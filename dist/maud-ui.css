@@ -174,6 +174,77 @@ body {
   display: none;
 }
 
+/* --- alert_dialog.css --- */
+/* Alert Dialog Component Styles */
+
+dialog.mui-alert-dialog {
+  border: none;
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 0;
+  box-shadow: var(--mui-shadow-lg);
+  border-top: 2px solid var(--mui-danger);
+  max-width: 28rem;
+  width: 90vw;
+}
+
+dialog.mui-alert-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.mui-alert-dialog .mui-dialog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.mui-alert-dialog .mui-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mui-alert-dialog .mui-dialog__close {
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-sm);
+  font-size: 1.25rem;
+  transition: background-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.mui-alert-dialog .mui-dialog__close:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-alert-dialog .mui-dialog__close:active {
+  background: var(--mui-bg-subtle);
+}
+
+.mui-alert-dialog .mui-dialog__description {
+  padding: 0.5rem 1.25rem 0;
+  margin: 0;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.mui-alert-dialog .mui-dialog__body {
+  padding: 1.25rem;
+}
+
 /* --- avatar.css --- */
 /* Avatar component — maud-ui Wave 1 */
 
@@ -586,6 +657,110 @@ body {
   display: none;
 }
 
+/* --- context_menu.css --- */
+.mui-context-menu {
+  position: relative;
+}
+
+.mui-context-menu__region {
+  cursor: context-menu;
+}
+
+.mui-context-menu-demo {
+  padding: 2rem;
+  background: var(--mui-bg-input);
+  border: 1px dashed var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  text-align: center;
+  user-select: none;
+  cursor: context-menu;
+}
+
+.mui-context-menu__content {
+  position: fixed;
+  min-width: 10rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 0.25rem;
+  z-index: 60;
+}
+
+.mui-context-menu__content[hidden] {
+  display: none;
+}
+
+/* --- dialog.css --- */
+/* Dialog Component Styles */
+
+dialog.mui-dialog {
+  border: none;
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 0;
+  box-shadow: var(--mui-shadow-lg);
+  max-width: 28rem;
+  width: 90vw;
+}
+
+dialog.mui-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.mui-dialog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.mui-dialog__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.mui-dialog__close {
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-sm);
+  font-size: 1.25rem;
+  transition: background-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.mui-dialog__close:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-dialog__close:active {
+  background: var(--mui-bg-subtle);
+}
+
+.mui-dialog__description {
+  padding: 0.5rem 1.25rem 0;
+  margin: 0;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.mui-dialog__body {
+  padding: 1.25rem;
+}
+
 /* --- field.css --- */
 /* Field component — form control wrapper with label, description, and error */
 
@@ -703,6 +878,86 @@ body {
   cursor: default;
 }
 
+/* --- menu.css --- */
+.mui-menu {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-menu__trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.mui-menu__chevron {
+  font-size: 0.875rem;
+  line-height: 1;
+  transition: transform var(--mui-transition);
+}
+
+.mui-menu__trigger[aria-expanded="true"] .mui-menu__chevron {
+  transform: rotate(180deg);
+}
+
+.mui-menu__content {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  min-width: 10rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 0.25rem;
+  z-index: 50;
+}
+
+.mui-menu__content[hidden] {
+  display: none;
+}
+
+.mui-menu__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  border-radius: var(--mui-radius-sm);
+  transition: var(--mui-transition);
+}
+
+.mui-menu__item:hover:not(:disabled) {
+  background: var(--mui-bg-input);
+}
+
+.mui-menu__item:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-menu__item--danger {
+  color: var(--mui-danger);
+}
+
+.mui-menu__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-menu__separator {
+  height: 1px;
+  background: var(--mui-border);
+  margin: 0.25rem 0.5rem;
+}
+
 /* --- meter.css --- */
 /* Meter component — measurement indicator with zones */
 
@@ -814,6 +1069,72 @@ body {
   outline: none;
 }
 
+/* --- popover.css --- */
+.mui-popover {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-popover__trigger {
+  cursor: pointer;
+}
+
+.mui-popover__content {
+  position: absolute;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 1rem;
+  min-width: 14rem;
+  max-width: 22rem;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity var(--mui-transition);
+}
+
+.mui-popover__content[data-visible="true"] {
+  opacity: 1;
+}
+
+.mui-popover__content[hidden] {
+  display: none;
+}
+
+/* Placement: Bottom */
+.mui-popover__content--bottom-center {
+  top: calc(100% + 0.375rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mui-popover__content--bottom-start {
+  top: calc(100% + 0.375rem);
+  left: 0;
+}
+
+.mui-popover__content--bottom-end {
+  top: calc(100% + 0.375rem);
+  right: 0;
+}
+
+/* Placement: Top */
+.mui-popover__content--top-center {
+  bottom: calc(100% + 0.375rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mui-popover__content--top-start {
+  bottom: calc(100% + 0.375rem);
+  left: 0;
+}
+
+.mui-popover__content--top-end {
+  bottom: calc(100% + 0.375rem);
+  right: 0;
+}
+
 /* --- progress.css --- */
 /* Progress component — determinate and indeterminate progress indicators */
 
@@ -912,6 +1233,187 @@ body {
   font-size: 0.875rem;
 }
 
+/* --- scroll_area.css --- */
+/* ScrollArea component — custom-styled scrollbar with auto-hide behavior */
+
+.mui-scroll-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.mui-scroll-area__viewport {
+  overflow-y: scroll;
+  height: 100%;
+  max-height: inherit;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide native scrollbar in WebKit browsers */
+.mui-scroll-area__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.mui-scroll-area__scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.375rem;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--mui-transition);
+  pointer-events: none;
+}
+
+/* Show scrollbar on hover */
+.mui-scroll-area:hover .mui-scroll-area__scrollbar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Show scrollbar when explicitly visible (during scroll) */
+.mui-scroll-area__scrollbar--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mui-scroll-area__thumb {
+  position: absolute;
+  width: 100%;
+  background: var(--mui-text-subtle);
+  border-radius: var(--mui-radius-full);
+  min-height: 1rem;
+  cursor: grab;
+  transition: background var(--mui-transition);
+}
+
+.mui-scroll-area__thumb:hover {
+  background: var(--mui-text-muted);
+}
+
+.mui-scroll-area__thumb:active {
+  background: var(--mui-text-muted);
+  cursor: grabbing;
+}
+
+/* Demo item styling for showcase */
+.mui-scroll-area__demo-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--mui-border);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* --- select.css --- */
+/* Select component — custom dropdown control */
+
+.mui-select {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 10rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-select__trigger:hover:not(:disabled) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-select__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-select__trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mui-select__chevron {
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  transition: transform var(--mui-transition);
+  flex-shrink: 0;
+}
+
+.mui-select__trigger[aria-expanded="true"] .mui-select__chevron {
+  transform: rotate(180deg);
+}
+
+.mui-select__dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  overflow-y: auto;
+  max-height: 12rem;
+  z-index: 50;
+  padding: 0.25rem;
+}
+
+.mui-select__dropdown[hidden] {
+  display: none;
+}
+
+.mui-select__option {
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  border-radius: var(--mui-radius-sm);
+  font-size: 0.875rem;
+  transition: var(--mui-transition);
+}
+
+.mui-select__option:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-select__option--selected {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+.mui-select__option--highlighted {
+  background: var(--mui-bg-input);
+}
+
+.mui-select__option[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-select__hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
 /* --- separator.css --- */
 /* Separator component — visual and semantic divider */
 
@@ -934,6 +1436,83 @@ body {
   min-height: 1rem;
   align-self: stretch;
   display: inline-block;
+}
+
+/* --- slider.css --- */
+/* Slider component — range input with custom styling and progressive enhancement */
+
+.mui-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 20rem;
+}
+
+.mui-slider__track {
+  flex: 1;
+  height: 0.375rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  position: relative;
+  cursor: pointer;
+}
+
+.mui-slider__fill {
+  height: 100%;
+  background: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width var(--mui-transition);
+}
+
+.mui-slider__thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-text);
+  border: 2px solid var(--mui-accent);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  transition: left var(--mui-transition);
+}
+
+.mui-slider__thumb:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-slider__thumb:active {
+  cursor: grabbing;
+}
+
+.mui-slider__thumb[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mui-slider__native {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.mui-slider__value {
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  min-width: 2rem;
+  font-family: var(--mui-font-mono);
+  text-align: right;
+}
+
+.mui-slider[data-disabled="true"] .mui-slider__track {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* --- switch.css --- */

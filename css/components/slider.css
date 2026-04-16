@@ -1,0 +1,75 @@
+/* Slider component — range input with custom styling and progressive enhancement */
+
+.mui-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 20rem;
+}
+
+.mui-slider__track {
+  flex: 1;
+  height: 0.375rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  position: relative;
+  cursor: pointer;
+}
+
+.mui-slider__fill {
+  height: 100%;
+  background: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width var(--mui-transition);
+}
+
+.mui-slider__thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-text);
+  border: 2px solid var(--mui-accent);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  transition: left var(--mui-transition);
+}
+
+.mui-slider__thumb:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-slider__thumb:active {
+  cursor: grabbing;
+}
+
+.mui-slider__thumb[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mui-slider__native {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.mui-slider__value {
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  min-width: 2rem;
+  font-family: var(--mui-font-mono);
+  text-align: right;
+}
+
+.mui-slider[data-disabled="true"] .mui-slider__track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

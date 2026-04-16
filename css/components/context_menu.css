@@ -1,0 +1,32 @@
+.mui-context-menu {
+  position: relative;
+}
+
+.mui-context-menu__region {
+  cursor: context-menu;
+}
+
+.mui-context-menu-demo {
+  padding: 2rem;
+  background: var(--mui-bg-input);
+  border: 1px dashed var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  text-align: center;
+  user-select: none;
+  cursor: context-menu;
+}
+
+.mui-context-menu__content {
+  position: fixed;
+  min-width: 10rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 0.25rem;
+  z-index: 60;
+}
+
+.mui-context-menu__content[hidden] {
+  display: none;
+}

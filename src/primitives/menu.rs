@@ -52,9 +52,9 @@ pub fn render(props: Props) -> Markup {
                                 data-action=(item.action.clone())
                                 tabindex="-1"
                                 class={
-                                    @if item.destructive { "mui-menu__item--danger" } else { "" }
+                                    @if item.destructive { "mui-menu__item--danger" } @else { "" }
                                 }
-                                @if item.disabled { disabled }
+                                disabled[item.disabled]
                             {
                                 (item.label.clone())
                             }

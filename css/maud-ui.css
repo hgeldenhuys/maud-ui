@@ -1,20 +1,26 @@
 /* maud-ui — design tokens + minimal showcase layout. Component styles added per wave. */
 
 @import "components/accordion.css";
+@import "components/alert_dialog.css";
 @import "components/avatar.css";
 @import "components/badge.css";
 @import "components/button.css";
 @import "components/checkbox.css";
 @import "components/collapsible.css";
+@import "components/context_menu.css";
+@import "components/dialog.css";
 @import "components/field.css";
 @import "components/fieldset.css";
 @import "components/input.css";
+@import "components/menu.css";
 @import "components/meter.css";
 @import "components/number_field.css";
 @import "components/popover.css";
 @import "components/progress.css";
 @import "components/radio.css";
+@import "components/scroll_area.css";
 @import "components/separator.css";
+@import "components/slider.css";
 @import "components/switch.css";
 @import "components/tabs.css";
 @import "components/textarea.css";

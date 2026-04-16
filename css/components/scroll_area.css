@@ -1,0 +1,69 @@
+/* ScrollArea component — custom-styled scrollbar with auto-hide behavior */
+
+.mui-scroll-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.mui-scroll-area__viewport {
+  overflow-y: scroll;
+  height: 100%;
+  max-height: inherit;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide native scrollbar in WebKit browsers */
+.mui-scroll-area__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.mui-scroll-area__scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.375rem;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--mui-transition);
+  pointer-events: none;
+}
+
+/* Show scrollbar on hover */
+.mui-scroll-area:hover .mui-scroll-area__scrollbar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Show scrollbar when explicitly visible (during scroll) */
+.mui-scroll-area__scrollbar--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mui-scroll-area__thumb {
+  position: absolute;
+  width: 100%;
+  background: var(--mui-text-subtle);
+  border-radius: var(--mui-radius-full);
+  min-height: 1rem;
+  cursor: grab;
+  transition: background var(--mui-transition);
+}
+
+.mui-scroll-area__thumb:hover {
+  background: var(--mui-text-muted);
+}
+
+.mui-scroll-area__thumb:active {
+  background: var(--mui-text-muted);
+  cursor: grabbing;
+}
+
+/* Demo item styling for showcase */
+.mui-scroll-area__demo-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--mui-border);
+  margin: 0;
+  font-size: 0.875rem;
+}

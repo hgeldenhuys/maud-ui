@@ -1,10 +1,96 @@
-//! Context menu component — Wave 1 stub. To be replaced by the full implementation.
-use maud::{html, Markup};
+//! Context menu component — right-click menu overlay
 
-pub fn render() -> Markup {
-    html! { p.mui-placeholder { "TODO: context_menu component" } }
+use maud::{html, Markup};
+use crate::primitives::menu::{MenuEntry, MenuItem};
+
+/// Context menu rendering properties
+#[derive(Debug, Clone)]
+pub struct Props {
+    /// Unique identifier for the menu
+    pub id: String,
+    /// Content that can be right-clicked to trigger the menu
+    pub trigger: Markup,
+    /// Menu entries (items and separators)
+    pub items: Vec<MenuEntry>,
 }
 
+/// Render a context menu with the given properties
+pub fn render(props: Props) -> Markup {
+    html! {
+        div.mui-context-menu data-mui="context-menu" {
+            div.mui-context-menu__region {
+                (props.trigger)
+            }
+            div.mui-context-menu__content
+                id=(format!("{}-menu", props.id))
+                role="menu"
+                hidden
+                style="position: fixed; top: 0; left: 0;"
+            {
+                @for entry in &props.items {
+                    @match entry {
+                        MenuEntry::Item(item) => {
+                            button.mui-menu__item
+                                type="button"
+                                role="menuitem"
+                                data-action=(item.action.clone())
+                                tabindex="-1"
+                                class={
+                                    @if item.destructive { "mui-menu__item--danger" } @else { "" }
+                                }
+                                disabled[item.disabled]
+                            {
+                                (item.label.clone())
+                            }
+                        }
+                        MenuEntry::Separator => {
+                            div.mui-menu__separator role="separator" {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Showcase context menu component
 pub fn showcase() -> Markup {
-    render()
+    html! {
+        div.mui-showcase__grid {
+            div {
+                p.mui-showcase__caption { "Right-click the area below" }
+                div.mui-showcase__row {
+                    (render(Props {
+                        id: "demo-ctx-1".into(),
+                        trigger: html! {
+                            div.mui-context-menu-demo {
+                                "Right-click me"
+                            }
+                        },
+                        items: vec![
+                            MenuEntry::Item(MenuItem {
+                                label: "Copy".into(),
+                                action: "copy".into(),
+                                disabled: false,
+                                destructive: false,
+                            }),
+                            MenuEntry::Item(MenuItem {
+                                label: "Paste".into(),
+                                action: "paste".into(),
+                                disabled: false,
+                                destructive: false,
+                            }),
+                            MenuEntry::Separator,
+                            MenuEntry::Item(MenuItem {
+                                label: "Delete".into(),
+                                action: "delete".into(),
+                                disabled: false,
+                                destructive: true,
+                            }),
+                        ],
+                    }))
+                }
+            }
+        }
+    }
 }

@@ -156,6 +156,627 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- dialog.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  // Dialog Trigger Behavior
+  window.MaudUI.behaviors["dialog-trigger"] = function (el) {
+    el.addEventListener("click", function () {
+      var target_id = el.getAttribute("data-target");
+      var dialog = target_id ? document.getElementById(target_id) : null;
+      if (dialog && dialog.showModal) {
+        dialog.showModal();
+      }
+    });
+  };
+
+  // Alert Dialog Trigger Behavior
+  window.MaudUI.behaviors["alert-dialog-trigger"] = function (el) {
+    el.addEventListener("click", function () {
+      var target_id = el.getAttribute("data-target");
+      var dialog = target_id ? document.getElementById(target_id) : null;
+      if (dialog && dialog.showModal) {
+        dialog.showModal();
+      }
+    });
+  };
+
+  // Dialog Behavior
+  window.MaudUI.behaviors["dialog"] = function (el) {
+    // Wire close buttons inside the dialog
+    var closeBtns = el.querySelectorAll("[data-mui-close]");
+    for (var i = 0; i < closeBtns.length; i++) {
+      closeBtns[i].addEventListener("click", function () {
+        el.close();
+      });
+    }
+
+    // Click on backdrop closes dialog (when clicking on dialog element outside content)
+    el.addEventListener("click", function (e) {
+      if (e.target === el) {
+        el.close();
+      }
+    });
+
+    // Native <dialog> with showModal() handles:
+    // - ESC closes the dialog (unless prevented by cancel event)
+    // - Focus trapping inside the dialog
+  };
+
+  // Alert Dialog Behavior
+  window.MaudUI.behaviors["alert-dialog"] = function (el) {
+    // Wire close buttons inside the alert dialog only
+    var closeBtns = el.querySelectorAll("[data-mui-close]");
+    for (var i = 0; i < closeBtns.length; i++) {
+      closeBtns[i].addEventListener("click", function () {
+        el.close();
+      });
+    }
+
+    // Prevent ESC key from closing alert dialog by canceling the cancel event
+    el.addEventListener("cancel", function (e) {
+      e.preventDefault();
+    });
+
+    // Prevent backdrop click from closing (don't listen to click outside)
+    // The click handler is intentionally omitted for alert dialogs
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- menu.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  // Menu behavior — dropdown triggered by button click
+  window.MaudUI.behaviors["menu"] = function (root) {
+    var trigger = root.querySelector(".mui-menu__trigger");
+    var content = root.querySelector("[role='menu']");
+    if (!trigger || !content) return;
+
+    var focusedIndex = -1;
+
+    function open() {
+      trigger.setAttribute("aria-expanded", "true");
+      content.removeAttribute("hidden");
+      focusedIndex = 0;
+      focusItem(0);
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("keydown", handleKeydown, true);
+    }
+
+    function close() {
+      trigger.setAttribute("aria-expanded", "false");
+      content.setAttribute("hidden", "");
+      focusedIndex = -1;
+      document.removeEventListener("click", clickOutside, true);
+      document.removeEventListener("keydown", handleKeydown, true);
+    }
+
+    function toggle() {
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        close();
+      } else {
+        open();
+      }
+    }
+
+    function getMenuItems() {
+      var items = [];
+      for (var i = 0; i < content.children.length; i++) {
+        var child = content.children[i];
+        if (child.getAttribute("role") === "menuitem") {
+          items.push(child);
+        }
+      }
+      return items;
+    }
+
+    function focusItem(index) {
+      var items = getMenuItems();
+      if (index < 0 || index >= items.length) return;
+      focusedIndex = index;
+      for (var i = 0; i < items.length; i++) {
+        items[i].tabIndex = i === index ? 0 : -1;
+      }
+      items[index].focus();
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target)) {
+        close();
+      }
+    }
+
+    function handleKeydown(e) {
+      if (trigger.getAttribute("aria-expanded") !== "true") return;
+
+      var items = getMenuItems();
+      if (items.length === 0) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          focusItem((focusedIndex + 1) % items.length);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          focusItem((focusedIndex - 1 + items.length) % items.length);
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (focusedIndex >= 0 && items[focusedIndex]) {
+            items[focusedIndex].click();
+            close();
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          close();
+          trigger.focus();
+          break;
+        case "Tab":
+          close();
+          break;
+      }
+    }
+
+    trigger.addEventListener("click", toggle);
+  };
+
+  // Context menu behavior — right-click menu with fixed positioning
+  window.MaudUI.behaviors["context-menu"] = function (root) {
+    var region = root.querySelector(".mui-context-menu__region");
+    var content = root.querySelector("[role='menu']");
+    if (!region || !content) return;
+
+    var focusedIndex = -1;
+
+    function open(x, y) {
+      content.style.left = x + "px";
+      content.style.top = y + "px";
+      content.removeAttribute("hidden");
+      focusedIndex = 0;
+      focusItem(0);
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("contextmenu", closeOnContext, true);
+      document.addEventListener("keydown", handleKeydown, true);
+    }
+
+    function close() {
+      content.setAttribute("hidden", "");
+      focusedIndex = -1;
+      document.removeEventListener("click", clickOutside, true);
+      document.removeEventListener("contextmenu", closeOnContext, true);
+      document.removeEventListener("keydown", handleKeydown, true);
+    }
+
+    function getMenuItems() {
+      var items = [];
+      for (var i = 0; i < content.children.length; i++) {
+        var child = content.children[i];
+        if (child.getAttribute("role") === "menuitem") {
+          items.push(child);
+        }
+      }
+      return items;
+    }
+
+    function focusItem(index) {
+      var items = getMenuItems();
+      if (index < 0 || index >= items.length) return;
+      focusedIndex = index;
+      for (var i = 0; i < items.length; i++) {
+        items[i].tabIndex = i === index ? 0 : -1;
+      }
+      items[index].focus();
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target) && !content.contains(e.target)) {
+        close();
+      }
+    }
+
+    function closeOnContext(e) {
+      if (!root.contains(e.target)) {
+        close();
+      }
+    }
+
+    function handleKeydown(e) {
+      if (content.getAttribute("hidden") !== null) return;
+
+      var items = getMenuItems();
+      if (items.length === 0) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          focusItem((focusedIndex + 1) % items.length);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          focusItem((focusedIndex - 1 + items.length) % items.length);
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (focusedIndex >= 0 && items[focusedIndex]) {
+            items[focusedIndex].click();
+            close();
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          close();
+          break;
+        case "Tab":
+          close();
+          break;
+      }
+    }
+
+    region.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+      open(e.clientX, e.clientY);
+    });
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- popover.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["popover"] = function (root) {
+    var trigger = root.querySelector(".mui-popover__trigger");
+    var content = root.querySelector(".mui-popover__content");
+    if (!trigger || !content) return;
+
+    function toggle() {
+      var expanded = trigger.getAttribute("aria-expanded") === "true";
+      if (expanded) close();
+      else open();
+    }
+
+    function open() {
+      trigger.setAttribute("aria-expanded", "true");
+      content.removeAttribute("hidden");
+      content.setAttribute("data-visible", "true");
+      content.focus();
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("keydown", escClose, true);
+    }
+
+    function close() {
+      trigger.setAttribute("aria-expanded", "false");
+      content.setAttribute("hidden", "");
+      content.setAttribute("data-visible", "false");
+      document.removeEventListener("click", clickOutside, true);
+      document.removeEventListener("keydown", escClose, true);
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target)) close();
+    }
+
+    function escClose(e) {
+      if (e.key === "Escape") close();
+    }
+
+    trigger.addEventListener("click", toggle);
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- scroll_area.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["scroll-area"] = function (root) {
+    var viewport = root.querySelector(".mui-scroll-area__viewport");
+    var scrollbar = root.querySelector(".mui-scroll-area__scrollbar");
+    var thumb = root.querySelector(".mui-scroll-area__thumb");
+    if (!viewport || !scrollbar || !thumb) return;
+
+    var hideTimer = null;
+
+    function updateThumb() {
+      var ratio = viewport.clientHeight / viewport.scrollHeight;
+      if (ratio >= 1) {
+        scrollbar.style.display = "none";
+        return;
+      }
+      scrollbar.style.display = "block";
+      var thumbHeight = Math.max(ratio * 100, 10); // min 10% height
+      var scrollRatio = viewport.scrollTop / (viewport.scrollHeight - viewport.clientHeight);
+      var thumbTop = scrollRatio * (100 - thumbHeight);
+      thumb.style.height = thumbHeight + "%";
+      thumb.style.top = thumbTop + "%";
+
+      // Show scrollbar, hide after 1s idle
+      scrollbar.classList.add("mui-scroll-area__scrollbar--visible");
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () {
+        scrollbar.classList.remove("mui-scroll-area__scrollbar--visible");
+      }, 1000);
+    }
+
+    viewport.addEventListener("scroll", updateThumb);
+
+    // Thumb drag
+    var dragging = false;
+    var startY = 0;
+    var startScroll = 0;
+
+    thumb.addEventListener("mousedown", function (e) {
+      e.preventDefault();
+      dragging = true;
+      startY = e.clientY;
+      startScroll = viewport.scrollTop;
+      document.addEventListener("mousemove", onDrag);
+      document.addEventListener(
+        "mouseup",
+        function () {
+          dragging = false;
+          document.removeEventListener("mousemove", onDrag);
+        },
+        { once: true }
+      );
+    });
+
+    function onDrag(e) {
+      if (!dragging) return;
+      var delta = e.clientY - startY;
+      var scrollable = viewport.scrollHeight - viewport.clientHeight;
+      var trackHeight = scrollbar.clientHeight;
+      viewport.scrollTop = startScroll + (delta / trackHeight) * scrollable;
+    }
+
+    // Initial update
+    updateThumb();
+    // Observe content changes
+    if (window.ResizeObserver) {
+      new ResizeObserver(updateThumb).observe(viewport);
+    }
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- select.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["select"] = function (root) {
+    var trigger = root.querySelector(".mui-select__trigger");
+    var dropdown = root.querySelector("[role='listbox']");
+    var hidden = root.querySelector(".mui-select__hidden");
+    var valueEl = root.querySelector(".mui-select__value");
+    var options = dropdown.querySelectorAll("[role='option']");
+    var activeIndex = -1;
+    var typeAheadTimeout = null;
+    var typeAheadStr = "";
+
+    function indexOf(nodeList, element) {
+      for (var i = 0; i < nodeList.length; i++) {
+        if (nodeList[i] === element) return i;
+      }
+      return -1;
+    }
+
+    function open() {
+      dropdown.removeAttribute("hidden");
+      trigger.setAttribute("aria-expanded", "true");
+      var sel = dropdown.querySelector(".mui-select__option--selected");
+      activeIndex = sel ? indexOf(options, sel) : 0;
+      highlight(activeIndex);
+      document.addEventListener("click", clickOutside, true);
+    }
+
+    function close() {
+      dropdown.setAttribute("hidden", "");
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.removeAttribute("aria-activedescendant");
+      unhighlightAll();
+      document.removeEventListener("click", clickOutside, true);
+      trigger.focus();
+    }
+
+    function highlight(idx) {
+      unhighlightAll();
+      if (idx >= 0 && idx < options.length) {
+        activeIndex = idx;
+        options[idx].classList.add("mui-select__option--highlighted");
+        trigger.setAttribute("aria-activedescendant", options[idx].id);
+      }
+    }
+
+    function unhighlightAll() {
+      for (var i = 0; i < options.length; i++) {
+        options[i].classList.remove("mui-select__option--highlighted");
+      }
+    }
+
+    function selectOption(idx) {
+      var opt = options[idx];
+      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      for (var i = 0; i < options.length; i++) {
+        options[i].classList.remove("mui-select__option--selected");
+        options[i].setAttribute("aria-selected", "false");
+      }
+      opt.classList.add("mui-select__option--selected");
+      opt.setAttribute("aria-selected", "true");
+      valueEl.textContent = opt.textContent;
+      hidden.value = opt.getAttribute("data-value");
+      close();
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target)) {
+        close();
+      }
+    }
+
+    trigger.addEventListener("click", function () {
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        close();
+      } else {
+        open();
+      }
+    });
+
+    trigger.addEventListener("keydown", function (e) {
+      var isOpen = trigger.getAttribute("aria-expanded") === "true";
+      var nextIdx;
+
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!isOpen) {
+          open();
+        } else {
+          nextIdx = activeIndex + (e.key === "ArrowDown" ? 1 : -1);
+          while (nextIdx >= 0 && nextIdx < options.length) {
+            if (options[nextIdx].getAttribute("aria-disabled") !== "true") break;
+            nextIdx += e.key === "ArrowDown" ? 1 : -1;
+          }
+          if (nextIdx >= 0 && nextIdx < options.length) {
+            highlight(nextIdx);
+          }
+        }
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        if (isOpen && activeIndex >= 0) {
+          selectOption(activeIndex);
+        } else {
+          open();
+        }
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        if (isOpen) {
+          close();
+        }
+      } else if (e.key.length === 1 && isOpen) {
+        e.preventDefault();
+        typeAheadStr += e.key.toLowerCase();
+        clearTimeout(typeAheadTimeout);
+        typeAheadTimeout = setTimeout(function () {
+          typeAheadStr = "";
+        }, 500);
+
+        for (var i = 0; i < options.length; i++) {
+          if (options[i].getAttribute("aria-disabled") !== "true") {
+            var optText = options[i].textContent.toLowerCase();
+            if (optText.indexOf(typeAheadStr) === 0) {
+              highlight(i);
+              break;
+            }
+          }
+        }
+      }
+    });
+
+    for (var i = 0; i < options.length; i++) {
+      (function (idx) {
+        options[idx].addEventListener("click", function () {
+          selectOption(idx);
+        });
+      })(i);
+    }
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- slider.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["slider"] = function (root) {
+    var thumb = root.querySelector(".mui-slider__thumb");
+    var fill = root.querySelector(".mui-slider__fill");
+    var track = root.querySelector(".mui-slider__track");
+    var native = root.querySelector(".mui-slider__native");
+    var valueLabel = root.querySelector(".mui-slider__value");
+
+    var min = parseFloat(root.getAttribute("data-min") || "0");
+    var max = parseFloat(root.getAttribute("data-max") || "100");
+    var step = parseFloat(root.getAttribute("data-step") || "1");
+
+    function setValue(val) {
+      val = Math.round(val / step) * step;
+      val = Math.max(min, Math.min(max, val));
+      var pct = ((val - min) / (max - min)) * 100;
+      thumb.style.left = pct + "%";
+      fill.style.width = pct + "%";
+      thumb.setAttribute("aria-valuenow", val);
+      native.value = val;
+      if (valueLabel) valueLabel.textContent = val;
+    }
+
+    // Keyboard: Arrow keys increment/decrement
+    thumb.addEventListener("keydown", function (e) {
+      if (thumb.getAttribute("aria-disabled") === "true") return;
+      var current = parseFloat(thumb.getAttribute("aria-valuenow"));
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setValue(current + step);
+      }
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+        e.preventDefault();
+        setValue(current - step);
+      }
+      if (e.key === "Home") {
+        e.preventDefault();
+        setValue(min);
+      }
+      if (e.key === "End") {
+        e.preventDefault();
+        setValue(max);
+      }
+    });
+
+    // Mouse: drag thumb
+    var dragging = false;
+    function onDrag(e) {
+      if (!dragging) return;
+      var rect = track.getBoundingClientRect();
+      var pct = (e.clientX - rect.left) / rect.width;
+      setValue(min + pct * (max - min));
+    }
+    thumb.addEventListener("mousedown", function (e) {
+      if (thumb.getAttribute("aria-disabled") === "true") return;
+      e.preventDefault();
+      dragging = true;
+      document.addEventListener("mousemove", onDrag);
+      document.addEventListener("mouseup", function () {
+        dragging = false;
+        document.removeEventListener("mousemove", onDrag);
+      }, { once: true });
+    });
+
+    // Click on track
+    track.addEventListener("click", function (e) {
+      if (thumb.getAttribute("aria-disabled") === "true") return;
+      var rect = track.getBoundingClientRect();
+      var pct = (e.clientX - rect.left) / rect.width;
+      setValue(min + pct * (max - min));
+    });
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
 // --- switch.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
@@ -457,53 +1078,6 @@
     }
 
     updateTabindex();
-  };
-
-  // Re-init in case DOMContentLoaded already fired
-  if (window.MaudUI.init) window.MaudUI.init();
-})();
-
-// --- popover.js ---
-(function () {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
-
-  window.MaudUI.behaviors["popover"] = function (root) {
-    var trigger = root.querySelector(".mui-popover__trigger");
-    var content = root.querySelector(".mui-popover__content");
-    if (!trigger || !content) return;
-
-    function toggle() {
-      var expanded = trigger.getAttribute("aria-expanded") === "true";
-      if (expanded) close();
-      else open();
-    }
-
-    function open() {
-      trigger.setAttribute("aria-expanded", "true");
-      content.removeAttribute("hidden");
-      content.setAttribute("data-visible", "true");
-      content.focus();
-      document.addEventListener("click", clickOutside, true);
-      document.addEventListener("keydown", escClose, true);
-    }
-
-    function close() {
-      trigger.setAttribute("aria-expanded", "false");
-      content.setAttribute("hidden", "");
-      content.setAttribute("data-visible", "false");
-      document.removeEventListener("click", clickOutside, true);
-      document.removeEventListener("keydown", escClose, true);
-    }
-
-    function clickOutside(e) {
-      if (!root.contains(e.target)) close();
-    }
-
-    function escClose(e) {
-      if (e.key === "Escape") close();
-    }
-
-    trigger.addEventListener("click", toggle);
   };
 
   // Re-init in case DOMContentLoaded already fired

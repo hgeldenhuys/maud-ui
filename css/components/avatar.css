@@ -12,6 +12,7 @@
   font-weight: 500;
   user-select: none;
   flex-shrink: 0;
+  border: 2px solid var(--mui-border);
 }
 
 /* Size: Small */

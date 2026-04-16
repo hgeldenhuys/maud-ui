@@ -30,13 +30,14 @@
   width: 1.125rem;
   height: 1.125rem;
   border-radius: var(--mui-radius-full);
-  background: var(--mui-text);
+  background: white;
   border: 2px solid var(--mui-accent);
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
   cursor: grab;
   transition: left var(--mui-transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .mui-slider__thumb:focus-visible {

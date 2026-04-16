@@ -27,6 +27,7 @@
   opacity: 0;
   transition: opacity var(--mui-transition);
   pointer-events: none;
+  padding: 0.25rem 0;
 }
 
 /* Show scrollbar on hover */

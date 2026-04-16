@@ -100,28 +100,66 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Dialog with basic content and form
+            // Edit Profile dialog
             {
-                (trigger("demo-dialog-1", "Open dialog"))
+                (trigger("demo-dialog-edit-profile", "Edit Profile"))
             }
             {
                 (render(Props {
-                    id: "demo-dialog-1".to_string(),
-                    title: "Edit profile".to_string(),
-                    description: Some("Make changes to your profile here.".to_string()),
+                    id: "demo-dialog-edit-profile".to_string(),
+                    title: "Edit Profile".to_string(),
+                    description: Some("Update your personal information below.".to_string()),
                     children: html! {
+                        div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;" {
+                            div style="width:3rem;height:3rem;border-radius:50%;background:var(--mui-muted);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;" {
+                                "JD"
+                            }
+                            p style="font-size:0.875rem;color:var(--mui-muted-fg);" {
+                                "Upload a new avatar from your device."
+                            }
+                        }
                         div class="mui-field" {
                             label class="mui-label" { "Name" }
-                            input class="mui-input" type="text" placeholder="Your name" {}
+                            input class="mui-input" type="text" value="Jane Doe" {}
                         }
                         div class="mui-field" {
                             label class="mui-label" { "Email" }
-                            input class="mui-input" type="email" placeholder="your@email.com" {}
+                            input class="mui-input" type="email" value="jane@example.com" {}
                         }
                     },
                     footer: Some(html! {
                         button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
-                        button class="mui-btn mui-btn--primary mui-btn--md" { "Save changes" }
+                        button class="mui-btn mui-btn--primary mui-btn--md" { "Save" }
+                    }),
+                    open: false,
+                }))
+            }
+
+            // Share Document dialog
+            {
+                (trigger("demo-dialog-share-doc", "Share Document"))
+            }
+            {
+                (render(Props {
+                    id: "demo-dialog-share-doc".to_string(),
+                    title: "Share Document".to_string(),
+                    description: Some("Invite a collaborator by email address.".to_string()),
+                    children: html! {
+                        div class="mui-field" {
+                            label class="mui-label" { "Email address" }
+                            input class="mui-input" type="email" placeholder="collaborator@company.com" {}
+                        }
+                        div class="mui-field" {
+                            label class="mui-label" { "Permission" }
+                            select class="mui-select__trigger" style="width:100%;" {
+                                option value="viewer" { "Viewer" }
+                                option value="editor" { "Editor" }
+                            }
+                        }
+                    },
+                    footer: Some(html! {
+                        button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
+                        button class="mui-btn mui-btn--primary mui-btn--md" { "Send invite" }
                     }),
                     open: false,
                 }))

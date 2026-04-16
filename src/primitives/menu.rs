@@ -89,93 +89,87 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Dropdown menu with shortcuts" }
+                p.mui-showcase__caption { "File menu" }
                 div.mui-showcase__row {
                     (render(Props {
-                        trigger_label: "Actions".into(),
-                        id: "demo-menu-1".into(),
+                        trigger_label: "File".into(),
+                        id: "demo-menu-file".into(),
                         items: vec![
-                            MenuEntry::Label("Edit".into()),
                             MenuEntry::Item(MenuItem {
-                                label: "Undo".into(),
-                                action: "undo".into(),
+                                label: "New".into(),
+                                action: "new".into(),
                                 disabled: false,
                                 destructive: false,
-                                shortcut: Some("\u{2318}Z".into()),
+                                shortcut: Some("\u{2318}N".into()),
                             }),
                             MenuEntry::Item(MenuItem {
-                                label: "Redo".into(),
-                                action: "redo".into(),
+                                label: "Open\u{2026}".into(),
+                                action: "open".into(),
                                 disabled: false,
                                 destructive: false,
-                                shortcut: Some("\u{21e7}\u{2318}Z".into()),
-                            }),
-                            MenuEntry::Separator,
-                            MenuEntry::Item(MenuItem {
-                                label: "Cut".into(),
-                                action: "cut".into(),
-                                disabled: false,
-                                destructive: false,
-                                shortcut: Some("\u{2318}X".into()),
-                            }),
-                            MenuEntry::Item(MenuItem {
-                                label: "Copy".into(),
-                                action: "copy".into(),
-                                disabled: false,
-                                destructive: false,
-                                shortcut: Some("\u{2318}C".into()),
-                            }),
-                            MenuEntry::Item(MenuItem {
-                                label: "Paste".into(),
-                                action: "paste".into(),
-                                disabled: false,
-                                destructive: false,
-                                shortcut: Some("\u{2318}V".into()),
+                                shortcut: Some("\u{2318}O".into()),
                             }),
                             MenuEntry::Separator,
                             MenuEntry::Item(MenuItem {
-                                label: "Delete".into(),
-                                action: "delete".into(),
+                                label: "Save".into(),
+                                action: "save".into(),
                                 disabled: false,
-                                destructive: true,
-                                shortcut: Some("\u{232b}".into()),
+                                destructive: false,
+                                shortcut: Some("\u{2318}S".into()),
+                            }),
+                            MenuEntry::Item(MenuItem {
+                                label: "Save As\u{2026}".into(),
+                                action: "save-as".into(),
+                                disabled: false,
+                                destructive: false,
+                                shortcut: Some("\u{21e7}\u{2318}S".into()),
+                            }),
+                            MenuEntry::Separator,
+                            MenuEntry::Item(MenuItem {
+                                label: "Print\u{2026}".into(),
+                                action: "print".into(),
+                                disabled: false,
+                                destructive: false,
+                                shortcut: Some("\u{2318}P".into()),
+                            }),
+                            MenuEntry::Separator,
+                            MenuEntry::Item(MenuItem {
+                                label: "Exit".into(),
+                                action: "exit".into(),
+                                disabled: false,
+                                destructive: false,
+                                shortcut: None,
                             }),
                         ],
                     }))
                 }
             }
             div {
-                p.mui-showcase__caption { "Simple menu" }
+                p.mui-showcase__caption { "User menu" }
                 div.mui-showcase__row {
                     (render(Props {
-                        trigger_label: "Options".into(),
-                        id: "demo-menu-2".into(),
+                        trigger_label: "My Account".into(),
+                        id: "demo-menu-user".into(),
                         items: vec![
+                            MenuEntry::Label("Account".into()),
                             MenuEntry::Item(MenuItem {
-                                label: "Edit".into(),
-                                action: "edit".into(),
+                                label: "Profile".into(),
+                                action: "profile".into(),
                                 disabled: false,
                                 destructive: false,
                                 shortcut: None,
                             }),
                             MenuEntry::Item(MenuItem {
-                                label: "Duplicate".into(),
-                                action: "duplicate".into(),
+                                label: "Settings".into(),
+                                action: "settings".into(),
                                 disabled: false,
                                 destructive: false,
                                 shortcut: None,
                             }),
                             MenuEntry::Separator,
                             MenuEntry::Item(MenuItem {
-                                label: "Archive".into(),
-                                action: "archive".into(),
-                                disabled: true,
-                                destructive: false,
-                                shortcut: None,
-                            }),
-                            MenuEntry::Item(MenuItem {
-                                label: "Delete".into(),
-                                action: "delete".into(),
+                                label: "Sign out".into(),
+                                action: "sign-out".into(),
                                 disabled: false,
                                 destructive: true,
                                 shortcut: None,

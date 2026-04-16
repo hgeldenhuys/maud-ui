@@ -109,29 +109,29 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Static toasts (inline)" }
                 div style="position: static;" {
                     (render(Props {
-                        title: "Info notification".into(),
-                        description: Some("This is an informational toast message.".into()),
+                        title: "Profile updated".into(),
+                        description: Some("Your display name and avatar have been saved.".into()),
                         variant: Variant::Info,
                         duration_ms: 5000,
                         id: "toast-info-static".into(),
                     }))
                     (render(Props {
-                        title: "Success! Changes saved".into(),
-                        description: Some("Your changes have been saved successfully.".into()),
+                        title: "Invoice sent".into(),
+                        description: Some("Invoice #1042 has been emailed to the client.".into()),
                         variant: Variant::Success,
                         duration_ms: 5000,
                         id: "toast-success-static".into(),
                     }))
                     (render(Props {
-                        title: "Warning: low disk space".into(),
-                        description: Some("You have less than 1GB of storage remaining.".into()),
+                        title: "Session expiring in 5 minutes".into(),
+                        description: Some("Save your work now to avoid losing unsaved changes.".into()),
                         variant: Variant::Warning,
                         duration_ms: 5000,
                         id: "toast-warning-static".into(),
                     }))
                     (render(Props {
-                        title: "Error: network connection failed".into(),
-                        description: Some("Please check your internet connection and try again.".into()),
+                        title: "Payment failed".into(),
+                        description: Some("Please check your card details and try again.".into()),
                         variant: Variant::Danger,
                         duration_ms: 5000,
                         id: "toast-danger-static".into(),
@@ -142,30 +142,60 @@ pub fn showcase() -> Markup {
             // Imperative API section
             div {
                 p.mui-showcase__caption { "Imperative (click to dispatch)" }
+
+                p.mui-showcase__caption { "Title only" }
                 div.mui-showcase__row {
                     button type="button"
-                        class="mui-btn mui-btn--primary mui-btn--md"
-                        onclick="MaudUI.toast({variant:'info', title:'Info', description:'This is an info toast.', duration_ms:5000})"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'info', title:'Profile updated', duration_ms:5000})"
                     {
-                        "Show info"
+                        "Show info toast"
                     }
                     button type="button"
-                        class="mui-btn mui-btn--primary mui-btn--md"
-                        onclick="MaudUI.toast({variant:'success', title:'Saved!', description:'Your changes have been saved.', duration_ms:5000})"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'success', title:'Changes saved', duration_ms:5000})"
                     {
-                        "Show success"
+                        "Show success toast"
                     }
                     button type="button"
-                        class="mui-btn mui-btn--primary mui-btn--md"
-                        onclick="MaudUI.toast({variant:'warning', title:'Warning', description:'Please review your input.', duration_ms:5000})"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'warning', title:'Session expiring soon', duration_ms:5000})"
                     {
-                        "Show warning"
+                        "Show warning toast"
                     }
                     button type="button"
-                        class="mui-btn mui-btn--primary mui-btn--md"
-                        onclick="MaudUI.toast({variant:'danger', title:'Error', description:'An unexpected error occurred.', duration_ms:5000})"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'danger', title:'Upload failed', duration_ms:5000})"
                     {
-                        "Show error"
+                        "Show error toast"
+                    }
+                }
+
+                p.mui-showcase__caption { "With description" }
+                div.mui-showcase__row {
+                    button type="button"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'info', title:'New comment', description:'Alex replied to your thread in #design.', duration_ms:5000})"
+                    {
+                        "Info with description"
+                    }
+                    button type="button"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'success', title:'Deployment complete', description:'v2.4.1 is now live in production.', duration_ms:5000})"
+                    {
+                        "Success with description"
+                    }
+                    button type="button"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'warning', title:'API rate limit', description:'You have 12 requests remaining this minute.', duration_ms:5000})"
+                    {
+                        "Warning with description"
+                    }
+                    button type="button"
+                        class="mui-btn mui-btn--default mui-btn--md"
+                        onclick="MaudUI.toast({variant:'danger', title:'Payment failed', description:'Please check your card details and try again.', duration_ms:5000})"
+                    {
+                        "Error with description"
                     }
                 }
             }

@@ -114,53 +114,98 @@ pub fn showcase() -> Markup {
         ComboboxOption { value: "solid".to_string(), label: "Solid".to_string() },
     ];
 
+    let team_members = vec![
+        ComboboxOption { value: "alice".to_string(), label: "Alice Johnson".to_string() },
+        ComboboxOption { value: "bob".to_string(), label: "Bob Smith".to_string() },
+        ComboboxOption { value: "carol".to_string(), label: "Carol Williams".to_string() },
+        ComboboxOption { value: "david".to_string(), label: "David Brown".to_string() },
+        ComboboxOption { value: "elena".to_string(), label: "Elena Garcia".to_string() },
+        ComboboxOption { value: "frank".to_string(), label: "Frank Miller".to_string() },
+        ComboboxOption { value: "grace".to_string(), label: "Grace Lee".to_string() },
+        ComboboxOption { value: "henry".to_string(), label: "Henry Chen".to_string() },
+    ];
+
     html! {
         div.mui-showcase__grid {
+            // Primary demo: framework picker
             section {
-                h2 { "With selection" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        id: "fw-1".to_string(),
-                        name: "framework-1".to_string(),
-                        options: frameworks.clone(),
-                        selected: Some("vue".to_string()),
-                        placeholder: "Select framework\u{2026}".to_string(),
-                        search_placeholder: "Search\u{2026}".to_string(),
-                        empty_text: "No framework found.".to_string(),
-                        disabled: false,
-                    }))
+                h2 { "Framework picker" }
+                p.mui-showcase__caption { "Search and select from a list of frontend frameworks." }
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:1.5rem;" {
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Pre-selected" }
+                        (render(Props {
+                            id: "fw-1".to_string(),
+                            name: "framework-1".to_string(),
+                            options: frameworks.clone(),
+                            selected: Some("vue".to_string()),
+                            placeholder: "Select framework\u{2026}".to_string(),
+                            search_placeholder: "Search\u{2026}".to_string(),
+                            empty_text: "No framework found.".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Placeholder" }
+                        (render(Props {
+                            id: "fw-2".to_string(),
+                            name: "framework-2".to_string(),
+                            options: frameworks.clone(),
+                            selected: None,
+                            placeholder: "Select framework\u{2026}".to_string(),
+                            search_placeholder: "Search frameworks\u{2026}".to_string(),
+                            empty_text: "No framework found.".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Disabled" }
+                        (render(Props {
+                            id: "fw-3".to_string(),
+                            name: "framework-3".to_string(),
+                            options: frameworks,
+                            selected: Some("react".to_string()),
+                            placeholder: "Select framework\u{2026}".to_string(),
+                            search_placeholder: "Search\u{2026}".to_string(),
+                            empty_text: "No framework found.".to_string(),
+                            disabled: true,
+                        }))
+                    }
                 }
             }
 
+            // Second demo: assign team member (realistic search-to-select)
             section {
-                h2 { "With placeholder" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        id: "fw-2".to_string(),
-                        name: "framework-2".to_string(),
-                        options: frameworks.clone(),
-                        selected: None,
-                        placeholder: "Select framework\u{2026}".to_string(),
-                        search_placeholder: "Search frameworks\u{2026}".to_string(),
-                        empty_text: "No framework found.".to_string(),
-                        disabled: false,
-                    }))
-                }
-            }
-
-            section {
-                h2 { "Disabled" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        id: "fw-3".to_string(),
-                        name: "framework-3".to_string(),
-                        options: frameworks,
-                        selected: Some("react".to_string()),
-                        placeholder: "Select framework\u{2026}".to_string(),
-                        search_placeholder: "Search\u{2026}".to_string(),
-                        empty_text: "No framework found.".to_string(),
-                        disabled: true,
-                    }))
+                h2 { "Assign team member" }
+                p.mui-showcase__caption { "A realistic search-to-select pattern for assigning people to a task." }
+                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                    div class="mui-field" {
+                        label class="mui-field__label" for="assign-lead" { "Lead" }
+                        (render(Props {
+                            id: "assign-lead".to_string(),
+                            name: "lead".to_string(),
+                            options: team_members.clone(),
+                            selected: Some("alice".to_string()),
+                            placeholder: "Assign lead\u{2026}".to_string(),
+                            search_placeholder: "Search people\u{2026}".to_string(),
+                            empty_text: "No team member found.".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div class="mui-field" {
+                        label class="mui-field__label" for="assign-reviewer" { "Reviewer" }
+                        (render(Props {
+                            id: "assign-reviewer".to_string(),
+                            name: "reviewer".to_string(),
+                            options: team_members,
+                            selected: None,
+                            placeholder: "Assign reviewer\u{2026}".to_string(),
+                            search_placeholder: "Search people\u{2026}".to_string(),
+                            empty_text: "No team member found.".to_string(),
+                            disabled: false,
+                        }))
+                        p class="mui-field__description" { "Optional. The reviewer will be notified when the task is ready." }
+                    }
                 }
             }
         }

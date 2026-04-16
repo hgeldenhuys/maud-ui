@@ -100,79 +100,133 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            // Primary demo: realistic Preferences form
             section {
-                h2 { "Basic" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "fruit-1".to_string(),
-                        id: "fruit-1".to_string(),
-                        options: vec![
-                            SelectOption { value: "apple".to_string(), label: "Apple".to_string(), disabled: false },
-                            SelectOption { value: "banana".to_string(), label: "Banana".to_string(), disabled: false },
-                            SelectOption { value: "cherry".to_string(), label: "Cherry".to_string(), disabled: false },
-                            SelectOption { value: "grape".to_string(), label: "Grape".to_string(), disabled: false },
-                        ],
-                        selected: Some("banana".to_string()),
-                        placeholder: "Select…".to_string(),
-                        disabled: false,
-                    }))
+                h2 { "Preferences" }
+                p.mui-showcase__caption { "A realistic settings form with theme, language, and a locked timezone field." }
+                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                    div class="mui-field" {
+                        label class="mui-field__label" for="pref-theme" { "Theme" }
+                        (render(Props {
+                            name: "theme".to_string(),
+                            id: "pref-theme".to_string(),
+                            options: vec![
+                                SelectOption { value: "light".to_string(), label: "Light".to_string(), disabled: false },
+                                SelectOption { value: "dark".to_string(), label: "Dark".to_string(), disabled: false },
+                                SelectOption { value: "system".to_string(), label: "System".to_string(), disabled: false },
+                            ],
+                            selected: Some("system".to_string()),
+                            placeholder: "Choose theme\u{2026}".to_string(),
+                            disabled: false,
+                        }))
+                        p class="mui-field__description" { "Controls the application appearance." }
+                    }
+                    div class="mui-field" {
+                        label class="mui-field__label" for="pref-language" { "Language" }
+                        (render(Props {
+                            name: "language".to_string(),
+                            id: "pref-language".to_string(),
+                            options: vec![
+                                SelectOption { value: "en".to_string(), label: "English".to_string(), disabled: false },
+                                SelectOption { value: "es".to_string(), label: "Spanish".to_string(), disabled: false },
+                                SelectOption { value: "fr".to_string(), label: "French".to_string(), disabled: false },
+                                SelectOption { value: "de".to_string(), label: "German".to_string(), disabled: false },
+                                SelectOption { value: "ja".to_string(), label: "Japanese".to_string(), disabled: false },
+                            ],
+                            selected: None,
+                            placeholder: "Select language\u{2026}".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div class="mui-field" {
+                        label class="mui-field__label mui-label--disabled" for="pref-timezone" {
+                            "Timezone"
+                            span style="font-weight:400;color:var(--mui-muted-foreground);margin-left:0.5rem;font-size:0.75rem;" { "(locked by admin)" }
+                        }
+                        (render(Props {
+                            name: "timezone".to_string(),
+                            id: "pref-timezone".to_string(),
+                            options: vec![
+                                SelectOption { value: "utc".to_string(), label: "UTC".to_string(), disabled: false },
+                                SelectOption { value: "est".to_string(), label: "US Eastern (EST)".to_string(), disabled: false },
+                                SelectOption { value: "pst".to_string(), label: "US Pacific (PST)".to_string(), disabled: false },
+                                SelectOption { value: "cet".to_string(), label: "Central European (CET)".to_string(), disabled: false },
+                                SelectOption { value: "jst".to_string(), label: "Japan Standard (JST)".to_string(), disabled: false },
+                            ],
+                            selected: Some("utc".to_string()),
+                            placeholder: "Select timezone\u{2026}".to_string(),
+                            disabled: true,
+                        }))
+                    }
                 }
             }
 
+            // Anatomy: individual select features
             section {
-                h2 { "With placeholder" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "fruit-2".to_string(),
-                        id: "fruit-2".to_string(),
-                        options: vec![
-                            SelectOption { value: "apple".to_string(), label: "Apple".to_string(), disabled: false },
-                            SelectOption { value: "banana".to_string(), label: "Banana".to_string(), disabled: false },
-                            SelectOption { value: "cherry".to_string(), label: "Cherry".to_string(), disabled: false },
-                            SelectOption { value: "grape".to_string(), label: "Grape".to_string(), disabled: false },
-                        ],
-                        selected: None,
-                        placeholder: "Pick a fruit…".to_string(),
-                        disabled: false,
-                    }))
-                }
-            }
-
-            section {
-                h2 { "Disabled" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "fruit-3".to_string(),
-                        id: "fruit-3".to_string(),
-                        options: vec![
-                            SelectOption { value: "apple".to_string(), label: "Apple".to_string(), disabled: false },
-                            SelectOption { value: "banana".to_string(), label: "Banana".to_string(), disabled: false },
-                            SelectOption { value: "cherry".to_string(), label: "Cherry".to_string(), disabled: false },
-                            SelectOption { value: "grape".to_string(), label: "Grape".to_string(), disabled: false },
-                        ],
-                        selected: Some("grape".to_string()),
-                        placeholder: "Select…".to_string(),
-                        disabled: true,
-                    }))
-                }
-            }
-
-            section {
-                h2 { "With disabled option" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "fruit-4".to_string(),
-                        id: "fruit-4".to_string(),
-                        options: vec![
-                            SelectOption { value: "apple".to_string(), label: "Apple".to_string(), disabled: false },
-                            SelectOption { value: "banana".to_string(), label: "Banana".to_string(), disabled: false },
-                            SelectOption { value: "cherry".to_string(), label: "Cherry".to_string(), disabled: true },
-                            SelectOption { value: "grape".to_string(), label: "Grape".to_string(), disabled: false },
-                        ],
-                        selected: Some("apple".to_string()),
-                        placeholder: "Select…".to_string(),
-                        disabled: false,
-                    }))
+                h2 { "Select Anatomy" }
+                p.mui-showcase__caption { "Individual select states shown in isolation." }
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:1.5rem;" {
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Pre-selected" }
+                        (render(Props {
+                            name: "status".to_string(),
+                            id: "anatomy-preselected".to_string(),
+                            options: vec![
+                                SelectOption { value: "active".to_string(), label: "Active".to_string(), disabled: false },
+                                SelectOption { value: "paused".to_string(), label: "Paused".to_string(), disabled: false },
+                                SelectOption { value: "archived".to_string(), label: "Archived".to_string(), disabled: false },
+                            ],
+                            selected: Some("active".to_string()),
+                            placeholder: "Select status\u{2026}".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Placeholder" }
+                        (render(Props {
+                            name: "priority".to_string(),
+                            id: "anatomy-placeholder".to_string(),
+                            options: vec![
+                                SelectOption { value: "low".to_string(), label: "Low".to_string(), disabled: false },
+                                SelectOption { value: "medium".to_string(), label: "Medium".to_string(), disabled: false },
+                                SelectOption { value: "high".to_string(), label: "High".to_string(), disabled: false },
+                                SelectOption { value: "critical".to_string(), label: "Critical".to_string(), disabled: false },
+                            ],
+                            selected: None,
+                            placeholder: "Set priority\u{2026}".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Disabled option" }
+                        (render(Props {
+                            name: "plan".to_string(),
+                            id: "anatomy-disabled-opt".to_string(),
+                            options: vec![
+                                SelectOption { value: "free".to_string(), label: "Free".to_string(), disabled: false },
+                                SelectOption { value: "pro".to_string(), label: "Pro".to_string(), disabled: false },
+                                SelectOption { value: "enterprise".to_string(), label: "Enterprise (contact sales)".to_string(), disabled: true },
+                            ],
+                            selected: Some("free".to_string()),
+                            placeholder: "Choose plan\u{2026}".to_string(),
+                            disabled: false,
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Fully disabled" }
+                        (render(Props {
+                            name: "role".to_string(),
+                            id: "anatomy-disabled".to_string(),
+                            options: vec![
+                                SelectOption { value: "viewer".to_string(), label: "Viewer".to_string(), disabled: false },
+                                SelectOption { value: "editor".to_string(), label: "Editor".to_string(), disabled: false },
+                                SelectOption { value: "admin".to_string(), label: "Admin".to_string(), disabled: false },
+                            ],
+                            selected: Some("editor".to_string()),
+                            placeholder: "Select role\u{2026}".to_string(),
+                            disabled: true,
+                        }))
+                    }
                 }
             }
         }

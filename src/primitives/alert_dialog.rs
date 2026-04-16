@@ -86,36 +86,37 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Destructive action alert dialog
+            // Delete Account — destructive confirmation
             {
-                (trigger("demo-alert-1", "Delete account", "danger"))
+                (trigger("demo-alert-delete", "Delete account", "danger"))
             }
             {
                 (render(Props {
-                    id: "demo-alert-1".to_string(),
-                    title: "Are you absolutely sure?".to_string(),
-                    description: Some("This action cannot be undone. This will permanently delete your account and remove your data from our servers.".to_string()),
+                    id: "demo-alert-delete".to_string(),
+                    title: "Delete Account".to_string(),
+                    description: Some("This action cannot be undone. Your account, projects, and all associated data will be permanently deleted.".to_string()),
                     children: html! {},
                     footer: Some(html! {
                         button class="mui-btn mui-btn--ghost mui-btn--md" data-mui-close { "Cancel" }
-                        button class="mui-btn mui-btn--danger mui-btn--md" data-mui-close { "Yes, delete account" }
+                        button class="mui-btn mui-btn--danger mui-btn--md" data-mui-close { "Delete account" }
                     }),
                     open: false,
                 }))
             }
-            // Confirmation alert dialog
+
+            // Discard Changes — non-destructive confirmation
             {
-                (trigger("demo-alert-2", "Discard changes", "default"))
+                (trigger("demo-alert-discard", "Discard changes", "default"))
             }
             {
                 (render(Props {
-                    id: "demo-alert-2".to_string(),
-                    title: "Discard changes?".to_string(),
-                    description: Some("You have unsaved changes. Are you sure you want to discard them?".to_string()),
+                    id: "demo-alert-discard".to_string(),
+                    title: "Discard Changes".to_string(),
+                    description: Some("Your unsaved changes will be lost. This cannot be recovered.".to_string()),
                     children: html! {},
                     footer: Some(html! {
-                        button class="mui-btn mui-btn--ghost mui-btn--md" data-mui-close { "Cancel" }
-                        button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Continue" }
+                        button class="mui-btn mui-btn--ghost mui-btn--md" data-mui-close { "Keep editing" }
+                        button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Discard" }
                     }),
                     open: false,
                 }))

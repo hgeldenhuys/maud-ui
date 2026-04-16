@@ -1,0 +1,65 @@
+/* Accordion component — multiple collapsibles with optional single-open mode */
+
+.mui-accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+}
+
+.mui-accordion__item {
+  border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-accordion__item:last-child {
+  border-bottom: none;
+}
+
+.mui-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  padding: 0.875rem 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--mui-transition);
+}
+
+.mui-accordion__trigger:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-accordion__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-accordion__chevron {
+  font-size: 0.75rem;
+  transition: transform var(--mui-transition);
+  color: var(--mui-text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.mui-accordion__trigger[aria-expanded="true"] .mui-accordion__chevron {
+  transform: rotate(90deg);
+}
+
+.mui-accordion__content {
+  padding: 0 1rem 0.875rem;
+  color: var(--mui-text);
+}
+
+.mui-accordion__content[hidden] {
+  display: none;
+}

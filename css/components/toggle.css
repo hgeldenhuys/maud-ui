@@ -1,0 +1,38 @@
+/* Toggle component — two-state button (pressed/unpressed) */
+
+.mui-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  min-width: 2.25rem;
+}
+
+.mui-toggle:hover:not(:disabled) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-toggle[aria-pressed="true"] {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-toggle[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--mui-border);
+}
+
+.mui-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

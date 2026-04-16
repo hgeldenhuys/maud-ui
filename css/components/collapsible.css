@@ -1,0 +1,58 @@
+/* Collapsible component — expandable section with trigger button */
+
+.mui-collapsible {
+  display: block;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+}
+
+.mui-collapsible__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--mui-transition);
+}
+
+.mui-collapsible__trigger:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-collapsible__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-collapsible__chevron {
+  font-size: 0.75rem;
+  transition: transform var(--mui-transition);
+  color: var(--mui-text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.mui-collapsible__trigger[aria-expanded="true"] .mui-collapsible__chevron {
+  transform: rotate(90deg);
+}
+
+.mui-collapsible__content {
+  padding: 0 1rem 0.75rem;
+  color: var(--mui-text);
+  border-top: 1px solid var(--mui-border);
+  margin-top: 0;
+}
+
+.mui-collapsible__content[hidden] {
+  display: none;
+}

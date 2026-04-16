@@ -1,0 +1,67 @@
+/* Switch component — toggle control with sliding thumb */
+
+.mui-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mui-switch {
+  width: 2.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--mui-transition), border-color var(--mui-transition);
+}
+
+.mui-switch[aria-checked="true"] {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-switch__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: calc(1.25rem - 4px);
+  height: calc(1.25rem - 4px);
+  background: var(--mui-text);
+  border-radius: var(--mui-radius-full);
+  transition: transform var(--mui-transition);
+  display: block;
+}
+
+.mui-switch[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(1rem);
+  background: var(--mui-accent-fg);
+}
+
+.mui-switch:disabled,
+.mui-switch[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-switch:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-switch__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mui-switch__value {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}

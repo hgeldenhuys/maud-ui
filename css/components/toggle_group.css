@@ -1,0 +1,50 @@
+/* Toggle group component — grouped toggle buttons with roving tabindex */
+
+.mui-toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+}
+
+.mui-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  border-right: 1px solid var(--mui-border);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  min-width: 2.25rem;
+}
+
+.mui-toggle-group__item:last-child {
+  border-right: none;
+}
+
+.mui-toggle-group__item:hover:not(:disabled) {
+  background: var(--mui-bg-card);
+}
+
+.mui-toggle-group__item[aria-pressed="true"] {
+  background: var(--mui-bg-card);
+}
+
+.mui-toggle-group__item:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-toggle-group__item:disabled,
+.mui-toggle-group[data-disabled="true"] .mui-toggle-group__item {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

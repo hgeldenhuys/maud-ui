@@ -105,10 +105,74 @@ body {
   outline-offset: 2px;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════ */
-/*  Components (bundled — originally @imported from css/components/*)     */
-/* ═══════════════════════════════════════════════════════════════════════ */
+/* ═══ Components ═══ */
 
+/* --- accordion.css --- */
+/* Accordion component — multiple collapsibles with optional single-open mode */
+
+.mui-accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+}
+
+.mui-accordion__item {
+  border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-accordion__item:last-child {
+  border-bottom: none;
+}
+
+.mui-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  padding: 0.875rem 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--mui-transition);
+}
+
+.mui-accordion__trigger:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-accordion__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-accordion__chevron {
+  font-size: 0.75rem;
+  transition: transform var(--mui-transition);
+  color: var(--mui-text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.mui-accordion__trigger[aria-expanded="true"] .mui-accordion__chevron {
+  transform: rotate(90deg);
+}
+
+.mui-accordion__content {
+  padding: 0 1rem 0.875rem;
+  color: var(--mui-text);
+}
+
+.mui-accordion__content[hidden] {
+  display: none;
+}
 
 /* --- avatar.css --- */
 /* Avatar component — maud-ui Wave 1 */
@@ -462,6 +526,66 @@ body {
   font-size: 0.875rem;
 }
 
+/* --- collapsible.css --- */
+/* Collapsible component — expandable section with trigger button */
+
+.mui-collapsible {
+  display: block;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+}
+
+.mui-collapsible__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--mui-transition);
+}
+
+.mui-collapsible__trigger:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-collapsible__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-collapsible__chevron {
+  font-size: 0.75rem;
+  transition: transform var(--mui-transition);
+  color: var(--mui-text-muted);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.mui-collapsible__trigger[aria-expanded="true"] .mui-collapsible__chevron {
+  transform: rotate(90deg);
+}
+
+.mui-collapsible__content {
+  padding: 0 1rem 0.75rem;
+  color: var(--mui-text);
+  border-top: 1px solid var(--mui-border);
+  margin-top: 0;
+}
+
+.mui-collapsible__content[hidden] {
+  display: none;
+}
+
 /* --- field.css --- */
 /* Field component — form control wrapper with label, description, and error */
 
@@ -812,6 +936,129 @@ body {
   display: inline-block;
 }
 
+/* --- switch.css --- */
+/* Switch component — toggle control with sliding thumb */
+
+.mui-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mui-switch {
+  width: 2.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--mui-transition), border-color var(--mui-transition);
+}
+
+.mui-switch[aria-checked="true"] {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-switch__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: calc(1.25rem - 4px);
+  height: calc(1.25rem - 4px);
+  background: var(--mui-text);
+  border-radius: var(--mui-radius-full);
+  transition: transform var(--mui-transition);
+  display: block;
+}
+
+.mui-switch[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(1rem);
+  background: var(--mui-accent-fg);
+}
+
+.mui-switch:disabled,
+.mui-switch[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-switch:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-switch__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mui-switch__value {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* --- tabs.css --- */
+/* Tabs component — client-side tabbed navigation with ARIA + keyboard support */
+
+.mui-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mui-tabs__list {
+  display: inline-flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--mui-border);
+  padding: 0 0.25rem;
+}
+
+.mui-tabs__trigger {
+  background: transparent;
+  color: var(--mui-text-muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: var(--mui-transition);
+  border-radius: var(--mui-radius-sm) var(--mui-radius-sm) 0 0;
+}
+
+.mui-tabs__trigger:hover {
+  color: var(--mui-text);
+}
+
+.mui-tabs__trigger[aria-selected="true"] {
+  color: var(--mui-text);
+  border-bottom-color: var(--mui-accent);
+}
+
+.mui-tabs__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-tabs__panel {
+  padding: 0.5rem 0;
+  color: var(--mui-text);
+}
+
+.mui-tabs__panel[hidden] {
+  display: none;
+}
+
 /* --- textarea.css --- */
 /* Textarea component — multi-line text input field */
 
@@ -878,4 +1125,269 @@ body {
 
 .mui-textarea--resize-both {
   resize: both;
+}
+
+/* --- toast.css --- */
+/* Toast component — transient notifications with dismiss and auto-dismiss */
+
+/* Viewport container — fixed position, stacks toasts bottom-right */
+.mui-toast-viewport {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.5rem;
+  z-index: 100;
+  max-width: calc(100vw - 2rem);
+  pointer-events: none;
+}
+
+/* Toast container — styled notification box */
+.mui-toast {
+  pointer-events: auto;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-left-width: 3px;
+  border-radius: var(--mui-radius-md);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  box-shadow: var(--mui-shadow-md);
+  min-width: 18rem;
+  max-width: 22rem;
+  position: relative;
+  animation: mui-toast-enter 0.2s ease-out;
+}
+
+/* Info variant — blue accent border */
+.mui-toast--info {
+  border-left-color: var(--mui-accent);
+}
+
+/* Success variant — green accent border */
+.mui-toast--success {
+  border-left-color: var(--mui-success);
+}
+
+/* Warning variant — yellow accent border */
+.mui-toast--warning {
+  border-left-color: var(--mui-warning);
+}
+
+/* Danger variant — red accent border */
+.mui-toast--danger {
+  border-left-color: var(--mui-danger);
+}
+
+/* Exit animation — fade out and slide right */
+.mui-toast--exit {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Title — bold, small font */
+.mui-toast__title {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Description — muted color, smaller font */
+.mui-toast__description {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
+/* Close button — positioned top-right */
+.mui-toast__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-sm);
+  font-size: 1.125rem;
+  line-height: 1;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.mui-toast__close:hover {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+/* Enter animation keyframe */
+@keyframes mui-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* --- toggle_group.css --- */
+/* Toggle group component — grouped toggle buttons with roving tabindex */
+
+.mui-toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+}
+
+.mui-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  border-right: 1px solid var(--mui-border);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  min-width: 2.25rem;
+}
+
+.mui-toggle-group__item:last-child {
+  border-right: none;
+}
+
+.mui-toggle-group__item:hover:not(:disabled) {
+  background: var(--mui-bg-card);
+}
+
+.mui-toggle-group__item[aria-pressed="true"] {
+  background: var(--mui-bg-card);
+}
+
+.mui-toggle-group__item:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+.mui-toggle-group__item:disabled,
+.mui-toggle-group[data-disabled="true"] .mui-toggle-group__item {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- toggle.css --- */
+/* Toggle component — two-state button (pressed/unpressed) */
+
+.mui-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  min-width: 2.25rem;
+}
+
+.mui-toggle:hover:not(:disabled) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-toggle[aria-pressed="true"] {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-toggle[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--mui-border);
+}
+
+.mui-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- tooltip.css --- */
+/* Tooltip component — non-modal hover/focus overlay content */
+
+.mui-tooltip {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-tooltip__trigger {
+  display: inline-flex;
+}
+
+.mui-tooltip__content {
+  position: absolute;
+  background: var(--mui-bg-overlay);
+  color: var(--mui-text);
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--mui-radius-sm);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  max-width: 16rem;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--mui-transition);
+  z-index: 50;
+  box-shadow: var(--mui-shadow-md);
+  border: 1px solid var(--mui-border);
+}
+
+.mui-tooltip__content[data-visible="true"] {
+  opacity: 1;
+}
+
+.mui-tooltip__content--top {
+  bottom: calc(100% + 0.375rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mui-tooltip__content--bottom {
+  top: calc(100% + 0.375rem);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mui-tooltip__content--left {
+  right: calc(100% + 0.375rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mui-tooltip__content--right {
+  left: calc(100% + 0.375rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mui-tooltip__content[hidden] {
+  display: none;
 }

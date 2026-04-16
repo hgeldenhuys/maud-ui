@@ -1,0 +1,22 @@
+/* Separator component — visual and semantic divider */
+
+.mui-separator {
+  background: var(--mui-border);
+  flex-shrink: 0;
+}
+
+/* Horizontal separator — full width, minimal height */
+.mui-separator--horizontal {
+  height: 1px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Vertical separator — minimal width, full height */
+.mui-separator--vertical {
+  width: 1px;
+  height: 100%;
+  min-height: 1rem;
+  align-self: stretch;
+  display: inline-block;
+}

@@ -1,0 +1,76 @@
+/* Checkbox component — custom styled checkbox with hidden native input */
+
+.mui-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.mui-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: inherit;
+}
+
+.mui-checkbox__indicator {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-bg-input);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--mui-transition);
+  position: relative;
+}
+
+.mui-checkbox__input:checked + .mui-checkbox__indicator {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-checkbox__input:checked + .mui-checkbox__indicator::after {
+  content: "";
+  width: 0.375rem;
+  height: 0.625rem;
+  border: solid var(--mui-accent-fg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -2px);
+}
+
+.mui-checkbox__indicator--indeterminate {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-checkbox__indicator--indeterminate::after {
+  content: "";
+  width: 0.625rem;
+  height: 2px;
+  background: var(--mui-accent-fg);
+  transform: none;
+}
+
+.mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-checkbox__input:disabled ~ *,
+.mui-checkbox--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-checkbox__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+}

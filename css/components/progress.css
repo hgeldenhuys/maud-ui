@@ -1,0 +1,33 @@
+/* Progress component — determinate and indeterminate progress indicators */
+
+.mui-progress {
+  width: 100%;
+  max-width: 20rem;
+  height: 0.5rem;
+  background-color: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.mui-progress__bar {
+  height: 100%;
+  background-color: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  transition: width var(--mui-transition);
+}
+
+/* Indeterminate state — animated sliding bar */
+.mui-progress--indeterminate .mui-progress__bar {
+  width: 40%;
+  animation: mui-progress-slide 1.5s ease-in-out infinite;
+}
+
+@keyframes mui-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}

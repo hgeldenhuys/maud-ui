@@ -20,35 +20,35 @@ pub fn showcase_page() -> Markup {
                     p.mui-text-muted { "Headless accessible components for maud + htmx" }
                 }
                 main.mui-showcase {
-                    section id="button" { h2 { "Button" } (primitives::button::render()) }
-                    section id="badge" { h2 { "Badge" } (primitives::badge::render()) }
-                    section id="avatar" { h2 { "Avatar" } (primitives::avatar::render()) }
-                    section id="separator" { h2 { "Separator" } (primitives::separator::render()) }
-                    section id="progress" { h2 { "Progress" } (primitives::progress::render()) }
-                    section id="meter" { h2 { "Meter" } (primitives::meter::render()) }
-                    section id="input" { h2 { "Input" } (primitives::input::render()) }
-                    section id="textarea" { h2 { "Textarea" } (primitives::textarea::render()) }
-                    section id="checkbox" { h2 { "Checkbox" } (primitives::checkbox::render()) }
-                    section id="radio" { h2 { "Radio" } (primitives::radio::render()) }
-                    section id="field" { h2 { "Field" } (primitives::field::render()) }
-                    section id="fieldset" { h2 { "Fieldset" } (primitives::fieldset::render()) }
-                    section id="number_field" { h2 { "Number Field" } (primitives::number_field::render()) }
-                    section id="switch" { h2 { "Switch" } (primitives::switch::render()) }
-                    section id="toggle" { h2 { "Toggle" } (primitives::toggle::render()) }
-                    section id="toggle_group" { h2 { "Toggle Group" } (primitives::toggle_group::render()) }
-                    section id="tabs" { h2 { "Tabs" } (primitives::tabs::render()) }
-                    section id="collapsible" { h2 { "Collapsible" } (primitives::collapsible::render()) }
-                    section id="accordion" { h2 { "Accordion" } (primitives::accordion::render()) }
-                    section id="toast" { h2 { "Toast" } (primitives::toast::render()) }
-                    section id="tooltip" { h2 { "Tooltip" } (primitives::tooltip::render()) }
-                    section id="dialog" { h2 { "Dialog" } (primitives::dialog::render()) }
-                    section id="alert_dialog" { h2 { "Alert Dialog" } (primitives::alert_dialog::render()) }
-                    section id="popover" { h2 { "Popover" } (primitives::popover::render()) }
-                    section id="select" { h2 { "Select" } (primitives::select::render()) }
-                    section id="menu" { h2 { "Menu" } (primitives::menu::render()) }
-                    section id="context_menu" { h2 { "Context Menu" } (primitives::context_menu::render()) }
-                    section id="slider" { h2 { "Slider" } (primitives::slider::render()) }
-                    section id="scroll_area" { h2 { "Scroll Area" } (primitives::scroll_area::render()) }
+                    section id="button" { h2 { "Button" } (primitives::button::showcase()) }
+                    section id="badge" { h2 { "Badge" } (primitives::badge::showcase()) }
+                    section id="avatar" { h2 { "Avatar" } (primitives::avatar::showcase()) }
+                    section id="separator" { h2 { "Separator" } (primitives::separator::showcase()) }
+                    section id="progress" { h2 { "Progress" } (primitives::progress::showcase()) }
+                    section id="meter" { h2 { "Meter" } (primitives::meter::showcase()) }
+                    section id="input" { h2 { "Input" } (primitives::input::showcase()) }
+                    section id="textarea" { h2 { "Textarea" } (primitives::textarea::showcase()) }
+                    section id="checkbox" { h2 { "Checkbox" } (primitives::checkbox::showcase()) }
+                    section id="radio" { h2 { "Radio" } (primitives::radio::showcase()) }
+                    section id="field" { h2 { "Field" } (primitives::field::showcase()) }
+                    section id="fieldset" { h2 { "Fieldset" } (primitives::fieldset::showcase()) }
+                    section id="number_field" { h2 { "Number Field" } (primitives::number_field::showcase()) }
+                    section id="switch" { h2 { "Switch" } (primitives::switch::showcase()) }
+                    section id="toggle" { h2 { "Toggle" } (primitives::toggle::showcase()) }
+                    section id="toggle_group" { h2 { "Toggle Group" } (primitives::toggle_group::showcase()) }
+                    section id="tabs" { h2 { "Tabs" } (primitives::tabs::showcase()) }
+                    section id="collapsible" { h2 { "Collapsible" } (primitives::collapsible::showcase()) }
+                    section id="accordion" { h2 { "Accordion" } (primitives::accordion::showcase()) }
+                    section id="toast" { h2 { "Toast" } (primitives::toast::showcase()) }
+                    section id="tooltip" { h2 { "Tooltip" } (primitives::tooltip::showcase()) }
+                    section id="dialog" { h2 { "Dialog" } (primitives::dialog::showcase()) }
+                    section id="alert_dialog" { h2 { "Alert Dialog" } (primitives::alert_dialog::showcase()) }
+                    section id="popover" { h2 { "Popover" } (primitives::popover::showcase()) }
+                    section id="select" { h2 { "Select" } (primitives::select::showcase()) }
+                    section id="menu" { h2 { "Menu" } (primitives::menu::showcase()) }
+                    section id="context_menu" { h2 { "Context Menu" } (primitives::context_menu::showcase()) }
+                    section id="slider" { h2 { "Slider" } (primitives::slider::showcase()) }
+                    section id="scroll_area" { h2 { "Scroll Area" } (primitives::scroll_area::showcase()) }
                 }
                 script src="/dist/maud-ui.js" defer {}
             }

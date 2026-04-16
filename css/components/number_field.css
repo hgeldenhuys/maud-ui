@@ -1,0 +1,75 @@
+/* Number field component — input with increment/decrement buttons */
+
+.mui-number-field {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+  transition: var(--mui-transition);
+}
+
+.mui-number-field:focus-within {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-number-field[data-disabled="true"] {
+  opacity: 0.5;
+}
+
+.mui-number-field__btn {
+  background: var(--mui-bg-card);
+  border: none;
+  color: var(--mui-text);
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+}
+
+.mui-number-field__btn:hover:not(:disabled) {
+  background: var(--mui-border-hover);
+}
+
+.mui-number-field__btn:disabled {
+  cursor: not-allowed;
+}
+
+.mui-number-field__btn--decrement {
+  border-right: 1px solid var(--mui-border);
+}
+
+.mui-number-field__btn--increment {
+  border-left: 1px solid var(--mui-border);
+}
+
+.mui-number-field__input {
+  border: none;
+  background: transparent;
+  color: var(--mui-text);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  width: 5rem;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+/* Remove default number input spinners */
+.mui-number-field__input::-webkit-inner-spin-button,
+.mui-number-field__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mui-number-field__input:focus {
+  outline: none;
+}

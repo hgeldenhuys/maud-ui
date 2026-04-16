@@ -1,0 +1,28 @@
+/* Fieldset component — groups related form controls with a legend */
+
+.mui-fieldset {
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 1rem 1.25rem 1.25rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mui-fieldset__legend {
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mui-text-muted);
+}
+
+.mui-fieldset[disabled] {
+  opacity: 0.6;
+}
+
+.mui-fieldset[disabled] .mui-fieldset__legend {
+  color: var(--mui-text-subtle);
+}

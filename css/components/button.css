@@ -1,0 +1,163 @@
+/* Button component — maud-ui Wave 1 */
+
+.mui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mui-font-sans);
+  font-weight: 500;
+  border: 1px solid;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+/* Base sizing */
+.mui-btn--sm {
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+}
+
+.mui-btn--md {
+  height: 2.25rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.mui-btn--lg {
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+}
+
+.mui-btn--icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+/* Variant: Default */
+.mui-btn--default {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--default:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--default:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Primary */
+.mui-btn--primary {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+.mui-btn--primary:hover:not([aria-disabled="true"]) {
+  background: var(--mui-accent-hover);
+  border-color: var(--mui-accent-hover);
+}
+
+.mui-btn--primary:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Secondary */
+.mui-btn--secondary {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--secondary:hover:not([aria-disabled="true"]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--secondary:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Outline */
+.mui-btn--outline {
+  background: transparent;
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--outline:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--outline:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Ghost */
+.mui-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-text);
+}
+
+.mui-btn--ghost:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border);
+}
+
+.mui-btn--ghost:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Danger */
+.mui-btn--danger {
+  background: var(--mui-danger);
+  border-color: var(--mui-danger);
+  color: white;
+}
+
+.mui-btn--danger:hover:not([aria-disabled="true"]) {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.mui-btn--danger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Link */
+.mui-btn--link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-accent);
+  padding: 0;
+}
+
+.mui-btn--link:hover:not([aria-disabled="true"]) {
+  text-decoration: underline;
+}
+
+.mui-btn--link:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.mui-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

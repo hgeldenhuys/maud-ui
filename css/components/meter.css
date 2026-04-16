@@ -1,0 +1,32 @@
+/* Meter component — measurement indicator with zones */
+
+.mui-meter {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.mui-meter__track {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+}
+
+.mui-meter__bar {
+  height: 100%;
+  border-radius: var(--mui-radius-full);
+  transition: width var(--mui-transition);
+}
+
+.mui-meter__bar--optimum {
+  background: var(--mui-success);
+}
+
+.mui-meter__bar--suboptimum {
+  background: var(--mui-warning);
+}
+
+.mui-meter__bar--danger {
+  background: var(--mui-danger);
+}

@@ -1,0 +1,48 @@
+/* Input component — text, email, password, and other input types */
+
+.mui-input {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  transition: var(--mui-transition);
+}
+
+.mui-input::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-input:hover:not(:disabled):not([readonly]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-input:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-input[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+.mui-input[aria-invalid="true"]:focus-visible {
+  outline-color: var(--mui-danger);
+}
+
+.mui-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-input[readonly] {
+  background: var(--mui-bg-card);
+  cursor: default;
+}

@@ -1,5 +1,19 @@
 /* maud-ui — design tokens + minimal showcase layout. Component styles added per wave. */
 
+@import "components/avatar.css";
+@import "components/badge.css";
+@import "components/button.css";
+@import "components/checkbox.css";
+@import "components/field.css";
+@import "components/fieldset.css";
+@import "components/input.css";
+@import "components/meter.css";
+@import "components/number_field.css";
+@import "components/progress.css";
+@import "components/radio.css";
+@import "components/separator.css";
+@import "components/textarea.css";
+
 :root,
 [data-theme="dark"] {
   --mui-bg: #0a0a0b;
@@ -70,6 +84,31 @@ body {
   font-family: var(--mui-font-mono);
   font-size: 0.875rem;
   margin: 0;
+}
+
+/* Showcase grid — used by each component's showcase() fn to lay out variants */
+.mui-showcase__grid {
+  display: grid;
+  gap: 1rem;
+}
+.mui-showcase__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.mui-showcase__label {
+  color: var(--mui-text-subtle);
+  font-family: var(--mui-font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 5.5rem;
+}
+.mui-showcase__caption {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  margin: 0 0 0.5rem;
 }
 
 /* Focus ring — use :focus-visible only, never :focus */

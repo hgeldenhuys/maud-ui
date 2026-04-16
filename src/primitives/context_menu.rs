@@ -4,3 +4,7 @@ use maud::{html, Markup};
 pub fn render() -> Markup {
     html! { p.mui-placeholder { "TODO: context_menu component" } }
 }
+
+pub fn showcase() -> Markup {
+    render()
+}

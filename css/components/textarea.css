@@ -1,0 +1,66 @@
+/* Textarea component — multi-line text input field */
+
+.mui-textarea {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: var(--mui-transition);
+  min-height: calc(0.5rem * 2 + 1.5em * 3);
+}
+
+.mui-textarea::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-textarea:hover:not(:disabled):not([readonly]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-textarea:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-textarea[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+.mui-textarea[aria-invalid="true"]:focus-visible {
+  outline-color: var(--mui-danger);
+}
+
+.mui-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-textarea[readonly] {
+  background: var(--mui-bg-card);
+  cursor: default;
+}
+
+/* Resize variants */
+.mui-textarea--resize-none {
+  resize: none;
+}
+
+.mui-textarea--resize-vertical {
+  resize: vertical;
+}
+
+.mui-textarea--resize-horizontal {
+  resize: horizontal;
+}
+
+.mui-textarea--resize-both {
+  resize: both;
+}

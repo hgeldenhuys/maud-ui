@@ -1,0 +1,61 @@
+/* Radio component — single radio button in a group */
+
+.mui-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.mui-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: inherit;
+}
+
+.mui-radio__indicator {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  flex-shrink: 0;
+  transition: var(--mui-transition);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-radio__input:checked + .mui-radio__indicator {
+  border-color: var(--mui-accent);
+}
+
+.mui-radio__input:checked + .mui-radio__indicator::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+}
+
+.mui-radio__input:focus-visible + .mui-radio__indicator {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-radio__input:disabled ~ *,
+.mui-radio--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-radio__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+}

@@ -1,5 +1,6 @@
 /* maud-ui — design tokens + minimal showcase layout. Component styles added per wave. */
 
+
 :root,
 [data-theme="dark"] {
   --mui-bg: #0a0a0b;
@@ -72,9 +73,809 @@ body {
   margin: 0;
 }
 
+/* Showcase grid — used by each component's showcase() fn to lay out variants */
+.mui-showcase__grid {
+  display: grid;
+  gap: 1rem;
+}
+.mui-showcase__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.mui-showcase__label {
+  color: var(--mui-text-subtle);
+  font-family: var(--mui-font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 5.5rem;
+}
+.mui-showcase__caption {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  margin: 0 0 0.5rem;
+}
+
 /* Focus ring — use :focus-visible only, never :focus */
 *:focus { outline: none; }
 *:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════ */
+/*  Components (bundled — originally @imported from css/components/*)     */
+/* ═══════════════════════════════════════════════════════════════════════ */
+
+
+/* --- avatar.css --- */
+/* Avatar component — maud-ui Wave 1 */
+
+.mui-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+  color: var(--mui-accent-fg);
+  font-family: var(--mui-font-sans);
+  font-weight: 500;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Size: Small */
+.mui-avatar--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.6875rem;
+}
+
+/* Size: Medium */
+.mui-avatar--md {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+}
+
+/* Size: Large */
+.mui-avatar--lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.125rem;
+}
+
+/* Image variant */
+.mui-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback variant */
+.mui-avatar__fallback {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- badge.css --- */
+/* Badge component — minimal status indicators */
+
+.mui-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  line-height: 1;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* Default variant — muted background with border */
+.mui-badge--default {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+  border-color: var(--mui-border);
+}
+
+/* Success variant — green tint */
+.mui-badge--success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--mui-success);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* Warning variant — yellow tint */
+.mui-badge--warning {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: var(--mui-warning);
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+/* Danger variant — red tint */
+.mui-badge--danger {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--mui-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Outline variant — transparent with border */
+.mui-badge--outline {
+  background-color: transparent;
+  color: var(--mui-text);
+  border-color: var(--mui-border);
+}
+
+/* --- button.css --- */
+/* Button component — maud-ui Wave 1 */
+
+.mui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mui-font-sans);
+  font-weight: 500;
+  border: 1px solid;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+/* Base sizing */
+.mui-btn--sm {
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+}
+
+.mui-btn--md {
+  height: 2.25rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.mui-btn--lg {
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+}
+
+.mui-btn--icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+/* Variant: Default */
+.mui-btn--default {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--default:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--default:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Primary */
+.mui-btn--primary {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+.mui-btn--primary:hover:not([aria-disabled="true"]) {
+  background: var(--mui-accent-hover);
+  border-color: var(--mui-accent-hover);
+}
+
+.mui-btn--primary:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Secondary */
+.mui-btn--secondary {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--secondary:hover:not([aria-disabled="true"]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--secondary:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Outline */
+.mui-btn--outline {
+  background: transparent;
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--outline:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-btn--outline:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Ghost */
+.mui-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-text);
+}
+
+.mui-btn--ghost:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border);
+}
+
+.mui-btn--ghost:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Danger */
+.mui-btn--danger {
+  background: var(--mui-danger);
+  border-color: var(--mui-danger);
+  color: white;
+}
+
+.mui-btn--danger:hover:not([aria-disabled="true"]) {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.mui-btn--danger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Variant: Link */
+.mui-btn--link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-accent);
+  padding: 0;
+}
+
+.mui-btn--link:hover:not([aria-disabled="true"]) {
+  text-decoration: underline;
+}
+
+.mui-btn--link:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.mui-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- checkbox.css --- */
+/* Checkbox component — custom styled checkbox with hidden native input */
+
+.mui-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.mui-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: inherit;
+}
+
+.mui-checkbox__indicator {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-bg-input);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--mui-transition);
+  position: relative;
+}
+
+.mui-checkbox__input:checked + .mui-checkbox__indicator {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-checkbox__input:checked + .mui-checkbox__indicator::after {
+  content: "";
+  width: 0.375rem;
+  height: 0.625rem;
+  border: solid var(--mui-accent-fg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -2px);
+}
+
+.mui-checkbox__indicator--indeterminate {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+}
+
+.mui-checkbox__indicator--indeterminate::after {
+  content: "";
+  width: 0.625rem;
+  height: 2px;
+  background: var(--mui-accent-fg);
+  transform: none;
+}
+
+.mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-checkbox__input:disabled ~ *,
+.mui-checkbox--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-checkbox__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+}
+
+/* --- field.css --- */
+/* Field component — form control wrapper with label, description, and error */
+
+.mui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  max-width: 24rem;
+}
+
+.mui-field__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+}
+
+.mui-field__required {
+  color: var(--mui-danger);
+  margin-left: 0.25rem;
+}
+
+.mui-field__description {
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  margin: 0;
+}
+
+.mui-field__error {
+  font-size: 0.8125rem;
+  color: var(--mui-danger);
+  margin: 0;
+}
+
+.mui-field--invalid .mui-field__label {
+  color: var(--mui-text);
+}
+
+/* --- fieldset.css --- */
+/* Fieldset component — groups related form controls with a legend */
+
+.mui-fieldset {
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 1rem 1.25rem 1.25rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mui-fieldset__legend {
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mui-text-muted);
+}
+
+.mui-fieldset[disabled] {
+  opacity: 0.6;
+}
+
+.mui-fieldset[disabled] .mui-fieldset__legend {
+  color: var(--mui-text-subtle);
+}
+
+/* --- input.css --- */
+/* Input component — text, email, password, and other input types */
+
+.mui-input {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  transition: var(--mui-transition);
+}
+
+.mui-input::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-input:hover:not(:disabled):not([readonly]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-input:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-input[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+.mui-input[aria-invalid="true"]:focus-visible {
+  outline-color: var(--mui-danger);
+}
+
+.mui-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-input[readonly] {
+  background: var(--mui-bg-card);
+  cursor: default;
+}
+
+/* --- meter.css --- */
+/* Meter component — measurement indicator with zones */
+
+.mui-meter {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.mui-meter__track {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+}
+
+.mui-meter__bar {
+  height: 100%;
+  border-radius: var(--mui-radius-full);
+  transition: width var(--mui-transition);
+}
+
+.mui-meter__bar--optimum {
+  background: var(--mui-success);
+}
+
+.mui-meter__bar--suboptimum {
+  background: var(--mui-warning);
+}
+
+.mui-meter__bar--danger {
+  background: var(--mui-danger);
+}
+
+/* --- number_field.css --- */
+/* Number field component — input with increment/decrement buttons */
+
+.mui-number-field {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+  transition: var(--mui-transition);
+}
+
+.mui-number-field:focus-within {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-number-field[data-disabled="true"] {
+  opacity: 0.5;
+}
+
+.mui-number-field__btn {
+  background: var(--mui-bg-card);
+  border: none;
+  color: var(--mui-text);
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+}
+
+.mui-number-field__btn:hover:not(:disabled) {
+  background: var(--mui-border-hover);
+}
+
+.mui-number-field__btn:disabled {
+  cursor: not-allowed;
+}
+
+.mui-number-field__btn--decrement {
+  border-right: 1px solid var(--mui-border);
+}
+
+.mui-number-field__btn--increment {
+  border-left: 1px solid var(--mui-border);
+}
+
+.mui-number-field__input {
+  border: none;
+  background: transparent;
+  color: var(--mui-text);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  width: 5rem;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+/* Remove default number input spinners */
+.mui-number-field__input::-webkit-inner-spin-button,
+.mui-number-field__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mui-number-field__input:focus {
+  outline: none;
+}
+
+/* --- progress.css --- */
+/* Progress component — determinate and indeterminate progress indicators */
+
+.mui-progress {
+  width: 100%;
+  max-width: 20rem;
+  height: 0.5rem;
+  background-color: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.mui-progress__bar {
+  height: 100%;
+  background-color: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  transition: width var(--mui-transition);
+}
+
+/* Indeterminate state — animated sliding bar */
+.mui-progress--indeterminate .mui-progress__bar {
+  width: 40%;
+  animation: mui-progress-slide 1.5s ease-in-out infinite;
+}
+
+@keyframes mui-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+/* --- radio.css --- */
+/* Radio component — single radio button in a group */
+
+.mui-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.mui-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: inherit;
+}
+
+.mui-radio__indicator {
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  flex-shrink: 0;
+  transition: var(--mui-transition);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-radio__input:checked + .mui-radio__indicator {
+  border-color: var(--mui-accent);
+}
+
+.mui-radio__input:checked + .mui-radio__indicator::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+}
+
+.mui-radio__input:focus-visible + .mui-radio__indicator {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-radio__input:disabled ~ *,
+.mui-radio--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-radio__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+}
+
+/* --- separator.css --- */
+/* Separator component — visual and semantic divider */
+
+.mui-separator {
+  background: var(--mui-border);
+  flex-shrink: 0;
+}
+
+/* Horizontal separator — full width, minimal height */
+.mui-separator--horizontal {
+  height: 1px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Vertical separator — minimal width, full height */
+.mui-separator--vertical {
+  width: 1px;
+  height: 100%;
+  min-height: 1rem;
+  align-self: stretch;
+  display: inline-block;
+}
+
+/* --- textarea.css --- */
+/* Textarea component — multi-line text input field */
+
+.mui-textarea {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: var(--mui-transition);
+  min-height: calc(0.5rem * 2 + 1.5em * 3);
+}
+
+.mui-textarea::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-textarea:hover:not(:disabled):not([readonly]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-textarea:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-textarea[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+.mui-textarea[aria-invalid="true"]:focus-visible {
+  outline-color: var(--mui-danger);
+}
+
+.mui-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-textarea[readonly] {
+  background: var(--mui-bg-card);
+  cursor: default;
+}
+
+/* Resize variants */
+.mui-textarea--resize-none {
+  resize: none;
+}
+
+.mui-textarea--resize-vertical {
+  resize: vertical;
+}
+
+.mui-textarea--resize-horizontal {
+  resize: horizontal;
+}
+
+.mui-textarea--resize-both {
+  resize: both;
 }

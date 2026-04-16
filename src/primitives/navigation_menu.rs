@@ -135,10 +135,24 @@ pub fn showcase() -> Markup {
                 },
             ],
         }),
-        NavItem::Link(NavLink {
-            label: "Documentation".to_string(),
-            href: "#documentation".to_string(),
-            description: None,
+        NavItem::Menu(NavMenu {
+            label: "Resources".to_string(),
+            links: vec![
+                NavLink {
+                    label: "Documentation".to_string(),
+                    href: "#documentation".to_string(),
+                    description: Some(
+                        "Full API reference and usage guides.".to_string(),
+                    ),
+                },
+                NavLink {
+                    label: "Changelog".to_string(),
+                    href: "#changelog".to_string(),
+                    description: Some(
+                        "Latest updates and release notes.".to_string(),
+                    ),
+                },
+            ],
         }),
         NavItem::Link(NavLink {
             label: "GitHub".to_string(),

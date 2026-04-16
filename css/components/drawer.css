@@ -132,8 +132,8 @@ dialog.mui-drawer--bottom {
 .mui-drawer__header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.25rem 1.5rem 0;
+  align-items: center;
+  padding: 1.5rem 1.5rem 0;
 }
 
 .mui-drawer__title {
@@ -146,8 +146,8 @@ dialog.mui-drawer--bottom {
 
 .mui-drawer__close {
   background: transparent;
-  border: none;
-  color: var(--mui-text-muted);
+  border: 1px solid var(--mui-border);
+  color: var(--mui-text);
   cursor: pointer;
   width: 2rem;
   height: 2rem;
@@ -155,14 +155,15 @@ dialog.mui-drawer--bottom {
   align-items: center;
   justify-content: center;
   border-radius: var(--mui-radius-sm);
-  font-size: 1rem;
-  transition: opacity var(--mui-transition);
-  opacity: 0.7;
+  font-size: 1.125rem;
+  line-height: 1;
+  transition: background var(--mui-transition), border-color var(--mui-transition);
   flex-shrink: 0;
 }
 
 .mui-drawer__close:hover {
-  opacity: 1;
+  background: var(--mui-bg-hover);
+  border-color: var(--mui-border-hover, var(--mui-border));
 }
 
 .mui-drawer__close:focus-visible {
@@ -171,7 +172,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-drawer__close:active {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .mui-drawer__description {
@@ -194,9 +195,10 @@ dialog.mui-drawer--bottom {
 
 /* Footer for action buttons pinned at bottom */
 .mui-drawer__footer {
-  padding: 1rem 1.5rem;
+  padding: 1.5rem;
   border-top: 1px solid var(--mui-border);
   display: flex;
   gap: 0.75rem;
   justify-content: flex-end;
+  flex-shrink: 0;
 }

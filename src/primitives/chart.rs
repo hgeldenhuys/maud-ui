@@ -50,7 +50,7 @@ impl Default for Props {
 }
 
 // Layout constants — padding for axis labels and breathing room
-const PAD_LEFT: f64 = 44.0;
+const PAD_LEFT: f64 = 48.0;
 const PAD_TOP: f64 = 12.0;
 const PAD_RIGHT: f64 = 12.0;
 const PAD_BOTTOM: f64 = 32.0;
@@ -234,7 +234,7 @@ fn render_line(props: &Props, color: &str) -> String {
     // Gradient definition for area fill
     let grad_id = format!("{}-area-grad", props.id);
     svg.push_str(&format!(
-        r#"<defs><linearGradient id="{grad_id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="{color}" stop-opacity="0.15"/><stop offset="100%" stop-color="{color}" stop-opacity="0.02"/></linearGradient></defs>"#
+        r#"<defs><linearGradient id="{grad_id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="{color}" stop-opacity="0.25"/><stop offset="100%" stop-color="{color}" stop-opacity="0.03"/></linearGradient></defs>"#
     ));
 
     // Area fill (smooth gradient)
@@ -342,17 +342,17 @@ pub fn showcase() -> Markup {
                     id: "chart-bar-demo".into(),
                     chart_type: ChartType::Bar,
                     data: monthly_data.clone(),
-                    title: Some("Monthly Revenue".into()),
+                    title: Some("Monthly Revenue (USD)".into()),
                     ..Default::default()
                 }))
             }
             div {
-                p.mui-showcase__caption { "Line chart" }
+                p.mui-showcase__caption { "Line chart with area fill" }
                 (render(Props {
                     id: "chart-line-demo".into(),
                     chart_type: ChartType::Line,
                     data: monthly_data.clone(),
-                    title: Some("Trend".into()),
+                    title: Some("Active Users Over Time".into()),
                     ..Default::default()
                 }))
             }
@@ -362,18 +362,18 @@ pub fn showcase() -> Markup {
                     id: "chart-custom-color".into(),
                     chart_type: ChartType::Bar,
                     data: monthly_data.clone(),
-                    title: Some("Revenue (green)".into()),
+                    title: Some("Conversion Rate by Month".into()),
                     color: Some("var(--mui-success)".into()),
                     ..Default::default()
                 }))
             }
             div {
-                p.mui-showcase__caption { "Line chart (wide)" }
+                p.mui-showcase__caption { "Wide line chart" }
                 (render(Props {
                     id: "chart-line-wide".into(),
                     chart_type: ChartType::Line,
                     data: monthly_data,
-                    title: Some("Wide Trend".into()),
+                    title: Some("Pageviews Trend (6 months)".into()),
                     width: 600,
                     height: 250,
                     color: Some("var(--mui-warning)".into()),

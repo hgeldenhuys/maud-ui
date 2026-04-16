@@ -1,6 +1,8 @@
 //! Drawer component — sliding panel that anchors to a screen edge using native <dialog> element.
 use maud::{html, Markup};
 
+use super::{field, native_select, separator, switch};
+
 /// Side where the drawer slides in from
 #[derive(Clone, Debug)]
 pub enum Side {
@@ -38,6 +40,8 @@ pub struct Props {
     pub description: Option<String>,
     /// Markup content displayed in drawer body
     pub children: Markup,
+    /// Optional footer markup pinned at the bottom
+    pub footer: Option<Markup>,
     /// Which side the drawer slides from (default Right)
     pub side: Side,
 }
@@ -49,6 +53,7 @@ impl Default for Props {
             title: "Drawer".to_string(),
             description: None,
             children: html! {},
+            footer: None,
             side: Side::Right,
         }
     }
@@ -113,6 +118,11 @@ pub fn render(props: Props) -> Markup {
             div class="mui-drawer__body" {
                 (props.children)
             }
+            @if let Some(footer) = props.footer {
+                div class="mui-drawer__footer" {
+                    (footer)
+                }
+            }
         }
     }
 }
@@ -132,23 +142,51 @@ pub fn showcase() -> Markup {
                 title: "Settings".to_string(),
                 description: Some("Adjust your preferences here.".to_string()),
                 children: html! {
-                    div class="mui-field" {
-                        label class="mui-label" for="demo-theme" { "Theme" }
-                        select class="mui-input" id="demo-theme" {
-                            option { "Light" }
-                            option { "Dark" }
-                            option { "Auto" }
-                        }
-                    }
-                    div class="mui-field" {
-                        label class="mui-label" for="demo-notify" { "Notifications" }
-                        input class="mui-input" id="demo-notify" type="checkbox" {}
-                    }
-                    div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
-                        button class="mui-btn mui-btn--primary" { "Save" }
-                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
+                    div style="display: flex; flex-direction: column; gap: 1rem;" {
+                        (field::render(field::Props {
+                            label: "Theme".to_string(),
+                            id: "demo-theme".to_string(),
+                            description: Some("Choose your preferred appearance.".to_string()),
+                            children: html! {
+                                (native_select::render(native_select::NativeSelectProps {
+                                    name: "theme".to_string(),
+                                    id: "demo-theme".to_string(),
+                                    options: vec![
+                                        native_select::NativeOption { value: "light".to_string(), label: "Light".to_string(), disabled: false },
+                                        native_select::NativeOption { value: "dark".to_string(), label: "Dark".to_string(), disabled: false },
+                                        native_select::NativeOption { value: "auto".to_string(), label: "System".to_string(), disabled: false },
+                                    ],
+                                    selected: Some("auto".to_string()),
+                                    disabled: false,
+                                    placeholder: None,
+                                }))
+                            },
+                            ..Default::default()
+                        }))
+                        (separator::render(separator::Props {
+                            orientation: separator::Orientation::Horizontal,
+                            decorative: true,
+                        }))
+                        (switch::render(switch::Props {
+                            name: "notifications".to_string(),
+                            id: "demo-notifications".to_string(),
+                            label: "Enable notifications".to_string(),
+                            checked: true,
+                            disabled: false,
+                        }))
+                        (switch::render(switch::Props {
+                            name: "sounds".to_string(),
+                            id: "demo-sounds".to_string(),
+                            label: "Sound effects".to_string(),
+                            checked: false,
+                            disabled: false,
+                        }))
                     }
                 },
+                footer: Some(html! {
+                    button class="mui-btn mui-btn--default mui-btn--md" data-mui-close { "Cancel" }
+                    button class="mui-btn mui-btn--primary mui-btn--md" { "Save changes" }
+                }),
                 side: Side::Right,
             }))
 
@@ -163,13 +201,19 @@ pub fn showcase() -> Markup {
                 title: "Navigation".to_string(),
                 description: None,
                 children: html! {
-                    nav style="display: flex; flex-direction: column; gap: 0.5rem;" {
-                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Home" }
-                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Products" }
-                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Docs" }
-                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Contact" }
+                    nav style="display: flex; flex-direction: column; gap: 0.25rem;" {
+                        a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Home" }
+                        a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Products" }
+                        a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Documentation" }
+                        (separator::render(separator::Props {
+                            orientation: separator::Orientation::Horizontal,
+                            decorative: true,
+                        }))
+                        a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Settings" }
+                        a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Contact" }
                     }
                 },
+                footer: None,
                 side: Side::Left,
             }))
 
@@ -184,15 +228,21 @@ pub fn showcase() -> Markup {
                 title: "Share".to_string(),
                 description: Some("Share this document with others.".to_string()),
                 children: html! {
-                    div class="mui-field" {
-                        label class="mui-label" for="demo-email" { "Email" }
-                        input class="mui-input" id="demo-email" type="email" placeholder="friend@example.com" {}
-                    }
-                    div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
-                        button class="mui-btn mui-btn--primary" { "Send invite" }
-                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
-                    }
+                    (field::render(field::Props {
+                        label: "Email address".to_string(),
+                        id: "demo-share-email".to_string(),
+                        description: Some("Enter the recipient's email.".to_string()),
+                        children: html! {
+                            input.mui-input type="email" id="demo-share-email" name="email"
+                                placeholder="colleague@example.com";
+                        },
+                        ..Default::default()
+                    }))
                 },
+                footer: Some(html! {
+                    button class="mui-btn mui-btn--default mui-btn--md" data-mui-close { "Cancel" }
+                    button class="mui-btn mui-btn--primary mui-btn--md" { "Send invite" }
+                }),
                 side: Side::Bottom,
             }))
         }

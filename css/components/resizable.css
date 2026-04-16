@@ -41,12 +41,12 @@
 }
 
 .mui-resizable--horizontal > .mui-resizable__handle {
-  width: 4px;
+  width: 8px;
   cursor: col-resize;
 }
 
 .mui-resizable--vertical > .mui-resizable__handle {
-  height: 4px;
+  height: 8px;
   cursor: row-resize;
 }
 
@@ -60,31 +60,45 @@
   background: var(--mui-border-focus);
 }
 
-/* ── Handle bar (grab indicator) ─────────────────────────────────────── */
+/* ── Handle bar (grab indicator — dotted pattern) ──────────────────── */
 
 .mui-resizable__handle-bar {
   border-radius: var(--mui-radius-sm);
   background: var(--mui-border);
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .mui-resizable--horizontal .mui-resizable__handle-bar {
-  width: 2px;
-  height: 1.5rem;
+  width: 4px;
+  height: 2rem;
+  background: transparent;
+  background-image: radial-gradient(circle, var(--mui-text-muted) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
 }
 
 .mui-resizable--vertical .mui-resizable__handle-bar {
-  height: 2px;
-  width: 1.5rem;
+  height: 4px;
+  width: 2rem;
+  background: transparent;
+  background-image: radial-gradient(circle, var(--mui-text-muted) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
 }
 
-.mui-resizable__handle:hover .mui-resizable__handle-bar,
-.mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
-  background: var(--mui-text-muted);
+.mui-resizable--horizontal > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--horizontal > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image: radial-gradient(circle, var(--mui-text) 1px, transparent 1px);
+}
+
+.mui-resizable--vertical > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--vertical > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image: radial-gradient(circle, var(--mui-text) 1px, transparent 1px);
 }
 
 .mui-resizable__handle:active .mui-resizable__handle-bar {
-  background: var(--mui-text);
+  background-image: radial-gradient(circle, var(--mui-accent) 1px, transparent 1px);
 }
 
 /* ── Dragging state (applied by JS) ──────────────────────────────────── */
@@ -118,4 +132,34 @@
   margin: 0;
   font-size: 0.8125rem;
   color: var(--mui-text-muted);
+  line-height: 1.5;
+}
+
+.mui-resizable__demo-nav {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.mui-resizable__demo-nav li a {
+  display: block;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.mui-resizable__demo-nav li a:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-resizable__demo-nav li a.active {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
 }

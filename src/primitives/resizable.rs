@@ -91,9 +91,9 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div class="mui-showcase__grid" {
-            // Two horizontal panels
+            // Two horizontal panels — sidebar + content
             div {
-                h3 class="mui-showcase__caption" { "Two Horizontal Panels" }
+                h3 class="mui-showcase__caption" { "Sidebar + Content" }
                 (render(Props {
                     id: "demo-resize-h2".to_string(),
                     direction: Direction::Horizontal,
@@ -101,8 +101,14 @@ pub fn showcase() -> Markup {
                         Panel {
                             content: html! {
                                 div class="mui-resizable__demo-content" {
-                                    h4 { "Sidebar" }
-                                    p { "This panel takes 30% of the space by default." }
+                                    h4 { "Navigation" }
+                                    ul class="mui-resizable__demo-nav" {
+                                        li { a class="active" href="#" { "Dashboard" } }
+                                        li { a href="#" { "Projects" } }
+                                        li { a href="#" { "Team" } }
+                                        li { a href="#" { "Settings" } }
+                                        li { a href="#" { "Analytics" } }
+                                    }
                                 }
                             },
                             default_size: 30.0,
@@ -111,8 +117,8 @@ pub fn showcase() -> Markup {
                         Panel {
                             content: html! {
                                 div class="mui-resizable__demo-content" {
-                                    h4 { "Content" }
-                                    p { "This panel takes 70% of the space by default." }
+                                    h4 { "Dashboard" }
+                                    p { "Welcome back. Here is an overview of your recent activity, key metrics, and pending tasks. Drag the handle to resize the sidebar." }
                                 }
                             },
                             default_size: 70.0,
@@ -122,9 +128,9 @@ pub fn showcase() -> Markup {
                 }))
             }
 
-            // Three horizontal panels
+            // Three horizontal panels — file explorer layout
             div {
-                h3 class="mui-showcase__caption" { "Three Panels with Two Handles" }
+                h3 class="mui-showcase__caption" { "Three-column Layout" }
                 (render(Props {
                     id: "demo-resize-h3".to_string(),
                     direction: Direction::Horizontal,
@@ -132,28 +138,33 @@ pub fn showcase() -> Markup {
                         Panel {
                             content: html! {
                                 div class="mui-resizable__demo-content" {
-                                    h4 { "Left" }
-                                    p { "25%" }
+                                    h4 { "Explorer" }
+                                    ul class="mui-resizable__demo-nav" {
+                                        li { a class="active" href="#" { "src/" } }
+                                        li { a href="#" { "tests/" } }
+                                        li { a href="#" { "docs/" } }
+                                        li { a href="#" { "Cargo.toml" } }
+                                    }
                                 }
                             },
-                            default_size: 25.0,
+                            default_size: 20.0,
                             min_size: Some(10.0),
                         },
                         Panel {
                             content: html! {
                                 div class="mui-resizable__demo-content" {
-                                    h4 { "Center" }
-                                    p { "50%" }
+                                    h4 { "Editor" }
+                                    p { "Select a file from the explorer to view its contents here. This center panel occupies the majority of the available space." }
                                 }
                             },
-                            default_size: 50.0,
+                            default_size: 55.0,
                             min_size: Some(20.0),
                         },
                         Panel {
                             content: html! {
                                 div class="mui-resizable__demo-content" {
-                                    h4 { "Right" }
-                                    p { "25%" }
+                                    h4 { "Inspector" }
+                                    p { "Properties and metadata for the selected item will appear in this panel." }
                                 }
                             },
                             default_size: 25.0,

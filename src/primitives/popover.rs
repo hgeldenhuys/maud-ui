@@ -78,8 +78,8 @@ impl Default for Props {
 
 /// Render a popover with the given properties
 pub fn render(props: Props) -> Markup {
-    let placement_align_class = format!(
-        "mui-popover__content--{}-{}",
+    let content_class = format!(
+        "mui-popover__content mui-popover__content--{}-{}",
         props.placement.class_part(),
         props.align.class_part()
     );
@@ -94,7 +94,7 @@ pub fn render(props: Props) -> Markup {
             {
                 (props.trigger)
             }
-            div.mui-popover__content class=(placement_align_class)
+            div class=(content_class)
                 id=(content_id)
                 role="dialog"
                 hidden

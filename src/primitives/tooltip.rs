@@ -51,7 +51,7 @@ impl Default for Props {
 
 /// Render a single tooltip with the given properties
 pub fn render(props: Props) -> Markup {
-    let placement_class = props.placement.class();
+    let content_class = format!("mui-tooltip__content {}", props.placement.class());
     let tip_id = format!("{}-tip", props.id);
 
     html! {
@@ -59,7 +59,7 @@ pub fn render(props: Props) -> Markup {
             span.mui-tooltip__trigger aria-describedby=(tip_id.clone()) {
                 (props.trigger)
             }
-            span.mui-tooltip__content class=(placement_class)
+            span class=(content_class)
                 id=(tip_id)
                 role="tooltip"
                 hidden

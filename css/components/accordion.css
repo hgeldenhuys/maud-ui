@@ -27,7 +27,7 @@
 }
 
 .mui-accordion__trigger:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .mui-accordion__trigger:focus-visible {

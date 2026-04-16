@@ -22,7 +22,7 @@
 }
 
 .mui-collapsible__trigger:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .mui-collapsible__trigger:focus-visible {

@@ -120,8 +120,8 @@ pub fn showcase() -> Markup {
                         }
                     },
                     footer: Some(html! {
-                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
-                        button class="mui-btn mui-btn--primary" { "Save changes" }
+                        button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
+                        button class="mui-btn mui-btn--primary mui-btn--md" { "Save changes" }
                     }),
                     open: false,
                 }))

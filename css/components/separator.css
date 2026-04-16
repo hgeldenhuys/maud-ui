@@ -12,11 +12,10 @@
   margin: 0;
 }
 
-/* Vertical separator — minimal width, full height */
+/* Vertical separator — minimal width, stretches to fill parent */
 .mui-separator--vertical {
   width: 1px;
-  height: 100%;
-  min-height: 1rem;
   align-self: stretch;
+  min-height: 1rem;
   display: inline-block;
 }

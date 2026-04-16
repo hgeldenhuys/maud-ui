@@ -58,9 +58,16 @@
 /* Calendar icon — right-aligned, muted */
 .mui-date-picker__icon {
   flex-shrink: 0;
-  font-size: 0.875rem;
   color: var(--mui-text-muted);
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-date-picker__icon svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 /* Dropdown panel — proper shadow and spacing */

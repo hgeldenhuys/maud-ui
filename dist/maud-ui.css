@@ -245,7 +245,7 @@ body {
 }
 
 .mui-accordion__trigger:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .mui-accordion__trigger:focus-visible {
@@ -1478,7 +1478,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-collapsible__trigger:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .mui-collapsible__trigger:focus-visible {
@@ -2133,9 +2133,16 @@ dialog.mui-command::backdrop {
 /* Calendar icon — right-aligned, muted */
 .mui-date-picker__icon {
   flex-shrink: 0;
-  font-size: 0.875rem;
   color: var(--mui-text-muted);
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-date-picker__icon svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 /* Dropdown panel — proper shadow and spacing */
@@ -2405,7 +2412,7 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-dialog__description {
-  padding: 0 1.5rem;
+  padding: 0.25rem 1.5rem 0;
   margin: 0;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
@@ -2413,7 +2420,7 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-dialog__body {
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .mui-dialog__body > *:last-child {
@@ -4489,12 +4496,11 @@ dialog.mui-drawer--bottom {
   margin: 0;
 }
 
-/* Vertical separator — minimal width, full height */
+/* Vertical separator — minimal width, stretches to fill parent */
 .mui-separator--vertical {
   width: 1px;
-  height: 100%;
-  min-height: 1rem;
   align-self: stretch;
+  min-height: 1rem;
   display: inline-block;
 }
 
@@ -4631,10 +4637,13 @@ dialog.mui-drawer--bottom {
 
 .mui-slider__native {
   position: absolute;
+  top: 0;
+  left: 0;
   opacity: 0;
   width: 100%;
   height: 100%;
   cursor: pointer;
+  margin: 0;
 }
 
 .mui-slider__value {

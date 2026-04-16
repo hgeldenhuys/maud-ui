@@ -85,7 +85,7 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-dialog__description {
-  padding: 0 1.5rem;
+  padding: 0.25rem 1.5rem 0;
   margin: 0;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
@@ -93,7 +93,7 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-dialog__body {
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .mui-dialog__body > *:last-child {

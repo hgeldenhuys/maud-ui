@@ -45,12 +45,12 @@ impl Default for Props {
 
 /// Render a single separator with the given properties
 pub fn render(props: Props) -> Markup {
+    let class = format!("mui-separator {}", props.orientation.class());
     html! {
         @if props.decorative {
-            div.mui-separator class=(props.orientation.class()) aria-hidden="true" {}
+            div class=(class) aria-hidden="true" {}
         } @else {
-            div.mui-separator
-                class=(props.orientation.class())
+            div class=(class)
                 role="separator"
                 aria-orientation=(props.orientation.aria_orientation()) {}
         }
@@ -73,18 +73,18 @@ pub fn showcase() -> Markup {
             // Vertical separators in a row
             div {
                 p.mui-showcase__caption { "Vertical separators" }
-                div.mui-showcase__row style="height: 1.5rem;" {
-                    span.mui-showcase__label { "Home" }
+                div.mui-showcase__row style="align-items: stretch; height: 2rem;" {
+                    span.mui-showcase__label style="display: flex; align-items: center;" { "Home" }
                     (render(Props {
                         orientation: Orientation::Vertical,
                         ..Default::default()
                     }))
-                    span.mui-showcase__label { "Docs" }
+                    span.mui-showcase__label style="display: flex; align-items: center;" { "Docs" }
                     (render(Props {
                         orientation: Orientation::Vertical,
                         ..Default::default()
                     }))
-                    span.mui-showcase__label { "About" }
+                    span.mui-showcase__label style="display: flex; align-items: center;" { "About" }
                 }
             }
 

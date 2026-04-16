@@ -14,11 +14,17 @@ dialog.mui-drawer {
 }
 
 dialog.mui-drawer::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  animation: mui-drawer-backdrop-enter 150ms ease-out;
 }
 
-/* Right drawer — anchored to the right edge */
+@keyframes mui-drawer-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Right drawer — anchored to the right edge, rounded left corners */
 dialog.mui-drawer--right {
   margin-left: auto;
   margin-right: 0;
@@ -28,9 +34,16 @@ dialog.mui-drawer--right {
   right: 0;
   top: 0;
   bottom: 0;
+  border-radius: var(--mui-radius-lg) 0 0 var(--mui-radius-lg);
+  animation: mui-drawer-slide-right 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Left drawer — anchored to the left edge */
+@keyframes mui-drawer-slide-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Left drawer — anchored to the left edge, rounded right corners */
 dialog.mui-drawer--left {
   margin-right: auto;
   margin-left: 0;
@@ -40,9 +53,16 @@ dialog.mui-drawer--left {
   left: 0;
   top: 0;
   bottom: 0;
+  border-radius: 0 var(--mui-radius-lg) var(--mui-radius-lg) 0;
+  animation: mui-drawer-slide-left 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Top drawer — anchored to the top edge */
+@keyframes mui-drawer-slide-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+/* Top drawer — anchored to the top edge, rounded bottom corners */
 dialog.mui-drawer--top {
   width: 100vw;
   max-width: 100vw;
@@ -56,14 +76,21 @@ dialog.mui-drawer--top {
   top: 0;
   left: 0;
   right: 0;
+  border-radius: 0 0 var(--mui-radius-lg) var(--mui-radius-lg);
+  animation: mui-drawer-slide-top 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Bottom drawer — anchored to the bottom edge */
+@keyframes mui-drawer-slide-top {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* Bottom drawer — anchored to the bottom edge, rounded top corners */
 dialog.mui-drawer--bottom {
   width: 100vw;
   max-width: 100vw;
   height: auto;
-  max-height: 50vh;
+  max-height: 85vh;
   margin-top: auto;
   margin-left: 0;
   margin-right: 0;
@@ -72,21 +99,43 @@ dialog.mui-drawer--bottom {
   bottom: 0;
   left: 0;
   right: 0;
+  border-radius: var(--mui-radius-lg) var(--mui-radius-lg) 0 0;
+  animation: mui-drawer-slide-bottom 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mui-drawer-slide-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Grab handle — centered bar at top of bottom/top drawers */
+.mui-drawer__handle {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 0 0;
+}
+
+.mui-drawer__handle-bar {
+  width: 2.5rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  background: var(--mui-text-muted);
+  opacity: 0.4;
 }
 
 .mui-drawer__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 1.25rem 1.25rem 0;
-  border-bottom: 1px solid var(--mui-border);
+  padding: 1.25rem 1.5rem 0;
 }
 
 .mui-drawer__title {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 .mui-drawer__close {
@@ -94,36 +143,36 @@ dialog.mui-drawer--bottom {
   border: none;
   color: var(--mui-text-muted);
   cursor: pointer;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--mui-radius-sm);
-  font-size: 1.25rem;
-  transition: background-color 0.15s, color 0.15s;
+  font-size: 1rem;
+  transition: opacity var(--mui-transition);
+  opacity: 0.7;
   flex-shrink: 0;
 }
 
 .mui-drawer__close:hover {
-  background: var(--mui-bg-input);
-  color: var(--mui-text);
+  opacity: 1;
 }
 
 .mui-drawer__close:active {
-  background: var(--mui-bg-subtle);
+  opacity: 0.5;
 }
 
 .mui-drawer__description {
-  padding: 0.5rem 1.25rem 0;
+  padding: 0.25rem 1.5rem 0;
   margin: 0;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .mui-drawer__body {
-  padding: 1.25rem;
+  padding: 1.5rem;
   overflow-y: auto;
   max-height: calc(100vh - 6rem);
 }

@@ -84,53 +84,34 @@ pub fn close_button(label: &str) -> Markup {
 pub fn render(props: Props) -> Markup {
     let title_id = format!("{}-title", props.id);
     let desc_id = format!("{}-desc", props.id);
-    let aria_describedby = if props.description.is_some() { desc_id.clone() } else { String::new() };
+    let has_desc = props.description.is_some();
+    let show_handle = matches!(props.side, Side::Bottom | Side::Top);
 
-    if aria_describedby.is_empty() {
-        html! {
-            dialog class={"mui-drawer " (props.side.class_name())}
-                id=(props.id)
-                data-mui="drawer"
-                aria-labelledby=(title_id)
-            {
-                div class="mui-drawer__header" {
-                    h2 class="mui-drawer__title" id=(title_id) {
-                        (props.title)
-                    }
-                    (close_button("Close"))
-                }
-                @if let Some(desc) = props.description {
-                    p class="mui-drawer__description" id=(desc_id) {
-                        (desc)
-                    }
-                }
-                div class="mui-drawer__body" {
-                    (props.children)
+    html! {
+        dialog class={"mui-drawer " (props.side.class_name())}
+            id=(props.id)
+            data-mui="drawer"
+            aria-labelledby=(title_id)
+            aria-describedby=[if has_desc { Some(desc_id.as_str()) } else { None }]
+        {
+            @if show_handle {
+                div class="mui-drawer__handle" {
+                    div class="mui-drawer__handle-bar" {}
                 }
             }
-        }
-    } else {
-        html! {
-            dialog class={"mui-drawer " (props.side.class_name())}
-                id=(props.id)
-                data-mui="drawer"
-                aria-labelledby=(title_id)
-                aria-describedby=(aria_describedby)
-            {
-                div class="mui-drawer__header" {
-                    h2 class="mui-drawer__title" id=(title_id) {
-                        (props.title)
-                    }
-                    (close_button("Close"))
+            div class="mui-drawer__header" {
+                h2 class="mui-drawer__title" id=(title_id) {
+                    (props.title)
                 }
-                @if let Some(desc) = props.description {
-                    p class="mui-drawer__description" id=(desc_id) {
-                        (desc)
-                    }
+                (close_button("Close"))
+            }
+            @if let Some(desc) = props.description {
+                p class="mui-drawer__description" id=(desc_id) {
+                    (desc)
                 }
-                div class="mui-drawer__body" {
-                    (props.children)
-                }
+            }
+            div class="mui-drawer__body" {
+                (props.children)
             }
         }
     }
@@ -188,6 +169,28 @@ pub fn showcase() -> Markup {
                         }
                     },
                     side: Side::Left,
+                }))
+            }
+            // Bottom drawer (sheet style with grab handle)
+            {
+                (trigger("demo-drawer-3", "Open drawer (bottom)"))
+            }
+            {
+                (render(Props {
+                    id: "demo-drawer-3".to_string(),
+                    title: "Share".to_string(),
+                    description: Some("Share this document with others.".to_string()),
+                    children: html! {
+                        div class="mui-field" {
+                            label class="mui-label" { "Email" }
+                            input class="mui-input" type="email" placeholder="friend@example.com" {}
+                        }
+                        div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
+                            button class="mui-btn mui-btn--primary" { "Send invite" }
+                            button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
+                        }
+                    },
+                    side: Side::Bottom,
                 }))
             }
         }

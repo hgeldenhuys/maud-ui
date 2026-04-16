@@ -14,7 +14,10 @@
 
     function open() {
       trigger.setAttribute("aria-expanded", "true");
+      // Remove hidden first so CSS transition can play
       content.removeAttribute("hidden");
+      // Force reflow before adding visible state
+      void content.offsetHeight;
       content.setAttribute("data-visible", "true");
       content.focus();
       document.addEventListener("click", clickOutside, true);
@@ -23,8 +26,11 @@
 
     function close() {
       trigger.setAttribute("aria-expanded", "false");
-      content.setAttribute("hidden", "");
       content.setAttribute("data-visible", "false");
+      // Delay hidden to let CSS transition complete
+      setTimeout(function () {
+        content.setAttribute("hidden", "");
+      }, 150); // Match --mui-transition duration
       document.removeEventListener("click", clickOutside, true);
       document.removeEventListener("keydown", escClose, true);
     }

@@ -40,17 +40,13 @@
 }
 
 .mui-accordion__chevron {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   color: var(--mui-text-muted);
+  font-size: 0.875rem;
   transition: transform 200ms ease;
-}
-
-.mui-accordion__chevron svg {
-  width: 1rem;
-  height: 1rem;
 }
 
 .mui-accordion__trigger[aria-expanded="true"] .mui-accordion__chevron {

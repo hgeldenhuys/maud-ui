@@ -272,28 +272,36 @@
 
   window.MaudUI.behaviors["hover-card"] = function (root) {
     // root is .mui-hover-card with trigger and content inside
-    const trigger = root.querySelector(".mui-hover-card__trigger");
-    const content = root.querySelector(".mui-hover-card__content");
+    var trigger = root.querySelector(".mui-hover-card__trigger");
+    var content = root.querySelector(".mui-hover-card__content");
     if (!trigger || !content) return;
 
-    const openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
-    const closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
-    let openTimer = null;
-    let closeTimer = null;
+    var openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
+    var closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
+    var openTimer = null;
+    var closeTimer = null;
+    var hideTimer = null;
 
     function show() {
       clearTimeout(closeTimer);
-      openTimer = setTimeout(() => {
+      clearTimeout(hideTimer);
+      openTimer = setTimeout(function () {
+        // Remove hidden first so CSS transition can play
         content.removeAttribute("hidden");
+        // Force reflow before adding visible state
+        void content.offsetHeight;
         content.setAttribute("data-visible", "true");
       }, openDelay);
     }
 
     function hide() {
       clearTimeout(openTimer);
-      closeTimer = setTimeout(() => {
+      closeTimer = setTimeout(function () {
         content.setAttribute("data-visible", "false");
-        content.setAttribute("hidden", "");
+        // Delay hidden to let CSS transition complete
+        hideTimer = setTimeout(function () {
+          content.setAttribute("hidden", "");
+        }, 150); // Match --mui-transition duration
       }, closeDelay);
     }
 
@@ -302,6 +310,7 @@
     // Content stays open while hovering the card itself
     content.addEventListener("mouseenter", function () {
       clearTimeout(closeTimer);
+      clearTimeout(hideTimer);
     });
     content.addEventListener("mouseleave", hide);
   };
@@ -606,7 +615,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
 
     function open() {
       trigger.setAttribute("aria-expanded", "true");
+      // Remove hidden first so CSS transition can play
       content.removeAttribute("hidden");
+      // Force reflow before adding visible state
+      void content.offsetHeight;
       content.setAttribute("data-visible", "true");
       content.focus();
       document.addEventListener("click", clickOutside, true);
@@ -615,8 +627,11 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
 
     function close() {
       trigger.setAttribute("aria-expanded", "false");
-      content.setAttribute("hidden", "");
       content.setAttribute("data-visible", "false");
+      // Delay hidden to let CSS transition complete
+      setTimeout(function () {
+        content.setAttribute("hidden", "");
+      }, 150); // Match --mui-transition duration
       document.removeEventListener("click", clickOutside, true);
       document.removeEventListener("keydown", escClose, true);
     }
@@ -1274,30 +1289,33 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
 
   window.MaudUI.behaviors["tooltip"] = function (wrapper) {
     // wrapper is .mui-tooltip with a trigger inside and a .mui-tooltip__content sibling
-    const trigger = wrapper.querySelector(".mui-tooltip__trigger");
-    const content = wrapper.querySelector(".mui-tooltip__content");
+    var trigger = wrapper.querySelector(".mui-tooltip__trigger");
+    var content = wrapper.querySelector(".mui-tooltip__content");
     if (!trigger || !content) return;
 
-    const delay = parseInt(wrapper.getAttribute("data-delay") || "500", 10);
-    let showTimer = null;
-    let hideTimer = null;
+    var delay = parseInt(wrapper.getAttribute("data-delay") || "500", 10);
+    var showTimer = null;
+    var hideTimer = null;
 
     function show() {
       clearTimeout(hideTimer);
       clearTimeout(showTimer);
-      showTimer = setTimeout(() => {
-        content.setAttribute("data-visible", "true");
+      showTimer = setTimeout(function () {
+        // Remove hidden first so CSS transition can play
         content.removeAttribute("hidden");
+        // Force reflow before adding visible state
+        void content.offsetHeight;
+        content.setAttribute("data-visible", "true");
       }, delay);
     }
 
     function hide() {
       clearTimeout(showTimer);
       clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => {
-        content.setAttribute("data-visible", "false");
+      content.setAttribute("data-visible", "false");
+      hideTimer = setTimeout(function () {
         content.setAttribute("hidden", "");
-      }, 100);
+      }, 150); // Match --mui-transition duration
     }
 
     trigger.addEventListener("mouseenter", show);
@@ -1305,7 +1323,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     trigger.addEventListener("focus", show);
     trigger.addEventListener("blur", hide);
     // Escape dismisses
-    trigger.addEventListener("keydown", (e) => {
+    trigger.addEventListener("keydown", function (e) {
       if (e.key === "Escape") hide();
     });
   };

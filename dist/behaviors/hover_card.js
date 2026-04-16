@@ -3,28 +3,36 @@
 
   window.MaudUI.behaviors["hover-card"] = function (root) {
     // root is .mui-hover-card with trigger and content inside
-    const trigger = root.querySelector(".mui-hover-card__trigger");
-    const content = root.querySelector(".mui-hover-card__content");
+    var trigger = root.querySelector(".mui-hover-card__trigger");
+    var content = root.querySelector(".mui-hover-card__content");
     if (!trigger || !content) return;
 
-    const openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
-    const closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
-    let openTimer = null;
-    let closeTimer = null;
+    var openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
+    var closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
+    var openTimer = null;
+    var closeTimer = null;
+    var hideTimer = null;
 
     function show() {
       clearTimeout(closeTimer);
-      openTimer = setTimeout(() => {
+      clearTimeout(hideTimer);
+      openTimer = setTimeout(function () {
+        // Remove hidden first so CSS transition can play
         content.removeAttribute("hidden");
+        // Force reflow before adding visible state
+        void content.offsetHeight;
         content.setAttribute("data-visible", "true");
       }, openDelay);
     }
 
     function hide() {
       clearTimeout(openTimer);
-      closeTimer = setTimeout(() => {
+      closeTimer = setTimeout(function () {
         content.setAttribute("data-visible", "false");
-        content.setAttribute("hidden", "");
+        // Delay hidden to let CSS transition complete
+        hideTimer = setTimeout(function () {
+          content.setAttribute("hidden", "");
+        }, 150); // Match --mui-transition duration
       }, closeDelay);
     }
 
@@ -33,6 +41,7 @@
     // Content stays open while hovering the card itself
     content.addEventListener("mouseenter", function () {
       clearTimeout(closeTimer);
+      clearTimeout(hideTimer);
     });
     content.addEventListener("mouseleave", hide);
   };

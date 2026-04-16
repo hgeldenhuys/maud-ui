@@ -41,6 +41,15 @@ impl Default for Props {
     }
 }
 
+/// Format a value cleanly: strip trailing zeros after decimal point.
+fn format_value(value: f64) -> String {
+    if value.fract() == 0.0 {
+        format!("{}", value as i64)
+    } else {
+        format!("{}", value)
+    }
+}
+
 /// Render a slider with the given properties
 pub fn render(props: Props) -> Markup {
     let pct = if props.max != props.min {
@@ -48,6 +57,7 @@ pub fn render(props: Props) -> Markup {
     } else {
         0.0
     };
+    let display_value = format_value(props.value);
 
     html! {
         @if props.disabled {
@@ -76,7 +86,7 @@ pub fn render(props: Props) -> Markup {
                     aria-hidden="true"
                     tabindex="-1";
                 @if props.show_value {
-                    span.mui-slider__value { (format!("{}", props.value)) }
+                    span.mui-slider__value { (display_value) }
                 }
             }
         } @else {
@@ -103,7 +113,7 @@ pub fn render(props: Props) -> Markup {
                     aria-hidden="true"
                     tabindex="-1";
                 @if props.show_value {
-                    span.mui-slider__value { (format!("{}", props.value)) }
+                    span.mui-slider__value { (display_value) }
                 }
             }
         }
@@ -126,6 +136,22 @@ pub fn showcase() -> Markup {
                     step: 1.0,
                     label: "Default slider".into(),
                     show_value: true,
+                    ..Default::default()
+                }))
+            }
+
+            // Without value label
+            div {
+                p.mui-showcase__label { "Without value label" }
+                (render(Props {
+                    name: "slider-no-label".into(),
+                    id: "slider-no-label".into(),
+                    value: 70.0,
+                    min: 0.0,
+                    max: 100.0,
+                    step: 1.0,
+                    label: "Slider without value label".into(),
+                    show_value: false,
                     ..Default::default()
                 }))
             }

@@ -1,4 +1,5 @@
-//! Collapsible component — expandable section with trigger button and animated content.
+//! Collapsible component — minimal expandable section with trigger and animated content.
+//! Unlike accordion, this is a standalone toggle — no card wrapping, just trigger + content.
 
 use maud::{html, Markup};
 
@@ -38,8 +39,8 @@ pub fn render(props: Props) -> Markup {
                 aria-expanded=(aria_expanded)
                 aria-controls=(content_id)
             {
-                span class="mui-collapsible__chevron" aria-hidden="true" { "▸" }
                 span class="mui-collapsible__label" { (props.trigger_label) }
+                span class="mui-collapsible__chevron" aria-hidden="true" { "\u{25BE}" }
             }
             div class="mui-collapsible__content"
                 id=(content_id)

@@ -48,10 +48,7 @@ pub fn render(props: Props) -> Markup {
                         aria-controls=(format!("{}-content", item.id))
                     {
                         span class="mui-accordion__label" { (item.trigger) }
-                        span class="mui-accordion__chevron" aria-hidden="true" {
-                            // Down-pointing chevron SVG — rotates 180deg when expanded
-                            (maud::PreEscaped(r#"<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>"#))
-                        }
+                        span class="mui-accordion__chevron" aria-hidden="true" { "\u{25BE}" }
                     }
                     div class="mui-accordion__content"
                         id=(format!("{}-content", item.id))

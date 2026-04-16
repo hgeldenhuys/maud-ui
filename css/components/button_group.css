@@ -1,0 +1,55 @@
+/* ButtonGroup component — groups multiple buttons with shared borders */
+
+.mui-button-group {
+  display: inline-flex;
+  gap: 0;
+}
+
+/* Horizontal orientation (default) */
+.mui-button-group--horizontal {
+  flex-direction: row;
+}
+
+.mui-button-group--horizontal > .mui-btn {
+  border-radius: 0;
+  margin-left: -1px;
+  position: relative;
+}
+
+.mui-button-group--horizontal > .mui-btn:first-child {
+  border-radius: var(--mui-radius-md) 0 0 var(--mui-radius-md);
+  margin-left: 0;
+}
+
+.mui-button-group--horizontal > .mui-btn:last-child {
+  border-radius: 0 var(--mui-radius-md) var(--mui-radius-md) 0;
+}
+
+/* Vertical orientation */
+.mui-button-group--vertical {
+  flex-direction: column;
+}
+
+.mui-button-group--vertical > .mui-btn {
+  border-radius: 0;
+  margin-top: -1px;
+  position: relative;
+}
+
+.mui-button-group--vertical > .mui-btn:first-child {
+  border-radius: var(--mui-radius-md) var(--mui-radius-md) 0 0;
+  margin-top: 0;
+}
+
+.mui-button-group--vertical > .mui-btn:last-child {
+  border-radius: 0 0 var(--mui-radius-md) var(--mui-radius-md);
+}
+
+/* Hover and focus state: raise z-index so border shows */
+.mui-button-group > .mui-btn:hover {
+  z-index: 1;
+}
+
+.mui-button-group > .mui-btn:focus-visible {
+  z-index: 2;
+}

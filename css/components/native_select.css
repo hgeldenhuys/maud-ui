@@ -1,0 +1,42 @@
+.mui-native-select {
+  position: relative;
+  display: inline-block;
+}
+
+.mui-native-select__select {
+  appearance: none;
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  height: 2.25rem;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  width: 100%;
+}
+
+.mui-native-select__select:hover {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-native-select__select:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-native-select__select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-native-select__chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mui-text-muted);
+  pointer-events: none;
+}

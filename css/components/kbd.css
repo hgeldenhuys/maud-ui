@@ -1,0 +1,27 @@
+/* Kbd component — keyboard shortcut display */
+
+.mui-kbd-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mui-kbd {
+  display: inline-block;
+  font-family: var(--mui-font-mono);
+  font-size: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  background-color: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-bottom: 2px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  color: var(--mui-text-muted);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mui-kbd-separator {
+  color: var(--mui-text-muted);
+  font-size: 0.75rem;
+  margin: 0 0.125rem;
+}

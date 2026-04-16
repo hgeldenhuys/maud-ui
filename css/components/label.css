@@ -1,0 +1,14 @@
+/* Label component — standalone form label element */
+
+.mui-label {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  margin-bottom: 0.5rem;
+}
+
+.mui-label__required {
+  color: var(--mui-danger);
+  margin-left: 0.25rem;
+}

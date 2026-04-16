@@ -1,0 +1,46 @@
+.mui-input-group {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background-color: var(--mui-bg-input);
+}
+
+.mui-input-group:focus-within {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+.mui-input-group__prefix,
+.mui-input-group__suffix {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  background-color: var(--mui-bg-card);
+  white-space: nowrap;
+}
+
+.mui-input-group > input,
+.mui-input-group > .mui-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--mui-text);
+  padding: 0.5rem 0.75rem;
+}
+
+.mui-input-group__prefix {
+  border-right: 1px solid var(--mui-border);
+}
+
+.mui-input-group__suffix {
+  border-left: 1px solid var(--mui-border);
+}

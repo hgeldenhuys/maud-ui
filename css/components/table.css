@@ -1,0 +1,65 @@
+/* Table component */
+
+.mui-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+}
+
+.mui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.mui-table__caption {
+  padding: 0.75rem;
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.mui-table__th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--mui-border);
+  color: var(--mui-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mui-table__td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-table__row {
+  transition: background-color var(--mui-transition);
+}
+
+/* Striped variant */
+.mui-table--striped tbody tr:nth-child(even) {
+  background-color: var(--mui-bg-input);
+}
+
+/* Hoverable variant */
+.mui-table--hoverable tbody tr:hover {
+  background-color: var(--mui-bg-input);
+}
+
+/* Compact variant */
+.mui-table--compact th,
+.mui-table--compact td {
+  padding: 0.375rem 0.75rem;
+}
+
+.mui-table--compact .mui-table__th {
+  padding: 0.375rem 0.75rem;
+}
+
+.mui-table--compact .mui-table__td {
+  padding: 0.375rem 0.75rem;
+}

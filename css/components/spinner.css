@@ -1,0 +1,36 @@
+/* Spinner component — circular loading indicator */
+
+@keyframes mui-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mui-spinner {
+  display: inline-block;
+  border: 2px solid var(--mui-border);
+  border-top-color: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  animation: mui-spin 0.6s linear infinite;
+}
+
+/* Small spinner — 1rem */
+.mui-spinner--sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Medium spinner — 1.5rem (default) */
+.mui-spinner--md {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Large spinner — 2rem */
+.mui-spinner--lg {
+  width: 2rem;
+  height: 2rem;
+}

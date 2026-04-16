@@ -1,0 +1,77 @@
+/* HoverCard component — richer hover overlay with structured content */
+
+.mui-hover-card {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-hover-card__trigger {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.mui-hover-card__content {
+  position: absolute;
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 1rem;
+  border-radius: var(--mui-radius-lg);
+  border: 1px solid var(--mui-border);
+  min-width: 16rem;
+  max-width: 20rem;
+  box-shadow: var(--mui-shadow-lg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--mui-transition);
+  z-index: 50;
+  top: calc(100% + 0.375rem);
+  left: 0;
+}
+
+.mui-hover-card__content[data-visible="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mui-hover-card__content[hidden] {
+  display: none;
+}
+
+/* User profile card styling */
+.mui-hover-card__user {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mui-hover-card__user-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.mui-hover-card__user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mui-hover-card__user-name {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.mui-hover-card__user-handle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--mui-text-secondary);
+  line-height: 1.25;
+}
+
+.mui-hover-card__user-bio {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--mui-text-secondary);
+}

@@ -2,32 +2,52 @@
 
 @import "components/accordion.css";
 @import "components/alert_dialog.css";
+@import "components/alert.css";
+@import "components/aspect_ratio.css";
 @import "components/avatar.css";
 @import "components/badge.css";
+@import "components/breadcrumb.css";
+@import "components/button_group.css";
 @import "components/button.css";
+@import "components/card.css";
 @import "components/checkbox.css";
 @import "components/collapsible.css";
 @import "components/context_menu.css";
 @import "components/dialog.css";
+@import "components/drawer.css";
+@import "components/empty_state.css";
 @import "components/field.css";
 @import "components/fieldset.css";
+@import "components/hover_card.css";
+@import "components/input_group.css";
+@import "components/input_otp.css";
 @import "components/input.css";
+@import "components/kbd.css";
+@import "components/label.css";
 @import "components/menu.css";
 @import "components/meter.css";
+@import "components/native_select.css";
 @import "components/number_field.css";
+@import "components/pagination.css";
 @import "components/popover.css";
 @import "components/progress.css";
+@import "components/radio_group.css";
 @import "components/radio.css";
 @import "components/scroll_area.css";
+@import "components/select.css";
 @import "components/separator.css";
+@import "components/skeleton.css";
 @import "components/slider.css";
+@import "components/spinner.css";
 @import "components/switch.css";
+@import "components/table.css";
 @import "components/tabs.css";
 @import "components/textarea.css";
 @import "components/toast.css";
-@import "components/toggle.css";
 @import "components/toggle_group.css";
+@import "components/toggle.css";
 @import "components/tooltip.css";
+@import "components/typography.css";
 
 :root,
 [data-theme="dark"] {
@@ -134,6 +154,11 @@ body {
   flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
+}
+.mui-showcase__column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 .mui-showcase__label {
   color: var(--mui-text-subtle);

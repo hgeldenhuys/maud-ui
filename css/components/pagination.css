@@ -1,0 +1,83 @@
+/* Pagination component — page navigation with prev/next and numbered pages */
+
+.mui-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mui-pagination__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-pagination__btn:hover:not(:disabled) {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-pagination__btn:disabled {
+  color: var(--mui-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mui-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.mui-pagination__page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-pagination__page:hover {
+  background-color: var(--mui-bg-input);
+}
+
+.mui-pagination__page[aria-current="page"] {
+  background-color: var(--mui-accent);
+  color: white;
+  cursor: default;
+}
+
+.mui-pagination__page[aria-current="page"]:hover {
+  background-color: var(--mui-accent);
+}
+
+.mui-pagination__ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  user-select: none;
+}

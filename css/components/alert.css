@@ -1,0 +1,91 @@
+/* Alert component — callout/banner for important messages */
+
+.mui-alert {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-left: 3px solid;
+  border-radius: var(--mui-radius-md);
+  background-color: var(--mui-bg-card);
+  align-items: flex-start;
+}
+
+.mui-alert__icon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-alert__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mui-alert__title {
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.mui-alert__description {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--mui-text-muted);
+  margin: 0;
+}
+
+/* Default variant — muted */
+.mui-alert--default {
+  border-left-color: var(--mui-text-muted);
+  color: var(--mui-text);
+  background-color: rgba(161, 161, 170, 0.08);
+}
+
+/* Info variant — blue tint */
+.mui-alert--info {
+  border-left-color: var(--mui-accent);
+  color: var(--mui-text);
+  background-color: rgba(59, 130, 246, 0.08);
+}
+
+.mui-alert--info .mui-alert__icon {
+  color: var(--mui-accent);
+}
+
+/* Success variant — green tint */
+.mui-alert--success {
+  border-left-color: var(--mui-success);
+  color: var(--mui-text);
+  background-color: rgba(34, 197, 94, 0.08);
+}
+
+.mui-alert--success .mui-alert__icon {
+  color: var(--mui-success);
+}
+
+/* Warning variant — yellow tint */
+.mui-alert--warning {
+  border-left-color: var(--mui-warning);
+  color: var(--mui-text);
+  background-color: rgba(234, 179, 8, 0.08);
+}
+
+.mui-alert--warning .mui-alert__icon {
+  color: var(--mui-warning);
+}
+
+/* Danger variant — red tint */
+.mui-alert--danger {
+  border-left-color: var(--mui-danger);
+  color: var(--mui-text);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.mui-alert--danger .mui-alert__icon {
+  color: var(--mui-danger);
+}

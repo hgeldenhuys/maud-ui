@@ -226,6 +226,123 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- drawer.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  // Drawer Trigger Behavior
+  window.MaudUI.behaviors["drawer-trigger"] = function (el) {
+    el.addEventListener("click", function () {
+      var target_id = el.getAttribute("data-target");
+      var drawer = target_id ? document.getElementById(target_id) : null;
+      if (drawer && drawer.showModal) {
+        drawer.showModal();
+      }
+    });
+  };
+
+  // Drawer Behavior
+  window.MaudUI.behaviors["drawer"] = function (el) {
+    // Wire close buttons inside the drawer
+    var closeBtns = el.querySelectorAll("[data-mui-close]");
+    for (var i = 0; i < closeBtns.length; i++) {
+      closeBtns[i].addEventListener("click", function () {
+        el.close();
+      });
+    }
+
+    // Click on backdrop closes drawer (when clicking on dialog element outside content)
+    el.addEventListener("click", function (e) {
+      if (e.target === el) {
+        el.close();
+      }
+    });
+
+    // Native <dialog> with showModal() handles:
+    // - ESC closes the drawer (unless prevented by cancel event)
+    // - Focus trapping inside the drawer
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- hover_card.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["hover-card"] = function (root) {
+    // root is .mui-hover-card with trigger and content inside
+    const trigger = root.querySelector(".mui-hover-card__trigger");
+    const content = root.querySelector(".mui-hover-card__content");
+    if (!trigger || !content) return;
+
+    const openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
+    const closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
+    let openTimer = null;
+    let closeTimer = null;
+
+    function show() {
+      clearTimeout(closeTimer);
+      openTimer = setTimeout(() => {
+        content.removeAttribute("hidden");
+        content.setAttribute("data-visible", "true");
+      }, openDelay);
+    }
+
+    function hide() {
+      clearTimeout(openTimer);
+      closeTimer = setTimeout(() => {
+        content.setAttribute("data-visible", "false");
+        content.setAttribute("hidden", "");
+      }, closeDelay);
+    }
+
+    trigger.addEventListener("mouseenter", show);
+    trigger.addEventListener("mouseleave", hide);
+    // Content stays open while hovering the card itself
+    content.addEventListener("mouseenter", function () {
+      clearTimeout(closeTimer);
+    });
+    content.addEventListener("mouseleave", hide);
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- input_otp.js ---
+window.MaudUI.behaviors["input-otp"] = function(root) {
+  var slots = root.querySelectorAll(".mui-input-otp__slot");
+  var hidden = root.querySelector(".mui-input-otp__value");
+
+  for (var i = 0; i < slots.length; i++) {
+    (function(idx) {
+      slots[idx].addEventListener("input", function() {
+        if (slots[idx].value.length === 1 && idx < slots.length - 1) {
+          slots[idx + 1].focus();
+        }
+        updateHidden();
+      });
+
+      slots[idx].addEventListener("keydown", function(e) {
+        if (e.key === "Backspace" && !slots[idx].value && idx > 0) {
+          slots[idx - 1].focus();
+        }
+      });
+    })(i);
+  }
+
+  function updateHidden() {
+    var val = "";
+    for (var j = 0; j < slots.length; j++) {
+      val += slots[j].value;
+    }
+    if (hidden) {
+      hidden.value = val;
+    }
+  }
+};
+
 // --- menu.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;

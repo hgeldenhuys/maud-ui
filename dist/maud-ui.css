@@ -1322,9 +1322,12 @@ dialog.mui-drawer {
   width: 85vw;
   height: 100vh;
   max-height: 100vh;
+  overflow: hidden;
+}
+
+dialog.mui-drawer[open] {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 dialog.mui-drawer::backdrop {

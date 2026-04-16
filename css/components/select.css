@@ -19,8 +19,10 @@
   border-radius: var(--mui-radius-md);
   font-family: inherit;
   font-size: 0.875rem;
+  line-height: 1.25;
   cursor: pointer;
   transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
 .mui-select__trigger:hover:not(:disabled) {

@@ -16,7 +16,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--mui-text-muted);
+  color: var(--mui-text-subtle);
 }
 
 .mui-fieldset[disabled] {

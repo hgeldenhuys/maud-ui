@@ -3,7 +3,7 @@
 .mui-input {
   display: block;
   width: 100%;
-  max-width: 20rem;
+  height: 2.25rem;
   background: var(--mui-bg-input);
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
@@ -13,6 +13,7 @@
   font-size: 0.875rem;
   line-height: 1.25;
   transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
 .mui-input::placeholder {

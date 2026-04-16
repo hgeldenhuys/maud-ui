@@ -39,7 +39,7 @@
 
 /* Variant: Default */
 .mui-btn--default {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border);
   color: var(--mui-text);
 }
@@ -95,7 +95,7 @@
 }
 
 .mui-btn--outline:hover:not([aria-disabled="true"]) {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border-hover);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .mui-btn--ghost:hover:not([aria-disabled="true"]) {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border);
 }
 

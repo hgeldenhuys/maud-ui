@@ -108,6 +108,42 @@ pub fn showcase() -> Markup {
                     },
                 }))
             }
+
+            section {
+                h2 { "Combined Form" }
+                div style="display: flex; flex-direction: column; gap: 1rem; max-width: 24rem;" {
+                    (render(Props {
+                        label: "Email".to_string(),
+                        id: "demo-f-5".to_string(),
+                        description: Some("We will never share your email.".to_string()),
+                        error: None,
+                        required: true,
+                        children: html! {
+                            input.mui-input type="email" id="demo-f-5" name="email" placeholder="you@example.com" aria-describedby="demo-f-5-desc";
+                        },
+                    }))
+                    (render(Props {
+                        label: "Password".to_string(),
+                        id: "demo-f-6".to_string(),
+                        description: Some("At least 8 characters with a number.".to_string()),
+                        error: Some("Password is too short.".to_string()),
+                        required: true,
+                        children: html! {
+                            input.mui-input type="password" id="demo-f-6" name="password" aria-invalid="true" aria-describedby="demo-f-6-desc demo-f-6-err";
+                        },
+                    }))
+                    (render(Props {
+                        label: "Bio".to_string(),
+                        id: "demo-f-7".to_string(),
+                        description: Some("Brief description for your profile.".to_string()),
+                        error: None,
+                        required: false,
+                        children: html! {
+                            textarea.mui-textarea id="demo-f-7" name="bio" rows="3" placeholder="Tell us about yourself..." aria-describedby="demo-f-7-desc" {}
+                        },
+                    }))
+                }
+            }
         }
     }
 }

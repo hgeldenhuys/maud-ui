@@ -26,6 +26,7 @@
 
 .mui-field__error {
   font-size: 0.8125rem;
+  font-weight: 500;
   color: var(--mui-danger);
   margin: 0;
 }

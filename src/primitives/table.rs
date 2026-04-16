@@ -68,78 +68,78 @@ pub fn render(props: Props) -> Markup {
 
 pub fn showcase() -> Markup {
     let headers = vec![
-        "Name".to_string(),
-        "Email".to_string(),
-        "Role".to_string(),
+        "Invoice".to_string(),
         "Status".to_string(),
+        "Method".to_string(),
+        "Amount".to_string(),
     ];
 
     let rows = vec![
         vec![
-            "Alice Johnson".to_string(),
-            "alice@example.com".to_string(),
-            "Engineer".to_string(),
-            "Active".to_string(),
+            "INV001".to_string(),
+            "Paid".to_string(),
+            "Credit Card".to_string(),
+            "$250.00".to_string(),
         ],
         vec![
-            "Bob Smith".to_string(),
-            "bob@example.com".to_string(),
-            "Designer".to_string(),
-            "Active".to_string(),
+            "INV002".to_string(),
+            "Pending".to_string(),
+            "PayPal".to_string(),
+            "$150.00".to_string(),
         ],
         vec![
-            "Carol Williams".to_string(),
-            "carol@example.com".to_string(),
-            "Manager".to_string(),
-            "Active".to_string(),
+            "INV003".to_string(),
+            "Unpaid".to_string(),
+            "Bank Transfer".to_string(),
+            "$350.00".to_string(),
         ],
         vec![
-            "David Brown".to_string(),
-            "david@example.com".to_string(),
-            "Engineer".to_string(),
-            "Inactive".to_string(),
+            "INV004".to_string(),
+            "Paid".to_string(),
+            "Credit Card".to_string(),
+            "$450.00".to_string(),
         ],
         vec![
-            "Eva Martinez".to_string(),
-            "eva@example.com".to_string(),
-            "Designer".to_string(),
-            "Active".to_string(),
+            "INV005".to_string(),
+            "Paid".to_string(),
+            "PayPal".to_string(),
+            "$550.00".to_string(),
         ],
     ];
 
     html! {
         div.mui-showcase__grid {
-            section {
-                h2 { "Table with Striped & Hoverable" }
-                (render(Props {
-                    headers: headers.clone(),
-                    rows: rows.clone(),
-                    striped: true,
-                    hoverable: true,
-                    compact: false,
-                    caption: None,
-                }))
-            }
-            section {
-                h2 { "Compact Table" }
+            div {
+                p.mui-showcase__caption { "Default" }
                 (render(Props {
                     headers: headers.clone(),
                     rows: rows.clone(),
                     striped: false,
-                    hoverable: false,
-                    compact: true,
-                    caption: None,
+                    hoverable: true,
+                    compact: false,
+                    caption: Some("A list of your recent invoices.".to_string()),
                 }))
             }
-            section {
-                h2 { "Table with Caption" }
+            div {
+                p.mui-showcase__caption { "Striped + hoverable" }
                 (render(Props {
-                    headers,
-                    rows,
+                    headers: headers.clone(),
+                    rows: rows.clone(),
                     striped: true,
                     hoverable: true,
                     compact: false,
-                    caption: Some("Team members".to_string()),
+                    caption: None,
+                }))
+            }
+            div {
+                p.mui-showcase__caption { "Compact" }
+                (render(Props {
+                    headers,
+                    rows,
+                    striped: false,
+                    hoverable: false,
+                    compact: true,
+                    caption: None,
                 }))
             }
         }

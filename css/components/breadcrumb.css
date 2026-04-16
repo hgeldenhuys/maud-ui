@@ -1,4 +1,4 @@
-/* Breadcrumb component — navigation breadcrumb trail */
+/* Breadcrumb component — shadcn-quality navigation trail */
 
 .mui-breadcrumb {
   display: flex;
@@ -8,38 +8,45 @@
 
 .mui-breadcrumb__list {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .mui-breadcrumb__item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .mui-breadcrumb__item a {
   color: var(--mui-text-muted);
   text-decoration: none;
-  transition: var(--mui-transition);
+  text-underline-offset: 4px;
+  transition: color var(--mui-transition);
 }
 
 .mui-breadcrumb__item a:hover {
   color: var(--mui-text);
+  text-decoration: underline;
 }
 
+/* Current page — foreground color, no link */
 .mui-breadcrumb__item--current {
   color: var(--mui-text);
-  font-weight: 500;
+  font-weight: 400;
 }
 
+/* Separator chevron — muted, no pointer events */
 .mui-breadcrumb__separator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  color: var(--mui-text-subtle);
-  margin: 0 -0.25rem;
+  color: var(--mui-text-muted);
   font-size: 0.875rem;
+  user-select: none;
+  pointer-events: none;
 }

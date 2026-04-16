@@ -15,25 +15,30 @@ pub struct BreadcrumbItem {
 pub struct Props {
     /// List of breadcrumb items (last item has no href)
     pub items: Vec<BreadcrumbItem>,
+    /// Separator character (default "/")
+    pub separator: Option<String>,
 }
 
 impl Default for Props {
     fn default() -> Self {
         Self {
             items: Vec::new(),
+            separator: None,
         }
     }
 }
 
 /// Render breadcrumb navigation
 pub fn render(props: Props) -> Markup {
+    let sep = props.separator.as_deref().unwrap_or("/");
+
     html! {
         nav class="mui-breadcrumb" aria-label="Breadcrumb" {
             ol class="mui-breadcrumb__list" {
                 @for (idx, item) in props.items.iter().enumerate() {
                     @if idx > 0 {
                         li class="mui-breadcrumb__separator" aria-hidden="true" {
-                            "/"
+                            (sep)
                         }
                     }
                     @if item.href.is_some() {
@@ -44,7 +49,7 @@ pub fn render(props: Props) -> Markup {
                         }
                     } @else {
                         li class="mui-breadcrumb__item mui-breadcrumb__item--current" aria-current="page" {
-                            (item.label)
+                            span { (item.label) }
                         }
                     }
                 }
@@ -58,7 +63,28 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Basic breadcrumb (4 levels)" }
+                p.mui-showcase__caption { "Default separator" }
+                (render(Props {
+                    items: vec![
+                        BreadcrumbItem {
+                            label: "Home".into(),
+                            href: Some("/".into()),
+                        },
+                        BreadcrumbItem {
+                            label: "Components".into(),
+                            href: Some("/docs/components".into()),
+                        },
+                        BreadcrumbItem {
+                            label: "Breadcrumb".into(),
+                            href: None,
+                        },
+                    ],
+                    separator: None,
+                }))
+            }
+
+            div {
+                p.mui-showcase__caption { "Chevron separator" }
                 (render(Props {
                     items: vec![
                         BreadcrumbItem {
@@ -78,11 +104,12 @@ pub fn showcase() -> Markup {
                             href: None,
                         },
                     ],
+                    separator: Some("\u{203a}".into()),
                 }))
             }
 
             div {
-                p.mui-showcase__caption { "Simple breadcrumb (2 levels)" }
+                p.mui-showcase__caption { "Two levels" }
                 (render(Props {
                     items: vec![
                         BreadcrumbItem {
@@ -94,6 +121,7 @@ pub fn showcase() -> Markup {
                             href: None,
                         },
                     ],
+                    separator: None,
                 }))
             }
         }

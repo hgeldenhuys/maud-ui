@@ -1,4 +1,5 @@
 //! Fieldset component — groups related form controls with a legend
+use crate::primitives::field;
 use maud::{html, Markup};
 
 #[derive(Clone, Debug)]
@@ -36,16 +37,26 @@ pub fn showcase() -> Markup {
                     legend: "Profile".to_string(),
                     disabled: false,
                     children: html! {
-                        div style="display: flex; flex-direction: column; gap: 0.75rem;" {
-                            div {
-                                label { "First Name" }
-                                input.mui-input type="text" placeholder="John";
-                            }
-                            div {
-                                label { "Last Name" }
-                                input.mui-input type="text" placeholder="Doe";
-                            }
-                        }
+                        (field::render(field::Props {
+                            label: "First Name".to_string(),
+                            id: "fs-fname".to_string(),
+                            description: None,
+                            error: None,
+                            required: true,
+                            children: html! {
+                                input.mui-input type="text" id="fs-fname" placeholder="John";
+                            },
+                        }))
+                        (field::render(field::Props {
+                            label: "Last Name".to_string(),
+                            id: "fs-lname".to_string(),
+                            description: None,
+                            error: None,
+                            required: true,
+                            children: html! {
+                                input.mui-input type="text" id="fs-lname" placeholder="Doe";
+                            },
+                        }))
                     },
                 }))
             }
@@ -56,16 +67,26 @@ pub fn showcase() -> Markup {
                     legend: "Disabled Group".to_string(),
                     disabled: true,
                     children: html! {
-                        div style="display: flex; flex-direction: column; gap: 0.75rem;" {
-                            div {
-                                label { "Email" }
-                                input.mui-input type="email" placeholder="you@example.com" disabled;
-                            }
-                            div {
-                                label { "Phone" }
-                                input.mui-input type="tel" placeholder="+1 (555) 000-0000" disabled;
-                            }
-                        }
+                        (field::render(field::Props {
+                            label: "Email".to_string(),
+                            id: "fs-email".to_string(),
+                            description: None,
+                            error: None,
+                            required: false,
+                            children: html! {
+                                input.mui-input type="email" id="fs-email" placeholder="you@example.com" disabled;
+                            },
+                        }))
+                        (field::render(field::Props {
+                            label: "Phone".to_string(),
+                            id: "fs-phone".to_string(),
+                            description: None,
+                            error: None,
+                            required: false,
+                            children: html! {
+                                input.mui-input type="tel" id="fs-phone" placeholder="+1 (555) 000-0000" disabled;
+                            },
+                        }))
                     },
                 }))
             }

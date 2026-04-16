@@ -12,7 +12,7 @@
   font-weight: 500;
   user-select: none;
   flex-shrink: 0;
-  border: 2px solid var(--mui-border);
+  border: 1px solid var(--mui-border);
 }
 
 /* Size: Small */
@@ -48,11 +48,27 @@
 .mui-avatar__fallback {
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  background: var(--mui-accent);
-  color: var(--mui-accent-fg);
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Avatar group — overlapping avatars */
+.mui-avatar-group {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.mui-avatar-group .mui-avatar {
+  margin-left: -0.5rem;
+  border: 2px solid var(--mui-bg);
+}
+
+.mui-avatar-group .mui-avatar:last-child {
+  margin-left: 0;
 }

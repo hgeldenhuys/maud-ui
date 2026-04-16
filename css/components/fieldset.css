@@ -11,12 +11,10 @@
 }
 
 .mui-fieldset__legend {
-  padding: 0 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--mui-text-subtle);
+  padding: 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
 }
 
 .mui-fieldset[disabled] {

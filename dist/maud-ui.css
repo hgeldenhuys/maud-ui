@@ -332,29 +332,39 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- alert.css --- */
-/* Alert component — callout/banner for important messages */
+/* Alert component — shadcn-quality callout/banner */
 
 .mui-alert {
+  position: relative;
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 1rem;
-  border-left: 3px solid;
-  border-radius: var(--mui-radius-md);
-  background-color: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  width: 100%;
   align-items: flex-start;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--mui-text);
+  background-color: var(--mui-bg);
 }
 
 .mui-alert__icon {
   flex-shrink: 0;
-  font-size: 1.25rem;
-  line-height: 1.5;
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 0.125rem;
+  color: var(--mui-text);
 }
 
 .mui-alert__content {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -362,8 +372,10 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-alert__title {
   font-weight: 500;
-  font-size: 0.9375rem;
-  line-height: 1.4;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--mui-text);
 }
 
 .mui-alert__description {
@@ -373,55 +385,63 @@ dialog.mui-alert-dialog::backdrop {
   margin: 0;
 }
 
-/* Default variant — muted */
+/* Default variant — neutral border, foreground text */
 .mui-alert--default {
-  border-left-color: var(--mui-text-muted);
+  border-color: var(--mui-border);
   color: var(--mui-text);
-  background-color: rgba(161, 161, 170, 0.08);
 }
 
-/* Info variant — blue tint */
-.mui-alert--info {
-  border-left-color: var(--mui-accent);
+.mui-alert--default .mui-alert__icon {
   color: var(--mui-text);
-  background-color: rgba(59, 130, 246, 0.08);
+}
+
+/* Destructive / danger variant — shadcn destructive style */
+.mui-alert--danger {
+  border-color: var(--mui-danger);
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__icon {
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__title {
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__description {
+  color: var(--mui-danger);
+  opacity: 0.9;
+}
+
+/* Info variant — accent border, subtle tint */
+.mui-alert--info {
+  border-color: var(--mui-accent);
+  color: var(--mui-text);
 }
 
 .mui-alert--info .mui-alert__icon {
   color: var(--mui-accent);
 }
 
-/* Success variant — green tint */
+/* Success variant — green border */
 .mui-alert--success {
-  border-left-color: var(--mui-success);
+  border-color: var(--mui-success);
   color: var(--mui-text);
-  background-color: rgba(34, 197, 94, 0.08);
 }
 
 .mui-alert--success .mui-alert__icon {
   color: var(--mui-success);
 }
 
-/* Warning variant — yellow tint */
+/* Warning variant — amber border */
 .mui-alert--warning {
-  border-left-color: var(--mui-warning);
+  border-color: var(--mui-warning);
   color: var(--mui-text);
-  background-color: rgba(234, 179, 8, 0.08);
 }
 
 .mui-alert--warning .mui-alert__icon {
   color: var(--mui-warning);
-}
-
-/* Danger variant — red tint */
-.mui-alert--danger {
-  border-left-color: var(--mui-danger);
-  color: var(--mui-text);
-  background-color: rgba(239, 68, 68, 0.08);
-}
-
-.mui-alert--danger .mui-alert__icon {
-  color: var(--mui-danger);
 }
 
 /* --- aspect_ratio.css --- */
@@ -459,7 +479,7 @@ dialog.mui-alert-dialog::backdrop {
   font-weight: 500;
   user-select: none;
   flex-shrink: 0;
-  border: 2px solid var(--mui-border);
+  border: 1px solid var(--mui-border);
 }
 
 /* Size: Small */
@@ -495,13 +515,29 @@ dialog.mui-alert-dialog::backdrop {
 .mui-avatar__fallback {
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  background: var(--mui-accent);
-  color: var(--mui-accent-fg);
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Avatar group — overlapping avatars */
+.mui-avatar-group {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.mui-avatar-group .mui-avatar {
+  margin-left: -0.5rem;
+  border: 2px solid var(--mui-bg);
+}
+
+.mui-avatar-group .mui-avatar:last-child {
+  margin-left: 0;
 }
 
 /* --- badge.css --- */
@@ -562,7 +598,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- breadcrumb.css --- */
-/* Breadcrumb component — navigation breadcrumb trail */
+/* Breadcrumb component — shadcn-quality navigation trail */
 
 .mui-breadcrumb {
   display: flex;
@@ -572,40 +608,47 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-breadcrumb__list {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .mui-breadcrumb__item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .mui-breadcrumb__item a {
   color: var(--mui-text-muted);
   text-decoration: none;
-  transition: var(--mui-transition);
+  text-underline-offset: 4px;
+  transition: color var(--mui-transition);
 }
 
 .mui-breadcrumb__item a:hover {
   color: var(--mui-text);
+  text-decoration: underline;
 }
 
+/* Current page — foreground color, no link */
 .mui-breadcrumb__item--current {
   color: var(--mui-text);
-  font-weight: 500;
+  font-weight: 400;
 }
 
+/* Separator chevron — muted, no pointer events */
 .mui-breadcrumb__separator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  color: var(--mui-text-subtle);
-  margin: 0 -0.25rem;
+  color: var(--mui-text-muted);
   font-size: 0.875rem;
+  user-select: none;
+  pointer-events: none;
 }
 
 /* --- button_group.css --- */
@@ -825,13 +868,14 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- card.css --- */
-/* Card component — container with optional header, body, and footer */
+/* Card component — shadcn-quality container */
 
 .mui-card {
   background-color: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-shadow-sm);
+  color: var(--mui-text);
   overflow: hidden;
 }
 
@@ -846,7 +890,7 @@ dialog.mui-alert-dialog::backdrop {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1;
   letter-spacing: -0.025em;
   color: var(--mui-text);
 }
@@ -862,7 +906,7 @@ dialog.mui-alert-dialog::backdrop {
   padding: 1.5rem;
 }
 
-/* When header is present, collapse top padding on body (pt-0 pattern) */
+/* Collapse top padding on body when header is above */
 .mui-card__header + .mui-card__body {
   padding-top: 0;
 }
@@ -873,7 +917,7 @@ dialog.mui-alert-dialog::backdrop {
   padding: 0 1.5rem 1.5rem;
 }
 
-/* When body is present before footer, collapse top padding */
+/* Collapse top padding on footer when body is above */
 .mui-card__body + .mui-card__footer {
   padding-top: 0;
 }
@@ -1061,18 +1105,21 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-context-menu-demo {
-  padding: 2rem;
+  padding: 2rem 4rem;
   background: var(--mui-bg-input);
-  border: 1px dashed var(--mui-border);
+  border: 2px dashed var(--mui-border);
   border-radius: var(--mui-radius-md);
   text-align: center;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  -webkit-user-select: none;
   user-select: none;
   cursor: context-menu;
 }
 
 .mui-context-menu__content {
   position: fixed;
-  min-width: 10rem;
+  min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -1084,6 +1131,9 @@ dialog.mui-alert-dialog::backdrop {
 .mui-context-menu__content[hidden] {
   display: none;
 }
+
+/* Context menu reuses .mui-menu__item, .mui-menu__separator,
+   .mui-menu__shortcut, and .mui-menu__item--danger from menu.css */
 
 /* --- dialog.css --- */
 /* Dialog Component Styles */
@@ -1436,6 +1486,7 @@ dialog.mui-drawer--bottom {
 
 .mui-field__error {
   font-size: 0.8125rem;
+  font-weight: 500;
   color: var(--mui-danger);
   margin: 0;
 }
@@ -1458,12 +1509,10 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-fieldset__legend {
-  padding: 0 0.5rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--mui-text-subtle);
+  padding: 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
 }
 
 .mui-fieldset[disabled] {
@@ -1696,32 +1745,41 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- kbd.css --- */
-/* Kbd component — keyboard shortcut display */
+/* Kbd component — shadcn-quality keyboard shortcut display */
 
 .mui-kbd-container {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .mui-kbd {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  padding: 0 0.3125rem;
   font-family: var(--mui-font-mono);
-  font-size: 0.75rem;
-  padding: 0.125rem 0.375rem;
-  background-color: var(--mui-bg-input);
-  border: 1px solid var(--mui-border);
-  border-bottom: 2px solid var(--mui-border);
-  border-radius: var(--mui-radius-sm);
-  color: var(--mui-text-muted);
+  font-size: 0.6875rem;
   font-weight: 500;
   line-height: 1;
+  white-space: nowrap;
+  color: var(--mui-text-muted);
+  background-color: var(--mui-bg);
+  border: 1px solid var(--mui-border);
+  border-bottom-width: 2px;
+  border-radius: var(--mui-radius-sm);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  pointer-events: none;
 }
 
 .mui-kbd-separator {
-  color: var(--mui-text-muted);
-  font-size: 0.75rem;
-  margin: 0 0.125rem;
+  color: var(--mui-text-subtle);
+  font-size: 0.625rem;
+  margin: 0 0.0625rem;
+  user-select: none;
 }
 
 /* --- label.css --- */
@@ -1754,20 +1812,23 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-menu__chevron {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1;
-  transition: transform var(--mui-transition);
+  color: var(--mui-text-muted);
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mui-menu__trigger[aria-expanded="true"] .mui-menu__chevron {
   transform: rotate(180deg);
 }
 
+/* --- Content panel ----------------------------------------------------- */
+
 .mui-menu__content {
   position: absolute;
   top: calc(100% + 0.25rem);
   left: 0;
-  min-width: 10rem;
+  min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -1780,44 +1841,97 @@ dialog.mui-drawer--bottom {
   display: none;
 }
 
+/* --- Label (group heading) --------------------------------------------- */
+
+.mui-menu__label {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mui-text);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* --- Items ------------------------------------------------------------- */
+
 .mui-menu__item {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   width: 100%;
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem 0.5rem;
   background: transparent;
   color: var(--mui-text);
   border: none;
   font-family: inherit;
   font-size: 0.875rem;
+  line-height: 1.25rem;
   cursor: pointer;
   text-align: left;
   border-radius: var(--mui-radius-sm);
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mui-menu__item:hover:not(:disabled) {
-  background: var(--mui-bg-input);
+  background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+  color: var(--mui-text);
 }
 
 .mui-menu__item:focus-visible {
-  background: var(--mui-bg-input);
+  background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
   outline: none;
 }
+
+/* --- Destructive item -------------------------------------------------- */
 
 .mui-menu__item--danger {
   color: var(--mui-danger);
 }
 
+.mui-menu__item--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
+  color: var(--mui-danger);
+}
+
+.mui-menu__item--danger:focus-visible {
+  background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
+}
+
+/* --- Shortcut text (right side) ---------------------------------------- */
+
+.mui-menu__shortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-family: var(--mui-font-mono, ui-monospace, monospace);
+  color: var(--mui-text-muted);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+
+/* --- Disabled ---------------------------------------------------------- */
+
 .mui-menu__item:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
+
+/* --- Separator --------------------------------------------------------- */
 
 .mui-menu__separator {
   height: 1px;
   background: var(--mui-border);
-  margin: 0.25rem 0.5rem;
+  margin: 0.25rem -0.25rem;
+}
+
+/* --- Sub-menu indicator ------------------------------------------------ */
+
+.mui-menu__sub-indicator {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  line-height: 1;
 }
 
 /* --- meter.css --- */
@@ -1898,7 +2012,7 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- number_field.css --- */
-/* Number field component — input with increment/decrement buttons */
+/* Number field component — [minus] [input] [plus] as one cohesive control */
 
 .mui-number-field {
   display: inline-flex;
@@ -1906,41 +2020,53 @@ dialog.mui-drawer--bottom {
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   overflow: hidden;
-  background: var(--mui-bg-input);
-  transition: var(--mui-transition);
+  background: transparent;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mui-number-field:focus-within {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
-  border-color: transparent;
+  border-color: var(--mui-border-hover);
 }
 
 .mui-number-field[aria-disabled="true"] {
   opacity: 0.5;
+  pointer-events: none;
 }
 
+/* --- Buttons ----------------------------------------------------------- */
+
 .mui-number-field__btn {
-  background: var(--mui-bg-card);
+  background: transparent;
   border: none;
-  color: var(--mui-text);
-  padding: 0 0.75rem;
-  font-size: 1rem;
+  color: var(--mui-text-muted);
+  width: 2rem;
+  padding: 0;
+  font-size: 0.875rem;
   line-height: 1;
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2rem;
+  flex-shrink: 0;
 }
 
 .mui-number-field__btn:hover:not(:disabled) {
-  background: var(--mui-border-hover);
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-number-field__btn:active:not(:disabled) {
+  background: var(--mui-border);
 }
 
 .mui-number-field__btn:disabled {
   cursor: not-allowed;
+  color: var(--mui-text-subtle);
 }
 
 .mui-number-field__btn--decrement {
@@ -1951,15 +2077,17 @@ dialog.mui-drawer--bottom {
   border-left: 1px solid var(--mui-border);
 }
 
+/* --- Input ------------------------------------------------------------- */
+
 .mui-number-field__input {
   border: none;
   background: transparent;
   color: var(--mui-text);
-  padding: 0.5rem 0.75rem;
+  padding: 0 0.25rem;
   font-size: 0.875rem;
   font-family: inherit;
-  width: 5rem;
-  height: 2.25rem;
+  width: 3.5rem;
+  height: 2rem;
   text-align: center;
   -moz-appearance: textfield;
   box-sizing: border-box;
@@ -2537,34 +2665,28 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- skeleton.css --- */
-/* Skeleton component — loading placeholder with shimmer animation */
+/* Skeleton component — shadcn-quality loading placeholder */
 
-@keyframes mui-skeleton-shimmer {
-  0% {
-    background-position: -1000px 0;
+@keyframes mui-skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
   }
-  100% {
-    background-position: 1000px 0;
+  50% {
+    opacity: 0.5;
   }
 }
 
 .mui-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--mui-bg-input) 25%,
-    var(--mui-border) 50%,
-    var(--mui-bg-input) 75%
-  );
-  background-size: 200% 100%;
-  animation: mui-skeleton-shimmer 1.5s ease-in-out infinite;
   display: block;
+  background-color: var(--mui-bg-input);
+  animation: mui-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Text skeleton — resembles a line of text */
 .mui-skeleton--text {
   height: 1rem;
   width: 100%;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
 }
 
 /* Circle skeleton — avatar placeholder */
@@ -2572,7 +2694,7 @@ dialog.mui-drawer--bottom {
   border-radius: var(--mui-radius-full);
 }
 
-/* Rect skeleton — card placeholder */
+/* Rect skeleton — card/image placeholder */
 .mui-skeleton--rect {
   border-radius: var(--mui-radius-md);
 }
@@ -2780,60 +2902,64 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- table.css --- */
-/* Table component */
+/* Table component — shadcn-quality data table */
 
 .mui-table-wrapper {
-  overflow-x: auto;
-  border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  position: relative;
+  overflow: auto;
+  width: 100%;
 }
 
 .mui-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
-}
-
-/* Caption — below table, muted, centered */
-.mui-table__caption {
-  padding: 0.75rem 1rem;
-  color: var(--mui-text-muted);
-  font-size: 0.8125rem;
-  text-align: left;
   caption-side: bottom;
 }
 
-/* Header cells — subtle bg tint, uppercase micro-text, muted color */
+/* Caption — bottom, muted, left-aligned */
+.mui-table__caption {
+  padding: 0.75rem 0;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+/* Header cells — subtle weight, muted color, bottom border */
 .mui-table__th {
   text-align: left;
   font-weight: 500;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--mui-border);
-  background-color: var(--mui-bg-input);
   color: var(--mui-text-muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 0.875rem;
   white-space: nowrap;
+  height: 2.5rem;
 }
 
+/* Body cells */
 .mui-table__td {
   padding: 0.75rem 1rem;
   color: var(--mui-text);
+  vertical-align: middle;
 }
 
+/* Row borders */
 .mui-table__row {
   border-bottom: 1px solid var(--mui-border);
   transition: background-color var(--mui-transition);
 }
 
-/* Remove border on last row (wrapper border handles it) */
-.mui-table tbody tr:last-child,
-.mui-table tbody tr:last-child .mui-table__td {
+/* Remove border on last row */
+.mui-table tbody tr:last-child {
   border-bottom: none;
 }
 
-/* Striped variant */
+.mui-table tbody tr:last-child .mui-table__row {
+  border-bottom: none;
+}
+
+/* Striped variant — muted bg on even rows */
 .mui-table--striped tbody tr:nth-child(even) {
   background-color: var(--mui-bg-input);
 }
@@ -2846,6 +2972,7 @@ dialog.mui-drawer--bottom {
 /* Compact variant */
 .mui-table--compact .mui-table__th {
   padding: 0.375rem 0.75rem;
+  height: 2rem;
 }
 
 .mui-table--compact .mui-table__td {
@@ -3114,56 +3241,78 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- toggle_group.css --- */
-/* Toggle group component — grouped toggle buttons with roving tabindex */
+/* Toggle group component — segmented control with roving tabindex */
 
 .mui-toggle-group {
   display: inline-flex;
+  align-items: center;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   overflow: hidden;
   background: var(--mui-bg-input);
+  padding: 1px;
+  gap: 0;
 }
+
+/* --- Sizes ------------------------------------------------------------- */
+
+.mui-toggle-group--md .mui-toggle-group__item {
+  height: calc(2.25rem - 4px);
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  min-width: 2rem;
+}
+
+.mui-toggle-group--sm .mui-toggle-group__item {
+  height: calc(2rem - 4px);
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+  min-width: 1.75rem;
+}
+
+/* --- Items ------------------------------------------------------------- */
 
 .mui-toggle-group__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.25rem;
-  padding: 0 0.75rem;
+  gap: 0.375rem;
   background: transparent;
-  color: var(--mui-text);
+  color: var(--mui-text-muted);
   border: none;
-  border-right: 1px solid var(--mui-border);
+  border-radius: calc(var(--mui-radius-md) - 2px);
   font-family: inherit;
-  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--mui-transition);
-  min-width: 2.25rem;
-}
-
-.mui-toggle-group__item:last-child {
-  border-right: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .mui-toggle-group__item:hover:not(:disabled) {
   background: var(--mui-bg-card);
+  color: var(--mui-text);
 }
 
 .mui-toggle-group__item[aria-pressed="true"] {
   background: var(--mui-bg-card);
-  color: var(--mui-text-bold);
+  color: var(--mui-text);
+  box-shadow: var(--mui-shadow-sm);
 }
 
 .mui-toggle-group__item:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: -2px;
+  z-index: 1;
 }
 
 .mui-toggle-group__item:disabled,
 .mui-toggle-group[data-disabled="true"] .mui-toggle-group__item {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* --- toggle.css --- */
@@ -3173,38 +3322,90 @@ dialog.mui-drawer--bottom {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.25rem;
-  padding: 0 0.75rem;
+  gap: 0.5rem;
   background: transparent;
-  color: var(--mui-text);
-  border: 1px solid var(--mui-border);
+  color: var(--mui-text-muted);
+  border: 1px solid transparent;
   border-radius: var(--mui-radius-md);
   font-family: inherit;
-  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* --- Sizes ------------------------------------------------------------- */
+
+.mui-toggle--md {
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
   min-width: 2.25rem;
 }
 
+.mui-toggle--sm {
+  height: 2rem;
+  padding: 0 0.625rem;
+  font-size: 0.75rem;
+  min-width: 2rem;
+}
+
+/* --- Variant: Default (ghost-like, no border) -------------------------- */
+
 .mui-toggle:hover:not(:disabled) {
-  background: var(--mui-bg-card);
-  border-color: var(--mui-border-hover);
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
 }
 
 .mui-toggle[aria-pressed="true"] {
-  background: var(--mui-bg-card);
-  border-color: var(--mui-border);
+  background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+  color: var(--mui-accent);
 }
 
 .mui-toggle[aria-pressed="true"]:hover:not(:disabled) {
-  background: var(--mui-bg-card);
+  background: color-mix(in srgb, var(--mui-accent) 18%, transparent);
+  color: var(--mui-accent);
+}
+
+/* --- Variant: Outline -------------------------------------------------- */
+
+.mui-toggle--outline {
+  border-color: var(--mui-border);
+  background: transparent;
+}
+
+.mui-toggle--outline:hover:not(:disabled) {
+  background: var(--mui-bg-input);
   border-color: var(--mui-border-hover);
+  color: var(--mui-text);
+}
+
+.mui-toggle--outline[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--mui-accent) 30%, transparent);
+  color: var(--mui-accent);
+}
+
+.mui-toggle--outline[aria-pressed="true"]:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mui-accent) 18%, transparent);
+  border-color: color-mix(in srgb, var(--mui-accent) 40%, transparent);
+  color: var(--mui-accent);
+}
+
+/* --- Focus & disabled -------------------------------------------------- */
+
+.mui-toggle:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 .mui-toggle:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* --- tooltip.css --- */

@@ -70,14 +70,6 @@ pub fn showcase() -> Markup {
                 }))
             }
 
-            div {
-                p.mui-showcase__caption { "Horizontal separator" }
-                (render(Props {
-                    orientation: Orientation::Horizontal,
-                    ..Default::default()
-                }))
-            }
-
             // Vertical separators in a row
             div {
                 p.mui-showcase__caption { "Vertical separators" }

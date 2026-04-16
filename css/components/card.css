@@ -1,10 +1,11 @@
-/* Card component — container with optional header, body, and footer */
+/* Card component — shadcn-quality container */
 
 .mui-card {
   background-color: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-shadow-sm);
+  color: var(--mui-text);
   overflow: hidden;
 }
 
@@ -19,7 +20,7 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1;
   letter-spacing: -0.025em;
   color: var(--mui-text);
 }
@@ -35,7 +36,7 @@
   padding: 1.5rem;
 }
 
-/* When header is present, collapse top padding on body (pt-0 pattern) */
+/* Collapse top padding on body when header is above */
 .mui-card__header + .mui-card__body {
   padding-top: 0;
 }
@@ -46,7 +47,7 @@
   padding: 0 1.5rem 1.5rem;
 }
 
-/* When body is present before footer, collapse top padding */
+/* Collapse top padding on footer when body is above */
 .mui-card__body + .mui-card__footer {
   padding-top: 0;
 }

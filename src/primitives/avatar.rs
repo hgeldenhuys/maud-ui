@@ -104,6 +104,35 @@ pub fn showcase() -> Markup {
                     }))
                 }
             }
+            section {
+                h2 { "Avatar Group" }
+                div.mui-avatar-group {
+                    (render(Props {
+                        src: Some("https://i.pravatar.cc/120?img=5".to_string()),
+                        alt: "Team member 1".to_string(),
+                        fallback: "A".to_string(),
+                        size: Size::Md,
+                    }))
+                    (render(Props {
+                        src: Some("https://i.pravatar.cc/120?img=8".to_string()),
+                        alt: "Team member 2".to_string(),
+                        fallback: "B".to_string(),
+                        size: Size::Md,
+                    }))
+                    (render(Props {
+                        src: Some("https://i.pravatar.cc/120?img=15".to_string()),
+                        alt: "Team member 3".to_string(),
+                        fallback: "C".to_string(),
+                        size: Size::Md,
+                    }))
+                    (render(Props {
+                        src: None,
+                        alt: "2 more members".to_string(),
+                        fallback: "+2".to_string(),
+                        size: Size::Md,
+                    }))
+                }
+            }
         }
     }
 }

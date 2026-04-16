@@ -1,7 +1,7 @@
 //! Context menu component — right-click menu overlay
 
 use maud::{html, Markup};
-use crate::primitives::menu::{MenuEntry, MenuItem};
+use crate::primitives::menu::{MenuEntry, MenuItem, render_entry};
 
 /// Context menu rendering properties
 #[derive(Debug, Clone)]
@@ -10,7 +10,7 @@ pub struct Props {
     pub id: String,
     /// Content that can be right-clicked to trigger the menu
     pub trigger: Markup,
-    /// Menu entries (items and separators)
+    /// Menu entries (items, separators, and labels)
     pub items: Vec<MenuEntry>,
 }
 
@@ -28,25 +28,7 @@ pub fn render(props: Props) -> Markup {
                 style="position: fixed; top: 0; left: 0;"
             {
                 @for entry in &props.items {
-                    @match entry {
-                        MenuEntry::Item(item) => {
-                            button.mui-menu__item
-                                type="button"
-                                role="menuitem"
-                                data-action=(item.action.clone())
-                                tabindex="-1"
-                                class={
-                                    @if item.destructive { "mui-menu__item--danger" } @else { "" }
-                                }
-                                disabled[item.disabled]
-                            {
-                                (item.label.clone())
-                            }
-                        }
-                        MenuEntry::Separator => {
-                            div.mui-menu__separator role="separator" {}
-                        }
-                    }
+                    (render_entry(entry))
                 }
             }
         }
@@ -69,16 +51,25 @@ pub fn showcase() -> Markup {
                         },
                         items: vec![
                             MenuEntry::Item(MenuItem {
+                                label: "Cut".into(),
+                                action: "cut".into(),
+                                disabled: false,
+                                destructive: false,
+                                shortcut: Some("\u{2318}X".into()),
+                            }),
+                            MenuEntry::Item(MenuItem {
                                 label: "Copy".into(),
                                 action: "copy".into(),
                                 disabled: false,
                                 destructive: false,
+                                shortcut: Some("\u{2318}C".into()),
                             }),
                             MenuEntry::Item(MenuItem {
                                 label: "Paste".into(),
                                 action: "paste".into(),
                                 disabled: false,
                                 destructive: false,
+                                shortcut: Some("\u{2318}V".into()),
                             }),
                             MenuEntry::Separator,
                             MenuEntry::Item(MenuItem {
@@ -86,6 +77,7 @@ pub fn showcase() -> Markup {
                                 action: "delete".into(),
                                 disabled: false,
                                 destructive: true,
+                                shortcut: Some("\u{232b}".into()),
                             }),
                         ],
                     }))

@@ -1,26 +1,36 @@
-/* Alert component — callout/banner for important messages */
+/* Alert component — shadcn-quality callout/banner */
 
 .mui-alert {
+  position: relative;
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 1rem;
-  border-left: 3px solid;
-  border-radius: var(--mui-radius-md);
-  background-color: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  width: 100%;
   align-items: flex-start;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--mui-text);
+  background-color: var(--mui-bg);
 }
 
 .mui-alert__icon {
   flex-shrink: 0;
-  font-size: 1.25rem;
-  line-height: 1.5;
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 0.125rem;
+  color: var(--mui-text);
 }
 
 .mui-alert__content {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -28,8 +38,10 @@
 
 .mui-alert__title {
   font-weight: 500;
-  font-size: 0.9375rem;
-  line-height: 1.4;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--mui-text);
 }
 
 .mui-alert__description {
@@ -39,53 +51,61 @@
   margin: 0;
 }
 
-/* Default variant — muted */
+/* Default variant — neutral border, foreground text */
 .mui-alert--default {
-  border-left-color: var(--mui-text-muted);
+  border-color: var(--mui-border);
   color: var(--mui-text);
-  background-color: rgba(161, 161, 170, 0.08);
 }
 
-/* Info variant — blue tint */
-.mui-alert--info {
-  border-left-color: var(--mui-accent);
+.mui-alert--default .mui-alert__icon {
   color: var(--mui-text);
-  background-color: rgba(59, 130, 246, 0.08);
+}
+
+/* Destructive / danger variant — shadcn destructive style */
+.mui-alert--danger {
+  border-color: var(--mui-danger);
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__icon {
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__title {
+  color: var(--mui-danger);
+}
+
+.mui-alert--danger .mui-alert__description {
+  color: var(--mui-danger);
+  opacity: 0.9;
+}
+
+/* Info variant — accent border, subtle tint */
+.mui-alert--info {
+  border-color: var(--mui-accent);
+  color: var(--mui-text);
 }
 
 .mui-alert--info .mui-alert__icon {
   color: var(--mui-accent);
 }
 
-/* Success variant — green tint */
+/* Success variant — green border */
 .mui-alert--success {
-  border-left-color: var(--mui-success);
+  border-color: var(--mui-success);
   color: var(--mui-text);
-  background-color: rgba(34, 197, 94, 0.08);
 }
 
 .mui-alert--success .mui-alert__icon {
   color: var(--mui-success);
 }
 
-/* Warning variant — yellow tint */
+/* Warning variant — amber border */
 .mui-alert--warning {
-  border-left-color: var(--mui-warning);
+  border-color: var(--mui-warning);
   color: var(--mui-text);
-  background-color: rgba(234, 179, 8, 0.08);
 }
 
 .mui-alert--warning .mui-alert__icon {
   color: var(--mui-warning);
-}
-
-/* Danger variant — red tint */
-.mui-alert--danger {
-  border-left-color: var(--mui-danger);
-  color: var(--mui-text);
-  background-color: rgba(239, 68, 68, 0.08);
-}
-
-.mui-alert--danger .mui-alert__icon {
-  color: var(--mui-danger);
 }

@@ -1,31 +1,25 @@
-/* Skeleton component — loading placeholder with shimmer animation */
+/* Skeleton component — shadcn-quality loading placeholder */
 
-@keyframes mui-skeleton-shimmer {
-  0% {
-    background-position: -1000px 0;
+@keyframes mui-skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
   }
-  100% {
-    background-position: 1000px 0;
+  50% {
+    opacity: 0.5;
   }
 }
 
 .mui-skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--mui-bg-input) 25%,
-    var(--mui-border) 50%,
-    var(--mui-bg-input) 75%
-  );
-  background-size: 200% 100%;
-  animation: mui-skeleton-shimmer 1.5s ease-in-out infinite;
   display: block;
+  background-color: var(--mui-bg-input);
+  animation: mui-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Text skeleton — resembles a line of text */
 .mui-skeleton--text {
   height: 1rem;
   width: 100%;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
 }
 
 /* Circle skeleton — avatar placeholder */
@@ -33,7 +27,7 @@
   border-radius: var(--mui-radius-full);
 }
 
-/* Rect skeleton — card placeholder */
+/* Rect skeleton — card/image placeholder */
 .mui-skeleton--rect {
   border-radius: var(--mui-radius-md);
 }

@@ -1,57 +1,61 @@
-/* Table component */
+/* Table component — shadcn-quality data table */
 
 .mui-table-wrapper {
-  overflow-x: auto;
-  border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  position: relative;
+  overflow: auto;
+  width: 100%;
 }
 
 .mui-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
-}
-
-/* Caption — below table, muted, centered */
-.mui-table__caption {
-  padding: 0.75rem 1rem;
-  color: var(--mui-text-muted);
-  font-size: 0.8125rem;
-  text-align: left;
   caption-side: bottom;
 }
 
-/* Header cells — subtle bg tint, uppercase micro-text, muted color */
+/* Caption — bottom, muted, left-aligned */
+.mui-table__caption {
+  padding: 0.75rem 0;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+/* Header cells — subtle weight, muted color, bottom border */
 .mui-table__th {
   text-align: left;
   font-weight: 500;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--mui-border);
-  background-color: var(--mui-bg-input);
   color: var(--mui-text-muted);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 0.875rem;
   white-space: nowrap;
+  height: 2.5rem;
 }
 
+/* Body cells */
 .mui-table__td {
   padding: 0.75rem 1rem;
   color: var(--mui-text);
+  vertical-align: middle;
 }
 
+/* Row borders */
 .mui-table__row {
   border-bottom: 1px solid var(--mui-border);
   transition: background-color var(--mui-transition);
 }
 
-/* Remove border on last row (wrapper border handles it) */
-.mui-table tbody tr:last-child,
-.mui-table tbody tr:last-child .mui-table__td {
+/* Remove border on last row */
+.mui-table tbody tr:last-child {
   border-bottom: none;
 }
 
-/* Striped variant */
+.mui-table tbody tr:last-child .mui-table__row {
+  border-bottom: none;
+}
+
+/* Striped variant — muted bg on even rows */
 .mui-table--striped tbody tr:nth-child(even) {
   background-color: var(--mui-bg-input);
 }
@@ -64,6 +68,7 @@
 /* Compact variant */
 .mui-table--compact .mui-table__th {
   padding: 0.375rem 0.75rem;
+  height: 2rem;
 }
 
 .mui-table--compact .mui-table__td {

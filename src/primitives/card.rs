@@ -59,57 +59,54 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Card with title, description, and body
             div {
                 p.mui-showcase__caption { "With header and body" }
                 (render(Props {
                     title: Some("Card Title".into()),
-                    description: Some("This is a card with a title, description, and body content.".into()),
+                    description: Some("Card description with supporting text.".into()),
                     children: html! {
-                        p {
-                            "This card contains some example content that demonstrates the basic card layout and structure."
+                        p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0;" {
+                            "Card content goes here. This area can contain any markup."
                         }
                     },
                     footer: None,
                 }))
             }
 
-            // Card with footer and buttons
             div {
                 p.mui-showcase__caption { "With footer" }
                 (render(Props {
-                    title: Some("Settings".into()),
-                    description: None,
+                    title: Some("Notifications".into()),
+                    description: Some("Manage your notification preferences.".into()),
                     children: html! {
-                        div style="display: flex; flex-direction: column; gap: 0.75rem;" {
-                            div class="mui-field" {
-                                label class="mui-label" { "Notifications" }
-                                input class="mui-input" type="checkbox" {}
+                        div style="display:flex;flex-direction:column;gap:0.75rem;font-size:0.875rem;" {
+                            div style="display:flex;justify-content:space-between;align-items:center;" {
+                                span { "Push notifications" }
+                                span.mui-text-muted { "Enabled" }
                             }
-                            div class="mui-field" {
-                                label class="mui-label" { "Dark mode" }
-                                input class="mui-input" type="checkbox" checked {}
+                            div style="display:flex;justify-content:space-between;align-items:center;" {
+                                span { "Email digest" }
+                                span.mui-text-muted { "Weekly" }
                             }
                         }
                     },
                     footer: Some(html! {
-                        div style="display: flex; gap: 0.5rem; margin-left: auto;" {
-                            button class="mui-btn mui-btn--secondary" { "Cancel" }
-                            button class="mui-btn mui-btn--primary" { "Save" }
+                        div style="display:flex;gap:0.5rem;margin-left:auto;" {
+                            button class="mui-btn mui-btn--md mui-btn--outline" { "Cancel" }
+                            button class="mui-btn mui-btn--md mui-btn--primary" { "Save" }
                         }
                     }),
                 }))
             }
 
-            // Card with body only (no header)
             div {
                 p.mui-showcase__caption { "Body only" }
                 (render(Props {
                     title: None,
                     description: None,
                     children: html! {
-                        p {
-                            "A simple card with just body content. Great for minimal layouts and focused information display."
+                        p style="font-size:0.875rem;margin:0;" {
+                            "A simple card with just body content."
                         }
                     },
                     footer: None,

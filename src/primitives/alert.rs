@@ -24,10 +24,11 @@ impl Variant {
 
     fn icon_char(&self) -> &'static str {
         match self {
-            Self::Default | Self::Info => "ℹ",
-            Self::Success => "✓",
-            Self::Warning => "⚠",
-            Self::Danger => "✕",
+            Self::Default => "\u{25cb}",  // circle
+            Self::Info => "\u{24d8}",     // circled i
+            Self::Success => "\u{2713}",  // checkmark
+            Self::Warning => "\u{26a0}",  // warning triangle
+            Self::Danger => "\u{26a0}",   // warning triangle (destructive)
         }
     }
 }
@@ -83,50 +84,36 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Variants row
             div {
-                p.mui-showcase__caption { "Variants" }
+                p.mui-showcase__caption { "Default" }
                 div.mui-showcase__column {
                     (render(Props {
-                        title: "Default".into(),
-                        description: Some("This is a default alert message.".into()),
+                        title: "Heads up!".into(),
+                        description: Some("You can add components to your app using the CLI.".into()),
                         variant: Variant::Default,
                         icon: true,
                     }))
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "Destructive" }
+                div.mui-showcase__column {
                     (render(Props {
-                        title: "Info".into(),
-                        description: Some("This is an info alert message.".into()),
-                        variant: Variant::Info,
-                        icon: true,
-                    }))
-                    (render(Props {
-                        title: "Success".into(),
-                        description: Some("This is a success alert message.".into()),
-                        variant: Variant::Success,
-                        icon: true,
-                    }))
-                    (render(Props {
-                        title: "Warning".into(),
-                        description: Some("This is a warning alert message.".into()),
-                        variant: Variant::Warning,
-                        icon: true,
-                    }))
-                    (render(Props {
-                        title: "Danger".into(),
-                        description: Some("This is a danger alert message.".into()),
+                        title: "Error".into(),
+                        description: Some("Your session has expired. Please log in again.".into()),
                         variant: Variant::Danger,
                         icon: true,
                     }))
                 }
             }
 
-            // Use cases row
             div {
-                p.mui-showcase__caption { "Use cases" }
+                p.mui-showcase__caption { "All variants" }
                 div.mui-showcase__column {
                     (render(Props {
-                        title: "System maintenance".into(),
-                        description: Some("The system will be down for maintenance on Sunday at 2 AM.".into()),
+                        title: "Info".into(),
+                        description: Some("The system will be down for maintenance on Sunday.".into()),
                         variant: Variant::Info,
                         icon: true,
                     }))
@@ -138,7 +125,7 @@ pub fn showcase() -> Markup {
                     }))
                     (render(Props {
                         title: "Storage nearly full".into(),
-                        description: Some("You have 50 MB left. Please delete some files.".into()),
+                        description: Some("You have 50 MB remaining.".into()),
                         variant: Variant::Warning,
                         icon: true,
                     }))

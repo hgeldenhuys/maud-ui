@@ -31,25 +31,35 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
-/// Showcase keyboard shortcuts
+/// Showcase keyboard shortcuts in a help card context
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Common shortcuts" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        keys: vec!["Ctrl".into(), "S".into()],
-                    }))
-                    (render(Props {
-                        keys: vec!["⌘".into(), "K".into()],
-                    }))
-                    (render(Props {
-                        keys: vec!["Shift".into(), "Enter".into()],
-                    }))
-                    (render(Props {
-                        keys: vec!["Esc".into()],
-                    }))
+                p.mui-showcase__caption { "Keyboard shortcuts" }
+                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);padding:1rem;background:var(--mui-bg-card);max-width:20rem;" {
+                    div style="display:flex;flex-direction:column;gap:0.625rem;" {
+                        div style="display:flex;justify-content:space-between;align-items:center;" {
+                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Save" }
+                            (render(Props { keys: vec!["\u{2318}".into(), "S".into()] }))
+                        }
+                        div style="display:flex;justify-content:space-between;align-items:center;" {
+                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Undo" }
+                            (render(Props { keys: vec!["\u{2318}".into(), "Z".into()] }))
+                        }
+                        div style="display:flex;justify-content:space-between;align-items:center;" {
+                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Redo" }
+                            (render(Props { keys: vec!["\u{21E7}".into(), "\u{2318}".into(), "Z".into()] }))
+                        }
+                        div style="display:flex;justify-content:space-between;align-items:center;" {
+                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Command palette" }
+                            (render(Props { keys: vec!["\u{2318}".into(), "K".into()] }))
+                        }
+                        div style="display:flex;justify-content:space-between;align-items:center;" {
+                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Toggle comment" }
+                            (render(Props { keys: vec!["\u{2318}".into(), "/".into()] }))
+                        }
+                    }
                 }
             }
         }

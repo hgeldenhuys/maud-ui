@@ -84,7 +84,7 @@ pub fn showcase() -> Markup {
             }
 
             div {
-                p.mui-showcase__caption { "Chevron separator" }
+                p.mui-showcase__caption { "Product navigation" }
                 (render(Props {
                     items: vec![
                         BreadcrumbItem {
@@ -96,11 +96,11 @@ pub fn showcase() -> Markup {
                             href: Some("/products".into()),
                         },
                         BreadcrumbItem {
-                            label: "Electronics".into(),
-                            href: Some("/products/electronics".into()),
+                            label: "Phones".into(),
+                            href: Some("/products/phones".into()),
                         },
                         BreadcrumbItem {
-                            label: "Headphones".into(),
+                            label: "iPhone 15 Pro".into(),
                             href: None,
                         },
                     ],

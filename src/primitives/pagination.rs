@@ -111,28 +111,42 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Pagination with ellipsis (page 3 of 10)" }
+                p.mui-showcase__caption { "Search results" }
+                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);padding:1rem;background:var(--mui-bg-card);" {
+                    p style="font-size:0.875rem;color:var(--mui-fg-muted);margin-bottom:0.75rem;" {
+                        "Showing " strong { "21\u{2013}30" } " of " strong { "97" } " results"
+                    }
+                    (render(Props {
+                        current_page: 3,
+                        total_pages: 10,
+                        max_visible: 5,
+                    }))
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "First page" }
                 (render(Props {
-                    current_page: 3,
+                    current_page: 1,
                     total_pages: 10,
                     max_visible: 5,
                 }))
             }
 
             div {
-                p.mui-showcase__caption { "Simple pagination (page 1 of 3, no ellipsis)" }
-                (render(Props {
-                    current_page: 1,
-                    total_pages: 3,
-                    max_visible: 5,
-                }))
-            }
-
-            div {
-                p.mui-showcase__caption { "Last page (page 10 of 10)" }
+                p.mui-showcase__caption { "Last page" }
                 (render(Props {
                     current_page: 10,
                     total_pages: 10,
+                    max_visible: 5,
+                }))
+            }
+
+            div {
+                p.mui-showcase__caption { "Few pages (no ellipsis)" }
+                (render(Props {
+                    current_page: 2,
+                    total_pages: 3,
                     max_visible: 5,
                 }))
             }

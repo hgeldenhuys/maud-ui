@@ -18,11 +18,12 @@
   max-width: 22rem;
   z-index: 50;
   opacity: 0;
+  pointer-events: none;
   transition: opacity var(--mui-transition);
 }
 
 .mui-popover__content[data-visible="true"] {
-  opacity: 1;
+  pointer-events: auto;
 }
 
 .mui-popover__content[hidden] {

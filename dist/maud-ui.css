@@ -287,8 +287,8 @@ dialog.mui-alert-dialog::backdrop {
   border: none;
   color: var(--mui-text-muted);
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -319,6 +319,10 @@ dialog.mui-alert-dialog::backdrop {
   padding: 1.25rem;
 }
 
+.mui-alert-dialog .mui-dialog__title {
+  color: var(--mui-danger);
+}
+
 /* --- avatar.css --- */
 /* Avatar component — maud-ui Wave 1 */
 
@@ -334,6 +338,7 @@ dialog.mui-alert-dialog::backdrop {
   font-weight: 500;
   user-select: none;
   flex-shrink: 0;
+  border: 2px solid var(--mui-border);
 }
 
 /* Size: Small */
@@ -384,6 +389,8 @@ dialog.mui-alert-dialog::backdrop {
 .mui-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  height: 1.25rem;
   padding: 0.125rem 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -391,6 +398,7 @@ dialog.mui-alert-dialog::backdrop {
   line-height: 1;
   border: 1px solid transparent;
   white-space: nowrap;
+  transition: var(--mui-transition);
 }
 
 /* Default variant — muted background with border */
@@ -470,7 +478,7 @@ dialog.mui-alert-dialog::backdrop {
 
 /* Variant: Default */
 .mui-btn--default {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border);
   color: var(--mui-text);
 }
@@ -526,7 +534,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--outline:hover:not([aria-disabled="true"]) {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border-hover);
 }
 
@@ -543,7 +551,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--ghost:hover:not([aria-disabled="true"]) {
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border);
 }
 
@@ -639,7 +647,7 @@ dialog.mui-alert-dialog::backdrop {
   height: 0.625rem;
   border: solid var(--mui-accent-fg);
   border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-1px, -2px);
+  transform: rotate(45deg) translate(-0.5px, -1px);
 }
 
 .mui-checkbox__indicator--indeterminate {
@@ -803,8 +811,8 @@ dialog.mui-dialog::backdrop {
   border: none;
   color: var(--mui-text-muted);
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -833,6 +841,17 @@ dialog.mui-dialog::backdrop {
 
 .mui-dialog__body {
   padding: 1.25rem;
+}
+
+.mui-dialog__body > *:last-child {
+  margin-bottom: 0;
+}
+
+.mui-dialog__actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
 /* --- field.css --- */
@@ -891,7 +910,7 @@ dialog.mui-dialog::backdrop {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--mui-text-muted);
+  color: var(--mui-text-subtle);
 }
 
 .mui-fieldset[disabled] {
@@ -908,7 +927,7 @@ dialog.mui-dialog::backdrop {
 .mui-input {
   display: block;
   width: 100%;
-  max-width: 20rem;
+  height: 2.25rem;
   background: var(--mui-bg-input);
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
@@ -918,6 +937,7 @@ dialog.mui-dialog::backdrop {
   font-size: 0.875rem;
   line-height: 1.25;
   transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
 .mui-input::placeholder {
@@ -1128,8 +1148,10 @@ dialog.mui-dialog::backdrop {
   font-size: 0.875rem;
   font-family: inherit;
   width: 5rem;
+  height: 2.25rem;
   text-align: center;
   -moz-appearance: textfield;
+  box-sizing: border-box;
 }
 
 /* Remove default number input spinners */
@@ -1164,11 +1186,12 @@ dialog.mui-dialog::backdrop {
   max-width: 22rem;
   z-index: 50;
   opacity: 0;
+  pointer-events: none;
   transition: opacity var(--mui-transition);
 }
 
 .mui-popover__content[data-visible="true"] {
-  opacity: 1;
+  pointer-events: auto;
 }
 
 .mui-popover__content[hidden] {
@@ -1280,7 +1303,9 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-radio__input:checked + .mui-radio__indicator {
+  background: transparent;
   border-color: var(--mui-accent);
+  border-width: 2px;
 }
 
 .mui-radio__input:checked + .mui-radio__indicator::after {
@@ -1337,6 +1362,7 @@ dialog.mui-dialog::backdrop {
   opacity: 0;
   transition: opacity var(--mui-transition);
   pointer-events: none;
+  padding: 0.25rem 0;
 }
 
 /* Show scrollbar on hover */
@@ -1400,8 +1426,10 @@ dialog.mui-dialog::backdrop {
   border-radius: var(--mui-radius-md);
   font-family: inherit;
   font-size: 0.875rem;
+  line-height: 1.25;
   cursor: pointer;
   transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
 .mui-select__trigger:hover:not(:disabled) {
@@ -1545,13 +1573,14 @@ dialog.mui-dialog::backdrop {
   width: 1.125rem;
   height: 1.125rem;
   border-radius: var(--mui-radius-full);
-  background: var(--mui-text);
+  background: white;
   border: 2px solid var(--mui-accent);
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
   cursor: grab;
   transition: left var(--mui-transition);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .mui-slider__thumb:focus-visible {
@@ -1618,19 +1647,19 @@ dialog.mui-dialog::backdrop {
 
 .mui-switch__thumb {
   position: absolute;
-  top: 1px;
-  left: 1px;
+  top: 2px;
+  left: 2px;
   width: calc(1.25rem - 4px);
   height: calc(1.25rem - 4px);
-  background: var(--mui-text);
+  background: white;
   border-radius: var(--mui-radius-full);
   transition: transform var(--mui-transition);
   display: block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .mui-switch[aria-checked="true"] .mui-switch__thumb {
   transform: translateX(1rem);
-  background: var(--mui-accent-fg);
 }
 
 .mui-switch:disabled,
@@ -1705,7 +1734,7 @@ dialog.mui-dialog::backdrop {
 }
 
 .mui-tabs__panel {
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
   color: var(--mui-text);
 }
 
@@ -1719,7 +1748,6 @@ dialog.mui-dialog::backdrop {
 .mui-textarea {
   display: block;
   width: 100%;
-  max-width: 30rem;
   background: var(--mui-bg-input);
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
@@ -1730,6 +1758,7 @@ dialog.mui-dialog::backdrop {
   line-height: 1.5;
   transition: var(--mui-transition);
   min-height: calc(0.5rem * 2 + 1.5em * 3);
+  box-sizing: border-box;
 }
 
 .mui-textarea::placeholder {
@@ -1931,6 +1960,7 @@ dialog.mui-dialog::backdrop {
 
 .mui-toggle-group__item[aria-pressed="true"] {
   background: var(--mui-bg-card);
+  color: var(--mui-text-bold);
 }
 
 .mui-toggle-group__item:focus-visible {
@@ -1972,11 +2002,12 @@ dialog.mui-dialog::backdrop {
 
 .mui-toggle[aria-pressed="true"] {
   background: var(--mui-bg-card);
-  border-color: var(--mui-border-hover);
+  border-color: var(--mui-border);
 }
 
 .mui-toggle[aria-pressed="true"]:hover:not(:disabled) {
-  background: var(--mui-border);
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
 }
 
 .mui-toggle:disabled {
@@ -2011,7 +2042,7 @@ dialog.mui-dialog::backdrop {
   transition: opacity var(--mui-transition);
   z-index: 50;
   box-shadow: var(--mui-shadow-md);
-  border: 1px solid var(--mui-border);
+  border: none;
 }
 
 .mui-tooltip__content[data-visible="true"] {

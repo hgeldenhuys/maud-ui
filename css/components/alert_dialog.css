@@ -36,8 +36,8 @@ dialog.mui-alert-dialog::backdrop {
   border: none;
   color: var(--mui-text-muted);
   cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+  width: 1.25rem;
+  height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,4 +66,8 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-alert-dialog .mui-dialog__body {
   padding: 1.25rem;
+}
+
+.mui-alert-dialog .mui-dialog__title {
+  color: var(--mui-danger);
 }

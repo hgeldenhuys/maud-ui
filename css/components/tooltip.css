@@ -24,7 +24,7 @@
   transition: opacity var(--mui-transition);
   z-index: 50;
   box-shadow: var(--mui-shadow-md);
-  border: 1px solid var(--mui-border);
+  border: none;
 }
 
 .mui-tooltip__content[data-visible="true"] {

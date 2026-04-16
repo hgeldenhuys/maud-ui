@@ -33,7 +33,9 @@
 }
 
 .mui-radio__input:checked + .mui-radio__indicator {
+  background: transparent;
   border-color: var(--mui-accent);
+  border-width: 2px;
 }
 
 .mui-radio__input:checked + .mui-radio__indicator::after {

@@ -36,6 +36,7 @@
 
 .mui-toggle-group__item[aria-pressed="true"] {
   background: var(--mui-bg-card);
+  color: var(--mui-text-bold);
 }
 
 .mui-toggle-group__item:focus-visible {

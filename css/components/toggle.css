@@ -25,11 +25,12 @@
 
 .mui-toggle[aria-pressed="true"] {
   background: var(--mui-bg-card);
-  border-color: var(--mui-border-hover);
+  border-color: var(--mui-border);
 }
 
 .mui-toggle[aria-pressed="true"]:hover:not(:disabled) {
-  background: var(--mui-border);
+  background: var(--mui-bg-card);
+  border-color: var(--mui-border-hover);
 }
 
 .mui-toggle:disabled {

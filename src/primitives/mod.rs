@@ -1,0 +1,31 @@
+//! Primitive components. Each is its own module — import as `maud_ui::primitives::button`.
+
+pub mod accordion;
+pub mod alert_dialog;
+pub mod avatar;
+pub mod badge;
+pub mod button;
+pub mod checkbox;
+pub mod collapsible;
+pub mod context_menu;
+pub mod dialog;
+pub mod field;
+pub mod fieldset;
+pub mod input;
+pub mod menu;
+pub mod meter;
+pub mod number_field;
+pub mod popover;
+pub mod progress;
+pub mod radio;
+pub mod scroll_area;
+pub mod select;
+pub mod separator;
+pub mod slider;
+pub mod switch;
+pub mod tabs;
+pub mod textarea;
+pub mod toast;
+pub mod toggle;
+pub mod toggle_group;
+pub mod tooltip;

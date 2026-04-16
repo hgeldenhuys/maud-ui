@@ -1,0 +1,161 @@
+/* Command palette component — Cmd+K modal */
+
+dialog.mui-command {
+  border: none;
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 0;
+  box-shadow: var(--mui-shadow-lg);
+  max-width: 32rem;
+  width: 90vw;
+  overflow: hidden;
+  animation: mui-command-enter 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+dialog.mui-command::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+  animation: mui-command-backdrop-enter 150ms ease-out;
+}
+
+@keyframes mui-command-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mui-command-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Search area */
+
+.mui-command__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-command__search-icon {
+  color: var(--mui-text-muted);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.mui-command__search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--mui-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  padding: 0;
+}
+
+.mui-command__search::placeholder {
+  color: var(--mui-text-muted);
+}
+
+/* Item list */
+
+.mui-command__list {
+  overflow-y: auto;
+  max-height: 18rem;
+  padding: 0.25rem;
+}
+
+/* Groups */
+
+.mui-command__group {
+  padding: 0.125rem 0;
+}
+
+.mui-command__group + .mui-command__group {
+  border-top: 1px solid var(--mui-border);
+  margin-top: 0.25rem;
+  padding-top: 0.375rem;
+}
+
+.mui-command__group-label {
+  padding: 0.375rem 0.5rem 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mui-text-muted);
+  user-select: none;
+}
+
+/* Items */
+
+.mui-command__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--mui-radius-sm);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background var(--mui-transition);
+}
+
+.mui-command__item:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-command__item--highlighted {
+  background: var(--mui-bg-input);
+}
+
+.mui-command__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-command__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Shortcut kbd inside command items */
+.mui-command__item .mui-kbd {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+
+.mui-command__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+}
+
+.mui-command__empty[hidden] {
+  display: none;
+}
+
+/* Hidden items during search */
+.mui-command__item[data-hidden="true"] {
+  display: none;
+}
+
+.mui-command__group[data-hidden="true"] {
+  display: none;
+}

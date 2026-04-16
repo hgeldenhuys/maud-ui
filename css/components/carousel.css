@@ -1,0 +1,108 @@
+/* Carousel component — horizontal slider with arrows + dot indicators */
+
+.mui-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.mui-carousel__viewport {
+  overflow: hidden;
+  border-radius: var(--mui-radius-lg);
+}
+
+.mui-carousel__container {
+  display: flex;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* Prev / Next arrows */
+.mui-carousel__prev,
+.mui-carousel__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--mui-transition);
+  z-index: 1;
+  padding: 0;
+  font-family: inherit;
+  opacity: 0.85;
+}
+
+.mui-carousel__prev {
+  left: 0.5rem;
+}
+
+.mui-carousel__next {
+  right: 0.5rem;
+}
+
+.mui-carousel__prev:hover,
+.mui-carousel__next:hover {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+  opacity: 1;
+}
+
+.mui-carousel__prev:disabled,
+.mui-carousel__next:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.mui-carousel__prev:focus-visible,
+.mui-carousel__next:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Dot indicators */
+.mui-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-top: 0.75rem;
+}
+
+.mui-carousel__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  border: none;
+  background: var(--mui-border);
+  cursor: pointer;
+  padding: 0;
+  transition: var(--mui-transition);
+}
+
+.mui-carousel__dot:hover {
+  background: var(--mui-text-muted);
+}
+
+.mui-carousel__dot--active,
+.mui-carousel__dot[aria-selected="true"] {
+  background: var(--mui-accent);
+  transform: scale(1.25);
+}
+
+.mui-carousel__dot:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}

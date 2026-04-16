@@ -30,10 +30,9 @@
   });
 })();
 
+// ═══ Component behaviors ═══
 
-// ============ Component Behaviors ============
-
-// ============ accordion.js ============
+// --- accordion.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -116,8 +115,421 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- calendar.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
-// ============ collapsible.js ============
+  var MONTHS = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
+  function isLeapYear(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+
+  function daysInMonth(y, m) {
+    if (m === 2) return isLeapYear(y) ? 29 : 28;
+    if (m === 4 || m === 6 || m === 9 || m === 11) return 30;
+    return 31;
+  }
+
+  // Tomohiko Sakamoto — returns 0=Sun..6=Sat
+  function dayOfWeek(y, m, d) {
+    var t = [0,3,2,5,0,3,5,1,4,6,2,4];
+    if (m < 3) y--;
+    return (y + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400) + t[m-1] + d) % 7;
+  }
+
+  function fmtDate(y, m, d) {
+    return String(y) + "-" + (m < 10 ? "0" : "") + m + "-" + (d < 10 ? "0" : "") + d;
+  }
+
+  function parseDate(s) {
+    if (!s) return null;
+    var p = s.split("-");
+    if (p.length !== 3) return null;
+    return { y: parseInt(p[0],10), m: parseInt(p[1],10), d: parseInt(p[2],10) };
+  }
+
+  function dateCmp(a, b) {
+    if (a.y !== b.y) return a.y < b.y ? -1 : 1;
+    if (a.m !== b.m) return a.m < b.m ? -1 : 1;
+    if (a.d !== b.d) return a.d < b.d ? -1 : 1;
+    return 0;
+  }
+
+  function isDisabled(y, m, d, minD, maxD) {
+    var cur = {y:y, m:m, d:d};
+    if (minD && dateCmp(cur, minD) < 0) return true;
+    if (maxD && dateCmp(cur, maxD) > 0) return true;
+    return false;
+  }
+
+  window.MaudUI.behaviors["calendar"] = function (root) {
+    var title = root.querySelector(".mui-calendar__title");
+    var grid = root.querySelector(".mui-calendar__grid");
+    var hidden = root.querySelector(".mui-calendar__value");
+    var prevBtn = root.querySelector(".mui-calendar__nav--prev");
+    var nextBtn = root.querySelector(".mui-calendar__nav--next");
+
+    var currentYear = parseInt(root.getAttribute("data-year"), 10);
+    var currentMonth = parseInt(root.getAttribute("data-month"), 10);
+    var selected = root.getAttribute("data-selected") || "";
+    var minDate = parseDate(root.getAttribute("data-min"));
+    var maxDate = parseDate(root.getAttribute("data-max"));
+    var showOutside = root.getAttribute("data-show-outside") !== "false";
+
+    // Today
+    var now = new Date();
+    var todayStr = fmtDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+    // Mark today on initial server-rendered grid
+    markToday();
+
+    function markToday() {
+      var days = grid.querySelectorAll(".mui-calendar__day");
+      for (var i = 0; i < days.length; i++) {
+        var btn = days[i];
+        if (btn.getAttribute("data-date") === todayStr) {
+          btn.classList.add("mui-calendar__day--today");
+        }
+      }
+    }
+
+    function renderMonth() {
+      title.textContent = MONTHS[currentMonth - 1] + " " + currentYear;
+      root.setAttribute("data-year", currentYear);
+      root.setAttribute("data-month", currentMonth);
+
+      // Remove existing week rows
+      var weekRows = grid.querySelectorAll(".mui-calendar__week");
+      for (var i = 0; i < weekRows.length; i++) weekRows[i].remove();
+
+      var firstDow = dayOfWeek(currentYear, currentMonth, 1);
+      var dim = daysInMonth(currentYear, currentMonth);
+
+      var prevYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+      var prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+      var prevDim = daysInMonth(prevYear, prevMonth);
+      var nextYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+      var nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+
+      var cells = [];
+      // Previous month trailing
+      for (var i = 0; i < firstDow; i++) {
+        var d = prevDim - firstDow + 1 + i;
+        cells.push({y: prevYear, m: prevMonth, d: d, outside: true});
+      }
+      // Current month
+      for (var d = 1; d <= dim; d++) {
+        cells.push({y: currentYear, m: currentMonth, d: d, outside: false});
+      }
+      // Next month leading
+      var remaining = 42 - cells.length;
+      for (var d = 1; d <= remaining; d++) {
+        cells.push({y: nextYear, m: nextMonth, d: d, outside: true});
+      }
+
+      // Determine which cell gets tabindex=0
+      var focusIdx = -1;
+      for (var i = 0; i < cells.length; i++) {
+        if (fmtDate(cells[i].y, cells[i].m, cells[i].d) === selected) { focusIdx = i; break; }
+      }
+      if (focusIdx === -1) {
+        // First day of current month
+        for (var i = 0; i < cells.length; i++) {
+          if (!cells[i].outside) { focusIdx = i; break; }
+        }
+      }
+
+      // Build 6 week rows
+      for (var w = 0; w < 6; w++) {
+        var row = document.createElement("div");
+        row.className = "mui-calendar__week";
+        row.setAttribute("role", "row");
+
+        for (var dow = 0; dow < 7; dow++) {
+          var idx = w * 7 + dow;
+          var c = cells[idx];
+          var dateStr = fmtDate(c.y, c.m, c.d);
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.setAttribute("role", "gridcell");
+          btn.setAttribute("data-date", dateStr);
+          btn.setAttribute("tabindex", idx === focusIdx ? "0" : "-1");
+
+          var cls = "mui-calendar__day";
+          if (c.outside) cls += " mui-calendar__day--outside";
+          if (dateStr === todayStr) cls += " mui-calendar__day--today";
+          if (dateStr === selected) {
+            cls += " mui-calendar__day--selected";
+            btn.setAttribute("aria-selected", "true");
+          } else {
+            btn.setAttribute("aria-selected", "false");
+          }
+
+          var dis = isDisabled(c.y, c.m, c.d, minDate, maxDate);
+          if (dis) btn.disabled = true;
+
+          btn.className = cls;
+
+          if (!c.outside || showOutside) {
+            btn.textContent = String(c.d);
+          }
+
+          row.appendChild(btn);
+        }
+        grid.appendChild(row);
+      }
+    }
+
+    // Navigation
+    prevBtn.addEventListener("click", function () {
+      currentMonth--;
+      if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+      renderMonth();
+    });
+
+    nextBtn.addEventListener("click", function () {
+      currentMonth++;
+      if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+      renderMonth();
+    });
+
+    // Day selection — event delegation
+    grid.addEventListener("click", function (e) {
+      var day = e.target.closest(".mui-calendar__day");
+      if (!day || day.disabled) return;
+
+      // Deselect previous
+      var prev = grid.querySelector(".mui-calendar__day--selected");
+      if (prev) {
+        prev.classList.remove("mui-calendar__day--selected");
+        prev.setAttribute("aria-selected", "false");
+        prev.setAttribute("tabindex", "-1");
+      }
+
+      // Select new
+      day.classList.add("mui-calendar__day--selected");
+      day.setAttribute("aria-selected", "true");
+      day.setAttribute("tabindex", "0");
+      day.focus();
+
+      selected = day.getAttribute("data-date");
+      root.setAttribute("data-selected", selected);
+      if (hidden) hidden.value = selected;
+
+      // Dispatch change event for external listeners
+      root.dispatchEvent(new CustomEvent("calendar:change", { detail: { date: selected }, bubbles: true }));
+    });
+
+    // Keyboard navigation
+    grid.addEventListener("keydown", function (e) {
+      var day = e.target.closest(".mui-calendar__day");
+      if (!day) return;
+
+      var allDays = grid.querySelectorAll(".mui-calendar__day:not(:disabled)");
+      var currentIdx = -1;
+      for (var i = 0; i < allDays.length; i++) {
+        if (allDays[i] === day) { currentIdx = i; break; }
+      }
+      if (currentIdx === -1) return;
+
+      var targetIdx = -1;
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        targetIdx = currentIdx + 1 < allDays.length ? currentIdx + 1 : currentIdx;
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        targetIdx = currentIdx - 1 >= 0 ? currentIdx - 1 : currentIdx;
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        targetIdx = currentIdx + 7 < allDays.length ? currentIdx + 7 : currentIdx;
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        targetIdx = currentIdx - 7 >= 0 ? currentIdx - 7 : currentIdx;
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        // First day of current month
+        for (var i = 0; i < allDays.length; i++) {
+          if (!allDays[i].classList.contains("mui-calendar__day--outside")) { targetIdx = i; break; }
+        }
+      } else if (e.key === "End") {
+        e.preventDefault();
+        // Last day of current month
+        for (var i = allDays.length - 1; i >= 0; i--) {
+          if (!allDays[i].classList.contains("mui-calendar__day--outside")) { targetIdx = i; break; }
+        }
+      } else if (e.key === "PageUp") {
+        e.preventDefault();
+        currentMonth--;
+        if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+        renderMonth();
+        // Focus first non-disabled day
+        var first = grid.querySelector(".mui-calendar__day:not(:disabled):not(.mui-calendar__day--outside)");
+        if (first) { first.setAttribute("tabindex", "0"); first.focus(); }
+        return;
+      } else if (e.key === "PageDown") {
+        e.preventDefault();
+        currentMonth++;
+        if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+        renderMonth();
+        var first = grid.querySelector(".mui-calendar__day:not(:disabled):not(.mui-calendar__day--outside)");
+        if (first) { first.setAttribute("tabindex", "0"); first.focus(); }
+        return;
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        day.click();
+        return;
+      }
+
+      if (targetIdx >= 0 && targetIdx < allDays.length) {
+        day.setAttribute("tabindex", "-1");
+        allDays[targetIdx].setAttribute("tabindex", "0");
+        allDays[targetIdx].focus();
+      }
+    });
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- carousel.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["carousel"] = function (root) {
+    var container = root.querySelector(".mui-carousel__container");
+    if (!container) return;
+
+    var slides = container.querySelectorAll(".mui-carousel__slide");
+    var prev = root.querySelector(".mui-carousel__prev");
+    var next = root.querySelector(".mui-carousel__next");
+    var dots = root.querySelectorAll(".mui-carousel__dot");
+    var currentIndex = 0;
+    var total = slides.length;
+    var loopEnabled = root.getAttribute("data-loop") === "true";
+    var autoPlay = root.getAttribute("data-autoplay") === "true";
+    var autoPlayTimer = null;
+
+    function updateDisabled() {
+      if (loopEnabled) return;
+      if (prev) prev.disabled = currentIndex === 0;
+      if (next) next.disabled = currentIndex === total - 1;
+    }
+
+    function goTo(index) {
+      if (index < 0) {
+        index = loopEnabled ? total - 1 : 0;
+      }
+      if (index >= total) {
+        index = loopEnabled ? 0 : total - 1;
+      }
+      currentIndex = index;
+      container.style.transform = "translateX(-" + (currentIndex * 100) + "%)";
+
+      // Update dots
+      for (var i = 0; i < dots.length; i++) {
+        var isActive = i === currentIndex;
+        dots[i].setAttribute("aria-selected", isActive ? "true" : "false");
+        if (isActive) {
+          dots[i].classList.add("mui-carousel__dot--active");
+        } else {
+          dots[i].classList.remove("mui-carousel__dot--active");
+        }
+      }
+
+      // Update slide aria-hidden
+      for (var j = 0; j < slides.length; j++) {
+        slides[j].setAttribute("aria-hidden", j === currentIndex ? "false" : "true");
+      }
+
+      updateDisabled();
+    }
+
+    // Arrow clicks
+    if (prev) {
+      prev.addEventListener("click", function () {
+        goTo(currentIndex - 1);
+        resetAutoPlay();
+      });
+    }
+    if (next) {
+      next.addEventListener("click", function () {
+        goTo(currentIndex + 1);
+        resetAutoPlay();
+      });
+    }
+
+    // Dot clicks
+    for (var i = 0; i < dots.length; i++) {
+      (function (idx) {
+        dots[idx].addEventListener("click", function () {
+          goTo(idx);
+          resetAutoPlay();
+        });
+      })(i);
+    }
+
+    // Keyboard: ArrowLeft/Right on the carousel root
+    root.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goTo(currentIndex - 1);
+        resetAutoPlay();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goTo(currentIndex + 1);
+        resetAutoPlay();
+      }
+    });
+
+    // Auto-play
+    function startAutoPlay() {
+      if (!autoPlay) return;
+      autoPlayTimer = setInterval(function () {
+        goTo(currentIndex + 1);
+      }, 4000);
+    }
+
+    function resetAutoPlay() {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+      startAutoPlay();
+    }
+
+    // Pause auto-play on hover/focus
+    root.addEventListener("mouseenter", function () {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    });
+    root.addEventListener("mouseleave", function () {
+      startAutoPlay();
+    });
+    root.addEventListener("focusin", function () {
+      if (autoPlayTimer) {
+        clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
+      }
+    });
+    root.addEventListener("focusout", function () {
+      startAutoPlay();
+    });
+
+    // Initialize
+    goTo(0);
+    startAutoPlay();
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- collapsible.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -158,8 +570,581 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- combobox.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
-// ============ dialog.js ============
+  window.MaudUI.behaviors["combobox"] = function (root) {
+    var trigger = root.querySelector(".mui-combobox__trigger");
+    var dropdown = root.querySelector(".mui-combobox__dropdown");
+    var searchInput = root.querySelector(".mui-combobox__search");
+    var list = root.querySelector(".mui-combobox__list");
+    var emptyEl = root.querySelector(".mui-combobox__empty");
+    var valueEl = root.querySelector(".mui-combobox__value");
+    var hidden = root.querySelector(".mui-combobox__hidden");
+    var options = list.querySelectorAll(".mui-combobox__option");
+    var activeIndex = -1;
+
+    function visibleOptions() {
+      var result = [];
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].style.display !== "none") {
+          result.push(options[i]);
+        }
+      }
+      return result;
+    }
+
+    function open() {
+      dropdown.removeAttribute("hidden");
+      trigger.setAttribute("aria-expanded", "true");
+      searchInput.value = "";
+      filterOptions("");
+      activeIndex = -1;
+      searchInput.focus();
+      document.addEventListener("click", clickOutside, true);
+    }
+
+    function close() {
+      dropdown.setAttribute("hidden", "");
+      trigger.setAttribute("aria-expanded", "false");
+      unhighlightAll();
+      activeIndex = -1;
+      document.removeEventListener("click", clickOutside, true);
+      trigger.focus();
+    }
+
+    function filterOptions(query) {
+      var q = query.toLowerCase();
+      var visibleCount = 0;
+      for (var i = 0; i < options.length; i++) {
+        var label = options[i].querySelector(".mui-combobox__option-label").textContent.toLowerCase();
+        var visible = !q || label.indexOf(q) !== -1;
+        options[i].style.display = visible ? "" : "none";
+        if (visible) visibleCount++;
+      }
+      if (visibleCount === 0) {
+        emptyEl.removeAttribute("hidden");
+        emptyEl.style.display = "";
+      } else {
+        emptyEl.setAttribute("hidden", "");
+        emptyEl.style.display = "none";
+      }
+      unhighlightAll();
+      activeIndex = -1;
+    }
+
+    function highlight(idx) {
+      var vis = visibleOptions();
+      unhighlightAll();
+      if (idx >= 0 && idx < vis.length) {
+        activeIndex = idx;
+        vis[idx].classList.add("mui-combobox__option--highlighted");
+        vis[idx].scrollIntoView({ block: "nearest" });
+      } else {
+        activeIndex = -1;
+      }
+    }
+
+    function unhighlightAll() {
+      for (var i = 0; i < options.length; i++) {
+        options[i].classList.remove("mui-combobox__option--highlighted");
+      }
+    }
+
+    function selectOption(opt) {
+      for (var i = 0; i < options.length; i++) {
+        options[i].setAttribute("aria-selected", "false");
+        options[i].classList.remove("mui-combobox__option--selected");
+      }
+      opt.setAttribute("aria-selected", "true");
+      opt.classList.add("mui-combobox__option--selected");
+      var value = opt.getAttribute("data-value");
+      var label = opt.querySelector(".mui-combobox__option-label").textContent;
+      valueEl.textContent = label;
+      hidden.value = value;
+      close();
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target)) {
+        close();
+      }
+    }
+
+    // Toggle on trigger click
+    trigger.addEventListener("click", function () {
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        close();
+      } else {
+        open();
+      }
+    });
+
+    // Search input events
+    searchInput.addEventListener("input", function () {
+      filterOptions(searchInput.value);
+    });
+
+    searchInput.addEventListener("keydown", function (e) {
+      var vis = visibleOptions();
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        var next = activeIndex + 1;
+        if (next < vis.length) {
+          highlight(next);
+        }
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        var prev = activeIndex - 1;
+        if (prev >= 0) {
+          highlight(prev);
+        }
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (activeIndex >= 0 && activeIndex < vis.length) {
+          selectOption(vis[activeIndex]);
+        }
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    // Trigger keyboard (open on arrow/enter/space)
+    trigger.addEventListener("keydown", function (e) {
+      var isOpen = trigger.getAttribute("aria-expanded") === "true";
+      if (!isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        open();
+      } else if (isOpen && e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    // Event delegation for option clicks
+    list.addEventListener("click", function (e) {
+      var option = e.target.closest(".mui-combobox__option");
+      if (option) {
+        selectOption(option);
+      }
+    });
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- command.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  // Command trigger — opens the palette
+  window.MaudUI.behaviors["command-trigger"] = function (el) {
+    el.addEventListener("click", function () {
+      var targetId = el.getAttribute("data-target");
+      var dialog = targetId ? document.getElementById(targetId) : null;
+      if (dialog && dialog.showModal) {
+        dialog.showModal();
+        var search = dialog.querySelector(".mui-command__search");
+        if (search) {
+          search.value = "";
+          search.focus();
+        }
+        // Reset filter state on open
+        resetFilter(dialog);
+      }
+    });
+  };
+
+  // Command palette behavior
+  window.MaudUI.behaviors["command"] = function (el) {
+    var searchInput = el.querySelector(".mui-command__search");
+    var list = el.querySelector(".mui-command__list");
+    var emptyEl = el.querySelector(".mui-command__empty");
+    var items = el.querySelectorAll(".mui-command__item");
+    var groups = el.querySelectorAll(".mui-command__group");
+    var activeIndex = -1;
+
+    function visibleItems() {
+      var result = [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].getAttribute("data-hidden") !== "true" &&
+            !items[i].classList.contains("mui-command__item--disabled")) {
+          result.push(items[i]);
+        }
+      }
+      return result;
+    }
+
+    function filterItems(query) {
+      var q = query.toLowerCase();
+      var visibleCount = 0;
+
+      for (var i = 0; i < items.length; i++) {
+        var label = items[i].getAttribute("data-label") || "";
+        var match = !q || label.toLowerCase().indexOf(q) !== -1;
+        if (match) {
+          items[i].removeAttribute("data-hidden");
+          visibleCount++;
+        } else {
+          items[i].setAttribute("data-hidden", "true");
+        }
+      }
+
+      // Hide groups that have no visible items
+      for (var g = 0; g < groups.length; g++) {
+        var groupItems = groups[g].querySelectorAll(".mui-command__item");
+        var anyVisible = false;
+        for (var j = 0; j < groupItems.length; j++) {
+          if (groupItems[j].getAttribute("data-hidden") !== "true") {
+            anyVisible = true;
+            break;
+          }
+        }
+        if (anyVisible) {
+          groups[g].removeAttribute("data-hidden");
+        } else {
+          groups[g].setAttribute("data-hidden", "true");
+        }
+      }
+
+      // Show/hide empty state
+      if (visibleCount === 0) {
+        emptyEl.removeAttribute("hidden");
+      } else {
+        emptyEl.setAttribute("hidden", "");
+      }
+
+      unhighlightAll();
+      activeIndex = -1;
+    }
+
+    function highlight(idx) {
+      var vis = visibleItems();
+      unhighlightAll();
+      if (idx >= 0 && idx < vis.length) {
+        activeIndex = idx;
+        vis[idx].classList.add("mui-command__item--highlighted");
+        vis[idx].scrollIntoView({ block: "nearest" });
+      } else {
+        activeIndex = -1;
+      }
+    }
+
+    function unhighlightAll() {
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove("mui-command__item--highlighted");
+      }
+    }
+
+    function selectItem(item) {
+      var label = item.getAttribute("data-label") || "";
+      el.close();
+      // Dispatch custom event for consumers
+      el.dispatchEvent(new CustomEvent("mui-command-select", {
+        detail: { label: label },
+        bubbles: true
+      }));
+    }
+
+    // Search input filtering
+    searchInput.addEventListener("input", function () {
+      filterItems(searchInput.value);
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener("keydown", function (e) {
+      var vis = visibleItems();
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        var next = activeIndex + 1;
+        if (next < vis.length) {
+          highlight(next);
+        }
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        var prev = activeIndex - 1;
+        if (prev >= 0) {
+          highlight(prev);
+        }
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (activeIndex >= 0 && activeIndex < vis.length) {
+          selectItem(vis[activeIndex]);
+        }
+      }
+      // Escape is handled natively by <dialog>
+    });
+
+    // Click on items
+    list.addEventListener("click", function (e) {
+      var item = e.target.closest(".mui-command__item");
+      if (item && !item.classList.contains("mui-command__item--disabled")) {
+        selectItem(item);
+      }
+    });
+
+    // Backdrop click closes
+    el.addEventListener("click", function (e) {
+      if (e.target === el) {
+        el.close();
+      }
+    });
+
+    // Reset on close
+    el.addEventListener("close", function () {
+      searchInput.value = "";
+      resetFilter(el);
+      unhighlightAll();
+      activeIndex = -1;
+    });
+  };
+
+  // Helper: reset filter state
+  function resetFilter(dialog) {
+    var items = dialog.querySelectorAll(".mui-command__item");
+    var groups = dialog.querySelectorAll(".mui-command__group");
+    var emptyEl = dialog.querySelector(".mui-command__empty");
+
+    for (var i = 0; i < items.length; i++) {
+      items[i].removeAttribute("data-hidden");
+    }
+    for (var g = 0; g < groups.length; g++) {
+      groups[g].removeAttribute("data-hidden");
+    }
+    if (emptyEl) {
+      emptyEl.setAttribute("hidden", "");
+    }
+  }
+
+  // Global Cmd+K / Ctrl+K keyboard shortcut
+  document.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      // Find the first command palette on the page
+      var command = document.querySelector("[data-mui='command']");
+      if (command && command.showModal && !command.open) {
+        command.showModal();
+        var search = command.querySelector(".mui-command__search");
+        if (search) {
+          search.value = "";
+          search.focus();
+        }
+        resetFilter(command);
+      }
+    }
+  });
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- date_picker.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  var MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  var DAY_HEADERS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+  function daysInMonth(year, month) {
+    if (month === 2) {
+      return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) ? 29 : 28;
+    }
+    var thirtyDays = [4, 6, 9, 11];
+    for (var i = 0; i < thirtyDays.length; i++) {
+      if (month === thirtyDays[i]) return 30;
+    }
+    return 31;
+  }
+
+  function dayOfWeek(year, month, day) {
+    var t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
+    var y = month < 3 ? year - 1 : year;
+    return (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + t[month - 1] + day) % 7;
+  }
+
+  function formatDisplay(year, month, day) {
+    return MONTH_NAMES[month - 1] + " " + day + ", " + year;
+  }
+
+  function formatISO(year, month, day) {
+    var m = month < 10 ? "0" + month : "" + month;
+    var d = day < 10 ? "0" + day : "" + day;
+    return year + "-" + m + "-" + d;
+  }
+
+  function renderCalendarHTML(year, month, selectedYear, selectedMonth, selectedDay) {
+    var html = '<div class="mui-date-picker__calendar" data-year="' + year + '" data-month="' + month + '">';
+
+    // Header
+    html += '<div class="mui-date-picker__cal-header">';
+    html += '<button type="button" class="mui-date-picker__nav-btn" data-action="prev-month" aria-label="Previous month">\u2039</button>';
+    html += '<span class="mui-date-picker__cal-title">' + MONTH_NAMES[month - 1] + ' ' + year + '</span>';
+    html += '<button type="button" class="mui-date-picker__nav-btn" data-action="next-month" aria-label="Next month">\u203a</button>';
+    html += '</div>';
+
+    // Day-of-week headers
+    html += '<div class="mui-date-picker__day-headers">';
+    for (var h = 0; h < DAY_HEADERS.length; h++) {
+      html += '<span class="mui-date-picker__day-header">' + DAY_HEADERS[h] + '</span>';
+    }
+    html += '</div>';
+
+    // Day grid
+    html += '<div class="mui-date-picker__days">';
+    var firstDow = dayOfWeek(year, month, 1);
+    var totalDays = daysInMonth(year, month);
+
+    for (var e = 0; e < firstDow; e++) {
+      html += '<span class="mui-date-picker__day mui-date-picker__day--empty"></span>';
+    }
+
+    for (var d = 1; d <= totalDays; d++) {
+      var isSelected = (year === selectedYear && month === selectedMonth && d === selectedDay);
+      var cls = "mui-date-picker__day";
+      if (isSelected) cls += " mui-date-picker__day--selected";
+      html += '<button type="button" class="' + cls + '" data-day="' + d + '" data-month="' + month + '" data-year="' + year + '">' + d + '</button>';
+    }
+
+    html += '</div></div>';
+    return html;
+  }
+
+  window.MaudUI.behaviors["date-picker"] = function (root) {
+    var trigger = root.querySelector(".mui-date-picker__trigger");
+    var dropdown = root.querySelector(".mui-date-picker__dropdown");
+    var valueEl = root.querySelector(".mui-date-picker__value");
+    var hiddenInput = root.querySelector(".mui-date-picker__hidden");
+
+    // Track current state
+    var selectedYear = 0;
+    var selectedMonth = 0;
+    var selectedDay = 0;
+    var viewYear = 0;
+    var viewMonth = 0;
+
+    // Parse initial selection from hidden input
+    var initialValue = hiddenInput ? hiddenInput.value : "";
+    if (initialValue) {
+      var parts = initialValue.split("-");
+      if (parts.length === 3) {
+        selectedYear = parseInt(parts[0], 10);
+        selectedMonth = parseInt(parts[1], 10);
+        selectedDay = parseInt(parts[2], 10);
+        viewYear = selectedYear;
+        viewMonth = selectedMonth;
+      }
+    }
+
+    // Default view to April 2026 if no selection
+    if (!viewYear) {
+      viewYear = 2026;
+      viewMonth = 4;
+    }
+
+    function open() {
+      dropdown.removeAttribute("hidden");
+      trigger.setAttribute("aria-expanded", "true");
+      rebuildCalendar();
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("keydown", escClose, true);
+    }
+
+    function close() {
+      dropdown.setAttribute("hidden", "");
+      trigger.setAttribute("aria-expanded", "false");
+      document.removeEventListener("click", clickOutside, true);
+      document.removeEventListener("keydown", escClose, true);
+    }
+
+    function clickOutside(e) {
+      if (!root.contains(e.target)) close();
+    }
+
+    function escClose(e) {
+      if (e.key === "Escape") close();
+    }
+
+    function rebuildCalendar() {
+      dropdown.innerHTML = renderCalendarHTML(viewYear, viewMonth, selectedYear, selectedMonth, selectedDay);
+      wireCalendarEvents();
+    }
+
+    function wireCalendarEvents() {
+      // Month navigation
+      var prevBtn = dropdown.querySelector('[data-action="prev-month"]');
+      var nextBtn = dropdown.querySelector('[data-action="next-month"]');
+
+      if (prevBtn) {
+        prevBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          viewMonth--;
+          if (viewMonth < 1) {
+            viewMonth = 12;
+            viewYear--;
+          }
+          rebuildCalendar();
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          viewMonth++;
+          if (viewMonth > 12) {
+            viewMonth = 1;
+            viewYear++;
+          }
+          rebuildCalendar();
+        });
+      }
+
+      // Day selection
+      var days = dropdown.querySelectorAll(".mui-date-picker__day:not(.mui-date-picker__day--empty):not(.mui-date-picker__day--disabled)");
+      for (var i = 0; i < days.length; i++) {
+        days[i].addEventListener("click", function (e) {
+          e.stopPropagation();
+          var btn = e.currentTarget;
+          selectedDay = parseInt(btn.getAttribute("data-day"), 10);
+          selectedMonth = parseInt(btn.getAttribute("data-month"), 10);
+          selectedYear = parseInt(btn.getAttribute("data-year"), 10);
+
+          // Update display
+          valueEl.textContent = formatDisplay(selectedYear, selectedMonth, selectedDay);
+          valueEl.classList.remove("mui-date-picker__value--placeholder");
+          hiddenInput.value = formatISO(selectedYear, selectedMonth, selectedDay);
+
+          close();
+
+          // Dispatch change event
+          root.dispatchEvent(new CustomEvent("mui-date-change", {
+            detail: { year: selectedYear, month: selectedMonth, day: selectedDay, iso: hiddenInput.value },
+            bubbles: true
+          }));
+        });
+      }
+    }
+
+    // Toggle on trigger click
+    trigger.addEventListener("click", function () {
+      if (trigger.getAttribute("aria-expanded") === "true") {
+        close();
+      } else {
+        open();
+      }
+    });
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- dialog.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -229,8 +1214,7 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ drawer.js ============
+// --- drawer.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -270,8 +1254,7 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ hover_card.js ============
+// --- hover_card.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -324,8 +1307,7 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ input_otp.js ============
+// --- input_otp.js ---
 window.MaudUI.behaviors["input-otp"] = function(root) {
   var slots = root.querySelectorAll(".mui-input-otp__slot");
   var hidden = root.querySelector(".mui-input-otp__value");
@@ -358,8 +1340,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   }
 };
 
-
-// ============ menu.js ============
+// --- menu.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -563,8 +1544,263 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- menubar.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
-// ============ number_field.js ============
+  window.MaudUI.behaviors["menubar"] = function (root) {
+    var triggers = [];
+    var contents = [];
+    var menuWrappers = root.querySelectorAll(".mui-menubar__menu");
+    var activeIndex = -1;
+
+    // Collect triggers and content panels
+    for (var i = 0; i < menuWrappers.length; i++) {
+      var trigger = menuWrappers[i].querySelector(".mui-menubar__trigger");
+      var content = menuWrappers[i].querySelector(".mui-menubar__content");
+      if (trigger && content) {
+        triggers.push(trigger);
+        contents.push(content);
+      }
+    }
+
+    if (triggers.length === 0) return;
+
+    function isAnyOpen() {
+      return activeIndex >= 0;
+    }
+
+    function openMenu(index) {
+      // Close current if different
+      if (activeIndex >= 0 && activeIndex !== index) {
+        closeMenu(activeIndex);
+      }
+      activeIndex = index;
+      triggers[index].setAttribute("aria-expanded", "true");
+      contents[index].removeAttribute("hidden");
+
+      // Set roving tabindex
+      for (var i = 0; i < triggers.length; i++) {
+        triggers[i].tabIndex = i === index ? 0 : -1;
+      }
+
+      // Focus first item in the dropdown
+      var firstItem = getMenuItems(index);
+      if (firstItem.length > 0) {
+        firstItem[0].tabIndex = 0;
+        firstItem[0].focus();
+      }
+
+      // Attach global listeners
+      document.addEventListener("click", handleClickOutside, true);
+      document.addEventListener("keydown", handleGlobalKeydown, true);
+    }
+
+    function closeMenu(index) {
+      if (index < 0 || index >= triggers.length) return;
+      triggers[index].setAttribute("aria-expanded", "false");
+      contents[index].setAttribute("hidden", "");
+
+      // Reset item tabindices
+      var items = getMenuItems(index);
+      for (var i = 0; i < items.length; i++) {
+        items[i].tabIndex = -1;
+      }
+    }
+
+    function closeAll() {
+      for (var i = 0; i < triggers.length; i++) {
+        closeMenu(i);
+      }
+      activeIndex = -1;
+      document.removeEventListener("click", handleClickOutside, true);
+      document.removeEventListener("keydown", handleGlobalKeydown, true);
+    }
+
+    function getMenuItems(index) {
+      var items = [];
+      var children = contents[index].children;
+      for (var j = 0; j < children.length; j++) {
+        if (children[j].getAttribute("role") === "menuitem") {
+          items.push(children[j]);
+        }
+      }
+      return items;
+    }
+
+    function getFocusedItemIndex(menuIndex) {
+      var items = getMenuItems(menuIndex);
+      var focused = document.activeElement;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i] === focused) return i;
+      }
+      return -1;
+    }
+
+    function focusItem(menuIndex, itemIndex) {
+      var items = getMenuItems(menuIndex);
+      if (itemIndex < 0 || itemIndex >= items.length) return;
+      for (var i = 0; i < items.length; i++) {
+        items[i].tabIndex = i === itemIndex ? 0 : -1;
+      }
+      items[itemIndex].focus();
+    }
+
+    // --- Event Handlers ---
+
+    function handleClickOutside(e) {
+      if (!root.contains(e.target)) {
+        closeAll();
+      }
+    }
+
+    function handleGlobalKeydown(e) {
+      if (!isAnyOpen()) return;
+
+      var items = getMenuItems(activeIndex);
+      var focusedIdx = getFocusedItemIndex(activeIndex);
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (items.length > 0) {
+            var next = focusedIdx < 0 ? 0 : (focusedIdx + 1) % items.length;
+            focusItem(activeIndex, next);
+          }
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          if (items.length > 0) {
+            var prev = focusedIdx <= 0 ? items.length - 1 : focusedIdx - 1;
+            focusItem(activeIndex, prev);
+          }
+          break;
+
+        case "ArrowRight":
+          e.preventDefault();
+          var nextMenu = (activeIndex + 1) % triggers.length;
+          openMenu(nextMenu);
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          var prevMenu = (activeIndex - 1 + triggers.length) % triggers.length;
+          openMenu(prevMenu);
+          break;
+
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (focusedIdx >= 0 && items[focusedIdx] && !items[focusedIdx].disabled) {
+            items[focusedIdx].click();
+            closeAll();
+            triggers[activeIndex >= 0 ? activeIndex : 0].focus();
+          }
+          break;
+
+        case "Escape":
+          e.preventDefault();
+          var returnTo = activeIndex;
+          closeAll();
+          if (returnTo >= 0) {
+            triggers[returnTo].focus();
+          }
+          break;
+
+        case "Tab":
+          closeAll();
+          break;
+      }
+    }
+
+    // Click on trigger: toggle that menu
+    for (var t = 0; t < triggers.length; t++) {
+      (function (idx) {
+        triggers[idx].addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (activeIndex === idx) {
+            closeAll();
+            triggers[idx].focus();
+          } else {
+            openMenu(idx);
+          }
+        });
+
+        // Hover while another menu is open: switch to this menu
+        triggers[idx].addEventListener("mouseenter", function () {
+          if (isAnyOpen() && activeIndex !== idx) {
+            openMenu(idx);
+          }
+        });
+      })(t);
+    }
+
+    // Item click: close menubar
+    for (var c = 0; c < contents.length; c++) {
+      (function (menuIdx) {
+        contents[menuIdx].addEventListener("click", function (e) {
+          var target = e.target;
+          while (target && target !== contents[menuIdx]) {
+            if (target.getAttribute("role") === "menuitem" && !target.disabled) {
+              closeAll();
+              triggers[menuIdx].focus();
+              return;
+            }
+            target = target.parentElement;
+          }
+        });
+      })(c);
+    }
+
+    // Keyboard on the menubar triggers (when no menu is open)
+    root.addEventListener("keydown", function (e) {
+      if (isAnyOpen()) return; // Handled by global handler
+
+      var focused = document.activeElement;
+      var currentIdx = -1;
+      for (var i = 0; i < triggers.length; i++) {
+        if (triggers[i] === focused) {
+          currentIdx = i;
+          break;
+        }
+      }
+      if (currentIdx < 0) return;
+
+      switch (e.key) {
+        case "ArrowRight":
+          e.preventDefault();
+          var nextIdx = (currentIdx + 1) % triggers.length;
+          for (var i = 0; i < triggers.length; i++) {
+            triggers[i].tabIndex = i === nextIdx ? 0 : -1;
+          }
+          triggers[nextIdx].focus();
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          var prevIdx = (currentIdx - 1 + triggers.length) % triggers.length;
+          for (var i = 0; i < triggers.length; i++) {
+            triggers[i].tabIndex = i === prevIdx ? 0 : -1;
+          }
+          triggers[prevIdx].focus();
+          break;
+
+        case "ArrowDown":
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          openMenu(currentIdx);
+          break;
+      }
+    });
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- number_field.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -606,8 +1842,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ popover.js ============
+// --- popover.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -660,8 +1895,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ scroll_area.js ============
+// --- scroll_area.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -737,8 +1971,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ select.js ============
+// --- select.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -888,8 +2121,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ slider.js ============
+// --- slider.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -969,8 +2201,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ switch.js ============
+// --- switch.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1007,8 +2238,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ tabs.js ============
+// --- tabs.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1083,8 +2313,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ theme.js ============
+// --- theme.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1111,8 +2340,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ toast.js ============
+// --- toast.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1184,8 +2412,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ toggle.js ============
+// --- toggle.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1300,8 +2527,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-
-// ============ tooltip.js ============
+// --- tooltip.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 

@@ -1,0 +1,167 @@
+/* Calendar component — shadcn-quality polish */
+
+.mui-calendar {
+  width: 18rem;
+  padding: 0.75rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  font-family: var(--mui-font-sans);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+.mui-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.25rem 0.75rem;
+}
+
+.mui-calendar__title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  user-select: none;
+}
+
+.mui-calendar__nav {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-md);
+  color: var(--mui-text-muted);
+  font-size: 1.125rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--mui-transition),
+              color var(--mui-transition),
+              border-color var(--mui-transition);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-calendar__nav:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  border-color: var(--mui-border);
+}
+
+.mui-calendar__nav:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Grid ────────────────────────────────────────────────────────────── */
+
+.mui-calendar__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.mui-calendar__weekdays,
+.mui-calendar__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+}
+
+.mui-calendar__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--mui-text-muted);
+  user-select: none;
+}
+
+/* ── Day cells ───────────────────────────────────────────────────────── */
+
+.mui-calendar__day {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.0625rem auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--mui-text);
+  cursor: pointer;
+  transition: background-color var(--mui-transition),
+              color var(--mui-transition);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-calendar__day:hover:not(:disabled):not(.mui-calendar__day--selected) {
+  background: var(--mui-bg-input);
+}
+
+/* Today: bold weight + subtle ring */
+.mui-calendar__day--today {
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--mui-border-focus);
+}
+
+/* Selected: accent background */
+.mui-calendar__day--selected {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-weight: 600;
+}
+
+.mui-calendar__day--selected:hover {
+  background: var(--mui-accent-hover);
+}
+
+.mui-calendar__day--selected.mui-calendar__day--today {
+  box-shadow: none;
+}
+
+/* Outside days (prev/next month) */
+.mui-calendar__day--outside {
+  color: var(--mui-text-subtle);
+}
+
+.mui-calendar__day--outside:empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Disabled */
+.mui-calendar__day:disabled {
+  color: var(--mui-text-subtle);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Focus ring */
+.mui-calendar__day:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* ── Hidden input ────────────────────────────────────────────────────── */
+
+.mui-calendar__value {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}

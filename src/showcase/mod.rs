@@ -147,7 +147,7 @@ fn page_header() -> Markup {
             div style="display:flex;justify-content:space-between;align-items:center;" {
                 div {
                     h1 { a href="/" style="color:inherit;text-decoration:none;" { "maud-ui" } }
-                    p.mui-text-muted { "Headless accessible components for maud + htmx" }
+                    p.mui-text-muted { (format!("{} components for maud + htmx", COMPONENT_NAMES.len())) }
                 }
                 button type="button" class="mui-btn mui-btn--outline mui-btn--md" data-mui="theme-toggle" {
                     "Toggle theme"
@@ -216,6 +216,13 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                         a href="/" { "Gallery" }
                         span { " / " }
                         span { (display_name(name)) }
+                    }
+                    div.mui-showcase__component-nav {
+                        @for comp in COMPONENT_NAMES {
+                            a.mui-showcase__component-nav-link
+                              class=(if *comp == name { "mui-showcase__component-nav-link--active" } else { "" })
+                              href=(format!("/{}", comp)) { (display_name(comp)) }
+                        }
                     }
                     section id=(name) {
                         h2 { (display_name(name)) }

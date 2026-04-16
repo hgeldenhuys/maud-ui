@@ -161,12 +161,13 @@ body {
   gap: 0.75rem;
 }
 .mui-showcase__label {
-  color: var(--mui-text-subtle);
+  color: var(--mui-text-muted);
   font-family: var(--mui-font-mono);
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   min-width: 5.5rem;
+  opacity: 0.7;
 }
 .mui-showcase__caption {
   color: var(--mui-text-muted);
@@ -218,6 +219,34 @@ body {
 .mui-showcase__breadcrumb a:hover {
   color: var(--mui-text);
   text-decoration: underline;
+}
+
+/* Showcase component nav strip (individual pages) */
+.mui-showcase__component-nav {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.mui-showcase__component-nav-link {
+  white-space: nowrap;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: var(--mui-transition);
+}
+.mui-showcase__component-nav-link:hover {
+  color: var(--mui-text);
+  background: var(--mui-bg-input);
+}
+.mui-showcase__component-nav-link--active {
+  color: var(--mui-text);
+  background: var(--mui-bg-card);
+  font-weight: 500;
 }
 
 /* Showcase back link */

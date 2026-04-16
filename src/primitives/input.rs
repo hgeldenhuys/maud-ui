@@ -103,87 +103,169 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Types row
-            div {
-                p.mui-showcase__caption { "Types" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "name".into(),
-                        input_type: InputType::Text,
-                        placeholder: "Your name".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "email".into(),
-                        input_type: InputType::Email,
-                        placeholder: "you@example.com".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "password".into(),
-                        input_type: InputType::Password,
-                        placeholder: "••••••".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "url".into(),
-                        input_type: InputType::Url,
-                        placeholder: "https://...".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "tel".into(),
-                        input_type: InputType::Tel,
-                        placeholder: "+1 555 0100".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "search".into(),
-                        input_type: InputType::Search,
-                        placeholder: "Search…".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "number".into(),
-                        input_type: InputType::Number,
-                        placeholder: "42".into(),
-                        ..Default::default()
-                    }))
+            // Realistic form section
+            section {
+                h2 { "Profile" }
+                p.mui-showcase__caption { "A typical sign-up form using text, email, and password inputs." }
+                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                    label style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.875rem;font-weight:500;" {
+                        "Full Name"
+                        (render(Props {
+                            name: "fullname".into(),
+                            id: "demo-fullname".into(),
+                            input_type: InputType::Text,
+                            placeholder: "Jane Smith".into(),
+                            required: true,
+                            ..Default::default()
+                        }))
+                    }
+                    label style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.875rem;font-weight:500;" {
+                        "Email Address"
+                        (render(Props {
+                            name: "email".into(),
+                            id: "demo-email".into(),
+                            input_type: InputType::Email,
+                            placeholder: "jane@example.com".into(),
+                            required: true,
+                            ..Default::default()
+                        }))
+                    }
+                    label style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.875rem;font-weight:500;" {
+                        "Password"
+                        (render(Props {
+                            name: "password".into(),
+                            id: "demo-password".into(),
+                            input_type: InputType::Password,
+                            placeholder: "At least 8 characters".into(),
+                            required: true,
+                            ..Default::default()
+                        }))
+                    }
                 }
             }
 
-            // States row
-            div {
-                p.mui-showcase__caption { "States" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        name: "default".into(),
-                        placeholder: "Default".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "with-value".into(),
-                        value: "With value".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "invalid".into(),
-                        invalid: true,
-                        placeholder: "Invalid email".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "disabled".into(),
-                        disabled: true,
-                        placeholder: "Disabled".into(),
-                        ..Default::default()
-                    }))
-                    (render(Props {
-                        name: "readonly".into(),
-                        readonly: true,
-                        value: "Read-only".into(),
-                        ..Default::default()
-                    }))
+            // All input types reference
+            section {
+                h2 { "Input Types" }
+                p.mui-showcase__caption { "Each HTML input type rendered with a contextual placeholder." }
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:0.75rem;" {
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Text" }
+                        (render(Props {
+                            name: "type-text".into(),
+                            input_type: InputType::Text,
+                            placeholder: "Your name".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Email" }
+                        (render(Props {
+                            name: "type-email".into(),
+                            input_type: InputType::Email,
+                            placeholder: "you@example.com".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Password" }
+                        (render(Props {
+                            name: "type-password".into(),
+                            input_type: InputType::Password,
+                            placeholder: "Secret".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "URL" }
+                        (render(Props {
+                            name: "type-url".into(),
+                            input_type: InputType::Url,
+                            placeholder: "https://example.com".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Phone" }
+                        (render(Props {
+                            name: "type-tel".into(),
+                            input_type: InputType::Tel,
+                            placeholder: "+1 (555) 000-0100".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Search" }
+                        (render(Props {
+                            name: "type-search".into(),
+                            input_type: InputType::Search,
+                            placeholder: "Search articles...".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Number" }
+                        (render(Props {
+                            name: "type-number".into(),
+                            input_type: InputType::Number,
+                            placeholder: "42".into(),
+                            ..Default::default()
+                        }))
+                    }
+                }
+            }
+
+            // States
+            section {
+                h2 { "States" }
+                p.mui-showcase__caption { "Default, populated, invalid, disabled, and read-only." }
+                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Default" }
+                        (render(Props {
+                            name: "state-default".into(),
+                            placeholder: "Enter a value...".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "With value" }
+                        (render(Props {
+                            name: "state-value".into(),
+                            value: "jane@example.com".into(),
+                            input_type: InputType::Email,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Invalid" }
+                        (render(Props {
+                            name: "state-invalid".into(),
+                            invalid: true,
+                            value: "not-an-email".into(),
+                            input_type: InputType::Email,
+                            ..Default::default()
+                        }))
+                        span style="font-size:0.75rem;color:var(--mui-destructive,#ef4444);" { "Please enter a valid email address." }
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Disabled" }
+                        (render(Props {
+                            name: "state-disabled".into(),
+                            disabled: true,
+                            value: "Cannot edit".into(),
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Read-only" }
+                        (render(Props {
+                            name: "state-readonly".into(),
+                            readonly: true,
+                            value: "user-9a3f2b".into(),
+                            ..Default::default()
+                        }))
+                    }
                 }
             }
         }

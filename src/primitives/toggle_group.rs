@@ -78,8 +78,10 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            // Text alignment — single select
             section {
-                h2 { "Text alignment (single)" }
+                h2 { "Text Alignment" }
+                p.mui-showcase__caption { "Single selection" }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
@@ -93,14 +95,64 @@ pub fn showcase() -> Markup {
                     }))
                 }
             }
+
+            // View mode — realistic app context
             section {
-                h2 { "Text formatting (multiple)" }
+                h2 { "View Mode" }
+                p.mui-showcase__caption { "Single selection" }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
-                            GroupItem { value: "bold".into(), label: "Bold".into(), pressed: true },
-                            GroupItem { value: "italic".into(), label: "Italic".into(), pressed: false },
-                            GroupItem { value: "underline".into(), label: "Underline".into(), pressed: true },
+                            GroupItem { value: "list".into(), label: "List".into(), pressed: false },
+                            GroupItem { value: "grid".into(), label: "Grid".into(), pressed: true },
+                            GroupItem { value: "kanban".into(), label: "Kanban".into(), pressed: false },
+                        ],
+                        aria_label: "View mode".into(),
+                        ..Default::default()
+                    }))
+                }
+            }
+
+            // Size variants side by side
+            section {
+                h2 { "Sizes" }
+                div.mui-showcase__row {
+                    span.mui-showcase__label { "md" }
+                    (render(Props {
+                        items: vec![
+                            GroupItem { value: "a".into(), label: "Day".into(), pressed: true },
+                            GroupItem { value: "b".into(), label: "Week".into(), pressed: false },
+                            GroupItem { value: "c".into(), label: "Month".into(), pressed: false },
+                        ],
+                        aria_label: "Time range md".into(),
+                        ..Default::default()
+                    }))
+                }
+                div.mui-showcase__row {
+                    span.mui-showcase__label { "sm" }
+                    (render(Props {
+                        items: vec![
+                            GroupItem { value: "a".into(), label: "Day".into(), pressed: true },
+                            GroupItem { value: "b".into(), label: "Week".into(), pressed: false },
+                            GroupItem { value: "c".into(), label: "Month".into(), pressed: false },
+                        ],
+                        size: Size::Sm,
+                        aria_label: "Time range sm".into(),
+                        ..Default::default()
+                    }))
+                }
+            }
+
+            // Multiple selection
+            section {
+                h2 { "Multiple Selection" }
+                p.mui-showcase__caption { "Text formatting — multi-select" }
+                div.mui-showcase__row {
+                    (render(Props {
+                        items: vec![
+                            GroupItem { value: "bold".into(), label: "B".into(), pressed: true },
+                            GroupItem { value: "italic".into(), label: "I".into(), pressed: false },
+                            GroupItem { value: "underline".into(), label: "U".into(), pressed: true },
                         ],
                         multiple: true,
                         aria_label: "Text formatting".into(),
@@ -108,29 +160,15 @@ pub fn showcase() -> Markup {
                     }))
                 }
             }
-            section {
-                h2 { "Small size" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        items: vec![
-                            GroupItem { value: "a".into(), label: "A".into(), pressed: true },
-                            GroupItem { value: "b".into(), label: "B".into(), pressed: false },
-                            GroupItem { value: "c".into(), label: "C".into(), pressed: false },
-                        ],
-                        size: Size::Sm,
-                        aria_label: "Small group".into(),
-                        ..Default::default()
-                    }))
-                }
-            }
+
+            // Disabled
             section {
                 h2 { "Disabled" }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
-                            GroupItem { value: "opt1".into(), label: "Option 1".into(), pressed: true },
-                            GroupItem { value: "opt2".into(), label: "Option 2".into(), pressed: false },
-                            GroupItem { value: "opt3".into(), label: "Option 3".into(), pressed: false },
+                            GroupItem { value: "on".into(), label: "Active".into(), pressed: true },
+                            GroupItem { value: "off".into(), label: "Inactive".into(), pressed: false },
                         ],
                         disabled: true,
                         aria_label: "Disabled group".into(),

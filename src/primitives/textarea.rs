@@ -108,53 +108,127 @@ fn escape_html(s: &str) -> String {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Default (4 rows)
-            div {
-                p.mui-showcase__caption { "Default (4 rows)" }
-                (render(Props {
-                    placeholder: "Type here…".into(),
-                    ..Default::default()
-                }))
+            // Realistic feedback form
+            section {
+                h2 { "Feedback Form" }
+                p.mui-showcase__caption { "A textarea in a realistic message context." }
+                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:28rem;" {
+                    label style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.875rem;font-weight:500;" {
+                        "Your Message"
+                        (render(Props {
+                            name: "message".into(),
+                            id: "demo-message".into(),
+                            placeholder: "Tell us what you think...".into(),
+                            rows: 5,
+                            ..Default::default()
+                        }))
+                    }
+                }
             }
 
-            // 6 rows
-            div {
-                p.mui-showcase__caption { "6 rows" }
-                (render(Props {
-                    rows: 6,
-                    placeholder: "This textarea has 6 rows…".into(),
-                    ..Default::default()
-                }))
+            // States
+            section {
+                h2 { "States" }
+                p.mui-showcase__caption { "Default, populated, invalid, disabled, and read-only." }
+                div style="display:flex;flex-direction:column;gap:1rem;max-width:28rem;" {
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Default" }
+                        (render(Props {
+                            name: "state-default".into(),
+                            placeholder: "Start typing...".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "With content" }
+                        (render(Props {
+                            name: "state-value".into(),
+                            value: "The onboarding flow was smooth and intuitive. One suggestion: adding a progress indicator on the setup wizard would help users know how many steps remain.".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Invalid" }
+                        (render(Props {
+                            name: "state-invalid".into(),
+                            invalid: true,
+                            value: "Hi".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                        span style="font-size:0.75rem;color:var(--mui-destructive,#ef4444);" { "Message must be at least 20 characters." }
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Disabled" }
+                        (render(Props {
+                            name: "state-disabled".into(),
+                            disabled: true,
+                            value: "Submissions are currently closed.".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Read-only" }
+                        (render(Props {
+                            name: "state-readonly".into(),
+                            readonly: true,
+                            value: "This response was submitted on 2026-04-10 and cannot be edited.".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                }
             }
 
-            // Invalid
-            div {
-                p.mui-showcase__caption { "Invalid" }
-                (render(Props {
-                    invalid: true,
-                    placeholder: "Required field".into(),
-                    ..Default::default()
-                }))
-            }
-
-            // Disabled
-            div {
-                p.mui-showcase__caption { "Disabled" }
-                (render(Props {
-                    disabled: true,
-                    value: "This field is disabled".into(),
-                    ..Default::default()
-                }))
-            }
-
-            // Resize: none
-            div {
-                p.mui-showcase__caption { "Resize: none" }
-                (render(Props {
-                    resize: Resize::None,
-                    placeholder: "Cannot be resized…".into(),
-                    ..Default::default()
-                }))
+            // Resize variants
+            section {
+                h2 { "Resize Behavior" }
+                p.mui-showcase__caption { "Control how users can resize the textarea." }
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:1rem;" {
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Vertical (default)" }
+                        (render(Props {
+                            name: "resize-vertical".into(),
+                            resize: Resize::Vertical,
+                            placeholder: "Drag to resize vertically...".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Horizontal" }
+                        (render(Props {
+                            name: "resize-horizontal".into(),
+                            resize: Resize::Horizontal,
+                            placeholder: "Drag to resize horizontally...".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Both" }
+                        (render(Props {
+                            name: "resize-both".into(),
+                            resize: Resize::Both,
+                            placeholder: "Drag any direction...".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "None" }
+                        (render(Props {
+                            name: "resize-none".into(),
+                            resize: Resize::None,
+                            placeholder: "Fixed size, no resize handle...".into(),
+                            rows: 3,
+                            ..Default::default()
+                        }))
+                    }
+                }
             }
         }
     }

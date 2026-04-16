@@ -53,95 +53,137 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            // Primary demo: realistic "Create Account" form
             section {
-                h2 { "Basic Field" }
-                (render(Props {
-                    label: "Email".to_string(),
-                    id: "demo-f-1".to_string(),
-                    description: None,
-                    error: None,
-                    required: false,
-                    children: html! {
-                        input.mui-input type="text" id="demo-f-1" name="email" placeholder="you@example.com" aria-describedby="demo-f-1-desc";
-                    },
-                }))
-            }
-
-            section {
-                h2 { "With Description" }
-                (render(Props {
-                    label: "Username".to_string(),
-                    id: "demo-f-2".to_string(),
-                    description: Some("Letters, numbers, underscores only.".to_string()),
-                    error: None,
-                    required: false,
-                    children: html! {
-                        input.mui-input type="text" id="demo-f-2" name="username" placeholder="john_doe" aria-describedby="demo-f-2-desc";
-                    },
-                }))
-            }
-
-            section {
-                h2 { "With Error" }
-                (render(Props {
-                    label: "Password".to_string(),
-                    id: "demo-f-3".to_string(),
-                    description: None,
-                    error: Some("Must be at least 8 characters.".to_string()),
-                    required: false,
-                    children: html! {
-                        input.mui-input type="password" id="demo-f-3" name="password" aria-invalid="true" aria-describedby="demo-f-3-err";
-                    },
-                }))
-            }
-
-            section {
-                h2 { "Required Field" }
-                (render(Props {
-                    label: "Full Name".to_string(),
-                    id: "demo-f-4".to_string(),
-                    description: None,
-                    error: None,
-                    required: true,
-                    children: html! {
-                        input.mui-input type="text" id="demo-f-4" name="fullname" placeholder="John Doe" aria-describedby="demo-f-4-desc";
-                    },
-                }))
-            }
-
-            section {
-                h2 { "Combined Form" }
-                div style="display: flex; flex-direction: column; gap: 1rem; max-width: 24rem;" {
+                h2 { "Create Account" }
+                p.mui-showcase__caption { "A realistic registration form showing label, description, error, and required field patterns together." }
+                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
                     (render(Props {
-                        label: "Email".to_string(),
-                        id: "demo-f-5".to_string(),
-                        description: Some("We will never share your email.".to_string()),
+                        label: "Full Name".to_string(),
+                        id: "demo-ca-name".to_string(),
+                        description: None,
                         error: None,
                         required: true,
                         children: html! {
-                            input.mui-input type="email" id="demo-f-5" name="email" placeholder="you@example.com" aria-describedby="demo-f-5-desc";
+                            input.mui-input type="text" id="demo-ca-name" name="fullname" placeholder="Jane Smith" required;
+                        },
+                    }))
+                    (render(Props {
+                        label: "Email".to_string(),
+                        id: "demo-ca-email".to_string(),
+                        description: Some("We'll never share your email with anyone.".to_string()),
+                        error: None,
+                        required: true,
+                        children: html! {
+                            input.mui-input type="email" id="demo-ca-email" name="email" placeholder="jane@example.com" required aria-describedby="demo-ca-email-desc";
                         },
                     }))
                     (render(Props {
                         label: "Password".to_string(),
-                        id: "demo-f-6".to_string(),
-                        description: Some("At least 8 characters with a number.".to_string()),
-                        error: Some("Password is too short.".to_string()),
+                        id: "demo-ca-password".to_string(),
+                        description: Some("Use 8 or more characters with a mix of letters and numbers.".to_string()),
+                        error: Some("Must be at least 8 characters.".to_string()),
                         required: true,
                         children: html! {
-                            input.mui-input type="password" id="demo-f-6" name="password" aria-invalid="true" aria-describedby="demo-f-6-desc demo-f-6-err";
+                            input.mui-input type="password" id="demo-ca-password" name="password" value="short" required aria-invalid="true" aria-describedby="demo-ca-password-desc demo-ca-password-err";
                         },
                     }))
                     (render(Props {
                         label: "Bio".to_string(),
-                        id: "demo-f-7".to_string(),
-                        description: Some("Brief description for your profile.".to_string()),
+                        id: "demo-ca-bio".to_string(),
+                        description: Some("A brief introduction for your public profile.".to_string()),
                         error: None,
                         required: false,
                         children: html! {
-                            textarea.mui-textarea id="demo-f-7" name="bio" rows="3" placeholder="Tell us about yourself..." aria-describedby="demo-f-7-desc" {}
+                            textarea.mui-textarea id="demo-ca-bio" name="bio" rows="3" placeholder="Tell us about yourself..." aria-describedby="demo-ca-bio-desc" {}
                         },
                     }))
+                }
+            }
+
+            // Anatomy: individual field features
+            section {
+                h2 { "Field Anatomy" }
+                p.mui-showcase__caption { "Each feature of the Field component shown in isolation." }
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1.5rem;" {
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Basic" }
+                        (render(Props {
+                            label: "Username".to_string(),
+                            id: "demo-a-basic".to_string(),
+                            description: None,
+                            error: None,
+                            required: false,
+                            children: html! {
+                                input.mui-input type="text" id="demo-a-basic" name="username" placeholder="johndoe";
+                            },
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Required" }
+                        (render(Props {
+                            label: "Email Address".to_string(),
+                            id: "demo-a-required".to_string(),
+                            description: None,
+                            error: None,
+                            required: true,
+                            children: html! {
+                                input.mui-input type="email" id="demo-a-required" name="email" placeholder="you@example.com" required;
+                            },
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "With Description" }
+                        (render(Props {
+                            label: "Phone".to_string(),
+                            id: "demo-a-desc".to_string(),
+                            description: Some("Include country code for international numbers.".to_string()),
+                            error: None,
+                            required: false,
+                            children: html! {
+                                input.mui-input type="tel" id="demo-a-desc" name="phone" placeholder="+1 (555) 000-0100" aria-describedby="demo-a-desc-desc";
+                            },
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "With Error" }
+                        (render(Props {
+                            label: "Website".to_string(),
+                            id: "demo-a-error".to_string(),
+                            description: None,
+                            error: Some("Please enter a valid URL starting with https://.".to_string()),
+                            required: false,
+                            children: html! {
+                                input.mui-input type="url" id="demo-a-error" name="website" value="not-a-url" aria-invalid="true" aria-describedby="demo-a-error-err";
+                            },
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Description + Error" }
+                        (render(Props {
+                            label: "Invite Code".to_string(),
+                            id: "demo-a-both".to_string(),
+                            description: Some("Found in your invitation email.".to_string()),
+                            error: Some("This code has already been used.".to_string()),
+                            required: true,
+                            children: html! {
+                                input.mui-input type="text" id="demo-a-both" name="invite" value="USED-CODE-123" aria-invalid="true" aria-describedby="demo-a-both-desc demo-a-both-err";
+                            },
+                        }))
+                    }
+                    div {
+                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Textarea Field" }
+                        (render(Props {
+                            label: "Notes".to_string(),
+                            id: "demo-a-textarea".to_string(),
+                            description: Some("Any additional context (optional).".to_string()),
+                            error: None,
+                            required: false,
+                            children: html! {
+                                textarea.mui-textarea id="demo-a-textarea" name="notes" rows="3" placeholder="Add notes..." aria-describedby="demo-a-textarea-desc" {}
+                            },
+                        }))
+                    }
                 }
             }
         }

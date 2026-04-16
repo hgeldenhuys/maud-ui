@@ -65,80 +65,108 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            // Text-editor toolbar context
             section {
-                h2 { "Default variant" }
+                h2 { "Text Editor Toolbar" }
+                p.mui-showcase__caption { "Default variant — formatting controls" }
                 div.mui-showcase__row {
                     (render(Props {
                         label: "B".to_string(),
-                        pressed: false,
-                        id: "toggle-b".to_string(),
+                        pressed: true,
+                        id: "toolbar-bold".to_string(),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "I".to_string(),
-                        pressed: true,
-                        id: "toggle-i".to_string(),
+                        pressed: false,
+                        id: "toolbar-italic".to_string(),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "U".to_string(),
-                        pressed: true,
-                        id: "toggle-u".to_string(),
+                        pressed: false,
+                        id: "toolbar-underline".to_string(),
                         ..Default::default()
                     }))
                 }
-            }
-            section {
-                h2 { "Outline variant" }
+                p.mui-showcase__caption { "Outline variant" }
                 div.mui-showcase__row {
                     (render(Props {
                         label: "B".to_string(),
-                        pressed: false,
+                        pressed: true,
                         variant: Variant::Outline,
-                        id: "toggle-outline-b".to_string(),
+                        id: "toolbar-outline-bold".to_string(),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "I".to_string(),
-                        pressed: true,
+                        pressed: false,
                         variant: Variant::Outline,
-                        id: "toggle-outline-i".to_string(),
+                        id: "toolbar-outline-italic".to_string(),
+                        ..Default::default()
+                    }))
+                    (render(Props {
+                        label: "U".to_string(),
+                        pressed: false,
+                        variant: Variant::Outline,
+                        id: "toolbar-outline-underline".to_string(),
                         ..Default::default()
                     }))
                 }
             }
+
+            // Sizes
             section {
-                h2 { "Small size" }
+                h2 { "Sizes" }
                 div.mui-showcase__row {
+                    span.mui-showcase__label { "md" }
                     (render(Props {
-                        label: "On".to_string(),
+                        label: "B".to_string(),
+                        pressed: true,
+                        id: "size-md-b".to_string(),
+                        ..Default::default()
+                    }))
+                    (render(Props {
+                        label: "I".to_string(),
+                        pressed: false,
+                        id: "size-md-i".to_string(),
+                        ..Default::default()
+                    }))
+                }
+                div.mui-showcase__row {
+                    span.mui-showcase__label { "sm" }
+                    (render(Props {
+                        label: "B".to_string(),
                         pressed: true,
                         size: Size::Sm,
-                        id: "toggle-sm-on".to_string(),
+                        id: "size-sm-b".to_string(),
                         ..Default::default()
                     }))
                     (render(Props {
-                        label: "Off".to_string(),
+                        label: "I".to_string(),
+                        pressed: false,
                         size: Size::Sm,
-                        id: "toggle-sm-off".to_string(),
+                        id: "size-sm-i".to_string(),
                         ..Default::default()
                     }))
                 }
             }
+
+            // Disabled
             section {
                 h2 { "Disabled" }
                 div.mui-showcase__row {
                     (render(Props {
-                        label: "Disabled".to_string(),
+                        label: "Off".to_string(),
                         disabled: true,
-                        id: "toggle-disabled-1".to_string(),
+                        id: "toggle-dis-off".to_string(),
                         ..Default::default()
                     }))
                     (render(Props {
-                        label: "Disabled".to_string(),
+                        label: "On".to_string(),
                         pressed: true,
                         disabled: true,
-                        id: "toggle-disabled-2".to_string(),
+                        id: "toggle-dis-on".to_string(),
                         ..Default::default()
                     }))
                 }

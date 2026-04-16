@@ -42,6 +42,9 @@
         activeIndex = idx;
         options[idx].classList.add("mui-select__option--highlighted");
         trigger.setAttribute("aria-activedescendant", options[idx].id);
+      } else {
+        activeIndex = -1;
+        trigger.removeAttribute("aria-activedescendant");
       }
     }
 
@@ -129,13 +132,16 @@
       }
     });
 
-    for (var i = 0; i < options.length; i++) {
-      (function (idx) {
-        options[idx].addEventListener("click", function () {
+    // Event delegation on dropdown instead of per-option listeners
+    dropdown.addEventListener("click", function (e) {
+      var option = e.target.closest("[role='option']");
+      if (option) {
+        var idx = indexOf(options, option);
+        if (idx >= 0) {
           selectOption(idx);
-        });
-      })(i);
-    }
+        }
+      }
+    });
   };
 
   if (window.MaudUI.init) window.MaudUI.init();

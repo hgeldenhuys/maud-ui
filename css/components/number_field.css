@@ -16,7 +16,7 @@
   border-color: transparent;
 }
 
-.mui-number-field[data-disabled="true"] {
+.mui-number-field[aria-disabled="true"] {
   opacity: 0.5;
 }
 

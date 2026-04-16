@@ -82,6 +82,13 @@ pub fn showcase() -> Markup {
                         checked: false,
                         disabled: true,
                     }))
+                    (render(Props {
+                        name: "demo-sw-4".to_string(),
+                        id: "demo-sw-4".to_string(),
+                        label: "Protected (disabled + checked)".to_string(),
+                        checked: true,
+                        disabled: true,
+                    }))
                 }
             }
         }

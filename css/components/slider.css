@@ -51,6 +51,7 @@
 .mui-slider__thumb[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.5;
+  pointer-events: none;
 }
 
 .mui-slider__native {

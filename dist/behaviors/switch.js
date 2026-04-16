@@ -28,14 +28,6 @@
         toggle();
       }
     });
-
-    el.addEventListener("focus", function () {
-      el.style.outline = "";
-    });
-
-    el.addEventListener("blur", function () {
-      el.style.outline = "";
-    });
   };
 
   // Re-init in case DOMContentLoaded already fired

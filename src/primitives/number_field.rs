@@ -41,7 +41,7 @@ impl Default for Props {
 /// Render a single number field with the given properties
 pub fn render(props: Props) -> Markup {
     html! {
-        div class="mui-number-field" role="group" aria-label=(props.label) data-disabled[props.disabled] {
+        div class="mui-number-field" role="group" aria-label=(props.label) aria-disabled[props.disabled] {
             button type="button" class="mui-number-field__btn mui-number-field__btn--decrement" tabindex="-1" aria-label="Decrement" data-mui="number-field-dec" disabled[props.disabled] { "−" }
             input type="number" class="mui-number-field__input" name=(props.name) id=(props.id) value=(props.value)
                   step=(props.step) min=[props.min] max=[props.max] disabled[props.disabled];
@@ -103,6 +103,48 @@ pub fn showcase() -> Markup {
                     disabled: true,
                     id: "demo-nf-4".into(),
                     label: "Disabled number field".into(),
+                    ..Default::default()
+                }))
+            }
+
+            // Bounds edge case: at minimum
+            div {
+                p.mui-showcase__caption { "At minimum (0..100)" }
+                (render(Props {
+                    name: "demo-nf-5".into(),
+                    value: 0.0,
+                    min: Some(0.0),
+                    max: Some(100.0),
+                    id: "demo-nf-5".into(),
+                    label: "At minimum bound".into(),
+                    ..Default::default()
+                }))
+            }
+
+            // Bounds edge case: at maximum
+            div {
+                p.mui-showcase__caption { "At maximum (0..100)" }
+                (render(Props {
+                    name: "demo-nf-6".into(),
+                    value: 100.0,
+                    min: Some(0.0),
+                    max: Some(100.0),
+                    id: "demo-nf-6".into(),
+                    label: "At maximum bound".into(),
+                    ..Default::default()
+                }))
+            }
+
+            // Negative values
+            div {
+                p.mui-showcase__caption { "Negative bounds (-50..50)" }
+                (render(Props {
+                    name: "demo-nf-7".into(),
+                    value: -10.0,
+                    min: Some(-50.0),
+                    max: Some(50.0),
+                    id: "demo-nf-7".into(),
+                    label: "Negative value field".into(),
                     ..Default::default()
                 }))
             }

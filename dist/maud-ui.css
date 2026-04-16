@@ -932,7 +932,7 @@ dialog.mui-alert-dialog::backdrop {
 /* Calendar component — shadcn-quality polish */
 
 .mui-calendar {
-  width: 18rem;
+  width: fit-content;
   padding: 0.75rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -940,13 +940,13 @@ dialog.mui-alert-dialog::backdrop {
   font-family: var(--mui-font-sans);
 }
 
-/* ── Header ─────────────────────────────────────────────────────────── */
+/* -- Header ---------------------------------------------------------------- */
 
 .mui-calendar__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.25rem 0.75rem;
+  padding-bottom: 0.5rem;
 }
 
 .mui-calendar__title {
@@ -956,6 +956,7 @@ dialog.mui-alert-dialog::backdrop {
   user-select: none;
 }
 
+/* Ghost nav buttons — subtle, no border until hover */
 .mui-calendar__nav {
   width: 1.75rem;
   height: 1.75rem;
@@ -964,15 +965,14 @@ dialog.mui-alert-dialog::backdrop {
   justify-content: center;
   padding: 0;
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   border-radius: var(--mui-radius-md);
   color: var(--mui-text-muted);
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
   transition: background-color var(--mui-transition),
-              color var(--mui-transition),
-              border-color var(--mui-transition);
+              color var(--mui-transition);
   -webkit-user-select: none;
   user-select: none;
 }
@@ -980,7 +980,10 @@ dialog.mui-alert-dialog::backdrop {
 .mui-calendar__nav:hover {
   background: var(--mui-bg-input);
   color: var(--mui-text);
-  border-color: var(--mui-border);
+}
+
+.mui-calendar__nav:active {
+  background: var(--mui-border);
 }
 
 .mui-calendar__nav:focus-visible {
@@ -988,25 +991,27 @@ dialog.mui-alert-dialog::backdrop {
   outline-offset: 2px;
 }
 
-/* ── Grid ────────────────────────────────────────────────────────────── */
+/* -- Grid ------------------------------------------------------------------ */
 
 .mui-calendar__grid {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 0;
 }
 
 .mui-calendar__weekdays,
 .mui-calendar__week {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
+  grid-template-columns: repeat(7, 2rem);
+  gap: 0.125rem;
+  justify-content: center;
 }
 
 .mui-calendar__weekday {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 2rem;
   height: 2rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -1014,7 +1019,7 @@ dialog.mui-alert-dialog::backdrop {
   user-select: none;
 }
 
-/* ── Day cells ───────────────────────────────────────────────────────── */
+/* -- Day cells ------------------------------------------------------------- */
 
 .mui-calendar__day {
   position: relative;
@@ -1023,13 +1028,12 @@ dialog.mui-alert-dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0.0625rem auto;
   padding: 0;
   background: transparent;
   border: none;
   border-radius: var(--mui-radius-md);
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: var(--mui-text);
   cursor: pointer;
   transition: background-color var(--mui-transition),
@@ -1042,30 +1046,33 @@ dialog.mui-alert-dialog::backdrop {
   background: var(--mui-bg-input);
 }
 
-/* Today: bold weight + subtle ring */
-.mui-calendar__day--today {
-  font-weight: 700;
-  box-shadow: inset 0 0 0 1px var(--mui-border-focus);
+.mui-calendar__day:active:not(:disabled):not(.mui-calendar__day--selected) {
+  background: var(--mui-border);
 }
 
-/* Selected: accent background */
+/* Today: subtle ring, not the same as selected */
+.mui-calendar__day--today:not(.mui-calendar__day--selected) {
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px var(--mui-border-hover);
+  border-radius: var(--mui-radius-md);
+}
+
+/* Selected: solid accent fill, white text, no ring */
 .mui-calendar__day--selected {
   background: var(--mui-accent);
   color: var(--mui-accent-fg);
   font-weight: 600;
+  box-shadow: none;
 }
 
 .mui-calendar__day--selected:hover {
   background: var(--mui-accent-hover);
 }
 
-.mui-calendar__day--selected.mui-calendar__day--today {
-  box-shadow: none;
-}
-
-/* Outside days (prev/next month) */
+/* Outside days (prev/next month) — very muted */
 .mui-calendar__day--outside {
   color: var(--mui-text-subtle);
+  opacity: 0.5;
 }
 
 .mui-calendar__day--outside:empty {
@@ -1076,7 +1083,7 @@ dialog.mui-alert-dialog::backdrop {
 /* Disabled */
 .mui-calendar__day:disabled {
   color: var(--mui-text-subtle);
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
@@ -1087,7 +1094,7 @@ dialog.mui-alert-dialog::backdrop {
   z-index: 1;
 }
 
-/* ── Hidden input ────────────────────────────────────────────────────── */
+/* -- Hidden input ---------------------------------------------------------- */
 
 .mui-calendar__value {
   position: absolute;
@@ -1168,7 +1175,7 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-carousel__container {
   display: flex;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease-out;
 }
 
 .mui-carousel__slide {
@@ -1176,7 +1183,7 @@ dialog.mui-alert-dialog::backdrop {
   min-width: 0;
 }
 
-/* Prev / Next arrows */
+/* Prev / Next arrows — ghost circles, vertically centered, slightly inset */
 .mui-carousel__prev,
 .mui-carousel__next {
   position: absolute;
@@ -1187,39 +1194,48 @@ dialog.mui-alert-dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--mui-border);
+  border: none;
   border-radius: var(--mui-radius-full);
-  background: var(--mui-bg-card);
+  background: transparent;
   color: var(--mui-text);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
   padding: 0;
   font-family: inherit;
-  opacity: 0.85;
+  opacity: 0.7;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .mui-carousel__prev {
-  left: 0.5rem;
+  left: 0.75rem;
 }
 
 .mui-carousel__next {
-  right: 0.5rem;
+  right: 0.75rem;
 }
 
 .mui-carousel__prev:hover,
 .mui-carousel__next:hover {
   background: var(--mui-bg-input);
-  border-color: var(--mui-border-hover);
   opacity: 1;
+}
+
+.mui-carousel__prev:active,
+.mui-carousel__next:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .mui-carousel__prev:disabled,
 .mui-carousel__next:disabled {
-  opacity: 0.35;
+  opacity: 0.25;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-carousel__prev:focus-visible,
@@ -1228,11 +1244,11 @@ dialog.mui-alert-dialog::backdrop {
   outline-offset: 2px;
 }
 
-/* Dot indicators */
+/* Dot indicators — small circles, active is larger + accent-colored */
 .mui-carousel__dots {
   display: flex;
   justify-content: center;
-  gap: 0.375rem;
+  gap: 0.5rem;
   padding-top: 0.75rem;
 }
 
@@ -1244,7 +1260,9 @@ dialog.mui-alert-dialog::backdrop {
   background: var(--mui-border);
   cursor: pointer;
   padding: 0;
-  transition: var(--mui-transition);
+  transition: background-color 200ms ease-out,
+              transform 200ms ease-out,
+              width 200ms ease-out;
 }
 
 .mui-carousel__dot:hover {
@@ -1254,7 +1272,8 @@ dialog.mui-alert-dialog::backdrop {
 .mui-carousel__dot--active,
 .mui-carousel__dot[aria-selected="true"] {
   background: var(--mui-accent);
-  transform: scale(1.25);
+  width: 1.25rem;
+  border-radius: var(--mui-radius-full);
 }
 
 .mui-carousel__dot:focus-visible {
@@ -1266,47 +1285,60 @@ dialog.mui-alert-dialog::backdrop {
 /* Chart component — inline SVG bar and line charts */
 
 .mui-chart {
-  display: inline-block;
+  width: 100%;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 1.25rem 1rem 0.75rem;
+  background: var(--mui-bg-card);
 }
 
 .mui-chart__title {
   font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0 0 0.5rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
   color: var(--mui-text);
+  letter-spacing: -0.01em;
 }
 
 .mui-chart__svg {
   color: var(--mui-text);
   display: block;
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
 .mui-chart__label {
   font-size: 0.625rem;
   fill: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
 }
 
 .mui-chart__value {
-  font-size: 0.5rem;
-  fill: var(--mui-text-muted);
+  font-size: 0.5625rem;
+  fill: var(--mui-text-subtle);
+  font-family: var(--mui-font-sans);
 }
 
-/* Bar hover effect */
+/* Bar hover effect — subtle brighten */
 .mui-chart rect {
   transition: opacity 0.2s ease;
 }
 .mui-chart rect:hover {
-  opacity: 1;
+  opacity: 1 !important;
+  filter: brightness(1.1);
 }
 
-/* Line chart dot hover */
+/* Line chart dot hover — grow on hover */
 .mui-chart circle {
   transition: r 0.15s ease;
 }
 .mui-chart circle:hover {
   r: 5;
+}
+
+/* Grid lines — keep them very subtle */
+.mui-chart line[stroke-opacity] {
+  shape-rendering: crispEdges;
 }
 
 /* --- checkbox.css --- */
@@ -1484,7 +1516,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- combobox.css --- */
-/* Combobox component — filterable select */
+/* Combobox component — filterable select (command-palette feel) */
 
 .mui-combobox {
   display: inline-block;
@@ -1496,7 +1528,7 @@ dialog.mui-alert-dialog::backdrop {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  min-width: 10rem;
+  min-width: 12rem;
   height: 2.25rem;
   padding: 0 0.75rem;
   background: transparent;
@@ -1544,7 +1576,7 @@ dialog.mui-alert-dialog::backdrop {
   transform: rotate(180deg);
 }
 
-/* Dropdown panel */
+/* Dropdown panel — command-palette style: clean, no heavy borders */
 
 .mui-combobox__dropdown {
   position: absolute;
@@ -1553,35 +1585,59 @@ dialog.mui-alert-dialog::backdrop {
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-shadow-md);
   z-index: 50;
   overflow: hidden;
+  /* Animate in */
+  animation: mui-cb-enter 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mui-cb-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .mui-combobox__dropdown[hidden] {
   display: none;
 }
 
-/* Search input */
+/* Search input — NO visible border, just text + subtle icon area.
+   Matches shadcn Command palette search: borderless, separator below. */
 
 .mui-combobox__search-wrap {
-  padding: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
   border-bottom: 1px solid var(--mui-border);
 }
 
+.mui-combobox__search-icon {
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
 .mui-combobox__search {
+  flex: 1;
   display: block;
   width: 100%;
-  height: 1.75rem;
-  padding: 0 0.5rem;
+  height: auto;
+  padding: 0;
   background: transparent;
   color: var(--mui-text);
   border: none;
-  border-radius: var(--mui-radius-sm);
+  outline: none;
   font-family: inherit;
   font-size: 0.875rem;
-  outline: none;
+  line-height: 1.5;
   box-sizing: border-box;
 }
 
@@ -1597,15 +1653,18 @@ dialog.mui-alert-dialog::backdrop {
   padding: 0.25rem;
 }
 
+/* Options — comfortable click targets (min 2rem height) */
+
 .mui-combobox__option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2rem;
   padding: 0.375rem 0.5rem;
   cursor: pointer;
   border-radius: var(--mui-radius-sm);
   font-size: 0.875rem;
-  transition: var(--mui-transition);
+  transition: background var(--mui-transition);
   position: relative;
 }
 
@@ -1620,6 +1679,8 @@ dialog.mui-alert-dialog::backdrop {
 .mui-combobox__option--highlighted {
   background: var(--mui-bg-input);
 }
+
+/* Checkmark — accent-colored, hidden until selected */
 
 .mui-combobox__check {
   display: none;
@@ -1642,10 +1703,10 @@ dialog.mui-alert-dialog::backdrop {
   flex: 1;
 }
 
-/* Empty state */
+/* Empty state — centered, muted, generous padding */
 
 .mui-combobox__empty {
-  padding: 1.5rem 0.75rem;
+  padding: 2rem 1rem;
   text-align: center;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
@@ -1877,14 +1938,40 @@ dialog.mui-command::backdrop {
 
 /* Toolbar — search input above table */
 .mui-data-table__toolbar {
-  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .mui-data-table__search {
-  max-width: 20rem;
+  max-width: 16rem;
+  height: 2rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
-/* Wrapper — inherits table-wrapper overflow behavior */
+.mui-data-table__search::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-data-table__search:hover:not(:disabled) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-data-table__search:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+}
+
+/* Wrapper — bordered container around the table */
 .mui-data-table__wrapper {
   position: relative;
   overflow: auto;
@@ -1904,23 +1991,27 @@ dialog.mui-command::backdrop {
   color: var(--mui-text);
 }
 
-/* Sort icon — inline, muted by default */
+/* Sort icon — subtle inline indicator */
 .mui-data-table__sort-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-left: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--mui-text-subtle);
   vertical-align: middle;
-  transition: color var(--mui-transition);
+  opacity: 0;
+  transition: opacity var(--mui-transition), color var(--mui-transition);
 }
 
 .mui-data-table__th[data-sortable="true"]:hover .mui-data-table__sort-icon {
+  opacity: 0.6;
   color: var(--mui-text-muted);
 }
 
 /* Active sort direction indicators (set by JS) */
 .mui-data-table__th[data-sort-dir="asc"] .mui-data-table__sort-icon,
 .mui-data-table__th[data-sort-dir="desc"] .mui-data-table__sort-icon {
+  opacity: 1;
   color: var(--mui-text);
 }
 
@@ -1929,15 +2020,15 @@ dialog.mui-command::backdrop {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 0 0;
-  font-size: 0.875rem;
+  padding: 0.75rem 0.125rem 0;
+  font-size: 0.8125rem;
 }
 
 .mui-data-table__info {
   color: var(--mui-text-muted);
 }
 
-/* Pagination buttons */
+/* Pagination buttons — outline style matching shadcn */
 .mui-data-table__pagination {
   display: flex;
   gap: 0.5rem;
@@ -1947,10 +2038,10 @@ dialog.mui-command::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.25rem;
+  height: 2rem;
   padding: 0 0.75rem;
   font-family: var(--mui-font-sans);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;
@@ -1989,7 +2080,7 @@ dialog.mui-command::backdrop {
   position: relative;
 }
 
-/* Trigger — styled like an input */
+/* Trigger — styled to match .mui-input (same height, border, radius) */
 
 .mui-date-picker__trigger {
   display: inline-flex;
@@ -2039,12 +2130,15 @@ dialog.mui-command::backdrop {
   color: var(--mui-text-muted);
 }
 
+/* Calendar icon — right-aligned, muted */
 .mui-date-picker__icon {
   flex-shrink: 0;
   font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  line-height: 1;
 }
 
-/* Dropdown panel */
+/* Dropdown panel — proper shadow and spacing */
 
 .mui-date-picker__dropdown {
   position: absolute;
@@ -2053,10 +2147,23 @@ dialog.mui-command::backdrop {
   z-index: 50;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-shadow-md);
   padding: 0.75rem;
   min-width: 16rem;
+  /* Animate in */
+  animation: mui-dp-enter 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mui-dp-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .mui-date-picker__dropdown[hidden] {
@@ -2080,10 +2187,11 @@ dialog.mui-command::backdrop {
 
 .mui-date-picker__cal-title {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   user-select: none;
 }
 
+/* Ghost nav buttons — match calendar.css nav style */
 .mui-date-picker__nav-btn {
   display: inline-flex;
   align-items: center;
@@ -2092,9 +2200,9 @@ dialog.mui-command::backdrop {
   height: 1.75rem;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
   color: var(--mui-text-muted);
-  font-size: 1.25rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: var(--mui-transition);
   line-height: 1;
@@ -2103,6 +2211,10 @@ dialog.mui-command::backdrop {
 .mui-date-picker__nav-btn:hover {
   background: var(--mui-bg-input);
   color: var(--mui-text);
+}
+
+.mui-date-picker__nav-btn:active {
+  background: var(--mui-border);
 }
 
 .mui-date-picker__nav-btn:focus-visible {
@@ -2114,26 +2226,31 @@ dialog.mui-command::backdrop {
 
 .mui-date-picker__day-headers {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
-  margin-bottom: 0.25rem;
+  grid-template-columns: repeat(7, 2rem);
+  gap: 0.125rem;
+  margin-bottom: 0.125rem;
+  justify-content: center;
 }
 
 .mui-date-picker__day-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--mui-text-muted);
-  padding: 0.25rem 0;
   user-select: none;
 }
 
-/* Day grid */
+/* Day grid — square cells, tight */
 
 .mui-date-picker__days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 2rem);
   gap: 0.125rem;
+  justify-content: center;
 }
 
 .mui-date-picker__day {
@@ -2142,10 +2259,9 @@ dialog.mui-command::backdrop {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  margin: 0 auto;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
   color: var(--mui-text);
   font-size: 0.8125rem;
   cursor: pointer;
@@ -2159,15 +2275,24 @@ dialog.mui-command::backdrop {
   background: var(--mui-bg-input);
 }
 
+.mui-date-picker__day:active:not(:disabled):not(.mui-date-picker__day--empty) {
+  background: var(--mui-border);
+}
+
 .mui-date-picker__day--empty {
   cursor: default;
   pointer-events: none;
 }
 
+/* Selected: accent bg, white text, no border */
 .mui-date-picker__day--selected {
   background: var(--mui-accent) !important;
   color: var(--mui-accent-fg);
   font-weight: 600;
+}
+
+.mui-date-picker__day--selected:hover {
+  background: var(--mui-accent-hover) !important;
 }
 
 .mui-date-picker__day--disabled {
@@ -2179,6 +2304,7 @@ dialog.mui-command::backdrop {
 .mui-date-picker__day:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 1px;
+  z-index: 1;
 }
 
 /* Hidden input */

@@ -1,45 +1,58 @@
 /* Chart component — inline SVG bar and line charts */
 
 .mui-chart {
-  display: inline-block;
+  width: 100%;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 1.25rem 1rem 0.75rem;
+  background: var(--mui-bg-card);
 }
 
 .mui-chart__title {
   font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0 0 0.5rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
   color: var(--mui-text);
+  letter-spacing: -0.01em;
 }
 
 .mui-chart__svg {
   color: var(--mui-text);
   display: block;
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
 .mui-chart__label {
   font-size: 0.625rem;
   fill: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
 }
 
 .mui-chart__value {
-  font-size: 0.5rem;
-  fill: var(--mui-text-muted);
+  font-size: 0.5625rem;
+  fill: var(--mui-text-subtle);
+  font-family: var(--mui-font-sans);
 }
 
-/* Bar hover effect */
+/* Bar hover effect — subtle brighten */
 .mui-chart rect {
   transition: opacity 0.2s ease;
 }
 .mui-chart rect:hover {
-  opacity: 1;
+  opacity: 1 !important;
+  filter: brightness(1.1);
 }
 
-/* Line chart dot hover */
+/* Line chart dot hover — grow on hover */
 .mui-chart circle {
   transition: r 0.15s ease;
 }
 .mui-chart circle:hover {
   r: 5;
+}
+
+/* Grid lines — keep them very subtle */
+.mui-chart line[stroke-opacity] {
+  shape-rendering: crispEdges;
 }

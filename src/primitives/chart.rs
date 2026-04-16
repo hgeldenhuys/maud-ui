@@ -49,11 +49,11 @@ impl Default for Props {
     }
 }
 
-// Layout constants
-const PAD_LEFT: f64 = 40.0;
-const PAD_TOP: f64 = 10.0;
-const PAD_RIGHT: f64 = 10.0;
-const PAD_BOTTOM: f64 = 30.0;
+// Layout constants — padding for axis labels and breathing room
+const PAD_LEFT: f64 = 44.0;
+const PAD_TOP: f64 = 12.0;
+const PAD_RIGHT: f64 = 12.0;
+const PAD_BOTTOM: f64 = 32.0;
 
 /// Scale a value into the drawable area (y-axis is flipped in SVG).
 fn scale_y(value: f64, max_value: f64, height: u32) -> f64 {
@@ -113,7 +113,7 @@ fn render_bar(props: &Props, color: &str) -> String {
         let y = scale_y(val, max_value, h);
         // Grid line
         svg.push_str(&format!(
-            r#"<line x1="{}" y1="{y}" x2="{}" y2="{y}" stroke="currentColor" stroke-opacity="0.08" />"#,
+            r#"<line x1="{}" y1="{y}" x2="{}" y2="{y}" stroke="currentColor" stroke-opacity="0.1" />"#,
             PAD_LEFT,
             w as f64 - PAD_RIGHT,
         ));
@@ -142,7 +142,7 @@ fn render_bar(props: &Props, color: &str) -> String {
         let center_x = bar_x + bar_w / 2.0;
 
         svg.push_str(&format!(
-            r#"<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="{bar_h}" rx="2" fill="{color}" opacity="0.8" />"#
+            r#"<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="{bar_h}" rx="3" fill="{color}" opacity="0.85" />"#
         ));
         svg.push_str(&format!(
             r#"<text x="{center_x}" y="{}" text-anchor="middle" class="mui-chart__label">{}</text>"#,
@@ -200,7 +200,7 @@ fn render_line(props: &Props, color: &str) -> String {
         let val = max_value * frac;
         let y = scale_y(val, max_value, h);
         svg.push_str(&format!(
-            r#"<line x1="{}" y1="{y}" x2="{}" y2="{y}" stroke="currentColor" stroke-opacity="0.08" />"#,
+            r#"<line x1="{}" y1="{y}" x2="{}" y2="{y}" stroke="currentColor" stroke-opacity="0.1" />"#,
             PAD_LEFT,
             w as f64 - PAD_RIGHT,
         ));
@@ -231,7 +231,13 @@ fn render_line(props: &Props, color: &str) -> String {
         points.push((x, y));
     }
 
-    // Area fill (translucent)
+    // Gradient definition for area fill
+    let grad_id = format!("{}-area-grad", props.id);
+    svg.push_str(&format!(
+        r#"<defs><linearGradient id="{grad_id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="{color}" stop-opacity="0.15"/><stop offset="100%" stop-color="{color}" stop-opacity="0.02"/></linearGradient></defs>"#
+    ));
+
+    // Area fill (smooth gradient)
     if points.len() >= 2 {
         let mut area = String::from("<polygon points=\"");
         // Start at baseline under first point
@@ -246,7 +252,7 @@ fn render_line(props: &Props, color: &str) -> String {
             baseline_y
         ));
         area.push_str(&format!(
-            r#"" fill="{color}" opacity="0.1" />"#
+            r#"" fill="url(#{grad_id})" />"#
         ));
         svg.push_str(&area);
     }

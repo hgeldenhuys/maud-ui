@@ -75,6 +75,7 @@ pub fn render(props: Props) -> Markup {
 
             div class="mui-combobox__dropdown" id=(format!("{}-dropdown", props.id)) hidden {
                 div class="mui-combobox__search-wrap" {
+                    span class="mui-combobox__search-icon" aria-hidden="true" { "\u{1f50d}" }
                     input type="text" class="mui-combobox__search"
                           placeholder=(props.search_placeholder)
                           aria-label="Search options"

@@ -6,14 +6,40 @@
 
 /* Toolbar — search input above table */
 .mui-data-table__toolbar {
-  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .mui-data-table__search {
-  max-width: 20rem;
+  max-width: 16rem;
+  height: 2rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  transition: var(--mui-transition);
+  box-sizing: border-box;
 }
 
-/* Wrapper — inherits table-wrapper overflow behavior */
+.mui-data-table__search::placeholder {
+  color: var(--mui-text-subtle);
+}
+
+.mui-data-table__search:hover:not(:disabled) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-data-table__search:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+}
+
+/* Wrapper — bordered container around the table */
 .mui-data-table__wrapper {
   position: relative;
   overflow: auto;
@@ -33,23 +59,27 @@
   color: var(--mui-text);
 }
 
-/* Sort icon — inline, muted by default */
+/* Sort icon — subtle inline indicator */
 .mui-data-table__sort-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-left: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--mui-text-subtle);
   vertical-align: middle;
-  transition: color var(--mui-transition);
+  opacity: 0;
+  transition: opacity var(--mui-transition), color var(--mui-transition);
 }
 
 .mui-data-table__th[data-sortable="true"]:hover .mui-data-table__sort-icon {
+  opacity: 0.6;
   color: var(--mui-text-muted);
 }
 
 /* Active sort direction indicators (set by JS) */
 .mui-data-table__th[data-sort-dir="asc"] .mui-data-table__sort-icon,
 .mui-data-table__th[data-sort-dir="desc"] .mui-data-table__sort-icon {
+  opacity: 1;
   color: var(--mui-text);
 }
 
@@ -58,15 +88,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 0 0;
-  font-size: 0.875rem;
+  padding: 0.75rem 0.125rem 0;
+  font-size: 0.8125rem;
 }
 
 .mui-data-table__info {
   color: var(--mui-text-muted);
 }
 
-/* Pagination buttons */
+/* Pagination buttons — outline style matching shadcn */
 .mui-data-table__pagination {
   display: flex;
   gap: 0.5rem;
@@ -76,10 +106,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.25rem;
+  height: 2rem;
   padding: 0 0.75rem;
   font-family: var(--mui-font-sans);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;

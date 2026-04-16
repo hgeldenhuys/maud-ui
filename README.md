@@ -14,7 +14,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## Features
 
-- **48 UI primitives** -- buttons, forms, dialogs, menus, tables, drawers, sliders, tabs, popovers, tooltips, and more
+- **58 UI primitives** -- buttons, forms, dialogs, menus, tables, charts, calendars, drawers, sliders, tabs, popovers, tooltips, and more
 - **Correct accessibility** -- ARIA roles, keyboard navigation, focus management, semantic HTML
 - **Dark + light themes** -- CSS custom properties for instant customization
 - **Progressive enhancement** -- all components work without JavaScript; enhanced with htmx + vanilla JS
@@ -80,7 +80,7 @@ fn my_page() -> Markup {
 
 ## Component reference
 
-All 48 primitives are organized into three tiers based on JS requirements:
+All 58 primitives are organized into three tiers based on JS requirements:
 
 ### Tier 1: Pure HTML+CSS (no JavaScript required)
 
@@ -94,6 +94,7 @@ All 48 primitives are organized into three tiers based on JS requirements:
 | Button | `button` | label, variant, size, disabled, button_type | Default, Primary, Secondary, Outline, Ghost, Danger, Link; Sm, Md, Lg, Icon |
 | Button Group | `button_group` | children, orientation, size | Horizontal, Vertical |
 | Card | `card` | title, description, children, footer | -- |
+| Chart | `chart` | id, chart_type, data, title, width, height, color | Bar, Line |
 | Checkbox | `checkbox` | name, value, label, id, checked, indeterminate, disabled, required | -- |
 | Empty State | `empty_state` | icon, title, description, action | -- |
 | Field | `field` | label, id, description, error, required, children | -- |
@@ -136,20 +137,27 @@ All 48 primitives are organized into three tiers based on JS requirements:
 | Component | Module | Props | Variants |
 |-----------|--------|-------|----------|
 | Alert Dialog | `alert_dialog` | id, title, description, children, open | -- |
+| Calendar | `calendar` | id, selected, month, year, min_date, max_date, show_outside_days | -- |
+| Carousel | `carousel` | id, items, show_dots, show_arrows, loop_slides, auto_play, aria_label | -- |
+| Combobox | `combobox` | id, name, options, selected, placeholder, search_placeholder, empty_text, disabled | -- |
+| Command | `command` | id, items (CommandItem: label, shortcut, group, disabled), placeholder | -- |
 | Context Menu | `context_menu` | id, trigger, items | -- |
+| Data Table | `data_table` | id, columns (Column: key, label, sortable), rows, page_size, searchable, search_placeholder | -- |
+| Date Picker | `date_picker` | id, name, selected, placeholder, disabled, min_date, max_date | -- |
 | Dialog | `dialog` | id, title, description, children, open | -- |
 | Drawer | `drawer` | id, title, description, children, side | Left, Right, Top, Bottom |
 | Menu | `menu` | trigger_label, id, items | -- |
+| Menubar | `menubar` | id, menus (MenubarMenu: label, items) | -- |
+| Navigation Menu | `navigation_menu` | id, items (NavItem: Link or Menu with links) | -- |
 | Popover | `popover` | id, trigger, content, placement, align | Top, Bottom, Left, Right; Start, Center, End |
+| Resizable | `resizable` | id, panels (Panel: content, default_size, min_size), direction | Horizontal, Vertical |
 | Scroll Area | `scroll_area` | max_height, id, children | -- |
 | Select | `select` | name, id, options, selected, placeholder, disabled | -- |
 | Slider | `slider` | name, id, value, min, max, step, disabled, label, show_value | -- |
 
 ## shadcn/ui coverage
 
-maud-ui implements 48 of shadcn's ~57 components. Components not yet implemented:
-Calendar, Carousel, Chart, Combobox, Command, Data Table, Date Picker,
-Menubar, Navigation Menu, Resizable.
+maud-ui implements 58 components, fully covering shadcn's component set.
 
 ## Gallery
 
@@ -271,7 +279,7 @@ Consumers receive pre-built CSS and JavaScript in the `dist/` directory; no buil
 
 ## Architecture
 
-- `src/primitives/` -- 48 UI components, each with `Props`, `Variant` enums, and `render(props) -> Markup`
+- `src/primitives/` -- 58 UI components, each with `Props`, `Variant` enums, and `render(props) -> Markup`
 - `src/tokens.rs` -- Rust design token constants (mirrors CSS custom properties)
 - `css/` -- Component styles organized by feature
 - `js/` -- Progressive enhancement behaviors and maud-ui runtime

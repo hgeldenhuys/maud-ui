@@ -5,7 +5,7 @@
   position: relative;
 }
 
-/* Trigger — styled like an input */
+/* Trigger — styled to match .mui-input (same height, border, radius) */
 
 .mui-date-picker__trigger {
   display: inline-flex;
@@ -55,12 +55,15 @@
   color: var(--mui-text-muted);
 }
 
+/* Calendar icon — right-aligned, muted */
 .mui-date-picker__icon {
   flex-shrink: 0;
   font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  line-height: 1;
 }
 
-/* Dropdown panel */
+/* Dropdown panel — proper shadow and spacing */
 
 .mui-date-picker__dropdown {
   position: absolute;
@@ -69,10 +72,23 @@
   z-index: 50;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-shadow-md);
   padding: 0.75rem;
   min-width: 16rem;
+  /* Animate in */
+  animation: mui-dp-enter 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mui-dp-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .mui-date-picker__dropdown[hidden] {
@@ -96,10 +112,11 @@
 
 .mui-date-picker__cal-title {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   user-select: none;
 }
 
+/* Ghost nav buttons — match calendar.css nav style */
 .mui-date-picker__nav-btn {
   display: inline-flex;
   align-items: center;
@@ -108,9 +125,9 @@
   height: 1.75rem;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
   color: var(--mui-text-muted);
-  font-size: 1.25rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: var(--mui-transition);
   line-height: 1;
@@ -119,6 +136,10 @@
 .mui-date-picker__nav-btn:hover {
   background: var(--mui-bg-input);
   color: var(--mui-text);
+}
+
+.mui-date-picker__nav-btn:active {
+  background: var(--mui-border);
 }
 
 .mui-date-picker__nav-btn:focus-visible {
@@ -130,26 +151,31 @@
 
 .mui-date-picker__day-headers {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0;
-  margin-bottom: 0.25rem;
+  grid-template-columns: repeat(7, 2rem);
+  gap: 0.125rem;
+  margin-bottom: 0.125rem;
+  justify-content: center;
 }
 
 .mui-date-picker__day-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--mui-text-muted);
-  padding: 0.25rem 0;
   user-select: none;
 }
 
-/* Day grid */
+/* Day grid — square cells, tight */
 
 .mui-date-picker__days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 2rem);
   gap: 0.125rem;
+  justify-content: center;
 }
 
 .mui-date-picker__day {
@@ -158,10 +184,9 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  margin: 0 auto;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-md);
   color: var(--mui-text);
   font-size: 0.8125rem;
   cursor: pointer;
@@ -175,15 +200,24 @@
   background: var(--mui-bg-input);
 }
 
+.mui-date-picker__day:active:not(:disabled):not(.mui-date-picker__day--empty) {
+  background: var(--mui-border);
+}
+
 .mui-date-picker__day--empty {
   cursor: default;
   pointer-events: none;
 }
 
+/* Selected: accent bg, white text, no border */
 .mui-date-picker__day--selected {
   background: var(--mui-accent) !important;
   color: var(--mui-accent-fg);
   font-weight: 600;
+}
+
+.mui-date-picker__day--selected:hover {
+  background: var(--mui-accent-hover) !important;
 }
 
 .mui-date-picker__day--disabled {
@@ -195,6 +229,7 @@
 .mui-date-picker__day:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 1px;
+  z-index: 1;
 }
 
 /* Hidden input */

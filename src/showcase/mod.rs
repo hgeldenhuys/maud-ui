@@ -182,6 +182,311 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "typography",
 ];
 
+/// Render a code example block with a title.
+fn code_example(title: &str, code: &str) -> Markup {
+    html! {
+        div.mui-showcase__code-section {
+            h3.mui-showcase__code-title { (title) }
+            pre.mui-showcase__code {
+                code { (code) }
+            }
+        }
+    }
+}
+
+/// Return a usage code example for a component by slug name.
+fn component_docs(name: &str) -> Option<Markup> {
+    let code = match name {
+        "button" => r#"use maud_ui::primitives::button;
+
+let html = button::render(button::Props {
+    label: "Save changes".into(),
+    variant: button::Variant::Primary,
+    size: button::Size::Md,
+    disabled: false,
+    button_type: "submit",
+});"#,
+        "input" => r#"use maud_ui::primitives::input;
+
+let html = input::render(input::Props {
+    name: "email".into(),
+    input_type: input::InputType::Email,
+    placeholder: "you@example.com".into(),
+    id: "email-field".into(),
+    required: true,
+    ..Default::default()
+});"#,
+        "textarea" => r#"use maud_ui::primitives::textarea;
+
+let html = textarea::render(textarea::Props {
+    name: "bio".into(),
+    placeholder: "Tell us about yourself...".into(),
+    rows: 6,
+    id: "bio-field".into(),
+    resize: textarea::Resize::Vertical,
+    ..Default::default()
+});"#,
+        "checkbox" => r#"use maud_ui::primitives::checkbox;
+
+let html = checkbox::render(checkbox::Props {
+    name: "terms".into(),
+    value: "accepted".into(),
+    label: "I agree to the terms".into(),
+    id: "terms-cb".into(),
+    description: Some("Required to continue.".into()),
+    ..Default::default()
+});"#,
+        "radio" => r#"use maud_ui::primitives::radio;
+
+let html = radio::render(radio::Props {
+    name: "plan".into(),
+    value: "pro".into(),
+    label: "Pro plan".into(),
+    id: "plan-pro".into(),
+    checked: true,
+    description: Some("Unlimited projects".into()),
+    ..Default::default()
+});"#,
+        "select" => r#"use maud_ui::primitives::select;
+
+let html = select::render(select::Props {
+    name: "country".into(),
+    id: "country-select".into(),
+    placeholder: "Choose a country".into(),
+    selected: Some("us".into()),
+    options: vec![
+        select::SelectOption { value: "us".into(), label: "United States".into(), disabled: false },
+        select::SelectOption { value: "gb".into(), label: "United Kingdom".into(), disabled: false },
+    ],
+    ..Default::default()
+});"#,
+        "switch" => r#"use maud_ui::primitives::switch;
+
+let html = switch::render(switch::Props {
+    name: "dark-mode".into(),
+    id: "dark-mode-switch".into(),
+    label: "Dark mode".into(),
+    checked: true,
+    disabled: false,
+});"#,
+        "dialog" => r#"use maud_ui::primitives::dialog;
+use maud::html;
+
+// Render the trigger button
+let trigger = dialog::trigger("confirm-dlg", "Open dialog");
+
+// Render the dialog itself
+let dlg = dialog::render(dialog::Props {
+    id: "confirm-dlg".into(),
+    title: "Confirm action".into(),
+    description: Some("This cannot be undone.".into()),
+    children: html! { p { "Are you sure?" } },
+    footer: Some(html! {
+        button.mui-btn.mui-btn--danger.mui-btn--md { "Confirm" }
+    }),
+    open: false,
+});"#,
+        "tabs" => r#"use maud_ui::primitives::tabs;
+use maud::html;
+
+let html = tabs::render(tabs::Props {
+    tabs: vec![
+        tabs::Tab { id: "overview".into(), label: "Overview".into(), content: html! { p { "Overview content" } } },
+        tabs::Tab { id: "settings".into(), label: "Settings".into(), content: html! { p { "Settings content" } } },
+    ],
+    default_active: 0,
+    aria_label: "Account tabs".into(),
+});"#,
+        "accordion" => r#"use maud_ui::primitives::accordion;
+use maud::html;
+
+let html = accordion::render(accordion::Props {
+    items: vec![
+        accordion::Item { id: "faq-1".into(), trigger: "What is maud-ui?".into(), content: html! { p { "A component library for maud + htmx." } }, open: true },
+        accordion::Item { id: "faq-2".into(), trigger: "Is it free?".into(), content: html! { p { "Yes, MIT licensed." } }, open: false },
+    ],
+    multiple: false,
+});"#,
+        "card" => r#"use maud_ui::primitives::card;
+use maud::html;
+
+let html = card::render(card::Props {
+    title: Some("Project stats".into()),
+    description: Some("Overview of your project.".into()),
+    children: html! { p { "Content goes here." } },
+    footer: Some(html! {
+        button.mui-btn.mui-btn--primary.mui-btn--sm { "View details" }
+    }),
+});"#,
+        "table" => r#"use maud_ui::primitives::table;
+
+let html = table::render(table::Props {
+    headers: vec!["Name".into(), "Role".into(), "Status".into()],
+    rows: vec![
+        vec!["Alice".into(), "Admin".into(), "Active".into()],
+        vec!["Bob".into(), "Editor".into(), "Inactive".into()],
+    ],
+    striped: true,
+    hoverable: true,
+    compact: false,
+    caption: Some("Team members".into()),
+});"#,
+        "badge" => r#"use maud_ui::primitives::badge;
+
+let html = badge::render(badge::Props {
+    label: "New".into(),
+    variant: badge::Variant::Success,
+});"#,
+        "alert" => r#"use maud_ui::primitives::alert;
+
+let html = alert::render(alert::Props {
+    title: "Deployment complete".into(),
+    description: Some("All services are running.".into()),
+    variant: alert::Variant::Success,
+    icon: true,
+});"#,
+        "toast" => r#"use maud_ui::primitives::toast;
+
+// Add the viewport container once in your layout
+let vp = toast::viewport();
+
+// Render a toast notification
+let html = toast::render(toast::Props {
+    title: "Changes saved".into(),
+    description: Some("Your profile was updated.".into()),
+    variant: toast::Variant::Success,
+    duration_ms: 5000,
+    id: "save-toast".into(),
+});
+
+// Trigger from JS: muiToast({ title, description, variant })"#,
+        "field" => r#"use maud_ui::primitives::field;
+use maud::html;
+
+let html = field::render(field::Props {
+    label: "Email".into(),
+    id: "signup-email".into(),
+    description: Some("We will never share your email.".into()),
+    error: None,
+    required: true,
+    children: html! {
+        input.mui-input type="email" id="signup-email" name="email" placeholder="you@example.com";
+    },
+});"#,
+        "calendar" => r#"use maud_ui::primitives::calendar;
+
+let html = calendar::render(calendar::Props {
+    id: "booking-cal".into(),
+    year: 2026,
+    month: 4,
+    selected: Some((2026, 4, 15)),
+    min_date: Some((2026, 4, 1)),
+    max_date: Some((2026, 12, 31)),
+    show_outside_days: true,
+});"#,
+        "combobox" => r#"use maud_ui::primitives::combobox;
+
+let html = combobox::render(combobox::Props {
+    id: "lang-combo".into(),
+    name: "language".into(),
+    placeholder: "Select language".into(),
+    selected: Some("rust".into()),
+    options: vec![
+        combobox::ComboboxOption { value: "rust".into(), label: "Rust".into() },
+        combobox::ComboboxOption { value: "ts".into(), label: "TypeScript".into() },
+    ],
+    ..Default::default()
+});"#,
+        "menu" => r#"use maud_ui::primitives::menu;
+
+let html = menu::render(menu::Props {
+    trigger_label: "Actions".into(),
+    id: "row-menu".into(),
+    items: vec![
+        menu::MenuEntry::Label("Edit".into()),
+        menu::MenuEntry::Item(menu::MenuItem {
+            label: "Rename".into(), action: "rename".into(),
+            disabled: false, destructive: false, shortcut: Some("F2".into()),
+        }),
+        menu::MenuEntry::Separator,
+        menu::MenuEntry::Item(menu::MenuItem {
+            label: "Delete".into(), action: "delete".into(),
+            disabled: false, destructive: true, shortcut: None,
+        }),
+    ],
+});"#,
+        "slider" => r#"use maud_ui::primitives::slider;
+
+let html = slider::render(slider::Props {
+    name: "volume".into(),
+    id: "volume-slider".into(),
+    value: 75.0,
+    min: 0.0,
+    max: 100.0,
+    step: 1.0,
+    label: "Volume".into(),
+    show_value: true,
+    disabled: false,
+});"#,
+        "spinner" => r#"use maud_ui::primitives::spinner;
+
+let html = spinner::render(spinner::Props {
+    size: spinner::Size::Md,
+    label: Some("Loading data...".into()),
+});"#,
+        "skeleton" => r#"use maud_ui::primitives::skeleton;
+
+let html = skeleton::render(skeleton::Props {
+    variant: skeleton::Variant::Text,
+    width: Some("200px".into()),
+    height: Some("1rem".into()),
+});"#,
+        "data_table" => r#"use maud_ui::primitives::data_table;
+
+let html = data_table::render(data_table::Props {
+    id: "users-table".into(),
+    columns: vec![
+        data_table::Column { key: "name".into(), label: "Name".into(), sortable: true },
+        data_table::Column { key: "email".into(), label: "Email".into(), sortable: true },
+    ],
+    rows: vec![
+        vec!["Alice".into(), "alice@example.com".into()],
+        vec!["Bob".into(), "bob@example.com".into()],
+    ],
+    page_size: 10,
+    searchable: true,
+    ..Default::default()
+});"#,
+        "date_picker" => r#"use maud_ui::primitives::date_picker;
+
+let html = date_picker::render(date_picker::Props {
+    id: "start-date".into(),
+    name: "start_date".into(),
+    selected: Some((2026, 4, 15)),
+    placeholder: "Pick a start date".into(),
+    disabled: false,
+    min_date: Some((2026, 1, 1)),
+    max_date: None,
+});"#,
+        "command" => r#"use maud_ui::primitives::command;
+
+// Render the trigger button
+let trigger = command::trigger("cmd-palette", "Command palette");
+
+// Render the palette
+let html = command::render(command::Props {
+    id: "cmd-palette".into(),
+    placeholder: "Type a command...".into(),
+    items: vec![
+        command::CommandItem { label: "New file".into(), shortcut: Some("Cmd+N".into()), group: Some("File".into()), disabled: false },
+        command::CommandItem { label: "Search".into(), shortcut: Some("Cmd+K".into()), group: Some("General".into()), disabled: false },
+    ],
+});"#,
+        _ => return None,
+    };
+    Some(code_example("Usage", code))
+}
+
 /// Convert a slug like "toggle_group" to a display name like "Toggle Group".
 fn display_name(slug: &str) -> String {
     slug.split('_')
@@ -387,6 +692,9 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                         section class="mui-gallery__component" id=(name) {
                             h3 class="mui-gallery__component-name" { (display_name(name)) }
                             (content)
+                            @if let Some(docs) = component_docs(name) {
+                                (docs)
+                            }
                         }
                         div class="mui-gallery__back" {
                             a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {

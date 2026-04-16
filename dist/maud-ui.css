@@ -206,6 +206,38 @@ body {
   padding-top: 0.5rem;
 }
 
+/* Showcase code examples */
+.mui-showcase__code-section {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--mui-border);
+  padding-top: 1.5rem;
+}
+.mui-showcase__code-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+.mui-showcase__code {
+  background: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--mui-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0;
+  color: var(--mui-text);
+  white-space: pre;
+}
+.mui-showcase__code code {
+  background: none;
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+}
+
 /* Focus ring — use :focus-visible only, never :focus */
 *:focus { outline: none; }
 *:focus-visible {

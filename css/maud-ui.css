@@ -11,11 +11,13 @@
 @import "components/button.css";
 @import "components/card.css";
 @import "components/carousel.css";
+@import "components/chart.css";
 @import "components/checkbox.css";
 @import "components/collapsible.css";
 @import "components/combobox.css";
 @import "components/command.css";
 @import "components/context_menu.css";
+@import "components/data_table.css";
 @import "components/date_picker.css";
 @import "components/dialog.css";
 @import "components/drawer.css";

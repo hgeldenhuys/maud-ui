@@ -941,6 +941,200 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- data_table.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["data-table"] = function (root) {
+    var pageSize = parseInt(root.getAttribute("data-page-size") || "5", 10);
+    var tbody = root.querySelector(".mui-data-table__body");
+    var info = root.querySelector(".mui-data-table__info");
+    var prevBtn = root.querySelector('[data-action="prev"]');
+    var nextBtn = root.querySelector('[data-action="next"]');
+    var searchInput = root.querySelector(".mui-data-table__search");
+    var headers = root.querySelectorAll(".mui-data-table__th");
+
+    if (!tbody) return;
+
+    // Read all rows from the DOM at init
+    var allRowEls = tbody.querySelectorAll("tr[data-row-data]");
+    var allRows = [];
+    for (var i = 0; i < allRowEls.length; i++) {
+      var raw = allRowEls[i].getAttribute("data-row-data");
+      try {
+        allRows.push(JSON.parse(raw));
+      } catch (e) {
+        allRows.push([]);
+      }
+    }
+
+    var filteredRows = allRows.slice();
+    var currentPage = 0;
+    var sortKey = -1;
+    var sortDir = ""; // "", "asc", "desc"
+
+    function renderPage() {
+      var total = filteredRows.length;
+      var totalPages = Math.max(1, Math.ceil(total / pageSize));
+      if (currentPage >= totalPages) currentPage = totalPages - 1;
+      if (currentPage < 0) currentPage = 0;
+
+      var start = currentPage * pageSize;
+      var end = Math.min(start + pageSize, total);
+      var pageRows = filteredRows.slice(start, end);
+
+      // Build tbody HTML
+      var html = "";
+      for (var i = 0; i < pageRows.length; i++) {
+        var row = pageRows[i];
+        var rowJson = JSON.stringify(row).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        html += '<tr class="mui-table__row" data-row-data="' + rowJson + '">';
+        for (var j = 0; j < row.length; j++) {
+          html += '<td class="mui-table__td">' + escapeHtml(row[j]) + "</td>";
+        }
+        html += "</tr>";
+      }
+      tbody.innerHTML = html;
+
+      // Update info
+      if (info) {
+        if (total === 0) {
+          info.textContent = "No results";
+        } else {
+          info.textContent = "Showing " + (start + 1) + "-" + end + " of " + total;
+        }
+      }
+
+      // Update button states
+      if (prevBtn) prevBtn.disabled = currentPage === 0;
+      if (nextBtn) nextBtn.disabled = end >= total;
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement("div");
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    function applyFilter(query) {
+      var q = query.toLowerCase().trim();
+      if (q === "") {
+        filteredRows = sortRows(allRows.slice());
+      } else {
+        var matched = [];
+        for (var i = 0; i < allRows.length; i++) {
+          var row = allRows[i];
+          var found = false;
+          for (var j = 0; j < row.length; j++) {
+            if (row[j].toLowerCase().indexOf(q) !== -1) {
+              found = true;
+              break;
+            }
+          }
+          if (found) matched.push(row);
+        }
+        filteredRows = sortRows(matched);
+      }
+      currentPage = 0;
+      renderPage();
+    }
+
+    function sortRows(rows) {
+      if (sortKey < 0 || sortDir === "") return rows;
+      var col = sortKey;
+      var dir = sortDir === "asc" ? 1 : -1;
+      rows.sort(function (a, b) {
+        var va = a[col] || "";
+        var vb = b[col] || "";
+        // Try numeric comparison for values like $250.00
+        var na = parseFloat(va.replace(/[^0-9.\-]/g, ""));
+        var nb = parseFloat(vb.replace(/[^0-9.\-]/g, ""));
+        if (!isNaN(na) && !isNaN(nb)) {
+          return (na - nb) * dir;
+        }
+        return va.localeCompare(vb) * dir;
+      });
+      return rows;
+    }
+
+    function handleSort(colIndex) {
+      if (sortKey === colIndex) {
+        // Cycle: asc -> desc -> none
+        if (sortDir === "asc") {
+          sortDir = "desc";
+        } else if (sortDir === "desc") {
+          sortDir = "";
+          sortKey = -1;
+        }
+      } else {
+        sortKey = colIndex;
+        sortDir = "asc";
+      }
+
+      // Update header indicators
+      for (var i = 0; i < headers.length; i++) {
+        headers[i].removeAttribute("data-sort-dir");
+        var icon = headers[i].querySelector(".mui-data-table__sort-icon");
+        if (icon) icon.innerHTML = "&#8693;";
+      }
+      if (sortDir !== "" && colIndex >= 0 && colIndex < headers.length) {
+        headers[colIndex].setAttribute("data-sort-dir", sortDir);
+        var activeIcon = headers[colIndex].querySelector(".mui-data-table__sort-icon");
+        if (activeIcon) {
+          activeIcon.innerHTML = sortDir === "asc" ? "&#9650;" : "&#9660;";
+        }
+      }
+
+      // Re-apply filter with new sort
+      var query = searchInput ? searchInput.value : "";
+      applyFilter(query);
+    }
+
+    // Bind header clicks
+    for (var h = 0; h < headers.length; h++) {
+      if (headers[h].getAttribute("data-sortable") === "true") {
+        (function (idx) {
+          headers[idx].addEventListener("click", function () {
+            handleSort(idx);
+          });
+        })(h);
+      }
+    }
+
+    // Bind search
+    if (searchInput) {
+      searchInput.addEventListener("input", function () {
+        applyFilter(searchInput.value);
+      });
+    }
+
+    // Bind pagination
+    if (prevBtn) {
+      prevBtn.addEventListener("click", function () {
+        if (currentPage > 0) {
+          currentPage--;
+          renderPage();
+        }
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", function () {
+        var total = filteredRows.length;
+        var totalPages = Math.ceil(total / pageSize);
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          renderPage();
+        }
+      });
+    }
+
+    // Initial render (JS takes over from server-rendered rows)
+    renderPage();
+  };
+
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
 // --- date_picker.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
@@ -1800,6 +1994,211 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
+// --- navigation_menu.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["nav-menu"] = function (root) {
+    var items = root.querySelectorAll(".mui-nav-menu__item[data-has-content]");
+    var triggers = [];
+    var contents = [];
+    var activeIndex = -1;
+
+    for (var i = 0; i < items.length; i++) {
+      var trigger = items[i].querySelector(".mui-nav-menu__trigger");
+      var content = items[i].querySelector(".mui-nav-menu__content");
+      if (trigger && content) {
+        triggers.push(trigger);
+        contents.push(content);
+      }
+    }
+
+    if (triggers.length === 0) return;
+
+    function isAnyOpen() {
+      return activeIndex >= 0;
+    }
+
+    function openMenu(index) {
+      if (activeIndex >= 0 && activeIndex !== index) {
+        closeMenu(activeIndex);
+      }
+      activeIndex = index;
+      triggers[index].setAttribute("aria-expanded", "true");
+      contents[index].removeAttribute("hidden");
+
+      // Focus first link in the panel
+      var firstLink = contents[index].querySelector(".mui-nav-menu__sub-link");
+      if (firstLink) {
+        firstLink.focus();
+      }
+
+      document.addEventListener("click", handleClickOutside, true);
+      document.addEventListener("keydown", handleGlobalKeydown, true);
+    }
+
+    function closeMenu(index) {
+      if (index < 0 || index >= triggers.length) return;
+      triggers[index].setAttribute("aria-expanded", "false");
+      contents[index].setAttribute("hidden", "");
+    }
+
+    function closeAll() {
+      for (var i = 0; i < triggers.length; i++) {
+        closeMenu(i);
+      }
+      activeIndex = -1;
+      document.removeEventListener("click", handleClickOutside, true);
+      document.removeEventListener("keydown", handleGlobalKeydown, true);
+    }
+
+    function getLinks(index) {
+      return contents[index].querySelectorAll(".mui-nav-menu__sub-link");
+    }
+
+    function getFocusedLinkIndex(menuIndex) {
+      var links = getLinks(menuIndex);
+      var focused = document.activeElement;
+      for (var i = 0; i < links.length; i++) {
+        if (links[i] === focused) return i;
+      }
+      return -1;
+    }
+
+    function focusLink(menuIndex, linkIndex) {
+      var links = getLinks(menuIndex);
+      if (linkIndex >= 0 && linkIndex < links.length) {
+        links[linkIndex].focus();
+      }
+    }
+
+    // --- Event Handlers ---
+
+    function handleClickOutside(e) {
+      if (!root.contains(e.target)) {
+        closeAll();
+      }
+    }
+
+    function handleGlobalKeydown(e) {
+      if (!isAnyOpen()) return;
+
+      var links = getLinks(activeIndex);
+      var focusedIdx = getFocusedLinkIndex(activeIndex);
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (links.length > 0) {
+            var next = focusedIdx < 0 ? 0 : (focusedIdx + 1) % links.length;
+            focusLink(activeIndex, next);
+          }
+          break;
+
+        case "ArrowUp":
+          e.preventDefault();
+          if (links.length > 0) {
+            var prev = focusedIdx <= 0 ? links.length - 1 : focusedIdx - 1;
+            focusLink(activeIndex, prev);
+          }
+          break;
+
+        case "ArrowRight":
+          e.preventDefault();
+          if (triggers.length > 1) {
+            var nextMenu = (activeIndex + 1) % triggers.length;
+            openMenu(nextMenu);
+          }
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          if (triggers.length > 1) {
+            var prevMenu =
+              (activeIndex - 1 + triggers.length) % triggers.length;
+            openMenu(prevMenu);
+          }
+          break;
+
+        case "Escape":
+          e.preventDefault();
+          var returnTo = activeIndex;
+          closeAll();
+          if (returnTo >= 0 && returnTo < triggers.length) {
+            triggers[returnTo].focus();
+          }
+          break;
+
+        case "Tab":
+          closeAll();
+          break;
+      }
+    }
+
+    // Click on trigger: toggle that menu
+    for (var t = 0; t < triggers.length; t++) {
+      (function (idx) {
+        triggers[idx].addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (activeIndex === idx) {
+            closeAll();
+            triggers[idx].focus();
+          } else {
+            openMenu(idx);
+          }
+        });
+
+        // Hover while another menu is open: switch to this menu
+        triggers[idx].addEventListener("mouseenter", function () {
+          if (isAnyOpen() && activeIndex !== idx) {
+            openMenu(idx);
+          }
+        });
+      })(t);
+    }
+
+    // Keyboard on triggers when no menu is open
+    root.addEventListener("keydown", function (e) {
+      if (isAnyOpen()) return;
+
+      var focused = document.activeElement;
+      var currentIdx = -1;
+      for (var i = 0; i < triggers.length; i++) {
+        if (triggers[i] === focused) {
+          currentIdx = i;
+          break;
+        }
+      }
+      if (currentIdx < 0) return;
+
+      switch (e.key) {
+        case "ArrowRight":
+          e.preventDefault();
+          var nextIdx = (currentIdx + 1) % triggers.length;
+          triggers[nextIdx].focus();
+          break;
+
+        case "ArrowLeft":
+          e.preventDefault();
+          var prevIdx =
+            (currentIdx - 1 + triggers.length) % triggers.length;
+          triggers[prevIdx].focus();
+          break;
+
+        case "ArrowDown":
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          openMenu(currentIdx);
+          break;
+      }
+    });
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
 // --- number_field.js ---
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
@@ -1889,6 +2288,164 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
 
     trigger.addEventListener("click", toggle);
+  };
+
+  // Re-init in case DOMContentLoaded already fired
+  if (window.MaudUI.init) window.MaudUI.init();
+})();
+
+// --- resizable.js ---
+(function () {
+  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+
+  window.MaudUI.behaviors["resizable"] = function (root) {
+    var handles = root.querySelectorAll(".mui-resizable__handle");
+    var panels = root.querySelectorAll(".mui-resizable__panel");
+    var direction = root.getAttribute("data-direction") || "horizontal";
+    var isHorizontal = direction === "horizontal";
+
+    if (handles.length === 0 || panels.length < 2) return;
+
+    function getTotalSize() {
+      var rect = root.getBoundingClientRect();
+      return isHorizontal ? rect.width : rect.height;
+    }
+
+    function getPanelSizes() {
+      var sizes = [];
+      for (var i = 0; i < panels.length; i++) {
+        var rect = panels[i].getBoundingClientRect();
+        sizes.push(isHorizontal ? rect.width : rect.height);
+      }
+      return sizes;
+    }
+
+    function getMinSize(panel) {
+      var min = parseFloat(panel.getAttribute("data-min-size") || "10");
+      // Convert percentage to pixels
+      return (min / 100) * getTotalSize();
+    }
+
+    function applyFlexValues(sizes) {
+      var total = 0;
+      for (var i = 0; i < sizes.length; i++) {
+        total += sizes[i];
+      }
+      for (var i = 0; i < panels.length; i++) {
+        var pct = (sizes[i] / total) * 100;
+        panels[i].style.flex = pct + " 1 0%";
+      }
+      // Update aria-valuenow on handles
+      for (var h = 0; h < handles.length; h++) {
+        var leftSize = sizes[h];
+        var leftPct = ((leftSize / total) * 100).toFixed(1);
+        handles[h].setAttribute("aria-valuenow", leftPct);
+      }
+    }
+
+    // Mouse drag
+    for (var h = 0; h < handles.length; h++) {
+      (function (handleIndex) {
+        var handle = handles[handleIndex];
+        var panelA = panels[handleIndex];
+        var panelB = panels[handleIndex + 1];
+
+        handle.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+          root.setAttribute("data-dragging", "");
+
+          var sizes = getPanelSizes();
+          var startPos = isHorizontal ? e.clientX : e.clientY;
+          var startA = sizes[handleIndex];
+          var startB = sizes[handleIndex + 1];
+          var minA = getMinSize(panelA);
+          var minB = getMinSize(panelB);
+
+          function onMove(e) {
+            var currentPos = isHorizontal ? e.clientX : e.clientY;
+            var delta = currentPos - startPos;
+
+            var newA = startA + delta;
+            var newB = startB - delta;
+
+            // Enforce min sizes
+            if (newA < minA) {
+              newA = minA;
+              newB = startA + startB - minA;
+            }
+            if (newB < minB) {
+              newB = minB;
+              newA = startA + startB - minB;
+            }
+
+            sizes[handleIndex] = newA;
+            sizes[handleIndex + 1] = newB;
+            applyFlexValues(sizes);
+          }
+
+          function onUp() {
+            root.removeAttribute("data-dragging");
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+          }
+
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("mouseup", onUp, { once: true });
+        });
+
+        // Keyboard: arrow keys to resize
+        handle.addEventListener("keydown", function (e) {
+          var step = getTotalSize() * 0.02; // 2% per keypress
+          var sizes = getPanelSizes();
+          var minA = getMinSize(panelA);
+          var minB = getMinSize(panelB);
+          var delta = 0;
+
+          var growKey = isHorizontal ? "ArrowRight" : "ArrowDown";
+          var shrinkKey = isHorizontal ? "ArrowLeft" : "ArrowUp";
+
+          if (e.key === growKey) {
+            e.preventDefault();
+            delta = step;
+          } else if (e.key === shrinkKey) {
+            e.preventDefault();
+            delta = -step;
+          } else if (e.key === "Home") {
+            e.preventDefault();
+            delta = -(sizes[handleIndex] - minA);
+          } else if (e.key === "End") {
+            e.preventDefault();
+            delta = sizes[handleIndex + 1] - minB;
+          } else {
+            return;
+          }
+
+          var newA = sizes[handleIndex] + delta;
+          var newB = sizes[handleIndex + 1] - delta;
+
+          if (newA < minA) {
+            newA = minA;
+            newB = sizes[handleIndex] + sizes[handleIndex + 1] - minA;
+          }
+          if (newB < minB) {
+            newB = minB;
+            newA = sizes[handleIndex] + sizes[handleIndex + 1] - minB;
+          }
+
+          sizes[handleIndex] = newA;
+          sizes[handleIndex + 1] = newB;
+          applyFlexValues(sizes);
+        });
+
+        // Double-click to reset to equal sizes
+        handle.addEventListener("dblclick", function () {
+          var equalSize = 100 / panels.length;
+          for (var i = 0; i < panels.length; i++) {
+            panels[i].style.flex = equalSize + " 1 0%";
+          }
+        });
+      })(h);
+    }
   };
 
   // Re-init in case DOMContentLoaded already fired

@@ -1,0 +1,121 @@
+/* ── Resizable ────────────────────────────────────────────────────────── */
+
+.mui-resizable {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+}
+
+.mui-resizable--horizontal {
+  flex-direction: row;
+  min-height: 12rem;
+}
+
+.mui-resizable--vertical {
+  flex-direction: column;
+  min-height: 20rem;
+}
+
+/* ── Panels ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ── Handle ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-resizable--horizontal > .mui-resizable__handle {
+  width: 4px;
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical > .mui-resizable__handle {
+  height: 4px;
+  cursor: row-resize;
+}
+
+.mui-resizable__handle:hover,
+.mui-resizable__handle:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-resizable__handle:active {
+  background: var(--mui-border-focus);
+}
+
+/* ── Handle bar (grab indicator) ─────────────────────────────────────── */
+
+.mui-resizable__handle-bar {
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-border);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-resizable--horizontal .mui-resizable__handle-bar {
+  width: 2px;
+  height: 1.5rem;
+}
+
+.mui-resizable--vertical .mui-resizable__handle-bar {
+  height: 2px;
+  width: 1.5rem;
+}
+
+.mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background: var(--mui-text-muted);
+}
+
+.mui-resizable__handle:active .mui-resizable__handle-bar {
+  background: var(--mui-text);
+}
+
+/* ── Dragging state (applied by JS) ──────────────────────────────────── */
+
+.mui-resizable[data-dragging] {
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical[data-dragging] {
+  cursor: row-resize;
+}
+
+.mui-resizable[data-dragging] .mui-resizable__panel {
+  pointer-events: none;
+}
+
+/* ── Demo content (showcase only) ────────────────────────────────────── */
+
+.mui-resizable__demo-content {
+  padding: 1rem;
+}
+
+.mui-resizable__demo-content h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mui-text);
+}
+
+.mui-resizable__demo-content p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+}

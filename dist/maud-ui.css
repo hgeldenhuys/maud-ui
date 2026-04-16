@@ -1262,6 +1262,53 @@ dialog.mui-alert-dialog::backdrop {
   outline-offset: 2px;
 }
 
+/* --- chart.css --- */
+/* Chart component — inline SVG bar and line charts */
+
+.mui-chart {
+  display: inline-block;
+}
+
+.mui-chart__title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+  color: var(--mui-text);
+}
+
+.mui-chart__svg {
+  color: var(--mui-text);
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.mui-chart__label {
+  font-size: 0.625rem;
+  fill: var(--mui-text-muted);
+}
+
+.mui-chart__value {
+  font-size: 0.5rem;
+  fill: var(--mui-text-muted);
+}
+
+/* Bar hover effect */
+.mui-chart rect {
+  transition: opacity 0.2s ease;
+}
+.mui-chart rect:hover {
+  opacity: 1;
+}
+
+/* Line chart dot hover */
+.mui-chart circle {
+  transition: r 0.15s ease;
+}
+.mui-chart circle:hover {
+  r: 5;
+}
+
 /* --- checkbox.css --- */
 /* Checkbox component — shadcn/ui-grade styling */
 
@@ -1820,6 +1867,119 @@ dialog.mui-command::backdrop {
 
 /* Context menu reuses .mui-menu__item, .mui-menu__separator,
    .mui-menu__shortcut, and .mui-menu__item--danger from menu.css */
+
+/* --- data_table.css --- */
+/* Data Table component — toolbar, sort indicators, footer/pagination */
+
+.mui-data-table {
+  width: 100%;
+}
+
+/* Toolbar — search input above table */
+.mui-data-table__toolbar {
+  margin-bottom: 0.75rem;
+}
+
+.mui-data-table__search {
+  max-width: 20rem;
+}
+
+/* Wrapper — inherits table-wrapper overflow behavior */
+.mui-data-table__wrapper {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+}
+
+/* Sortable header cells */
+.mui-data-table__th[data-sortable="true"] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-data-table__th[data-sortable="true"]:hover {
+  color: var(--mui-text);
+}
+
+/* Sort icon — inline, muted by default */
+.mui-data-table__sort-icon {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--mui-text-subtle);
+  vertical-align: middle;
+  transition: color var(--mui-transition);
+}
+
+.mui-data-table__th[data-sortable="true"]:hover .mui-data-table__sort-icon {
+  color: var(--mui-text-muted);
+}
+
+/* Active sort direction indicators (set by JS) */
+.mui-data-table__th[data-sort-dir="asc"] .mui-data-table__sort-icon,
+.mui-data-table__th[data-sort-dir="desc"] .mui-data-table__sort-icon {
+  color: var(--mui-text);
+}
+
+/* Footer — info text + pagination buttons */
+.mui-data-table__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0 0;
+  font-size: 0.875rem;
+}
+
+.mui-data-table__info {
+  color: var(--mui-text-muted);
+}
+
+/* Pagination buttons */
+.mui-data-table__pagination {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mui-data-table__page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  font-family: var(--mui-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  background: transparent;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mui-data-table__page-btn:hover:not(:disabled) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-data-table__page-btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-data-table__page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 /* --- date_picker.css --- */
 /* DatePicker component — date input with calendar dropdown */
@@ -3145,6 +3305,159 @@ dialog.mui-drawer--bottom {
   opacity: 0.7;
 }
 
+/* --- navigation_menu.css --- */
+/* ── Navigation Menu ──────────────────────────────────────────────────── */
+
+.mui-nav-menu {
+  position: relative;
+}
+
+.mui-nav-menu__list {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+}
+
+/* ── Direct links ────────────────────────────────────────────────────── */
+
+.mui-nav-menu__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-nav-menu__link:hover,
+.mui-nav-menu__link:focus-visible {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  outline: none;
+}
+
+/* ── Trigger buttons ─────────────────────────────────────────────────── */
+
+.mui-nav-menu__item {
+  position: relative;
+}
+
+.mui-nav-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  border-radius: var(--mui-radius-sm);
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-nav-menu__trigger:hover,
+.mui-nav-menu__trigger:focus-visible {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  outline: none;
+}
+
+.mui-nav-menu__trigger[aria-expanded="true"] {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+/* ── Dropdown content panel ──────────────────────────────────────────── */
+
+.mui-nav-menu__content {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  min-width: 16rem;
+  width: max-content;
+  max-width: 36rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 0.5rem;
+  z-index: 50;
+  animation: mui-nav-menu-in 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-nav-menu__content[hidden] {
+  display: none;
+}
+
+@keyframes mui-nav-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Sub-list (link grid) ────────────────────────────────────────────── */
+
+.mui-nav-menu__sub-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mui-nav-menu__sub-link {
+  display: block;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--mui-radius-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-nav-menu__sub-link:hover,
+.mui-nav-menu__sub-link:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-nav-menu__sub-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--mui-text);
+}
+
+.mui-nav-menu__sub-desc {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--mui-text-muted);
+  margin-top: 0.125rem;
+}
+
 /* --- number_field.css --- */
 /* Number field component — [minus] [input] [plus] as one cohesive control */
 
@@ -3700,6 +4013,129 @@ dialog.mui-drawer--bottom {
   display: flex;
   flex-direction: column;
   gap: 0;
+}
+
+/* --- resizable.css --- */
+/* ── Resizable ────────────────────────────────────────────────────────── */
+
+.mui-resizable {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+}
+
+.mui-resizable--horizontal {
+  flex-direction: row;
+  min-height: 12rem;
+}
+
+.mui-resizable--vertical {
+  flex-direction: column;
+  min-height: 20rem;
+}
+
+/* ── Panels ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ── Handle ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-resizable--horizontal > .mui-resizable__handle {
+  width: 4px;
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical > .mui-resizable__handle {
+  height: 4px;
+  cursor: row-resize;
+}
+
+.mui-resizable__handle:hover,
+.mui-resizable__handle:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-resizable__handle:active {
+  background: var(--mui-border-focus);
+}
+
+/* ── Handle bar (grab indicator) ─────────────────────────────────────── */
+
+.mui-resizable__handle-bar {
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-border);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-resizable--horizontal .mui-resizable__handle-bar {
+  width: 2px;
+  height: 1.5rem;
+}
+
+.mui-resizable--vertical .mui-resizable__handle-bar {
+  height: 2px;
+  width: 1.5rem;
+}
+
+.mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background: var(--mui-text-muted);
+}
+
+.mui-resizable__handle:active .mui-resizable__handle-bar {
+  background: var(--mui-text);
+}
+
+/* ── Dragging state (applied by JS) ──────────────────────────────────── */
+
+.mui-resizable[data-dragging] {
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical[data-dragging] {
+  cursor: row-resize;
+}
+
+.mui-resizable[data-dragging] .mui-resizable__panel {
+  pointer-events: none;
+}
+
+/* ── Demo content (showcase only) ────────────────────────────────────── */
+
+.mui-resizable__demo-content {
+  padding: 1rem;
+}
+
+.mui-resizable__demo-content h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mui-text);
+}
+
+.mui-resizable__demo-content p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
 }
 
 /* --- scroll_area.css --- */

@@ -1,30 +1,39 @@
+/* EmptyState component — polished empty/blank-slate placeholder */
+
 .mui-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 3rem 2rem;
 }
 
 .mui-empty-state__icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mui-text-subtle);
+  opacity: 0.6;
+  line-height: 1;
 }
 
 .mui-empty-state__title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
-  color: var(--mui-text-primary, #000);
+  margin: 0 0 0.5rem 0;
+  color: var(--mui-text);
 }
 
 .mui-empty-state__description {
   font-size: 0.875rem;
-  color: var(--mui-text-muted, #666);
-  margin: 0 0 1rem 0;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.5;
+  color: var(--mui-text-muted);
+  margin: 0;
+  max-width: 20rem;
 }
 
 .mui-empty-state__action {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }

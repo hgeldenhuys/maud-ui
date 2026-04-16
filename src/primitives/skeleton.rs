@@ -88,21 +88,91 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // Circle skeleton
+            // Circle + text combo (user row)
             div {
-                p.mui-showcase__caption { "Avatar" }
-                div.mui-showcase__row {
+                p.mui-showcase__caption { "User row" }
+                div.mui-showcase__row style="gap:0.75rem" {
                     (render(Props {
                         variant: Variant::Circle,
-                        width: Some("3rem".into()),
-                        height: Some("3rem".into()),
+                        width: Some("2.5rem".into()),
+                        height: Some("2.5rem".into()),
                     }))
+                    div.mui-showcase__column style="flex:1;gap:0.375rem" {
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("40%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("25%".into()),
+                            height: Some("0.75rem".into()),
+                        }))
+                    }
                 }
             }
 
-            // Rect skeleton
+            // Card skeleton (composite)
             div {
-                p.mui-showcase__caption { "Card" }
+                p.mui-showcase__caption { "Card skeleton" }
+                div class="mui-skeleton-card" style="max-width:320px" {
+                    // Header: avatar + title
+                    div class="mui-skeleton-card__header" {
+                        (render(Props {
+                            variant: Variant::Circle,
+                            width: Some("2rem".into()),
+                            height: Some("2rem".into()),
+                        }))
+                        div.mui-showcase__column style="flex:1;gap:0.25rem" {
+                            (render(Props {
+                                variant: Variant::Text,
+                                width: Some("50%".into()),
+                                height: Some("0.75rem".into()),
+                            }))
+                            (render(Props {
+                                variant: Variant::Text,
+                                width: Some("30%".into()),
+                                height: Some("0.625rem".into()),
+                            }))
+                        }
+                    }
+                    // Body: content lines
+                    div class="mui-skeleton-card__body" {
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("100%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("90%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("70%".into()),
+                            height: None,
+                        }))
+                    }
+                    // Footer: button placeholders
+                    div class="mui-skeleton-card__footer" {
+                        (render(Props {
+                            variant: Variant::Rect,
+                            width: Some("5rem".into()),
+                            height: Some("2rem".into()),
+                        }))
+                        (render(Props {
+                            variant: Variant::Rect,
+                            width: Some("5rem".into()),
+                            height: Some("2rem".into()),
+                        }))
+                    }
+                }
+            }
+
+            // Image placeholder
+            div {
+                p.mui-showcase__caption { "Image placeholder" }
                 div.mui-showcase__row {
                     (render(Props {
                         variant: Variant::Rect,

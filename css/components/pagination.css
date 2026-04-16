@@ -4,80 +4,120 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
   width: 100%;
 }
 
+/* Prev / Next buttons — outline style, matching button --outline */
 .mui-pagination__btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  height: 2.5rem;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  font-family: var(--mui-font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;
-  border: none;
+  border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .mui-pagination__btn:hover:not(:disabled) {
-  background-color: var(--mui-bg-input);
-  color: var(--mui-text);
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-pagination__btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 .mui-pagination__btn:disabled {
-  color: var(--mui-text-muted);
-  cursor: not-allowed;
   opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
+/* Arrow icons inside prev/next */
+.mui-pagination__btn-icon {
+  display: inline-flex;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.mui-pagination__btn-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Page number container */
 .mui-pagination__pages {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
+/* Individual page buttons — ghost style by default */
 .mui-pagination__page {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-family: var(--mui-font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--mui-radius-md);
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.mui-pagination__page:hover {
-  background-color: var(--mui-bg-input);
+.mui-pagination__page:hover:not([aria-current="page"]) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border);
 }
 
+.mui-pagination__page:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Active page — solid accent background */
 .mui-pagination__page[aria-current="page"] {
-  background-color: var(--mui-accent);
-  color: white;
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
   cursor: default;
 }
 
-.mui-pagination__page[aria-current="page"]:hover {
-  background-color: var(--mui-accent);
-}
-
+/* Ellipsis */
 .mui-pagination__ellipsis {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
   font-size: 0.875rem;
   color: var(--mui-text-muted);
+  letter-spacing: 0.1em;
   user-select: none;
 }

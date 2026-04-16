@@ -63,32 +63,52 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Default with all elements
+            // No results
             div {
-                p.mui-showcase__caption { "With description & action" }
-                (render(
-                    Props::new("No results found")
-                        .with_description("Try adjusting your search or filters")
-                        .with_action(html! {
-                            button.mui-button.mui-button--default { "Clear filters" }
-                        })
-                ))
+                p.mui-showcase__caption { "No results" }
+                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                    (render(
+                        Props::new("No results found")
+                            .with_icon("\u{1F50D}")
+                            .with_description("Try adjusting your search query or removing some filters to find what you're looking for.")
+                            .with_action(html! {
+                                button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Clear filters" }
+                            })
+                    ))
+                }
+            }
+
+            // Empty inbox
+            div {
+                p.mui-showcase__caption { "Empty inbox" }
+                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                    (render(
+                        Props::new("Your inbox is empty")
+                            .with_icon("\u{2709}\u{FE0F}")
+                            .with_description("Messages you receive will appear here.")
+                    ))
+                }
+            }
+
+            // First-run / onboarding
+            div {
+                p.mui-showcase__caption { "First run" }
+                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                    (render(
+                        Props::new("Create your first project")
+                            .with_icon("\u{1F680}")
+                            .with_description("Projects help you organize your work and collaborate with your team.")
+                            .with_action(html! {
+                                button type="button" class="mui-btn mui-btn--default mui-btn--md" { "New project" }
+                            })
+                    ))
+                }
             }
 
             // Minimal
             div {
                 p.mui-showcase__caption { "Minimal" }
                 (render(Props::new("Nothing here yet")))
-            }
-
-            // Custom icon
-            div {
-                p.mui-showcase__caption { "Custom icon" }
-                (render(
-                    Props::new("No items")
-                        .with_icon("🎯")
-                        .with_description("Create your first item to get started")
-                ))
             }
         }
     }

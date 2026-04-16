@@ -11,6 +11,9 @@ dialog.mui-drawer {
   width: 85vw;
   height: 100vh;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 dialog.mui-drawer::backdrop {
@@ -174,9 +177,18 @@ dialog.mui-drawer--bottom {
 .mui-drawer__body {
   padding: 1.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 6rem);
+  flex: 1;
 }
 
 .mui-drawer__body > *:last-child {
   margin-bottom: 0;
+}
+
+/* Footer for action buttons pinned at bottom */
+.mui-drawer__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--mui-border);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
 }

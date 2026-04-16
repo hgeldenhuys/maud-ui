@@ -121,78 +121,80 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Right drawer (default)
-            {
-                (trigger("demo-drawer-1", "Open drawer (right)"))
+            section {
+                h2 { "Right (default)" }
+                div.mui-showcase__row {
+                    (trigger("demo-drawer-1", "Open drawer"))
+                }
             }
-            {
-                (render(Props {
-                    id: "demo-drawer-1".to_string(),
-                    title: "Settings".to_string(),
-                    description: Some("Adjust your preferences here.".to_string()),
-                    children: html! {
-                        div class="mui-field" {
-                            label class="mui-label" { "Theme" }
-                            select class="mui-input" {
-                                option { "Light" }
-                                option { "Dark" }
-                                option { "Auto" }
-                            }
+            (render(Props {
+                id: "demo-drawer-1".to_string(),
+                title: "Settings".to_string(),
+                description: Some("Adjust your preferences here.".to_string()),
+                children: html! {
+                    div class="mui-field" {
+                        label class="mui-label" for="demo-theme" { "Theme" }
+                        select class="mui-input" id="demo-theme" {
+                            option { "Light" }
+                            option { "Dark" }
+                            option { "Auto" }
                         }
-                        div class="mui-field" {
-                            label class="mui-label" { "Notifications" }
-                            input class="mui-input" type="checkbox" {}
-                        }
-                        div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
-                            button class="mui-btn mui-btn--primary" { "Save" }
-                            button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
-                        }
-                    },
-                    side: Side::Right,
-                }))
+                    }
+                    div class="mui-field" {
+                        label class="mui-label" for="demo-notify" { "Notifications" }
+                        input class="mui-input" id="demo-notify" type="checkbox" {}
+                    }
+                    div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
+                        button class="mui-btn mui-btn--primary" { "Save" }
+                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
+                    }
+                },
+                side: Side::Right,
+            }))
+
+            section {
+                h2 { "Left (navigation)" }
+                div.mui-showcase__row {
+                    (trigger("demo-drawer-2", "Open drawer"))
+                }
             }
-            // Left drawer
-            {
-                (trigger("demo-drawer-2", "Open drawer (left)"))
+            (render(Props {
+                id: "demo-drawer-2".to_string(),
+                title: "Navigation".to_string(),
+                description: None,
+                children: html! {
+                    nav style="display: flex; flex-direction: column; gap: 0.5rem;" {
+                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Home" }
+                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Products" }
+                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Docs" }
+                        a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Contact" }
+                    }
+                },
+                side: Side::Left,
+            }))
+
+            section {
+                h2 { "Bottom (sheet with grab handle)" }
+                div.mui-showcase__row {
+                    (trigger("demo-drawer-3", "Open drawer"))
+                }
             }
-            {
-                (render(Props {
-                    id: "demo-drawer-2".to_string(),
-                    title: "Navigation".to_string(),
-                    description: None,
-                    children: html! {
-                        nav style="display: flex; flex-direction: column; gap: 0.5rem;" {
-                            a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Home" }
-                            a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Products" }
-                            a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Docs" }
-                            a class="mui-btn mui-btn--secondary" style="justify-content: flex-start;" href="#" { "Contact" }
-                        }
-                    },
-                    side: Side::Left,
-                }))
-            }
-            // Bottom drawer (sheet style with grab handle)
-            {
-                (trigger("demo-drawer-3", "Open drawer (bottom)"))
-            }
-            {
-                (render(Props {
-                    id: "demo-drawer-3".to_string(),
-                    title: "Share".to_string(),
-                    description: Some("Share this document with others.".to_string()),
-                    children: html! {
-                        div class="mui-field" {
-                            label class="mui-label" { "Email" }
-                            input class="mui-input" type="email" placeholder="friend@example.com" {}
-                        }
-                        div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
-                            button class="mui-btn mui-btn--primary" { "Send invite" }
-                            button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
-                        }
-                    },
-                    side: Side::Bottom,
-                }))
-            }
+            (render(Props {
+                id: "demo-drawer-3".to_string(),
+                title: "Share".to_string(),
+                description: Some("Share this document with others.".to_string()),
+                children: html! {
+                    div class="mui-field" {
+                        label class="mui-label" for="demo-email" { "Email" }
+                        input class="mui-input" id="demo-email" type="email" placeholder="friend@example.com" {}
+                    }
+                    div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
+                        button class="mui-btn mui-btn--primary" { "Send invite" }
+                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
+                    }
+                },
+                side: Side::Bottom,
+            }))
         }
     }
 }

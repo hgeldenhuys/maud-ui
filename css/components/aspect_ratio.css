@@ -1,6 +1,8 @@
 .mui-aspect-ratio {
   position: relative;
   width: 100%;
+  overflow: hidden;
+  border-radius: var(--mui-radius-md);
 }
 
 .mui-aspect-ratio::before {
@@ -15,4 +17,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Images inside aspect ratio get proper sizing */
+.mui-aspect-ratio > img {
+  display: block;
 }

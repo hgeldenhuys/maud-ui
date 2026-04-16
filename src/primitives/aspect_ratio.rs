@@ -56,40 +56,50 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // 16:9 ratio
-            div {
-                p.mui-showcase__caption { "16:9 (video)" }
-                (render(Props::video(
-                    html! {
-                        div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;" {
-                            "16:9 (1.778)"
-                        }
+            section {
+                h2 { "Common ratios" }
+                div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;" {
+                    div {
+                        p.mui-showcase__caption { "16:9" }
+                        (render(Props::video(
+                            html! {
+                                div style="background: linear-gradient(135deg, var(--mui-accent) 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                    "16:9"
+                                }
+                            }
+                        )))
                     }
-                )))
+                    div {
+                        p.mui-showcase__caption { "4:3" }
+                        (render(Props::four_by_three(
+                            html! {
+                                div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                    "4:3"
+                                }
+                            }
+                        )))
+                    }
+                    div {
+                        p.mui-showcase__caption { "1:1" }
+                        (render(Props::square(
+                            html! {
+                                div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                    "1:1"
+                                }
+                            }
+                        )))
+                    }
+                }
             }
-
-            // 1:1 square
-            div {
-                p.mui-showcase__caption { "1:1 (square)" }
-                (render(Props::square(
-                    html! {
-                        div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;" {
-                            "1:1"
+            section {
+                h2 { "With image" }
+                div style="max-width: 24rem;" {
+                    (render(Props::video(
+                        html! {
+                            img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80" alt="Minimalist white shapes" style="width: 100%; height: 100%; object-fit: cover;" {}
                         }
-                    }
-                )))
-            }
-
-            // 4:3 ratio
-            div {
-                p.mui-showcase__caption { "4:3 (photograph)" }
-                (render(Props::four_by_three(
-                    html! {
-                        div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;" {
-                            "4:3 (1.333)"
-                        }
-                    }
-                )))
+                    )))
+                }
             }
         }
     }

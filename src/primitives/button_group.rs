@@ -63,10 +63,10 @@ pub fn showcase() -> Markup {
         button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Bottom" }
     };
 
-    let buttons_mixed = html! {
-        button type="button" class="mui-btn mui-btn--primary mui-btn--md" { "Primary" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Outline 1" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Outline 2" }
+    let buttons_toggle = html! {
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-pressed="true" { "Bold" }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Italic" }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Underline" }
     };
 
     html! {
@@ -92,10 +92,10 @@ pub fn showcase() -> Markup {
                 }
             }
             section {
-                h2 { "Mixed variants" }
+                h2 { "Toggle group (active state)" }
                 div.mui-showcase__row {
                     (render(Props {
-                        children: buttons_mixed,
+                        children: buttons_toggle,
                         orientation: Orientation::Horizontal,
                         size: None,
                     }))

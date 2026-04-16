@@ -5,21 +5,21 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.4;
   }
 }
 
 .mui-skeleton {
   display: block;
-  background-color: var(--mui-bg-input);
+  background-color: var(--mui-border);
   animation: mui-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Text skeleton — resembles a line of text */
 .mui-skeleton--text {
-  height: 1rem;
+  height: 0.875rem;
   width: 100%;
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-sm);
 }
 
 /* Circle skeleton — avatar placeholder */
@@ -30,4 +30,34 @@
 /* Rect skeleton — card/image placeholder */
 .mui-skeleton--rect {
   border-radius: var(--mui-radius-md);
+}
+
+/* --- Skeleton composites (card-level placeholders) --- */
+
+.mui-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+}
+
+.mui-skeleton-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mui-skeleton-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mui-skeleton-card__footer {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
 }

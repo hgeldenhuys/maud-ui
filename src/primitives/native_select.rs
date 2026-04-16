@@ -1,5 +1,5 @@
-//! NativeSelect component.
-use maud::{html, Markup};
+//! NativeSelect component — styled native `<select>` matching Input appearance.
+use maud::{html, Markup, PreEscaped};
 
 pub struct NativeOption {
     pub value: String,
@@ -15,6 +15,9 @@ pub struct NativeSelectProps {
     pub disabled: bool,
     pub placeholder: Option<String>,
 }
+
+/// SVG chevron-down (lucide icon, 15x15)
+const CHEVRON_DOWN: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>"#;
 
 pub fn render(props: NativeSelectProps) -> Markup {
     html! {
@@ -37,7 +40,7 @@ pub fn render(props: NativeSelectProps) -> Markup {
                     }
                 }
             }
-            span.mui-native-select__chevron aria-hidden="true" { "▾" }
+            span.mui-native-select__chevron aria-hidden="true" { (PreEscaped(CHEVRON_DOWN)) }
         }
     }
 }

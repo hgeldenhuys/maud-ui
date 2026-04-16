@@ -52,4 +52,24 @@
 
 .mui-button-group > .mui-btn:focus-visible {
   z-index: 2;
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+/* Active button in group (e.g., selected state) */
+.mui-button-group > .mui-btn[aria-pressed="true"],
+.mui-button-group > .mui-btn.is-active {
+  z-index: 1;
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  border-color: var(--mui-accent);
+}
+
+/* Only child: restore full radius */
+.mui-button-group--horizontal > .mui-btn:only-child {
+  border-radius: var(--mui-radius-md);
+}
+
+.mui-button-group--vertical > .mui-btn:only-child {
+  border-radius: var(--mui-radius-md);
 }

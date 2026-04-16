@@ -54,29 +54,40 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Sizes" }
                 div.mui-showcase__row {
-                    (render(Props {
-                        size: Size::Sm,
-                        label: None,
-                    }))
-                    (render(Props {
-                        size: Size::Md,
-                        label: None,
-                    }))
-                    (render(Props {
-                        size: Size::Lg,
-                        label: None,
-                    }))
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                        (render(Props { size: Size::Sm, label: None }))
+                        span.mui-muted style="font-size:0.75rem" { "sm" }
+                    }
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                        (render(Props { size: Size::Md, label: None }))
+                        span.mui-muted style="font-size:0.75rem" { "md" }
+                    }
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                        (render(Props { size: Size::Lg, label: None }))
+                        span.mui-muted style="font-size:0.75rem" { "lg" }
+                    }
                 }
             }
 
-            // With label row
+            // Inline with text
             div {
-                p.mui-showcase__caption { "With label" }
+                p.mui-showcase__caption { "Inline with text" }
                 div.mui-showcase__row {
-                    (render(Props {
-                        size: Size::Md,
-                        label: Some("Saving...".into()),
-                    }))
+                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                        (render(Props { size: Size::Sm, label: Some("Loading".into()) }))
+                        "Loading..."
+                    }
+                }
+            }
+
+            // Inside a button
+            div {
+                p.mui-showcase__caption { "Button with spinner" }
+                div.mui-showcase__row {
+                    button type="button" class="mui-btn mui-btn--default mui-btn--md" disabled style="opacity:0.7;cursor:not-allowed" {
+                        (render(Props { size: Size::Sm, label: Some("Submitting".into()) }))
+                        "Submitting..."
+                    }
                 }
             }
         }

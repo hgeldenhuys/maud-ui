@@ -53,31 +53,35 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             div {
                 p.mui-showcase__caption { "Headings" }
-                div {
-                    (h1("Heading 1"))
-                    (h2("Heading 2"))
-                    (h3("Heading 3"))
-                    (h4("Heading 4"))
+                div.mui-showcase__column style="gap:0.5rem" {
+                    (h1("The quick brown fox"))
+                    (h2("The quick brown fox"))
+                    (h3("The quick brown fox"))
+                    (h4("The quick brown fox"))
                 }
             }
 
             div {
                 p.mui-showcase__caption { "Body text" }
-                div {
-                    (p("Paragraph text at standard size."))
-                    (lead("Lead text for introductions and emphasis."))
-                    (muted("Muted text for secondary information."))
+                div.mui-showcase__column style="gap:0.75rem" {
+                    (lead("A lead paragraph is great for intros. It's visually larger and lighter than body text, drawing the eye without shouting."))
+                    (p("Regular paragraph text. This is the standard body copy size used throughout the interface for readable content at comfortable line lengths."))
+                    (muted("Muted text for secondary information, timestamps, or helper copy."))
                 }
             }
 
             div {
-                p.mui-showcase__caption { "Code and quotes" }
-                div {
-                    p {
-                        "Use " (code_inline("code_inline")) " for keywords."
+                p.mui-showcase__caption { "Code" }
+                div.mui-showcase__column style="gap:0.75rem" {
+                    p.mui-p {
+                        "Install dependencies with " (code_inline("bun install")) " then run " (code_inline("bun dev")) " to start."
                     }
-                    (blockquote("A great blockquote can inspire action and reflection."))
                 }
+            }
+
+            div {
+                p.mui-showcase__caption { "Blockquote" }
+                (blockquote("Design is not just what it looks like and feels like. Design is how it works."))
             }
         }
     }

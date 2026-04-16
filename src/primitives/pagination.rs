@@ -1,5 +1,5 @@
 //! Pagination component — page navigation with prev/next and numbered pages.
-use maud::{html, Markup};
+use maud::{html, Markup, PreEscaped};
 
 /// Pagination rendering properties
 #[derive(Debug, Clone)]
@@ -21,6 +21,12 @@ impl Default for Props {
         }
     }
 }
+
+/// SVG chevron-left (lucide icon, 15x15)
+const CHEVRON_LEFT: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>"#;
+
+/// SVG chevron-right (lucide icon, 15x15)
+const CHEVRON_RIGHT: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>"#;
 
 impl Props {
     /// Determine which page numbers to display
@@ -65,14 +71,15 @@ pub fn render(props: Props) -> Markup {
                 class="mui-pagination__btn mui-pagination__btn--prev"
                 disabled[props.current_page == 1]
             {
-                "← Previous"
+                span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_LEFT)) }
+                "Previous"
             }
 
             div class="mui-pagination__pages" {
                 @for page in visible.iter() {
                     @if *page == 0 {
                         // Ellipsis marker
-                        span class="mui-pagination__ellipsis" { "…" }
+                        span class="mui-pagination__ellipsis" { "..." }
                     } @else if *page == props.current_page {
                         button
                             class="mui-pagination__page"
@@ -92,7 +99,8 @@ pub fn render(props: Props) -> Markup {
                 class="mui-pagination__btn mui-pagination__btn--next"
                 disabled[props.current_page == props.total_pages]
             {
-                "Next →"
+                "Next"
+                span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
             }
         }
     }

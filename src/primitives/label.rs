@@ -11,6 +11,8 @@ pub struct Props {
     pub html_for: Option<String>,
     /// Whether the field is required
     pub required: bool,
+    /// Whether the label should appear disabled
+    pub disabled: bool,
 }
 
 impl Default for Props {
@@ -19,27 +21,33 @@ impl Default for Props {
             text: String::new(),
             html_for: None,
             required: false,
+            disabled: false,
         }
     }
 }
 
 /// Render a label element
 pub fn render(props: Props) -> Markup {
+    let mut class = "mui-label".to_string();
+    if props.disabled {
+        class.push_str(" mui-label--disabled");
+    }
+
     if let Some(html_for) = props.html_for {
         html! {
-            label class="mui-label" for=(html_for) {
+            label class=(class) for=(html_for) {
                 (props.text)
                 @if props.required {
-                    span.mui-label__required { "*" }
+                    span.mui-label__required aria-hidden="true" { " *" }
                 }
             }
         }
     } else {
         html! {
-            label class="mui-label" {
+            label class=(class) {
                 (props.text)
                 @if props.required {
-                    span.mui-label__required { "*" }
+                    span.mui-label__required aria-hidden="true" { " *" }
                 }
             }
         }
@@ -50,31 +58,50 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            div {
-                p.mui-showcase__caption { "Basic label" }
-                (render(Props {
-                    text: "Email address".into(),
-                    html_for: Some("email-input".into()),
-                    required: false,
-                }))
+            section {
+                h2 { "Variants" }
+                div.mui-showcase__column {
+                    div {
+                        p.mui-showcase__caption { "Default" }
+                        (render(Props {
+                            text: "Email address".into(),
+                            html_for: Some("email-input".into()),
+                            ..Props::default()
+                        }))
+                    }
+                    div {
+                        p.mui-showcase__caption { "Required" }
+                        (render(Props {
+                            text: "Password".into(),
+                            html_for: Some("password-input".into()),
+                            required: true,
+                            ..Props::default()
+                        }))
+                    }
+                    div {
+                        p.mui-showcase__caption { "Disabled" }
+                        (render(Props {
+                            text: "Username".into(),
+                            html_for: Some("username-input".into()),
+                            disabled: true,
+                            ..Props::default()
+                        }))
+                    }
+                }
             }
-
-            div {
-                p.mui-showcase__caption { "Required label" }
-                (render(Props {
-                    text: "Password".into(),
-                    html_for: Some("password-input".into()),
-                    required: true,
-                }))
-            }
-
-            div {
-                p.mui-showcase__caption { "Label with for attribute" }
-                (render(Props {
-                    text: "Remember me".into(),
-                    html_for: Some("remember-checkbox".into()),
-                    required: false,
-                }))
+            section {
+                h2 { "With input" }
+                div.mui-showcase__column {
+                    div class="mui-field" {
+                        (render(Props {
+                            text: "Email".into(),
+                            html_for: Some("demo-email".into()),
+                            required: true,
+                            ..Props::default()
+                        }))
+                        input class="mui-input" id="demo-email" type="email" placeholder="you@example.com" {}
+                    }
+                }
             }
         }
     }

@@ -448,6 +448,8 @@ dialog.mui-alert-dialog::backdrop {
 .mui-aspect-ratio {
   position: relative;
   width: 100%;
+  overflow: hidden;
+  border-radius: var(--mui-radius-md);
 }
 
 .mui-aspect-ratio::before {
@@ -462,6 +464,11 @@ dialog.mui-alert-dialog::backdrop {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Images inside aspect ratio get proper sizing */
+.mui-aspect-ratio > img {
+  display: block;
 }
 
 /* --- avatar.css --- */
@@ -706,6 +713,26 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-button-group > .mui-btn:focus-visible {
   z-index: 2;
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+}
+
+/* Active button in group (e.g., selected state) */
+.mui-button-group > .mui-btn[aria-pressed="true"],
+.mui-button-group > .mui-btn.is-active {
+  z-index: 1;
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  border-color: var(--mui-accent);
+}
+
+/* Only child: restore full radius */
+.mui-button-group--horizontal > .mui-btn:only-child {
+  border-radius: var(--mui-radius-md);
+}
+
+.mui-button-group--vertical > .mui-btn:only-child {
+  border-radius: var(--mui-radius-md);
 }
 
 /* --- button.css --- */
@@ -1255,6 +1282,9 @@ dialog.mui-drawer {
   width: 85vw;
   height: 100vh;
   max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 dialog.mui-drawer::backdrop {
@@ -1418,43 +1448,61 @@ dialog.mui-drawer--bottom {
 .mui-drawer__body {
   padding: 1.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 6rem);
+  flex: 1;
 }
 
 .mui-drawer__body > *:last-child {
   margin-bottom: 0;
 }
 
+/* Footer for action buttons pinned at bottom */
+.mui-drawer__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--mui-border);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
 /* --- empty_state.css --- */
+/* EmptyState component — polished empty/blank-slate placeholder */
+
 .mui-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 3rem 2rem;
 }
 
 .mui-empty-state__icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mui-text-subtle);
+  opacity: 0.6;
+  line-height: 1;
 }
 
 .mui-empty-state__title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
-  color: var(--mui-text-primary, #000);
+  margin: 0 0 0.5rem 0;
+  color: var(--mui-text);
 }
 
 .mui-empty-state__description {
   font-size: 0.875rem;
-  color: var(--mui-text-muted, #666);
-  margin: 0 0 1rem 0;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.5;
+  color: var(--mui-text-muted);
+  margin: 0;
+  max-width: 20rem;
 }
 
 .mui-empty-state__action {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 /* --- field.css --- */
@@ -1610,43 +1658,43 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- input_group.css --- */
+/* InputGroup component — input with prefix/suffix addons as one visual unit */
+
 .mui-input-group {
   display: flex;
   align-items: stretch;
+  width: 100%;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   overflow: hidden;
-  background-color: var(--mui-bg-input);
+  background: transparent;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Hover on the whole group */
+.mui-input-group:hover:not(:focus-within) {
+  border-color: var(--mui-border-hover);
+}
+
+/* Focus ring wraps entire group — matching Input component style */
 .mui-input-group:focus-within {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
   border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
+/* Prefix & suffix addons — distinct muted background */
 .mui-input-group__prefix,
 .mui-input-group__suffix {
   display: flex;
   align-items: center;
   padding: 0 0.75rem;
   color: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
   font-size: 0.875rem;
-  background-color: var(--mui-bg-card);
+  background: var(--mui-bg-input);
   white-space: nowrap;
-}
-
-.mui-input-group > input,
-.mui-input-group > .mui-input {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  flex: 1;
-  min-width: 0;
-  font-family: inherit;
-  font-size: inherit;
-  color: var(--mui-text);
-  padding: 0.5rem 0.75rem;
+  user-select: none;
 }
 
 .mui-input-group__prefix {
@@ -1657,31 +1705,97 @@ dialog.mui-drawer--bottom {
   border-left: 1px solid var(--mui-border);
 }
 
+/* Input inside the group — no border, inherits group ring */
+.mui-input-group > input,
+.mui-input-group > .mui-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: var(--mui-text);
+  padding: 0.5rem 0.75rem;
+  height: 2.25rem;
+  box-sizing: border-box;
+}
+
+.mui-input-group > input::placeholder,
+.mui-input-group > .mui-input::placeholder {
+  color: var(--mui-text-muted);
+}
+
+.mui-input-group > input:focus,
+.mui-input-group > .mui-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Buttons inside suffix/prefix */
+.mui-input-group__suffix > button,
+.mui-input-group__prefix > button {
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mui-input-group__suffix > button:hover,
+.mui-input-group__prefix > button:hover {
+  color: var(--mui-text);
+}
+
 /* --- input_otp.css --- */
 /* InputOTP component — one-time password input slots */
 
 .mui-input-otp {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
   gap: 0.375rem;
 }
 
+/* Individual character slot */
 .mui-input-otp__slot {
   width: 2.5rem;
-  height: 2.5rem;
+  height: 2.75rem;
   text-align: center;
-  font-size: 1.125rem;
-  font-weight: 600;
-  background: var(--mui-bg-input);
+  font-size: 1.25rem;
+  font-weight: 500;
+  font-family: var(--mui-font-mono);
+  color: var(--mui-text);
+  background: transparent;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
-  color: var(--mui-text);
-  font-family: var(--mui-font-mono);
-  transition: var(--mui-transition);
+  caret-color: var(--mui-accent);
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.mui-input-otp__slot::placeholder {
+  color: var(--mui-text-muted);
+  opacity: 0.4;
+}
+
+/* Hover */
+.mui-input-otp__slot:hover:not(:disabled):not(:focus) {
+  border-color: var(--mui-border-hover);
+}
+
+/* Focus ring — matching Input component style */
 .mui-input-otp__slot:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+}
+
+/* Filled slot — slightly bolder for visual feedback */
+.mui-input-otp__slot:not(:placeholder-shown) {
+  font-weight: 600;
 }
 
 .mui-input-otp__slot:disabled {
@@ -1689,6 +1803,22 @@ dialog.mui-drawer--bottom {
   cursor: not-allowed;
 }
 
+/* Group separator (dash between slot groups) */
+.mui-input-otp__separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.125rem;
+}
+
+.mui-input-otp__separator-dash {
+  width: 0.625rem;
+  height: 2px;
+  background: var(--mui-border);
+  border-radius: 1px;
+}
+
+/* Hidden composite value input */
 .mui-input-otp__value {
   display: none;
 }
@@ -1789,13 +1919,24 @@ dialog.mui-drawer--bottom {
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1;
   color: var(--mui-text);
-  margin-bottom: 0.5rem;
+  cursor: default;
+}
+
+.mui-label[for] {
+  cursor: pointer;
+}
+
+.mui-label--disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .mui-label__required {
   color: var(--mui-danger);
-  margin-left: 0.25rem;
+  margin-left: 0.125rem;
+  font-weight: 500;
 }
 
 /* --- menu.css --- */
@@ -1968,33 +2109,43 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- native_select.css --- */
+/* NativeSelect component — styled native <select> matching Input appearance */
+
 .mui-native-select {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  width: 100%;
 }
 
 .mui-native-select__select {
   appearance: none;
-  background-color: var(--mui-bg-input);
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
   font-family: inherit;
   font-size: 0.875rem;
-  height: 2.25rem;
+  line-height: 1.25;
   cursor: pointer;
-  transition: var(--mui-transition);
-  width: 100%;
+  transition: border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
 }
 
-.mui-native-select__select:hover {
+.mui-native-select__select:hover:not(:disabled) {
   border-color: var(--mui-border-hover);
 }
 
+/* Focus ring — matching Input component style */
 .mui-native-select__select:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-native-select__select:disabled {
@@ -2002,13 +2153,26 @@ dialog.mui-drawer--bottom {
   cursor: not-allowed;
 }
 
+/* Placeholder option styling */
+.mui-native-select__select:invalid,
+.mui-native-select__select option[value=""][disabled] {
+  color: var(--mui-text-muted);
+}
+
+/* Chevron indicator — subtle, right-aligned */
 .mui-native-select__chevron {
   position: absolute;
   right: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
   color: var(--mui-text-muted);
   pointer-events: none;
+  opacity: 0.7;
 }
 
 /* --- number_field.css --- */
@@ -2111,81 +2275,121 @@ dialog.mui-drawer--bottom {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
   width: 100%;
 }
 
+/* Prev / Next buttons — outline style, matching button --outline */
 .mui-pagination__btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  height: 2.5rem;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  font-family: var(--mui-font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;
-  border: none;
+  border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .mui-pagination__btn:hover:not(:disabled) {
-  background-color: var(--mui-bg-input);
-  color: var(--mui-text);
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-pagination__btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 .mui-pagination__btn:disabled {
-  color: var(--mui-text-muted);
-  cursor: not-allowed;
   opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
+/* Arrow icons inside prev/next */
+.mui-pagination__btn-icon {
+  display: inline-flex;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.mui-pagination__btn-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Page number container */
 .mui-pagination__pages {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
+/* Individual page buttons — ghost style by default */
 .mui-pagination__page {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-family: var(--mui-font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--mui-text);
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--mui-radius-md);
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.mui-pagination__page:hover {
-  background-color: var(--mui-bg-input);
+.mui-pagination__page:hover:not([aria-current="page"]) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border);
 }
 
+.mui-pagination__page:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Active page — solid accent background */
 .mui-pagination__page[aria-current="page"] {
-  background-color: var(--mui-accent);
-  color: white;
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
   cursor: default;
 }
 
-.mui-pagination__page[aria-current="page"]:hover {
-  background-color: var(--mui-accent);
-}
-
+/* Ellipsis */
 .mui-pagination__ellipsis {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
   font-size: 0.875rem;
   color: var(--mui-text-muted);
+  letter-spacing: 0.1em;
   user-select: none;
 }
 
@@ -2316,7 +2520,7 @@ dialog.mui-drawer--bottom {
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .mui-radio-group--vertical {
@@ -2326,13 +2530,101 @@ dialog.mui-drawer--bottom {
 .mui-radio-group--horizontal {
   flex-direction: row;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .mui-radio-group__legend {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--mui-text);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Each radio item — row layout: indicator + label */
+.mui-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Visually-hidden native input — fully accessible, invisible */
+.mui-radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Indicator — 16px circle, border */
+.mui-radio__indicator {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--mui-transition);
+  margin-top: 0.125rem; /* align with first line of text */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Checked state — accent border with filled inner circle */
+.mui-radio__input:checked + .mui-radio__indicator {
+  border-color: var(--mui-accent);
+}
+
+.mui-radio__input:checked + .mui-radio__indicator::after {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+}
+
+/* Focus-visible ring */
+.mui-radio__input:focus-visible + .mui-radio__indicator {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Disabled — reduced opacity, not-allowed cursor */
+.mui-radio:has(.mui-radio__input:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Label — 0.875rem, medium weight */
+.mui-radio__label {
+  color: var(--mui-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Description text below label — smaller, muted */
+.mui-radio__description {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 0.125rem;
+}
+
+/* Label+description wrapper for vertical text stacking */
+.mui-radio__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* --- radio.css --- */
@@ -2672,21 +2964,21 @@ dialog.mui-drawer--bottom {
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.4;
   }
 }
 
 .mui-skeleton {
   display: block;
-  background-color: var(--mui-bg-input);
+  background-color: var(--mui-border);
   animation: mui-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Text skeleton — resembles a line of text */
 .mui-skeleton--text {
-  height: 1rem;
+  height: 0.875rem;
   width: 100%;
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-sm);
 }
 
 /* Circle skeleton — avatar placeholder */
@@ -2697,6 +2989,36 @@ dialog.mui-drawer--bottom {
 /* Rect skeleton — card/image placeholder */
 .mui-skeleton--rect {
   border-radius: var(--mui-radius-md);
+}
+
+/* --- Skeleton composites (card-level placeholders) --- */
+
+.mui-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+}
+
+.mui-skeleton-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mui-skeleton-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mui-skeleton-card__footer {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 /* --- slider.css --- */
@@ -2792,7 +3114,7 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- spinner.css --- */
-/* Spinner component — circular loading indicator */
+/* Spinner component — circular loading indicator (shadcn style) */
 
 @keyframes mui-spin {
   from {
@@ -2805,28 +3127,31 @@ dialog.mui-drawer--bottom {
 
 .mui-spinner {
   display: inline-block;
-  border: 2px solid var(--mui-border);
-  border-top-color: var(--mui-accent);
   border-radius: var(--mui-radius-full);
-  animation: mui-spin 0.6s linear infinite;
+  border: 2px solid transparent;
+  border-top-color: var(--mui-text);
+  animation: mui-spin 0.75s linear infinite;
 }
 
 /* Small spinner — 1rem */
 .mui-spinner--sm {
   width: 1rem;
   height: 1rem;
+  border-width: 1.5px;
 }
 
 /* Medium spinner — 1.5rem (default) */
 .mui-spinner--md {
   width: 1.5rem;
   height: 1.5rem;
+  border-width: 2px;
 }
 
-/* Large spinner — 2rem */
+/* Large spinner — 2.5rem */
 .mui-spinner--lg {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 2.5px;
 }
 
 /* --- switch.css --- */
@@ -3486,47 +3811,53 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- typography.css --- */
-/* Typography component — text utility components */
+/* Typography component — shadcn-quality text utility components */
 
 .mui-h1 {
-  font-size: 2rem;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0;
+  line-height: 1.1;
+  color: var(--mui-text);
+}
+
+.mui-h2 {
+  font-size: 1.875rem;
   font-weight: 700;
   letter-spacing: -0.025em;
   margin: 0;
   line-height: 1.2;
-}
-
-.mui-h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  margin: 0;
-  line-height: 1.3;
+  color: var(--mui-text);
 }
 
 .mui-h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.3;
+  color: var(--mui-text);
+}
+
+.mui-h4 {
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
   line-height: 1.4;
-}
-
-.mui-h4 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.4;
+  color: var(--mui-text);
 }
 
 .mui-p {
-  font-size: 0.875rem;
-  line-height: 1.625;
+  font-size: 1rem;
+  line-height: 1.75;
   color: var(--mui-text);
   margin: 0;
 }
 
 .mui-lead {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  font-weight: 400;
   color: var(--mui-text-muted);
   margin: 0;
   line-height: 1.6;
@@ -3539,17 +3870,20 @@ dialog.mui-drawer--bottom {
 
 .mui-code {
   font-family: var(--mui-font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.875em;
   background-color: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
   padding: 0.125rem 0.375rem;
   border-radius: var(--mui-radius-sm);
   color: var(--mui-text);
+  font-weight: 500;
 }
 
 .mui-blockquote {
-  border-left: 2px solid var(--mui-border);
-  padding-left: 1rem;
+  border-left: 3px solid var(--mui-border);
+  padding-left: 1.25rem;
   font-style: italic;
   color: var(--mui-text-muted);
   margin: 0;
+  line-height: 1.6;
 }

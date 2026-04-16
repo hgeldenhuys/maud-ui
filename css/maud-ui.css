@@ -149,6 +149,57 @@ body {
   margin: 0 0 0.5rem;
 }
 
+/* Showcase navigation grid */
+.mui-showcase__nav {
+  padding: 1.5rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+}
+.mui-showcase__nav h2 { margin: 0 0 1rem; font-size: 1.125rem; }
+.mui-showcase__nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.5rem;
+}
+.mui-showcase__nav-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  text-decoration: none;
+  border-radius: var(--mui-radius-md);
+  font-size: 0.875rem;
+  transition: var(--mui-transition);
+  border: 1px solid transparent;
+}
+.mui-showcase__nav-link:hover {
+  background: var(--mui-bg-overlay);
+  border-color: var(--mui-border);
+}
+
+/* Showcase breadcrumb */
+.mui-showcase__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+}
+.mui-showcase__breadcrumb a {
+  color: var(--mui-text-subtle);
+  text-decoration: none;
+}
+.mui-showcase__breadcrumb a:hover {
+  color: var(--mui-text);
+  text-decoration: underline;
+}
+
+/* Showcase back link */
+.mui-showcase__back {
+  padding-top: 0.5rem;
+}
+
 /* Focus ring — use :focus-visible only, never :focus */
 *:focus { outline: none; }
 *:focus-visible {

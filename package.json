@@ -1,0 +1,13 @@
+{
+  "name": "maud-ui",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "MaudUI - Accessible component library built with Rust/Maud and vanilla JS behaviors",
+  "scripts": {
+    "build": "node js/build.mjs",
+    "build:watch": "node --watch js/build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.0"
+  }
+}

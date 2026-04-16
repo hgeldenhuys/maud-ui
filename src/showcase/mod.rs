@@ -16,8 +16,15 @@ pub fn showcase_page() -> Markup {
             }
             body {
                 header.mui-showcase__header {
-                    h1 { "maud-ui" }
-                    p.mui-text-muted { "Headless accessible components for maud + htmx" }
+                    div style="display:flex;justify-content:space-between;align-items:center;" {
+                        div {
+                            h1 { "maud-ui" }
+                            p.mui-text-muted { "Headless accessible components for maud + htmx" }
+                        }
+                        button type="button" class="mui-btn mui-btn--outline mui-btn--md" data-mui="theme-toggle" {
+                            "Toggle theme"
+                        }
+                    }
                 }
                 main.mui-showcase {
                     section id="button" { h2 { "Button" } (primitives::button::showcase()) }

@@ -59,12 +59,13 @@ pub fn render_entry(entry: &MenuEntry) -> Markup {
     html! {
         @match entry {
             MenuEntry::Item(item) => {
-                button.mui-menu__item
+                @let cls = if item.destructive { "mui-menu__item mui-menu__item--danger" } else { "mui-menu__item" };
+                button
                     type="button"
                     role="menuitem"
+                    class=(cls)
                     data-action=(item.action)
                     tabindex="-1"
-                    class={ @if item.destructive { "mui-menu__item--danger" } @else { "" } }
                     disabled[item.disabled]
                 {
                     (item.label.clone())

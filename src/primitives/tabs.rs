@@ -61,34 +61,141 @@ pub fn render(props: Props) -> Markup {
 }
 
 pub fn showcase() -> Markup {
+    use crate::primitives::{input, label, button};
+
     let tabs = vec![
         Tab {
-            id: "overview".to_string(),
-            label: "Overview".to_string(),
-            content: html! { p { "General overview content here." } },
-        },
-        Tab {
-            id: "features".to_string(),
-            label: "Features".to_string(),
+            id: "account".to_string(),
+            label: "Account".to_string(),
             content: html! {
-                ul {
-                    li { "Feature A" }
-                    li { "Feature B" }
-                    li { "Feature C" }
+                div style="padding:1rem 0;" {
+                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                        "Make changes to your account here. Click save when you\u{2019}re done."
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                        div class="mui-field" {
+                            (label::render(label::Props {
+                                text: "Name".into(),
+                                html_for: Some("tab-account-name".into()),
+                                ..Default::default()
+                            }))
+                            (input::render(input::Props {
+                                name: "name".into(),
+                                id: "tab-account-name".into(),
+                                input_type: input::InputType::Text,
+                                value: "Pedro Duarte".into(),
+                                ..Default::default()
+                            }))
+                        }
+                        div class="mui-field" {
+                            (label::render(label::Props {
+                                text: "Email".into(),
+                                html_for: Some("tab-account-email".into()),
+                                ..Default::default()
+                            }))
+                            (input::render(input::Props {
+                                name: "email".into(),
+                                id: "tab-account-email".into(),
+                                input_type: input::InputType::Email,
+                                value: "pedro@example.com".into(),
+                                ..Default::default()
+                            }))
+                        }
+                        div style="display:flex;justify-content:flex-end;margin-top:0.5rem;" {
+                            (button::render(button::Props {
+                                label: "Save changes".into(),
+                                variant: button::Variant::Primary,
+                                size: button::Size::Md,
+                                ..Default::default()
+                            }))
+                        }
+                    }
                 }
             },
         },
         Tab {
-            id: "pricing".to_string(),
-            label: "Pricing".to_string(),
-            content: html! { p { "Pricing details." } },
+            id: "password".to_string(),
+            label: "Password".to_string(),
+            content: html! {
+                div style="padding:1rem 0;" {
+                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                        "Change your password here. After saving, you\u{2019}ll be logged out."
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                        div class="mui-field" {
+                            (label::render(label::Props {
+                                text: "Current password".into(),
+                                html_for: Some("tab-pw-current".into()),
+                                ..Default::default()
+                            }))
+                            (input::render(input::Props {
+                                name: "current_password".into(),
+                                id: "tab-pw-current".into(),
+                                input_type: input::InputType::Password,
+                                placeholder: "Enter current password".into(),
+                                ..Default::default()
+                            }))
+                        }
+                        div class="mui-field" {
+                            (label::render(label::Props {
+                                text: "New password".into(),
+                                html_for: Some("tab-pw-new".into()),
+                                ..Default::default()
+                            }))
+                            (input::render(input::Props {
+                                name: "new_password".into(),
+                                id: "tab-pw-new".into(),
+                                input_type: input::InputType::Password,
+                                placeholder: "Enter new password".into(),
+                                ..Default::default()
+                            }))
+                        }
+                        div style="display:flex;justify-content:flex-end;margin-top:0.5rem;" {
+                            (button::render(button::Props {
+                                label: "Change password".into(),
+                                variant: button::Variant::Primary,
+                                size: button::Size::Md,
+                                ..Default::default()
+                            }))
+                        }
+                    }
+                }
+            },
+        },
+        Tab {
+            id: "team".to_string(),
+            label: "Team".to_string(),
+            content: html! {
+                div style="padding:1rem 0;" {
+                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                        "Invite your team members to collaborate."
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:28rem;" {
+                        @for (name, email, role) in [
+                            ("Sofia Davis", "sofia@example.com", "Owner"),
+                            ("Jackson Lee", "jackson@example.com", "Member"),
+                            ("Isabella Nguyen", "isabella@example.com", "Member"),
+                        ] {
+                            div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--mui-border,#e5e7eb);" {
+                                div {
+                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { (name) }
+                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" { (email) }
+                                }
+                                span style="font-size:0.75rem;color:var(--mui-text-muted);padding:0.25rem 0.5rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:0.375rem;" {
+                                    (role)
+                                }
+                            }
+                        }
+                    }
+                }
+            },
         },
     ];
 
     let props = Props {
         tabs,
         default_active: 0,
-        aria_label: "Content tabs".to_string(),
+        aria_label: "Account settings".to_string(),
     };
 
     render(props)

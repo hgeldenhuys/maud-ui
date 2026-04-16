@@ -124,69 +124,119 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Default (0–100)
+            // Volume control
             div {
-                p.mui-showcase__label { "Default (0–100)" }
-                (render(Props {
-                    name: "slider-default".into(),
-                    id: "slider-default".into(),
-                    value: 40.0,
-                    min: 0.0,
-                    max: 100.0,
-                    step: 1.0,
-                    label: "Default slider".into(),
-                    show_value: true,
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Volume" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        label for="slider-volume" style="font-size:0.875rem;color:var(--mui-text)" { "Volume" }
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);min-width:2.5rem;text-align:right" { "72" }
+                    }
+                    (render(Props {
+                        name: "volume".into(),
+                        id: "slider-volume".into(),
+                        value: 72.0,
+                        min: 0.0,
+                        max: 100.0,
+                        step: 1.0,
+                        label: "Volume".into(),
+                        show_value: false,
+                        ..Default::default()
+                    }))
+                }
             }
 
-            // Without value label
+            // Brightness with icon context
             div {
-                p.mui-showcase__label { "Without value label" }
-                (render(Props {
-                    name: "slider-no-label".into(),
-                    id: "slider-no-label".into(),
-                    value: 70.0,
-                    min: 0.0,
-                    max: 100.0,
-                    step: 1.0,
-                    label: "Slider without value label".into(),
-                    show_value: false,
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Brightness" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    label for="slider-brightness" style="font-size:0.875rem;color:var(--mui-text)" { "Brightness" }
+                    div style="display:flex;align-items:center;gap:0.75rem" {
+                        // Sun dim icon (SVG)
+                        svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mui-text-muted);flex-shrink:0" {
+                            circle cx="12" cy="12" r="4" {}
+                            path d="M12 2v2" {}
+                            path d="M12 20v2" {}
+                            path d="m4.93 4.93 1.41 1.41" {}
+                            path d="m17.66 17.66 1.41 1.41" {}
+                            path d="M2 12h2" {}
+                            path d="M20 12h2" {}
+                            path d="m6.34 17.66-1.41 1.41" {}
+                            path d="m19.07 4.93-1.41 1.41" {}
+                        }
+                        div style="flex:1" {
+                            (render(Props {
+                                name: "brightness".into(),
+                                id: "slider-brightness".into(),
+                                value: 40.0,
+                                min: 0.0,
+                                max: 100.0,
+                                step: 1.0,
+                                label: "Brightness".into(),
+                                show_value: false,
+                                ..Default::default()
+                            }))
+                        }
+                        // Sun bright icon (SVG)
+                        svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mui-text);flex-shrink:0" {
+                            circle cx="12" cy="12" r="4" {}
+                            path d="M12 2v2" {}
+                            path d="M12 20v2" {}
+                            path d="m4.93 4.93 1.41 1.41" {}
+                            path d="m17.66 17.66 1.41 1.41" {}
+                            path d="M2 12h2" {}
+                            path d="M20 12h2" {}
+                            path d="m6.34 17.66-1.41 1.41" {}
+                            path d="m19.07 4.93-1.41 1.41" {}
+                        }
+                    }
+                }
             }
 
-            // Custom range (0–10, step 0.5)
+            // Max price filter
             div {
-                p.mui-showcase__label { "Custom range (0–10, step 0.5)" }
-                (render(Props {
-                    name: "slider-custom".into(),
-                    id: "slider-custom".into(),
-                    value: 3.5,
-                    min: 0.0,
-                    max: 10.0,
-                    step: 0.5,
-                    label: "Custom range slider".into(),
-                    show_value: true,
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Price range" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        label for="slider-price" style="font-size:0.875rem;color:var(--mui-text)" { "Max price" }
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text)" { "$150" }
+                    }
+                    (render(Props {
+                        name: "max-price".into(),
+                        id: "slider-price".into(),
+                        value: 150.0,
+                        min: 0.0,
+                        max: 500.0,
+                        step: 10.0,
+                        label: "Maximum price".into(),
+                        show_value: false,
+                        ..Default::default()
+                    }))
+                    div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mui-text-muted)" {
+                        span { "$0" }
+                        span { "$500" }
+                    }
+                }
             }
 
             // Disabled
             div {
-                p.mui-showcase__label { "Disabled" }
-                (render(Props {
-                    name: "slider-disabled".into(),
-                    id: "slider-disabled".into(),
-                    value: 60.0,
-                    min: 0.0,
-                    max: 100.0,
-                    step: 1.0,
-                    disabled: true,
-                    label: "Disabled slider".into(),
-                    show_value: true,
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Disabled" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    label for="slider-disabled" style="font-size:0.875rem;color:var(--mui-text-muted)" { "Playback speed" }
+                    (render(Props {
+                        name: "playback-speed".into(),
+                        id: "slider-disabled".into(),
+                        value: 1.0,
+                        min: 0.5,
+                        max: 2.0,
+                        step: 0.25,
+                        disabled: true,
+                        label: "Playback speed".into(),
+                        show_value: true,
+                        ..Default::default()
+                    }))
+                }
             }
         }
     }

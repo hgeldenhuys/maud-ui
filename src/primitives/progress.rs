@@ -47,70 +47,71 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // 0% progress
+            // File upload in progress
             div {
-                p.mui-showcase__label { "0%" }
-                (render(Props {
-                    value: 0,
-                    max: 100,
-                    label: "Zero progress".into(),
-                    indeterminate: false,
-                }))
+                p.mui-showcase__caption { "File upload" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        span style="font-size:0.875rem;color:var(--mui-text)" { "Uploading file..." }
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text)" { "65%" }
+                    }
+                    (render(Props {
+                        value: 65,
+                        max: 100,
+                        label: "Uploading file, 65 percent".into(),
+                        indeterminate: false,
+                    }))
+                    span style="font-size:0.75rem;color:var(--mui-text-muted)" { "report-2026.pdf — 3.2 MB of 4.9 MB" }
+                }
             }
 
-            // 25% progress
+            // Stepped progress
             div {
-                p.mui-showcase__label { "25%" }
-                (render(Props {
-                    value: 25,
-                    max: 100,
-                    label: "Quarter progress".into(),
-                    indeterminate: false,
-                }))
+                p.mui-showcase__caption { "Stepped progress" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text)" { "Step 2 of 4" }
+                        span style="font-size:0.75rem;color:var(--mui-text-muted)" { "Account details" }
+                    }
+                    (render(Props {
+                        value: 50,
+                        max: 100,
+                        label: "Step 2 of 4, account details".into(),
+                        indeterminate: false,
+                    }))
+                }
             }
 
-            // 50% progress
+            // Indeterminate — processing
             div {
-                p.mui-showcase__label { "50%" }
-                (render(Props {
-                    value: 50,
-                    max: 100,
-                    label: "Half progress".into(),
-                    indeterminate: false,
-                }))
+                p.mui-showcase__caption { "Indeterminate" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    span style="font-size:0.875rem;color:var(--mui-text-muted)" { "Processing your request..." }
+                    (render(Props {
+                        value: 0,
+                        max: 100,
+                        label: "Processing request".into(),
+                        indeterminate: true,
+                    }))
+                }
             }
 
-            // 75% progress
+            // Download complete (100%)
             div {
-                p.mui-showcase__label { "75%" }
-                (render(Props {
-                    value: 75,
-                    max: 100,
-                    label: "Three-quarter progress".into(),
-                    indeterminate: false,
-                }))
-            }
-
-            // 100% progress
-            div {
-                p.mui-showcase__label { "100%" }
-                (render(Props {
-                    value: 100,
-                    max: 100,
-                    label: "Complete progress".into(),
-                    indeterminate: false,
-                }))
-            }
-
-            // Indeterminate
-            div {
-                p.mui-showcase__label { "Indeterminate" }
-                (render(Props {
-                    value: 0,
-                    max: 100,
-                    label: "Loading...".into(),
-                    indeterminate: true,
-                }))
+                p.mui-showcase__caption { "Download complete" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        span style="font-size:0.875rem;color:var(--mui-text)" { "Download complete" }
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-accent,var(--mui-text))" { "100%" }
+                    }
+                    (render(Props {
+                        value: 100,
+                        max: 100,
+                        label: "Download complete".into(),
+                        indeterminate: false,
+                    }))
+                    span style="font-size:0.75rem;color:var(--mui-text-muted)" { "dataset.csv — 12.7 MB" }
+                }
             }
         }
     }

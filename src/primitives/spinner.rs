@@ -50,7 +50,7 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Sizes row
+            // Size variants
             div {
                 p.mui-showcase__caption { "Sizes" }
                 div.mui-showcase__row {
@@ -69,24 +69,41 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // Inline with text
+            // Loading button
             div {
-                p.mui-showcase__caption { "Inline with text" }
-                div.mui-showcase__row {
-                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                p.mui-showcase__caption { "Loading button" }
+                div.mui-showcase__row style="gap:0.75rem" {
+                    button type="button" class="mui-btn mui-btn--primary mui-btn--md" disabled style="opacity:0.7;cursor:not-allowed" {
                         (render(Props { size: Size::Sm, label: Some("Loading".into()) }))
                         "Loading..."
+                    }
+                    button type="button" class="mui-btn mui-btn--default mui-btn--md" disabled style="opacity:0.7;cursor:not-allowed" {
+                        (render(Props { size: Size::Sm, label: Some("Saving".into()) }))
+                        "Saving..."
                     }
                 }
             }
 
-            // Inside a button
+            // Page loading — centered with label
             div {
-                p.mui-showcase__caption { "Button with spinner" }
-                div.mui-showcase__row {
-                    button type="button" class="mui-btn mui-btn--default mui-btn--md" disabled style="opacity:0.7;cursor:not-allowed" {
-                        (render(Props { size: Size::Sm, label: Some("Submitting".into()) }))
-                        "Submitting..."
+                p.mui-showcase__caption { "Page loading" }
+                div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;padding:2rem;border:1px dashed var(--mui-border);border-radius:var(--mui-radius,0.5rem)" {
+                    (render(Props { size: Size::Lg, label: Some("Loading page".into()) }))
+                    span style="font-size:0.875rem;color:var(--mui-text-muted)" { "Loading page..." }
+                }
+            }
+
+            // Inline status
+            div {
+                p.mui-showcase__caption { "Inline status" }
+                div style="display:flex;flex-direction:column;gap:0.75rem" {
+                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                        (render(Props { size: Size::Sm, label: Some("Checking".into()) }))
+                        "Checking for updates..."
+                    }
+                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                        (render(Props { size: Size::Sm, label: Some("Connecting".into()) }))
+                        "Connecting to server..."
                     }
                 }
             }

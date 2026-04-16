@@ -57,59 +57,141 @@ pub fn render(props: Props) -> Markup {
 
 /// Showcase all card use cases
 pub fn showcase() -> Markup {
+    use crate::primitives::{switch, button, input, label, select};
+
     html! {
         div.mui-showcase__grid {
+            // 1. Notifications card with switches
             div {
-                p.mui-showcase__caption { "With header and body" }
-                (render(Props {
-                    title: Some("Card Title".into()),
-                    description: Some("Card description with supporting text.".into()),
-                    children: html! {
-                        p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0;" {
-                            "Card content goes here. This area can contain any markup."
-                        }
-                    },
-                    footer: None,
-                }))
-            }
-
-            div {
-                p.mui-showcase__caption { "With footer" }
+                p.mui-showcase__caption { "Notifications" }
                 (render(Props {
                     title: Some("Notifications".into()),
-                    description: Some("Manage your notification preferences.".into()),
+                    description: Some("Choose what you want to be notified about.".into()),
                     children: html! {
-                        div style="display:flex;flex-direction:column;gap:0.75rem;font-size:0.875rem;" {
-                            div style="display:flex;justify-content:space-between;align-items:center;" {
-                                span { "Push notifications" }
-                                span.mui-text-muted { "Enabled" }
+                        div style="display:flex;flex-direction:column;gap:1rem;" {
+                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                                div {
+                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { "Push Notifications" }
+                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" {
+                                        "Send notifications to device."
+                                    }
+                                }
+                                (switch::render(switch::Props {
+                                    name: "card-push".into(),
+                                    id: "card-push".into(),
+                                    label: String::new(),
+                                    checked: false,
+                                    disabled: false,
+                                }))
                             }
-                            div style="display:flex;justify-content:space-between;align-items:center;" {
-                                span { "Email digest" }
-                                span.mui-text-muted { "Weekly" }
+                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                                div {
+                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { "Email Notifications" }
+                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" {
+                                        "Receive emails for activity updates."
+                                    }
+                                }
+                                (switch::render(switch::Props {
+                                    name: "card-email".into(),
+                                    id: "card-email".into(),
+                                    label: String::new(),
+                                    checked: true,
+                                    disabled: false,
+                                }))
                             }
                         }
                     },
                     footer: Some(html! {
                         div style="display:flex;gap:0.5rem;margin-left:auto;" {
-                            button class="mui-btn mui-btn--md mui-btn--outline" { "Cancel" }
-                            button class="mui-btn mui-btn--md mui-btn--primary" { "Save" }
+                            (button::render(button::Props {
+                                label: "Save preferences".into(),
+                                variant: button::Variant::Primary,
+                                size: button::Size::Md,
+                                ..Default::default()
+                            }))
                         }
                     }),
                 }))
             }
 
+            // 2. Simple stat card
             div {
-                p.mui-showcase__caption { "Body only" }
+                p.mui-showcase__caption { "Stat card" }
                 (render(Props {
-                    title: None,
+                    title: Some("Total Revenue".into()),
                     description: None,
                     children: html! {
-                        p style="font-size:0.875rem;margin:0;" {
-                            "A simple card with just body content."
+                        div {
+                            p style="font-size:1.75rem;font-weight:700;margin:0;" { "$45,231.89" }
+                            p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.25rem 0 0;" {
+                                "+20.1% from last month"
+                            }
                         }
                     },
                     footer: None,
+                }))
+            }
+
+            // 3. Create project card with form
+            div {
+                p.mui-showcase__caption { "Create project" }
+                (render(Props {
+                    title: Some("Create project".into()),
+                    description: Some("Deploy your new project in one click.".into()),
+                    children: html! {
+                        div style="display:flex;flex-direction:column;gap:0.75rem;" {
+                            div class="mui-field" {
+                                (label::render(label::Props {
+                                    text: "Name".into(),
+                                    html_for: Some("card-project-name".into()),
+                                    ..Default::default()
+                                }))
+                                (input::render(input::Props {
+                                    name: "project_name".into(),
+                                    id: "card-project-name".into(),
+                                    input_type: input::InputType::Text,
+                                    placeholder: "Name of your project".into(),
+                                    ..Default::default()
+                                }))
+                            }
+                            div class="mui-field" {
+                                (label::render(label::Props {
+                                    text: "Framework".into(),
+                                    html_for: Some("card-framework".into()),
+                                    ..Default::default()
+                                }))
+                                (select::render(select::Props {
+                                    name: "framework".into(),
+                                    id: "card-framework".into(),
+                                    options: vec![
+                                        select::SelectOption { value: "next".into(), label: "Next.js".into(), disabled: false },
+                                        select::SelectOption { value: "remix".into(), label: "Remix".into(), disabled: false },
+                                        select::SelectOption { value: "astro".into(), label: "Astro".into(), disabled: false },
+                                        select::SelectOption { value: "nuxt".into(), label: "Nuxt".into(), disabled: false },
+                                    ],
+                                    selected: None,
+                                    placeholder: "Select a framework\u{2026}".into(),
+                                    disabled: false,
+                                }))
+                            }
+                        }
+                    },
+                    footer: Some(html! {
+                        div style="display:flex;gap:0.5rem;justify-content:space-between;width:100%;" {
+                            (button::render(button::Props {
+                                label: "Cancel".into(),
+                                variant: button::Variant::Outline,
+                                size: button::Size::Md,
+                                ..Default::default()
+                            }))
+                            (button::render(button::Props {
+                                label: "Create".into(),
+                                variant: button::Variant::Primary,
+                                size: button::Size::Md,
+                                ..Default::default()
+                            }))
+                        }
+                    }),
                 }))
             }
         }

@@ -68,27 +68,33 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Single (default) — only one item can be open at a time
+            // FAQ — single open (shadcn-style)
             div {
-                h3 class="mui-showcase__caption" { "Single (default)" }
+                h3 class="mui-showcase__caption" { "FAQ" }
                 (render(Props {
                     items: vec![
                         Item {
-                            id: "demo-acc-1-q1".to_string(),
-                            trigger: "Q1".to_string(),
-                            content: html! { p { "This is the first question answer with some detailed content." } },
+                            id: "faq-accessible".to_string(),
+                            trigger: "Is it accessible?".to_string(),
+                            content: html! {
+                                p { "Yes. It adheres to the WAI-ARIA design pattern." }
+                            },
                             open: true,
                         },
                         Item {
-                            id: "demo-acc-1-q2".to_string(),
-                            trigger: "Q2".to_string(),
-                            content: html! { p { "This is the second question answer with more details." } },
+                            id: "faq-styled".to_string(),
+                            trigger: "Is it styled?".to_string(),
+                            content: html! {
+                                p { "Yes. It comes with a default theme that matches shadcn." }
+                            },
                             open: false,
                         },
                         Item {
-                            id: "demo-acc-1-q3".to_string(),
-                            trigger: "Q3".to_string(),
-                            content: html! { p { "This is the third question answer explaining further." } },
+                            id: "faq-animated".to_string(),
+                            trigger: "Is it animated?".to_string(),
+                            content: html! {
+                                p { "Yes. JavaScript handles expand/collapse with ARIA state." }
+                            },
                             open: false,
                         },
                     ],
@@ -102,19 +108,19 @@ pub fn showcase() -> Markup {
                 (render(Props {
                     items: vec![
                         Item {
-                            id: "demo-acc-2-a".to_string(),
+                            id: "multi-acc-a".to_string(),
                             trigger: "Section A".to_string(),
                             content: html! { p { "Content for Section A with relevant information." } },
                             open: true,
                         },
                         Item {
-                            id: "demo-acc-2-b".to_string(),
+                            id: "multi-acc-b".to_string(),
                             trigger: "Section B".to_string(),
                             content: html! { p { "Content for Section B with additional details." } },
                             open: false,
                         },
                         Item {
-                            id: "demo-acc-2-c".to_string(),
+                            id: "multi-acc-c".to_string(),
                             trigger: "Section C".to_string(),
                             content: html! { p { "Content for Section C with more information." } },
                             open: true,

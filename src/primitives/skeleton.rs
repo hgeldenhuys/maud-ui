@@ -66,52 +66,6 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Text skeleton row
-            div {
-                p.mui-showcase__caption { "Text lines" }
-                div.mui-showcase__column {
-                    (render(Props {
-                        variant: Variant::Text,
-                        width: Some("100%".into()),
-                        height: None,
-                    }))
-                    (render(Props {
-                        variant: Variant::Text,
-                        width: Some("80%".into()),
-                        height: None,
-                    }))
-                    (render(Props {
-                        variant: Variant::Text,
-                        width: Some("60%".into()),
-                        height: None,
-                    }))
-                }
-            }
-
-            // Circle + text combo (user row)
-            div {
-                p.mui-showcase__caption { "User row" }
-                div.mui-showcase__row style="gap:0.75rem" {
-                    (render(Props {
-                        variant: Variant::Circle,
-                        width: Some("2.5rem".into()),
-                        height: Some("2.5rem".into()),
-                    }))
-                    div.mui-showcase__column style="flex:1;gap:0.375rem" {
-                        (render(Props {
-                            variant: Variant::Text,
-                            width: Some("40%".into()),
-                            height: None,
-                        }))
-                        (render(Props {
-                            variant: Variant::Text,
-                            width: Some("25%".into()),
-                            height: Some("0.75rem".into()),
-                        }))
-                    }
-                }
-            }
-
             // Card skeleton (composite)
             div {
                 p.mui-showcase__caption { "Card skeleton" }
@@ -170,15 +124,115 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // Image placeholder
+            // Loading article
             div {
-                p.mui-showcase__caption { "Image placeholder" }
-                div.mui-showcase__row {
+                p.mui-showcase__caption { "Loading article" }
+                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:480px" {
+                    // Article title
+                    (render(Props {
+                        variant: Variant::Text,
+                        width: Some("70%".into()),
+                        height: Some("1.5rem".into()),
+                    }))
+                    // Author line
+                    div style="display:flex;align-items:center;gap:0.5rem" {
+                        (render(Props {
+                            variant: Variant::Circle,
+                            width: Some("1.5rem".into()),
+                            height: Some("1.5rem".into()),
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("8rem".into()),
+                            height: Some("0.75rem".into()),
+                        }))
+                    }
+                    // Featured image placeholder
                     (render(Props {
                         variant: Variant::Rect,
-                        width: Some("200px".into()),
-                        height: Some("120px".into()),
+                        width: Some("100%".into()),
+                        height: Some("10rem".into()),
                     }))
+                    // Paragraph lines
+                    div style="display:flex;flex-direction:column;gap:0.375rem" {
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("100%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("95%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("88%".into()),
+                            height: None,
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.375rem" {
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("100%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("92%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("78%".into()),
+                            height: None,
+                        }))
+                    }
+                    div style="display:flex;flex-direction:column;gap:0.375rem" {
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("100%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("85%".into()),
+                            height: None,
+                        }))
+                        (render(Props {
+                            variant: Variant::Text,
+                            width: Some("60%".into()),
+                            height: None,
+                        }))
+                    }
+                }
+            }
+
+            // User list loading
+            div {
+                p.mui-showcase__caption { "User list" }
+                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:320px" {
+                    @for _ in 0..3 {
+                        div style="display:flex;align-items:center;gap:0.75rem" {
+                            (render(Props {
+                                variant: Variant::Circle,
+                                width: Some("2.5rem".into()),
+                                height: Some("2.5rem".into()),
+                            }))
+                            div.mui-showcase__column style="flex:1;gap:0.375rem" {
+                                (render(Props {
+                                    variant: Variant::Text,
+                                    width: Some("60%".into()),
+                                    height: None,
+                                }))
+                                (render(Props {
+                                    variant: Variant::Text,
+                                    width: Some("40%".into()),
+                                    height: Some("0.625rem".into()),
+                                }))
+                            }
+                        }
+                    }
                 }
             }
         }

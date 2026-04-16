@@ -75,6 +75,11 @@ dialog.mui-dialog::backdrop {
   opacity: 1;
 }
 
+.mui-dialog__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
 .mui-dialog__close:active {
   opacity: 0.5;
 }

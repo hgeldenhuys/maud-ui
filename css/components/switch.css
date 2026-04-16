@@ -43,6 +43,7 @@
 .mui-switch[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-switch:focus-visible {
@@ -51,7 +52,7 @@
 }
 
 .mui-switch[aria-checked="true"]:focus-visible {
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-accent);
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-switch__label {

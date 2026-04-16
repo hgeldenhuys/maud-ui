@@ -588,7 +588,7 @@ dialog.mui-alert-dialog::backdrop {
 /* Warning — solid amber, dark text for contrast */
 .mui-badge--warning {
   background-color: var(--mui-warning);
-  color: #1c1917;
+  color: var(--mui-bg);
 }
 
 /* Danger / destructive — solid red, white text */
@@ -640,6 +640,11 @@ dialog.mui-alert-dialog::backdrop {
 .mui-breadcrumb__item a:hover {
   color: var(--mui-text);
   text-decoration: underline;
+}
+
+.mui-breadcrumb__item a:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 /* Current page — foreground color, no link */
@@ -859,8 +864,8 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--danger:hover:not([aria-disabled="true"]) {
-  background: #dc2626;
-  border-color: #dc2626;
+  background: color-mix(in srgb, var(--mui-danger) 85%, black);
+  border-color: color-mix(in srgb, var(--mui-danger) 85%, black);
 }
 
 /* --- Variant: Link ---------------------------------------------------- */
@@ -1031,6 +1036,7 @@ dialog.mui-alert-dialog::backdrop {
 .mui-checkbox--disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-checkbox--disabled .mui-checkbox__indicator {
@@ -1240,6 +1246,11 @@ dialog.mui-dialog::backdrop {
   opacity: 1;
 }
 
+.mui-dialog__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
 .mui-dialog__close:active {
   opacity: 0.5;
 }
@@ -1433,6 +1444,11 @@ dialog.mui-drawer--bottom {
   opacity: 1;
 }
 
+.mui-drawer__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
 .mui-drawer__close:active {
   opacity: 0.5;
 }
@@ -1564,7 +1580,9 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-fieldset[disabled] {
-  opacity: 0.6;
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-fieldset[disabled] .mui-fieldset__legend {
@@ -1583,6 +1601,12 @@ dialog.mui-drawer--bottom {
 .mui-hover-card__trigger {
   display: inline-flex;
   cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-hover-card__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 .mui-hover-card__content {
@@ -1801,6 +1825,7 @@ dialog.mui-drawer--bottom {
 .mui-input-otp__slot:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Group separator (dash between slot groups) */
@@ -1867,6 +1892,7 @@ dialog.mui-drawer--bottom {
 .mui-input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-input[readonly] {
@@ -1929,7 +1955,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-label--disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -2151,6 +2177,7 @@ dialog.mui-drawer--bottom {
 .mui-native-select__select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Placeholder option styling */
@@ -2190,13 +2217,14 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-number-field:focus-within {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-  border-color: var(--mui-border-hover);
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-number-field[aria-disabled="true"] {
   opacity: 0.5;
+  cursor: not-allowed;
   pointer-events: none;
 }
 
@@ -2401,6 +2429,12 @@ dialog.mui-drawer--bottom {
 
 .mui-popover__trigger {
   cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-popover__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 /* shadcn: bg-popover border rounded-md shadow-md p-4 w-72 */
@@ -2602,6 +2636,7 @@ dialog.mui-drawer--bottom {
 .mui-radio:has(.mui-radio__input:disabled) {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Label — 0.875rem, medium weight */
@@ -2694,6 +2729,7 @@ dialog.mui-drawer--bottom {
 .mui-radio--disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-radio--disabled .mui-radio__indicator {
@@ -2836,6 +2872,7 @@ dialog.mui-drawer--bottom {
 .mui-select__trigger:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-select__value {
@@ -3200,6 +3237,7 @@ dialog.mui-drawer--bottom {
 .mui-switch[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-switch:focus-visible {
@@ -3208,7 +3246,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-switch[aria-checked="true"]:focus-visible {
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-accent);
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-switch__label {
@@ -3365,7 +3403,7 @@ dialog.mui-drawer--bottom {
 .mui-textarea {
   display: block;
   width: 100%;
-  background: var(--mui-bg-input);
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -3379,7 +3417,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-textarea::placeholder {
-  color: var(--mui-text-subtle);
+  color: var(--mui-text-muted);
 }
 
 .mui-textarea:hover:not(:disabled):not([readonly]) {
@@ -3387,9 +3425,9 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-textarea:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
   border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-textarea[aria-invalid="true"] {
@@ -3397,12 +3435,13 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-textarea[aria-invalid="true"]:focus-visible {
-  outline-color: var(--mui-danger);
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
 }
 
 .mui-textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .mui-textarea[readonly] {
@@ -3535,6 +3574,12 @@ dialog.mui-drawer--bottom {
 .mui-toast__close:hover {
   background-color: var(--mui-bg-input);
   color: var(--mui-text);
+}
+
+.mui-toast__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  opacity: 1;
 }
 
 /* --- Exit animation --------------------------------------------------- */

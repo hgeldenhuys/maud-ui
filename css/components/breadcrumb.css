@@ -35,6 +35,11 @@
   text-decoration: underline;
 }
 
+.mui-breadcrumb__item a:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
 /* Current page — foreground color, no link */
 .mui-breadcrumb__item--current {
   color: var(--mui-text);

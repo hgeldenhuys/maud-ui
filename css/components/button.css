@@ -121,8 +121,8 @@
 }
 
 .mui-btn--danger:hover:not([aria-disabled="true"]) {
-  background: #dc2626;
-  border-color: #dc2626;
+  background: color-mix(in srgb, var(--mui-danger) 85%, black);
+  border-color: color-mix(in srgb, var(--mui-danger) 85%, black);
 }
 
 /* --- Variant: Link ---------------------------------------------------- */

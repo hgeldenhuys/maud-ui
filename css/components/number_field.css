@@ -12,13 +12,14 @@
 }
 
 .mui-number-field:focus-within {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-  border-color: var(--mui-border-hover);
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-number-field[aria-disabled="true"] {
   opacity: 0.5;
+  cursor: not-allowed;
   pointer-events: none;
 }
 

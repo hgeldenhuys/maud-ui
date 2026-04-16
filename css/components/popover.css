@@ -5,6 +5,12 @@
 
 .mui-popover__trigger {
   cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-popover__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 /* shadcn: bg-popover border rounded-md shadow-md p-4 w-72 */

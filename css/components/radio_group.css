@@ -87,6 +87,7 @@
 .mui-radio:has(.mui-radio__input:disabled) {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Label — 0.875rem, medium weight */

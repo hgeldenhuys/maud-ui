@@ -48,6 +48,7 @@
 .mui-input-otp__slot:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 /* Group separator (dash between slot groups) */

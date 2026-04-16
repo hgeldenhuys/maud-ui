@@ -38,7 +38,7 @@
 /* Warning — solid amber, dark text for contrast */
 .mui-badge--warning {
   background-color: var(--mui-warning);
-  color: #1c1917;
+  color: var(--mui-bg);
 }
 
 /* Danger / destructive — solid red, white text */

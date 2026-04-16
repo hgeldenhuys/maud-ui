@@ -9,6 +9,12 @@
 .mui-hover-card__trigger {
   display: inline-flex;
   cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-hover-card__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
 }
 
 .mui-hover-card__content {

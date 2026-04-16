@@ -107,6 +107,12 @@
   color: var(--mui-text);
 }
 
+.mui-toast__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
 /* --- Exit animation --------------------------------------------------- */
 .mui-toast--exit {
   animation: mui-toast-exit 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;

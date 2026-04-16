@@ -1,51 +1,55 @@
-/* Badge component — minimal status indicators */
+/* Badge component — shadcn-quality solid-color pills */
 
 .mui-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 1.25rem;
-  padding: 0.125rem 0.5rem;
+  height: 1.375rem;
+  padding: 0 0.625rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border-radius: 0.375rem;
   line-height: 1;
-  border: 1px solid transparent;
   white-space: nowrap;
-  transition: var(--mui-transition);
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-full);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Default variant — muted background with border */
+/* Default — accent solid */
 .mui-badge--default {
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+/* Secondary — muted bg, normal text */
+.mui-badge--secondary {
   background-color: var(--mui-bg-input);
-  color: var(--mui-text-muted);
   border-color: var(--mui-border);
+  color: var(--mui-text-muted);
 }
 
-/* Success variant — green tint */
+/* Success — solid green, white text */
 .mui-badge--success {
-  background-color: rgba(34, 197, 94, 0.15);
-  color: var(--mui-success);
-  border-color: rgba(34, 197, 94, 0.3);
+  background-color: var(--mui-success);
+  color: #fff;
 }
 
-/* Warning variant — yellow tint */
+/* Warning — solid amber, dark text for contrast */
 .mui-badge--warning {
-  background-color: rgba(234, 179, 8, 0.15);
-  color: var(--mui-warning);
-  border-color: rgba(234, 179, 8, 0.3);
+  background-color: var(--mui-warning);
+  color: #1c1917;
 }
 
-/* Danger variant — red tint */
+/* Danger / destructive — solid red, white text */
 .mui-badge--danger {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: var(--mui-danger);
-  border-color: rgba(239, 68, 68, 0.3);
+  background-color: var(--mui-danger);
+  color: #fff;
 }
 
-/* Outline variant — transparent with border */
+/* Outline — transparent bg, border, text inherits */
 .mui-badge--outline {
   background-color: transparent;
-  color: var(--mui-text);
   border-color: var(--mui-border);
+  color: var(--mui-text);
 }

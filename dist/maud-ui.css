@@ -187,36 +187,28 @@ body {
 /* ═══ Components ═══ */
 
 /* --- accordion.css --- */
-/* Accordion component — multiple collapsibles with optional single-open mode */
+/* Accordion component — shadcn-style collapsibles with bottom-border separators */
 
 .mui-accordion {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
-  background: var(--mui-bg-card);
-  overflow: hidden;
 }
 
 .mui-accordion__item {
   border-bottom: 1px solid var(--mui-border);
 }
 
-.mui-accordion__item:last-child {
-  border-bottom: none;
-}
-
 .mui-accordion__trigger {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   width: 100%;
   background: transparent;
   color: var(--mui-text);
   border: none;
-  padding: 0.875rem 1rem;
+  padding: 1rem 0;
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
   text-align: left;
@@ -224,29 +216,41 @@ body {
 }
 
 .mui-accordion__trigger:hover {
-  background: var(--mui-bg-input);
+  text-decoration: underline;
 }
 
 .mui-accordion__trigger:focus-visible {
   outline: 2px solid var(--mui-border-focus);
-  outline-offset: -2px;
+  outline-offset: 2px;
+}
+
+.mui-accordion__label {
+  flex: 1;
 }
 
 .mui-accordion__chevron {
-  font-size: 0.75rem;
-  transition: transform var(--mui-transition);
-  color: var(--mui-text-muted);
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: var(--mui-text-muted);
+  transition: transform 200ms ease;
+}
+
+.mui-accordion__chevron svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .mui-accordion__trigger[aria-expanded="true"] .mui-accordion__chevron {
-  transform: rotate(90deg);
+  transform: rotate(180deg);
 }
 
 .mui-accordion__content {
-  padding: 0 1rem 0.875rem;
-  color: var(--mui-text);
+  padding: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  overflow: hidden;
 }
 
 .mui-accordion__content[hidden] {
@@ -502,56 +506,60 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- badge.css --- */
-/* Badge component — minimal status indicators */
+/* Badge component — shadcn-quality solid-color pills */
 
 .mui-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 1.25rem;
-  padding: 0.125rem 0.5rem;
+  height: 1.375rem;
+  padding: 0 0.625rem;
   font-size: 0.75rem;
   font-weight: 500;
-  border-radius: 0.375rem;
   line-height: 1;
-  border: 1px solid transparent;
   white-space: nowrap;
-  transition: var(--mui-transition);
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-full);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Default variant — muted background with border */
+/* Default — accent solid */
 .mui-badge--default {
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+/* Secondary — muted bg, normal text */
+.mui-badge--secondary {
   background-color: var(--mui-bg-input);
-  color: var(--mui-text-muted);
   border-color: var(--mui-border);
+  color: var(--mui-text-muted);
 }
 
-/* Success variant — green tint */
+/* Success — solid green, white text */
 .mui-badge--success {
-  background-color: rgba(34, 197, 94, 0.15);
-  color: var(--mui-success);
-  border-color: rgba(34, 197, 94, 0.3);
+  background-color: var(--mui-success);
+  color: #fff;
 }
 
-/* Warning variant — yellow tint */
+/* Warning — solid amber, dark text for contrast */
 .mui-badge--warning {
-  background-color: rgba(234, 179, 8, 0.15);
-  color: var(--mui-warning);
-  border-color: rgba(234, 179, 8, 0.3);
+  background-color: var(--mui-warning);
+  color: #1c1917;
 }
 
-/* Danger variant — red tint */
+/* Danger / destructive — solid red, white text */
 .mui-badge--danger {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: var(--mui-danger);
-  border-color: rgba(239, 68, 68, 0.3);
+  background-color: var(--mui-danger);
+  color: #fff;
 }
 
-/* Outline variant — transparent with border */
+/* Outline — transparent bg, border, text inherits */
 .mui-badge--outline {
   background-color: transparent;
-  color: var(--mui-text);
   border-color: var(--mui-border);
+  color: var(--mui-text);
 }
 
 /* --- breadcrumb.css --- */
@@ -659,24 +667,32 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* --- button.css --- */
-/* Button component — maud-ui Wave 1 */
+/* Button component — shadcn-quality polish */
 
 .mui-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   font-family: var(--mui-font-sans);
   font-weight: 500;
-  border: 1px solid;
+  white-space: nowrap;
+  border: 1px solid transparent;
   border-radius: var(--mui-radius-md);
   cursor: pointer;
-  transition: var(--mui-transition);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-/* Base sizing */
+/* --- Sizes ------------------------------------------------------------ */
+
 .mui-btn--sm {
-  height: 1.75rem;
-  padding: 0 0.625rem;
+  height: 2rem;
+  padding: 0 0.75rem;
   font-size: 0.75rem;
 }
 
@@ -687,18 +703,20 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--lg {
-  height: 2.75rem;
+  height: 2.5rem;
   padding: 0 1.5rem;
-  font-size: 1rem;
+  font-size: 0.875rem;
 }
 
 .mui-btn--icon {
   width: 2.25rem;
   height: 2.25rem;
   padding: 0;
+  flex-shrink: 0;
 }
 
-/* Variant: Default */
+/* --- Variant: Default (secondary feel — muted bg, text) --------------- */
+
 .mui-btn--default {
   background: var(--mui-bg-input);
   border-color: var(--mui-border);
@@ -706,20 +724,17 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--default:hover:not([aria-disabled="true"]) {
-  background: var(--mui-bg-input);
+  background: var(--mui-border);
   border-color: var(--mui-border-hover);
 }
 
-.mui-btn--default:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Primary (accent standout) ------------------------------- */
 
-/* Variant: Primary */
 .mui-btn--primary {
   background: var(--mui-accent);
   border-color: var(--mui-accent);
   color: var(--mui-accent-fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 .mui-btn--primary:hover:not([aria-disabled="true"]) {
@@ -727,12 +742,8 @@ dialog.mui-alert-dialog::backdrop {
   border-color: var(--mui-accent-hover);
 }
 
-.mui-btn--primary:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Secondary (same as default — neutral) ------------------- */
 
-/* Variant: Secondary */
 .mui-btn--secondary {
   background: var(--mui-bg-input);
   border-color: var(--mui-border);
@@ -740,15 +751,12 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-btn--secondary:hover:not([aria-disabled="true"]) {
+  background: var(--mui-border);
   border-color: var(--mui-border-hover);
 }
 
-.mui-btn--secondary:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Outline (transparent bg, border, accent on hover) ------- */
 
-/* Variant: Outline */
 .mui-btn--outline {
   background: transparent;
   border-color: var(--mui-border);
@@ -757,15 +765,11 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-btn--outline:hover:not([aria-disabled="true"]) {
   background: var(--mui-bg-input);
-  border-color: var(--mui-border-hover);
+  color: var(--mui-text);
 }
 
-.mui-btn--outline:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Ghost (invisible until hover) --------------------------- */
 
-/* Variant: Ghost */
 .mui-btn--ghost {
   background: transparent;
   border-color: transparent;
@@ -774,19 +778,15 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-btn--ghost:hover:not([aria-disabled="true"]) {
   background: var(--mui-bg-input);
-  border-color: var(--mui-border);
 }
 
-.mui-btn--ghost:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Danger / Destructive ------------------------------------ */
 
-/* Variant: Danger */
 .mui-btn--danger {
   background: var(--mui-danger);
   border-color: var(--mui-danger);
-  color: white;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 .mui-btn--danger:hover:not([aria-disabled="true"]) {
@@ -794,29 +794,31 @@ dialog.mui-alert-dialog::backdrop {
   border-color: #dc2626;
 }
 
-.mui-btn--danger:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
-}
+/* --- Variant: Link ---------------------------------------------------- */
 
-/* Variant: Link */
 .mui-btn--link {
   background: transparent;
   border-color: transparent;
   color: var(--mui-accent);
+  height: auto;
   padding: 0;
+  font-weight: 500;
+  text-underline-offset: 4px;
 }
 
 .mui-btn--link:hover:not([aria-disabled="true"]) {
   text-decoration: underline;
 }
 
-.mui-btn--link:focus-visible {
+/* --- Focus ring (all variants) ---------------------------------------- */
+
+.mui-btn:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
 }
 
-/* Disabled state */
+/* --- Disabled state --------------------------------------------------- */
+
 .mui-btn[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
@@ -835,14 +837,18 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 .mui-card__header {
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 1.5rem 1.5rem 0;
 }
 
 .mui-card__title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.125rem;
+  margin: 0;
+  font-size: 1.5rem;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
   color: var(--mui-text);
 }
 
@@ -857,60 +863,80 @@ dialog.mui-alert-dialog::backdrop {
   padding: 1.5rem;
 }
 
+/* When header is present, collapse top padding on body (pt-0 pattern) */
+.mui-card__header + .mui-card__body {
+  padding-top: 0;
+}
+
 .mui-card__footer {
-  padding: 1.5rem;
-  border-top: 1px solid var(--mui-border);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem 1.5rem;
+}
+
+/* When body is present before footer, collapse top padding */
+.mui-card__body + .mui-card__footer {
+  padding-top: 0;
 }
 
 /* --- checkbox.css --- */
-/* Checkbox component — custom styled checkbox with hidden native input */
+/* Checkbox component — shadcn/ui-grade styling */
 
 .mui-checkbox {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
   gap: 0.5rem;
   cursor: pointer;
   user-select: none;
-  line-height: 1.25;
 }
 
+/* Visually-hidden native input — fully accessible, invisible */
 .mui-checkbox__input {
   position: absolute;
-  opacity: 0;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  cursor: inherit;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
+/* Indicator — 16px square, rounded-sm, border */
 .mui-checkbox__indicator {
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-sm);
-  background: var(--mui-bg-input);
-  display: inline-flex;
+  background: transparent;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   transition: var(--mui-transition);
-  position: relative;
+  margin-top: 0.125rem; /* align with first line of text */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Checked state — filled accent with white checkmark */
 .mui-checkbox__input:checked + .mui-checkbox__indicator {
   background: var(--mui-accent);
   border-color: var(--mui-accent);
 }
 
+/* Checkmark — clean CSS check aligned precisely */
 .mui-checkbox__input:checked + .mui-checkbox__indicator::after {
   content: "";
-  width: 0.375rem;
-  height: 0.625rem;
+  display: block;
+  width: 0.25rem;
+  height: 0.5rem;
   border: solid var(--mui-accent-fg);
   border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-0.5px, -1px);
+  transform: rotate(45deg) translateY(-0.5px);
 }
 
+/* Indeterminate — accent bg with horizontal dash */
 .mui-checkbox__indicator--indeterminate {
   background: var(--mui-accent);
   border-color: var(--mui-accent);
@@ -918,26 +944,50 @@ dialog.mui-alert-dialog::backdrop {
 
 .mui-checkbox__indicator--indeterminate::after {
   content: "";
-  width: 0.625rem;
+  display: block;
+  width: 0.5rem;
   height: 2px;
   background: var(--mui-accent-fg);
-  transform: none;
+  border-radius: 1px;
 }
 
+/* Focus-visible ring */
 .mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
 }
 
-.mui-checkbox__input:disabled ~ *,
+/* Disabled — reduced opacity, not-allowed cursor */
 .mui-checkbox--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+.mui-checkbox--disabled .mui-checkbox__indicator {
+  cursor: not-allowed;
+}
+
+/* Label — 0.875rem, medium weight, leading-none */
 .mui-checkbox__label {
   color: var(--mui-text);
   font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Description text below label — smaller, muted */
+.mui-checkbox__description {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 0.125rem;
+}
+
+/* Label+description wrapper for vertical text stacking */
+.mui-checkbox__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* --- collapsible.css --- */
@@ -1044,75 +1094,100 @@ dialog.mui-dialog {
   color: var(--mui-text);
   padding: 0;
   box-shadow: var(--mui-shadow-lg);
-  max-width: 28rem;
+  max-width: 32rem;
   width: 90vw;
+  animation: mui-dialog-enter 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 dialog.mui-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  animation: mui-dialog-backdrop-enter 150ms ease-out;
 }
 
+@keyframes mui-dialog-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mui-dialog-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Header — no close button in flow; title + description only */
 .mui-dialog__header {
+  padding: 1.5rem 1.5rem 0;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.25rem 1.25rem 0;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
 .mui-dialog__title {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
+/* Close button — positioned absolute, out of header flow */
 .mui-dialog__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   background: transparent;
   border: none;
   color: var(--mui-text-muted);
   cursor: pointer;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--mui-radius-sm);
-  font-size: 1.25rem;
-  transition: background-color 0.15s, color 0.15s;
+  font-size: 1rem;
+  transition: opacity var(--mui-transition);
+  opacity: 0.7;
   flex-shrink: 0;
 }
 
 .mui-dialog__close:hover {
-  background: var(--mui-bg-input);
-  color: var(--mui-text);
+  opacity: 1;
 }
 
 .mui-dialog__close:active {
-  background: var(--mui-bg-subtle);
+  opacity: 0.5;
 }
 
 .mui-dialog__description {
-  padding: 0.5rem 1.25rem 0;
+  padding: 0 1.5rem;
   margin: 0;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .mui-dialog__body {
-  padding: 1.25rem;
+  padding: 1.5rem;
 }
 
 .mui-dialog__body > *:last-child {
   margin-bottom: 0;
 }
 
-.mui-dialog__actions {
+/* Footer for dialog actions — flex row, right-aligned, gap */
+.mui-dialog__footer {
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
-  margin-top: 1rem;
+  padding: 0 1.5rem 1.5rem;
 }
 
 /* --- drawer.css --- */
@@ -1519,7 +1594,7 @@ dialog.mui-drawer--bottom {
   display: block;
   width: 100%;
   height: 2.25rem;
-  background: var(--mui-bg-input);
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -1532,7 +1607,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-input::placeholder {
-  color: var(--mui-text-subtle);
+  color: var(--mui-text-muted);
 }
 
 .mui-input:hover:not(:disabled):not([readonly]) {
@@ -1540,9 +1615,9 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-input:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
   border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-input[aria-invalid="true"] {
@@ -1550,7 +1625,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-input[aria-invalid="true"]:focus-visible {
-  outline-color: var(--mui-danger);
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
 }
 
 .mui-input:disabled {
@@ -2060,68 +2135,99 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- radio.css --- */
-/* Radio component — single radio button in a group */
+/* Radio component — shadcn/ui-grade styling */
 
 .mui-radio {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
   gap: 0.5rem;
   cursor: pointer;
   user-select: none;
-  line-height: 1.25;
 }
 
+/* Visually-hidden native input — fully accessible, invisible */
 .mui-radio__input {
   position: absolute;
-  opacity: 0;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  cursor: inherit;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
+/* Indicator — 16px circle, 1px border */
 .mui-radio__indicator {
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-full);
-  background: var(--mui-bg-input);
-  flex-shrink: 0;
-  transition: var(--mui-transition);
-  position: relative;
-  display: inline-flex;
+  background: transparent;
+  display: flex;
   align-items: center;
   justify-content: center;
+  transition: var(--mui-transition);
+  margin-top: 0.125rem; /* align with first line of text */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Checked state — accent border, inner dot */
 .mui-radio__input:checked + .mui-radio__indicator {
   background: transparent;
   border-color: var(--mui-accent);
-  border-width: 2px;
+  border-width: 1px;
 }
 
+/* Inner dot — 8px filled circle */
 .mui-radio__input:checked + .mui-radio__indicator::after {
   content: "";
+  display: block;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: var(--mui-radius-full);
   background: var(--mui-accent);
 }
 
+/* Focus-visible ring */
 .mui-radio__input:focus-visible + .mui-radio__indicator {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
 }
 
-.mui-radio__input:disabled ~ *,
+/* Disabled — reduced opacity, not-allowed cursor */
 .mui-radio--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+.mui-radio--disabled .mui-radio__indicator {
+  cursor: not-allowed;
+}
+
+/* Label — 0.875rem, medium weight */
 .mui-radio__label {
   color: var(--mui-text);
   font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Description text below label — smaller, muted */
+.mui-radio__description {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 0.125rem;
+}
+
+/* Label+description wrapper for vertical text stacking */
+.mui-radio__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 /* --- scroll_area.css --- */
@@ -2212,7 +2318,7 @@ dialog.mui-drawer--bottom {
   min-width: 10rem;
   height: 2.25rem;
   padding: 0 0.75rem;
-  background: var(--mui-bg-input);
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -2229,8 +2335,9 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-select__trigger:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-select__trigger:disabled {
@@ -2245,7 +2352,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-select__chevron {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: var(--mui-text-muted);
   transition: transform var(--mui-transition);
   flex-shrink: 0;
@@ -2259,13 +2366,13 @@ dialog.mui-drawer--bottom {
   position: absolute;
   top: calc(100% + 0.25rem);
   left: 0;
-  right: 0;
+  min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
-  box-shadow: var(--mui-shadow-lg);
+  box-shadow: var(--mui-shadow-md);
   overflow-y: auto;
-  max-height: 12rem;
+  max-height: 15rem;
   z-index: 50;
   padding: 0.25rem;
 }
@@ -2275,11 +2382,15 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-select__option {
-  padding: 0.375rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem 0.375rem 0.5rem;
   cursor: pointer;
   border-radius: var(--mui-radius-sm);
   font-size: 0.875rem;
   transition: var(--mui-transition);
+  position: relative;
 }
 
 .mui-select__option:hover {
@@ -2287,8 +2398,28 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-select__option--selected {
-  background: var(--mui-accent);
-  color: var(--mui-accent-fg);
+  font-weight: 500;
+}
+
+.mui-select__check {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--mui-accent);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+}
+
+.mui-select__option--selected .mui-select__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-select__option-label {
+  flex: 1;
 }
 
 .mui-select__option--highlighted {
@@ -2500,37 +2631,36 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-switch {
-  width: 2.25rem;
-  height: 1.25rem;
-  border: 1px solid var(--mui-border);
+  width: 2.75rem;
+  height: 1.5rem;
+  border: none;
   border-radius: var(--mui-radius-full);
   background: var(--mui-bg-input);
   position: relative;
   cursor: pointer;
   padding: 0;
-  transition: background-color var(--mui-transition), border-color var(--mui-transition);
+  transition: background-color var(--mui-transition);
 }
 
 .mui-switch[aria-checked="true"] {
   background: var(--mui-accent);
-  border-color: var(--mui-accent);
 }
 
 .mui-switch__thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: calc(1.25rem - 4px);
-  height: calc(1.25rem - 4px);
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
   background: white;
   border-radius: var(--mui-radius-full);
   transition: transform var(--mui-transition);
   display: block;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .mui-switch[aria-checked="true"] .mui-switch__thumb {
-  transform: translateX(1rem);
+  transform: translateX(1.25rem);
 }
 
 .mui-switch:disabled,
@@ -2540,8 +2670,12 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-switch:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+}
+
+.mui-switch[aria-checked="true"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-accent);
 }
 
 .mui-switch__label {
@@ -2574,32 +2708,43 @@ dialog.mui-drawer--bottom {
   font-size: 0.875rem;
 }
 
+/* Caption — below table, muted, centered */
 .mui-table__caption {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   color: var(--mui-text-muted);
   font-size: 0.8125rem;
   text-align: left;
+  caption-side: bottom;
 }
 
+/* Header cells — subtle bg tint, uppercase micro-text, muted color */
 .mui-table__th {
   text-align: left;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--mui-border);
+  background-color: var(--mui-bg-input);
   color: var(--mui-text-muted);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .mui-table__td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--mui-border);
   color: var(--mui-text);
 }
 
 .mui-table__row {
+  border-bottom: 1px solid var(--mui-border);
   transition: background-color var(--mui-transition);
+}
+
+/* Remove border on last row (wrapper border handles it) */
+.mui-table tbody tr:last-child,
+.mui-table tbody tr:last-child .mui-table__td {
+  border-bottom: none;
 }
 
 /* Striped variant */
@@ -2613,11 +2758,6 @@ dialog.mui-drawer--bottom {
 }
 
 /* Compact variant */
-.mui-table--compact th,
-.mui-table--compact td {
-  padding: 0.375rem 0.75rem;
-}
-
 .mui-table--compact .mui-table__th {
   padding: 0.375rem 0.75rem;
 }
@@ -2627,34 +2767,34 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- tabs.css --- */
-/* Tabs component — client-side tabbed navigation with ARIA + keyboard support */
+/* Tabs component — shadcn-style segmented pill tabs with ARIA + keyboard support */
 
 .mui-tabs {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .mui-tabs__list {
   display: inline-flex;
+  align-items: center;
   gap: 0.25rem;
-  border-bottom: 1px solid var(--mui-border);
-  padding: 0 0.25rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-md);
+  padding: 0.25rem;
 }
 
 .mui-tabs__trigger {
   background: transparent;
   color: var(--mui-text-muted);
   border: none;
-  border-bottom: 2px solid transparent;
-  padding: 0.5rem 1rem;
+  padding: 0.375rem 0.75rem;
   font-family: inherit;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: -1px;
   transition: var(--mui-transition);
-  border-radius: var(--mui-radius-sm) var(--mui-radius-sm) 0 0;
+  border-radius: var(--mui-radius-sm);
+  white-space: nowrap;
 }
 
 .mui-tabs__trigger:hover {
@@ -2662,8 +2802,9 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-tabs__trigger[aria-selected="true"] {
+  background: var(--mui-bg-card);
   color: var(--mui-text);
-  border-bottom-color: var(--mui-accent);
+  box-shadow: var(--mui-shadow-sm);
 }
 
 .mui-tabs__trigger:focus-visible {
@@ -2672,7 +2813,7 @@ dialog.mui-drawer--bottom {
 }
 
 .mui-tabs__panel {
-  padding: 0.75rem 0;
+  padding: 1rem 0 0;
   color: var(--mui-text);
 }
 
@@ -2749,7 +2890,7 @@ dialog.mui-drawer--bottom {
 }
 
 /* --- toast.css --- */
-/* Toast component — transient notifications with dismiss and auto-dismiss */
+/* Toast component — clean card style, no left border accent */
 
 /* Viewport container — fixed position, stacks toasts bottom-right */
 .mui-toast-viewport {
@@ -2764,82 +2905,93 @@ dialog.mui-drawer--bottom {
   pointer-events: none;
 }
 
-/* Toast container — styled notification box */
+/* Toast card — uniform border, elevated shadow */
 .mui-toast {
   pointer-events: auto;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
-  border-left-width: 3px;
-  border-radius: var(--mui-radius-md);
-  padding: 0.75rem 2.5rem 0.75rem 1rem;
-  box-shadow: var(--mui-shadow-md);
-  min-width: 18rem;
-  max-width: 22rem;
+  border-radius: var(--mui-radius-lg);
+  padding: 0.875rem 2.5rem 0.875rem 1rem;
+  box-shadow: var(--mui-shadow-lg);
+  min-width: 20rem;
+  max-width: 24rem;
   position: relative;
-  animation: mui-toast-enter 0.2s ease-out;
+  animation: mui-toast-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Info variant — blue accent border */
-.mui-toast--info {
-  border-left-color: var(--mui-accent);
-}
+/* --- Variant indicator dot -------------------------------------------- */
+/* Small colored dot before the title instead of thick left border */
 
-/* Success variant — green accent border */
-.mui-toast--success {
-  border-left-color: var(--mui-success);
-}
-
-/* Warning variant — yellow accent border */
-.mui-toast--warning {
-  border-left-color: var(--mui-warning);
-}
-
-/* Danger variant — red accent border */
-.mui-toast--danger {
-  border-left-color: var(--mui-danger);
-}
-
-/* Exit animation — fade out and slide right */
-.mui-toast--exit {
-  opacity: 0;
-  transform: translateX(100%);
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-/* Title — bold, small font */
 .mui-toast__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--mui-text);
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.25;
 }
 
-/* Description — muted color, smaller font */
+.mui-toast__title::before {
+  content: "";
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+}
+
+/* Variant dot colors */
+.mui-toast--info .mui-toast__title::before {
+  background: var(--mui-accent);
+}
+
+.mui-toast--success .mui-toast__title::before {
+  background: var(--mui-success);
+}
+
+.mui-toast--warning .mui-toast__title::before {
+  background: var(--mui-warning);
+}
+
+.mui-toast--danger .mui-toast__title::before {
+  background: var(--mui-danger);
+}
+
+/* Description — muted, indented to align past the dot */
 .mui-toast__description {
   color: var(--mui-text-muted);
   font-size: 0.8125rem;
-  line-height: 1.4;
+  line-height: 1.5;
   margin-top: 0.25rem;
+  padding-left: 1rem;
 }
 
-/* Close button — positioned top-right */
+/* Close button — subtle, top-right */
 .mui-toast__close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.625rem;
+  right: 0.625rem;
   background: transparent;
   border: none;
-  color: var(--mui-text-muted);
+  color: var(--mui-text-subtle);
   cursor: pointer;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--mui-radius-sm);
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   line-height: 1;
-  transition: background-color 0.15s, color 0.15s;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+}
+
+/* Show close on card hover */
+.mui-toast:hover .mui-toast__close {
+  opacity: 1;
 }
 
 .mui-toast__close:hover {
@@ -2847,7 +2999,12 @@ dialog.mui-drawer--bottom {
   color: var(--mui-text);
 }
 
-/* Enter animation keyframe */
+/* --- Exit animation --------------------------------------------------- */
+.mui-toast--exit {
+  animation: mui-toast-exit 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+/* --- Keyframes -------------------------------------------------------- */
 @keyframes mui-toast-enter {
   from {
     opacity: 0;
@@ -2856,6 +3013,17 @@ dialog.mui-drawer--bottom {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes mui-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 

@@ -1,4 +1,4 @@
-//! Radio component — single radio button in a group
+//! Radio component — single radio button in a group (shadcn/ui-grade)
 
 use maud::{html, Markup, PreEscaped};
 
@@ -7,6 +7,7 @@ pub struct Props {
     pub name: String,
     pub value: String,
     pub label: String,
+    pub description: Option<String>,
     pub id: String,
     pub checked: bool,
     pub disabled: bool,
@@ -19,6 +20,7 @@ impl Default for Props {
             name: "radio".to_string(),
             value: "option".to_string(),
             label: "Option".to_string(),
+            description: None,
             id: "radio-default".to_string(),
             checked: false,
             disabled: false,
@@ -49,11 +51,22 @@ pub fn render(props: Props) -> Markup {
         required_attr,
     );
 
+    let has_desc = props.description.is_some();
+
     html! {
         label class=(class) for=(props.id) {
             (PreEscaped(input_html))
             span class="mui-radio__indicator" aria-hidden="true" {}
-            span class="mui-radio__label" { (props.label) }
+            @if has_desc {
+                span class="mui-radio__text" {
+                    span class="mui-radio__label" { (props.label) }
+                    @if let Some(desc) = props.description {
+                        span class="mui-radio__description" { (desc) }
+                    }
+                }
+            } @else {
+                span class="mui-radio__label" { (props.label) }
+            }
         }
     }
 }
@@ -75,34 +88,33 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             section {
-                h2 { "Plan" }
-                div.mui-showcase__row {
+                h2 { "Radio — Plan" }
+                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
                     (render(Props {
                         name: "plan".to_string(),
                         value: "free".to_string(),
                         label: "Free".to_string(),
+                        description: None,
                         id: "demo-radio-plan-free".to_string(),
                         checked: true,
                         disabled: false,
                         required: false,
                     }))
-                }
-                div.mui-showcase__row {
                     (render(Props {
                         name: "plan".to_string(),
                         value: "pro".to_string(),
                         label: "Pro".to_string(),
+                        description: None,
                         id: "demo-radio-plan-pro".to_string(),
                         checked: false,
                         disabled: false,
                         required: false,
                     }))
-                }
-                div.mui-showcase__row {
                     (render(Props {
                         name: "plan".to_string(),
                         value: "team".to_string(),
                         label: "Team".to_string(),
+                        description: None,
                         id: "demo-radio-plan-team".to_string(),
                         checked: false,
                         disabled: false,
@@ -111,12 +123,13 @@ pub fn showcase() -> Markup {
                 }
             }
             section {
-                h2 { "States" }
-                div.mui-showcase__row {
+                h2 { "Radio — States" }
+                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
                     (render(Props {
                         name: "state-unchecked".to_string(),
                         value: "unchecked".to_string(),
                         label: "Unchecked".to_string(),
+                        description: None,
                         id: "demo-radio-state-unchecked".to_string(),
                         checked: false,
                         disabled: false,
@@ -126,6 +139,7 @@ pub fn showcase() -> Markup {
                         name: "state-checked".to_string(),
                         value: "checked".to_string(),
                         label: "Checked".to_string(),
+                        description: None,
                         id: "demo-radio-state-checked".to_string(),
                         checked: true,
                         disabled: false,
@@ -135,6 +149,7 @@ pub fn showcase() -> Markup {
                         name: "state-disabled-unchecked".to_string(),
                         value: "disabled-unchecked".to_string(),
                         label: "Disabled unchecked".to_string(),
+                        description: None,
                         id: "demo-radio-state-disabled-unchecked".to_string(),
                         checked: false,
                         disabled: true,
@@ -144,9 +159,45 @@ pub fn showcase() -> Markup {
                         name: "state-disabled-checked".to_string(),
                         value: "disabled-checked".to_string(),
                         label: "Disabled checked".to_string(),
+                        description: None,
                         id: "demo-radio-state-disabled-checked".to_string(),
                         checked: true,
                         disabled: true,
+                        required: false,
+                    }))
+                }
+            }
+            section {
+                h2 { "Radio — With Descriptions" }
+                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
+                    (render(Props {
+                        name: "notify".to_string(),
+                        value: "all".to_string(),
+                        label: "All new messages".to_string(),
+                        description: Some("Receive notifications for every new message.".to_string()),
+                        id: "demo-radio-notify-all".to_string(),
+                        checked: true,
+                        disabled: false,
+                        required: false,
+                    }))
+                    (render(Props {
+                        name: "notify".to_string(),
+                        value: "mentions".to_string(),
+                        label: "Direct messages and mentions".to_string(),
+                        description: Some("Only get notified when someone mentions you.".to_string()),
+                        id: "demo-radio-notify-mentions".to_string(),
+                        checked: false,
+                        disabled: false,
+                        required: false,
+                    }))
+                    (render(Props {
+                        name: "notify".to_string(),
+                        value: "none".to_string(),
+                        label: "Nothing".to_string(),
+                        description: Some("Turn off all notifications.".to_string()),
+                        id: "demo-radio-notify-none".to_string(),
+                        checked: false,
+                        disabled: false,
                         required: false,
                     }))
                 }

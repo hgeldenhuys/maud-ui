@@ -4,7 +4,7 @@
   display: block;
   width: 100%;
   height: 2.25rem;
-  background: var(--mui-bg-input);
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -17,7 +17,7 @@
 }
 
 .mui-input::placeholder {
-  color: var(--mui-text-subtle);
+  color: var(--mui-text-muted);
 }
 
 .mui-input:hover:not(:disabled):not([readonly]) {
@@ -25,9 +25,9 @@
 }
 
 .mui-input:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
   border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-input[aria-invalid="true"] {
@@ -35,7 +35,7 @@
 }
 
 .mui-input[aria-invalid="true"]:focus-visible {
-  outline-color: var(--mui-danger);
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
 }
 
 .mui-input:disabled {

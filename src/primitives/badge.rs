@@ -6,6 +6,7 @@ use maud::{html, Markup};
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Variant {
     Default,
+    Secondary,
     Success,
     Warning,
     Danger,
@@ -16,6 +17,7 @@ impl Variant {
     fn class(&self) -> &'static str {
         match self {
             Self::Default => "mui-badge--default",
+            Self::Secondary => "mui-badge--secondary",
             Self::Success => "mui-badge--success",
             Self::Warning => "mui-badge--warning",
             Self::Danger => "mui-badge--danger",
@@ -64,6 +66,10 @@ pub fn showcase() -> Markup {
                         variant: Variant::Default,
                     }))
                     (render(Props {
+                        label: "Secondary".into(),
+                        variant: Variant::Secondary,
+                    }))
+                    (render(Props {
                         label: "Success".into(),
                         variant: Variant::Success,
                     }))
@@ -101,6 +107,10 @@ pub fn showcase() -> Markup {
                     (render(Props {
                         label: "5 new".into(),
                         variant: Variant::Default,
+                    }))
+                    (render(Props {
+                        label: "v2.1".into(),
+                        variant: Variant::Secondary,
                     }))
                 }
             }

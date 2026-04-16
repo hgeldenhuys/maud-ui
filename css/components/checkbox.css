@@ -1,51 +1,60 @@
-/* Checkbox component — custom styled checkbox with hidden native input */
+/* Checkbox component — shadcn/ui-grade styling */
 
 .mui-checkbox {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
   gap: 0.5rem;
   cursor: pointer;
   user-select: none;
-  line-height: 1.25;
 }
 
+/* Visually-hidden native input — fully accessible, invisible */
 .mui-checkbox__input {
   position: absolute;
-  opacity: 0;
-  width: 1rem;
-  height: 1rem;
-  margin: 0;
-  cursor: inherit;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
+/* Indicator — 16px square, rounded-sm, border */
 .mui-checkbox__indicator {
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-sm);
-  background: var(--mui-bg-input);
-  display: inline-flex;
+  background: transparent;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   transition: var(--mui-transition);
-  position: relative;
+  margin-top: 0.125rem; /* align with first line of text */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Checked state — filled accent with white checkmark */
 .mui-checkbox__input:checked + .mui-checkbox__indicator {
   background: var(--mui-accent);
   border-color: var(--mui-accent);
 }
 
+/* Checkmark — clean CSS check aligned precisely */
 .mui-checkbox__input:checked + .mui-checkbox__indicator::after {
   content: "";
-  width: 0.375rem;
-  height: 0.625rem;
+  display: block;
+  width: 0.25rem;
+  height: 0.5rem;
   border: solid var(--mui-accent-fg);
   border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-0.5px, -1px);
+  transform: rotate(45deg) translateY(-0.5px);
 }
 
+/* Indeterminate — accent bg with horizontal dash */
 .mui-checkbox__indicator--indeterminate {
   background: var(--mui-accent);
   border-color: var(--mui-accent);
@@ -53,24 +62,48 @@
 
 .mui-checkbox__indicator--indeterminate::after {
   content: "";
-  width: 0.625rem;
+  display: block;
+  width: 0.5rem;
   height: 2px;
   background: var(--mui-accent-fg);
-  transform: none;
+  border-radius: 1px;
 }
 
+/* Focus-visible ring */
 .mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
 }
 
-.mui-checkbox__input:disabled ~ *,
+/* Disabled — reduced opacity, not-allowed cursor */
 .mui-checkbox--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+.mui-checkbox--disabled .mui-checkbox__indicator {
+  cursor: not-allowed;
+}
+
+/* Label — 0.875rem, medium weight, leading-none */
 .mui-checkbox__label {
   color: var(--mui-text);
   font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* Description text below label — smaller, muted */
+.mui-checkbox__description {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 0.125rem;
+}
+
+/* Label+description wrapper for vertical text stacking */
+.mui-checkbox__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }

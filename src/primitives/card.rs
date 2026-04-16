@@ -93,7 +93,7 @@ pub fn showcase() -> Markup {
                         }
                     },
                     footer: Some(html! {
-                        div style="display: flex; gap: 0.75rem; justify-content: flex-end;" {
+                        div style="display: flex; gap: 0.5rem; margin-left: auto;" {
                             button class="mui-btn mui-btn--secondary" { "Cancel" }
                             button class="mui-btn mui-btn--primary" { "Save" }
                         }

@@ -5,6 +5,7 @@ use maud::{html, Markup};
 pub struct RadioOption {
     pub value: String,
     pub label: String,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -49,7 +50,14 @@ pub fn render(props: Props) -> Markup {
                         disabled[props.disabled]
                     ;
                     span class="mui-radio__indicator" aria-hidden="true" {}
-                    span class="mui-radio__label" { (opt.label) }
+                    @if let Some(desc) = opt.description {
+                        span class="mui-radio__text" {
+                            span class="mui-radio__label" { (opt.label) }
+                            span class="mui-radio__description" { (desc) }
+                        }
+                    } @else {
+                        span class="mui-radio__label" { (opt.label) }
+                    }
                 }
             }
         }
@@ -64,9 +72,9 @@ pub fn showcase() -> Markup {
                 name: "plan".to_string(),
                 label: "Plan".to_string(),
                 options: vec![
-                    RadioOption { value: "free".to_string(), label: "Free".to_string() },
-                    RadioOption { value: "pro".to_string(), label: "Pro".to_string() },
-                    RadioOption { value: "team".to_string(), label: "Team".to_string() },
+                    RadioOption { value: "free".to_string(), label: "Free".to_string(), description: None },
+                    RadioOption { value: "pro".to_string(), label: "Pro".to_string(), description: None },
+                    RadioOption { value: "team".to_string(), label: "Team".to_string(), description: None },
                 ],
                 selected: Some("pro".to_string()),
                 orientation: Orientation::Vertical,
@@ -79,10 +87,10 @@ pub fn showcase() -> Markup {
                 name: "size".to_string(),
                 label: "Size".to_string(),
                 options: vec![
-                    RadioOption { value: "s".to_string(), label: "S".to_string() },
-                    RadioOption { value: "m".to_string(), label: "M".to_string() },
-                    RadioOption { value: "l".to_string(), label: "L".to_string() },
-                    RadioOption { value: "xl".to_string(), label: "XL".to_string() },
+                    RadioOption { value: "s".to_string(), label: "S".to_string(), description: None },
+                    RadioOption { value: "m".to_string(), label: "M".to_string(), description: None },
+                    RadioOption { value: "l".to_string(), label: "L".to_string(), description: None },
+                    RadioOption { value: "xl".to_string(), label: "XL".to_string(), description: None },
                 ],
                 selected: None,
                 orientation: Orientation::Horizontal,

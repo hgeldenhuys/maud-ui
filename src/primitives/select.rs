@@ -76,7 +76,8 @@ pub fn render(props: Props) -> Markup {
                             data-value=(opt.value.clone())
                             aria-selected=(props.selected.as_ref() == Some(&opt.value))
                             aria-disabled="true" {
-                            (opt.label.clone())
+                            span class="mui-select__check" aria-hidden="true" { "\u{2713}" }
+                            span class="mui-select__option-label" { (opt.label.clone()) }
                         }
                     } @else {
                         div class=(format!("mui-select__option{}", if props.selected.as_ref() == Some(&opt.value) { " mui-select__option--selected" } else { "" }))
@@ -84,7 +85,8 @@ pub fn render(props: Props) -> Markup {
                             data-value=(opt.value.clone())
                             aria-selected=(props.selected.as_ref() == Some(&opt.value))
                             aria-disabled="false" {
-                            (opt.label.clone())
+                            span class="mui-select__check" aria-hidden="true" { "\u{2713}" }
+                            span class="mui-select__option-label" { (opt.label.clone()) }
                         }
                     }
                 }

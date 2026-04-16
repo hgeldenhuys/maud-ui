@@ -13,7 +13,7 @@
   min-width: 10rem;
   height: 2.25rem;
   padding: 0 0.75rem;
-  background: var(--mui-bg-input);
+  background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -30,8 +30,9 @@
 }
 
 .mui-select__trigger:focus-visible {
-  outline: 2px solid var(--mui-border-focus);
-  outline-offset: 2px;
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
 }
 
 .mui-select__trigger:disabled {
@@ -46,7 +47,7 @@
 }
 
 .mui-select__chevron {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: var(--mui-text-muted);
   transition: transform var(--mui-transition);
   flex-shrink: 0;
@@ -60,13 +61,13 @@
   position: absolute;
   top: calc(100% + 0.25rem);
   left: 0;
-  right: 0;
+  min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
-  box-shadow: var(--mui-shadow-lg);
+  box-shadow: var(--mui-shadow-md);
   overflow-y: auto;
-  max-height: 12rem;
+  max-height: 15rem;
   z-index: 50;
   padding: 0.25rem;
 }
@@ -76,11 +77,15 @@
 }
 
 .mui-select__option {
-  padding: 0.375rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem 0.375rem 0.5rem;
   cursor: pointer;
   border-radius: var(--mui-radius-sm);
   font-size: 0.875rem;
   transition: var(--mui-transition);
+  position: relative;
 }
 
 .mui-select__option:hover {
@@ -88,8 +93,28 @@
 }
 
 .mui-select__option--selected {
-  background: var(--mui-accent);
-  color: var(--mui-accent-fg);
+  font-weight: 500;
+}
+
+.mui-select__check {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--mui-accent);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  text-align: center;
+}
+
+.mui-select__option--selected .mui-select__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-select__option-label {
+  flex: 1;
 }
 
 .mui-select__option--highlighted {

@@ -14,13 +14,13 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## Features
 
-- **29 UI primitives** — buttons, forms, dialogs, menus, sliders, tabs, popovers, tooltips, and more
-- **Correct accessibility** — ARIA roles, keyboard navigation, focus management, semantic HTML
-- **Dark + light themes** — CSS custom properties for instant customization
-- **Progressive enhancement** — all components work without JavaScript; enhanced with htmx + vanilla JS
-- **Single Rust dependency** — only maud; no serde, no framework lock-in
-- **Minimal runtime** — 34 KB JavaScript (minified), 39 KB CSS across all components
-- **Ship pre-built artifacts** — no build step required for consumers
+- **48 UI primitives** -- buttons, forms, dialogs, menus, tables, drawers, sliders, tabs, popovers, tooltips, and more
+- **Correct accessibility** -- ARIA roles, keyboard navigation, focus management, semantic HTML
+- **Dark + light themes** -- CSS custom properties for instant customization
+- **Progressive enhancement** -- all components work without JavaScript; enhanced with htmx + vanilla JS
+- **Single Rust dependency** -- only maud; no serde, no framework lock-in
+- **Minimal runtime** -- 34 KB JavaScript (minified), 39 KB CSS across all components
+- **Ship pre-built artifacts** -- no build step required for consumers
 - **MIT licensed**
 
 ## Quick start
@@ -35,7 +35,7 @@ Run the gallery:
 git clone https://git.kapable.dev/kapable/maud-ui
 cd maud-ui
 cargo run --example showcase
-# open http://127.0.0.1:3456
+# open http://127.0.0.1:3457
 ```
 
 ## Usage example
@@ -80,51 +80,84 @@ fn my_page() -> Markup {
 
 ## Component reference
 
-All 30 primitives are organized into three tiers based on JS requirements:
+All 48 primitives are organized into three tiers based on JS requirements:
 
 ### Tier 1: Pure HTML+CSS (no JavaScript required)
 
 | Component | Module | Props | Variants |
 |-----------|--------|-------|----------|
+| Alert | `alert` | title, description, variant, icon | Default, Info, Success, Warning, Danger |
+| Aspect Ratio | `aspect_ratio` | ratio, children | -- |
 | Avatar | `avatar` | src, alt, fallback, size | Sm, Md, Lg |
 | Badge | `badge` | label, variant | Default, Success, Warning, Danger, Outline |
+| Breadcrumb | `breadcrumb` | items (BreadcrumbItem: label, href) | -- |
 | Button | `button` | label, variant, size, disabled, button_type | Default, Primary, Secondary, Outline, Ghost, Danger, Link; Sm, Md, Lg, Icon |
-| Fieldset | `fieldset` | legend, disabled, children | — |
-| Meter | `meter` | value, min, max, low, high, optimum | — |
-| Progress | `progress` | value, max, label, indeterminate | — |
+| Button Group | `button_group` | children, orientation, size | Horizontal, Vertical |
+| Card | `card` | title, description, children, footer | -- |
+| Checkbox | `checkbox` | name, value, label, id, checked, indeterminate, disabled, required | -- |
+| Empty State | `empty_state` | icon, title, description, action | -- |
+| Field | `field` | label, id, description, error, required, children | -- |
+| Fieldset | `fieldset` | legend, disabled, children | -- |
+| Input | `input` | name, input_type, placeholder, value, id, disabled, required | Text, Email, Password, Number, Tel, Url, Search |
+| Kbd | `kbd` | keys (Vec) | -- |
+| Label | `label` | text, html_for, required | -- |
+| Meter | `meter` | value, min, max, low, high, optimum | -- |
+| Native Select | `native_select` | name, id, options, selected, disabled, placeholder | -- |
+| Number Field | `number_field` | name, value, min, max, step, disabled, required | -- |
+| Pagination | `pagination` | current_page, total_pages, max_visible | -- |
+| Progress | `progress` | value, max, label, indeterminate | -- |
+| Radio | `radio` | name, value, label, id, checked, disabled, required | -- |
+| Radio Group | `radio_group` | name, label, options, selected, orientation, disabled | Vertical, Horizontal |
 | Separator | `separator` | orientation, decorative | Horizontal, Vertical |
-| Switch | `switch` | name, id, label, checked, disabled | — |
-| Textarea | `textarea` | name, placeholder, value, rows, id, required | — |
-| Toggle | `toggle` | label, pressed, disabled, id | — |
+| Skeleton | `skeleton` | variant, width, height | Text, Circle, Rect |
+| Spinner | `spinner` | size, label | Sm, Md, Lg |
+| Table | `table` | headers, rows, striped, hoverable, compact, caption | -- |
+| Textarea | `textarea` | name, placeholder, value, rows, id, required | -- |
+| Typography | `typography` | (functions: h1, h2, h3, h4, p, lead, muted, code_inline, blockquote) | -- |
 
 ### Tier 2: JS-enhanced (works without JS, full keyboard nav requires JS)
 
 | Component | Module | Props | Variants |
 |-----------|--------|-------|----------|
-| Accordion | `accordion` | items, multiple | — |
-| Alert Dialog | `alert_dialog` | id, title, description, children, open | — |
-| Checkbox | `checkbox` | name, value, label, id, checked, indeterminate, disabled, required | — |
-| Collapsible | `collapsible` | trigger_label, content, open, id | — |
-| Context Menu | `context_menu` | id, trigger, items | — |
-| Dialog | `dialog` | id, title, description, children, open | — |
-| Field | `field` | label, id, description, error, required, children | — |
-| Input | `input` | name, input_type, placeholder, value, id, disabled, required | Text, Email, Password, Number, Tel, Url, Search |
-| Menu | `menu` | trigger_label, id, items | — |
-| Number Field | `number_field` | name, value, min, max, step, disabled, required | — |
-| Popover | `popover` | id, trigger, content, placement, align | Top, Bottom, Left, Right; Start, Center, End |
-| Radio | `radio` | name, value, label, id, checked, disabled, required | — |
-| Scroll Area | `scroll_area` | max_height, id, children | — |
-| Select | `select` | name, id, options, selected, placeholder, disabled | — |
-| Slider | `slider` | name, id, value, min, max, step, disabled, label, show_value | — |
-| Tabs | `tabs` | tabs, default_active, aria_label | — |
-| Toggle Group | `toggle_group` | items, multiple, disabled, aria_label | — |
+| Accordion | `accordion` | items, multiple | -- |
+| Collapsible | `collapsible` | trigger_label, content, open, id | -- |
+| Hover Card | `hover_card` | trigger, content, id, open_delay_ms, close_delay_ms | -- |
+| Input Group | `input_group` | prefix, suffix, children | -- |
+| Input OTP | `input_otp` | length, name, id, disabled | -- |
+| Switch | `switch` | name, id, label, checked, disabled | -- |
+| Tabs | `tabs` | tabs, default_active, aria_label | -- |
+| Toast | `toast` | title, description, variant, duration_ms, id | Default, Success, Warning, Danger |
+| Toggle | `toggle` | label, pressed, disabled, id | -- |
+| Toggle Group | `toggle_group` | items, multiple, disabled, aria_label | -- |
 | Tooltip | `tooltip` | content, placement, delay_ms, trigger, id | Top, Bottom, Left, Right |
 
 ### Tier 3: Full interaction (JavaScript required for core functionality)
 
 | Component | Module | Props | Variants |
 |-----------|--------|-------|----------|
-| Toast | `toast` | title, description, variant, duration_ms, id | Default, Success, Warning, Danger |
+| Alert Dialog | `alert_dialog` | id, title, description, children, open | -- |
+| Context Menu | `context_menu` | id, trigger, items | -- |
+| Dialog | `dialog` | id, title, description, children, open | -- |
+| Drawer | `drawer` | id, title, description, children, side | Left, Right, Top, Bottom |
+| Menu | `menu` | trigger_label, id, items | -- |
+| Popover | `popover` | id, trigger, content, placement, align | Top, Bottom, Left, Right; Start, Center, End |
+| Scroll Area | `scroll_area` | max_height, id, children | -- |
+| Select | `select` | name, id, options, selected, placeholder, disabled | -- |
+| Slider | `slider` | name, id, value, min, max, step, disabled, label, show_value | -- |
+
+## shadcn/ui coverage
+
+maud-ui implements 48 of shadcn's ~57 components. Components not yet implemented:
+Calendar, Carousel, Chart, Combobox, Command, Data Table, Date Picker,
+Menubar, Navigation Menu, Resizable.
+
+## Gallery
+
+```bash
+cargo run --example showcase
+# Main gallery: http://localhost:3457
+# Individual: http://localhost:3457/button, /tabs, /dialog, etc.
+```
 
 ## Theming
 
@@ -143,37 +176,37 @@ All components use CSS custom properties (CSS variables) for colors, spacing, sh
 ### CSS Custom Properties
 
 **Colors (auto-switched dark/light):**
-- `--mui-bg` — background color
-- `--mui-bg-card` — card/elevated background
-- `--mui-bg-overlay` — semi-transparent overlay
-- `--mui-bg-input` — input field background
-- `--mui-border` — border color
-- `--mui-border-hover` — border on hover/focus
-- `--mui-border-focus` — focus ring color
-- `--mui-text` — primary text color
-- `--mui-text-muted` — secondary text
-- `--mui-text-subtle` — tertiary text
-- `--mui-accent` — primary interactive color
-- `--mui-accent-hover` — accent on hover/focus
-- `--mui-accent-fg` — text color on accent background
-- `--mui-success` — success state color
-- `--mui-warning` — warning state color
-- `--mui-danger` — danger/error state color
+- `--mui-bg` -- background color
+- `--mui-bg-card` -- card/elevated background
+- `--mui-bg-overlay` -- semi-transparent overlay
+- `--mui-bg-input` -- input field background
+- `--mui-border` -- border color
+- `--mui-border-hover` -- border on hover/focus
+- `--mui-border-focus` -- focus ring color
+- `--mui-text` -- primary text color
+- `--mui-text-muted` -- secondary text
+- `--mui-text-subtle` -- tertiary text
+- `--mui-accent` -- primary interactive color
+- `--mui-accent-hover` -- accent on hover/focus
+- `--mui-accent-fg` -- text color on accent background
+- `--mui-success` -- success state color
+- `--mui-warning` -- warning state color
+- `--mui-danger` -- danger/error state color
 
 **Spacing:**
-- `--mui-radius-sm` — small border radius (form fields)
-- `--mui-radius-md` — medium border radius
-- `--mui-radius-lg` — large border radius
-- `--mui-radius-full` — fully rounded (pills)
+- `--mui-radius-sm` -- small border radius (form fields)
+- `--mui-radius-md` -- medium border radius
+- `--mui-radius-lg` -- large border radius
+- `--mui-radius-full` -- fully rounded (pills)
 
 **Typography:**
-- `--mui-font-sans` — system font stack
-- `--mui-font-mono` — monospace font stack
+- `--mui-font-sans` -- system font stack
+- `--mui-font-mono` -- monospace font stack
 
 **Effects:**
-- `--mui-shadow-sm`, `--mui-shadow-md`, `--mui-shadow-lg` — drop shadows
-- `--mui-ring` — focus ring (computed from border-focus)
-- `--mui-transition` — standard transition timing
+- `--mui-shadow-sm`, `--mui-shadow-md`, `--mui-shadow-lg` -- drop shadows
+- `--mui-ring` -- focus ring (computed from border-focus)
+- `--mui-transition` -- standard transition timing
 
 ## Design tokens
 
@@ -212,7 +245,7 @@ The runtime is bundled in `dist/maud-ui.js` and automatically re-initializes com
 ```bash
 cargo check              # Type-check the crate
 cargo test               # Run tests
-cargo run --example showcase  # Run the component gallery (http://127.0.0.1:3456)
+cargo run --example showcase  # Run the component gallery (http://127.0.0.1:3457)
 ```
 
 Building the distribution artifacts:
@@ -238,12 +271,12 @@ Consumers receive pre-built CSS and JavaScript in the `dist/` directory; no buil
 
 ## Architecture
 
-- `src/primitives/` — 30 UI components, each with `Props`, `Variant` enums, and `render(props) -> Markup`
-- `src/tokens.rs` — Rust design token constants (mirrors CSS custom properties)
-- `css/` — Component styles organized by feature
-- `js/` — Progressive enhancement behaviors and maud-ui runtime
-- `dist/` — Pre-built CSS and JavaScript (minified)
-- `examples/showcase.rs` — Interactive gallery of all components
+- `src/primitives/` -- 48 UI components, each with `Props`, `Variant` enums, and `render(props) -> Markup`
+- `src/tokens.rs` -- Rust design token constants (mirrors CSS custom properties)
+- `css/` -- Component styles organized by feature
+- `js/` -- Progressive enhancement behaviors and maud-ui runtime
+- `dist/` -- Pre-built CSS and JavaScript (minified)
+- `examples/showcase.rs` -- Interactive gallery of all components
 
 ## License
 

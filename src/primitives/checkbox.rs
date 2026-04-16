@@ -1,4 +1,4 @@
-//! Checkbox component — maud-ui Wave 1
+//! Checkbox component — maud-ui (shadcn/ui-grade)
 
 use maud::{html, Markup};
 
@@ -7,6 +7,7 @@ pub struct Props {
     pub name: String,
     pub value: String,
     pub label: String,
+    pub description: Option<String>,
     pub id: String,
     pub checked: bool,
     pub indeterminate: bool,
@@ -20,6 +21,7 @@ impl Default for Props {
             name: "checkbox".to_string(),
             value: "on".to_string(),
             label: "Checkbox".to_string(),
+            description: None,
             id: "checkbox".to_string(),
             checked: false,
             indeterminate: false,
@@ -49,6 +51,8 @@ pub fn render(props: Props) -> Markup {
     } else {
         "false"
     };
+
+    let has_desc = props.description.is_some();
 
     html! {
         label class=(format!("mui-checkbox{}", disabled_class)) for=(props.id.clone()) {
@@ -82,10 +86,17 @@ pub fn render(props: Props) -> Markup {
                 }
             }
 
-            span class=(format!("mui-checkbox__indicator{}", indeterminate_class)) aria-hidden="true";
+            span class=(format!("mui-checkbox__indicator{}", indeterminate_class)) aria-hidden="true" {}
 
-            span class="mui-checkbox__label" {
-                (props.label)
+            @if has_desc {
+                span class="mui-checkbox__text" {
+                    span class="mui-checkbox__label" { (props.label) }
+                    @if let Some(desc) = props.description {
+                        span class="mui-checkbox__description" { (desc) }
+                    }
+                }
+            } @else {
+                span class="mui-checkbox__label" { (props.label) }
             }
         }
     }
@@ -95,12 +106,13 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             section {
-                h2 { "States" }
-                div.mui-showcase__row {
+                h2 { "Checkbox" }
+                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
                     (render(Props {
                         name: "cb-unchecked".to_string(),
                         value: "on".to_string(),
                         label: "Unchecked".to_string(),
+                        description: None,
                         id: "cb-unchecked".to_string(),
                         checked: false,
                         indeterminate: false,
@@ -111,6 +123,7 @@ pub fn showcase() -> Markup {
                         name: "cb-checked".to_string(),
                         value: "on".to_string(),
                         label: "Checked".to_string(),
+                        description: None,
                         id: "cb-checked".to_string(),
                         checked: true,
                         indeterminate: false,
@@ -121,6 +134,7 @@ pub fn showcase() -> Markup {
                         name: "cb-indeterminate".to_string(),
                         value: "on".to_string(),
                         label: "Indeterminate".to_string(),
+                        description: None,
                         id: "cb-indeterminate".to_string(),
                         checked: false,
                         indeterminate: true,
@@ -131,6 +145,7 @@ pub fn showcase() -> Markup {
                         name: "cb-disabled".to_string(),
                         value: "on".to_string(),
                         label: "Disabled".to_string(),
+                        description: None,
                         id: "cb-disabled".to_string(),
                         checked: false,
                         indeterminate: false,
@@ -141,10 +156,22 @@ pub fn showcase() -> Markup {
                         name: "cb-disabled-checked".to_string(),
                         value: "on".to_string(),
                         label: "Disabled + Checked".to_string(),
+                        description: None,
                         id: "cb-disabled-checked".to_string(),
                         checked: true,
                         indeterminate: false,
                         disabled: true,
+                        required: false,
+                    }))
+                    (render(Props {
+                        name: "cb-with-desc".to_string(),
+                        value: "on".to_string(),
+                        label: "Accept terms and conditions".to_string(),
+                        description: Some("You agree to our Terms of Service and Privacy Policy.".to_string()),
+                        id: "cb-with-desc".to_string(),
+                        checked: false,
+                        indeterminate: false,
+                        disabled: false,
                         required: false,
                     }))
                 }

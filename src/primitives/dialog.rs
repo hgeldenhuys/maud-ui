@@ -12,6 +12,8 @@ pub struct Props {
     pub description: Option<String>,
     /// Markup content displayed in dialog body
     pub children: Markup,
+    /// Optional footer markup (buttons/actions, rendered right-aligned)
+    pub footer: Option<Markup>,
     /// Initial open state (default false; if true renders with open attribute for SSR)
     pub open: bool,
 }
@@ -23,6 +25,7 @@ impl Default for Props {
             title: "Dialog".to_string(),
             description: None,
             children: html! {},
+            footer: None,
             open: false,
         }
     }
@@ -41,7 +44,7 @@ pub fn trigger(target_id: &str, label: &str) -> Markup {
     }
 }
 
-/// Render a close button for use inside the dialog
+/// Render a close button for use inside the dialog (positioned absolute via CSS)
 pub fn close_button(label: &str) -> Markup {
     html! {
         button type="button"
@@ -49,7 +52,7 @@ pub fn close_button(label: &str) -> Markup {
             data-mui-close
             aria-label=(label)
         {
-            "×"
+            "\u{00d7}"
         }
     }
 }
@@ -58,54 +61,35 @@ pub fn close_button(label: &str) -> Markup {
 pub fn render(props: Props) -> Markup {
     let title_id = format!("{}-title", props.id);
     let desc_id = format!("{}-desc", props.id);
-    let aria_describedby = if props.description.is_some() { desc_id.clone() } else { String::new() };
+    let has_desc = props.description.is_some();
 
-    if aria_describedby.is_empty() {
-        html! {
-            dialog class="mui-dialog"
-                id=(props.id)
-                data-mui="dialog"
-                aria-labelledby=(title_id)
-                open[props.open]
-            {
-                div class="mui-dialog__header" {
-                    h2 class="mui-dialog__title" id=(title_id) {
-                        (props.title)
-                    }
-                    (close_button("Close"))
-                }
-                @if let Some(desc) = props.description {
-                    p class="mui-dialog__description" id=(desc_id) {
-                        (desc)
-                    }
-                }
-                div class="mui-dialog__body" {
-                    (props.children)
+    html! {
+        dialog class="mui-dialog"
+            id=(props.id)
+            data-mui="dialog"
+            aria-labelledby=(title_id)
+            aria-describedby=[if has_desc { Some(desc_id.as_str()) } else { None }]
+            open[props.open]
+        {
+            // Close button — absolute positioned, outside header flow
+            (close_button("Close"))
+
+            div class="mui-dialog__header" {
+                h2 class="mui-dialog__title" id=(title_id) {
+                    (props.title)
                 }
             }
-        }
-    } else {
-        html! {
-            dialog class="mui-dialog"
-                id=(props.id)
-                data-mui="dialog"
-                aria-labelledby=(title_id)
-                aria-describedby=(aria_describedby)
-                open[props.open]
-            {
-                div class="mui-dialog__header" {
-                    h2 class="mui-dialog__title" id=(title_id) {
-                        (props.title)
-                    }
-                    (close_button("Close"))
+            @if let Some(desc) = props.description {
+                p class="mui-dialog__description" id=(desc_id) {
+                    (desc)
                 }
-                @if let Some(desc) = props.description {
-                    p class="mui-dialog__description" id=(desc_id) {
-                        (desc)
-                    }
-                }
-                div class="mui-dialog__body" {
-                    (props.children)
+            }
+            div class="mui-dialog__body" {
+                (props.children)
+            }
+            @if let Some(footer) = props.footer {
+                div class="mui-dialog__footer" {
+                    (footer)
                 }
             }
         }
@@ -134,11 +118,11 @@ pub fn showcase() -> Markup {
                             label class="mui-label" { "Email" }
                             input class="mui-input" type="email" placeholder="your@email.com" {}
                         }
-                        div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;" {
-                            button class="mui-btn mui-btn--primary" { "Save" }
-                            button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
-                        }
                     },
+                    footer: Some(html! {
+                        button class="mui-btn mui-btn--secondary" data-mui-close { "Cancel" }
+                        button class="mui-btn mui-btn--primary" { "Save changes" }
+                    }),
                     open: false,
                 }))
             }

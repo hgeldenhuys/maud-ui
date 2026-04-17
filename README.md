@@ -15,7 +15,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 [license]: LICENSE
 
 - **Live gallery:** [maudui.herman.engineer](https://maudui.herman.engineer)
-- **Source:** `github.com/hgeldenhuys/maude-ui`
+- **Source:** `github.com/hgeldenhuys/maud-ui`
 - **Docs:** [docs.rs/maud-ui](https://docs.rs/maud-ui)
 
 ---
@@ -90,8 +90,8 @@ async fn main() {
 Better yet, clone the repo and run the full component gallery:
 
 ```bash
-git clone https://github.com/hgeldenhuys/maude-ui
-cd maude-ui
+git clone https://github.com/hgeldenhuys/maud-ui
+cd maud-ui
 cargo run --example showcase
 # open http://127.0.0.1:3457
 ```

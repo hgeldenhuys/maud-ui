@@ -597,7 +597,7 @@ fn page_header() -> Markup {
                     a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Docs"
                     }
-                    a href="https://github.com/hgeldenhuys/maude-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "GitHub"
                     }
                     span.mui-text-subtle style="font-size:0.8125rem;" { "Theme:" }
@@ -956,7 +956,7 @@ let app = Router::new()
                                     title: Some("Pair with Tailwind".into()),
                                     description: Some("Layer order, Preflight, shared tokens.".into()),
                                     children: html! {
-                                        a href="https://github.com/hgeldenhuys/maude-ui/blob/master/docs/TAILWIND.md" target="_blank" rel="noopener" class="mui-btn mui-btn--outline mui-btn--sm" style="text-decoration:none;" { "Tailwind guide" }
+                                        a href="https://github.com/hgeldenhuys/maud-ui/blob/master/docs/TAILWIND.md" target="_blank" rel="noopener" class="mui-btn mui-btn--outline mui-btn--sm" style="text-decoration:none;" { "Tailwind guide" }
                                     },
                                     ..Default::default()
                                 }))

@@ -32,6 +32,10 @@ async fn main() {
     let app = Router::new()
         .route("/", get(|| async { maud_ui::showcase::showcase_page() }))
         .route(
+            "/getting-started",
+            get(|| async { maud_ui::showcase::getting_started_page() }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

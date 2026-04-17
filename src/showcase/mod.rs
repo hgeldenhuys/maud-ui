@@ -585,12 +585,21 @@ fn page_head(title: &str) -> Markup {
 fn page_header() -> Markup {
     html! {
         header.mui-showcase__header {
-            div style="display:flex;justify-content:space-between;align-items:center;" {
+            div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;" {
                 div {
                     h1 { a href="/" style="color:inherit;text-decoration:none;" { "maud-ui" } }
                     p.mui-text-muted { (format!("{} components for maud + htmx", COMPONENT_NAMES.len())) }
                 }
                 div style="display:flex;gap:0.75rem;align-items:center;" {
+                    a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Get started"
+                    }
+                    a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Docs"
+                    }
+                    a href="https://github.com/hgeldenhuys/maude-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "GitHub"
+                    }
                     span.mui-text-subtle style="font-size:0.8125rem;" { "Theme:" }
                     button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="theme-toggle" id="theme-toggle" {
                         "Toggle theme"
@@ -659,6 +668,304 @@ pub fn showcase_page() -> Markup {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+                script src="/js/maud-ui.js" defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+/// Onboarding page at /getting-started — install, first paint, theming, runtime.
+pub fn getting_started_page() -> Markup {
+    use crate::primitives::{alert, badge, button, card, field, input, kbd};
+
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Get started \u{2014} maud-ui"))
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Get started" }
+                        }
+
+                        section class="mui-gallery__component" id="hero" {
+                            h3 class="mui-gallery__component-name" { "Welcome to maud-ui" }
+                            p style="font-size:1rem;line-height:1.6;color:var(--mui-text-muted);max-width:42rem;" {
+                                "58 headless, accessible components for Rust web apps. Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
+                            }
+                            div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
+                                (badge::render(badge::Props { label: "58 components".into(), variant: badge::Variant::Default }))
+                                (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary }))
+                                (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success }))
+                                (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline }))
+                            }
+                        }
+
+                        section class="mui-gallery__component" id="install" {
+                            h3 class="mui-gallery__component-name" { "1. Install" }
+                            p.mui-showcase__caption { "Add maud + maud-ui to your Cargo.toml. If you're wiring up a brand new server, grab axum + tokio too." }
+                            (code_example("Cargo", r#"cargo new my-app
+cd my-app
+cargo add maud maud-ui
+cargo add axum tokio --features tokio/full
+cargo add tower-http --features tower-http/fs
+"#))
+                        }
+
+                        section class="mui-gallery__component" id="first-paint" {
+                            h3 class="mui-gallery__component-name" { "2. First paint" }
+                            p.mui-showcase__caption { "A minimal axum server that renders a card with a button. Copy this into src/main.rs and run cargo run." }
+                            (code_example("src/main.rs", r##"use axum::{routing::get, Router};
+use maud::{html, Markup, DOCTYPE};
+use maud_ui::primitives::{button, card};
+
+async fn index() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                meta charset="utf-8";
+                link rel="stylesheet" href="/assets/maud-ui.min.css";
+                script src="/assets/maud-ui.min.js" defer {}
+            }
+            body style="padding: 2rem;" {
+                (card::render(card::Props {
+                    title: Some("Welcome".into()),
+                    description: Some("You're running maud-ui.".into()),
+                    children: html! {
+                        (button::render(button::Props {
+                            label: "Ship it".into(),
+                            variant: button::Variant::Primary,
+                            ..Default::default()
+                        }))
+                    },
+                    ..Default::default()
+                }))
+            }
+        }
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    // Serve the bundled CSS + JS from maud-ui's dist/ folder.
+    let assets = tower_http::services::ServeDir::new(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../maud-ui/dist"),  // or wherever your copy lives
+    );
+
+    let app = Router::new()
+        .route("/", get(index))
+        .nest_service("/assets", assets);
+
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    println!("Open http://127.0.0.1:3000");
+    axum::serve(listener, app).await.unwrap();
+}
+"##))
+                            p.mui-showcase__caption style="margin-top:1rem;" {
+                                "For production you can embed the assets at compile time with include_str! — see the Deployment section below."
+                            }
+                        }
+
+                        section class="mui-gallery__component" id="your-first-component" {
+                            h3 class="mui-gallery__component-name" { "3. Your first component" }
+                            p.mui-showcase__caption { "Every component is a Props struct and a render() function. Start typing — the compiler will guide you." }
+                            div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1rem;" {
+                                div {
+                                    p.mui-showcase__caption { "You write:" }
+                                    (code_example("", r#"button::render(button::Props {
+    label: "Invite teammate".into(),
+    variant: button::Variant::Primary,
+    size: button::Size::Md,
+    ..Default::default()
+})"#))
+                                }
+                                div {
+                                    p.mui-showcase__caption { "You get:" }
+                                    div style="padding:1rem;background:var(--mui-bg-input);border-radius:var(--mui-radius-md);border:1px solid var(--mui-border);" {
+                                        (button::render(button::Props {
+                                            label: "Invite teammate".into(),
+                                            variant: button::Variant::Primary,
+                                            size: button::Size::Md,
+                                            ..Default::default()
+                                        }))
+                                    }
+                                }
+                            }
+                        }
+
+                        section class="mui-gallery__component" id="forms" {
+                            h3 class="mui-gallery__component-name" { "4. Forms + validation" }
+                            p.mui-showcase__caption { "Field wraps label + input + error message with ARIA wiring handled for you." }
+                            div style="max-width:28rem;padding:1.25rem;background:var(--mui-bg-input);border-radius:var(--mui-radius-md);border:1px solid var(--mui-border);margin-bottom:1rem;" {
+                                (field::render(field::Props {
+                                    label: "Work email".into(),
+                                    id: "gs-email".into(),
+                                    description: Some("We'll send the verification link here.".into()),
+                                    required: true,
+                                    children: html! {
+                                        (input::render(input::Props {
+                                            name: "email".into(),
+                                            id: "gs-email".into(),
+                                            input_type: crate::primitives::input::InputType::Email,
+                                            placeholder: "you@company.com".into(),
+                                            ..Default::default()
+                                        }))
+                                    },
+                                    ..Default::default()
+                                }))
+                            }
+                            (code_example("", r#"field::render(field::Props {
+    label: "Work email".into(),
+    id: "email".into(),
+    description: Some("We'll send the verification link here.".into()),
+    required: true,
+    children: html! {
+        (input::render(input::Props {
+            name: "email".into(),
+            id: "email".into(),
+            input_type: input::InputType::Email,
+            placeholder: "you@company.com".into(),
+            ..Default::default()
+        }))
+    },
+    ..Default::default()
+})"#))
+                        }
+
+                        section class="mui-gallery__component" id="theming" {
+                            h3 class="mui-gallery__component-name" { "5. Theming" }
+                            p.mui-showcase__caption { "Set data-theme on <html> and every component recolors via CSS variables." }
+                            div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;" {
+                                (button::render(button::Props {
+                                    label: "Try the theme toggle".into(),
+                                    variant: button::Variant::Outline,
+                                    size: button::Size::Md,
+                                    aria_label: Some("Toggle theme demo".into()),
+                                    ..Default::default()
+                                }))
+                                span.mui-text-muted style="font-size:0.875rem;" {
+                                    "Use the toggle at the top-right, or add "
+                                    (kbd::render(kbd::Props { keys: vec!["button".into(), "data-mui=\"theme-toggle\"".into()] }))
+                                    " anywhere in your app."
+                                }
+                            }
+                            (code_example("Custom palette", r#"[data-theme="dark"] {
+    --mui-accent: #8b5cf6;        /* violet */
+    --mui-accent-hover: #a78bfa;
+    --mui-bg: #0c0a1d;
+    --mui-text: #ede9fe;
+}"#))
+                        }
+
+                        section class="mui-gallery__component" id="js-runtime" {
+                            h3 class="mui-gallery__component-name" { "6. JavaScript runtime" }
+                            p.mui-showcase__caption { "Components with interactivity (dialogs, dropdowns, carousels) register behaviors under window.MaudUI. The runtime auto-initializes on DOMContentLoaded and after htmx swaps." }
+                            (code_example("", r#"// Dropped into your page via:
+//   <script src="/assets/maud-ui.min.js" defer></script>
+
+window.MaudUI.init();         // manually re-init (e.g. after a custom swap)
+window.MaudUI.init(rootEl);   // re-init just a subtree
+"#))
+                            (alert::render(alert::Props {
+                                title: "Progressive enhancement".into(),
+                                description: Some("Tier 1 components (29 of them) render and style correctly with JS disabled. Tier 2 and 3 need the runtime for full keyboard/interaction support.".into()),
+                                variant: alert::Variant::Info,
+                                ..Default::default()
+                            }))
+                        }
+
+                        section class="mui-gallery__component" id="htmx" {
+                            h3 class="mui-gallery__component-name" { "7. Pair with htmx" }
+                            p.mui-showcase__caption { "maud-ui was designed for htmx flows. Return a fresh Markup fragment from any handler and htmx swaps it in — the runtime re-initializes behaviors on the new nodes automatically." }
+                            (code_example("Trigger a server fragment swap", r##"// Button that asks the server for a fresh table fragment.
+(button::render(button::Props {
+    label: "Refresh results".into(),
+    variant: button::Variant::Outline,
+    ..Default::default()
+}))
+
+// Axum handler returns HTML; htmx replaces #results with it.
+async fn results() -> Markup {
+    html! {
+        (table::render(table::Props {
+            headers: vec!["Customer".into(), "MRR".into()],
+            rows: load_rows().await,
+            striped: true,
+            ..Default::default()
+        }))
+    }
+}
+"##))
+                        }
+
+                        section class="mui-gallery__component" id="deployment" {
+                            h3 class="mui-gallery__component-name" { "8. Deployment" }
+                            p.mui-showcase__caption { "Ship the runtime inside your binary with include_str! so there's nothing to serve from disk." }
+                            (code_example("Embed the bundle at compile time", r##"// Instead of nest_service("/assets", ServeDir::new(...)),
+// bake the CSS + JS into your binary:
+async fn serve_css() -> impl IntoResponse {
+    let css = include_str!("../../vendor/maud-ui/dist/maud-ui.min.css");
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
+        css,
+    )
+}
+
+let app = Router::new()
+    .route("/", get(index))
+    .route("/assets/maud-ui.min.css", get(serve_css))
+    .route("/assets/maud-ui.min.js",  get(serve_js));
+"##))
+                        }
+
+                        section class="mui-gallery__component" id="next-steps" {
+                            h3 class="mui-gallery__component-name" { "Where to next" }
+                            div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;" {
+                                (card::render(card::Props {
+                                    title: Some("Browse the gallery".into()),
+                                    description: Some("Every component with code snippets.".into()),
+                                    children: html! {
+                                        a href="/" class="mui-btn mui-btn--primary mui-btn--sm" style="text-decoration:none;" { "Open gallery" }
+                                    },
+                                    ..Default::default()
+                                }))
+                                (card::render(card::Props {
+                                    title: Some("Read the API docs".into()),
+                                    description: Some("Every Props struct and module, generated from rustdoc.".into()),
+                                    children: html! {
+                                        a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--outline mui-btn--sm" style="text-decoration:none;" { "docs.rs" }
+                                    },
+                                    ..Default::default()
+                                }))
+                                (card::render(card::Props {
+                                    title: Some("Pair with Tailwind".into()),
+                                    description: Some("Layer order, Preflight, shared tokens.".into()),
+                                    children: html! {
+                                        a href="https://github.com/hgeldenhuys/maude-ui/blob/master/docs/TAILWIND.md" target="_blank" rel="noopener" class="mui-btn mui-btn--outline mui-btn--sm" style="text-decoration:none;" { "Tailwind guide" }
+                                    },
+                                    ..Default::default()
+                                }))
+                            }
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
                             }
                         }
                     }

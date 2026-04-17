@@ -3,11 +3,23 @@ name = "maud-ui"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "Headless accessible UI components for maud + htmx"
-repository = "https://git.kapable.dev/kapable/maud-ui"
+description = "58 headless, accessible UI components for Rust web apps. Built on maud + htmx, styled like shadcn/ui."
+repository = "https://github.com/hgeldenhuys/maude-ui"
+homepage = "https://maudui.herman.engineer"
+documentation = "https://docs.rs/maud-ui"
 readme = "README.md"
-keywords = ["maud", "htmx", "ui", "components", "accessibility"]
-categories = ["web-programming"]
+authors = ["Hein Geldenhuys"]
+keywords = ["maud", "htmx", "ui", "components", "shadcn"]
+categories = ["web-programming", "gui", "template-engine"]
+include = [
+    "src/**/*.rs",
+    "css/**/*.css",
+    "dist/**/*",
+    "examples/showcase.rs",
+    "README.md",
+    "LICENSE",
+    "Cargo.toml",
+]
 
 [dependencies]
 maud = { version = "0.27", features = ["axum"] }

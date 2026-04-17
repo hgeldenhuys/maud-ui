@@ -1,295 +1,236 @@
 # maud-ui
 
-Headless accessible UI components for Rust web apps.
-
+**58 headless, accessible UI components for Rust web apps.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
+[![Docs][docs-badge]][docs]
 [![License: MIT][license-badge]][license]
 
 [crate-badge]: https://img.shields.io/crates/v/maud-ui.svg
 [crate]: https://crates.io/crates/maud-ui
+[docs-badge]: https://docs.rs/maud-ui/badge.svg
+[docs]: https://docs.rs/maud-ui
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license]: LICENSE
 
-## Features
+- **Live gallery:** [maudui.herman.engineer](https://maudui.herman.engineer)
+- **Source:** `github.com/hgeldenhuys/maude-ui`
+- **Docs:** [docs.rs/maud-ui](https://docs.rs/maud-ui)
 
-- **58 UI primitives** -- buttons, forms, dialogs, menus, tables, charts, calendars, drawers, sliders, tabs, popovers, tooltips, and more
-- **Correct accessibility** -- ARIA roles, keyboard navigation, focus management, semantic HTML
-- **Dark + light themes** -- CSS custom properties for instant customization
-- **Progressive enhancement** -- all components work without JavaScript; enhanced with htmx + vanilla JS
-- **Single Rust dependency** -- only maud; no serde, no framework lock-in
-- **Minimal runtime** -- 46 KB JS + 78 KB CSS minified (11 KB each gzipped)
-- **Tailwind-compatible** -- every class prefixed `mui-`, no collisions ([pairing guide](docs/TAILWIND.md))
-- **Ship pre-built artifacts** -- no build step required for consumers
-- **MIT licensed**
+---
 
-## Quick start
+## What you get
+
+- **58 primitives** — every shadcn/ui component plus some (data-table, resizable, hover-card, OTP input, command palette, calendar, charts).
+- **Accessible by default** — ARIA roles, keyboard navigation, focus management, WCAG-AA contrast in both themes.
+- **Dark + light themes** — flip `data-theme` on `<html>` and the whole tree recolors via CSS variables.
+- **Progressive enhancement** — every component renders correctly without JavaScript. JS adds drag, dropdowns, keyboard shortcuts on top.
+- **Tailwind-compatible** — all classes prefixed `mui-`, no collisions. [Pairing guide →](docs/TAILWIND.md)
+- **One Rust dependency** — just `maud`. No serde, no framework lock-in. Works with axum, actix, rocket, or whatever you use.
+- **Ship pre-built** — 46 KB JS + 78 KB CSS minified (11 KB + 11 KB gzipped). No build step required for consumers.
+
+## 30-second tour
 
 ```bash
-cargo add maud-ui
+cargo new my-app
+cd my-app
+cargo add maud maud-ui
+cargo add axum tokio --features tokio/full
 ```
 
-Run the gallery:
+```rust
+// src/main.rs
+use axum::{routing::get, Router};
+use maud::{html, Markup, DOCTYPE};
+use maud_ui::primitives::{button, card};
+
+async fn index() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                link rel="stylesheet" href="/css/maud-ui.min.css";
+                script src="/js/maud-ui.min.js" defer {}
+            }
+            body style="padding: 2rem" {
+                (card::render(card::Props {
+                    title: Some("Welcome".into()),
+                    description: Some("You're running maud-ui.".into()),
+                    children: html! {
+                        (button::render(button::Props {
+                            label: "Ship it".into(),
+                            variant: button::Variant::Primary,
+                            ..Default::default()
+                        }))
+                    },
+                    ..Default::default()
+                }))
+            }
+        }
+    }
+}
+
+#[tokio::main]
+async fn main() {
+    let app = Router::new()
+        .route("/", get(index))
+        .route("/css/maud-ui.min.css", get(|| async {
+            ([("content-type", "text/css")], include_str!("../../path/to/maud-ui/dist/maud-ui.min.css"))
+        }))
+        .route("/js/maud-ui.min.js", get(|| async {
+            ([("content-type", "application/javascript")], include_str!("../../path/to/maud-ui/dist/maud-ui.min.js"))
+        }));
+
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    axum::serve(listener, app).await.unwrap();
+}
+```
+
+Better yet, clone the repo and run the full component gallery:
 
 ```bash
-git clone https://git.kapable.dev/kapable/maud-ui
-cd maud-ui
+git clone https://github.com/hgeldenhuys/maude-ui
+cd maude-ui
 cargo run --example showcase
 # open http://127.0.0.1:3457
 ```
 
-## Usage example
+The gallery has every component, a live theme toggle, per-component routes with code samples, and a `/getting-started` page.
 
-Render a button and dialog in an axum handler:
+## Usage
+
+Every component is a module under `maud_ui::primitives`. Each exposes:
+
+- a `Props` struct with sensible defaults (via `Default::default()`)
+- a `render(props) -> Markup` function
+- a `showcase() -> Markup` function used by the gallery (demo only; consumers don't call this)
+
+### Example: dialog with a trigger button
 
 ```rust
-use maud::{html, Markup};
+use maud::html;
 use maud_ui::primitives::{button, dialog};
 
-fn my_page() -> Markup {
-    html! {
-        // Trigger button
-        (button::render(button::Props {
-            label: "Open settings".into(),
-            variant: button::Variant::Primary,
-            size: button::Size::Md,
-            ..Default::default()
-        }))
+html! {
+    (dialog::trigger("settings-dialog", "Open settings"))
 
-        // Dialog trigger
-        (dialog::trigger("settings-dialog", "Open settings"))
-
-        // Dialog
-        (dialog::render(dialog::Props {
-            id: "settings-dialog".into(),
-            title: "Settings".into(),
-            description: Some("Adjust your preferences".into()),
-            children: html! {
-                p { "Your settings go here." }
-                (button::render(button::Props {
-                    label: "Save".into(),
-                    variant: button::Variant::Primary,
-                    ..Default::default()
-                }))
-            },
-            ..Default::default()
-        }))
-    }
+    (dialog::render(dialog::Props {
+        id: "settings-dialog".into(),
+        title: "Settings".into(),
+        description: Some("Adjust your preferences".into()),
+        children: html! {
+            p { "Your settings go here." }
+            (button::render(button::Props {
+                label: "Save changes".into(),
+                variant: button::Variant::Primary,
+                ..Default::default()
+            }))
+        },
+        ..Default::default()
+    }))
 }
 ```
 
-## Component reference
+### Example: table with data
 
-All 58 primitives are organized into three tiers based on JS requirements:
+```rust
+use maud::html;
+use maud_ui::primitives::table;
 
-### Tier 1: Pure HTML+CSS (no JavaScript required)
-
-| Component | Module | Props | Variants |
-|-----------|--------|-------|----------|
-| Alert | `alert` | title, description, variant, icon | Default, Info, Success, Warning, Danger |
-| Aspect Ratio | `aspect_ratio` | ratio, children | -- |
-| Avatar | `avatar` | src, alt, fallback, size | Sm, Md, Lg |
-| Badge | `badge` | label, variant | Default, Success, Warning, Danger, Outline |
-| Breadcrumb | `breadcrumb` | items (BreadcrumbItem: label, href) | -- |
-| Button | `button` | label, variant, size, disabled, button_type | Default, Primary, Secondary, Outline, Ghost, Danger, Link; Sm, Md, Lg, Icon |
-| Button Group | `button_group` | children, orientation, size | Horizontal, Vertical |
-| Card | `card` | title, description, children, footer | -- |
-| Chart | `chart` | id, chart_type, data, title, width, height, color | Bar, Line |
-| Checkbox | `checkbox` | name, value, label, id, checked, indeterminate, disabled, required | -- |
-| Empty State | `empty_state` | icon, title, description, action | -- |
-| Field | `field` | label, id, description, error, required, children | -- |
-| Fieldset | `fieldset` | legend, disabled, children | -- |
-| Input | `input` | name, input_type, placeholder, value, id, disabled, required | Text, Email, Password, Number, Tel, Url, Search |
-| Kbd | `kbd` | keys (Vec) | -- |
-| Label | `label` | text, html_for, required | -- |
-| Meter | `meter` | value, min, max, low, high, optimum | -- |
-| Native Select | `native_select` | name, id, options, selected, disabled, placeholder | -- |
-| Number Field | `number_field` | name, value, min, max, step, disabled, required | -- |
-| Pagination | `pagination` | current_page, total_pages, max_visible | -- |
-| Progress | `progress` | value, max, label, indeterminate | -- |
-| Radio | `radio` | name, value, label, id, checked, disabled, required | -- |
-| Radio Group | `radio_group` | name, label, options, selected, orientation, disabled | Vertical, Horizontal |
-| Separator | `separator` | orientation, decorative | Horizontal, Vertical |
-| Skeleton | `skeleton` | variant, width, height | Text, Circle, Rect |
-| Spinner | `spinner` | size, label | Sm, Md, Lg |
-| Table | `table` | headers, rows, striped, hoverable, compact, caption | -- |
-| Textarea | `textarea` | name, placeholder, value, rows, id, required | -- |
-| Typography | `typography` | (functions: h1, h2, h3, h4, p, lead, muted, code_inline, blockquote) | -- |
-
-### Tier 2: JS-enhanced (works without JS, full keyboard nav requires JS)
-
-| Component | Module | Props | Variants |
-|-----------|--------|-------|----------|
-| Accordion | `accordion` | items, multiple | -- |
-| Collapsible | `collapsible` | trigger_label, content, open, id | -- |
-| Hover Card | `hover_card` | trigger, content, id, open_delay_ms, close_delay_ms | -- |
-| Input Group | `input_group` | prefix, suffix, children | -- |
-| Input OTP | `input_otp` | length, name, id, disabled | -- |
-| Switch | `switch` | name, id, label, checked, disabled | -- |
-| Tabs | `tabs` | tabs, default_active, aria_label | -- |
-| Toast | `toast` | title, description, variant, duration_ms, id | Default, Success, Warning, Danger |
-| Toggle | `toggle` | label, pressed, disabled, id | -- |
-| Toggle Group | `toggle_group` | items, multiple, disabled, aria_label | -- |
-| Tooltip | `tooltip` | content, placement, delay_ms, trigger, id | Top, Bottom, Left, Right |
-
-### Tier 3: Full interaction (JavaScript required for core functionality)
-
-| Component | Module | Props | Variants |
-|-----------|--------|-------|----------|
-| Alert Dialog | `alert_dialog` | id, title, description, children, open | -- |
-| Calendar | `calendar` | id, selected, month, year, min_date, max_date, show_outside_days | -- |
-| Carousel | `carousel` | id, items, show_dots, show_arrows, loop_slides, auto_play, aria_label | -- |
-| Combobox | `combobox` | id, name, options, selected, placeholder, search_placeholder, empty_text, disabled | -- |
-| Command | `command` | id, items (CommandItem: label, shortcut, group, disabled), placeholder | -- |
-| Context Menu | `context_menu` | id, trigger, items | -- |
-| Data Table | `data_table` | id, columns (Column: key, label, sortable), rows, page_size, searchable, search_placeholder | -- |
-| Date Picker | `date_picker` | id, name, selected, placeholder, disabled, min_date, max_date | -- |
-| Dialog | `dialog` | id, title, description, children, open | -- |
-| Drawer | `drawer` | id, title, description, children, side | Left, Right, Top, Bottom |
-| Menu | `menu` | trigger_label, id, items | -- |
-| Menubar | `menubar` | id, menus (MenubarMenu: label, items) | -- |
-| Navigation Menu | `navigation_menu` | id, items (NavItem: Link or Menu with links) | -- |
-| Popover | `popover` | id, trigger, content, placement, align | Top, Bottom, Left, Right; Start, Center, End |
-| Resizable | `resizable` | id, panels (Panel: content, default_size, min_size), direction | Horizontal, Vertical |
-| Scroll Area | `scroll_area` | max_height, id, children | -- |
-| Select | `select` | name, id, options, selected, placeholder, disabled | -- |
-| Slider | `slider` | name, id, value, min, max, step, disabled, label, show_value | -- |
-
-## shadcn/ui coverage
-
-maud-ui implements 58 components, fully covering shadcn's component set.
-
-## Gallery
-
-```bash
-cargo run --example showcase
-# Main gallery: http://localhost:3457
-# Individual: http://localhost:3457/button, /tabs, /dialog, etc.
+table::render(table::Props {
+    headers: vec!["Customer".into(), "Plan".into(), "MRR".into()],
+    rows: vec![
+        vec!["Acme Corp".into(), "Pro".into(), "$299".into()],
+        vec!["Globex".into(), "Enterprise".into(), "$1,299".into()],
+    ],
+    striped: true,
+    ..Default::default()
+})
 ```
 
 ## Theming
 
-All components use CSS custom properties (CSS variables) for colors, spacing, shadows, and fonts. Override them via `data-theme` attributes or class selectors:
+Flip the theme by setting `data-theme` on `<html>`:
+
+```html
+<html data-theme="dark">   <!-- default -->
+<html data-theme="light">
+```
+
+A theme toggle is included — add `<button data-mui="theme-toggle">Toggle theme</button>` anywhere and the runtime wires it up.
+
+### Custom palette
+
+Override any token in your CSS. Classes are prefixed `mui-` so nothing collides with your app styles.
 
 ```css
-/* Override for a theme variant */
-[data-theme="custom"] {
-  --mui-accent: #8b5cf6;
-  --mui-accent-hover: #a78bfa;
-  --mui-bg: #1e1e2e;
-  --mui-text: #cdd6f4;
+[data-theme="dark"] {
+    --mui-accent: #8b5cf6;        /* violet-500 */
+    --mui-accent-hover: #a78bfa;
+    --mui-bg: #0c0a1d;
+    --mui-text: #ede9fe;
 }
 ```
 
-### CSS Custom Properties
+The full token list is in [css/maud-ui.css](css/maud-ui.css).
 
-**Colors (auto-switched dark/light):**
-- `--mui-bg` -- background color
-- `--mui-bg-card` -- card/elevated background
-- `--mui-bg-overlay` -- semi-transparent overlay
-- `--mui-bg-input` -- input field background
-- `--mui-border` -- border color
-- `--mui-border-hover` -- border on hover/focus
-- `--mui-border-focus` -- focus ring color
-- `--mui-text` -- primary text color
-- `--mui-text-muted` -- secondary text
-- `--mui-text-subtle` -- tertiary text
-- `--mui-accent` -- primary interactive color
-- `--mui-accent-hover` -- accent on hover/focus
-- `--mui-accent-fg` -- text color on accent background
-- `--mui-success` -- success state color
-- `--mui-warning` -- warning state color
-- `--mui-danger` -- danger/error state color
+## Component reference
 
-**Spacing:**
-- `--mui-radius-sm` -- small border radius (form fields)
-- `--mui-radius-md` -- medium border radius
-- `--mui-radius-lg` -- large border radius
-- `--mui-radius-full` -- fully rounded (pills)
+<details>
+<summary><strong>58 components across three tiers</strong> (click to expand)</summary>
 
-**Typography:**
-- `--mui-font-sans` -- system font stack
-- `--mui-font-mono` -- monospace font stack
+### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
-**Effects:**
-- `--mui-shadow-sm`, `--mui-shadow-md`, `--mui-shadow-lg` -- drop shadows
-- `--mui-ring` -- focus ring (computed from border-focus)
-- `--mui-transition` -- standard transition timing
+Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button Group • Card • Chart • Checkbox • Empty State • Field • Fieldset • Input • Kbd • Label • Meter • Native Select • Number Field • Pagination • Progress • Radio • Radio Group • Separator • Skeleton • Spinner • Table • Textarea • Typography
 
-## Design tokens
+### Tier 2 — JS-enhanced (renders without JS; full interactivity with it)
 
-Rust code equivalents are available in `src/tokens.rs`:
+Accordion • Collapsible • Hover Card • Input Group • Input OTP • Switch • Tabs • Toast • Toggle • Toggle Group • Tooltip
 
-```rust
-use maud_ui::tokens;
+### Tier 3 — Requires JS for core functionality
 
-let accent_color = tokens::colors::ACCENT;  // #3b82f6
-let spacing_lg = tokens::spacing::LG;       // 1rem
-let radius_md = tokens::radius::MD;         // 0.5rem
+Alert Dialog • Calendar • Carousel • Combobox • Command • Context Menu • Data Table • Date Picker • Dialog • Drawer • Menu • Menubar • Navigation Menu • Popover • Resizable • Scroll Area • Select • Slider
+
+</details>
+
+Each component's props and variants are documented in its module — run `cargo doc --open` after adding the crate.
+
+## Architecture
+
+```
+src/primitives/     # 58 component modules (Props, Variant, render(), showcase())
+src/tokens.rs       # Rust constants mirroring CSS custom properties
+css/                # Source styles (one file per component + maud-ui.css tokens)
+dist/               # Pre-built bundles — serve these to the browser
+  ├─ maud-ui.min.css
+  ├─ maud-ui.min.js
+  └─ behaviors/*.js
+js/build.mjs        # esbuild pipeline that concatenates + minifies dist/
+examples/showcase.rs  # axum server that renders the full gallery
 ```
 
-## JavaScript runtime
-
-The maud-ui runtime provides a lightweight behavior system for progressive enhancement:
-
-```javascript
-// Components register behaviors via data-mui attributes
-MaudUI.behaviors["dialog-trigger"] = (el) => {
-  el.addEventListener("click", () => {
-    const targetId = el.getAttribute("data-target");
-    document.getElementById(targetId)?.showModal();
-  });
-};
-
-// Auto-init on DOMContentLoaded and htmx:afterSwap
-MaudUI.init();              // manual re-init after dynamic content
-MaudUI.init(parentEl);      // re-init a subtree
-```
-
-The runtime is bundled in `dist/maud-ui.js` and automatically re-initializes components after htmx swaps via the `htmx:afterSwap` event listener.
+Components are pure functions: `(props) -> Markup`. No state, no framework. Pair with htmx for interactivity that spans requests, or with vanilla JS for in-page behavior.
 
 ## Development
 
 ```bash
-cargo check              # Type-check the crate
-cargo test               # Run tests
-cargo run --example showcase  # Run the component gallery (http://127.0.0.1:3457)
+cargo check                     # Type-check the crate
+cargo test                      # Run render tests for all 58 components
+cargo run --example showcase    # Gallery + getting-started at :3457
+
+# Rebuild dist/ artifacts (requires Node + esbuild)
+bun install
+node js/build.mjs
 ```
 
-Building the distribution artifacts:
+## Tailwind
 
-```bash
-# Bundle CSS and JS into dist/
-./js/build.mjs          # Requires Node.js or deno; reads js/maud-ui.ts and css/
-```
-
-Components are added in waves. Check `examples/showcase.rs` for the latest coverage.
-
-## Installation
-
-As a library dependency:
-
-```toml
-[dependencies]
-maud-ui = "0.1"
-maud = { version = "0.27", features = ["axum"] }
-```
-
-Consumers receive pre-built CSS and JavaScript in the `dist/` directory; no build step is required.
-
-## Architecture
-
-- `src/primitives/` -- 58 UI components, each with `Props`, `Variant` enums, and `render(props) -> Markup`
-- `src/tokens.rs` -- Rust design token constants (mirrors CSS custom properties)
-- `css/` -- Component styles organized by feature
-- `js/` -- Progressive enhancement behaviors and maud-ui runtime
-- `dist/` -- Pre-built CSS and JavaScript (minified)
-- `examples/showcase.rs` -- Interactive gallery of all components
+maud-ui and Tailwind coexist cleanly — see [docs/TAILWIND.md](docs/TAILWIND.md) for the pairing guide (Preflight, layer order, shared tokens, dark-mode coordination).
 
 ## License
 
-MIT. See [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE).
 
 ## Credits
 

@@ -3,6 +3,8 @@
 .mui-number-field {
   display: inline-flex;
   align-items: stretch;
+  align-self: flex-start;
+  width: fit-content;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   overflow: hidden;

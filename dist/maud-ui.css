@@ -2795,6 +2795,8 @@ dialog.mui-drawer--bottom {
 .mui-number-field {
   display: inline-flex;
   align-items: stretch;
+  align-self: flex-start;
+  width: fit-content;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
   overflow: hidden;
@@ -3260,6 +3262,157 @@ dialog.mui-drawer--bottom {
   display: flex;
   flex-direction: column;
   gap: 0;
+}
+
+/* css/components/resizable.css */
+.mui-resizable {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+}
+.mui-resizable--horizontal {
+  flex-direction: row;
+  min-height: 12rem;
+}
+.mui-resizable--vertical {
+  flex-direction: column;
+  min-height: 20rem;
+}
+.mui-resizable__panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+.mui-resizable__handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mui-resizable--horizontal > .mui-resizable__handle {
+  width: 8px;
+  cursor: col-resize;
+}
+.mui-resizable--vertical > .mui-resizable__handle {
+  height: 8px;
+  cursor: row-resize;
+}
+.mui-resizable__handle:hover,
+.mui-resizable__handle:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+.mui-resizable__handle:active {
+  background: var(--mui-border-focus);
+}
+.mui-resizable__handle-bar {
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-border);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.mui-resizable--horizontal .mui-resizable__handle-bar {
+  width: 4px;
+  height: 2rem;
+  background: transparent;
+  background-image:
+    radial-gradient(
+      circle,
+      var(--mui-text-muted) 1px,
+      transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
+}
+.mui-resizable--vertical .mui-resizable__handle-bar {
+  height: 4px;
+  width: 2rem;
+  background: transparent;
+  background-image:
+    radial-gradient(
+      circle,
+      var(--mui-text-muted) 1px,
+      transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
+}
+.mui-resizable--horizontal > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--horizontal > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image:
+    radial-gradient(
+      circle,
+      var(--mui-text) 1px,
+      transparent 1px);
+}
+.mui-resizable--vertical > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--vertical > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image:
+    radial-gradient(
+      circle,
+      var(--mui-text) 1px,
+      transparent 1px);
+}
+.mui-resizable__handle:active .mui-resizable__handle-bar {
+  background-image:
+    radial-gradient(
+      circle,
+      var(--mui-accent) 1px,
+      transparent 1px);
+}
+.mui-resizable[data-dragging] {
+  cursor: col-resize;
+}
+.mui-resizable--vertical[data-dragging] {
+  cursor: row-resize;
+}
+.mui-resizable[data-dragging] .mui-resizable__panel {
+  pointer-events: none;
+}
+.mui-resizable__demo-content {
+  padding: 1rem;
+}
+.mui-resizable__demo-content h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mui-text);
+}
+.mui-resizable__demo-content p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  line-height: 1.5;
+}
+.mui-resizable__demo-nav {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.mui-resizable__demo-nav li a {
+  display: block;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.mui-resizable__demo-nav li a:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+.mui-resizable__demo-nav li a.active {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
 }
 
 /* css/components/scroll_area.css */

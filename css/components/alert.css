@@ -64,20 +64,19 @@
 /* Destructive / danger variant — shadcn destructive style */
 .mui-alert--danger {
   border-color: var(--mui-danger);
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 
 .mui-alert--danger .mui-alert__icon {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 
 .mui-alert--danger .mui-alert__title {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 
 .mui-alert--danger .mui-alert__description {
-  color: var(--mui-danger);
-  opacity: 0.9;
+  color: var(--mui-danger-text);
 }
 
 /* Info variant — accent border, subtle tint */
@@ -97,7 +96,7 @@
 }
 
 .mui-alert--success .mui-alert__icon {
-  color: var(--mui-success);
+  color: var(--mui-success-text);
 }
 
 /* Warning variant — amber border */

@@ -78,6 +78,13 @@
   --mui-success: #15803d;
   --mui-warning: #a16207;
   --mui-danger: #dc2626;
+  /* Text-on-bg variants — lighter for dark backgrounds so error/status
+     text passes 4.5:1. The solid tokens above are tuned for use as a
+     background paired with white text (button, badge fill). */
+  --mui-accent-text: #60a5fa;
+  --mui-success-text: #4ade80;
+  --mui-warning-text: #fbbf24;
+  --mui-danger-text: #f87171;
   --mui-radius-sm: calc(0.5rem - 2px);
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
@@ -105,9 +112,14 @@
   --mui-accent: #2563eb;
   --mui-accent-hover: #3b82f6;
   --mui-accent-fg: #ffffff;
-  --mui-success: #16a34a;
-  --mui-warning: #ca8a04;
-  --mui-danger: #dc2626;
+  --mui-success: #15803d;
+  --mui-warning: #a16207;
+  --mui-danger: #b91c1c;
+  /* Text variants — darker on light bg for 4.5:1. */
+  --mui-accent-text: #1d4ed8;
+  --mui-success-text: #15803d;
+  --mui-warning-text: #a16207;
+  --mui-danger-text: #b91c1c;
   --mui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --mui-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --mui-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);

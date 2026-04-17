@@ -8,6 +8,10 @@ pub struct Props {
     pub label: String,
     pub checked: bool,
     pub disabled: bool,
+    /// Explicit accessible name. Required when `label` is empty (e.g., when
+    /// the switch sits next to an external label or description block).
+    /// Falls back to `label` if not set.
+    pub aria_label: Option<String>,
 }
 
 impl Default for Props {
@@ -18,6 +22,7 @@ impl Default for Props {
             label: "Toggle".to_string(),
             checked: false,
             disabled: false,
+            aria_label: None,
         }
     }
 }
@@ -25,12 +30,17 @@ impl Default for Props {
 pub fn render(props: Props) -> Markup {
     let aria_checked = if props.checked { "true" } else { "false" };
     let value = if props.checked { "true" } else { "false" };
+    let accessible_name = props
+        .aria_label
+        .clone()
+        .unwrap_or_else(|| props.label.clone());
 
     html! {
         span class="mui-switch-wrap" {
             @if props.disabled {
                 button type="button" class="mui-switch" role="switch"
                     aria-checked=(aria_checked)
+                    aria-label=(accessible_name)
                     id=(props.id.clone())
                     data-mui="switch"
                     data-name=(props.name.clone())
@@ -40,6 +50,7 @@ pub fn render(props: Props) -> Markup {
             } @else {
                 button type="button" class="mui-switch" role="switch"
                     aria-checked=(aria_checked)
+                    aria-label=(accessible_name)
                     id=(props.id.clone())
                     data-mui="switch"
                     data-name=(props.name.clone()) {
@@ -80,6 +91,7 @@ pub fn showcase() -> Markup {
                             label: String::new(),
                             checked: false,
                             disabled: false,
+                            aria_label: Some("Marketing emails".to_string()),
                         }))
                     }
                     // Push notifications — on
@@ -98,6 +110,7 @@ pub fn showcase() -> Markup {
                             label: String::new(),
                             checked: true,
                             disabled: false,
+                            aria_label: Some("Push notifications".to_string()),
                         }))
                     }
                     // Airplane mode — disabled
@@ -116,6 +129,7 @@ pub fn showcase() -> Markup {
                             label: String::new(),
                             checked: false,
                             disabled: true,
+                            aria_label: Some("Airplane mode".to_string()),
                         }))
                     }
                 }
@@ -131,6 +145,7 @@ pub fn showcase() -> Markup {
                         label: "Off".to_string(),
                         checked: false,
                         disabled: false,
+                        aria_label: None,
                     }))
                     (render(Props {
                         name: "demo-on".to_string(),
@@ -138,6 +153,7 @@ pub fn showcase() -> Markup {
                         label: "On".to_string(),
                         checked: true,
                         disabled: false,
+                        aria_label: None,
                     }))
                     (render(Props {
                         name: "demo-disabled".to_string(),
@@ -145,6 +161,7 @@ pub fn showcase() -> Markup {
                         label: "Disabled".to_string(),
                         checked: false,
                         disabled: true,
+                        aria_label: None,
                     }))
                     (render(Props {
                         name: "demo-locked".to_string(),
@@ -152,6 +169,7 @@ pub fn showcase() -> Markup {
                         label: "Locked on".to_string(),
                         checked: true,
                         disabled: true,
+                        aria_label: None,
                     }))
                 }
             }

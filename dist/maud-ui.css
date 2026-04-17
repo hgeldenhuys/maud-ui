@@ -199,17 +199,16 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-alert--danger {
   border-color: var(--mui-danger);
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 .mui-alert--danger .mui-alert__icon {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 .mui-alert--danger .mui-alert__title {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 .mui-alert--danger .mui-alert__description {
-  color: var(--mui-danger);
-  opacity: 0.9;
+  color: var(--mui-danger-text);
 }
 .mui-alert--info {
   border-color: var(--mui-accent);
@@ -223,7 +222,7 @@ dialog.mui-alert-dialog::backdrop {
   color: var(--mui-text);
 }
 .mui-alert--success .mui-alert__icon {
-  color: var(--mui-success);
+  color: var(--mui-success-text);
 }
 .mui-alert--warning {
   border-color: var(--mui-warning);
@@ -346,7 +345,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-badge--warning {
   background-color: var(--mui-warning);
-  color: var(--mui-bg);
+  color: #fff;
 }
 .mui-badge--danger {
   background-color: var(--mui-danger);
@@ -2213,7 +2212,7 @@ dialog.mui-drawer--bottom {
   color: var(--mui-text);
 }
 .mui-field__required {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
   margin-left: 0.25rem;
 }
 .mui-field__description {
@@ -2224,7 +2223,7 @@ dialog.mui-drawer--bottom {
 .mui-field__error {
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
   margin: 0;
 }
 .mui-field--invalid .mui-field__label {
@@ -2555,7 +2554,7 @@ dialog.mui-drawer--bottom {
   cursor: not-allowed;
 }
 .mui-label__required {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
   margin-left: 0.125rem;
   font-weight: 500;
 }
@@ -2629,11 +2628,11 @@ dialog.mui-drawer--bottom {
   outline: none;
 }
 .mui-menu__item--danger {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 .mui-menu__item--danger:hover:not(:disabled) {
   background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 .mui-menu__item--danger:focus-visible {
   background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
@@ -4579,6 +4578,10 @@ dialog.mui-drawer--bottom {
   --mui-success: #15803d;
   --mui-warning: #a16207;
   --mui-danger: #dc2626;
+  --mui-accent-text: #60a5fa;
+  --mui-success-text: #4ade80;
+  --mui-warning-text: #fbbf24;
+  --mui-danger-text: #f87171;
   --mui-radius-sm: calc(0.5rem - 2px);
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
@@ -4615,9 +4618,13 @@ dialog.mui-drawer--bottom {
   --mui-accent: #2563eb;
   --mui-accent-hover: #3b82f6;
   --mui-accent-fg: #ffffff;
-  --mui-success: #16a34a;
-  --mui-warning: #ca8a04;
-  --mui-danger: #dc2626;
+  --mui-success: #15803d;
+  --mui-warning: #a16207;
+  --mui-danger: #b91c1c;
+  --mui-accent-text: #1d4ed8;
+  --mui-success-text: #15803d;
+  --mui-warning-text: #a16207;
+  --mui-danger-text: #b91c1c;
   --mui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --mui-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --mui-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);

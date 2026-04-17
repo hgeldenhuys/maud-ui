@@ -173,6 +173,7 @@ pub fn showcase() -> Markup {
                             label: "Enable notifications".to_string(),
                             checked: true,
                             disabled: false,
+                            aria_label: None,
                         }))
                         (switch::render(switch::Props {
                             name: "sounds".to_string(),
@@ -180,6 +181,7 @@ pub fn showcase() -> Markup {
                             label: "Sound effects".to_string(),
                             checked: false,
                             disabled: false,
+                            aria_label: None,
                         }))
                     }
                 },

@@ -82,6 +82,7 @@ pub fn showcase() -> Markup {
                                     label: String::new(),
                                     checked: false,
                                     disabled: false,
+                                    aria_label: Some("Push notifications".into()),
                                 }))
                             }
                             div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
@@ -97,6 +98,7 @@ pub fn showcase() -> Markup {
                                     label: String::new(),
                                     checked: true,
                                     disabled: false,
+                                    aria_label: Some("Email notifications".into()),
                                 }))
                             }
                         }

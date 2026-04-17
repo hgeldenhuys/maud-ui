@@ -131,9 +131,9 @@ pub fn showcase() -> Markup {
             // Loading table row
             div {
                 p.mui-showcase__caption { "Loading table row" }
-                div style="display:flex;flex-direction:column;gap:0;max-width:32rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-lg);overflow:hidden;" {
+                div style="display:flex;flex-direction:column;gap:0;max-width:32rem;border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);overflow:hidden;" {
                     // Header row (real, so the skeleton has context)
-                    div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.625rem 0.875rem;background:var(--mui-surface-muted,#f9fafb);font-size:0.75rem;font-weight:600;color:var(--mui-text-muted);text-transform:uppercase;letter-spacing:0.04em;" {
+                    div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.625rem 0.875rem;background:var(--mui-bg-input);font-size:0.75rem;font-weight:600;color:var(--mui-text);text-transform:uppercase;letter-spacing:0.04em;" {
                         span { "Customer" }
                         span { "Plan" }
                         span { "Status" }
@@ -141,7 +141,7 @@ pub fn showcase() -> Markup {
                     }
                     // Skeleton rows
                     @for _ in 0..3 {
-                        div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border,#e5e7eb);" {
+                        div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border);" {
                             div style="display:flex;align-items:center;gap:0.625rem;" {
                                 (render(Props {
                                     variant: Variant::Circle,

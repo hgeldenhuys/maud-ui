@@ -14,7 +14,7 @@
 }
 
 .mui-field__required {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
   margin-left: 0.25rem;
 }
 
@@ -27,7 +27,7 @@
 .mui-field__error {
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
   margin: 0;
 }
 

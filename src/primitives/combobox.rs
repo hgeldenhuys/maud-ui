@@ -57,6 +57,7 @@ pub fn render(props: Props) -> Markup {
                         role="combobox" aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-controls=(format!("{}-dropdown", props.id))
+                        aria-label=(selected_label.clone())
                         id=(props.id.clone())
                         disabled {
                     span class="mui-combobox__value" { (selected_label) }
@@ -67,6 +68,7 @@ pub fn render(props: Props) -> Markup {
                         role="combobox" aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-controls=(format!("{}-dropdown", props.id))
+                        aria-label=(selected_label.clone())
                         id=(props.id.clone()) {
                     span class="mui-combobox__value" { (selected_label) }
                     span class="mui-combobox__chevron" aria-hidden="true" { "\u{25be}" }

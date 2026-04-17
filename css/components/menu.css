@@ -85,12 +85,12 @@
 /* --- Destructive item -------------------------------------------------- */
 
 .mui-menu__item--danger {
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 
 .mui-menu__item--danger:hover:not(:disabled) {
   background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
-  color: var(--mui-danger);
+  color: var(--mui-danger-text);
 }
 
 .mui-menu__item--danger:focus-visible {

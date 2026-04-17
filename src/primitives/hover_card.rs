@@ -79,7 +79,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "HoverCard" }
                 div.mui-showcase__row {
                     (render(Props {
-                        trigger: html! { a href="#" { "@shadcn" } },
+                        trigger: html! { a href="#" style="color:var(--mui-accent-text);" { "@shadcn" } },
                         content: user_card,
                         id: "demo-hover-1".into(),
                         open_delay_ms: 300,

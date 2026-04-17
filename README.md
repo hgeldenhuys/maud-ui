@@ -19,7 +19,8 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 - **Dark + light themes** -- CSS custom properties for instant customization
 - **Progressive enhancement** -- all components work without JavaScript; enhanced with htmx + vanilla JS
 - **Single Rust dependency** -- only maud; no serde, no framework lock-in
-- **Minimal runtime** -- 34 KB JavaScript (minified), 39 KB CSS across all components
+- **Minimal runtime** -- 46 KB JS + 78 KB CSS minified (11 KB each gzipped)
+- **Tailwind-compatible** -- every class prefixed `mui-`, no collisions ([pairing guide](docs/TAILWIND.md))
 - **Ship pre-built artifacts** -- no build step required for consumers
 - **MIT licensed**
 

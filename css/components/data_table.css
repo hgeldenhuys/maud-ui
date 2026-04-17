@@ -139,3 +139,32 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* Mobile: stack toolbar/footer, full-width search */
+@media (max-width: 640px) {
+  .mui-data-table__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .mui-data-table__search {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .mui-data-table__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.625rem;
+  }
+
+  .mui-data-table__pagination {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mui-data-table__page-btn {
+    flex: 1;
+  }
+}

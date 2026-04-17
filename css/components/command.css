@@ -159,3 +159,23 @@ dialog.mui-command::backdrop {
 .mui-command__group[data-hidden="true"] {
   display: none;
 }
+
+/* Mobile: full-width command palette with tighter padding */
+@media (max-width: 640px) {
+  dialog.mui-command {
+    width: calc(100vw - 1.5rem);
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .mui-command__search-wrap {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .mui-command__list {
+    max-height: 60vh;
+  }
+
+  .mui-command__item {
+    padding: 0.5rem 0.375rem;
+  }
+}

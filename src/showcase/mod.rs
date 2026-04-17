@@ -922,26 +922,7 @@ html { scroll-behavior: smooth; }
 fn showcase_js() -> &'static str {
     r#"
 (function() {
-    // Theme toggle
-    var toggle = document.getElementById('theme-toggle');
-    if (toggle) {
-        toggle.addEventListener('click', function() {
-            var html = document.documentElement;
-            var current = html.getAttribute('data-theme') || 'dark';
-            var next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            toggle.textContent = next === 'dark' ? 'Toggle theme' : 'Toggle theme';
-            try { localStorage.setItem('maud-ui-theme', next); } catch(e) {}
-        });
-        // Restore saved theme
-        try {
-            var saved = localStorage.getItem('maud-ui-theme');
-            if (saved) {
-                document.documentElement.setAttribute('data-theme', saved);
-            }
-        } catch(e) {}
-    }
-
+    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll
     var navItems = document.querySelectorAll('.mui-gallery__nav-item');
     if (navItems.length > 0) {

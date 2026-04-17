@@ -330,50 +330,42 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             section {
-                h2 { "Default" }
-                p.mui-showcase__caption { "April 2026 with the 20th selected" }
+                h2 { "Check-in" }
+                p.mui-showcase__caption { "Pick a check-in date — earliest arrival is today (Apr 16)." }
                 (render(Props {
-                    id: "demo-cal-1".into(),
+                    id: "demo-cal-checkin".into(),
                     year: 2026,
                     month: 4,
                     selected: Some((2026, 4, 20)),
+                    min_date: Some((2026, 4, 16)),
                     ..Default::default()
                 }))
             }
 
             section {
-                h2 { "With min/max range" }
-                p.mui-showcase__caption { "Only April 10–25 selectable" }
+                h2 { "Departure" }
+                p.mui-showcase__caption { "Departure must be after check-in — min Apr 21, max 60 days out." }
                 (render(Props {
-                    id: "demo-cal-2".into(),
+                    id: "demo-cal-departure".into(),
                     year: 2026,
                     month: 4,
-                    min_date: Some((2026, 4, 10)),
-                    max_date: Some((2026, 4, 25)),
+                    selected: Some((2026, 4, 27)),
+                    min_date: Some((2026, 4, 21)),
+                    max_date: Some((2026, 6, 20)),
                     ..Default::default()
                 }))
             }
 
             section {
-                h2 { "No outside days" }
-                p.mui-showcase__caption { "Previous/next month days hidden" }
+                h2 { "Disabled weekends" }
+                p.mui-showcase__caption { "Business-day picking — window locked to the Mon–Fri work week of Apr 20–24." }
                 (render(Props {
-                    id: "demo-cal-3".into(),
+                    id: "demo-cal-weekdays".into(),
                     year: 2026,
                     month: 4,
-                    show_outside_days: false,
-                    ..Default::default()
-                }))
-            }
-
-            section {
-                h2 { "February (leap year check)" }
-                p.mui-showcase__caption { "2028 is a leap year — 29 days" }
-                (render(Props {
-                    id: "demo-cal-4".into(),
-                    year: 2028,
-                    month: 2,
-                    selected: Some((2028, 2, 29)),
+                    selected: Some((2026, 4, 22)),
+                    min_date: Some((2026, 4, 20)),
+                    max_date: Some((2026, 4, 24)),
                     ..Default::default()
                 }))
             }

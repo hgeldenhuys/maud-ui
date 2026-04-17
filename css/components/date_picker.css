@@ -248,3 +248,23 @@
   width: 0;
   height: 0;
 }
+
+/* Mobile: trigger expands to fit, dropdown clamps to viewport */
+@media (max-width: 640px) {
+  .mui-date-picker {
+    display: block;
+    width: 100%;
+  }
+
+  .mui-date-picker__trigger {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mui-date-picker__dropdown {
+    min-width: 0;
+    max-width: calc(100vw - 2rem);
+    left: 0;
+    right: auto;
+  }
+}

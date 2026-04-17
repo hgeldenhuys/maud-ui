@@ -54,99 +54,96 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Default (step 1, no bounds)
+            // Cart quantity
             div {
-                p.mui-showcase__caption { "Default (step 1, no bounds)" }
-                (render(Props {
-                    name: "demo-nf-1".into(),
-                    value: 10.0,
-                    step: 1.0,
-                    id: "demo-nf-1".into(),
-                    label: "Default number field".into(),
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Cart \u{2014} Wireless Headphones" }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
+                    div style="display:flex;justify-content:space-between;align-items:center;" {
+                        div {
+                            p style="font-size:0.875rem;font-weight:500;margin:0;" { "Aurora Wireless Headphones" }
+                            p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" { "$149 each" }
+                        }
+                        span style="font-size:0.875rem;font-weight:600;" { "$298" }
+                    }
+                    label for="cart-qty" style="font-size:0.75rem;color:var(--mui-text-muted);" { "Quantity" }
+                    (render(Props {
+                        name: "cart_quantity".into(),
+                        value: 2.0,
+                        min: Some(1.0),
+                        max: Some(10.0),
+                        step: 1.0,
+                        id: "cart-qty".into(),
+                        label: "Cart quantity".into(),
+                        ..Default::default()
+                    }))
+                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" { "Max 10 per order" }
+                }
             }
 
-            // Bounded (0..100)
+            // Age field
             div {
-                p.mui-showcase__caption { "Bounded (0..100)" }
-                (render(Props {
-                    name: "demo-nf-2".into(),
-                    value: 50.0,
-                    min: Some(0.0),
-                    max: Some(100.0),
-                    id: "demo-nf-2".into(),
-                    label: "Bounded number field".into(),
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Account \u{2014} Age verification" }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
+                    label for="signup-age" style="font-size:0.875rem;font-weight:500;" { "Age" }
+                    (render(Props {
+                        name: "age".into(),
+                        value: 24.0,
+                        min: Some(13.0),
+                        max: Some(120.0),
+                        step: 1.0,
+                        id: "signup-age".into(),
+                        label: "Age".into(),
+                        ..Default::default()
+                    }))
+                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                        "You must be at least 13 to create an account."
+                    }
+                }
             }
 
-            // Decimal (step 0.1)
+            // Recipe servings
             div {
-                p.mui-showcase__caption { "Decimal (step 0.1)" }
-                (render(Props {
-                    name: "demo-nf-3".into(),
-                    value: 1.5,
-                    step: 0.1,
-                    id: "demo-nf-3".into(),
-                    label: "Decimal number field".into(),
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Recipe \u{2014} Tomato Basil Risotto" }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
+                    label for="recipe-servings" style="font-size:0.875rem;font-weight:500;" { "Servings" }
+                    (render(Props {
+                        name: "servings".into(),
+                        value: 4.0,
+                        min: Some(1.0),
+                        max: Some(12.0),
+                        step: 1.0,
+                        id: "recipe-servings".into(),
+                        label: "Servings".into(),
+                        ..Default::default()
+                    }))
+                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                        "Adjust to scale ingredients (1\u{2013}12 people)."
+                    }
+                }
             }
 
-            // Disabled
+            // Disabled — backorder
             div {
-                p.mui-showcase__caption { "Disabled" }
-                (render(Props {
-                    name: "demo-nf-4".into(),
-                    value: 42.0,
-                    disabled: true,
-                    id: "demo-nf-4".into(),
-                    label: "Disabled number field".into(),
-                    ..Default::default()
-                }))
-            }
-
-            // Bounds edge case: at minimum
-            div {
-                p.mui-showcase__caption { "At minimum (0..100)" }
-                (render(Props {
-                    name: "demo-nf-5".into(),
-                    value: 0.0,
-                    min: Some(0.0),
-                    max: Some(100.0),
-                    id: "demo-nf-5".into(),
-                    label: "At minimum bound".into(),
-                    ..Default::default()
-                }))
-            }
-
-            // Bounds edge case: at maximum
-            div {
-                p.mui-showcase__caption { "At maximum (0..100)" }
-                (render(Props {
-                    name: "demo-nf-6".into(),
-                    value: 100.0,
-                    min: Some(0.0),
-                    max: Some(100.0),
-                    id: "demo-nf-6".into(),
-                    label: "At maximum bound".into(),
-                    ..Default::default()
-                }))
-            }
-
-            // Negative values
-            div {
-                p.mui-showcase__caption { "Negative bounds (-50..50)" }
-                (render(Props {
-                    name: "demo-nf-7".into(),
-                    value: -10.0,
-                    min: Some(-50.0),
-                    max: Some(50.0),
-                    id: "demo-nf-7".into(),
-                    label: "Negative value field".into(),
-                    ..Default::default()
-                }))
+                p.mui-showcase__caption { "Backordered \u{2014} quantity locked" }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
+                    label for="backorder-qty" style="font-size:0.875rem;font-weight:500;color:var(--mui-text-muted);" {
+                        "Quantity (reserved)"
+                    }
+                    (render(Props {
+                        name: "backorder".into(),
+                        value: 1.0,
+                        min: Some(1.0),
+                        max: Some(1.0),
+                        step: 1.0,
+                        disabled: true,
+                        id: "backorder-qty".into(),
+                        label: "Backordered quantity".into(),
+                        ..Default::default()
+                    }))
+                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                        "Ships when restocked on April 28."
+                    }
+                }
             }
         }
     }

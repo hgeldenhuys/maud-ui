@@ -51,51 +51,81 @@ pub fn render(props: Props) -> Markup {
 }
 
 pub fn showcase() -> Markup {
-    let buttons_horizontal = html! {
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Left" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Center" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Right" }
+    // Text alignment — Left/Center/Right with glyph icons
+    let buttons_align = html! {
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-pressed="true" aria-label="Align left" {
+            span aria-hidden="true" { "\u{2630}" }
+            " Left"
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-label="Align center" {
+            span aria-hidden="true" { "\u{2261}" }
+            " Center"
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-label="Align right" {
+            span aria-hidden="true" { "\u{268c}" }
+            " Right"
+        }
     };
 
-    let buttons_vertical = html! {
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Top" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Middle" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Bottom" }
+    // Text formatting — Bold/Italic/Underline
+    let buttons_format = html! {
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-pressed="true" aria-label="Bold" {
+            strong { "B" }
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-label="Italic" {
+            em { "I" }
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-label="Underline" {
+            span style="text-decoration:underline;" { "U" }
+        }
     };
 
-    let buttons_toggle = html! {
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-pressed="true" { "Bold" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Italic" }
-        button type="button" class="mui-btn mui-btn--outline mui-btn--md" { "Underline" }
+    // View switcher — Grid/List/Board
+    let buttons_view = html! {
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" aria-pressed="true" {
+            span aria-hidden="true" { "\u{25a6}" }
+            " Grid"
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" {
+            span aria-hidden="true" { "\u{2630}" }
+            " List"
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" {
+            span aria-hidden="true" { "\u{25a7}" }
+            " Board"
+        }
     };
 
     html! {
         div.mui-showcase__grid {
             section {
-                h2 { "Horizontal (default)" }
+                h2 { "Text alignment toolbar" }
+                p.mui-showcase__caption { "Editor toolbar — exactly one alignment active at a time." }
                 div.mui-showcase__row {
                     (render(Props {
-                        children: buttons_horizontal.clone(),
+                        children: buttons_align,
                         orientation: Orientation::Horizontal,
                         size: None,
                     }))
                 }
             }
             section {
-                h2 { "Vertical" }
+                h2 { "Text formatting" }
+                p.mui-showcase__caption { "Rich-text controls — each toggle independent (Bold currently on)." }
                 div.mui-showcase__row {
                     (render(Props {
-                        children: buttons_vertical.clone(),
-                        orientation: Orientation::Vertical,
+                        children: buttons_format,
+                        orientation: Orientation::Horizontal,
                         size: None,
                     }))
                 }
             }
             section {
-                h2 { "Toggle group (active state)" }
+                h2 { "View switcher" }
+                p.mui-showcase__caption { "Project listing view — Grid / List / Board (Grid active)." }
                 div.mui-showcase__row {
                     (render(Props {
-                        children: buttons_toggle,
+                        children: buttons_view,
                         orientation: Orientation::Horizontal,
                         size: None,
                     }))

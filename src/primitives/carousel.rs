@@ -88,69 +88,97 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
+/// Render one product slide: SVG placeholder, name, price, CTA.
+fn product_slide(name: &str, price: &str, gradient: &str, glyph: &str) -> Markup {
+    html! {
+        div style="display:flex;flex-direction:column;gap:0.75rem;padding:0.75rem;" {
+            // Product image — SVG placeholder inside gradient
+            div style=(format!("background: linear-gradient(135deg, {}); border-radius: var(--mui-radius-lg); height: 10rem; display: flex; align-items: center; justify-content: center;", gradient)) {
+                span style="font-size:3rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));" { (glyph) }
+            }
+            div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;" {
+                div style="min-width:0;" {
+                    p style="font-size:0.9375rem;font-weight:600;margin:0;" { (name) }
+                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" { "Free shipping over $50" }
+                }
+                span style="font-size:0.9375rem;font-weight:600;" { (price) }
+            }
+            button type="button" style="align-self:flex-start;font-size:0.8125rem;font-weight:500;color:var(--mui-text);background:transparent;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-md);padding:0.375rem 0.75rem;cursor:pointer;" {
+                "View details →"
+            }
+        }
+    }
+}
+
 /// Showcase carousel variants
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Default: arrows + dots, 5 colored slides
+            // Product gallery
             div {
-                h3 class="mui-showcase__caption" { "Default (arrows + dots)" }
+                h3 class="mui-showcase__caption" { "Featured products" }
                 (render(Props {
-                    id: "demo-carousel-1".to_string(),
+                    id: "demo-carousel-products".to_string(),
                     items: vec![
-                        html! {
-                            div style="background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide 1"
-                            }
-                        },
-                        html! {
-                            div style="background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide 2"
-                            }
-                        },
-                        html! {
-                            div style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide 3"
-                            }
-                        },
-                        html! {
-                            div style="background: linear-gradient(135deg, #10b981, #3b82f6); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide 4"
-                            }
-                        },
-                        html! {
-                            div style="background: linear-gradient(135deg, #f43f5e, #a855f7); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide 5"
-                            }
-                        },
+                        product_slide("Aurora Wireless Headphones", "$149", "#3b82f6, #6366f1", "\u{1F3A7}"),
+                        product_slide("Orbit Smart Watch", "$249", "#8b5cf6, #ec4899", "\u{231A}"),
+                        product_slide("Nimbus Desk Lamp", "$79", "#f59e0b, #ef4444", "\u{1F4A1}"),
+                        product_slide("Meridian Leather Wallet", "$64", "#10b981, #3b82f6", "\u{1F45B}"),
                     ],
                     show_dots: true,
                     show_arrows: true,
-                    loop_slides: false,
+                    loop_slides: true,
                     auto_play: false,
-                    aria_label: "Demo carousel with arrows and dots".to_string(),
+                    aria_label: "Featured products".to_string(),
                 }))
             }
 
-            // Without dots
+            // Testimonials carousel — arrows only
             div {
-                h3 class="mui-showcase__caption" { "Arrows only (no dots)" }
+                h3 class="mui-showcase__caption" { "What customers say" }
                 (render(Props {
-                    id: "demo-carousel-2".to_string(),
+                    id: "demo-carousel-reviews".to_string(),
                     items: vec![
                         html! {
-                            div style="background: linear-gradient(135deg, #0ea5e9, #06b6d4); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide A"
+                            div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;min-height:10rem;" {
+                                p style="font-size:1rem;line-height:1.5;margin:0;font-style:italic;color:var(--mui-text);" {
+                                    "\u{201C}Charging speed is absurd. Went from 0 to 80% during my morning coffee.\u{201D}"
+                                }
+                                div style="display:flex;align-items:center;gap:0.625rem;margin-top:auto;" {
+                                    div style="width:2rem;height:2rem;border-radius:9999px;background:linear-gradient(135deg,#14b8a6,#22c55e);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:600;" { "SM" }
+                                    div {
+                                        p style="font-size:0.8125rem;font-weight:500;margin:0;" { "Sofia Martinez" }
+                                        p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" { "Verified buyer \u{00B7} 5 stars" }
+                                    }
+                                }
                             }
                         },
                         html! {
-                            div style="background: linear-gradient(135deg, #14b8a6, #22c55e); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide B"
+                            div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;min-height:10rem;" {
+                                p style="font-size:1rem;line-height:1.5;margin:0;font-style:italic;color:var(--mui-text);" {
+                                    "\u{201C}Sound isolation is the best I've tried under $200. Worth every penny.\u{201D}"
+                                }
+                                div style="display:flex;align-items:center;gap:0.625rem;margin-top:auto;" {
+                                    div style="width:2rem;height:2rem;border-radius:9999px;background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:600;" { "DK" }
+                                    div {
+                                        p style="font-size:0.8125rem;font-weight:500;margin:0;" { "Daniel Kim" }
+                                        p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" { "Verified buyer \u{00B7} 5 stars" }
+                                    }
+                                }
                             }
                         },
                         html! {
-                            div style="background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; display: flex; align-items: center; justify-content: center; height: 12rem; font-size: 1.25rem; font-weight: 600; border-radius: var(--mui-radius-lg);" {
-                                "Slide C"
+                            div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.75rem;min-height:10rem;" {
+                                p style="font-size:1rem;line-height:1.5;margin:0;font-style:italic;color:var(--mui-text);" {
+                                    "\u{201C}Returned two other pairs before this one. Comfortable for full workdays.\u{201D}"
+                                }
+                                div style="display:flex;align-items:center;gap:0.625rem;margin-top:auto;" {
+                                    div style="width:2rem;height:2rem;border-radius:9999px;background:linear-gradient(135deg,#f43f5e,#f59e0b);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.8125rem;font-weight:600;" { "AP" }
+                                    div {
+                                        p style="font-size:0.8125rem;font-weight:500;margin:0;" { "Amelia Park" }
+                                        p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" { "Verified buyer \u{00B7} 4 stars" }
+                                    }
+                                }
                             }
                         },
                     ],
@@ -158,7 +186,7 @@ pub fn showcase() -> Markup {
                     show_arrows: true,
                     loop_slides: true,
                     auto_play: false,
-                    aria_label: "Demo carousel with arrows only".to_string(),
+                    aria_label: "Customer testimonials".to_string(),
                 }))
             }
         }

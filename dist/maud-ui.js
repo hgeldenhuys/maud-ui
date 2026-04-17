@@ -30,9 +30,10 @@
   });
 })();
 
-// ═══ Component behaviors ═══
 
-// --- accordion.js ---
+// ============ Component Behaviors ============
+
+// ============ accordion.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -115,7 +116,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- calendar.js ---
+
+// ============ calendar.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -394,7 +396,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- carousel.js ---
+
+// ============ carousel.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -529,7 +532,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- collapsible.js ---
+
+// ============ collapsible.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -570,7 +574,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- combobox.js ---
+
+// ============ combobox.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -736,7 +741,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- command.js ---
+
+// ============ command.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -941,7 +947,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- data_table.js ---
+
+// ============ data_table.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1135,7 +1142,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- date_picker.js ---
+
+// ============ date_picker.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1338,7 +1346,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- dialog.js ---
+
+// ============ dialog.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1408,7 +1417,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- drawer.js ---
+
+// ============ drawer.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1448,7 +1458,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- hover_card.js ---
+
+// ============ hover_card.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1501,7 +1512,8 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- input_otp.js ---
+
+// ============ input_otp.js ============
 window.MaudUI.behaviors["input-otp"] = function(root) {
   var slots = root.querySelectorAll(".mui-input-otp__slot");
   var hidden = root.querySelector(".mui-input-otp__value");
@@ -1534,7 +1546,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   }
 };
 
-// --- menu.js ---
+
+// ============ menu.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1738,7 +1751,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- menubar.js ---
+
+// ============ menubar.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -1994,7 +2008,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- navigation_menu.js ---
+
+// ============ navigation_menu.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2199,7 +2214,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- number_field.js ---
+
+// ============ number_field.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2241,7 +2257,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- popover.js ---
+
+// ============ popover.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2294,7 +2311,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- resizable.js ---
+
+// ============ resizable.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2452,7 +2470,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- scroll_area.js ---
+
+// ============ scroll_area.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2528,7 +2547,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- select.js ---
+
+// ============ select.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2678,7 +2698,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- slider.js ---
+
+// ============ slider.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2758,7 +2779,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- switch.js ---
+
+// ============ switch.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2795,7 +2817,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- tabs.js ---
+
+// ============ tabs.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2870,7 +2893,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- theme.js ---
+
+// ============ theme.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2897,7 +2921,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- toast.js ---
+
+// ============ toast.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -2969,7 +2994,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- toggle.js ---
+
+// ============ toggle.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
@@ -3084,7 +3110,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 
-// --- tooltip.js ---
+
+// ============ tooltip.js ============
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 

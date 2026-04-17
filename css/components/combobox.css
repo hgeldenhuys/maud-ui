@@ -207,3 +207,22 @@
   width: 0;
   height: 0;
 }
+
+/* Mobile: trigger spans full width; dropdown clamps to viewport */
+@media (max-width: 640px) {
+  .mui-combobox {
+    display: block;
+    width: 100%;
+  }
+
+  .mui-combobox__trigger {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mui-combobox__dropdown {
+    left: 0;
+    right: 0;
+    max-width: 100%;
+  }
+}

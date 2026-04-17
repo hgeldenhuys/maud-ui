@@ -121,3 +121,29 @@
   letter-spacing: 0.1em;
   user-select: none;
 }
+
+/* Mobile: collapse to prev/next + current/total; hide numbered page buttons */
+@media (max-width: 640px) {
+  .mui-pagination {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .mui-pagination__pages {
+    flex: 1;
+    justify-content: center;
+    gap: 0.125rem;
+    /* Keep only the active page visible; hide siblings + ellipsis */
+    overflow: hidden;
+  }
+
+  .mui-pagination__pages .mui-pagination__page:not([aria-current="page"]),
+  .mui-pagination__pages .mui-pagination__ellipsis {
+    display: none;
+  }
+
+  .mui-pagination__page[aria-current="page"] {
+    min-width: 3.5rem;
+  }
+}

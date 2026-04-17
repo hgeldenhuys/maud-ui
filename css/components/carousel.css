@@ -6,6 +6,13 @@
   max-width: 24rem;
 }
 
+/* Mobile: ensure carousel never exceeds viewport at 375px */
+@media (max-width: 640px) {
+  .mui-carousel {
+    max-width: 100%;
+  }
+}
+
 .mui-carousel__viewport {
   overflow: hidden;
   border-radius: var(--mui-radius-lg);

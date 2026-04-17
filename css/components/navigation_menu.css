@@ -154,3 +154,24 @@
   color: var(--mui-text-muted);
   margin-top: 0.25rem;
 }
+
+/* Mobile: wrap list, clamp dropdown to viewport, single-column sub-list */
+@media (max-width: 640px) {
+  .mui-nav-menu__list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-nav-menu__content {
+    min-width: 0;
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    left: 0;
+  }
+
+  .mui-nav-menu__sub-list {
+    grid-template-columns: 1fr;
+  }
+}

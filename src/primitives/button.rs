@@ -91,107 +91,95 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             section {
-                h2 { "Variants" }
+                h2 { "Form actions" }
+                p.mui-showcase__caption { "Primary/secondary pairing for settings, onboarding, checkout." }
                 div.mui-showcase__row {
                     (render(Props {
-                        label: "Default".to_string(),
-                        variant: Variant::Default,
+                        label: "Save changes".to_string(),
+                        variant: Variant::Primary,
                         size: Size::Md,
                         disabled: false,
-                        button_type: "button",
+                        button_type: "submit",
                     }))
                     (render(Props {
-                        label: "Primary".to_string(),
+                        label: "Continue to billing".to_string(),
                         variant: Variant::Primary,
                         size: Size::Md,
                         disabled: false,
                         button_type: "button",
                     }))
                     (render(Props {
-                        label: "Secondary".to_string(),
-                        variant: Variant::Secondary,
-                        size: Size::Md,
-                        disabled: false,
-                        button_type: "button",
-                    }))
-                    (render(Props {
-                        label: "Outline".to_string(),
+                        label: "Cancel".to_string(),
                         variant: Variant::Outline,
                         size: Size::Md,
                         disabled: false,
                         button_type: "button",
                     }))
+                }
+            }
+            section {
+                h2 { "Destructive" }
+                p.mui-showcase__caption { "Irreversible actions — only after a confirm dialog." }
+                div.mui-showcase__row {
                     (render(Props {
-                        label: "Ghost".to_string(),
-                        variant: Variant::Ghost,
-                        size: Size::Md,
-                        disabled: false,
-                        button_type: "button",
-                    }))
-                    (render(Props {
-                        label: "Danger".to_string(),
+                        label: "Delete account".to_string(),
                         variant: Variant::Danger,
                         size: Size::Md,
                         disabled: false,
                         button_type: "button",
                     }))
                     (render(Props {
-                        label: "Link".to_string(),
-                        variant: Variant::Link,
-                        size: Size::Md,
+                        label: "Revoke API key".to_string(),
+                        variant: Variant::Danger,
+                        size: Size::Sm,
                         disabled: false,
                         button_type: "button",
                     }))
                 }
             }
             section {
-                h2 { "Sizes" }
+                h2 { "Loading state" }
+                p.mui-showcase__caption { "Disabled + spinner label while awaiting a response." }
                 div.mui-showcase__row {
                     (render(Props {
-                        label: "Sm".to_string(),
+                        label: "\u{27f3}  Signing in\u{2026}".to_string(),
                         variant: Variant::Primary,
-                        size: Size::Sm,
-                        disabled: false,
+                        size: Size::Md,
+                        disabled: true,
                         button_type: "button",
                     }))
                     (render(Props {
-                        label: "Md".to_string(),
+                        label: "\u{27f3}  Deploying\u{2026}".to_string(),
+                        variant: Variant::Secondary,
+                        size: Size::Md,
+                        disabled: true,
+                        button_type: "button",
+                    }))
+                }
+            }
+            section {
+                h2 { "Icon + text" }
+                p.mui-showcase__caption { "Leading glyph for recognition at a glance." }
+                div.mui-showcase__row {
+                    (render(Props {
+                        label: "\u{2795}  Invite teammate".to_string(),
                         variant: Variant::Primary,
                         size: Size::Md,
                         disabled: false,
                         button_type: "button",
                     }))
                     (render(Props {
-                        label: "Lg".to_string(),
-                        variant: Variant::Primary,
-                        size: Size::Lg,
+                        label: "\u{f09b}  GitHub".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Md,
                         disabled: false,
                         button_type: "button",
                     }))
                     (render(Props {
                         label: "+".to_string(),
-                        variant: Variant::Primary,
+                        variant: Variant::Outline,
                         size: Size::Icon,
                         disabled: false,
-                        button_type: "button",
-                    }))
-                }
-            }
-            section {
-                h2 { "Disabled" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        label: "Primary Disabled".to_string(),
-                        variant: Variant::Primary,
-                        size: Size::Md,
-                        disabled: true,
-                        button_type: "button",
-                    }))
-                    (render(Props {
-                        label: "Outline Disabled".to_string(),
-                        variant: Variant::Outline,
-                        size: Size::Md,
-                        disabled: true,
                         button_type: "button",
                     }))
                 }

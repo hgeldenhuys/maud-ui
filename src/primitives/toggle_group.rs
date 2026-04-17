@@ -78,10 +78,10 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Text alignment — single select
+            // Text alignment picker — single select, editor context
             section {
-                h2 { "Text Alignment" }
-                p.mui-showcase__caption { "Single selection" }
+                h2 { "Text alignment" }
+                p.mui-showcase__caption { "Paragraph alignment in the document editor." }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
@@ -96,63 +96,17 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // View mode — realistic app context
+            // Text formatting — multi select
             section {
-                h2 { "View Mode" }
-                p.mui-showcase__caption { "Single selection" }
+                h2 { "Text formatting" }
+                p.mui-showcase__caption { "Bold, italic, underline, strikethrough — multi-select." }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
-                            GroupItem { value: "list".into(), label: "List".into(), pressed: false },
-                            GroupItem { value: "grid".into(), label: "Grid".into(), pressed: true },
-                            GroupItem { value: "kanban".into(), label: "Kanban".into(), pressed: false },
-                        ],
-                        aria_label: "View mode".into(),
-                        ..Default::default()
-                    }))
-                }
-            }
-
-            // Size variants side by side
-            section {
-                h2 { "Sizes" }
-                div.mui-showcase__row {
-                    span.mui-showcase__label { "md" }
-                    (render(Props {
-                        items: vec![
-                            GroupItem { value: "a".into(), label: "Day".into(), pressed: true },
-                            GroupItem { value: "b".into(), label: "Week".into(), pressed: false },
-                            GroupItem { value: "c".into(), label: "Month".into(), pressed: false },
-                        ],
-                        aria_label: "Time range md".into(),
-                        ..Default::default()
-                    }))
-                }
-                div.mui-showcase__row {
-                    span.mui-showcase__label { "sm" }
-                    (render(Props {
-                        items: vec![
-                            GroupItem { value: "a".into(), label: "Day".into(), pressed: true },
-                            GroupItem { value: "b".into(), label: "Week".into(), pressed: false },
-                            GroupItem { value: "c".into(), label: "Month".into(), pressed: false },
-                        ],
-                        size: Size::Sm,
-                        aria_label: "Time range sm".into(),
-                        ..Default::default()
-                    }))
-                }
-            }
-
-            // Multiple selection
-            section {
-                h2 { "Multiple Selection" }
-                p.mui-showcase__caption { "Text formatting — multi-select" }
-                div.mui-showcase__row {
-                    (render(Props {
-                        items: vec![
-                            GroupItem { value: "bold".into(), label: "B".into(), pressed: true },
-                            GroupItem { value: "italic".into(), label: "I".into(), pressed: false },
-                            GroupItem { value: "underline".into(), label: "U".into(), pressed: true },
+                            GroupItem { value: "bold".into(), label: "Bold".into(), pressed: true },
+                            GroupItem { value: "italic".into(), label: "Italic".into(), pressed: false },
+                            GroupItem { value: "underline".into(), label: "Underline".into(), pressed: true },
+                            GroupItem { value: "strike".into(), label: "Strike".into(), pressed: false },
                         ],
                         multiple: true,
                         aria_label: "Text formatting".into(),
@@ -161,17 +115,31 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // Disabled
+            // View mode — calendar picker
             section {
-                h2 { "Disabled" }
+                h2 { "Calendar view" }
+                p.mui-showcase__caption { "Switch between Day, Week, and Month layouts." }
                 div.mui-showcase__row {
                     (render(Props {
                         items: vec![
-                            GroupItem { value: "on".into(), label: "Active".into(), pressed: true },
-                            GroupItem { value: "off".into(), label: "Inactive".into(), pressed: false },
+                            GroupItem { value: "day".into(), label: "Day".into(), pressed: false },
+                            GroupItem { value: "week".into(), label: "Week".into(), pressed: true },
+                            GroupItem { value: "month".into(), label: "Month".into(), pressed: false },
                         ],
-                        disabled: true,
-                        aria_label: "Disabled group".into(),
+                        aria_label: "Calendar view".into(),
+                        ..Default::default()
+                    }))
+                }
+                div.mui-showcase__row style="margin-top:0.5rem;" {
+                    span.mui-showcase__label { "Compact" }
+                    (render(Props {
+                        items: vec![
+                            GroupItem { value: "day".into(), label: "Day".into(), pressed: false },
+                            GroupItem { value: "week".into(), label: "Week".into(), pressed: true },
+                            GroupItem { value: "month".into(), label: "Month".into(), pressed: false },
+                        ],
+                        size: Size::Sm,
+                        aria_label: "Calendar view compact".into(),
                         ..Default::default()
                     }))
                 }

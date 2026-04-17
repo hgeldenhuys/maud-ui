@@ -73,3 +73,18 @@
 .mui-menubar__content .mui-menu__shortcut {
   /* Inherits all styles from menu.css — no overrides needed */
 }
+
+/* Mobile: allow menubar to wrap and dropdowns to fit viewport */
+@media (max-width: 640px) {
+  .mui-menubar {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-menubar__content {
+    min-width: 12rem;
+    max-width: calc(100vw - 2rem);
+  }
+}

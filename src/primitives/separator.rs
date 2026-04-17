@@ -61,84 +61,79 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            // Horizontal separator — basic
+            // Profile card — horizontal separator between Bio and Settings sections
             section {
-                h2 { "Horizontal separator" }
-                p style="margin: 0 0 0.5rem; color: var(--mui-text-muted); font-size: 0.875rem;" {
-                    "A 1px line spanning the full width."
-                }
-                (render(Props {
-                    orientation: Orientation::Horizontal,
-                    ..Default::default()
-                }))
-            }
-
-            // Settings-style list with separators between items
-            section {
-                h2 { "Between list items" }
-                div style="display: flex; flex-direction: column;" {
-                    div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;" {
-                        div {
-                            div style="font-weight: 500;" { "Profile" }
-                            div style="font-size: 0.8125rem; color: var(--mui-text-muted);" { "Manage your account details" }
+                h2 { "Profile card sections" }
+                p.mui-showcase__caption { "Separator divides the Bio block from account Settings in a user profile." }
+                div style="border: 1px solid var(--mui-border); border-radius: 0.5rem; padding: 1.25rem; max-width: 24rem; background: var(--mui-card-bg, var(--mui-bg, transparent));" {
+                    div {
+                        div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Bio" }
+                        div style="font-weight: 600; font-size: 1rem;" { "Henry Geldenhuys" }
+                        div style="font-size: 0.8125rem; color: var(--mui-text-muted); margin-top: 0.25rem;" {
+                            "Staff engineer at Kapable. Building Claude Conductor. Cape Town \u{2192} Remote."
                         }
-                        span style="color: var(--mui-text-muted); font-size: 0.875rem;" { ">" }
                     }
-                    (render(Props { orientation: Orientation::Horizontal, decorative: true }))
-                    div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;" {
-                        div {
-                            div style="font-weight: 500;" { "Notifications" }
-                            div style="font-size: 0.8125rem; color: var(--mui-text-muted);" { "Configure alert preferences" }
-                        }
-                        span style="color: var(--mui-text-muted); font-size: 0.875rem;" { ">" }
+                    div style="margin: 1rem 0;" {
+                        (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                     }
-                    (render(Props { orientation: Orientation::Horizontal, decorative: true }))
-                    div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;" {
-                        div {
-                            div style="font-weight: 500;" { "Privacy" }
-                            div style="font-size: 0.8125rem; color: var(--mui-text-muted);" { "Control data sharing" }
+                    div {
+                        div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Settings" }
+                        div style="display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.25rem 0;" {
+                            span { "Email" }
+                            span style="color: var(--mui-text-muted);" { "invoice@geldentech.ca" }
                         }
-                        span style="color: var(--mui-text-muted); font-size: 0.875rem;" { ">" }
+                        div style="display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.25rem 0;" {
+                            span { "Two-factor" }
+                            span style="color: var(--mui-text-muted);" { "Enabled" }
+                        }
                     }
                 }
             }
 
-            // Vertical separators in a toolbar
+            // "OR" divider — between Google sign-in and email form
             section {
-                h2 { "Vertical separators (toolbar)" }
-                div style="display: flex; align-items: center; gap: 0.75rem; height: 2.5rem;" {
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Cut" }
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Copy" }
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Paste" }
+                h2 { "Auth methods" }
+                p.mui-showcase__caption { "\u{201c}OR\u{201d} label separates social sign-in from email + password." }
+                div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 22rem;" {
+                    button class="mui-btn mui-btn--outline mui-btn--md" style="width: 100%;" {
+                        span aria-hidden="true" style="margin-right: 0.5rem;" { "G" }
+                        "Sign in with Google"
+                    }
+                    div style="display: flex; align-items: center; gap: 0.75rem; margin: 0.25rem 0;" {
+                        div style="flex: 1;" {
+                            (render(Props { orientation: Orientation::Horizontal, decorative: true }))
+                        }
+                        span style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; color: var(--mui-text-muted); letter-spacing: 0.08em;" { "OR" }
+                        div style="flex: 1;" {
+                            (render(Props { orientation: Orientation::Horizontal, decorative: true }))
+                        }
+                    }
+                    div class="mui-field" {
+                        input type="email" placeholder="you@company.com" class="mui-input" style="width: 100%;";
+                    }
+                    div class="mui-field" {
+                        input type="password" placeholder="Password" class="mui-input" style="width: 100%;";
+                    }
+                    button class="mui-btn mui-btn--primary mui-btn--md" type="submit" { "Sign in" }
+                }
+            }
+
+            // Vertical separator inside a nav bar
+            section {
+                h2 { "Navigation" }
+                p.mui-showcase__caption { "Vertical separator between primary nav and user menu." }
+                nav style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border: 1px solid var(--mui-border); border-radius: 0.5rem; height: 2.75rem;" {
+                    a href="#" style="font-weight: 500; text-decoration: none; color: inherit;" { "Dashboard" }
+                    a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Projects" }
+                    a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Billing" }
+                    a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Settings" }
+                    div style="flex: 1;" {}
                     (render(Props {
                         orientation: Orientation::Vertical,
                         ..Default::default()
                     }))
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Undo" }
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Redo" }
-                    (render(Props {
-                        orientation: Orientation::Vertical,
-                        ..Default::default()
-                    }))
-                    button class="mui-btn mui-btn--ghost mui-btn--sm" { "Settings" }
-                }
-            }
-
-            // Decorative variant
-            section {
-                h2 { "Decorative (aria-hidden)" }
-                p style="margin: 0 0 0.5rem; color: var(--mui-text-muted); font-size: 0.875rem;" {
-                    "Purely visual, hidden from screen readers."
-                }
-                div style="padding: 0.75rem 0;" {
-                    p style="margin: 0;" { "Section one content" }
-                }
-                (render(Props {
-                    orientation: Orientation::Horizontal,
-                    decorative: true,
-                }))
-                div style="padding: 0.75rem 0;" {
-                    p style="margin: 0;" { "Section two content" }
+                    a href="#" style="color: var(--mui-text-muted); text-decoration: none; font-size: 0.875rem;" { "Docs" }
+                    a href="#" style="font-weight: 500; text-decoration: none; color: inherit;" { "HG" }
                 }
             }
         }

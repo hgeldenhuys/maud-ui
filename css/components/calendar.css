@@ -172,3 +172,22 @@
   overflow: hidden;
   pointer-events: none;
 }
+
+/* Mobile: allow calendar to flex with container */
+@media (max-width: 640px) {
+  .mui-calendar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-calendar__weekdays,
+  .mui-calendar__week {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .mui-calendar__weekday,
+  .mui-calendar__day {
+    width: 100%;
+  }
+}

@@ -85,23 +85,35 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Default" }
+                p.mui-showcase__caption { "Subscription expiring" }
                 div.mui-showcase__column {
                     (render(Props {
-                        title: "Heads up!".into(),
-                        description: Some("You can add components to your app using the CLI.".into()),
-                        variant: Variant::Default,
+                        title: "Your Pro plan expires in 3 days".into(),
+                        description: Some("Renew by Apr 19 to keep unlimited builds and priority support. After expiry your workspace drops to the Free tier and projects over 3 will be archived.".into()),
+                        variant: Variant::Warning,
                         icon: true,
                     }))
                 }
             }
 
             div {
-                p.mui-showcase__caption { "Destructive" }
+                p.mui-showcase__caption { "Two-factor enabled" }
                 div.mui-showcase__column {
                     (render(Props {
-                        title: "Error".into(),
-                        description: Some("Your session has expired. Please log in again.".into()),
+                        title: "Two-factor authentication is on".into(),
+                        description: Some("Backup codes were emailed to invoice@geldentech.ca. Store them somewhere safe — you'll need one if you lose access to your authenticator.".into()),
+                        variant: Variant::Success,
+                        icon: true,
+                    }))
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "Destructive — API key revocation" }
+                div.mui-showcase__column {
+                    (render(Props {
+                        title: "Revoke key sk_live_\u{2026}A9f2?".into(),
+                        description: Some("Any services using this key will stop working immediately. This action cannot be undone — you'll need to issue a new key and redeploy.".into()),
                         variant: Variant::Danger,
                         icon: true,
                     }))
@@ -109,24 +121,12 @@ pub fn showcase() -> Markup {
             }
 
             div {
-                p.mui-showcase__caption { "All variants" }
+                p.mui-showcase__caption { "Informational" }
                 div.mui-showcase__column {
                     (render(Props {
-                        title: "Info".into(),
-                        description: Some("The system will be down for maintenance on Sunday.".into()),
+                        title: "Scheduled maintenance Sunday 02:00 UTC".into(),
+                        description: Some("The build pipeline will be paused for roughly 20 minutes. In-flight deploys will resume automatically once maintenance completes.".into()),
                         variant: Variant::Info,
-                        icon: true,
-                    }))
-                    (render(Props {
-                        title: "Changes saved".into(),
-                        description: None,
-                        variant: Variant::Success,
-                        icon: true,
-                    }))
-                    (render(Props {
-                        title: "Storage nearly full".into(),
-                        description: Some("You have 50 MB remaining.".into()),
-                        variant: Variant::Warning,
                         icon: true,
                     }))
                 }

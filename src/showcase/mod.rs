@@ -918,13 +918,22 @@ fn sidebar_nav() -> Markup {
             nav class="mui-gallery__nav" {
                 @for tier in TIERS {
                     div class="mui-gallery__nav-group" {
-                        a class="mui-gallery__nav-tier" href=(format!("#{}", tier.slug)) {
+                        // Tier header → `/#slug` so it always navigates to the
+                        // index gallery first and then scrolls to the tier
+                        // section, no matter which page the user is on.
+                        a class="mui-gallery__nav-tier" href=(format!("/#{}", tier.slug)) {
                             (tier.title)
                         }
                         div class="mui-gallery__nav-items" {
                             @for comp in tier.components {
                                 @if component_content(comp).is_some() {
-                                    a class="mui-gallery__nav-item" href=(format!("#{}", comp)) {
+                                    // Component link → `/{slug}` (absolute)
+                                    // so it navigates to the component's own
+                                    // page from any context. The in-page
+                                    // IntersectionObserver on `/` still
+                                    // tracks scroll-based active state via
+                                    // the #{slug} anchor next to each name.
+                                    a class="mui-gallery__nav-item" href=(format!("/{}", comp)) data-slug=(comp) {
                                         (display_name(comp))
                                     }
                                 }
@@ -1605,7 +1614,9 @@ fn showcase_js() -> &'static str {
                     var id = entry.target.id;
                     for (var j = 0; j < navItems.length; j++) {
                         var item = navItems[j];
-                        if (item.getAttribute('href') === '#' + id) {
+                        // Nav items link to /{slug} for cross-page nav,
+                        // so we match by data-slug instead of href.
+                        if (item.getAttribute('data-slug') === id) {
                             item.classList.add('mui-gallery__nav-item--active');
                         } else {
                             item.classList.remove('mui-gallery__nav-item--active');

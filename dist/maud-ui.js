@@ -2770,9 +2770,11 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       if (thumb.getAttribute("aria-disabled") === "true") return;
       e.preventDefault();
       dragging = true;
+      root.setAttribute("data-dragging", "true");
       document.addEventListener("mousemove", onDrag);
       document.addEventListener("mouseup", function () {
         dragging = false;
+        root.removeAttribute("data-dragging");
         document.removeEventListener("mousemove", onDrag);
       }, { once: true });
     });

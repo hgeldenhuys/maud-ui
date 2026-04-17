@@ -3913,6 +3913,10 @@ dialog.mui-drawer--bottom {
 .mui-slider[data-disabled=true] .mui-slider__value {
   opacity: 0.5;
 }
+.mui-slider[data-dragging] .mui-slider__thumb,
+.mui-slider[data-dragging] .mui-slider__fill {
+  transition: none;
+}
 
 /* css/components/spinner.css */
 @keyframes mui-spin {

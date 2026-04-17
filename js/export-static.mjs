@@ -87,12 +87,13 @@ async function main() {
     mkdirSync(join(PUBLIC_DIR, "css"), { recursive: true });
     mkdirSync(join(PUBLIC_DIR, "js"), { recursive: true });
 
-    // 4. Fetch root + getting-started + blocks index + every component
-    //    route + every block route.
+    // 4. Fetch root + getting-started + blocks index + integrations +
+    //    every component route + every block route.
     const routes = [
       "/",
       "/getting-started",
       "/blocks",
+      "/integrations/monaco-editor",
       ...COMPONENTS.map(s => `/${s}`),
       ...BLOCKS.map(s => `/blocks/${s}`),
     ];

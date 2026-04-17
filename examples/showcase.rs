@@ -46,6 +46,10 @@ async fn main() {
             }),
         )
         .route(
+            "/integrations/monaco-editor",
+            get(|| async { maud_ui::showcase::integrations_monaco_page() }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

@@ -951,6 +951,9 @@ fn page_header() -> Markup {
                     a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Blocks"
                     }
+                    a href="/integrations/monaco-editor" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Monaco"
+                    }
                     a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Docs"
                     }
@@ -1345,6 +1348,584 @@ let app = Router::new()
             }
         }
     }
+}
+
+/// `/integrations/monaco-editor` — embed Monaco (VS Code's editor)
+/// inside maud-ui chrome. Demonstrates that the primitive + block CSS
+/// cooperates cleanly with heavyweight third-party widgets.
+///
+/// Monaco is loaded from the jsdelivr CDN; no npm dep needed on the
+/// consumer side. The editor syncs to `<html data-theme>` so the
+/// light/dark toggle in the header flips the Monaco theme too.
+pub fn integrations_monaco_page() -> Markup {
+    let sample_rust = r##"// maud-ui login handler — returns the login block as HTML.
+use axum::{extract::Form, response::Redirect, Router, routing::post};
+use maud_ui::blocks::auth::login;
+use maud::{html, Markup};
+
+#[derive(serde::Deserialize)]
+struct LoginForm {
+    email: String,
+    password: String,
+}
+
+async fn submit(Form(f): Form<LoginForm>) -> Result<Redirect, Markup> {
+    match authenticate(&f.email, &f.password).await {
+        Ok(user) => Ok(Redirect::to(&format!("/u/{}", user.id))),
+        Err(err) => Err(login::render(login::Props {
+            action: "/login".into(),
+            email_value: f.email,
+            error: Some(err.to_string()),
+            ..Default::default()
+        })),
+    }
+}
+
+pub fn routes() -> Router {
+    Router::new().route("/login", post(submit))
+}
+"##;
+
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Monaco editor \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(monaco_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Integrations" }
+                            span { " / " }
+                            span { "Monaco editor" }
+                        }
+
+                        section class="mui-gallery__component" id="integration-monaco" {
+                            h3 class="mui-gallery__component-name" { "Monaco editor \u{2014} Integration" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "The editor behind VS Code, embedded inside a maud-ui shell. File header, toolbar, language dropdown, and status bar are all plain maud-ui primitives wrapping the Monaco instance. The editor theme auto-syncs with "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "<html data-theme>" }
+                                " so toggling the gallery theme flips Monaco too."
+                            }
+
+                            // The integration frame
+                            div class="mui-integration mui-integration--monaco" {
+                                // File header row
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(
+                                                r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-monaco-filename" { "src/routes/auth.rs" }
+                                        span class="mui-integration__dirty" id="mui-monaco-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-monaco-lang" class="mui-integration__select" aria-label="Language" {
+                                            option value="rust" selected { "Rust" }
+                                            option value="typescript" { "TypeScript" }
+                                            option value="javascript" { "JavaScript" }
+                                            option value="html" { "HTML" }
+                                            option value="css" { "CSS" }
+                                            option value="json" { "JSON" }
+                                            option value="markdown" { "Markdown" }
+                                            option value="sql" { "SQL" }
+                                            option value="python" { "Python" }
+                                            option value="go" { "Go" }
+                                        }
+                                        button type="button" id="mui-monaco-format"
+                                               class="mui-btn mui-btn--outline mui-btn--sm"
+                                               aria-label="Format document" { "Format" }
+                                        button type="button" id="mui-monaco-run"
+                                               class="mui-btn mui-btn--primary mui-btn--sm" { "Run" }
+                                    }
+                                }
+
+                                // The editor mount point
+                                div class="mui-integration__editor" id="mui-monaco-editor" {
+                                    // Loading placeholder shown until Monaco finishes loading
+                                    div class="mui-integration__loading" id="mui-monaco-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading Monaco from CDN\u{2026}" }
+                                    }
+                                }
+
+                                // Status bar at the bottom
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-monaco-status-lang" { "Rust" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-monaco-status-pos" { "Ln 1, Col 1" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-monaco-status-lines" { "0 lines" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-monaco-status-theme" {
+                                        "maud-ui-dark"
+                                    }
+                                }
+                            }
+
+                            // Output panel (shows "Run" clicks)
+                            div class="mui-integration__output" {
+                                div class="mui-integration__output-header" {
+                                    span { "Output" }
+                                    button type="button" id="mui-monaco-clear"
+                                           class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear" }
+                                }
+                                pre class="mui-integration__output-body" id="mui-monaco-output" {
+                                    "// Click " span style="color:var(--mui-accent-text);" { "Run" } " to see output here."
+                                }
+                            }
+
+                            (code_example("Usage — drop Monaco into any maud-ui page", r##"// In your <head>:
+//   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.css">
+//   <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/loader.min.js"></script>
+//
+// In your body (where you want the editor):
+html! {
+    div class="mui-integration mui-integration--monaco" {
+        div class="mui-integration__header" {
+            div class="mui-integration__filepath" { "src/main.rs" }
+            div class="mui-integration__toolbar" {
+                (button::render(button::Props {
+                    label: "Format".into(),
+                    variant: button::Variant::Outline,
+                    size: button::Size::Sm,
+                    ..Default::default()
+                }))
+            }
+        }
+        div class="mui-integration__editor" id="editor" {}
+    }
+}
+
+// Then bootstrap Monaco (matches --mui-* theme tokens automatically):
+// require.config({ paths: { vs: 'https://cdn.jsdelivr.net/.../min/vs' } });
+// require(['vs/editor/editor.main'], () => {
+//   monaco.editor.defineTheme('maud-ui-dark', { base: 'vs-dark', ... });
+//   monaco.editor.create(document.getElementById('editor'), {
+//     value: '// your code here',
+//     language: 'rust',
+//     theme: 'maud-ui-dark',
+//     fontFamily: 'var(--mui-font-mono)',
+//     minimap: { enabled: false },
+//     automaticLayout: true,
+//   });
+// });
+"##))
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
+                            }
+                        }
+                    }
+                }
+
+                // Sample code injected as a JS constant so the page loads
+                // without Monaco and the bootstrap can hydrate with this
+                // content once Monaco's AMD modules resolve.
+                script {
+                    (maud::PreEscaped(format!(
+                        "window.__MUI_MONACO_SAMPLE__ = {};",
+                        serde_json_lite_escape(sample_rust),
+                    )))
+                }
+
+                // Monaco CDN loader + bootstrap
+                link rel="stylesheet" data-name="vs/editor/editor.main"
+                     href="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/editor/editor.main.css";
+                script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs/loader.min.js" {}
+                script { (maud::PreEscaped(monaco_bootstrap())) }
+
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+/// Inline CSS for the Monaco integration layout — shell around the
+/// editor, status bar, output panel. Kept inline (not in the bundle)
+/// since it's demo-only, not part of the public `mui-*` API.
+fn monaco_css() -> &'static str {
+    r#"
+.mui-integration {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    overflow: hidden;
+    background: var(--mui-bg-card);
+}
+
+.mui-integration__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--mui-border);
+    background: var(--mui-bg);
+    min-height: 2.75rem;
+    flex-wrap: wrap;
+}
+
+.mui-integration__filepath {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--mui-text);
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+}
+
+.mui-integration__filepath-icon {
+    color: var(--mui-text-muted);
+    display: inline-flex;
+}
+
+.mui-integration__dirty {
+    color: var(--mui-text-subtle);
+    font-size: 0.75rem;
+    transition: color var(--mui-transition);
+}
+
+.mui-integration__dirty[data-dirty="true"] {
+    color: var(--mui-accent-text);
+}
+
+.mui-integration__toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mui-integration__select {
+    height: 2rem;
+    padding: 0 2rem 0 0.75rem;
+    font-size: 0.8125rem;
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.mui-integration__select:focus-visible {
+    outline: 2px solid var(--mui-border-focus);
+    outline-offset: 1px;
+}
+
+.mui-integration__editor {
+    position: relative;
+    height: 24rem;
+    min-height: 20rem;
+    background: var(--mui-bg);
+}
+
+@media (min-width: 1024px) {
+    .mui-integration__editor {
+        height: 28rem;
+    }
+}
+
+.mui-integration__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+    z-index: 1;
+}
+
+/* Fade out the loading overlay once Monaco mounts. */
+.mui-integration__editor[data-ready="true"] .mui-integration__loading {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms;
+}
+
+.mui-integration__statusbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-top: 1px solid var(--mui-border);
+    background: var(--mui-bg);
+    font-family: var(--mui-font-mono);
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+}
+
+.mui-integration__statusbar-sep {
+    color: var(--mui-text-subtle);
+    font-size: 0.625rem;
+}
+
+.mui-integration__statusbar-spacer {
+    flex: 1;
+}
+
+.mui-integration__statusbar-theme {
+    color: var(--mui-accent-text);
+    font-weight: 500;
+}
+
+/* Output panel */
+.mui-integration__output {
+    margin-top: 1rem;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    overflow: hidden;
+    background: var(--mui-bg-card);
+}
+
+.mui-integration__output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--mui-border);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: var(--mui-text-muted);
+    background: var(--mui-bg);
+}
+
+.mui-integration__output-body {
+    margin: 0;
+    padding: 0.875rem 0.75rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+    color: var(--mui-text);
+    white-space: pre-wrap;
+    max-height: 12rem;
+    overflow-y: auto;
+    line-height: 1.5;
+}
+"#
+}
+
+/// Inline JS that boots Monaco via AMD loader, registers a maud-ui
+/// theme, wires the toolbar/status-bar widgets, and reacts to
+/// `data-theme` flips on the <html> element.
+fn monaco_bootstrap() -> &'static str {
+    r##"
+(function () {
+  'use strict';
+  // Wait for the AMD loader (served separately by <script src=...>).
+  if (typeof require !== 'function' || !require.config) {
+    console.warn('[maud-ui] Monaco loader not present — skipping editor init.');
+    return;
+  }
+
+  require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.50.0/min/vs' } });
+
+  require(['vs/editor/editor.main'], function () {
+    // Resolve token colors from the live --mui-* variables so the editor
+    // matches whatever custom theme the consumer is running.
+    function readToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function defineThemes() {
+      monaco.editor.defineTheme('maud-ui-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+          { token: '', foreground: readToken('--mui-text').replace('#','') || 'fafafa' },
+          { token: 'comment', foreground: '71717a', fontStyle: 'italic' },
+          { token: 'keyword', foreground: '60a5fa' },
+          { token: 'string', foreground: '4ade80' },
+          { token: 'number', foreground: 'f472b6' },
+          { token: 'type', foreground: '818cf8' },
+        ],
+        colors: {
+          'editor.background': readToken('--mui-bg') || '#0a0a0b',
+          'editor.foreground': readToken('--mui-text') || '#fafafa',
+          'editor.lineHighlightBackground': readToken('--mui-bg-card') || '#111113',
+          'editorLineNumber.foreground': readToken('--mui-text-subtle') || '#8e8e93',
+          'editorLineNumber.activeForeground': readToken('--mui-text-muted') || '#a1a1aa',
+          'editorGutter.background': readToken('--mui-bg') || '#0a0a0b',
+          'editor.selectionBackground': '#264f78',
+          'editor.inactiveSelectionBackground': '#3a3d41',
+          'editorCursor.foreground': readToken('--mui-accent') || '#2563eb',
+          'editorIndentGuide.background': readToken('--mui-border') || '#27272a',
+          'editorIndentGuide.activeBackground': readToken('--mui-border-hover') || '#3f3f46',
+          'editorWhitespace.foreground': '#3f3f46',
+        },
+      });
+
+      monaco.editor.defineTheme('maud-ui-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [
+          { token: 'comment', foreground: '71717a', fontStyle: 'italic' },
+          { token: 'keyword', foreground: '1d4ed8' },
+          { token: 'string', foreground: '15803d' },
+          { token: 'type', foreground: '6d28d9' },
+        ],
+        colors: {
+          'editor.background': '#ffffff',
+          'editor.foreground': '#09090b',
+          'editorLineNumber.foreground': '#a1a1aa',
+          'editorLineNumber.activeForeground': '#71717a',
+          'editorCursor.foreground': '#2563eb',
+          'editorIndentGuide.background': '#e4e4e7',
+        },
+      });
+    }
+
+    defineThemes();
+
+    function pickTheme() {
+      return (document.documentElement.getAttribute('data-theme') || 'dark') === 'light'
+        ? 'maud-ui-light'
+        : 'maud-ui-dark';
+    }
+
+    var host = document.getElementById('mui-monaco-editor');
+    if (!host) return;
+
+    var editor = monaco.editor.create(host, {
+      value: (window.__MUI_MONACO_SAMPLE__ || '// empty\n'),
+      language: 'rust',
+      theme: pickTheme(),
+      fontSize: 13,
+      fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--mui-font-mono').trim() || 'ui-monospace, monospace',
+      fontLigatures: true,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      roundedSelection: false,
+      padding: { top: 12, bottom: 12 },
+      renderLineHighlight: 'all',
+      smoothScrolling: true,
+      cursorBlinking: 'smooth',
+    });
+
+    host.setAttribute('data-ready', 'true');
+
+    // ── Toolbar wiring ────────────────────────────────────────
+    var lang = document.getElementById('mui-monaco-lang');
+    var fileEl = document.getElementById('mui-monaco-filename');
+    var statusLang = document.getElementById('mui-monaco-status-lang');
+    var statusPos = document.getElementById('mui-monaco-status-pos');
+    var statusLines = document.getElementById('mui-monaco-status-lines');
+    var statusTheme = document.getElementById('mui-monaco-status-theme');
+    var dirty = document.getElementById('mui-monaco-dirty');
+    var output = document.getElementById('mui-monaco-output');
+
+    var LANG_TO_EXT = {
+      rust: 'rs', typescript: 'ts', javascript: 'js', html: 'html',
+      css: 'css', json: 'json', markdown: 'md', sql: 'sql',
+      python: 'py', go: 'go',
+    };
+    var LANG_DISPLAY = {
+      rust: 'Rust', typescript: 'TypeScript', javascript: 'JavaScript',
+      html: 'HTML', css: 'CSS', json: 'JSON', markdown: 'Markdown',
+      sql: 'SQL', python: 'Python', go: 'Go',
+    };
+
+    lang.addEventListener('change', function () {
+      monaco.editor.setModelLanguage(editor.getModel(), lang.value);
+      statusLang.textContent = LANG_DISPLAY[lang.value] || lang.value;
+      fileEl.textContent = 'src/scratch.' + (LANG_TO_EXT[lang.value] || 'txt');
+    });
+
+    document.getElementById('mui-monaco-format').addEventListener('click', function () {
+      editor.getAction('editor.action.formatDocument').run();
+    });
+
+    document.getElementById('mui-monaco-run').addEventListener('click', function () {
+      var code = editor.getValue();
+      var lines = code.split('\n').length;
+      var now = new Date().toLocaleTimeString();
+      var langName = LANG_DISPLAY[lang.value] || lang.value;
+      output.textContent =
+        '[' + now + '] would run ' + langName + ' — ' +
+        lines + ' lines, ' + code.length + ' chars.\n' +
+        '  (this demo doesn\'t actually execute — your app wires Run to its own endpoint.)';
+    });
+
+    document.getElementById('mui-monaco-clear').addEventListener('click', function () {
+      output.textContent = '// cleared.';
+    });
+
+    // ── Status bar updates ───────────────────────────────────
+    editor.onDidChangeCursorPosition(function (e) {
+      statusPos.textContent = 'Ln ' + e.position.lineNumber + ', Col ' + e.position.column;
+    });
+
+    function updateLines() {
+      statusLines.textContent = editor.getModel().getLineCount() + ' lines';
+    }
+    updateLines();
+
+    editor.onDidChangeModelContent(function () {
+      updateLines();
+      dirty.setAttribute('data-dirty', 'true');
+    });
+
+    // ── Theme sync with data-theme toggle ────────────────────
+    var themeObserver = new MutationObserver(function () {
+      var next = pickTheme();
+      // Redefine themes so they pick up fresh CSS variables after a
+      // toggle (tokens change on :root[data-theme]).
+      defineThemes();
+      monaco.editor.setTheme(next);
+      statusTheme.textContent = next;
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  });
+})();
+"##
+}
+
+/// Minimal JSON-string escaper for injecting sample code as a JS literal
+/// (avoids pulling in serde as a runtime dependency just for this).
+fn serde_json_lite_escape(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 16);
+    out.push('"');
+    for c in s.chars() {
+        match c {
+            '"'  => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            '\x08' => out.push_str("\\b"),
+            '\x0c' => out.push_str("\\f"),
+            c if (c as u32) < 0x20 => out.push_str(&format!("\\u{:04x}", c as u32)),
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
 }
 
 /// Wraps a single component's showcase in the full page shell.

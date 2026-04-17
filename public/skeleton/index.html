@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Skeleton — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css"><style>
+/* Gallery layout — sidebar + main */
+.mui-gallery {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 80px);
+}
+
+/* Sticky sidebar */
+.mui-gallery__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--mui-border);
+    padding: 1rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-gallery__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mui-gallery__nav-group {
+    padding: 0 0 0.25rem;
+}
+
+.mui-gallery__nav-tier {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    transition: color var(--mui-transition);
+}
+.mui-gallery__nav-tier:hover { color: var(--mui-text); }
+
+.mui-gallery__nav-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.mui-gallery__nav-item {
+    display: block;
+    padding: 0.25rem 1rem 0.25rem 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all var(--mui-transition);
+}
+.mui-gallery__nav-item:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+    border-left-color: var(--mui-border-hover);
+}
+.mui-gallery__nav-item--active {
+    color: var(--mui-text);
+    border-left-color: var(--mui-accent);
+    background: var(--mui-bg-input);
+}
+
+/* Main content */
+.mui-gallery__main {
+    padding: 2rem;
+    max-width: 960px;
+}
+
+.mui-gallery__tier {
+    margin-bottom: 3rem;
+}
+
+.mui-gallery__tier-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-gallery__tier-title {
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.mui-gallery__tier-desc {
+    margin: 0;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+}
+
+.mui-gallery__component {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+}
+
+.mui-gallery__component-name {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mui-gallery__anchor {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity var(--mui-transition);
+}
+.mui-gallery__component:hover .mui-gallery__anchor {
+    opacity: 1;
+}
+.mui-gallery__anchor:hover { color: var(--mui-accent); }
+
+.mui-gallery__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    margin-bottom: 1rem;
+}
+.mui-gallery__breadcrumb a {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+}
+.mui-gallery__breadcrumb a:hover {
+    color: var(--mui-text);
+    text-decoration: underline;
+}
+
+.mui-gallery__back { padding-top: 1rem; }
+
+/* Responsive: collapse sidebar on narrow screens */
+@media (max-width: 768px) {
+    .mui-gallery {
+        grid-template-columns: 1fr;
+    }
+    .mui-gallery__sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--mui-border);
+        padding: 0.75rem 0;
+    }
+    .mui-gallery__nav-items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.125rem;
+    }
+    .mui-gallery__nav-item {
+        border-left: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--mui-radius-sm);
+    }
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+</style></head><body><header class="mui-showcase__header"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;"><div><h1><a href="/" style="color:inherit;text-decoration:none;">maud-ui</a></h1><p class="mui-text-muted">58 components for maud + htmx</p></div><div style="display:flex;gap:0.75rem;align-items:center;"><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a><span class="mui-text-subtle" style="font-size:0.8125rem;">Theme:</span><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="theme-toggle" id="theme-toggle">Toggle theme</button></div></div></header><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#button">Button</a><a class="mui-gallery__nav-item" href="#input">Input</a><a class="mui-gallery__nav-item" href="#textarea">Textarea</a><a class="mui-gallery__nav-item" href="#checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="#radio">Radio</a><a class="mui-gallery__nav-item" href="#select">Select</a><a class="mui-gallery__nav-item" href="#switch">Switch</a><a class="mui-gallery__nav-item" href="#slider">Slider</a><a class="mui-gallery__nav-item" href="#number_field">Number Field</a><a class="mui-gallery__nav-item" href="#field">Field</a><a class="mui-gallery__nav-item" href="#fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="#label">Label</a><a class="mui-gallery__nav-item" href="#native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#badge">Badge</a><a class="mui-gallery__nav-item" href="#avatar">Avatar</a><a class="mui-gallery__nav-item" href="#separator">Separator</a><a class="mui-gallery__nav-item" href="#progress">Progress</a><a class="mui-gallery__nav-item" href="#meter">Meter</a><a class="mui-gallery__nav-item" href="#kbd">Kbd</a><a class="mui-gallery__nav-item" href="#skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="#spinner">Spinner</a><a class="mui-gallery__nav-item" href="#typography">Typography</a><a class="mui-gallery__nav-item" href="#empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#card">Card</a><a class="mui-gallery__nav-item" href="#accordion">Accordion</a><a class="mui-gallery__nav-item" href="#collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="#tabs">Tabs</a><a class="mui-gallery__nav-item" href="#table">Table</a><a class="mui-gallery__nav-item" href="#data_table">Data Table</a><a class="mui-gallery__nav-item" href="#pagination">Pagination</a><a class="mui-gallery__nav-item" href="#resizable">Resizable</a><a class="mui-gallery__nav-item" href="#scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="#aspect_ratio">Aspect Ratio</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#dialog">Dialog</a><a class="mui-gallery__nav-item" href="#alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="#drawer">Drawer</a><a class="mui-gallery__nav-item" href="#popover">Popover</a><a class="mui-gallery__nav-item" href="#tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="#hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="#toast">Toast</a><a class="mui-gallery__nav-item" href="#alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#menu">Menu</a><a class="mui-gallery__nav-item" href="#context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="#menubar">Menubar</a><a class="mui-gallery__nav-item" href="#navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="#breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="#command">Command</a><a class="mui-gallery__nav-item" href="#combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#button_group">Button Group</a><a class="mui-gallery__nav-item" href="#toggle">Toggle</a><a class="mui-gallery__nav-item" href="#toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="#input_group">Input Group</a><a class="mui-gallery__nav-item" href="#input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="#radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="#calendar">Calendar</a><a class="mui-gallery__nav-item" href="#carousel">Carousel</a><a class="mui-gallery__nav-item" href="#chart">Chart</a><a class="mui-gallery__nav-item" href="#date_picker">Date Picker</a></div></div></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/">Gallery</a><span> / </span><span>Skeleton</span></nav><section class="mui-gallery__component" id="skeleton"><h3 class="mui-gallery__component-name">Skeleton</h3><div class="mui-showcase__grid"><div><p class="mui-showcase__caption">Loading post</p><div style="display:flex;gap:0.75rem;padding:1rem;max-width:24rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-lg);"><div class="mui-skeleton mui-skeleton--circle" style="width:2.75rem;height:2.75rem;" aria-hidden="true"></div><div class="mui-showcase__column" style="flex:1;gap:0.5rem;min-width:0;"><div style="display:flex;gap:0.5rem;align-items:center;"><div class="mui-skeleton mui-skeleton--text" style="width:6rem;height:0.875rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:3rem;height:0.75rem;" aria-hidden="true"></div></div><div class="mui-skeleton mui-skeleton--text" style="width:100%;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:92%;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:65%;" aria-hidden="true"></div><div style="display:flex;gap:1.5rem;margin-top:0.25rem;"><div class="mui-skeleton mui-skeleton--text" style="width:2rem;height:0.75rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:2rem;height:0.75rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:2rem;height:0.75rem;" aria-hidden="true"></div></div></div></div></div><div><p class="mui-showcase__caption">Loading table row</p><div style="display:flex;flex-direction:column;gap:0;max-width:32rem;border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);overflow:hidden;"><div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.625rem 0.875rem;background:var(--mui-bg-input);font-size:0.75rem;font-weight:600;color:var(--mui-text);text-transform:uppercase;letter-spacing:0.04em;"><span>Customer</span><span>Plan</span><span>Status</span><span>MRR</span></div><div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border);"><div style="display:flex;align-items:center;gap:0.625rem;"><div class="mui-skeleton mui-skeleton--circle" style="width:1.75rem;height:1.75rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:8rem;height:0.875rem;" aria-hidden="true"></div></div><div class="mui-skeleton mui-skeleton--text" style="width:4rem;height:0.875rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--rect" style="width:4.5rem;height:1.25rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:3rem;height:0.875rem;" aria-hidden="true"></div></div><div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border);"><div style="display:flex;align-items:center;gap:0.625rem;"><div class="mui-skeleton mui-skeleton--circle" style="width:1.75rem;height:1.75rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:8rem;height:0.875rem;" aria-hidden="true"></div></div><div class="mui-skeleton mui-skeleton--text" style="width:4rem;height:0.875rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--rect" style="width:4.5rem;height:1.25rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:3rem;height:0.875rem;" aria-hidden="true"></div></div><div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border);"><div style="display:flex;align-items:center;gap:0.625rem;"><div class="mui-skeleton mui-skeleton--circle" style="width:1.75rem;height:1.75rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:8rem;height:0.875rem;" aria-hidden="true"></div></div><div class="mui-skeleton mui-skeleton--text" style="width:4rem;height:0.875rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--rect" style="width:4.5rem;height:1.25rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:3rem;height:0.875rem;" aria-hidden="true"></div></div></div></div><div><p class="mui-showcase__caption">Loading product card</p><div style="display:flex;flex-direction:column;gap:0.75rem;max-width:16rem;padding:0.75rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-lg);"><div class="mui-skeleton mui-skeleton--rect" style="width:100%;height:11rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:85%;height:1rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" style="width:55%;height:0.75rem;" aria-hidden="true"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.25rem;"><div class="mui-skeleton mui-skeleton--text" style="width:4rem;height:1.125rem;" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--rect" style="width:2rem;height:2rem;" aria-hidden="true"></div></div></div></div></div><div class="mui-showcase__code-section"><h3 class="mui-showcase__code-title">Usage</h3><pre class="mui-showcase__code"><code>use maud_ui::primitives::skeleton;
+
+let html = skeleton::render(skeleton::Props {
+    variant: skeleton::Variant::Text,
+    width: Some(&quot;200px&quot;.into()),
+    height: Some(&quot;1rem&quot;.into()),
+});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js" defer></script><script>
+(function() {
+    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+    // Sidebar active state on scroll
+    var navItems = document.querySelectorAll('.mui-gallery__nav-item');
+    if (navItems.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (entry.isIntersecting) {
+                    var id = entry.target.id;
+                    for (var j = 0; j < navItems.length; j++) {
+                        var item = navItems[j];
+                        if (item.getAttribute('href') === '#' + id) {
+                            item.classList.add('mui-gallery__nav-item--active');
+                        } else {
+                            item.classList.remove('mui-gallery__nav-item--active');
+                        }
+                    }
+                }
+            }
+        }, { rootMargin: '-20% 0px -60% 0px' });
+
+        var sections = document.querySelectorAll('.mui-gallery__component');
+        for (var k = 0; k < sections.length; k++) {
+            observer.observe(sections[k]);
+        }
+    }
+})();
+</script></body></html>

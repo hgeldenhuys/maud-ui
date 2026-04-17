@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Avatar — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css"><style>
+/* Gallery layout — sidebar + main */
+.mui-gallery {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 80px);
+}
+
+/* Sticky sidebar */
+.mui-gallery__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--mui-border);
+    padding: 1rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-gallery__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mui-gallery__nav-group {
+    padding: 0 0 0.25rem;
+}
+
+.mui-gallery__nav-tier {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    transition: color var(--mui-transition);
+}
+.mui-gallery__nav-tier:hover { color: var(--mui-text); }
+
+.mui-gallery__nav-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.mui-gallery__nav-item {
+    display: block;
+    padding: 0.25rem 1rem 0.25rem 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all var(--mui-transition);
+}
+.mui-gallery__nav-item:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+    border-left-color: var(--mui-border-hover);
+}
+.mui-gallery__nav-item--active {
+    color: var(--mui-text);
+    border-left-color: var(--mui-accent);
+    background: var(--mui-bg-input);
+}
+
+/* Main content */
+.mui-gallery__main {
+    padding: 2rem;
+    max-width: 960px;
+}
+
+.mui-gallery__tier {
+    margin-bottom: 3rem;
+}
+
+.mui-gallery__tier-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-gallery__tier-title {
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.mui-gallery__tier-desc {
+    margin: 0;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+}
+
+.mui-gallery__component {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+}
+
+.mui-gallery__component-name {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mui-gallery__anchor {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity var(--mui-transition);
+}
+.mui-gallery__component:hover .mui-gallery__anchor {
+    opacity: 1;
+}
+.mui-gallery__anchor:hover { color: var(--mui-accent); }
+
+.mui-gallery__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    margin-bottom: 1rem;
+}
+.mui-gallery__breadcrumb a {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+}
+.mui-gallery__breadcrumb a:hover {
+    color: var(--mui-text);
+    text-decoration: underline;
+}
+
+.mui-gallery__back { padding-top: 1rem; }
+
+/* Responsive: collapse sidebar on narrow screens */
+@media (max-width: 768px) {
+    .mui-gallery {
+        grid-template-columns: 1fr;
+    }
+    .mui-gallery__sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--mui-border);
+        padding: 0.75rem 0;
+    }
+    .mui-gallery__nav-items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.125rem;
+    }
+    .mui-gallery__nav-item {
+        border-left: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--mui-radius-sm);
+    }
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+</style></head><body><header class="mui-showcase__header"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;"><div><h1><a href="/" style="color:inherit;text-decoration:none;">maud-ui</a></h1><p class="mui-text-muted">58 components for maud + htmx</p></div><div style="display:flex;gap:0.75rem;align-items:center;"><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a><span class="mui-text-subtle" style="font-size:0.8125rem;">Theme:</span><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="theme-toggle" id="theme-toggle">Toggle theme</button></div></div></header><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#button">Button</a><a class="mui-gallery__nav-item" href="#input">Input</a><a class="mui-gallery__nav-item" href="#textarea">Textarea</a><a class="mui-gallery__nav-item" href="#checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="#radio">Radio</a><a class="mui-gallery__nav-item" href="#select">Select</a><a class="mui-gallery__nav-item" href="#switch">Switch</a><a class="mui-gallery__nav-item" href="#slider">Slider</a><a class="mui-gallery__nav-item" href="#number_field">Number Field</a><a class="mui-gallery__nav-item" href="#field">Field</a><a class="mui-gallery__nav-item" href="#fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="#label">Label</a><a class="mui-gallery__nav-item" href="#native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#badge">Badge</a><a class="mui-gallery__nav-item" href="#avatar">Avatar</a><a class="mui-gallery__nav-item" href="#separator">Separator</a><a class="mui-gallery__nav-item" href="#progress">Progress</a><a class="mui-gallery__nav-item" href="#meter">Meter</a><a class="mui-gallery__nav-item" href="#kbd">Kbd</a><a class="mui-gallery__nav-item" href="#skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="#spinner">Spinner</a><a class="mui-gallery__nav-item" href="#typography">Typography</a><a class="mui-gallery__nav-item" href="#empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#card">Card</a><a class="mui-gallery__nav-item" href="#accordion">Accordion</a><a class="mui-gallery__nav-item" href="#collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="#tabs">Tabs</a><a class="mui-gallery__nav-item" href="#table">Table</a><a class="mui-gallery__nav-item" href="#data_table">Data Table</a><a class="mui-gallery__nav-item" href="#pagination">Pagination</a><a class="mui-gallery__nav-item" href="#resizable">Resizable</a><a class="mui-gallery__nav-item" href="#scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="#aspect_ratio">Aspect Ratio</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#dialog">Dialog</a><a class="mui-gallery__nav-item" href="#alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="#drawer">Drawer</a><a class="mui-gallery__nav-item" href="#popover">Popover</a><a class="mui-gallery__nav-item" href="#tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="#hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="#toast">Toast</a><a class="mui-gallery__nav-item" href="#alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#menu">Menu</a><a class="mui-gallery__nav-item" href="#context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="#menubar">Menubar</a><a class="mui-gallery__nav-item" href="#navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="#breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="#command">Command</a><a class="mui-gallery__nav-item" href="#combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="#button_group">Button Group</a><a class="mui-gallery__nav-item" href="#toggle">Toggle</a><a class="mui-gallery__nav-item" href="#toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="#input_group">Input Group</a><a class="mui-gallery__nav-item" href="#input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="#radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="#calendar">Calendar</a><a class="mui-gallery__nav-item" href="#carousel">Carousel</a><a class="mui-gallery__nav-item" href="#chart">Chart</a><a class="mui-gallery__nav-item" href="#date_picker">Date Picker</a></div></div></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/">Gallery</a><span> / </span><span>Avatar</span></nav><section class="mui-gallery__component" id="avatar"><h3 class="mui-gallery__component-name">Avatar</h3><div class="mui-showcase__grid"><section><h2>User Card</h2><div style="display:flex;align-items:center;gap:0.75rem;"><span class="mui-avatar mui-avatar--lg" role="img" aria-label="Sofia Davis"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=12" alt=""></img></span><div><div style="font-size:0.875rem;font-weight:500;color:var(--mui-text);">Sofia Davis</div><div style="font-size:0.8125rem;color:var(--mui-text-muted);">sofia@example.com</div></div></div></section><section><h2>Status Indicator</h2><div class="mui-showcase__row"><span style="position:relative;display:inline-block;"><span class="mui-avatar mui-avatar--md" role="img" aria-label="Online user"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=20" alt=""></img></span><span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#22c55e;border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);"></span></span><span style="position:relative;display:inline-block;"><span class="mui-avatar mui-avatar--md" role="img" aria-label="Away user"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=33" alt=""></img></span><span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#eab308;border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);"></span></span><span style="position:relative;display:inline-block;"><span class="mui-avatar mui-avatar--md" role="img" aria-label="Offline user"><span class="mui-avatar__fallback" aria-hidden="true">JD</span></span><span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-text-muted);border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);"></span></span></div></section><section><h2>Team</h2><div class="mui-avatar-group"><span class="mui-avatar mui-avatar--md" role="img" aria-label="Alice"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=5" alt=""></img></span><span class="mui-avatar mui-avatar--md" role="img" aria-label="Bob"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=8" alt=""></img></span><span class="mui-avatar mui-avatar--md" role="img" aria-label="Carol"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=15" alt=""></img></span><span class="mui-avatar mui-avatar--md" role="img" aria-label="3 more members"><span class="mui-avatar__fallback" aria-hidden="true">+3</span></span></div></section><section><h2>Sizes</h2><div class="mui-showcase__row"><span class="mui-showcase__label">sm</span><span class="mui-avatar mui-avatar--sm" role="img" aria-label="Small avatar"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=12" alt=""></img></span><span class="mui-avatar mui-avatar--sm" role="img" aria-label="Small fallback"><span class="mui-avatar__fallback" aria-hidden="true">SM</span></span></div><div class="mui-showcase__row"><span class="mui-showcase__label">md</span><span class="mui-avatar mui-avatar--md" role="img" aria-label="Medium avatar"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=20" alt=""></img></span><span class="mui-avatar mui-avatar--md" role="img" aria-label="Medium fallback"><span class="mui-avatar__fallback" aria-hidden="true">MD</span></span></div><div class="mui-showcase__row"><span class="mui-showcase__label">lg</span><span class="mui-avatar mui-avatar--lg" role="img" aria-label="Large avatar"><img class="mui-avatar__img" src="https://i.pravatar.cc/120?img=33" alt=""></img></span><span class="mui-avatar mui-avatar--lg" role="img" aria-label="Large fallback"><span class="mui-avatar__fallback" aria-hidden="true">LG</span></span></div></section></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js" defer></script><script>
+(function() {
+    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+    // Sidebar active state on scroll
+    var navItems = document.querySelectorAll('.mui-gallery__nav-item');
+    if (navItems.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (entry.isIntersecting) {
+                    var id = entry.target.id;
+                    for (var j = 0; j < navItems.length; j++) {
+                        var item = navItems[j];
+                        if (item.getAttribute('href') === '#' + id) {
+                            item.classList.add('mui-gallery__nav-item--active');
+                        } else {
+                            item.classList.remove('mui-gallery__nav-item--active');
+                        }
+                    }
+                }
+            }
+        }, { rootMargin: '-20% 0px -60% 0px' });
+
+        var sections = document.querySelectorAll('.mui-gallery__component');
+        for (var k = 0; k < sections.length; k++) {
+            observer.observe(sections[k]);
+        }
+    }
+})();
+</script></body></html>

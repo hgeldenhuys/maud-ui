@@ -91,11 +91,15 @@ Bun.serve({
     return new Response(f, {
       headers: {
         "content-type": contentType(filepath),
-        // CSS/JS assets are content-hashed by bundle version — cache aggressively.
-        // HTML pages are generated; short TTL so redeploys are visible.
+        // We overwrite /css/maud-ui.css and /js/maud-ui.js in place on
+        // every redeploy (they're NOT content-hashed), so `immutable`
+        // would strand visitors on stale CSS forever. Short TTL +
+        // must-revalidate lets Bun's automatic ETag handling serve 304s
+        // when nothing changed, while still picking up redeploys
+        // quickly. HTML: even shorter since content changes most often.
         "cache-control": filepath.endsWith(".html")
-          ? "public, max-age=60"
-          : "public, max-age=31536000, immutable",
+          ? "public, max-age=60, must-revalidate"
+          : "public, max-age=300, must-revalidate",
       },
     });
   },

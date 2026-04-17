@@ -102,7 +102,7 @@
 }
 
 .mui-block--data__table th {
-    text-align: left;
+    text-align: start;
     padding: 0.75rem;
     font-weight: 500;
     font-size: 0.6875rem;
@@ -131,8 +131,8 @@
 
 .mui-block--data__select-col {
     width: 1%;
-    padding-left: 0.875rem;
-    padding-right: 0.5rem;
+    padding-inline-start: 0.875rem;
+    padding-inline-end: 0.5rem;
 }
 
 .mui-block--data__select-col input[type="checkbox"] {
@@ -170,8 +170,8 @@
 .mui-block--data__actions-col {
     width: 1%;
     white-space: nowrap;
-    text-align: right;
-    padding-right: 0.875rem;
+    text-align: end;
+    padding-inline-end: 0.875rem;
 }
 
 .mui-block--data__row-action {
@@ -195,5 +195,5 @@
     margin: 0.75rem 0 0;
     font-size: 0.8125rem;
     color: var(--mui-text-muted);
-    text-align: right;
+    text-align: end;
 }

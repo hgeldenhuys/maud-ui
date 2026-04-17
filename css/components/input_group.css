@@ -38,11 +38,11 @@
 }
 
 .mui-input-group__prefix {
-  border-right: 1px solid var(--mui-border);
+  border-inline-end: 1px solid var(--mui-border);
 }
 
 .mui-input-group__suffix {
-  border-left: 1px solid var(--mui-border);
+  border-inline-start: 1px solid var(--mui-border);
 }
 
 /* Input inside the group — no border, inherits group ring */

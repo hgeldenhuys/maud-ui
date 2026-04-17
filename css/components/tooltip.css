@@ -41,7 +41,7 @@
 /* Placement: Top */
 .mui-tooltip__content--top {
   bottom: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-tooltip-translate: translateX(-50%);
   --mui-tooltip-origin: center bottom;
 }
@@ -49,14 +49,14 @@
 /* Placement: Bottom */
 .mui-tooltip__content--bottom {
   top: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-tooltip-translate: translateX(-50%);
   --mui-tooltip-origin: center top;
 }
 
 /* Placement: Left */
 .mui-tooltip__content--left {
-  right: calc(100% + 0.375rem);
+  inset-inline-end: calc(100% + 0.375rem);
   top: 50%;
   --mui-tooltip-translate: translateY(-50%);
   --mui-tooltip-origin: right center;
@@ -64,7 +64,7 @@
 
 /* Placement: Right */
 .mui-tooltip__content--right {
-  left: calc(100% + 0.375rem);
+  inset-inline-start: calc(100% + 0.375rem);
   top: 50%;
   --mui-tooltip-translate: translateY(-50%);
   --mui-tooltip-origin: left center;

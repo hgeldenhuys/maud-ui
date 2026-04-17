@@ -58,11 +58,11 @@
 }
 
 .mui-carousel__prev {
-  left: 0.75rem;
+  inset-inline-start: 0.75rem;
 }
 
 .mui-carousel__next {
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
 }
 
 .mui-carousel__prev:hover,

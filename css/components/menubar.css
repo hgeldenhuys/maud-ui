@@ -52,7 +52,7 @@
 .mui-menubar__content {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);

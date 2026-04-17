@@ -84,8 +84,8 @@ dialog.mui-alert-dialog::backdrop {
 
   .mui-alert-dialog__header,
   .mui-alert-dialog__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
 
   .mui-alert-dialog__body {

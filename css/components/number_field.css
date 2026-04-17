@@ -59,11 +59,11 @@
 }
 
 .mui-number-field__btn--decrement {
-  border-right: 1px solid var(--mui-border);
+  border-inline-end: 1px solid var(--mui-border);
 }
 
 .mui-number-field__btn--increment {
-  border-left: 1px solid var(--mui-border);
+  border-inline-start: 1px solid var(--mui-border);
 }
 
 /* --- Input ------------------------------------------------------------- */

@@ -22,7 +22,7 @@
   background: var(--mui-accent);
   border-radius: var(--mui-radius-full);
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   transition: width var(--mui-transition);
 }
@@ -67,7 +67,7 @@
 .mui-slider__native {
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   opacity: 0;
   width: 100%;
   height: 100%;
@@ -80,7 +80,7 @@
   color: var(--mui-text-muted);
   min-width: 2.5rem;
   font-family: var(--mui-font-mono);
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
 }
 

@@ -134,7 +134,7 @@ dialog.mui-command::backdrop {
 
 /* Shortcut kbd inside command items */
 .mui-command__item .mui-kbd {
-  margin-left: auto;
+  margin-inline-start: auto;
   flex-shrink: 0;
 }
 

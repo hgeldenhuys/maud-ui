@@ -21,7 +21,7 @@
 .mui-scroll-area__scrollbar {
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   width: 0.375rem;
   height: 100%;
   opacity: 0;

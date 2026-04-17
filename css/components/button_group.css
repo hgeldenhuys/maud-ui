@@ -12,13 +12,13 @@
 
 .mui-button-group--horizontal > .mui-btn {
   border-radius: 0;
-  margin-left: -1px;
+  margin-inline-start: -1px;
   position: relative;
 }
 
 .mui-button-group--horizontal > .mui-btn:first-child {
   border-radius: var(--mui-radius-md) 0 0 var(--mui-radius-md);
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 .mui-button-group--horizontal > .mui-btn:last-child {

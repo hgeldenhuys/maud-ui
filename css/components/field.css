@@ -15,7 +15,7 @@
 
 .mui-field__required {
   color: var(--mui-danger-text);
-  margin-left: 0.25rem;
+  margin-inline-start: 0.25rem;
 }
 
 .mui-field__description {

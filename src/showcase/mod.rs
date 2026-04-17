@@ -961,6 +961,10 @@ fn page_header() -> Markup {
                     button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="theme-toggle" id="theme-toggle" {
                         "Toggle theme"
                     }
+                    span.mui-text-subtle style="font-size:0.8125rem;" { "Dir:" }
+                    button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="dir-toggle" id="dir-toggle" aria-label="Toggle reading direction" {
+                        "RTL"
+                    }
                 }
             }
         }

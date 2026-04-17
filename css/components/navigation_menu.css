@@ -83,7 +83,7 @@
 .mui-nav-menu__content {
   position: absolute;
   top: calc(100% + 0.5rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 16rem;
   width: max-content;
   max-width: 36rem;
@@ -168,7 +168,7 @@
     min-width: 0;
     width: calc(100vw - 2rem);
     max-width: calc(100vw - 2rem);
-    left: 0;
+    inset-inline-start: 0;
   }
 
   .mui-nav-menu__sub-list {

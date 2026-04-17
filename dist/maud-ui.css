@@ -19,7 +19,7 @@
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition: var(--mui-transition);
 }
 .mui-accordion__trigger:hover {
@@ -128,8 +128,8 @@ dialog.mui-alert-dialog::backdrop {
   }
   .mui-alert-dialog__header,
   .mui-alert-dialog__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
   .mui-alert-dialog__body {
     padding: 1rem;
@@ -308,11 +308,11 @@ dialog.mui-alert-dialog::backdrop {
   justify-content: flex-end;
 }
 .mui-avatar-group .mui-avatar {
-  margin-left: -0.5rem;
+  margin-inline-start: -0.5rem;
   border: 2px solid var(--mui-bg);
 }
 .mui-avatar-group .mui-avatar:last-child {
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 /* css/components/badge.css */
@@ -415,12 +415,12 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-button-group--horizontal > .mui-btn {
   border-radius: 0;
-  margin-left: -1px;
+  margin-inline-start: -1px;
   position: relative;
 }
 .mui-button-group--horizontal > .mui-btn:first-child {
   border-radius: var(--mui-radius-md) 0 0 var(--mui-radius-md);
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 .mui-button-group--horizontal > .mui-btn:last-child {
   border-radius: 0 var(--mui-radius-md) var(--mui-radius-md) 0;
@@ -851,10 +851,10 @@ dialog.mui-alert-dialog::backdrop {
   -webkit-backdrop-filter: blur(4px);
 }
 .mui-carousel__prev {
-  left: 0.75rem;
+  inset-inline-start: 0.75rem;
 }
 .mui-carousel__next {
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
 }
 .mui-carousel__prev:hover,
 .mui-carousel__next:hover {
@@ -1072,7 +1072,7 @@ dialog.mui-alert-dialog::backdrop {
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition: var(--mui-transition);
 }
 .mui-collapsible__trigger:hover {
@@ -1161,7 +1161,7 @@ dialog.mui-alert-dialog::backdrop {
 .mui-combobox__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -1284,8 +1284,8 @@ dialog.mui-alert-dialog::backdrop {
     width: 100%;
   }
   .mui-combobox__dropdown {
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     max-width: 100%;
   }
 }
@@ -1403,7 +1403,7 @@ dialog.mui-command::backdrop {
   white-space: nowrap;
 }
 .mui-command__item .mui-kbd {
-  margin-left: auto;
+  margin-inline-start: auto;
   flex-shrink: 0;
 }
 .mui-command__empty {
@@ -1521,7 +1521,7 @@ dialog.mui-command::backdrop {
 .mui-data-table__sort-icon {
   display: inline-flex;
   align-items: center;
-  margin-left: 0.25rem;
+  margin-inline-start: 0.25rem;
   font-size: 0.6875rem;
   color: var(--mui-text-subtle);
   vertical-align: middle;
@@ -1633,7 +1633,7 @@ dialog.mui-command::backdrop {
   cursor: pointer;
   transition: var(--mui-transition);
   box-sizing: border-box;
-  text-align: left;
+  text-align: start;
 }
 .mui-date-picker__trigger:hover:not(:disabled) {
   border-color: var(--mui-border-hover);
@@ -1672,7 +1672,7 @@ dialog.mui-command::backdrop {
 .mui-date-picker__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   z-index: 50;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -1823,8 +1823,8 @@ dialog.mui-command::backdrop {
   .mui-date-picker__dropdown {
     min-width: 0;
     max-width: calc(100vw - 2rem);
-    left: 0;
-    right: auto;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
   }
 }
 
@@ -1879,7 +1879,7 @@ dialog.mui-dialog::backdrop {
 .mui-dialog__close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   background: transparent;
   border: none;
   color: var(--mui-text-muted);
@@ -1931,8 +1931,8 @@ dialog.mui-dialog::backdrop {
   }
   .mui-dialog__header,
   .mui-dialog__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
   .mui-dialog__body {
     padding: 0.875rem 1rem;
@@ -1978,12 +1978,12 @@ dialog.mui-drawer::backdrop {
   }
 }
 dialog.mui-drawer--right {
-  margin-left: auto;
-  margin-right: 0;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
   margin-top: 0;
   margin-bottom: 0;
   position: fixed;
-  right: 0;
+  inset-inline-end: 0;
   top: 0;
   bottom: 0;
   border-radius: var(--mui-radius-lg) 0 0 var(--mui-radius-lg);
@@ -1997,13 +1997,16 @@ dialog.mui-drawer--right {
     transform: translateX(0);
   }
 }
+:dir(rtl) dialog.mui-drawer--right {
+  animation-name: mui-drawer-slide-left;
+}
 dialog.mui-drawer--left {
-  margin-right: auto;
-  margin-left: 0;
+  margin-inline-end: auto;
+  margin-inline-start: 0;
   margin-top: 0;
   margin-bottom: 0;
   position: fixed;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   bottom: 0;
   border-radius: 0 var(--mui-radius-lg) var(--mui-radius-lg) 0;
@@ -2017,19 +2020,22 @@ dialog.mui-drawer--left {
     transform: translateX(0);
   }
 }
+:dir(rtl) dialog.mui-drawer--left {
+  animation-name: mui-drawer-slide-right;
+}
 dialog.mui-drawer--top {
   width: 100vw;
   max-width: 100vw;
   height: auto;
   max-height: 50vh;
   margin-bottom: auto;
-  margin-left: 0;
-  margin-right: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   margin-top: 0;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   border-radius: 0 0 var(--mui-radius-lg) var(--mui-radius-lg);
   animation: mui-drawer-slide-top 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -2047,13 +2053,13 @@ dialog.mui-drawer--bottom {
   height: auto;
   max-height: 85vh;
   margin-top: auto;
-  margin-left: 0;
-  margin-right: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   margin-bottom: 0;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   border-radius: var(--mui-radius-lg) var(--mui-radius-lg) 0 0;
   animation: mui-drawer-slide-bottom 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -2149,8 +2155,8 @@ dialog.mui-drawer--bottom {
   }
   .mui-drawer__header,
   .mui-drawer__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
   .mui-drawer__body {
     padding: 1rem;
@@ -2213,7 +2219,7 @@ dialog.mui-drawer--bottom {
 }
 .mui-field__required {
   color: var(--mui-danger-text);
-  margin-left: 0.25rem;
+  margin-inline-start: 0.25rem;
 }
 .mui-field__description {
   font-size: 0.8125rem;
@@ -2281,7 +2287,7 @@ dialog.mui-drawer--bottom {
   outline: none;
   z-index: 50;
   top: calc(100% + 0.375rem);
-  left: 0;
+  inset-inline-start: 0;
   opacity: 0;
   pointer-events: none;
   transform-origin: left top;
@@ -2360,10 +2366,10 @@ dialog.mui-drawer--bottom {
   user-select: none;
 }
 .mui-input-group__prefix {
-  border-right: 1px solid var(--mui-border);
+  border-inline-end: 1px solid var(--mui-border);
 }
 .mui-input-group__suffix {
-  border-left: 1px solid var(--mui-border);
+  border-inline-start: 1px solid var(--mui-border);
 }
 .mui-input-group > input,
 .mui-input-group > .mui-input {
@@ -2555,7 +2561,7 @@ dialog.mui-drawer--bottom {
 }
 .mui-label__required {
   color: var(--mui-danger-text);
-  margin-left: 0.125rem;
+  margin-inline-start: 0.125rem;
   font-weight: 500;
 }
 
@@ -2582,7 +2588,7 @@ dialog.mui-drawer--bottom {
 .mui-menu__content {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -2615,7 +2621,7 @@ dialog.mui-drawer--bottom {
   font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   border-radius: var(--mui-radius-sm);
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2638,7 +2644,7 @@ dialog.mui-drawer--bottom {
   background: color-mix(in srgb, var(--mui-danger) 12%, transparent);
 }
 .mui-menu__shortcut {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 0.75rem;
   font-family: var(--mui-font-mono, ui-monospace, monospace);
   color: var(--mui-text-muted);
@@ -2656,7 +2662,7 @@ dialog.mui-drawer--bottom {
   margin: 0.25rem -0.25rem;
 }
 .mui-menu__sub-indicator {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 0.75rem;
   color: var(--mui-text-muted);
   line-height: 1;
@@ -2705,7 +2711,7 @@ dialog.mui-drawer--bottom {
 .mui-menubar__content {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -2804,7 +2810,7 @@ dialog.mui-drawer--bottom {
 }
 .mui-native-select__chevron {
   position: absolute;
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -2885,7 +2891,7 @@ dialog.mui-drawer--bottom {
 .mui-nav-menu__content {
   position: absolute;
   top: calc(100% + 0.5rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 16rem;
   width: max-content;
   max-width: 36rem;
@@ -2959,7 +2965,7 @@ dialog.mui-drawer--bottom {
     min-width: 0;
     width: calc(100vw - 2rem);
     max-width: calc(100vw - 2rem);
-    left: 0;
+    inset-inline-start: 0;
   }
   .mui-nav-menu__sub-list {
     grid-template-columns: 1fr;
@@ -3015,10 +3021,10 @@ dialog.mui-drawer--bottom {
   color: var(--mui-text-subtle);
 }
 .mui-number-field__btn--decrement {
-  border-right: 1px solid var(--mui-border);
+  border-inline-end: 1px solid var(--mui-border);
 }
 .mui-number-field__btn--increment {
-  border-left: 1px solid var(--mui-border);
+  border-inline-start: 1px solid var(--mui-border);
 }
 .mui-number-field__input {
   border: none;
@@ -3209,34 +3215,34 @@ dialog.mui-drawer--bottom {
 }
 .mui-popover__content--bottom-center {
   top: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-popover-translate: translateX(-50%);
   --mui-popover-origin: center top;
 }
 .mui-popover__content--bottom-start {
   top: calc(100% + 0.375rem);
-  left: 0;
+  inset-inline-start: 0;
   --mui-popover-origin: left top;
 }
 .mui-popover__content--bottom-end {
   top: calc(100% + 0.375rem);
-  right: 0;
+  inset-inline-end: 0;
   --mui-popover-origin: right top;
 }
 .mui-popover__content--top-center {
   bottom: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-popover-translate: translateX(-50%);
   --mui-popover-origin: center bottom;
 }
 .mui-popover__content--top-start {
   bottom: calc(100% + 0.375rem);
-  left: 0;
+  inset-inline-start: 0;
   --mui-popover-origin: left bottom;
 }
 .mui-popover__content--top-end {
   bottom: calc(100% + 0.375rem);
-  right: 0;
+  inset-inline-end: 0;
   --mui-popover-origin: right bottom;
 }
 
@@ -3608,7 +3614,7 @@ dialog.mui-drawer--bottom {
 .mui-scroll-area__scrollbar {
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   width: 0.375rem;
   height: 100%;
   opacity: 0;
@@ -3701,7 +3707,7 @@ dialog.mui-drawer--bottom {
 .mui-select__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -3853,7 +3859,7 @@ dialog.mui-drawer--bottom {
   background: var(--mui-accent);
   border-radius: var(--mui-radius-full);
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   transition: width var(--mui-transition);
 }
@@ -3890,7 +3896,7 @@ dialog.mui-drawer--bottom {
 .mui-slider__native {
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   opacity: 0;
   width: 100%;
   height: 100%;
@@ -3902,7 +3908,7 @@ dialog.mui-drawer--bottom {
   color: var(--mui-text-muted);
   min-width: 2.5rem;
   font-family: var(--mui-font-mono);
-  text-align: right;
+  text-align: end;
   font-variant-numeric: tabular-nums;
 }
 .mui-slider[data-disabled=true] .mui-slider__track {
@@ -3972,7 +3978,7 @@ dialog.mui-drawer--bottom {
 .mui-switch__thumb {
   position: absolute;
   top: 0.125rem;
-  left: 0.125rem;
+  inset-inline-start: 0.125rem;
   width: 1.25rem;
   height: 1.25rem;
   background: white;
@@ -3983,6 +3989,9 @@ dialog.mui-drawer--bottom {
 }
 .mui-switch[aria-checked=true] .mui-switch__thumb {
   transform: translateX(1.25rem);
+}
+:dir(rtl) .mui-switch[aria-checked=true] .mui-switch__thumb {
+  transform: translateX(-1.25rem);
 }
 .mui-switch:disabled,
 .mui-switch[disabled] {
@@ -4027,10 +4036,10 @@ dialog.mui-drawer--bottom {
   padding: 0.75rem 0;
   color: var(--mui-text-muted);
   font-size: 0.875rem;
-  text-align: left;
+  text-align: start;
 }
 .mui-table__th {
-  text-align: left;
+  text-align: start;
   font-weight: 500;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--mui-border);
@@ -4184,7 +4193,7 @@ dialog.mui-drawer--bottom {
 .mui-toast-viewport {
   position: fixed;
   bottom: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   display: flex;
   flex-direction: column-reverse;
   gap: 0.5rem;
@@ -4238,12 +4247,12 @@ dialog.mui-drawer--bottom {
   font-size: 0.8125rem;
   line-height: 1.5;
   margin-top: 0.25rem;
-  padding-left: 1rem;
+  padding-inline-start: 1rem;
 }
 .mui-toast__close {
   position: absolute;
   top: 0.625rem;
-  right: 0.625rem;
+  inset-inline-end: 0.625rem;
   background: transparent;
   border: none;
   color: var(--mui-text-subtle);
@@ -4293,6 +4302,32 @@ dialog.mui-drawer--bottom {
     opacity: 0;
     transform: translateX(100%);
   }
+}
+@keyframes mui-toast-enter-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes mui-toast-exit-rtl {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+:dir(rtl) .mui-toast {
+  animation-name: mui-toast-enter-rtl;
+}
+:dir(rtl) .mui-toast[data-state=exit] {
+  animation-name: mui-toast-exit-rtl;
 }
 
 /* css/components/toggle_group.css */
@@ -4464,24 +4499,24 @@ dialog.mui-drawer--bottom {
 }
 .mui-tooltip__content--top {
   bottom: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-tooltip-translate: translateX(-50%);
   --mui-tooltip-origin: center bottom;
 }
 .mui-tooltip__content--bottom {
   top: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-tooltip-translate: translateX(-50%);
   --mui-tooltip-origin: center top;
 }
 .mui-tooltip__content--left {
-  right: calc(100% + 0.375rem);
+  inset-inline-end: calc(100% + 0.375rem);
   top: 50%;
   --mui-tooltip-translate: translateY(-50%);
   --mui-tooltip-origin: right center;
 }
 .mui-tooltip__content--right {
-  left: calc(100% + 0.375rem);
+  inset-inline-start: calc(100% + 0.375rem);
   top: 50%;
   --mui-tooltip-translate: translateY(-50%);
   --mui-tooltip-origin: left center;
@@ -4550,8 +4585,8 @@ dialog.mui-drawer--bottom {
   font-weight: 500;
 }
 .mui-blockquote {
-  border-left: 3px solid var(--mui-border);
-  padding-left: 1.25rem;
+  border-inline-start: 3px solid var(--mui-border);
+  padding-inline-start: 1.25rem;
   font-style: italic;
   color: var(--mui-text-muted);
   margin: 0;
@@ -4961,7 +4996,7 @@ dialog.mui-drawer--bottom {
   font-size: 0.875rem;
 }
 .mui-block--data__table th {
-  text-align: left;
+  text-align: start;
   padding: 0.75rem;
   font-weight: 500;
   font-size: 0.6875rem;
@@ -4986,8 +5021,8 @@ dialog.mui-drawer--bottom {
 }
 .mui-block--data__select-col {
   width: 1%;
-  padding-left: 0.875rem;
-  padding-right: 0.5rem;
+  padding-inline-start: 0.875rem;
+  padding-inline-end: 0.5rem;
 }
 .mui-block--data__select-col input[type=checkbox] {
   margin: 0;
@@ -5018,8 +5053,8 @@ dialog.mui-drawer--bottom {
 .mui-block--data__actions-col {
   width: 1%;
   white-space: nowrap;
-  text-align: right;
-  padding-right: 0.875rem;
+  text-align: end;
+  padding-inline-end: 0.875rem;
 }
 .mui-block--data__row-action {
   color: var(--mui-text-muted);
@@ -5039,7 +5074,7 @@ dialog.mui-drawer--bottom {
   margin: 0.75rem 0 0;
   font-size: 0.8125rem;
   color: var(--mui-text-muted);
-  text-align: right;
+  text-align: end;
 }
 
 /* css/blocks/pricing-tiers.css */
@@ -5101,7 +5136,7 @@ dialog.mui-drawer--bottom {
 .mui-block--pricing__tier-badge {
   position: absolute;
   top: -0.625rem;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translateX(-50%);
 }
 .mui-block--pricing__tier-name {
@@ -5293,7 +5328,7 @@ dialog.mui-drawer--bottom {
   font-size: 0.875rem;
 }
 .mui-block--team__table th {
-  text-align: left;
+  text-align: start;
   font-weight: 500;
   color: var(--mui-text-muted);
   font-size: 0.75rem;
@@ -5357,7 +5392,7 @@ dialog.mui-drawer--bottom {
 }
 .mui-block--team__actions-col,
 .mui-block--team__row-actions {
-  text-align: right;
+  text-align: end;
   width: 1%;
   white-space: nowrap;
 }
@@ -5498,7 +5533,7 @@ dialog.mui-drawer--bottom {
   display: flex;
   flex-direction: column;
   background: var(--mui-bg-card);
-  border-right: 1px solid var(--mui-border);
+  border-inline-end: 1px solid var(--mui-border);
   min-width: 0;
 }
 .mui-block--shell__brand {
@@ -5710,7 +5745,7 @@ dialog.mui-drawer--bottom {
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    border-right: none;
+    border-inline-end: none;
     border-bottom: 1px solid var(--mui-border);
     padding: 0.5rem 0.75rem;
     overflow-x: auto;

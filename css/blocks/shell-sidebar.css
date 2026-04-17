@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     background: var(--mui-bg-card);
-    border-right: 1px solid var(--mui-border);
+    border-inline-end: 1px solid var(--mui-border);
     min-width: 0;
 }
 
@@ -267,7 +267,7 @@
         flex-direction: row;
         align-items: center;
         gap: 0.5rem;
-        border-right: none;
+        border-inline-end: none;
         border-bottom: 1px solid var(--mui-border);
         padding: 0.5rem 0.75rem;
         overflow-x: auto;

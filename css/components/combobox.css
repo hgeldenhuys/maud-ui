@@ -63,7 +63,7 @@
 .mui-combobox__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -221,8 +221,8 @@
   }
 
   .mui-combobox__dropdown {
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     max-width: 100%;
   }
 }

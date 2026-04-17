@@ -68,7 +68,7 @@
 .mui-block--pricing__tier-badge {
     position: absolute;
     top: -0.625rem;
-    left: 50%;
+    inset-inline-start: 50%;
     transform: translateX(-50%);
 }
 

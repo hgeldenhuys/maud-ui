@@ -22,7 +22,7 @@
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition: var(--mui-transition);
 }
 

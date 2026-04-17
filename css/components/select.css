@@ -61,7 +61,7 @@
 .mui-select__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);

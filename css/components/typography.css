@@ -67,8 +67,8 @@
 }
 
 .mui-blockquote {
-  border-left: 3px solid var(--mui-border);
-  padding-left: 1.25rem;
+  border-inline-start: 3px solid var(--mui-border);
+  padding-inline-start: 1.25rem;
   font-style: italic;
   color: var(--mui-text-muted);
   margin: 0;

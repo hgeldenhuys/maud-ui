@@ -26,7 +26,7 @@
 .mui-menu__content {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   min-width: 12rem;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -66,7 +66,7 @@
   font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   border-radius: var(--mui-radius-sm);
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
               color 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -100,7 +100,7 @@
 /* --- Shortcut text (right side) ---------------------------------------- */
 
 .mui-menu__shortcut {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 0.75rem;
   font-family: var(--mui-font-mono, ui-monospace, monospace);
   color: var(--mui-text-muted);
@@ -127,7 +127,7 @@
 /* --- Sub-menu indicator ------------------------------------------------ */
 
 .mui-menu__sub-indicator {
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: 0.75rem;
   color: var(--mui-text-muted);
   line-height: 1;

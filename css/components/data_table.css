@@ -63,7 +63,7 @@
 .mui-data-table__sort-icon {
   display: inline-flex;
   align-items: center;
-  margin-left: 0.25rem;
+  margin-inline-start: 0.25rem;
   font-size: 0.6875rem;
   color: var(--mui-text-subtle);
   vertical-align: middle;

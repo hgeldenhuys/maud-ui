@@ -48,39 +48,39 @@
 /* Placement: Bottom */
 .mui-popover__content--bottom-center {
   top: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-popover-translate: translateX(-50%);
   --mui-popover-origin: center top;
 }
 
 .mui-popover__content--bottom-start {
   top: calc(100% + 0.375rem);
-  left: 0;
+  inset-inline-start: 0;
   --mui-popover-origin: left top;
 }
 
 .mui-popover__content--bottom-end {
   top: calc(100% + 0.375rem);
-  right: 0;
+  inset-inline-end: 0;
   --mui-popover-origin: right top;
 }
 
 /* Placement: Top */
 .mui-popover__content--top-center {
   bottom: calc(100% + 0.375rem);
-  left: 50%;
+  inset-inline-start: 50%;
   --mui-popover-translate: translateX(-50%);
   --mui-popover-origin: center bottom;
 }
 
 .mui-popover__content--top-start {
   bottom: calc(100% + 0.375rem);
-  left: 0;
+  inset-inline-start: 0;
   --mui-popover-origin: left bottom;
 }
 
 .mui-popover__content--top-end {
   bottom: calc(100% + 0.375rem);
-  right: 0;
+  inset-inline-end: 0;
   --mui-popover-origin: right bottom;
 }

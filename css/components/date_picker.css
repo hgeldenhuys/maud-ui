@@ -25,7 +25,7 @@
   cursor: pointer;
   transition: var(--mui-transition);
   box-sizing: border-box;
-  text-align: left;
+  text-align: start;
 }
 
 .mui-date-picker__trigger:hover:not(:disabled) {
@@ -75,7 +75,7 @@
 .mui-date-picker__dropdown {
   position: absolute;
   top: calc(100% + 0.25rem);
-  left: 0;
+  inset-inline-start: 0;
   z-index: 50;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
@@ -264,7 +264,7 @@
   .mui-date-picker__dropdown {
     min-width: 0;
     max-width: calc(100vw - 2rem);
-    left: 0;
-    right: auto;
+    inset-inline-start: 0;
+    inset-inline-end: auto;
   }
 }

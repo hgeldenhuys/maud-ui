@@ -32,12 +32,12 @@ dialog.mui-drawer::backdrop {
 
 /* Right drawer — anchored to the right edge, rounded left corners */
 dialog.mui-drawer--right {
-  margin-left: auto;
-  margin-right: 0;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
   margin-top: 0;
   margin-bottom: 0;
   position: fixed;
-  right: 0;
+  inset-inline-end: 0;
   top: 0;
   bottom: 0;
   border-radius: var(--mui-radius-lg) 0 0 var(--mui-radius-lg);
@@ -49,14 +49,22 @@ dialog.mui-drawer--right {
   to { transform: translateX(0); }
 }
 
+/* Flip slide-in direction in RTL so "right" drawer still enters from
+   the physical end of the viewport. `mui-drawer--right` is anchored
+   with `inset-inline-end: 0` so in RTL it sits on the physical left —
+   meaning the slide-in must come from the physical left too. */
+:dir(rtl) dialog.mui-drawer--right {
+  animation-name: mui-drawer-slide-left;
+}
+
 /* Left drawer — anchored to the left edge, rounded right corners */
 dialog.mui-drawer--left {
-  margin-right: auto;
-  margin-left: 0;
+  margin-inline-end: auto;
+  margin-inline-start: 0;
   margin-top: 0;
   margin-bottom: 0;
   position: fixed;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   bottom: 0;
   border-radius: 0 var(--mui-radius-lg) var(--mui-radius-lg) 0;
@@ -68,6 +76,10 @@ dialog.mui-drawer--left {
   to { transform: translateX(0); }
 }
 
+:dir(rtl) dialog.mui-drawer--left {
+  animation-name: mui-drawer-slide-right;
+}
+
 /* Top drawer — anchored to the top edge, rounded bottom corners */
 dialog.mui-drawer--top {
   width: 100vw;
@@ -75,13 +87,13 @@ dialog.mui-drawer--top {
   height: auto;
   max-height: 50vh;
   margin-bottom: auto;
-  margin-left: 0;
-  margin-right: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   margin-top: 0;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   border-radius: 0 0 var(--mui-radius-lg) var(--mui-radius-lg);
   animation: mui-drawer-slide-top 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -98,13 +110,13 @@ dialog.mui-drawer--bottom {
   height: auto;
   max-height: 85vh;
   margin-top: auto;
-  margin-left: 0;
-  margin-right: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
   margin-bottom: 0;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   border-radius: var(--mui-radius-lg) var(--mui-radius-lg) 0 0;
   animation: mui-drawer-slide-bottom 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -214,8 +226,8 @@ dialog.mui-drawer--bottom {
 
   .mui-drawer__header,
   .mui-drawer__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
 
   .mui-drawer__body {

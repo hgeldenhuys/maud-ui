@@ -25,7 +25,7 @@
 .mui-switch__thumb {
   position: absolute;
   top: 0.125rem;
-  left: 0.125rem;
+  inset-inline-start: 0.125rem;
   width: 1.25rem;
   height: 1.25rem;
   background: white;
@@ -37,6 +37,13 @@
 
 .mui-switch[aria-checked="true"] .mui-switch__thumb {
   transform: translateX(1.25rem);
+}
+
+/* Flip thumb travel in RTL — the "on" state should slide toward the
+   inline-end (reading-direction end), which is physical right in LTR
+   and physical left in RTL. */
+:dir(rtl) .mui-switch[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(-1.25rem);
 }
 
 .mui-switch:disabled,

@@ -54,7 +54,7 @@ dialog.mui-dialog::backdrop {
 .mui-dialog__close {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  inset-inline-end: 1rem;
   background: transparent;
   border: none;
   color: var(--mui-text-muted);
@@ -117,8 +117,8 @@ dialog.mui-dialog::backdrop {
 
   .mui-dialog__header,
   .mui-dialog__description {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
   }
 
   .mui-dialog__body {

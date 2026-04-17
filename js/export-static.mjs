@@ -29,6 +29,9 @@ const COMPONENTS = [
   "tooltip","typography",
 ];
 
+// Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.
+const BLOCKS = ["auth-login"];
+
 function log(msg) { process.stdout.write(`[export-static] ${msg}\n`); }
 
 async function fetchText(url) {
@@ -73,8 +76,15 @@ async function main() {
     mkdirSync(join(PUBLIC_DIR, "css"), { recursive: true });
     mkdirSync(join(PUBLIC_DIR, "js"), { recursive: true });
 
-    // 4. Fetch root + getting-started + every component route.
-    const routes = ["/", "/getting-started", ...COMPONENTS.map(s => `/${s}`)];
+    // 4. Fetch root + getting-started + blocks index + every component
+    //    route + every block route.
+    const routes = [
+      "/",
+      "/getting-started",
+      "/blocks",
+      ...COMPONENTS.map(s => `/${s}`),
+      ...BLOCKS.map(s => `/blocks/${s}`),
+    ];
     log(`fetching ${routes.length} routes...`);
     for (const r of routes) {
       const html = await fetchText(`http://127.0.0.1:${PORT}${r}`);

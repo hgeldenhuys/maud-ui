@@ -1,0 +1,173 @@
+/* auth::login block layout.
+   Centered card ~24rem wide with OAuth stack, divider, email/password
+   form, and signup prompt at bottom. */
+
+.mui-block--auth__frame {
+    /* Subtle auth-screen backdrop so the card doesn't float on the
+       page background. Consumers override with their own wallpaper. */
+    background: radial-gradient(ellipse at top,
+        color-mix(in srgb, var(--mui-accent) 8%, transparent),
+        transparent 60%),
+        var(--mui-bg);
+}
+
+.mui-block--auth__card {
+    width: 100%;
+    max-width: 24rem;
+    padding: 2rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    box-shadow: var(--mui-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .mui-block--auth__card {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+}
+
+.mui-block--auth__logo {
+    display: flex;
+    justify-content: center;
+    color: var(--mui-text);
+    margin-bottom: 0.25rem;
+}
+
+.mui-block--auth__heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    color: var(--mui-text);
+    letter-spacing: -0.01em;
+}
+
+.mui-block--auth__subheading {
+    text-align: center;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+    margin: 0 0 0.25rem;
+}
+
+.mui-block--auth__error {
+    /* Alert primitive handles its own styling; this wrapper just
+       spaces it above the form. */
+    margin-top: 0.25rem;
+}
+
+.mui-block--auth__oauth {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* OAuth buttons are wrapped in a <form> each (one per provider) so
+   CSRF tokens can differ. The form itself should be invisible — just
+   a stretchable block. */
+.mui-block--auth__oauth-form {
+    display: block;
+    margin: 0;
+}
+
+.mui-block--auth__oauth-form .mui-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.mui-block--auth__divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    margin: 0.25rem 0;
+}
+
+.mui-block--auth__divider::before,
+.mui-block--auth__divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--mui-border);
+}
+
+.mui-block--auth__divider-text {
+    padding: 0 0.75rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+}
+
+.mui-block--auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mui-block--auth__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.mui-block--auth__label-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.mui-block--auth__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--mui-text);
+    cursor: pointer;
+}
+
+.mui-block--auth__forgot-link {
+    font-size: 0.8125rem;
+    color: var(--mui-accent-text);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.mui-block--auth__forgot-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.mui-block--auth__form .mui-input {
+    width: 100%;
+}
+
+.mui-block--auth__form .mui-btn--primary {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.25rem;
+}
+
+.mui-block--auth__footer {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    margin: 0.5rem 0 0;
+}
+
+.mui-block--auth__footer-link {
+    color: var(--mui-accent-text);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.mui-block--auth__footer-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}

@@ -1,0 +1,29 @@
+/* Shared layout for block showcase pages.
+   A block is a full-page composition, so its preview takes a larger
+   stage than a primitive's `showcase()` grid. The frame gives it a
+   viewport-like backdrop with appropriate padding. */
+
+.mui-block {
+    width: 100%;
+    min-height: 100%;
+}
+
+.mui-block__frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36rem;
+    padding: 2rem 1rem;
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--mui-bg) 100%, transparent),
+        color-mix(in srgb, var(--mui-bg-card) 60%, transparent));
+    border-radius: var(--mui-radius-lg);
+    border: 1px solid var(--mui-border);
+}
+
+@media (max-width: 640px) {
+    .mui-block__frame {
+        padding: 1rem 0.5rem;
+        min-height: 32rem;
+    }
+}

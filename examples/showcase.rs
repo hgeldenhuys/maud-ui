@@ -36,6 +36,16 @@ async fn main() {
             get(|| async { maud_ui::showcase::getting_started_page() }),
         )
         .route(
+            "/blocks",
+            get(|| async { maud_ui::showcase::blocks_index_page() }),
+        )
+        .route(
+            "/blocks/{slug}",
+            get(|Path(slug): Path<String>| async move {
+                maud_ui::showcase::block_page_by_name(&slug)
+            }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

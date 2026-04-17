@@ -4,6 +4,7 @@
 //! Ships with a shadcn-inspired dark theme in `css/maud-ui.css` that consumers
 //! can override via CSS custom properties.
 
+pub mod blocks;
 pub mod primitives;
 pub mod showcase;
 pub mod tokens;

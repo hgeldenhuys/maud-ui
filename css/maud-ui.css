@@ -59,6 +59,10 @@
 @import "components/tooltip.css";
 @import "components/typography.css";
 
+/* Blocks — pre-composed templates */
+@import "blocks/common.css";
+@import "blocks/auth-login.css";
+
 :root,
 [data-theme="dark"] {
   --mui-bg: #0a0a0b;

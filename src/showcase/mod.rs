@@ -5,7 +5,7 @@
 
 use maud::{html, Markup, DOCTYPE};
 
-use crate::primitives;
+use crate::{blocks, primitives};
 
 // ── Tier definitions ───────────────────────────────────────────────────
 
@@ -504,6 +504,201 @@ fn display_name(slug: &str) -> String {
         .join(" ")
 }
 
+// ── Blocks ─────────────────────────────────────────────────────────────
+
+/// Catalog of blocks shown on the /blocks index. Each entry = one card
+/// on the index page + one route at /blocks/{slug}.
+struct BlockEntry {
+    slug: &'static str,
+    category: &'static str,
+    title: &'static str,
+    description: &'static str,
+    uses: &'static [&'static str],
+}
+
+const BLOCK_CATALOG: &[BlockEntry] = &[
+    BlockEntry {
+        slug: "auth-login",
+        category: "Authentication",
+        title: "Sign in",
+        description: "Centered card with optional OAuth providers, email + password form, forgot-password link, and signup prompt. Drop it behind your POST /login handler.",
+        uses: &["card", "input", "button", "alert", "separator"],
+    },
+];
+
+/// Render the preview for a block by slug.
+fn block_content(slug: &str) -> Option<Markup> {
+    let markup = match slug {
+        "auth-login" => blocks::auth::login::preview(),
+        _ => return None,
+    };
+    Some(markup)
+}
+
+/// Hand-written "Usage" snippet for a block. Shown below the preview
+/// on each /blocks/{slug} page.
+fn block_docs(slug: &str) -> Option<Markup> {
+    let code = match slug {
+        "auth-login" => r#"use maud_ui::blocks::auth::login;
+
+login::render(login::Props {
+    action: "/auth/login".into(),
+    heading: "Welcome back".into(),
+    subheading: "Sign in to continue".into(),
+    oauth_providers: vec![
+        login::OAuthProvider {
+            id: "google".into(),
+            label: "Continue with Google".into(),
+            href: "/auth/oauth/google".into(),
+            icon: None,
+        },
+    ],
+    forgot_password_url: Some("/auth/forgot".into()),
+    signup_url: Some("/auth/signup".into()),
+    // Re-render after failed POST to preserve the email + surface error:
+    // email_value: submitted_email,
+    // error: Some("Invalid credentials".into()),
+    ..Default::default()
+})"#,
+        _ => return None,
+    };
+    Some(code_example("Usage", code))
+}
+
+/// Render the content list of all blocks as a card grid — used by
+/// the /blocks index page.
+fn blocks_index_grid() -> Markup {
+    html! {
+        div class="mui-showcase__block-grid" {
+            @for entry in BLOCK_CATALOG {
+                a class="mui-showcase__block-card" href=(format!("/blocks/{}", entry.slug)) {
+                    div class="mui-showcase__block-card-header" {
+                        span class="mui-showcase__block-card-category" { (entry.category) }
+                        h3 class="mui-showcase__block-card-title" { (entry.title) }
+                    }
+                    p class="mui-showcase__block-card-desc" { (entry.description) }
+                    div class="mui-showcase__block-card-uses" {
+                        @for u in entry.uses {
+                            span class="mui-showcase__block-card-use" { (u) }
+                        }
+                    }
+                }
+            }
+            @if BLOCK_CATALOG.len() < 10 {
+                div class="mui-showcase__block-card mui-showcase__block-card--placeholder" {
+                    div class="mui-showcase__block-card-header" {
+                        span class="mui-showcase__block-card-category" { "Coming soon" }
+                        h3 class="mui-showcase__block-card-title" { "More blocks on the way" }
+                    }
+                    p class="mui-showcase__block-card-desc" {
+                        "Signup, two-factor, sidebar shell, dashboard stats, settings profile, billing, pricing tiers, data-table with filters. "
+                        a href="https://github.com/hgeldenhuys/maud-ui/issues" target="_blank" rel="noopener" style="color:var(--mui-accent-text);" {
+                            "Open an issue"
+                        }
+                        " if you want a specific one prioritised."
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Full page shell for the /blocks index.
+pub fn blocks_index_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Blocks \u{2014} maud-ui"))
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Blocks" }
+                        }
+                        section class="mui-gallery__component" id="blocks" {
+                            h3 class="mui-gallery__component-name" { "Blocks" }
+                            p style="color:var(--mui-text-muted);font-size:0.9375rem;max-width:42rem;margin:0 0 1.5rem;" {
+                                "Pre-composed templates built from primitives. Drop into real apps — customize by reading the source and paste-editing into your own module. Each block renders to plain HTML; no framework needed on the client side."
+                            }
+                            (blocks_index_grid())
+                        }
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
+                            }
+                        }
+                    }
+                }
+                script src="/js/maud-ui.js" defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+/// Page shell for an individual /blocks/{slug} route.
+pub fn block_page_by_name(slug: &str) -> Markup {
+    let content = block_content(slug);
+    let display = blocks::display_name(slug);
+    let title = format!("{} \u{2014} maud-ui blocks", display);
+    match content {
+        Some(preview) => html! {
+            (DOCTYPE)
+            html lang="en" data-theme="dark" {
+                head { (page_head(&title)) }
+                body {
+                    (page_header())
+                    div class="mui-gallery" {
+                        (sidebar_nav())
+                        main class="mui-gallery__main" {
+                            nav class="mui-gallery__breadcrumb" {
+                                a href="/" { "Gallery" }
+                                span { " / " }
+                                a href="/blocks" { "Blocks" }
+                                span { " / " }
+                                span { (display) }
+                            }
+                            section class="mui-gallery__component" id=(slug) {
+                                h3 class="mui-gallery__component-name" { (display) }
+                                (preview)
+                                @if let Some(docs) = block_docs(slug) { (docs) }
+                            }
+                            div class="mui-gallery__back" {
+                                a href="/blocks" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                    "\u{2190} Back to Blocks"
+                                }
+                            }
+                        }
+                    }
+                    script src="/js/maud-ui.js" defer {}
+                    script { (maud::PreEscaped(showcase_js())) }
+                }
+            }
+        },
+        None => html! {
+            (DOCTYPE)
+            html lang="en" data-theme="dark" {
+                head { (page_head("Block not found \u{2014} maud-ui")) }
+                body {
+                    (page_header())
+                    main class="mui-gallery__main" style="padding:4rem 2rem;" {
+                        h2 { "Block not found: " (slug) }
+                        p { a href="/blocks" { "\u{2190} Back to Blocks" } }
+                    }
+                }
+            }
+        },
+    }
+}
+
+// ── Components ─────────────────────────────────────────────────────────
+
 /// Render the showcase content for a component by slug name.
 fn component_content(name: &str) -> Option<Markup> {
     let markup = match name {
@@ -593,6 +788,9 @@ fn page_header() -> Markup {
                 div style="display:flex;gap:0.75rem;align-items:center;" {
                     a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Get started"
+                    }
+                    a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Blocks"
                     }
                     a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Docs"
@@ -1217,6 +1415,70 @@ fn showcase_css() -> &'static str {
         padding: 0.25rem 0.5rem;
         border-radius: var(--mui-radius-sm);
     }
+}
+
+/* Blocks index grid */
+.mui-showcase__block-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.mui-showcase__block-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color var(--mui-transition), transform var(--mui-transition);
+}
+.mui-showcase__block-card:hover {
+    border-color: var(--mui-border-hover);
+    transform: translateY(-1px);
+}
+.mui-showcase__block-card--placeholder {
+    opacity: 0.55;
+    pointer-events: auto;
+    background: transparent;
+    border-style: dashed;
+}
+.mui-showcase__block-card-category {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-subtle);
+}
+.mui-showcase__block-card-title {
+    margin: 0.25rem 0 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--mui-text);
+}
+.mui-showcase__block-card-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    line-height: 1.5;
+    flex: 1;
+}
+.mui-showcase__block-card-uses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.mui-showcase__block-card-use {
+    font-size: 0.6875rem;
+    font-family: var(--mui-font-mono);
+    padding: 0.125rem 0.4375rem;
+    background: var(--mui-bg-input);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text-muted);
 }
 
 /* Smooth scrolling */

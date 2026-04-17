@@ -11,7 +11,12 @@ import { join, resolve } from "node:path";
 import { existsSync, statSync } from "node:fs";
 
 const PUBLIC_DIR = resolve(import.meta.dir, "public");
-const PORT = Number(process.env.PORT ?? 3000);
+// Kapable's bun-server framework sets PORT on the container; fall back to
+// 3000 for local runs. BUN_PORT / APP_PORT are checked as backups in case
+// the framework evolves.
+const PORT = Number(
+  process.env.PORT ?? process.env.BUN_PORT ?? process.env.APP_PORT ?? 3000,
+);
 
 function resolvePath(pathname: string): string | null {
   // Strip leading slash and normalize
@@ -67,6 +72,15 @@ Bun.serve({
   hostname: "0.0.0.0",
   async fetch(req) {
     const url = new URL(req.url);
+
+    // Kapable health probe — respond 200 cheaply so deploy succeeds.
+    if (url.pathname === "/health" || url.pathname === "/_health") {
+      return new Response("ok", {
+        status: 200,
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      });
+    }
+
     const filepath = resolvePath(url.pathname);
 
     if (!filepath) {

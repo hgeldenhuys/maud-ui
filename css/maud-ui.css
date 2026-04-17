@@ -62,6 +62,7 @@
 /* Blocks — pre-composed templates */
 @import "blocks/common.css";
 @import "blocks/auth-login.css";
+@import "blocks/shell-sidebar.css";
 
 :root,
 [data-theme="dark"] {

@@ -4727,6 +4727,286 @@ dialog.mui-drawer--bottom {
   text-underline-offset: 2px;
 }
 
+/* css/blocks/shell-sidebar.css */
+.mui-block--shell {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  min-height: 40rem;
+  background: var(--mui-bg);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+.mui-block--shell__sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--mui-bg-card);
+  border-right: 1px solid var(--mui-border);
+  min-width: 0;
+}
+.mui-block--shell__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.125rem;
+  border-bottom: 1px solid var(--mui-border);
+  color: var(--mui-text);
+  font-size: 0.9375rem;
+  flex-shrink: 0;
+}
+.mui-block--shell__brand-mark {
+  display: inline-flex;
+  color: var(--mui-accent-text);
+  flex-shrink: 0;
+}
+.mui-block--shell__brand-name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.mui-block--shell__nav {
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mui-border) transparent;
+}
+.mui-block--shell__nav::-webkit-scrollbar {
+  width: 6px;
+}
+.mui-block--shell__nav::-webkit-scrollbar-thumb {
+  background: var(--mui-border);
+  border-radius: 3px;
+}
+.mui-block--shell__nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.mui-block--shell__nav-group-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mui-text-subtle);
+  padding: 0 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.mui-block--shell__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.0625rem;
+}
+.mui-block--shell__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.4375rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-md);
+  transition: background-color var(--mui-transition), color var(--mui-transition);
+  min-width: 0;
+}
+.mui-block--shell__nav-item:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+.mui-block--shell__nav-item--active {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  font-weight: 500;
+}
+.mui-block--shell__nav-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: inherit;
+  opacity: 0.85;
+}
+.mui-block--shell__nav-item--active .mui-block--shell__nav-icon {
+  color: var(--mui-accent-text);
+  opacity: 1;
+}
+.mui-block--shell__nav-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-block--shell__nav-badge {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.0625rem 0.4375rem;
+  background: var(--mui-bg);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  color: var(--mui-text-muted);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.mui-block--shell__user {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 0.875rem;
+  border-top: 1px solid var(--mui-border);
+  text-decoration: none;
+  color: var(--mui-text);
+  transition: background-color var(--mui-transition);
+  flex-shrink: 0;
+}
+.mui-block--shell__user:hover {
+  background: var(--mui-bg-input);
+}
+.mui-block--shell__user-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--mui-radius-full);
+  background:
+    linear-gradient(
+      135deg,
+      var(--mui-accent),
+      var(--mui-accent-hover));
+  color: var(--mui-accent-fg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+.mui-block--shell__user-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.mui-block--shell__user-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--mui-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-block--shell__user-email {
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-block--shell__user-caret {
+  color: var(--mui-text-subtle);
+  flex-shrink: 0;
+}
+.mui-block--shell__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.mui-block--shell__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  border-bottom: 1px solid var(--mui-border);
+  background: var(--mui-bg);
+  flex-shrink: 0;
+}
+.mui-block--shell__topbar-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mui-text);
+  letter-spacing: -0.01em;
+}
+.mui-block--shell__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mui-block--shell__content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background: var(--mui-bg);
+}
+@media (max-width: 768px) {
+  .mui-block--shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .mui-block--shell__sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    border-right: none;
+    border-bottom: 1px solid var(--mui-border);
+    padding: 0.5rem 0.75rem;
+    overflow-x: auto;
+  }
+  .mui-block--shell__brand {
+    padding: 0;
+    border-bottom: none;
+    flex-shrink: 0;
+  }
+  .mui-block--shell__nav {
+    flex: 1;
+    flex-direction: row;
+    padding: 0;
+    gap: 0.25rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .mui-block--shell__nav-group {
+    flex-direction: row;
+    gap: 0.125rem;
+  }
+  .mui-block--shell__nav-group-label {
+    display: none;
+  }
+  .mui-block--shell__nav-list {
+    flex-direction: row;
+  }
+  .mui-block--shell__nav-item {
+    padding: 0.375rem 0.625rem;
+    white-space: nowrap;
+  }
+  .mui-block--shell__nav-label {
+    display: none;
+  }
+  .mui-block--shell__user {
+    border-top: none;
+    padding: 0;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .mui-block--shell__user-text,
+  .mui-block--shell__user-caret {
+    display: none;
+  }
+  .mui-block--shell__topbar {
+    padding: 0.75rem 1rem;
+  }
+  .mui-block--shell__content {
+    padding: 1rem;
+  }
+}
+
 /* css/maud-ui.css */
 :root,
 [data-theme=dark] {

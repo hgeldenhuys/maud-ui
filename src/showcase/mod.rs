@@ -524,12 +524,20 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
         description: "Centered card with optional OAuth providers, email + password form, forgot-password link, and signup prompt. Drop it behind your POST /login handler.",
         uses: &["card", "input", "button", "alert", "separator"],
     },
+    BlockEntry {
+        slug: "shell-sidebar",
+        category: "Application shell",
+        title: "Sidebar app shell",
+        description: "Full app chrome — 16rem vertical nav with grouped items + badges + user footer, plus a sticky topbar and main content slot. Drop your whole app inside.",
+        uses: &["button", "card", "badge"],
+    },
 ];
 
 /// Render the preview for a block by slug.
 fn block_content(slug: &str) -> Option<Markup> {
     let markup = match slug {
         "auth-login" => blocks::auth::login::preview(),
+        "shell-sidebar" => blocks::shell::sidebar::preview(),
         _ => return None,
     };
     Some(markup)
@@ -539,6 +547,46 @@ fn block_content(slug: &str) -> Option<Markup> {
 /// on each /blocks/{slug} page.
 fn block_docs(slug: &str) -> Option<Markup> {
     let code = match slug {
+        "shell-sidebar" => r#"use maud_ui::blocks::shell::sidebar;
+use maud::html;
+
+sidebar::render(sidebar::Props {
+    brand: html! { span { "Acme" } },
+    active_path: "/dashboard".into(),
+    nav_groups: vec![
+        sidebar::NavGroup {
+            label: None,
+            items: vec![
+                sidebar::NavItem {
+                    label: "Dashboard".into(),
+                    href: "/dashboard".into(),
+                    icon: None,
+                    badge: None,
+                },
+                sidebar::NavItem {
+                    label: "Inbox".into(),
+                    href: "/inbox".into(),
+                    icon: None,
+                    badge: Some("12".into()),
+                },
+            ],
+        },
+    ],
+    user: Some(sidebar::UserBlock {
+        name: "Sofia Davis".into(),
+        email: "sofia@acme.com".into(),
+        avatar_initials: "SD".into(),
+        menu_href: "/settings".into(),
+    }),
+    topbar_title: Some("Overview".into()),
+    topbar_actions: html! {
+        // any Markup — e.g. your primary action button or search
+    },
+    children: html! {
+        // your route content here
+    },
+    ..Default::default()
+})"#,
         "auth-login" => r#"use maud_ui::blocks::auth::login;
 
 login::render(login::Props {

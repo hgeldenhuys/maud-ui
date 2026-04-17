@@ -5073,8 +5073,8 @@ dialog.mui-drawer--bottom {
 }
 .mui-block--pricing__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
   align-items: stretch;
 }
 .mui-block--pricing__tier {

@@ -34,8 +34,11 @@
 
 .mui-block--pricing__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: 1.25rem;
+    /* 14rem min so 3 tiers fit side-by-side at ≥48rem wide (the
+       gallery's main column clocks in around 56-60rem). Below that,
+       tiers wrap to 2-up and finally stack on mobile. */
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem;
     align-items: stretch;
 }
 

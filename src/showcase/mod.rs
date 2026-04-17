@@ -7,6 +7,14 @@ use maud::{html, Markup, DOCTYPE};
 
 use crate::{blocks, primitives};
 
+// Build-time cache busters. Browsers treat `?v=X` as part of the URL,
+// so changing X (on every build that touches dist/) guarantees a fresh
+// fetch without waiting for `must-revalidate` or manual hard-reloads.
+// `.len()` on `&[u8; N]` is a const expression, so these constants
+// re-compute automatically each time the embedded files change.
+const CSS_VER: usize = include_bytes!("../../dist/maud-ui.css").len();
+const JS_VER: usize = include_bytes!("../../dist/maud-ui.js").len();
+
 // ── Tier definitions ───────────────────────────────────────────────────
 
 struct Tier {
@@ -786,7 +794,7 @@ pub fn blocks_index_page() -> Markup {
                         }
                     }
                 }
-                script src="/js/maud-ui.js" defer {}
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                 script { (maud::PreEscaped(showcase_js())) }
             }
         }
@@ -827,7 +835,7 @@ pub fn block_page_by_name(slug: &str) -> Markup {
                             }
                         }
                     }
-                    script src="/js/maud-ui.js" defer {}
+                    script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                     script { (maud::PreEscaped(showcase_js())) }
                 }
             }
@@ -922,7 +930,7 @@ fn page_head(title: &str) -> Markup {
         meta charset="utf-8";
         meta name="viewport" content="width=device-width, initial-scale=1";
         title { (title) }
-        link rel="stylesheet" href="/css/maud-ui.css";
+        link rel="stylesheet" href=(format!("/css/maud-ui.css?v={}", CSS_VER));
         style { (showcase_css()) }
     }
 }
@@ -1030,7 +1038,7 @@ pub fn showcase_page() -> Markup {
                         }
                     }
                 }
-                script src="/js/maud-ui.js" defer {}
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                 script { (maud::PreEscaped(showcase_js())) }
             }
         }
@@ -1328,7 +1336,7 @@ let app = Router::new()
                         }
                     }
                 }
-                script src="/js/maud-ui.js" defer {}
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                 script { (maud::PreEscaped(showcase_js())) }
             }
         }
@@ -1368,7 +1376,7 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                         }
                     }
                 }
-                script src="/js/maud-ui.js" defer {}
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                 script { (maud::PreEscaped(showcase_js())) }
             }
         }
@@ -1398,7 +1406,7 @@ pub fn component_page_by_name(name: &str) -> Markup {
                                 }
                             }
                         }
-                        script src="/js/maud-ui.js" defer {}
+                        script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
                     }
                 }
             }

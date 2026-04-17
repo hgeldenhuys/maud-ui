@@ -96,7 +96,7 @@ pub fn showcase() -> Markup {
                         placement: Placement::Bottom,
                         delay_ms: 400,
                         trigger: html! {
-                            button.mui-btn.mui-btn--outline.mui-btn--sm type="button" aria-label="View all members" {
+                            button.mui-btn.mui-btn--outline.mui-btn--sm type="button" aria-label="+3 more members — view all" {
                                 "+3"
                             }
                         },

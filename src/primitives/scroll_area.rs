@@ -26,7 +26,7 @@ impl Default for Props {
 pub fn render(props: Props) -> Markup {
     html! {
         div class="mui-scroll-area" data-mui="scroll-area" style={"max-height: " (props.max_height)} {
-            div class="mui-scroll-area__viewport" id=(props.id) {
+            div class="mui-scroll-area__viewport" id=(props.id) tabindex="0" role="region" aria-label="Scrollable region" {
                 (props.children)
             }
             div class="mui-scroll-area__scrollbar" aria-hidden="true" {

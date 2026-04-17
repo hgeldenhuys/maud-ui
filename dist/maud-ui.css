@@ -884,26 +884,31 @@ dialog.mui-alert-dialog::backdrop {
   padding-top: 0.75rem;
 }
 .mui-carousel__dot {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.mui-carousel__dot::before {
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border-radius: var(--mui-radius-full);
-  border: none;
   background: var(--mui-border);
-  cursor: pointer;
-  padding: 0;
-  transition:
-    background-color 200ms ease-out,
-    transform 200ms ease-out,
-    width 200ms ease-out;
+  transition: background-color 200ms ease-out, width 200ms ease-out;
 }
-.mui-carousel__dot:hover {
+.mui-carousel__dot:hover::before {
   background: var(--mui-text-muted);
 }
-.mui-carousel__dot--active,
-.mui-carousel__dot[aria-selected=true] {
+.mui-carousel__dot--active::before,
+.mui-carousel__dot[aria-selected=true]::before {
   background: var(--mui-accent);
   width: 1.25rem;
-  border-radius: var(--mui-radius-full);
 }
 .mui-carousel__dot:focus-visible {
   outline: 2px solid var(--mui-border-focus);
@@ -4563,13 +4568,13 @@ dialog.mui-drawer--bottom {
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #fafafa;
   --mui-text-muted: #a1a1aa;
-  --mui-text-subtle: #71717a;
-  --mui-accent: #3b82f6;
-  --mui-accent-hover: #60a5fa;
+  --mui-text-subtle: #8e8e93;
+  --mui-accent: #2563eb;
+  --mui-accent-hover: #3b82f6;
   --mui-accent-fg: #ffffff;
-  --mui-success: #22c55e;
-  --mui-warning: #eab308;
-  --mui-danger: #ef4444;
+  --mui-success: #15803d;
+  --mui-warning: #a16207;
+  --mui-danger: #dc2626;
   --mui-radius-sm: calc(0.5rem - 2px);
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
@@ -4681,7 +4686,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   min-width: 5.5rem;
-  opacity: 0.7;
 }
 .mui-showcase__caption {
   color: var(--mui-text-muted);

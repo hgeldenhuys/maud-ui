@@ -6,14 +6,22 @@
     var content = root.querySelector(".mui-popover__content");
     if (!trigger || !content) return;
 
+    // Find the actual interactive element (consumer's button/link). If none,
+    // fall back to the trigger span — but avoid setting aria-expanded on a
+    // bare span (invalid on a generic role).
+    var interactive = trigger.querySelector('button, a, [role="button"]') || trigger;
+    interactive.setAttribute("aria-haspopup", "dialog");
+    interactive.setAttribute("aria-expanded", "false");
+    interactive.setAttribute("aria-controls", content.id || "");
+
     function toggle() {
-      var expanded = trigger.getAttribute("aria-expanded") === "true";
+      var expanded = interactive.getAttribute("aria-expanded") === "true";
       if (expanded) close();
       else open();
     }
 
     function open() {
-      trigger.setAttribute("aria-expanded", "true");
+      interactive.setAttribute("aria-expanded", "true");
       // Remove hidden first so CSS transition can play
       content.removeAttribute("hidden");
       // Force reflow before adding visible state
@@ -25,7 +33,7 @@
     }
 
     function close() {
-      trigger.setAttribute("aria-expanded", "false");
+      interactive.setAttribute("aria-expanded", "false");
       content.setAttribute("data-visible", "false");
       // Delay hidden to let CSS transition complete
       setTimeout(function () {

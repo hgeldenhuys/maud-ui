@@ -48,8 +48,10 @@ pub fn render(props: Props) -> Markup {
             }
             input type="hidden" name=(props.name.clone()) value=(value)
                 class="mui-switch__value" aria-hidden="true";
-            label for=(props.id) class="mui-switch__label" {
-                (props.label)
+            @if !props.label.is_empty() {
+                label for=(props.id) class="mui-switch__label" {
+                    (props.label)
+                }
             }
         }
     }

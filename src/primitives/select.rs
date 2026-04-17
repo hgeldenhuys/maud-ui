@@ -53,6 +53,7 @@ pub fn render(props: Props) -> Markup {
                         role="combobox" aria-expanded="false"
                         aria-haspopup="listbox" aria-controls=(format!("{}-listbox", props.id))
                         aria-activedescendant=""
+                        aria-label=(selected_label.clone())
                         disabled {
                     span class="mui-select__value" { (selected_label) }
                     span class="mui-select__chevron" aria-hidden="true" { "▾" }
@@ -61,7 +62,8 @@ pub fn render(props: Props) -> Markup {
                 button type="button" class="mui-select__trigger" id=(props.id.clone())
                         role="combobox" aria-expanded="false"
                         aria-haspopup="listbox" aria-controls=(format!("{}-listbox", props.id))
-                        aria-activedescendant="" {
+                        aria-activedescendant=""
+                        aria-label=(selected_label.clone()) {
                     span class="mui-select__value" { (selected_label) }
                     span class="mui-select__chevron" aria-hidden="true" { "▾" }
                 }

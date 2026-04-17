@@ -87,11 +87,7 @@ pub fn render(props: Props) -> Markup {
 
     html! {
         span.mui-popover data-mui="popover" {
-            span.mui-popover__trigger
-                aria-expanded="false"
-                aria-haspopup="dialog"
-                aria-controls=(content_id.clone())
-            {
+            span.mui-popover__trigger {
                 (props.trigger)
             }
             div class=(content_class)

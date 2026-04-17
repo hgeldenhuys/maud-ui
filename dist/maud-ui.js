@@ -442,9 +442,12 @@
         }
       }
 
-      // Update slide aria-hidden
+      // Mark inactive slides as inert — removes them from both the focus
+      // order and the a11y tree without the aria-hidden-on-focusable
+      // trap (aria-hidden="true" with focusable descendants is a WCAG
+      // violation; inert is the modern, browser-supported equivalent).
       for (var j = 0; j < slides.length; j++) {
-        slides[j].setAttribute("aria-hidden", j === currentIndex ? "false" : "true");
+        slides[j].inert = j !== currentIndex;
       }
 
       updateDisabled();
@@ -2267,14 +2270,22 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     var content = root.querySelector(".mui-popover__content");
     if (!trigger || !content) return;
 
+    // Find the actual interactive element (consumer's button/link). If none,
+    // fall back to the trigger span — but avoid setting aria-expanded on a
+    // bare span (invalid on a generic role).
+    var interactive = trigger.querySelector('button, a, [role="button"]') || trigger;
+    interactive.setAttribute("aria-haspopup", "dialog");
+    interactive.setAttribute("aria-expanded", "false");
+    interactive.setAttribute("aria-controls", content.id || "");
+
     function toggle() {
-      var expanded = trigger.getAttribute("aria-expanded") === "true";
+      var expanded = interactive.getAttribute("aria-expanded") === "true";
       if (expanded) close();
       else open();
     }
 
     function open() {
-      trigger.setAttribute("aria-expanded", "true");
+      interactive.setAttribute("aria-expanded", "true");
       // Remove hidden first so CSS transition can play
       content.removeAttribute("hidden");
       // Force reflow before adding visible state
@@ -2286,7 +2297,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
 
     function close() {
-      trigger.setAttribute("aria-expanded", "false");
+      interactive.setAttribute("aria-expanded", "false");
       content.setAttribute("data-visible", "false");
       // Delay hidden to let CSS transition complete
       setTimeout(function () {

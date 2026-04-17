@@ -43,8 +43,8 @@ impl Default for Props {
 /// Render a navigation menu with the given properties.
 pub fn render(props: Props) -> Markup {
     html! {
-        nav class="mui-nav-menu" data-mui="nav-menu" id=(props.id) {
-            ul class="mui-nav-menu__list" role="menubar" {
+        nav class="mui-nav-menu" data-mui="nav-menu" id=(props.id) aria-label="Primary" {
+            ul class="mui-nav-menu__list" {
                 @for item in &props.items {
                     @match item {
                         NavItem::Link(link) => {

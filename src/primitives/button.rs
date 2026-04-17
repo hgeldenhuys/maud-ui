@@ -28,6 +28,9 @@ pub struct Props {
     /// inherits the button's text color — emoji characters do NOT inherit
     /// color and will render in OS system colors.
     pub leading_icon: Option<Markup>,
+    /// aria-label override. Required for icon-only buttons (where `label` is
+    /// empty) so screen readers announce the button's purpose.
+    pub aria_label: Option<String>,
 }
 
 impl Default for Props {
@@ -39,6 +42,7 @@ impl Default for Props {
             disabled: false,
             button_type: "button",
             leading_icon: None,
+            aria_label: None,
         }
     }
 }
@@ -101,11 +105,20 @@ pub fn render(props: Props) -> Markup {
     );
 
     html! {
-        button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) {
-            @if let Some(icon) = &props.leading_icon {
-                span.mui-btn__icon aria-hidden="true" { (icon) }
+        @if let Some(label) = &props.aria_label {
+            button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) aria-label=(label) {
+                @if let Some(icon) = &props.leading_icon {
+                    span.mui-btn__icon aria-hidden="true" { (icon) }
+                }
+                (props.label)
             }
-            (props.label)
+        } @else {
+            button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) {
+                @if let Some(icon) = &props.leading_icon {
+                    span.mui-btn__icon aria-hidden="true" { (icon) }
+                }
+                (props.label)
+            }
         }
     }
 }
@@ -124,6 +137,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "submit",
                         leading_icon: None,
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: "Continue to billing".to_string(),
@@ -132,6 +146,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: "Cancel".to_string(),
@@ -140,6 +155,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        aria_label: None,
                     }))
                 }
             }
@@ -154,6 +170,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: "Revoke API key".to_string(),
@@ -162,6 +179,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        aria_label: None,
                     }))
                 }
             }
@@ -176,6 +194,7 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         button_type: "button",
                         leading_icon: Some(icon_spinner()),
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: "Deploying\u{2026}".to_string(),
@@ -184,6 +203,7 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         button_type: "button",
                         leading_icon: Some(icon_spinner()),
+                        aria_label: None,
                     }))
                 }
             }
@@ -198,6 +218,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_plus()),
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: "GitHub".to_string(),
@@ -206,6 +227,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_github()),
+                        aria_label: None,
                     }))
                     (render(Props {
                         label: String::new(),
@@ -214,6 +236,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_plus()),
+                        aria_label: Some("Add item".to_string()),
                     }))
                 }
             }

@@ -229,18 +229,20 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap:0.25rem;" {
-                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "With value" }
+                        label for="state-value" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "With value" }
                         (render(Props {
                             name: "state-value".into(),
+                            id: "state-value".into(),
                             value: "jane@example.com".into(),
                             input_type: InputType::Email,
                             ..Default::default()
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap:0.25rem;" {
-                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Invalid" }
+                        label for="state-invalid" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Invalid" }
                         (render(Props {
                             name: "state-invalid".into(),
+                            id: "state-invalid".into(),
                             invalid: true,
                             value: "not-an-email".into(),
                             input_type: InputType::Email,
@@ -249,18 +251,20 @@ pub fn showcase() -> Markup {
                         span style="font-size:0.75rem;color:var(--mui-destructive,#ef4444);" { "Please enter a valid email address." }
                     }
                     div style="display:flex;flex-direction:column;gap:0.25rem;" {
-                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Disabled" }
+                        label for="state-disabled" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Disabled" }
                         (render(Props {
                             name: "state-disabled".into(),
+                            id: "state-disabled".into(),
                             disabled: true,
                             value: "Cannot edit".into(),
                             ..Default::default()
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap:0.25rem;" {
-                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Read-only" }
+                        label for="state-readonly" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Read-only" }
                         (render(Props {
                             name: "state-readonly".into(),
+                            id: "state-readonly".into(),
                             readonly: true,
                             value: "user-9a3f2b".into(),
                             ..Default::default()

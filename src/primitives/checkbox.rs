@@ -44,14 +44,6 @@ pub fn render(props: Props) -> Markup {
         ""
     };
 
-    let aria_checked = if props.indeterminate {
-        "mixed"
-    } else if props.checked {
-        "true"
-    } else {
-        "false"
-    };
-
     let has_desc = props.description.is_some();
 
     html! {
@@ -59,29 +51,29 @@ pub fn render(props: Props) -> Markup {
             @if props.checked {
                 @if props.disabled {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) checked disabled required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked disabled required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) checked disabled;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked disabled;
                     }
                 } @else {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) checked required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) checked;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked;
                     }
                 }
             } @else {
                 @if props.disabled {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) disabled required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) disabled required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) disabled;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) disabled;
                     }
                 } @else {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked) required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-checked=(aria_checked);
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value);
                     }
                 }
             }

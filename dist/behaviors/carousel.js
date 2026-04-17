@@ -42,9 +42,12 @@
         }
       }
 
-      // Update slide aria-hidden
+      // Mark inactive slides as inert — removes them from both the focus
+      // order and the a11y tree without the aria-hidden-on-focusable
+      // trap (aria-hidden="true" with focusable descendants is a WCAG
+      // violation; inert is the modern, browser-supported equivalent).
       for (var j = 0; j < slides.length; j++) {
-        slides[j].setAttribute("aria-hidden", j === currentIndex ? "false" : "true");
+        slides[j].inert = j !== currentIndex;
       }
 
       updateDisabled();

@@ -35,6 +35,7 @@
 @import "components/menubar.css";
 @import "components/meter.css";
 @import "components/native_select.css";
+@import "components/navigation_menu.css";
 @import "components/number_field.css";
 @import "components/pagination.css";
 @import "components/popover.css";

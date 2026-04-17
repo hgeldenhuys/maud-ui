@@ -580,6 +580,28 @@ dialog.mui-alert-dialog::backdrop {
   cursor: not-allowed;
   pointer-events: none;
 }
+.mui-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mui-btn__icon svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+.mui-spin {
+  animation: mui-spin 1s linear infinite;
+}
+@keyframes mui-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* css/components/card.css */
 .mui-card {

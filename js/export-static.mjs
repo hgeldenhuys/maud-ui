@@ -30,7 +30,18 @@ const COMPONENTS = [
 ];
 
 // Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.
-const BLOCKS = ["auth-login", "auth-signup", "dashboard-stats", "shell-sidebar"];
+const BLOCKS = [
+  "auth-login",
+  "auth-signup",
+  "auth-two-factor",
+  "dashboard-stats",
+  "data-table-full",
+  "pricing-tiers",
+  "settings-billing",
+  "settings-profile",
+  "settings-team",
+  "shell-sidebar",
+];
 
 function log(msg) { process.stdout.write(`[export-static] ${msg}\n`); }
 

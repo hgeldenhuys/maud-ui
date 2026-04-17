@@ -63,6 +63,9 @@
 @import "blocks/common.css";
 @import "blocks/auth-login.css";
 @import "blocks/dashboard-stats.css";
+@import "blocks/data-table-full.css";
+@import "blocks/pricing-tiers.css";
+@import "blocks/settings.css";
 @import "blocks/shell-sidebar.css";
 
 :root,

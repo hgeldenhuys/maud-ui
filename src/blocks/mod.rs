@@ -20,6 +20,9 @@
 
 pub mod auth;
 pub mod dashboard;
+pub mod data;
+pub mod pricing;
+pub mod settings;
 pub mod shell;
 
 /// Canonical slug registry. Mirrors the showcase routes.
@@ -32,7 +35,13 @@ pub mod shell;
 pub const BLOCK_NAMES: &[&str] = &[
     "auth-login",
     "auth-signup",
+    "auth-two-factor",
     "dashboard-stats",
+    "data-table-full",
+    "pricing-tiers",
+    "settings-billing",
+    "settings-profile",
+    "settings-team",
     "shell-sidebar",
 ];
 
@@ -49,9 +58,14 @@ pub fn display_name(slug: &str) -> String {
 }
 
 fn title_case(s: &str) -> String {
-    let mut chars = s.chars();
-    match chars.next() {
-        Some(c) => c.to_uppercase().collect::<String>() + chars.as_str(),
-        None => String::new(),
-    }
+    s.split(' ')
+        .map(|word| {
+            let mut chars = word.chars();
+            match chars.next() {
+                Some(c) => c.to_uppercase().collect::<String>() + chars.as_str(),
+                None => String::new(),
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
 }

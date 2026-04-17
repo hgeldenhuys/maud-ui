@@ -19,6 +19,7 @@
 //! there has a showcase page at `/blocks/{slug}`.
 
 pub mod auth;
+pub mod dashboard;
 pub mod shell;
 
 /// Canonical slug registry. Mirrors the showcase routes.
@@ -28,7 +29,12 @@ pub mod shell;
 ///   2. A `render(Props) -> Markup` consumer API
 ///   3. A `preview() -> Markup` for the showcase page
 ///   4. A matching arm in `showcase::block_content()`
-pub const BLOCK_NAMES: &[&str] = &["auth-login", "shell-sidebar"];
+pub const BLOCK_NAMES: &[&str] = &[
+    "auth-login",
+    "auth-signup",
+    "dashboard-stats",
+    "shell-sidebar",
+];
 
 /// Convert a block slug into a human-readable name.
 /// "auth-login" → "Auth — Login"

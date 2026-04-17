@@ -30,7 +30,7 @@ const COMPONENTS = [
 ];
 
 // Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.
-const BLOCKS = ["auth-login", "shell-sidebar"];
+const BLOCKS = ["auth-login", "auth-signup", "dashboard-stats", "shell-sidebar"];
 
 function log(msg) { process.stdout.write(`[export-static] ${msg}\n`); }
 

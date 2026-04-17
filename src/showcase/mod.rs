@@ -525,6 +525,20 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
         uses: &["card", "input", "button", "alert", "separator"],
     },
     BlockEntry {
+        slug: "auth-signup",
+        category: "Authentication",
+        title: "Sign up",
+        description: "Create-account card. Name + email + password + confirm, optional OAuth, optional Terms/Privacy checkbox. Submits to your POST /signup handler.",
+        uses: &["card", "input", "button", "alert", "separator"],
+    },
+    BlockEntry {
+        slug: "dashboard-stats",
+        category: "Dashboard",
+        title: "Stats overview",
+        description: "Auto-fit grid of KPI cards with color-coded +/- deltas, plus an optional chart slot and recent-activity feed. Drop it into any dashboard route.",
+        uses: &["card"],
+    },
+    BlockEntry {
         slug: "shell-sidebar",
         category: "Application shell",
         title: "Sidebar app shell",
@@ -537,6 +551,8 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
 fn block_content(slug: &str) -> Option<Markup> {
     let markup = match slug {
         "auth-login" => blocks::auth::login::preview(),
+        "auth-signup" => blocks::auth::signup::preview(),
+        "dashboard-stats" => blocks::dashboard::stats::preview(),
         "shell-sidebar" => blocks::shell::sidebar::preview(),
         _ => return None,
     };
@@ -547,6 +563,45 @@ fn block_content(slug: &str) -> Option<Markup> {
 /// on each /blocks/{slug} page.
 fn block_docs(slug: &str) -> Option<Markup> {
     let code = match slug {
+        "auth-signup" => r#"use maud_ui::blocks::auth::signup;
+
+signup::render(signup::Props {
+    action: "/auth/signup".into(),
+    heading: "Create your account".into(),
+    subheading: "14-day free trial. No credit card required.".into(),
+    terms_url: Some("/legal/terms".into()),
+    privacy_url: Some("/legal/privacy".into()),
+    signin_url: Some("/auth/login".into()),
+    // Re-render after failed POST to preserve input + surface error:
+    // email_value: submitted_email,
+    // name_value: submitted_name,
+    // error: Some("Email already in use".into()),
+    ..Default::default()
+})"#,
+        "dashboard-stats" => r#"use maud_ui::blocks::dashboard::stats;
+
+stats::render(stats::Props {
+    title: Some("Overview".into()),
+    subtitle: Some("Last 30 days".into()),
+    cards: vec![
+        stats::StatCard {
+            label: "MRR".into(),
+            value: "$42,310".into(),
+            delta: Some(stats::Delta { value: "+12.4%".into(), positive: true }),
+            hint: Some("vs last month".into()),
+        },
+        stats::StatCard {
+            label: "Churn".into(),
+            value: "2.1%".into(),
+            // Set positive:true on a negative number for
+            // "lower is better" metrics (churn, error rate).
+            delta: Some(stats::Delta { value: "-0.4%".into(), positive: true }),
+            hint: Some("lower is better".into()),
+        },
+    ],
+    chart: None,         // Some(html! { (chart::render(...)) })
+    activity: None,      // Some(vec![ ActivityItem { .. } ])
+})"#,
         "shell-sidebar" => r#"use maud_ui::blocks::shell::sidebar;
 use maud::html;
 

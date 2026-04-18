@@ -58,6 +58,50 @@ async fn main() {
             get(|| async { maud_ui::showcase::integrations_excalidraw_page() }),
         )
         .route(
+            "/integrations/xterm",
+            get(|| async { maud_ui::showcase::integrations_xterm_page() }),
+        )
+        .route(
+            "/integrations/fullcalendar",
+            get(|| async { maud_ui::showcase::integrations_fullcalendar_page() }),
+        )
+        .route(
+            "/integrations/leaflet",
+            get(|| async { maud_ui::showcase::integrations_leaflet_page() }),
+        )
+        .route(
+            "/integrations/tiptap",
+            get(|| async { maud_ui::showcase::integrations_tiptap_page() }),
+        )
+        .route(
+            "/integrations/threejs",
+            get(|| async { maud_ui::showcase::integrations_threejs_page() }),
+        )
+        .route(
+            "/integrations/ag-grid",
+            get(|| async { maud_ui::showcase::integrations_aggrid_page() }),
+        )
+        .route(
+            "/integrations/mermaid",
+            get(|| async { maud_ui::showcase::integrations_mermaid_page() }),
+        )
+        .route(
+            "/integrations/echarts",
+            get(|| async { maud_ui::showcase::integrations_echarts_page() }),
+        )
+        .route(
+            "/integrations/wavesurfer",
+            get(|| async { maud_ui::showcase::integrations_wavesurfer_page() }),
+        )
+        .route(
+            "/integrations/pdfjs",
+            get(|| async { maud_ui::showcase::integrations_pdfjs_page() }),
+        )
+        .route(
+            "/integrations/cytoscape",
+            get(|| async { maud_ui::showcase::integrations_cytoscape_page() }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

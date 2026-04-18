@@ -963,17 +963,82 @@ fn page_header() -> Markup {
                             span class="mui-gallery__nav-advanced-caret" aria-hidden="true" { "\u{25be}" }
                         }
                         div class="mui-gallery__nav-advanced-menu" role="menu" {
-                            a href="/integrations/monaco-editor" role="menuitem" {
-                                span class="mui-gallery__nav-advanced-label" { "Monaco editor" }
-                                span class="mui-gallery__nav-advanced-sub" { "VS Code's editor, embedded" }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Code & Text" }
+                                a href="/integrations/monaco-editor" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Monaco editor" }
+                                    span class="mui-gallery__nav-advanced-sub" { "VS Code's editor, embedded" }
+                                }
+                                a href="/integrations/tiptap" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "TipTap" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Rich text prose editor" }
+                                }
                             }
-                            a href="/integrations/xyflow" role="menuitem" {
-                                span class="mui-gallery__nav-advanced-label" { "xyflow" }
-                                span class="mui-gallery__nav-advanced-sub" { "React Flow node editor" }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Diagrams & Graphs" }
+                                a href="/integrations/xyflow" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "xyflow" }
+                                    span class="mui-gallery__nav-advanced-sub" { "React Flow node editor" }
+                                }
+                                a href="/integrations/cytoscape" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Cytoscape" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Network graph visualisation" }
+                                }
+                                a href="/integrations/mermaid" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Mermaid" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Text-to-diagram renderer" }
+                                }
                             }
-                            a href="/integrations/excalidraw" role="menuitem" {
-                                span class="mui-gallery__nav-advanced-label" { "Excalidraw" }
-                                span class="mui-gallery__nav-advanced-sub" { "Sketchy whiteboard canvas" }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Canvas" }
+                                a href="/integrations/excalidraw" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Excalidraw" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Sketchy whiteboard canvas" }
+                                }
+                                a href="/integrations/threejs" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Three.js" }
+                                    span class="mui-gallery__nav-advanced-sub" { "WebGL 3D scene" }
+                                }
+                            }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Data" }
+                                a href="/integrations/ag-grid" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "AG Grid" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Enterprise data grid" }
+                                }
+                                a href="/integrations/echarts" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Apache ECharts" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Charting library" }
+                                }
+                            }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Maps & Scheduling" }
+                                a href="/integrations/leaflet" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Leaflet" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Interactive maps" }
+                                }
+                                a href="/integrations/fullcalendar" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "FullCalendar" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Scheduling, drag-drop events" }
+                                }
+                            }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Media" }
+                                a href="/integrations/wavesurfer" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "Wavesurfer" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Audio waveform player" }
+                                }
+                                a href="/integrations/pdfjs" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "PDF.js" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Inline PDF viewer" }
+                                }
+                            }
+                            div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Terminal" }
+                                a href="/integrations/xterm" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "xterm.js" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Terminal emulator" }
+                                }
                             }
                         }
                     }
@@ -2847,6 +2912,2525 @@ if (host) {
 "##
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+//  xterm.js — terminal emulator integration
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_xterm_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("xterm.js \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(xterm_css())) }
+                link rel="stylesheet" href="https://esm.sh/@xterm/xterm@5.5.0/css/xterm.css";
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "xterm.js" }
+                        }
+                        section class="mui-gallery__component" id="integration-xterm" {
+                            h3 class="mui-gallery__component-name" { "xterm.js \u{2014} Terminal emulator" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A full-fidelity terminal inside a maud-ui shell. Type commands, "
+                                "resize with the "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "FitAddon" }
+                                ", and watch the background track the gallery's "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                ". Pair with a WebSocket for a live shell or agent transcript viewer."
+                            }
+                            div class="mui-integration mui-integration--xterm" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-xterm-title" { "~/maud-ui-demo" }
+                                        span class="mui-integration__dirty" id="mui-xterm-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-xterm-clear" class="mui-btn mui-btn--outline mui-btn--sm" { "Clear" }
+                                        button type="button" id="mui-xterm-demo" class="mui-btn mui-btn--outline mui-btn--sm" { "Run demo" }
+                                        button type="button" id="mui-xterm-fit" class="mui-btn mui-btn--primary mui-btn--sm" { "Fit" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-xterm-root" {
+                                    div class="mui-integration__loading" id="mui-xterm-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading xterm.js from esm.sh\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-xterm-status-size" { "\u{2014} cols \u{00d7} \u{2014} rows" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-xterm-status-cursor" { "Ln 1, Col 1" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-xterm-status-lines" { "0 lines written" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-xterm-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "@xterm/xterm":         "https://esm.sh/@xterm/xterm@5.5.0",
+    "@xterm/addon-fit":     "https://esm.sh/@xterm/addon-fit@0.10.0",
+    "@xterm/addon-web-links":"https://esm.sh/@xterm/addon-web-links@0.11.0"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(xterm_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn xterm_css() -> &'static str {
+    r#"
+.mui-integration--xterm .mui-integration__editor {
+    padding: 0.5rem;
+    background: var(--mui-bg);
+}
+.mui-integration--xterm .xterm,
+.mui-integration--xterm .xterm-viewport,
+.mui-integration--xterm .xterm-screen {
+    width: 100% !important;
+    height: 100% !important;
+}
+.mui-integration--xterm .xterm-viewport { background: var(--mui-bg) !important; }
+"#
+}
+
+fn xterm_bootstrap() -> &'static str {
+    r##"
+import { Terminal } from '@xterm/xterm';
+import { FitAddon } from '@xterm/addon-fit';
+import { WebLinksAddon } from '@xterm/addon-web-links';
+
+function readVar(name, fallback) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+}
+function buildTheme() {
+  return {
+    background:  readVar('--mui-bg',          '#0a0a0b'),
+    foreground:  readVar('--mui-text',        '#fafafa'),
+    cursor:      readVar('--mui-accent',      '#2563eb'),
+    cursorAccent:readVar('--mui-bg',          '#0a0a0b'),
+    selectionBackground: '#264f78',
+    black:   '#1e1e1e',  red: '#f87171',   green:  '#4ade80',  yellow: '#facc15',
+    blue:    '#60a5fa',  magenta:'#f472b6', cyan:   '#67e8f9',  white:  '#e5e5e5',
+    brightBlack: '#525252', brightRed:'#fca5a5', brightGreen:'#86efac',
+    brightYellow:'#fde68a',  brightBlue:'#93c5fd', brightMagenta:'#f9a8d4',
+    brightCyan:'#a5f3fc', brightWhite:'#ffffff',
+  };
+}
+
+const host = document.getElementById('mui-xterm-root');
+if (host) {
+  const term = new Terminal({
+    theme: buildTheme(),
+    fontFamily: readVar('--mui-font-mono', 'ui-monospace, monospace'),
+    fontSize: 13,
+    cursorBlink: true,
+    convertEol: true,
+    scrollback: 1000,
+    allowTransparency: true,
+  });
+  const fit = new FitAddon();
+  term.loadAddon(fit);
+  term.loadAddon(new WebLinksAddon());
+
+  // Drop the loading overlay, then mount.
+  host.replaceChildren();
+  term.open(host);
+  requestAnimationFrame(() => fit.fit());
+
+  const GREEN = '\x1b[32m', CYAN = '\x1b[36m', GRAY = '\x1b[90m', RESET = '\x1b[0m', BOLD = '\x1b[1m';
+  term.writeln(BOLD + 'maud-ui xterm.js demo' + RESET);
+  term.writeln(GRAY + '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500' + RESET);
+  term.writeln('Type ' + CYAN + 'help' + RESET + ' for commands, or press Enter.');
+  term.write('\r\n' + GREEN + '$ ' + RESET);
+
+  let buf = '', lines = 0;
+  const statusSize   = document.getElementById('mui-xterm-status-size');
+  const statusCursor = document.getElementById('mui-xterm-status-cursor');
+  const statusLines  = document.getElementById('mui-xterm-status-lines');
+  const statusTheme  = document.getElementById('mui-xterm-status-theme');
+  const dirty        = document.getElementById('mui-xterm-dirty');
+
+  function updateSize() {
+    if (statusSize) statusSize.textContent = term.cols + ' cols \u00d7 ' + term.rows + ' rows';
+  }
+  updateSize();
+  term.onResize(updateSize);
+  term.onCursorMove(() => {
+    if (statusCursor) {
+      const pos = term.buffer.active;
+      statusCursor.textContent = 'Ln ' + (pos.cursorY + 1) + ', Col ' + (pos.cursorX + 1);
+    }
+  });
+
+  function runCommand(cmd) {
+    lines++;
+    if (statusLines) statusLines.textContent = lines + ' line' + (lines === 1 ? '' : 's') + ' written';
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+    switch ((cmd || '').trim()) {
+      case '':  break;
+      case 'help':
+        term.writeln('  ' + CYAN + 'help' + RESET + '       show this message');
+        term.writeln('  ' + CYAN + 'ls' + RESET + '         list gallery sections');
+        term.writeln('  ' + CYAN + 'whoami' + RESET + '     print caller');
+        term.writeln('  ' + CYAN + 'date' + RESET + '       print local date');
+        term.writeln('  ' + CYAN + 'clear' + RESET + '      clear scrollback');
+        term.writeln('  ' + CYAN + 'theme' + RESET + '      show theme tokens');
+        break;
+      case 'ls':     term.writeln('primitives/  blocks/  integrations/  README.md'); break;
+      case 'whoami': term.writeln('maud-ui demo user'); break;
+      case 'date':   term.writeln(new Date().toString()); break;
+      case 'clear':  term.clear(); break;
+      case 'theme':
+        term.writeln('--mui-bg:     ' + readVar('--mui-bg'));
+        term.writeln('--mui-text:   ' + readVar('--mui-text'));
+        term.writeln('--mui-accent: ' + readVar('--mui-accent'));
+        break;
+      default:
+        term.writeln(GRAY + cmd + ': command not found (try ' + CYAN + 'help' + RESET + GRAY + ')' + RESET);
+    }
+  }
+
+  term.onData((data) => {
+    for (const ch of data) {
+      if (ch === '\r') {
+        term.write('\r\n');
+        runCommand(buf);
+        buf = '';
+        term.write(GREEN + '$ ' + RESET);
+      } else if (ch === '\x7f') {
+        if (buf.length > 0) { buf = buf.slice(0, -1); term.write('\b \b'); }
+      } else if (ch >= ' ' && ch < '\x7f') {
+        buf += ch;
+        term.write(ch);
+      }
+    }
+  });
+
+  document.getElementById('mui-xterm-clear')?.addEventListener('click', () => term.clear());
+  document.getElementById('mui-xterm-demo')?.addEventListener('click', () => {
+    term.writeln('');
+    term.writeln(BOLD + CYAN + 'Running demo pipeline...' + RESET);
+    const steps = [
+      [GRAY + '[00:00]' + RESET, 'fetch http request'],
+      [GRAY + '[00:01]' + RESET, GREEN + 'ok' + RESET + ' auth middleware'],
+      [GRAY + '[00:02]' + RESET, GREEN + 'ok' + RESET + ' validate body'],
+      [GRAY + '[00:03]' + RESET, GREEN + 'ok' + RESET + ' handler'],
+      [GRAY + '[00:04]' + RESET, GREEN + 'ok' + RESET + ' sql query (24 rows)'],
+      [GRAY + '[00:05]' + RESET, GREEN + 'ok' + RESET + ' response 200 OK'],
+    ];
+    steps.forEach((s, i) => setTimeout(() => term.writeln('  ' + s[0] + ' ' + s[1]), i * 220));
+    setTimeout(() => term.write('\r\n' + GREEN + '$ ' + RESET), steps.length * 220 + 60);
+  });
+  document.getElementById('mui-xterm-fit')?.addEventListener('click', () => fit.fit());
+
+  new MutationObserver(() => {
+    term.options.theme = buildTheme();
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  window.addEventListener('resize', () => fit.fit());
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  FullCalendar — scheduling integration
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_fullcalendar_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("FullCalendar \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(fullcalendar_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "FullCalendar" }
+                        }
+                        section class="mui-gallery__component" id="integration-fullcalendar" {
+                            h3 class="mui-gallery__component-name" { "FullCalendar \u{2014} Scheduling" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A FullCalendar 6 calendar inside a maud-ui shell \u{2014} month / week / day "
+                                "views, drag-to-move events, click-to-create. The maud-ui toolbar proxies "
+                                "FullCalendar's imperative API so navigation and view switches flow through "
+                                "the native shell."
+                            }
+                            div class="mui-integration mui-integration--fullcalendar" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-fc-title" { "schedule/q2-2026.ics" }
+                                        span class="mui-integration__dirty" id="mui-fc-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-fc-prev"  class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2039}" }
+                                        button type="button" id="mui-fc-today" class="mui-btn mui-btn--outline mui-btn--sm" { "Today" }
+                                        button type="button" id="mui-fc-next"  class="mui-btn mui-btn--outline mui-btn--sm" { "\u{203a}" }
+                                        select id="mui-fc-view" class="mui-integration__select" aria-label="View" {
+                                            option value="dayGridMonth" selected { "Month" }
+                                            option value="timeGridWeek" { "Week" }
+                                            option value="timeGridDay" { "Day" }
+                                            option value="listWeek" { "List" }
+                                        }
+                                        button type="button" id="mui-fc-add" class="mui-btn mui-btn--primary mui-btn--sm" { "+ Event" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-fc-root" {
+                                    div class="mui-integration__loading" id="mui-fc-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading FullCalendar from CDN\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-fc-status-range" { "\u{2014}" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-fc-status-count" { "0 events" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-fc-status-view" { "dayGridMonth" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-fc-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" {}
+                script { (maud::PreEscaped(fullcalendar_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn fullcalendar_css() -> &'static str {
+    r#"
+.mui-integration--fullcalendar .mui-integration__editor {
+    height: 32rem;
+    padding: 0.75rem;
+    overflow: auto;
+}
+@media (min-width: 1024px) {
+    .mui-integration--fullcalendar .mui-integration__editor { height: 40rem; }
+}
+.mui-integration--fullcalendar .fc {
+    --fc-border-color: var(--mui-border);
+    --fc-page-bg-color: var(--mui-bg-card);
+    --fc-neutral-bg-color: var(--mui-bg);
+    --fc-today-bg-color: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+    --fc-event-bg-color: var(--mui-accent);
+    --fc-event-border-color: var(--mui-accent);
+    --fc-event-text-color: #fff;
+    --fc-list-event-hover-bg-color: var(--mui-bg);
+    color: var(--mui-text);
+    font-family: var(--mui-font-sans);
+}
+.mui-integration--fullcalendar .fc-toolbar-title { color: var(--mui-text); font-size: 1rem !important; }
+.mui-integration--fullcalendar .fc-col-header-cell-cushion,
+.mui-integration--fullcalendar .fc-daygrid-day-number,
+.mui-integration--fullcalendar .fc-timegrid-slot-label-cushion {
+    color: var(--mui-text-muted);
+    text-decoration: none;
+}
+.mui-integration--fullcalendar .fc-day-today .fc-daygrid-day-number { color: var(--mui-accent-text); font-weight: 600; }
+"#
+}
+
+fn fullcalendar_bootstrap() -> &'static str {
+    r##"
+(function () {
+  if (typeof FullCalendar === 'undefined') {
+    console.error('[maud-ui] FullCalendar global missing \u2014 CDN load failed');
+    return;
+  }
+  const host = document.getElementById('mui-fc-root');
+  if (!host) return;
+  host.replaceChildren();
+
+  const today = new Date();
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const add = (base, days) => { const n = new Date(base); n.setDate(n.getDate() + days); return n; };
+  const events = [
+    { title: 'maud-ui 0.2 release',   start: iso(add(today, 1)), allDay: true, color: '#2563eb' },
+    { title: 'Konductor sprint demo', start: iso(add(today, 3)) + 'T10:00:00', end: iso(add(today, 3)) + 'T11:30:00' },
+    { title: 'Drain session',         start: iso(add(today, 5)) + 'T14:00:00', end: iso(add(today, 5)) + 'T18:00:00' },
+    { title: 'Retro',                 start: iso(add(today, 7)) + 'T09:00:00', end: iso(add(today, 7)) + 'T09:45:00' },
+    { title: 'Platform integrity',    start: iso(add(today, -2)), allDay: true, color: '#db2777' },
+    { title: 'Office hours',          start: iso(add(today, 10)) + 'T15:00:00', end: iso(add(today, 10)) + 'T16:00:00' },
+  ];
+
+  const calendar = new FullCalendar.Calendar(host, {
+    initialView: 'dayGridMonth',
+    headerToolbar: false,
+    events,
+    editable: true,
+    selectable: true,
+    nowIndicator: true,
+    dateClick: (info) => {
+      const title = window.prompt('Event title?', 'New event');
+      if (title) { calendar.addEvent({ title, start: info.dateStr, allDay: info.allDay }); updateStatus(); }
+    },
+    eventChange: () => { updateStatus(); document.getElementById('mui-fc-dirty')?.setAttribute('data-dirty', 'true'); },
+    datesSet: updateStatus,
+  });
+  calendar.render();
+
+  const statusRange = document.getElementById('mui-fc-status-range');
+  const statusCount = document.getElementById('mui-fc-status-count');
+  const statusView  = document.getElementById('mui-fc-status-view');
+  const statusTheme = document.getElementById('mui-fc-status-theme');
+
+  function fmt(d) { return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }); }
+  function updateStatus() {
+    const v = calendar.view;
+    if (statusRange) statusRange.textContent = fmt(v.currentStart) + ' \u2013 ' + fmt(new Date(v.currentEnd.getTime() - 1));
+    if (statusView)  statusView.textContent  = v.type;
+    if (statusCount) {
+      const n = calendar.getEvents().length;
+      statusCount.textContent = n + ' event' + (n === 1 ? '' : 's');
+    }
+  }
+
+  document.getElementById('mui-fc-prev')?.addEventListener('click',  () => calendar.prev());
+  document.getElementById('mui-fc-next')?.addEventListener('click',  () => calendar.next());
+  document.getElementById('mui-fc-today')?.addEventListener('click', () => calendar.today());
+  document.getElementById('mui-fc-view')?.addEventListener('change', (e) => calendar.changeView(e.target.value));
+  document.getElementById('mui-fc-add')?.addEventListener('click', () => {
+    const title = window.prompt('Event title?', 'New event');
+    if (!title) return;
+    const now = new Date(); now.setMinutes(0, 0, 0); now.setHours(now.getHours() + 1);
+    const end = new Date(now); end.setHours(end.getHours() + 1);
+    calendar.addEvent({ title, start: now, end });
+    updateStatus();
+    document.getElementById('mui-fc-dirty')?.setAttribute('data-dirty', 'true');
+  });
+
+  new MutationObserver(() => {
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Leaflet — interactive map integration
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_leaflet_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Leaflet \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(leaflet_css())) }
+                link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Leaflet" }
+                        }
+                        section class="mui-gallery__component" id="integration-leaflet" {
+                            h3 class="mui-gallery__component-name" { "Leaflet \u{2014} Interactive map" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A Leaflet map with an OpenStreetMap tile layer and a set of markers, "
+                                "all inside a maud-ui shell. The toolbar exposes Leaflet's imperative "
+                                "API \u{2014} add markers, switch tile providers, fit bounds \u{2014} without "
+                                "exposing Leaflet's own controls."
+                            }
+                            div class="mui-integration mui-integration--leaflet" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 4.5-8 12-8 12s-8-7.5-8-12a8 8 0 0 1 8-8z"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-leaflet-title" { "maps/san-francisco.geojson" }
+                                        span class="mui-integration__dirty" id="mui-leaflet-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-leaflet-tiles" class="mui-integration__select" aria-label="Tile provider" {
+                                            option value="osm" selected { "OpenStreetMap" }
+                                            option value="dark"          { "Carto Dark" }
+                                            option value="light"         { "Carto Light" }
+                                        }
+                                        button type="button" id="mui-leaflet-add"   class="mui-btn mui-btn--outline mui-btn--sm" { "+ Marker" }
+                                        button type="button" id="mui-leaflet-clear" class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear" }
+                                        button type="button" id="mui-leaflet-fit"   class="mui-btn mui-btn--primary mui-btn--sm" { "Fit" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-leaflet-root" {
+                                    div class="mui-integration__loading" id="mui-leaflet-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading Leaflet + OSM tiles\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-leaflet-status-center" { "Lat \u{2014}, Lng \u{2014}" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-leaflet-status-zoom"   { "Zoom \u{2014}" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-leaflet-status-markers"{ "0 markers" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-leaflet-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" {}
+                script { (maud::PreEscaped(leaflet_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn leaflet_css() -> &'static str {
+    r#"
+.mui-integration--leaflet .mui-integration__editor {
+    height: 28rem;
+    padding: 0;
+}
+@media (min-width: 1024px) {
+    .mui-integration--leaflet .mui-integration__editor { height: 34rem; }
+}
+.mui-integration--leaflet .leaflet-container { height: 100% !important; width: 100% !important; background: var(--mui-bg); }
+.mui-integration--leaflet .leaflet-control-zoom { display: none; }
+.mui-integration--leaflet .leaflet-control-attribution {
+    background: var(--mui-bg-card);
+    color: var(--mui-text-subtle);
+    font-size: 0.625rem;
+}
+.mui-integration--leaflet .leaflet-control-attribution a { color: var(--mui-text-muted); }
+"#
+}
+
+fn leaflet_bootstrap() -> &'static str {
+    r##"
+(function () {
+  if (typeof L === 'undefined') {
+    console.error('[maud-ui] Leaflet global L missing \u2014 CDN load failed');
+    return;
+  }
+  const host = document.getElementById('mui-leaflet-root');
+  if (!host) return;
+  host.replaceChildren();
+  const mapEl = document.createElement('div');
+  mapEl.id = 'mui-leaflet-map';
+  mapEl.style.width = '100%';
+  mapEl.style.height = '100%';
+  host.appendChild(mapEl);
+
+  const map = L.map(mapEl, { zoomControl: false, attributionControl: true }).setView([37.7749, -122.4194], 12);
+
+  const tiles = {
+    osm:   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '\u00a9 OpenStreetMap' }),
+    dark:  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: '\u00a9 OpenStreetMap \u00a9 CARTO' }),
+    light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: '\u00a9 OpenStreetMap \u00a9 CARTO' }),
+  };
+  tiles.osm.addTo(map);
+  let activeKey = 'osm';
+
+  const seed = [
+    { lat: 37.8199, lng: -122.4783, title: 'Golden Gate Bridge' },
+    { lat: 37.8024, lng: -122.4058, title: 'Coit Tower' },
+    { lat: 37.8087, lng: -122.4098, title: 'Pier 39' },
+    { lat: 37.7694, lng: -122.4862, title: 'Golden Gate Park' },
+  ];
+  const markers = L.layerGroup().addTo(map);
+  for (const m of seed) {
+    L.marker([m.lat, m.lng]).addTo(markers).bindPopup(document.createTextNode(m.title));
+  }
+
+  const statusCenter  = document.getElementById('mui-leaflet-status-center');
+  const statusZoom    = document.getElementById('mui-leaflet-status-zoom');
+  const statusMarkers = document.getElementById('mui-leaflet-status-markers');
+  const statusTheme   = document.getElementById('mui-leaflet-status-theme');
+  const dirty         = document.getElementById('mui-leaflet-dirty');
+
+  function updateStatus() {
+    const c = map.getCenter();
+    if (statusCenter)  statusCenter.textContent  = 'Lat ' + c.lat.toFixed(4) + ', Lng ' + c.lng.toFixed(4);
+    if (statusZoom)    statusZoom.textContent    = 'Zoom ' + map.getZoom();
+    if (statusMarkers) statusMarkers.textContent = markers.getLayers().length + ' markers';
+  }
+  updateStatus();
+  map.on('moveend zoomend layeradd layerremove', updateStatus);
+
+  document.getElementById('mui-leaflet-tiles')?.addEventListener('change', (e) => {
+    tiles[activeKey].remove();
+    activeKey = e.target.value;
+    tiles[activeKey].addTo(map);
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-leaflet-add')?.addEventListener('click', () => {
+    const c = map.getCenter();
+    const jitter = () => (Math.random() - 0.5) * 0.02;
+    const pt = [c.lat + jitter(), c.lng + jitter()];
+    const label = 'Pinned ' + pt[0].toFixed(4) + ', ' + pt[1].toFixed(4);
+    L.marker(pt).addTo(markers).bindPopup(document.createTextNode(label));
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-leaflet-clear')?.addEventListener('click', () => {
+    markers.clearLayers();
+    updateStatus();
+  });
+  document.getElementById('mui-leaflet-fit')?.addEventListener('click', () => {
+    const layers = markers.getLayers();
+    if (layers.length === 0) { map.setView([37.7749, -122.4194], 12); return; }
+    const group = L.featureGroup(layers);
+    map.fitBounds(group.getBounds().pad(0.2));
+  });
+
+  new MutationObserver(() => {
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  setTimeout(() => map.invalidateSize(), 100);
+})();
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  TipTap — rich text editor integration
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_tiptap_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("TipTap \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(tiptap_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "TipTap" }
+                        }
+                        section class="mui-gallery__component" id="integration-tiptap" {
+                            h3 class="mui-gallery__component-name" { "TipTap \u{2014} Rich text editor" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A TipTap (ProseMirror) editor with a maud-ui toolbar. Bold, italic, "
+                                "headings, lists, blockquote, code block, undo / redo \u{2014} all driven "
+                                "through TipTap's chainable command API. Active-format state on each "
+                                "button reflects the cursor position."
+                            }
+                            div class="mui-integration mui-integration--tiptap" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-tt-title" { "docs/draft.md" }
+                                        span class="mui-integration__dirty" id="mui-tt-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar mui-tt__toolbar" {
+                                        button type="button" data-tt-cmd="bold"       class="mui-btn mui-btn--outline mui-btn--sm" title="Bold" { "B" }
+                                        button type="button" data-tt-cmd="italic"     class="mui-btn mui-btn--outline mui-btn--sm" title="Italic" { em { "I" } }
+                                        button type="button" data-tt-cmd="strike"     class="mui-btn mui-btn--outline mui-btn--sm" title="Strikethrough" { s { "S" } }
+                                        button type="button" data-tt-cmd="h1"         class="mui-btn mui-btn--outline mui-btn--sm" title="Heading 1" { "H1" }
+                                        button type="button" data-tt-cmd="h2"         class="mui-btn mui-btn--outline mui-btn--sm" title="Heading 2" { "H2" }
+                                        button type="button" data-tt-cmd="h3"         class="mui-btn mui-btn--outline mui-btn--sm" title="Heading 3" { "H3" }
+                                        button type="button" data-tt-cmd="bulletList" class="mui-btn mui-btn--outline mui-btn--sm" title="Bullet list" { "\u{2022}" }
+                                        button type="button" data-tt-cmd="orderedList" class="mui-btn mui-btn--outline mui-btn--sm" title="Ordered list" { "1." }
+                                        button type="button" data-tt-cmd="blockquote" class="mui-btn mui-btn--outline mui-btn--sm" title="Blockquote" { "\u{201c}\u{201d}" }
+                                        button type="button" data-tt-cmd="codeBlock"  class="mui-btn mui-btn--outline mui-btn--sm" title="Code block" { "{ }" }
+                                        button type="button" data-tt-cmd="undo"       class="mui-btn mui-btn--ghost mui-btn--sm" title="Undo" { "\u{21b6}" }
+                                        button type="button" data-tt-cmd="redo"       class="mui-btn mui-btn--ghost mui-btn--sm" title="Redo" { "\u{21b7}" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-tt-root" {
+                                    div class="mui-integration__loading" id="mui-tt-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading TipTap + ProseMirror from esm.sh\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-tt-status-words" { "0 words" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-tt-status-chars" { "0 characters" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-tt-status-active" { "paragraph" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-tt-status-theme" { "dark" }
+                                }
+                            }
+                            div class="mui-integration__output" {
+                                div class="mui-integration__output-header" {
+                                    span { "HTML output" }
+                                    button type="button" id="mui-tt-copy" class="mui-btn mui-btn--ghost mui-btn--sm" { "Copy" }
+                                }
+                                pre class="mui-integration__output-body" id="mui-tt-output" { "<!-- live HTML will render here as you type -->" }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "@tiptap/core":         "https://esm.sh/@tiptap/core@2.10.3",
+    "@tiptap/starter-kit":  "https://esm.sh/@tiptap/starter-kit@2.10.3"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(tiptap_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn tiptap_css() -> &'static str {
+    r#"
+.mui-integration--tiptap .mui-integration__editor {
+    height: 24rem;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    font-family: var(--mui-font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--mui-text);
+}
+@media (min-width: 1024px) {
+    .mui-integration--tiptap .mui-integration__editor { height: 28rem; }
+}
+.mui-integration--tiptap .ProseMirror { outline: none; min-height: 100%; }
+.mui-integration--tiptap .ProseMirror > *:first-child { margin-top: 0; }
+.mui-integration--tiptap h1 { font-size: 1.5rem;   margin: 1.25rem 0 0.5rem; font-weight: 700; }
+.mui-integration--tiptap h2 { font-size: 1.25rem;  margin: 1.1rem  0 0.5rem; font-weight: 700; }
+.mui-integration--tiptap h3 { font-size: 1.0625rem;margin: 1rem    0 0.5rem; font-weight: 600; }
+.mui-integration--tiptap ul, .mui-integration--tiptap ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+.mui-integration--tiptap blockquote {
+    border-left: 3px solid var(--mui-border-hover);
+    padding-left: 0.875rem;
+    color: var(--mui-text-muted);
+    margin: 0.75rem 0;
+}
+.mui-integration--tiptap pre {
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    padding: 0.75rem 0.875rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+    overflow-x: auto;
+}
+.mui-integration--tiptap code {
+    font-family: var(--mui-font-mono);
+    font-size: 0.875em;
+    padding: 0.05rem 0.25rem;
+    background: var(--mui-bg);
+    border-radius: var(--mui-radius-sm);
+}
+.mui-tt__toolbar { flex-wrap: wrap; row-gap: 0.25rem; }
+.mui-tt__toolbar .mui-btn.is-active {
+    background: color-mix(in srgb, var(--mui-accent) 18%, transparent);
+    border-color: var(--mui-accent);
+    color: var(--mui-accent-text);
+}
+"#
+}
+
+fn tiptap_bootstrap() -> &'static str {
+    r##"
+import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+
+const host = document.getElementById('mui-tt-root');
+if (host) {
+  host.replaceChildren();
+
+  const initial = `
+<h1>maud-ui \u00d7 TipTap</h1>
+<p>This is a <strong>rich text editor</strong> inside a maud-ui shell. Type, format, and watch the
+status bar track your progress. All toolbar buttons proxy TipTap's chainable command API.</p>
+<h3>Try it</h3>
+<ul>
+  <li>Press <code>Cmd/Ctrl&nbsp;+&nbsp;B</code> to bold</li>
+  <li>Start a line with <code>##</code> for a heading</li>
+  <li>Start a line with <code>*</code> for a bullet list</li>
+</ul>
+<blockquote>TipTap is a headless wrapper around ProseMirror. maud-ui provides the chrome.</blockquote>
+<pre><code>editor.chain().focus().toggleBold().run();</code></pre>
+  `;
+
+  const editor = new Editor({
+    element: host,
+    extensions: [StarterKit],
+    content: initial,
+    autofocus: false,
+  });
+
+  const dirty       = document.getElementById('mui-tt-dirty');
+  const statusWords = document.getElementById('mui-tt-status-words');
+  const statusChars = document.getElementById('mui-tt-status-chars');
+  const statusActive= document.getElementById('mui-tt-status-active');
+  const statusTheme = document.getElementById('mui-tt-status-theme');
+  const output      = document.getElementById('mui-tt-output');
+  const buttons     = Array.from(document.querySelectorAll('.mui-tt__toolbar [data-tt-cmd]'));
+
+  function currentBlock() {
+    const s = editor.state.selection.$from;
+    const node = s.node(s.depth);
+    const t = node.type.name;
+    if (t === 'heading') return 'heading ' + (node.attrs.level || 1);
+    if (t === 'codeBlock') return 'code block';
+    if (t === 'bulletList' || t === 'orderedList') return t;
+    if (t === 'blockquote') return 'blockquote';
+    return t;
+  }
+
+  function refresh() {
+    const text = editor.state.doc.textContent;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    if (statusWords) statusWords.textContent = words + ' word' + (words === 1 ? '' : 's');
+    if (statusChars) statusChars.textContent = text.length + ' character' + (text.length === 1 ? '' : 's');
+    if (statusActive) statusActive.textContent = currentBlock();
+    if (output) output.textContent = editor.getHTML();
+    for (const b of buttons) {
+      const cmd = b.getAttribute('data-tt-cmd');
+      const active =
+        cmd === 'h1'   ? editor.isActive('heading', { level: 1 }) :
+        cmd === 'h2'   ? editor.isActive('heading', { level: 2 }) :
+        cmd === 'h3'   ? editor.isActive('heading', { level: 3 }) :
+        editor.isActive(cmd);
+      b.classList.toggle('is-active', !!active);
+    }
+  }
+
+  editor.on('update', () => { if (dirty) dirty.setAttribute('data-dirty', 'true'); refresh(); });
+  editor.on('selectionUpdate', refresh);
+  refresh();
+
+  for (const b of buttons) {
+    b.addEventListener('click', () => {
+      const cmd = b.getAttribute('data-tt-cmd');
+      const chain = editor.chain().focus();
+      switch (cmd) {
+        case 'bold':        chain.toggleBold().run(); break;
+        case 'italic':      chain.toggleItalic().run(); break;
+        case 'strike':      chain.toggleStrike().run(); break;
+        case 'h1':          chain.toggleHeading({ level: 1 }).run(); break;
+        case 'h2':          chain.toggleHeading({ level: 2 }).run(); break;
+        case 'h3':          chain.toggleHeading({ level: 3 }).run(); break;
+        case 'bulletList':  chain.toggleBulletList().run(); break;
+        case 'orderedList': chain.toggleOrderedList().run(); break;
+        case 'blockquote':  chain.toggleBlockquote().run(); break;
+        case 'codeBlock':   chain.toggleCodeBlock().run(); break;
+        case 'undo':        chain.undo().run(); break;
+        case 'redo':        chain.redo().run(); break;
+      }
+    });
+  }
+
+  document.getElementById('mui-tt-copy')?.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(editor.getHTML()); } catch {}
+  });
+
+  new MutationObserver(() => {
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Three.js — WebGL 3D scene
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_threejs_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Three.js \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(threejs_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Three.js" }
+                        }
+                        section class="mui-gallery__component" id="integration-threejs" {
+                            h3 class="mui-gallery__component-name" { "Three.js \u{2014} WebGL 3D" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A Three.js scene \u{2014} camera, lights, meshes, orbit controls, grid, "
+                                "axes helper \u{2014} mounted into a maud-ui shell. The toolbar swaps the "
+                                "displayed geometry and toggles wireframe, and the status bar tracks FPS, "
+                                "triangle count, and the active shape."
+                            }
+                            div class="mui-integration mui-integration--threejs" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 19 22 19 12 2"/><line x1="12" y1="2" x2="12" y2="19"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-three-title" { "scenes/demo.glb" }
+                                        span class="mui-integration__dirty" id="mui-three-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-three-shape" class="mui-integration__select" aria-label="Shape" {
+                                            option value="torusKnot" selected { "Torus knot" }
+                                            option value="icosahedron" { "Icosahedron" }
+                                            option value="box"          { "Box" }
+                                            option value="sphere"       { "Sphere" }
+                                            option value="cone"         { "Cone" }
+                                        }
+                                        button type="button" id="mui-three-wire"  class="mui-btn mui-btn--outline mui-btn--sm" { "Wireframe" }
+                                        button type="button" id="mui-three-spin"  class="mui-btn mui-btn--outline mui-btn--sm" { "Spin" }
+                                        button type="button" id="mui-three-reset" class="mui-btn mui-btn--primary mui-btn--sm" { "Reset camera" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-three-root" {
+                                    div class="mui-integration__loading" id="mui-three-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading Three.js from esm.sh\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-three-status-fps" { "\u{2014} fps" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-three-status-tris"{ "\u{2014} triangles" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-three-status-shape"{ "torusKnot" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-three-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "three":                            "https://esm.sh/three@0.170.0",
+    "three/addons/controls/OrbitControls.js": "https://esm.sh/three@0.170.0/examples/jsm/controls/OrbitControls.js"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(threejs_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn threejs_css() -> &'static str {
+    r#"
+.mui-integration--threejs .mui-integration__editor {
+    height: 32rem;
+    padding: 0;
+    background: var(--mui-bg);
+}
+@media (min-width: 1024px) {
+    .mui-integration--threejs .mui-integration__editor { height: 38rem; }
+}
+.mui-integration--threejs canvas { display: block; width: 100% !important; height: 100% !important; }
+"#
+}
+
+fn threejs_bootstrap() -> &'static str {
+    r##"
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const host = document.getElementById('mui-three-root');
+if (host) {
+  host.replaceChildren();
+
+  function bgColor() {
+    const c = getComputedStyle(document.documentElement).getPropertyValue('--mui-bg').trim();
+    try { return new THREE.Color(c || '#0a0a0b'); } catch { return new THREE.Color('#0a0a0b'); }
+  }
+
+  const scene = new THREE.Scene();
+  scene.background = bgColor();
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+  camera.position.set(4, 3, 6);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  host.appendChild(renderer.domElement);
+
+  function resize() {
+    const r = host.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect = r.width / Math.max(r.height, 1);
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  new ResizeObserver(resize).observe(host);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const point = new THREE.PointLight(0xffffff, 1.2, 50);
+  point.position.set(5, 5, 5);
+  scene.add(point);
+  const rim = new THREE.DirectionalLight(0x60a5fa, 0.7);
+  rim.position.set(-4, 2, -4);
+  scene.add(rim);
+
+  scene.add(new THREE.GridHelper(20, 20, 0x3f3f46, 0x27272a));
+  scene.add(new THREE.AxesHelper(1.5));
+
+  const material = new THREE.MeshPhongMaterial({ color: 0x2563eb, shininess: 90, wireframe: false });
+  let mesh = makeMesh('torusKnot');
+  scene.add(mesh);
+
+  function makeMesh(kind) {
+    let g;
+    switch (kind) {
+      case 'icosahedron': g = new THREE.IcosahedronGeometry(1.2, 0); break;
+      case 'box':         g = new THREE.BoxGeometry(1.6, 1.6, 1.6); break;
+      case 'sphere':      g = new THREE.SphereGeometry(1.2, 32, 32); break;
+      case 'cone':        g = new THREE.ConeGeometry(1.2, 2, 32); break;
+      case 'torusKnot':
+      default:            g = new THREE.TorusKnotGeometry(0.9, 0.28, 120, 16);
+    }
+    const m = new THREE.Mesh(g, material);
+    m.position.y = 1;
+    return m;
+  }
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  let spinning = true;
+  let frames = 0, lastFps = performance.now();
+  const statusFps   = document.getElementById('mui-three-status-fps');
+  const statusTris  = document.getElementById('mui-three-status-tris');
+  const statusShape = document.getElementById('mui-three-status-shape');
+  const statusTheme = document.getElementById('mui-three-status-theme');
+  const dirty       = document.getElementById('mui-three-dirty');
+
+  function updateTris() {
+    const tris = (mesh.geometry.index ? mesh.geometry.index.count : mesh.geometry.attributes.position.count) / 3;
+    if (statusTris) statusTris.textContent = Math.round(tris).toLocaleString() + ' triangles';
+  }
+  updateTris();
+
+  function animate(now) {
+    if (spinning) {
+      mesh.rotation.x += 0.006;
+      mesh.rotation.y += 0.011;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    frames++;
+    if (now - lastFps > 500) {
+      const fps = (frames * 1000) / (now - lastFps);
+      if (statusFps) statusFps.textContent = fps.toFixed(0) + ' fps';
+      frames = 0; lastFps = now;
+    }
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+
+  document.getElementById('mui-three-shape')?.addEventListener('change', (e) => {
+    scene.remove(mesh);
+    mesh.geometry.dispose();
+    mesh = makeMesh(e.target.value);
+    scene.add(mesh);
+    if (statusShape) statusShape.textContent = e.target.value;
+    updateTris();
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-three-wire')?.addEventListener('click', () => {
+    material.wireframe = !material.wireframe;
+    material.needsUpdate = true;
+  });
+  document.getElementById('mui-three-spin')?.addEventListener('click', () => { spinning = !spinning; });
+  document.getElementById('mui-three-reset')?.addEventListener('click', () => {
+    camera.position.set(4, 3, 6);
+    controls.target.set(0, 1, 0);
+    controls.update();
+  });
+
+  new MutationObserver(() => {
+    scene.background = bgColor();
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  AG Grid Community — enterprise-grade data grid
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_aggrid_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("AG Grid \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(aggrid_css())) }
+                link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-grid.css";
+                link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/styles/ag-theme-quartz.css";
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "AG Grid" }
+                        }
+                        section class="mui-gallery__component" id="integration-aggrid" {
+                            h3 class="mui-gallery__component-name" { "AG Grid \u{2014} Enterprise data grid" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "AG Grid Community inside a maud-ui shell. 50 seed rows, sortable / "
+                                "filterable columns, row selection, CSV export \u{2014} the data-heavy "
+                                "story. Theme flips between quartz and quartz-dark with the gallery's "
+                                "data-theme."
+                            }
+                            div class="mui-integration mui-integration--aggrid" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-ag-title" { "data/users.csv" }
+                                        span class="mui-integration__dirty" id="mui-ag-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-ag-add"    class="mui-btn mui-btn--outline mui-btn--sm" { "+ Row" }
+                                        button type="button" id="mui-ag-delete" class="mui-btn mui-btn--outline mui-btn--sm" { "Delete selected" }
+                                        button type="button" id="mui-ag-clear"  class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear filters" }
+                                        button type="button" id="mui-ag-csv"    class="mui-btn mui-btn--primary mui-btn--sm" { "Export CSV" }
+                                    }
+                                }
+                                div class="mui-integration__editor ag-theme-quartz-dark" id="mui-ag-root" {
+                                    div class="mui-integration__loading" id="mui-ag-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading AG Grid from CDN\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-ag-status-rows"  { "0 rows" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ag-status-sel"   { "0 selected" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ag-status-filter"{ "no filters" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-ag-status-theme" { "quartz-dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/dist/ag-grid-community.min.js" {}
+                script { (maud::PreEscaped(aggrid_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn aggrid_css() -> &'static str {
+    r#"
+.mui-integration--aggrid .mui-integration__editor {
+    height: 30rem;
+    padding: 0;
+}
+@media (min-width: 1024px) {
+    .mui-integration--aggrid .mui-integration__editor { height: 36rem; }
+}
+.mui-integration--aggrid .ag-theme-quartz,
+.mui-integration--aggrid .ag-theme-quartz-dark {
+    --ag-font-family: var(--mui-font-sans);
+    --ag-font-size: 13px;
+    height: 100%;
+}
+"#
+}
+
+fn aggrid_bootstrap() -> &'static str {
+    r##"
+(function () {
+  if (typeof agGrid === 'undefined') {
+    console.error('[maud-ui] agGrid global missing \u2014 CDN load failed');
+    return;
+  }
+  const host = document.getElementById('mui-ag-root');
+  if (!host) return;
+  host.replaceChildren();
+
+  const FIRST = ['Alex','Blair','Charlie','Dana','Eli','Fran','Gil','Harper','Indigo','Jules','Kai','Lee','Morgan','Nico','Ola','Parker','Quinn','Riley','Sam','Taylor'];
+  const LAST  = ['Adams','Brooks','Clark','Davis','Evans','Fisher','Gray','Harris','Irwin','Jones','Kim','Lopez','Miller','Nguyen','Ortiz','Patel','Quinn','Ramos','Smith','Taylor'];
+  const ROLES = ['Engineer','Designer','PM','Ops','Researcher','Analyst'];
+  const STATUS= ['active','invited','dormant'];
+
+  function seed(n) {
+    const rows = [];
+    for (let i = 1; i <= n; i++) {
+      const first = FIRST[i % FIRST.length];
+      const last  = LAST[(i * 7) % LAST.length];
+      rows.push({
+        id: i,
+        name: first + ' ' + last,
+        email: (first + '.' + last).toLowerCase() + '@maud-ui.dev',
+        role:  ROLES[i % ROLES.length],
+        salary: 60000 + ((i * 1273) % 80000),
+        joined: new Date(2023, (i * 3) % 12, (i * 5) % 27 + 1).toISOString().slice(0, 10),
+        status: STATUS[i % STATUS.length],
+      });
+    }
+    return rows;
+  }
+
+  const columnDefs = [
+    { field: 'id',     headerName: '#',       maxWidth: 80,  pinned: 'left', checkboxSelection: true, headerCheckboxSelection: true },
+    { field: 'name',   headerName: 'Name',    flex: 1.2, editable: true },
+    { field: 'email',  headerName: 'Email',   flex: 1.6 },
+    { field: 'role',   headerName: 'Role',    flex: 0.9, editable: true },
+    { field: 'salary', headerName: 'Salary',  flex: 0.9, type: 'numericColumn',
+      valueFormatter: (p) => '$' + (p.value || 0).toLocaleString() },
+    { field: 'joined', headerName: 'Joined',  flex: 0.8 },
+    { field: 'status', headerName: 'Status',  flex: 0.7,
+      cellStyle: (p) => ({
+        color: p.value === 'active' ? '#4ade80' : p.value === 'dormant' ? '#f87171' : '#facc15',
+        fontWeight: 600,
+      }) },
+  ];
+
+  let rowData = seed(50);
+  const statusRows   = document.getElementById('mui-ag-status-rows');
+  const statusSel    = document.getElementById('mui-ag-status-sel');
+  const statusFilter = document.getElementById('mui-ag-status-filter');
+  const statusTheme  = document.getElementById('mui-ag-status-theme');
+  const dirty        = document.getElementById('mui-ag-dirty');
+
+  const gridOptions = {
+    columnDefs,
+    rowData,
+    defaultColDef: { sortable: true, filter: true, resizable: true, minWidth: 90 },
+    rowSelection: 'multiple',
+    animateRows: true,
+    onGridReady: (p) => {
+      p.api.sizeColumnsToFit();
+      updateStatus(p.api);
+    },
+    onFirstDataRendered: (p) => updateStatus(p.api),
+    onSelectionChanged: (p) => updateStatus(p.api),
+    onFilterChanged:    (p) => updateStatus(p.api),
+    onCellValueChanged: () => { if (dirty) dirty.setAttribute('data-dirty', 'true'); },
+  };
+
+  const api = agGrid.createGrid(host, gridOptions);
+
+  function updateStatus(gApi) {
+    let rows = 0;
+    gApi.forEachNodeAfterFilter(() => rows++);
+    if (statusRows) statusRows.textContent = rows + ' row' + (rows === 1 ? '' : 's');
+    if (statusSel)  statusSel.textContent  = gApi.getSelectedNodes().length + ' selected';
+    if (statusFilter) {
+      const fm = gApi.getFilterModel() || {};
+      const n = Object.keys(fm).length;
+      statusFilter.textContent = n === 0 ? 'no filters' : n + ' filter' + (n === 1 ? '' : 's') + ' active';
+    }
+  }
+
+  function applyTheme() {
+    const dark = (document.documentElement.getAttribute('data-theme') || 'dark') !== 'light';
+    host.classList.toggle('ag-theme-quartz-dark', dark);
+    host.classList.toggle('ag-theme-quartz', !dark);
+    if (statusTheme) statusTheme.textContent = dark ? 'quartz-dark' : 'quartz';
+  }
+  applyTheme();
+  new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  document.getElementById('mui-ag-add')?.addEventListener('click', () => {
+    const n = rowData.length + 1;
+    const extra = seed(1)[0];
+    extra.id = n;
+    rowData.push(extra);
+    api.applyTransaction({ add: [extra] });
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-ag-delete')?.addEventListener('click', () => {
+    const sel = api.getSelectedNodes().map((n) => n.data);
+    if (sel.length === 0) return;
+    api.applyTransaction({ remove: sel });
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-ag-clear')?.addEventListener('click', () => {
+    api.setFilterModel(null);
+  });
+  document.getElementById('mui-ag-csv')?.addEventListener('click', () => {
+    api.exportDataAsCsv?.({ fileName: 'maud-ui-users.csv' });
+  });
+})();
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Mermaid — text-to-diagram renderer
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_mermaid_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Mermaid \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(mermaid_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Mermaid" }
+                        }
+                        section class="mui-gallery__component" id="integration-mermaid" {
+                            h3 class="mui-gallery__component-name" { "Mermaid \u{2014} Text to diagram" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "Mermaid's text-to-diagram renderer in a maud-ui split pane \u{2014} source on "
+                                "the left, rendered SVG on the right. Tabs switch between flowchart, "
+                                "sequence, class, and Gantt diagrams."
+                            }
+                            div class="mui-integration mui-integration--mermaid" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-mer-title" { "diagrams/flow.mmd" }
+                                        span class="mui-integration__dirty" id="mui-mer-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" data-mer-kind="flowchart" class="mui-btn mui-btn--outline mui-btn--sm is-active" { "Flowchart" }
+                                        button type="button" data-mer-kind="sequence"  class="mui-btn mui-btn--outline mui-btn--sm" { "Sequence" }
+                                        button type="button" data-mer-kind="class"     class="mui-btn mui-btn--outline mui-btn--sm" { "Class" }
+                                        button type="button" data-mer-kind="gantt"     class="mui-btn mui-btn--outline mui-btn--sm" { "Gantt" }
+                                        button type="button" id="mui-mer-render"       class="mui-btn mui-btn--primary mui-btn--sm" { "Render" }
+                                    }
+                                }
+                                div class="mui-integration__editor mui-mer__split" id="mui-mer-root" {
+                                    textarea id="mui-mer-src" spellcheck="false" {}
+                                    div id="mui-mer-output" class="mui-mer__output" {
+                                        div class="mui-integration__loading" id="mui-mer-loading" {
+                                            span class="mui-spin" aria-hidden="true" {
+                                                (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                            }
+                                            span { "Loading Mermaid from esm.sh\u{2026}" }
+                                        }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-mer-status-kind"  { "flowchart" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-mer-status-lines" { "0 source lines" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-mer-status-nodes" { "\u{2014}" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-mer-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{"imports":{"mermaid":"https://esm.sh/mermaid@11.4.1"}}"##))
+                }
+                script type="module" { (maud::PreEscaped(mermaid_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn mermaid_css() -> &'static str {
+    r#"
+.mui-integration--mermaid .mui-integration__editor {
+    height: 30rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+@media (min-width: 1024px) {
+    .mui-integration--mermaid .mui-integration__editor { height: 34rem; }
+}
+.mui-integration--mermaid textarea {
+    background: var(--mui-bg);
+    color: var(--mui-text);
+    border: 0;
+    border-right: 1px solid var(--mui-border);
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    padding: 0.875rem 1rem;
+    resize: none;
+    outline: none;
+}
+.mui-mer__output {
+    background: var(--mui-bg-card);
+    overflow: auto;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.mui-mer__output svg { max-width: 100%; height: auto; }
+.mui-integration--mermaid [data-mer-kind].is-active {
+    background: color-mix(in srgb, var(--mui-accent) 18%, transparent);
+    border-color: var(--mui-accent);
+    color: var(--mui-accent-text);
+}
+"#
+}
+
+fn mermaid_bootstrap() -> &'static str {
+    r##"
+import mermaid from 'mermaid';
+
+const SAMPLES = {
+  flowchart: `flowchart LR
+    A[HTTP Request] --> B[Auth]
+    B --> C[Validate]
+    B --> D[Rate limit]
+    C --> E[Handler]
+    D --> E
+    E --> F[(Database)]
+    E --> G[[Cache]]
+    F --> H[Response]
+    G --> H`,
+  sequence: `sequenceDiagram
+    participant U as User
+    participant C as Console
+    participant A as API
+    participant D as Database
+    U->>C: Navigate to /users
+    C->>A: GET /v1/users
+    A->>D: SELECT * FROM users
+    D-->>A: rows
+    A-->>C: 200 OK
+    C-->>U: render list`,
+  class: `classDiagram
+    class User {
+      +Uuid id
+      +String email
+      +Role role
+      +login()
+      +logout()
+    }
+    class Session {
+      +Uuid id
+      +Uuid user_id
+      +DateTime expires_at
+    }
+    class ApiKey {
+      +String prefix
+      +Bytes hash
+    }
+    User "1" --> "many" Session
+    User "1" --> "many" ApiKey`,
+  gantt: `gantt
+    title maud-ui roadmap
+    dateFormat  YYYY-MM-DD
+    section Gallery
+    Components       :done,   a1, 2026-01-01, 60d
+    Blocks           :done,   a2, 2026-02-15, 30d
+    Integrations v1  :done,   a3, 2026-04-01, 14d
+    Integrations v2  :active, a4, 2026-04-18, 10d
+    section Polish
+    Theming pass     :        b1, 2026-04-28, 14d
+    i18n             :        b2, 2026-05-05, 21d`,
+};
+
+let kind = 'flowchart';
+
+const src    = document.getElementById('mui-mer-src');
+const output = document.getElementById('mui-mer-output');
+const tabBtns = Array.from(document.querySelectorAll('[data-mer-kind]'));
+const statusKind  = document.getElementById('mui-mer-status-kind');
+const statusLines = document.getElementById('mui-mer-status-lines');
+const statusNodes = document.getElementById('mui-mer-status-nodes');
+const statusTheme = document.getElementById('mui-mer-status-theme');
+const dirty       = document.getElementById('mui-mer-dirty');
+
+function pickTheme() {
+  return (document.documentElement.getAttribute('data-theme') || 'dark') === 'light' ? 'default' : 'dark';
+}
+
+mermaid.initialize({ startOnLoad: false, theme: pickTheme(), securityLevel: 'loose', fontFamily: 'var(--mui-font-sans)' });
+
+src.value = SAMPLES[kind];
+
+async function render() {
+  const code = src.value;
+  output.replaceChildren();
+  try {
+    const { svg } = await mermaid.render('mui-mer-svg-' + Date.now(), code);
+    const holder = document.createElement('div');
+    holder.innerHTML = svg; // mermaid's own output is trusted
+    while (holder.firstChild) output.appendChild(holder.firstChild);
+    if (statusNodes) {
+      const svgEl = output.querySelector('svg');
+      const nodes = svgEl ? svgEl.querySelectorAll('g.node, .actor, .classGroup, .taskText').length : 0;
+      statusNodes.textContent = nodes + ' node' + (nodes === 1 ? '' : 's');
+    }
+  } catch (err) {
+    const pre = document.createElement('pre');
+    pre.style.color = '#f87171';
+    pre.style.fontFamily = 'var(--mui-font-mono)';
+    pre.style.fontSize = '0.8125rem';
+    pre.style.whiteSpace = 'pre-wrap';
+    pre.textContent = String(err.message || err);
+    output.appendChild(pre);
+    if (statusNodes) statusNodes.textContent = 'render error';
+  }
+  const lines = code.split('\n').length;
+  if (statusLines) statusLines.textContent = lines + ' source line' + (lines === 1 ? '' : 's');
+}
+
+function setKind(k) {
+  kind = k;
+  src.value = SAMPLES[k];
+  for (const b of tabBtns) b.classList.toggle('is-active', b.getAttribute('data-mer-kind') === k);
+  if (statusKind) statusKind.textContent = k;
+  render();
+}
+
+for (const b of tabBtns) b.addEventListener('click', () => setKind(b.getAttribute('data-mer-kind')));
+document.getElementById('mui-mer-render')?.addEventListener('click', render);
+src.addEventListener('input', () => { if (dirty) dirty.setAttribute('data-dirty', 'true'); });
+
+new MutationObserver(() => {
+  mermaid.initialize({ startOnLoad: false, theme: pickTheme(), securityLevel: 'loose', fontFamily: 'var(--mui-font-sans)' });
+  if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  render();
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+render();
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Apache ECharts — charting library
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_echarts_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("ECharts \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(echarts_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Apache ECharts" }
+                        }
+                        section class="mui-gallery__component" id="integration-echarts" {
+                            h3 class="mui-gallery__component-name" { "Apache ECharts \u{2014} Charting library" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "Apache ECharts inside a maud-ui shell. Switch chart type, randomise "
+                                "data, and download as PNG without leaving the host chrome. ECharts "
+                                "picks up theme from the gallery's data-theme."
+                            }
+                            div class="mui-integration mui-integration--echarts" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="20" x2="21" y2="20"/><line x1="3" y1="20" x2="3" y2="4"/><rect x="6" y="11" width="3" height="9"/><rect x="11" y="6" width="3" height="14"/><rect x="16" y="14" width="3" height="6"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-ec-title" { "analytics/q2-kpis.json" }
+                                        span class="mui-integration__dirty" id="mui-ec-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-ec-kind" class="mui-integration__select" aria-label="Chart type" {
+                                            option value="line" selected { "Line + Bar" }
+                                            option value="bar"            { "Bar" }
+                                            option value="pie"            { "Pie" }
+                                            option value="radar"          { "Radar" }
+                                            option value="scatter"        { "Scatter" }
+                                        }
+                                        button type="button" id="mui-ec-shuffle" class="mui-btn mui-btn--outline mui-btn--sm" { "Randomise" }
+                                        button type="button" id="mui-ec-png"     class="mui-btn mui-btn--primary mui-btn--sm" { "PNG" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-ec-root" {
+                                    div class="mui-integration__loading" id="mui-ec-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading ECharts from esm.sh\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-ec-status-series" { "0 series" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ec-status-points" { "0 data points" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ec-status-type"   { "line" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-ec-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{"imports":{"echarts":"https://esm.sh/echarts@5.5.1"}}"##))
+                }
+                script type="module" { (maud::PreEscaped(echarts_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn echarts_css() -> &'static str {
+    r#"
+.mui-integration--echarts .mui-integration__editor {
+    height: 28rem;
+    padding: 0;
+    background: var(--mui-bg-card);
+}
+@media (min-width: 1024px) {
+    .mui-integration--echarts .mui-integration__editor { height: 34rem; }
+}
+"#
+}
+
+fn echarts_bootstrap() -> &'static str {
+    r##"
+import * as echarts from 'echarts';
+
+const host = document.getElementById('mui-ec-root');
+if (host) {
+  host.replaceChildren();
+  const chart = echarts.init(host, null, { renderer: 'svg' });
+
+  let kind = 'line';
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let series1 = seed(12, 50, 50);
+  let series2 = seed(12, 30, 60);
+
+  function seed(n, base, spread) {
+    const out = [];
+    for (let i = 0; i < n; i++) out.push(Math.round(base + Math.random() * spread));
+    return out;
+  }
+
+  function build() {
+    const common = { tooltip: { trigger: 'axis' }, legend: { textStyle: { color: getVar('--mui-text') } }, backgroundColor: 'transparent' };
+    switch (kind) {
+      case 'bar':
+        return { ...common, xAxis: { type: 'category', data: MONTHS, axisLabel: { color: getVar('--mui-text-muted') } },
+          yAxis: { type: 'value', axisLabel: { color: getVar('--mui-text-muted') } },
+          series: [{ name: 'Signups', type: 'bar', data: series1, itemStyle: { color: '#2563eb' } }] };
+      case 'pie':
+        return { ...common,
+          series: [{ name: 'Traffic', type: 'pie', radius: ['35%','70%'], label: { color: getVar('--mui-text') },
+            data: MONTHS.slice(0, 6).map((m, i) => ({ name: m, value: series1[i] })) }] };
+      case 'radar':
+        return { ...common,
+          radar: { indicator: MONTHS.slice(0, 6).map((m) => ({ name: m, max: 150 })),
+            axisName: { color: getVar('--mui-text-muted') } },
+          series: [{ type: 'radar',
+            data: [
+              { value: series1.slice(0, 6), name: 'Plan',   lineStyle: { color: '#2563eb' }, itemStyle: { color: '#2563eb' } },
+              { value: series2.slice(0, 6), name: 'Actual', lineStyle: { color: '#db2777' }, itemStyle: { color: '#db2777' } },
+            ] }] };
+      case 'scatter':
+        return { ...common, xAxis: { axisLabel: { color: getVar('--mui-text-muted') } },
+          yAxis: { axisLabel: { color: getVar('--mui-text-muted') } },
+          series: [{ type: 'scatter', symbolSize: 14,
+            data: series1.map((v, i) => [i, v]), itemStyle: { color: '#2563eb' } }] };
+      case 'line':
+      default:
+        return { ...common, xAxis: { type: 'category', data: MONTHS, axisLabel: { color: getVar('--mui-text-muted') } },
+          yAxis: { type: 'value', axisLabel: { color: getVar('--mui-text-muted') } },
+          series: [
+            { name: 'Plan',   type: 'bar',  data: series1, itemStyle: { color: '#2563eb' } },
+            { name: 'Actual', type: 'line', data: series2, smooth: true, lineStyle: { color: '#db2777', width: 2 }, itemStyle: { color: '#db2777' }, areaStyle: { color: 'rgba(219,39,119,0.2)' } },
+          ] };
+    }
+  }
+
+  function getVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#fafafa'; }
+
+  function apply() {
+    const opt = build();
+    chart.clear();
+    chart.setOption(opt, true);
+    document.getElementById('mui-ec-status-series').textContent = opt.series.length + ' series';
+    const pts = opt.series.reduce((a, s) => a + (Array.isArray(s.data) ? s.data.length : 0), 0);
+    document.getElementById('mui-ec-status-points').textContent = pts + ' data points';
+    document.getElementById('mui-ec-status-type').textContent = kind;
+  }
+  apply();
+
+  document.getElementById('mui-ec-kind')?.addEventListener('change', (e) => { kind = e.target.value; apply(); });
+  document.getElementById('mui-ec-shuffle')?.addEventListener('click', () => {
+    series1 = seed(12, 50, 50); series2 = seed(12, 30, 60); apply();
+    document.getElementById('mui-ec-dirty')?.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-ec-png')?.addEventListener('click', () => {
+    const url = chart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: getVar('--mui-bg') });
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'maud-ui-echarts.png';
+    a.click();
+  });
+
+  window.addEventListener('resize', () => chart.resize());
+  new MutationObserver(() => {
+    apply();
+    document.getElementById('mui-ec-status-theme').textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Wavesurfer.js — audio waveform player
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_wavesurfer_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Wavesurfer \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(wavesurfer_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Wavesurfer" }
+                        }
+                        section class="mui-gallery__component" id="integration-wavesurfer" {
+                            h3 class="mui-gallery__component-name" { "Wavesurfer.js \u{2014} Audio waveform" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "Wavesurfer.js inside a maud-ui shell, playing a waveform of an "
+                                "in-browser-synthesised sample \u{2014} no external audio, no CORS. Click "
+                                "the waveform to scrub. The maud-ui toolbar drives the imperative "
+                                "API for play / pause / zoom / speed."
+                            }
+                            div class="mui-integration mui-integration--wavesurfer" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="4" y2="12"/><line x1="8" y1="8"  x2="8" y2="16"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="16" y1="7" x2="16" y2="17"/><line x1="20" y1="10" x2="20" y2="14"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-ws-title" { "audio/sample-440hz.wav" }
+                                        span class="mui-integration__dirty" id="mui-ws-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-ws-play"     class="mui-btn mui-btn--primary mui-btn--sm" { "Play" }
+                                        button type="button" id="mui-ws-stop"     class="mui-btn mui-btn--outline mui-btn--sm" { "Stop" }
+                                        button type="button" id="mui-ws-zoom-in"  class="mui-btn mui-btn--outline mui-btn--sm" { "Zoom +" }
+                                        button type="button" id="mui-ws-zoom-out" class="mui-btn mui-btn--outline mui-btn--sm" { "Zoom -" }
+                                        select id="mui-ws-speed" class="mui-integration__select" aria-label="Playback speed" {
+                                            option value="0.5"         { "0.5\u{00d7}" }
+                                            option value="1" selected  { "1\u{00d7}" }
+                                            option value="1.5"         { "1.5\u{00d7}" }
+                                            option value="2"           { "2\u{00d7}" }
+                                        }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-ws-root" {
+                                    div class="mui-integration__loading" id="mui-ws-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Synthesising audio + loading wavesurfer.js\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-ws-status-time"  { "00:00 / 00:00" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ws-status-speed" { "1\u{00d7}" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-ws-status-zoom"  { "px/s \u{2014}" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-ws-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{"imports":{"wavesurfer.js":"https://esm.sh/wavesurfer.js@7.8.13"}}"##))
+                }
+                script type="module" { (maud::PreEscaped(wavesurfer_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn wavesurfer_css() -> &'static str {
+    r#"
+.mui-integration--wavesurfer .mui-integration__editor {
+    height: 14rem;
+    padding: 1.5rem 1.5rem;
+    background: var(--mui-bg);
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+}
+#mui-ws-surface { width: 100%; }
+"#
+}
+
+fn wavesurfer_bootstrap() -> &'static str {
+    r##"
+import WaveSurfer from 'wavesurfer.js';
+
+const host = document.getElementById('mui-ws-root');
+if (host) {
+  // ── Build an AudioBuffer in-browser via OfflineAudioContext, then hand
+  //    it to wavesurfer via the WebAudio backend. This sidesteps MediaElement
+  //    decoding of a data blob (which was failing silently on v7) and gives
+  //    us real playable audio without any CORS dependency.
+  const SR = 44100, DUR = 4;
+
+  function synth() {
+    const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, SR * DUR, SR);
+    const data = ctx.createBuffer(1, SR * DUR, SR);
+    const ch = data.getChannelData(0);
+    for (let i = 0; i < ch.length; i++) {
+      const t = i / SR;
+      const env = Math.exp(-t * 0.25) * (1 - Math.exp(-t * 30));
+      ch[i] = env * (
+        0.5 * Math.sin(2 * Math.PI * 440 * t * (1 + 0.003 * Math.sin(2 * Math.PI * 2 * t))) +
+        0.25 * Math.sin(2 * Math.PI * 660 * t) +
+        0.05 * (Math.random() * 2 - 1)
+      );
+    }
+    return data;
+  }
+
+  // Pre-compute peaks for wavesurfer's waveform rendering (faster than
+  // waiting for decode).
+  function computePeaks(buffer, n) {
+    const ch = buffer.getChannelData(0);
+    const step = Math.floor(ch.length / n);
+    const peaks = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      let max = 0;
+      const s = i * step, e = Math.min(s + step, ch.length);
+      for (let j = s; j < e; j++) { const v = Math.abs(ch[j]); if (v > max) max = v; }
+      peaks[i] = max;
+    }
+    return Array.from(peaks);
+  }
+
+  host.replaceChildren();
+  const surface = document.createElement('div');
+  surface.id = 'mui-ws-surface';
+  host.appendChild(surface);
+
+  function readVar(n, fb) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || fb; }
+
+  const audioBuffer = synth();
+  const peaks = computePeaks(audioBuffer, 800);
+
+  const ws = WaveSurfer.create({
+    container: surface,
+    height: 120,
+    waveColor:     readVar('--mui-border-hover', '#3f3f46'),
+    progressColor: readVar('--mui-accent',       '#2563eb'),
+    cursorColor:   readVar('--mui-accent-text',  '#93c5fd'),
+    barWidth: 2,
+    barGap: 2,
+    barRadius: 2,
+    normalize: true,
+    peaks: [peaks],
+    duration: DUR,
+  });
+
+  // Set up a manual Web Audio playback pipeline on top of wavesurfer's
+  // visual cursor. wavesurfer drives the UI, we drive the sound.
+  let audioCtx = null;
+  let currentSrc = null;
+  let playStartCtxTime = 0;
+  let playStartBufTime = 0;
+  let isPlaying = false;
+  let rate = 1;
+  let currentTime = 0;
+
+  function ensureCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function stopSrc() {
+    if (currentSrc) {
+      try { currentSrc.stop(); } catch {}
+      try { currentSrc.disconnect(); } catch {}
+      currentSrc = null;
+    }
+  }
+
+  function playFrom(t) {
+    stopSrc();
+    const ctx = ensureCtx();
+    currentSrc = ctx.createBufferSource();
+    currentSrc.buffer = audioBuffer;
+    currentSrc.playbackRate.value = rate;
+    currentSrc.connect(ctx.destination);
+    currentSrc.onended = () => {
+      if (currentSrc) {
+        isPlaying = false;
+        currentTime = 0;
+        if (playBtn) playBtn.textContent = 'Play';
+        ws.seekTo(0);
+        updateTime();
+      }
+    };
+    playStartCtxTime = ctx.currentTime;
+    playStartBufTime = Math.max(0, Math.min(DUR, t));
+    currentSrc.start(0, playStartBufTime);
+    isPlaying = true;
+  }
+
+  function pause() {
+    if (!isPlaying) return;
+    currentTime = currentBufTime();
+    stopSrc();
+    isPlaying = false;
+  }
+
+  function currentBufTime() {
+    if (!isPlaying || !audioCtx) return currentTime;
+    return playStartBufTime + (audioCtx.currentTime - playStartCtxTime) * rate;
+  }
+
+  const playBtn      = document.getElementById('mui-ws-play');
+  const stopBtn      = document.getElementById('mui-ws-stop');
+  const zoomInBtn    = document.getElementById('mui-ws-zoom-in');
+  const zoomOutBtn   = document.getElementById('mui-ws-zoom-out');
+  const speedSel     = document.getElementById('mui-ws-speed');
+  const statusTime   = document.getElementById('mui-ws-status-time');
+  const statusSpeed  = document.getElementById('mui-ws-status-speed');
+  const statusZoom   = document.getElementById('mui-ws-status-zoom');
+  const statusTheme  = document.getElementById('mui-ws-status-theme');
+  const dirty        = document.getElementById('mui-ws-dirty');
+
+  let zoom = 50;
+  function fmt(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function updateTime() {
+    const cur = Math.min(DUR, Math.max(0, currentBufTime()));
+    if (statusTime) statusTime.textContent = fmt(cur) + ' / ' + fmt(DUR);
+    if (isPlaying) ws.seekTo(cur / DUR);
+  }
+  function updateZoom() { if (statusZoom) statusZoom.textContent = 'px/s ' + zoom; }
+  updateZoom();
+
+  // Drive the wavesurfer cursor from our audio clock.
+  function tick() {
+    if (isPlaying) {
+      const cur = currentBufTime();
+      if (cur >= DUR) {
+        // `onended` handles the rest.
+      } else {
+        updateTime();
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  ws.on('ready', () => { ws.zoom(zoom); updateTime(); });
+  ws.on('interaction', (t) => {
+    // User clicked the waveform — t is a fraction 0..1.
+    currentTime = t * DUR;
+    if (isPlaying) playFrom(currentTime);
+    updateTime();
+  });
+
+  playBtn?.addEventListener('click', () => {
+    if (isPlaying) {
+      pause();
+      if (playBtn) playBtn.textContent = 'Play';
+    } else {
+      playFrom(currentTime);
+      if (playBtn) playBtn.textContent = 'Pause';
+    }
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  stopBtn?.addEventListener('click', () => {
+    stopSrc();
+    isPlaying = false;
+    currentTime = 0;
+    ws.seekTo(0);
+    updateTime();
+    if (playBtn) playBtn.textContent = 'Play';
+  });
+  zoomInBtn?.addEventListener('click',  () => { zoom = Math.min(300, zoom + 25); ws.zoom(zoom); updateZoom(); });
+  zoomOutBtn?.addEventListener('click', () => { zoom = Math.max(10,  zoom - 25); ws.zoom(zoom); updateZoom(); });
+  speedSel?.addEventListener('change', (e) => {
+    rate = parseFloat(e.target.value);
+    if (statusSpeed) statusSpeed.textContent = rate + '\u00d7';
+    if (isPlaying) playFrom(currentBufTime());
+  });
+
+  new MutationObserver(() => {
+    ws.setOptions({
+      waveColor:     readVar('--mui-border-hover', '#3f3f46'),
+      progressColor: readVar('--mui-accent',       '#2563eb'),
+      cursorColor:   readVar('--mui-accent-text',  '#93c5fd'),
+    });
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PDF.js — inline PDF viewer
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_pdfjs_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("PDF.js \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(pdfjs_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "PDF.js" }
+                        }
+                        section class="mui-gallery__component" id="integration-pdfjs" {
+                            h3 class="mui-gallery__component-name" { "PDF.js \u{2014} Inline PDF viewer" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "Mozilla's PDF.js renders a sample document directly onto a canvas inside "
+                                "a maud-ui shell. The maud-ui toolbar drives the imperative API \u{2014} "
+                                "page navigation, zoom, fit-to-width. The seed PDF is a small in-browser "
+                                "generated file so the demo has zero external dependencies."
+                            }
+                            div class="mui-integration mui-integration--pdfjs" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-pdf-title" { "docs/maud-ui-intro.pdf" }
+                                        span class="mui-integration__dirty" id="mui-pdf-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-pdf-prev"     class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2039} Prev" }
+                                        button type="button" id="mui-pdf-next"     class="mui-btn mui-btn--outline mui-btn--sm" { "Next \u{203a}" }
+                                        button type="button" id="mui-pdf-zoom-out" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2212}" }
+                                        button type="button" id="mui-pdf-zoom-in"  class="mui-btn mui-btn--outline mui-btn--sm" { "+" }
+                                        button type="button" id="mui-pdf-fit"      class="mui-btn mui-btn--primary mui-btn--sm" { "Fit width" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-pdf-root" {
+                                    div class="mui-integration__loading" id="mui-pdf-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading PDF.js + worker\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-pdf-status-page"  { "Page \u{2014} of \u{2014}" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-pdf-status-zoom"  { "\u{2014}%" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-pdf-status-bytes" { "\u{2014} bytes" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-pdf-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "pdfjs-dist":           "https://esm.sh/pdfjs-dist@4.9.155",
+    "pdfjs-dist/worker":    "https://esm.sh/pdfjs-dist@4.9.155/build/pdf.worker.mjs"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(pdfjs_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn pdfjs_css() -> &'static str {
+    r#"
+.mui-integration--pdfjs .mui-integration__editor {
+    height: 34rem;
+    padding: 1rem;
+    overflow: auto;
+    background: var(--mui-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+@media (min-width: 1024px) {
+    .mui-integration--pdfjs .mui-integration__editor { height: 42rem; }
+}
+.mui-integration--pdfjs canvas {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    border-radius: var(--mui-radius-sm);
+    background: #fff;
+}
+"#
+}
+
+fn pdfjs_bootstrap() -> &'static str {
+    r##"
+import * as pdfjsLib from 'pdfjs-dist';
+
+// pdf.js requires a worker URL. esm.sh serves it at the same version.
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.9.155/build/pdf.worker.mjs';
+
+// Minimal hand-rolled multi-page PDF. Three pages, plain text content.
+// PDF spec references kept terse since this is purely a seed doc.
+function buildPdfBytes() {
+  const pages = [
+    'maud-ui \u00d7 PDF.js',
+    'This is page 2 of the inline demo.',
+    'And page 3 \u2014 rendered entirely from PDF.js.',
+  ];
+  const enc = new TextEncoder();
+  const parts = [];
+  const offsets = [];
+  function emit(s) {
+    offsets.push(parts.reduce((a, p) => a + p.length, 0));
+    parts.push(enc.encode(s));
+  }
+  emit('%PDF-1.4\n');
+  // 1: Catalog
+  emit('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  // 2: Pages
+  const pageRefs = pages.map((_, i) => (3 + i * 2) + ' 0 R').join(' ');
+  emit('2 0 obj\n<< /Type /Pages /Kids [' + pageRefs + '] /Count ' + pages.length + ' >>\nendobj\n');
+  // 3..: each page + its content stream
+  for (let i = 0; i < pages.length; i++) {
+    const pageIdx = 3 + i * 2;
+    const streamIdx = pageIdx + 1;
+    emit(pageIdx + ' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents '
+         + streamIdx + ' 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> >>\nendobj\n');
+    const body = 'BT /F1 26 Tf 60 720 Td (' + pages[i].replace(/([()\\])/g, '\\$1') + ') Tj ET\n'
+               + 'BT /F1 12 Tf 60 680 Td (Page ' + (i + 1) + ' of ' + pages.length + ') Tj ET\n'
+               + 'BT /F1 12 Tf 60 660 Td (maud-ui \u2014 a gallery of components built for maud + htmx) Tj ET\n';
+    emit(streamIdx + ' 0 obj\n<< /Length ' + body.length + ' >>\nstream\n' + body + 'endstream\nendobj\n');
+  }
+  const xrefOffset = parts.reduce((a, p) => a + p.length, 0);
+  const objCount = 2 + pages.length * 2;
+  let xref = 'xref\n0 ' + (objCount + 1) + '\n0000000000 65535 f \n';
+  for (let i = 0; i < offsets.length; i++) {
+    xref += (offsets[i].toString().padStart(10, '0')) + ' 00000 n \n';
+  }
+  xref += 'trailer\n<< /Size ' + (objCount + 1) + ' /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF\n';
+  parts.push(enc.encode(xref));
+  const total = parts.reduce((a, p) => a + p.length, 0);
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (const p of parts) { out.set(p, off); off += p.length; }
+  return out;
+}
+
+const host = document.getElementById('mui-pdf-root');
+if (host) {
+  const bytes = buildPdfBytes();
+  document.getElementById('mui-pdf-status-bytes').textContent = bytes.length.toLocaleString() + ' bytes';
+
+  (async () => {
+    const doc = await pdfjsLib.getDocument({ data: bytes }).promise;
+    host.replaceChildren();
+    const scroll = document.createElement('div');
+    scroll.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;';
+    host.appendChild(scroll);
+
+    let scale = 1.1;
+    let current = 1;
+    const total = doc.numPages;
+    const canvases = [];
+    const pages = [];
+
+    for (let i = 1; i <= total; i++) {
+      const page = await doc.getPage(i);
+      pages.push(page);
+      const canvas = document.createElement('canvas');
+      canvases.push(canvas);
+      scroll.appendChild(canvas);
+    }
+
+    async function render() {
+      for (let i = 0; i < pages.length; i++) {
+        const vp = pages[i].getViewport({ scale });
+        const c = canvases[i];
+        c.width = vp.width; c.height = vp.height;
+        await pages[i].render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+      }
+      document.getElementById('mui-pdf-status-page').textContent = 'Page ' + current + ' of ' + total;
+      document.getElementById('mui-pdf-status-zoom').textContent = Math.round(scale * 100) + '%';
+    }
+    await render();
+
+    function scrollTo(i) {
+      current = Math.max(1, Math.min(total, i));
+      canvases[current - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('mui-pdf-status-page').textContent = 'Page ' + current + ' of ' + total;
+    }
+
+    document.getElementById('mui-pdf-prev')?.addEventListener('click', () => scrollTo(current - 1));
+    document.getElementById('mui-pdf-next')?.addEventListener('click', () => scrollTo(current + 1));
+    document.getElementById('mui-pdf-zoom-in')?.addEventListener('click',  async () => { scale = Math.min(3, scale + 0.15); await render(); });
+    document.getElementById('mui-pdf-zoom-out')?.addEventListener('click', async () => { scale = Math.max(0.4, scale - 0.15); await render(); });
+    document.getElementById('mui-pdf-fit')?.addEventListener('click', async () => {
+      const targetWidth = host.clientWidth - 32;
+      const vp = pages[0].getViewport({ scale: 1 });
+      scale = targetWidth / vp.width;
+      await render();
+    });
+
+    new MutationObserver(() => {
+      document.getElementById('mui-pdf-status-theme').textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  })().catch((err) => {
+    console.error('[maud-ui] PDF.js failed:', err);
+    host.replaceChildren();
+    const pre = document.createElement('pre');
+    pre.style.cssText = 'color:#f87171;padding:1rem;font-family:var(--mui-font-mono);font-size:0.8125rem;';
+    pre.textContent = '[PDF.js error] ' + String(err.message || err);
+    host.appendChild(pre);
+  });
+}
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  Cytoscape.js — network graph visualisation
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_cytoscape_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Cytoscape \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(cytoscape_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Cytoscape" }
+                        }
+                        section class="mui-gallery__component" id="integration-cytoscape" {
+                            h3 class="mui-gallery__component-name" { "Cytoscape.js \u{2014} Network graph" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "Cytoscape.js is the sibling-by-different-mission of xyflow \u{2014} where "
+                                "xyflow is an "
+                                em { "editor" }
+                                ", Cytoscape is a "
+                                em { "visualisation / analytics" }
+                                " library. A network of Kapable's service dependencies mounts into a "
+                                "maud-ui shell with a choice of layouts."
+                            }
+                            div class="mui-integration mui-integration--cytoscape" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><line x1="10" y1="14" x2="6" y2="17"/><line x1="14" y1="14" x2="18" y2="17"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-cy-title" { "graphs/service-mesh.json" }
+                                        span class="mui-integration__dirty" id="mui-cy-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-cy-layout" class="mui-integration__select" aria-label="Layout" {
+                                            option value="cose" selected  { "Force (cose)" }
+                                            option value="concentric"      { "Concentric" }
+                                            option value="breadthfirst"    { "Tree" }
+                                            option value="grid"            { "Grid" }
+                                            option value="circle"          { "Circle" }
+                                        }
+                                        button type="button" id="mui-cy-add"   class="mui-btn mui-btn--outline mui-btn--sm" { "+ Node" }
+                                        button type="button" id="mui-cy-fit"   class="mui-btn mui-btn--outline mui-btn--sm" { "Fit" }
+                                        button type="button" id="mui-cy-reset" class="mui-btn mui-btn--primary mui-btn--sm" { "Reset" }
+                                    }
+                                }
+                                div class="mui-integration__editor" id="mui-cy-root" {
+                                    div class="mui-integration__loading" id="mui-cy-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading Cytoscape.js from esm.sh\u{2026}" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-cy-status-nodes" { "0 nodes" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-cy-status-edges" { "0 edges" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-cy-status-sel"   { "No selection" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-cy-status-theme" { "dark" }
+                                }
+                            }
+                        }
+                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                    }
+                }
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{"imports":{"cytoscape":"https://esm.sh/cytoscape@3.30.4"}}"##))
+                }
+                script type="module" { (maud::PreEscaped(cytoscape_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn cytoscape_css() -> &'static str {
+    r#"
+.mui-integration--cytoscape .mui-integration__editor {
+    height: 30rem;
+    padding: 0;
+    background: var(--mui-bg);
+}
+@media (min-width: 1024px) {
+    .mui-integration--cytoscape .mui-integration__editor { height: 36rem; }
+}
+"#
+}
+
+fn cytoscape_bootstrap() -> &'static str {
+    r##"
+import cytoscape from 'cytoscape';
+
+const host = document.getElementById('mui-cy-root');
+if (host) {
+  host.replaceChildren();
+
+  function v(n, fb) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || fb; }
+
+  const SEED = {
+    nodes: [
+      { data: { id: 'api',     label: 'kapable-api' } },
+      { data: { id: 'proxy',   label: 'kapable-proxy' } },
+      { data: { id: 'forge',   label: 'forge' } },
+      { data: { id: 'worker',  label: 'worker' } },
+      { data: { id: 'tunnel',  label: 'kapable-tunnel' } },
+      { data: { id: 'db',      label: 'postgres' } },
+      { data: { id: 'console', label: 'console' } },
+      { data: { id: 'admin',   label: 'admin' } },
+      { data: { id: 'dev',     label: 'developer' } },
+      { data: { id: 'caddy',   label: 'caddy' } },
+    ],
+    edges: [
+      { data: { source: 'caddy',   target: 'proxy' } },
+      { data: { source: 'proxy',   target: 'api' } },
+      { data: { source: 'proxy',   target: 'console' } },
+      { data: { source: 'proxy',   target: 'admin' } },
+      { data: { source: 'proxy',   target: 'dev' } },
+      { data: { source: 'api',     target: 'db' } },
+      { data: { source: 'api',     target: 'forge' } },
+      { data: { source: 'forge',   target: 'worker' } },
+      { data: { source: 'worker',  target: 'db' } },
+      { data: { source: 'api',     target: 'tunnel' } },
+      { data: { source: 'console', target: 'api' } },
+      { data: { source: 'admin',   target: 'api' } },
+    ],
+  };
+
+  const cy = cytoscape({
+    container: host,
+    elements: JSON.parse(JSON.stringify(SEED)),
+    style: [
+      { selector: 'node',
+        style: {
+          'background-color': v('--mui-bg-card', '#111113'),
+          'border-color':     v('--mui-border',   '#27272a'),
+          'border-width':     1,
+          'color':            v('--mui-text',     '#fafafa'),
+          'label':            'data(label)',
+          'font-family':      v('--mui-font-sans', 'system-ui'),
+          'font-size':        12,
+          'text-valign':      'bottom',
+          'text-margin-y':    6,
+          'width':            36,
+          'height':           36,
+        } },
+      { selector: 'node:selected',
+        style: {
+          'border-color':  v('--mui-accent', '#2563eb'),
+          'border-width':  2,
+        } },
+      { selector: 'edge',
+        style: {
+          'width':            1.5,
+          'line-color':       v('--mui-border-hover', '#3f3f46'),
+          'target-arrow-color': v('--mui-border-hover', '#3f3f46'),
+          'target-arrow-shape':'triangle',
+          'curve-style':      'bezier',
+        } },
+      { selector: 'edge:selected',
+        style: { 'line-color': v('--mui-accent', '#2563eb'), 'target-arrow-color': v('--mui-accent', '#2563eb') } },
+    ],
+    layout: { name: 'cose', animate: true, padding: 30 },
+    minZoom: 0.2, maxZoom: 3,
+  });
+
+  const statusNodes = document.getElementById('mui-cy-status-nodes');
+  const statusEdges = document.getElementById('mui-cy-status-edges');
+  const statusSel   = document.getElementById('mui-cy-status-sel');
+  const statusTheme = document.getElementById('mui-cy-status-theme');
+  const dirty       = document.getElementById('mui-cy-dirty');
+
+  function updateCounts() {
+    if (statusNodes) statusNodes.textContent = cy.nodes().length + ' nodes';
+    if (statusEdges) statusEdges.textContent = cy.edges().length + ' edges';
+  }
+  updateCounts();
+  cy.on('select unselect', () => {
+    const sel = cy.$(':selected');
+    if (statusSel) statusSel.textContent = sel.length === 0 ? 'No selection' : (sel[0].data('label') || sel[0].id()) + (sel.length > 1 ? ' (+' + (sel.length - 1) + ')' : '');
+  });
+  cy.on('add remove', updateCounts);
+
+  document.getElementById('mui-cy-layout')?.addEventListener('change', (e) => {
+    cy.layout({ name: e.target.value, animate: true, padding: 30 }).run();
+  });
+  document.getElementById('mui-cy-add')?.addEventListener('click', () => {
+    const id = 'n' + Date.now();
+    cy.add({ data: { id, label: 'svc-' + (cy.nodes().length + 1) } });
+    const src = cy.nodes()[Math.floor(Math.random() * (cy.nodes().length - 1))].id();
+    cy.add({ data: { id: 'e' + id, source: src, target: id } });
+    cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  });
+  document.getElementById('mui-cy-fit')?.addEventListener('click', () => cy.fit(null, 40));
+  document.getElementById('mui-cy-reset')?.addEventListener('click', () => {
+    cy.elements().remove();
+    cy.add(JSON.parse(JSON.stringify(SEED)));
+    cy.layout({ name: 'cose', animate: true, padding: 30 }).run();
+    updateCounts();
+  });
+
+  new MutationObserver(() => {
+    cy.style()
+      .selector('node').style({
+        'background-color': v('--mui-bg-card', '#111113'),
+        'border-color':     v('--mui-border',   '#27272a'),
+        'color':            v('--mui-text',     '#fafafa'),
+      })
+      .selector('edge').style({
+        'line-color':         v('--mui-border-hover', '#3f3f46'),
+        'target-arrow-color': v('--mui-border-hover', '#3f3f46'),
+      })
+      .update();
+    if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+"##
+}
+
 /// Minimal JSON-string escaper for injecting sample code as a JS literal
 /// (avoids pulling in serde as a runtime dependency just for this).
 fn serde_json_lite_escape(s: &str) -> String {
@@ -3214,7 +5798,9 @@ html { scroll-behavior: smooth; }
     top: calc(100% + 0.375rem);
     right: 0;
     z-index: 60;
-    min-width: 16rem;
+    min-width: 18rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
@@ -3226,11 +5812,30 @@ html { scroll-behavior: smooth; }
                 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+.mui-gallery__nav-advanced-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    padding: 0.25rem 0 0.375rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+.mui-gallery__nav-advanced-group:last-child { border-bottom: 0; }
+
+.mui-gallery__nav-advanced-group-label {
+    display: block;
+    padding: 0.375rem 0.75rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mui-text-subtle);
+}
+
 .mui-gallery__nav-advanced-menu a {
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.4375rem 0.75rem;
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text);
     text-decoration: none;

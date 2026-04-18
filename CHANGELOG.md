@@ -5,6 +5,55 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — Advanced integrations, part 2 (11 new)
+
+### Added
+Eleven new `/integrations/*` pages, all following the same maud-ui shell
+pattern and loaded on demand from CDN (esm.sh importmap / jsDelivr UMD):
+
+- **Code & Text** — `tiptap` (ProseMirror-based rich text editor with
+  formatting toolbar, active-state tracking, word / character counter,
+  live HTML output panel).
+- **Diagrams & Graphs** — `mermaid` (text-to-diagram renderer with
+  tabbed samples for flowchart / sequence / class / Gantt, live render
+  on change, split-pane source + preview), `cytoscape` (network graph
+  visualisation with layout switcher and a seeded service-mesh graph).
+- **Canvas** — `threejs` (WebGL 3D scene with torus knot / icosahedron
+  / box / sphere / cone shapes, orbit controls, wireframe toggle,
+  spin toggle, FPS and triangle count in status bar).
+- **Data** — `ag-grid` (AG Grid Community with 50 seed rows, sortable
+  / filterable columns, row selection, CSV export, theme auto-swap
+  between quartz and quartz-dark), `echarts` (Apache ECharts with
+  chart-type switcher, randomise button, PNG export).
+- **Maps & Scheduling** — `leaflet` (OpenStreetMap tile viewer with
+  marker add / clear / fit, three tile provider options), `fullcalendar`
+  (FullCalendar 6 with month / week / day / list views, drag-to-move
+  events, dateClick-to-create, seeded around today).
+- **Media** — `wavesurfer` (Wavesurfer.js waveform with in-browser
+  OfflineAudioContext synthesis + Web Audio BufferSourceNode playback,
+  zoom, speed, theme-aware colours), `pdfjs` (Mozilla PDF.js rendering
+  a multi-page in-browser-generated PDF, prev/next/zoom/fit toolbar).
+- **Terminal** — `xterm` (xterm.js terminal with FitAddon +
+  WebLinksAddon, a demo command set, toolbar-driven pipeline replay,
+  theme-reactive colour palette).
+
+### Changed
+- `page_header()` nav replaced the plain Advanced dropdown with a
+  **grouped** dropdown — Code & Text / Diagrams & Graphs / Canvas /
+  Data / Maps & Scheduling / Media / Terminal. Each entry carries a
+  one-line description. Still zero-JS (`<details>`/`<summary>`).
+- Static export now ships **85 pages** (was 74).
+
+### Fixed
+- Wavesurfer.js v7's `url: blobUrl` option hangs with `readyState: 0`
+  on synthesised WAV blobs. Switched to the `peaks:` + `duration:`
+  pattern (pre-computed visualisation) plus an independent Web Audio
+  `BufferSourceNode` driving sound, with `requestAnimationFrame`
+  syncing the wavesurfer cursor to the audio clock. Decode bottleneck
+  bypassed entirely.
+
+---
+
 ## [2026-04-18] — Advanced integrations: xyflow + Excalidraw
 
 ### Added

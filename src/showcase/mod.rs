@@ -4104,6 +4104,18 @@ fn aggrid_css() -> &'static str {
     --ag-font-family: var(--mui-font-sans);
     --ag-font-size: 13px;
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+/* AG Grid v32 ships an .ag-root-wrapper that doesn't assume a percent
+ * height from its container in every theme flavour — force it to fill
+ * our shell so the virtualised rows have room to render. Without this
+ * the wrapper collapses to ~2px and the grid appears empty despite
+ * rows being present in the DOM. */
+.mui-integration--aggrid .ag-root-wrapper {
+    height: 100% !important;
+    flex: 1 1 auto;
 }
 "#
 }
@@ -4769,20 +4781,38 @@ if (host) {
   //    it to wavesurfer via the WebAudio backend. This sidesteps MediaElement
   //    decoding of a data blob (which was failing silently on v7) and gives
   //    us real playable audio without any CORS dependency.
-  const SR = 44100, DUR = 4;
+  //
+  //    20 seconds at 100 px/s default = 2000 px waveform — comfortably
+  //    wider than the container, so zoom + / - visibly scrolls / shrinks
+  //    the rendering from the first click. A short clip + default 50 px/s
+  //    would stretch-to-fit the container and make zoom look broken until
+  //    the 6th click.
+  const SR = 44100, DUR = 20;
 
   function synth() {
     const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, SR * DUR, SR);
     const data = ctx.createBuffer(1, SR * DUR, SR);
     const ch = data.getChannelData(0);
+    // A gentle pitch sweep (220 Hz → 880 Hz), with a slow vibrato and a
+    // periodic amplitude pulse — produces a visually rich waveform that
+    // reads well at any zoom level.
     for (let i = 0; i < ch.length; i++) {
       const t = i / SR;
-      const env = Math.exp(-t * 0.25) * (1 - Math.exp(-t * 30));
+      const p = t / DUR;                                // 0..1 progress
+      const f = 220 + (880 - 220) * p;                  // pitch sweep
+      const env = 0.5 * (1 + Math.sin(2 * Math.PI * 0.5 * t));  // 0.5 Hz pulse
+      const vib = 1 + 0.004 * Math.sin(2 * Math.PI * 5 * t);    // 5 Hz vibrato
       ch[i] = env * (
-        0.5 * Math.sin(2 * Math.PI * 440 * t * (1 + 0.003 * Math.sin(2 * Math.PI * 2 * t))) +
-        0.25 * Math.sin(2 * Math.PI * 660 * t) +
-        0.05 * (Math.random() * 2 - 1)
+        0.55 * Math.sin(2 * Math.PI * f * t * vib) +
+        0.20 * Math.sin(2 * Math.PI * f * 1.5 * t) +
+        0.04 * (Math.random() * 2 - 1)
       );
+    }
+    // Short fade-in + fade-out so we don't click.
+    const fade = SR * 0.05;
+    for (let i = 0; i < fade; i++) {
+      ch[i] *= i / fade;
+      ch[ch.length - 1 - i] *= i / fade;
     }
     return data;
   }
@@ -4895,7 +4925,10 @@ if (host) {
   const statusTheme  = document.getElementById('mui-ws-status-theme');
   const dirty        = document.getElementById('mui-ws-dirty');
 
-  let zoom = 50;
+  // Default 100 px/s × 20s = 2000 px (already wider than container so
+  // zoom buttons have an immediate visible effect). Step by 40 so the
+  // change registers visually on every click.
+  let zoom = 100;
   function fmt(sec) {
     const m = Math.floor(sec / 60);
     const s = Math.floor(sec % 60);
@@ -4949,8 +4982,8 @@ if (host) {
     updateTime();
     if (playBtn) playBtn.textContent = 'Play';
   });
-  zoomInBtn?.addEventListener('click',  () => { zoom = Math.min(300, zoom + 25); ws.zoom(zoom); updateZoom(); });
-  zoomOutBtn?.addEventListener('click', () => { zoom = Math.max(10,  zoom - 25); ws.zoom(zoom); updateZoom(); });
+  zoomInBtn?.addEventListener('click',  () => { zoom = Math.min(400, zoom + 40); ws.zoom(zoom); updateZoom(); });
+  zoomOutBtn?.addEventListener('click', () => { zoom = Math.max(30,  zoom - 40); ws.zoom(zoom); updateZoom(); });
   speedSel?.addEventListener('change', (e) => {
     rate = parseFloat(e.target.value);
     if (statusSpeed) statusSpeed.textContent = rate + '\u00d7';

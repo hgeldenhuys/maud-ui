@@ -5,6 +5,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — Fix: AG Grid empty render + Wavesurfer zoom UX
+
+### Fixed
+- **AG Grid** rendered an empty frame. `.ag-root-wrapper` collapsed to
+  2px despite 50 rows being present in the grid API and DOM. AG Grid
+  v32.3's legacy CSS path doesn't reliably size the wrapper inside
+  custom hosts — added explicit `height: 100% !important` on
+  `.ag-root-wrapper` and made the theme container a flex column so
+  the wrapper grows to fill.
+- **Wavesurfer zoom** had no visible effect on the first few clicks.
+  Root cause: 4 second audio × default 50 px/s = 200 px, but the
+  container is ~700 px wide → wavesurfer stretches the waveform to
+  fit the host, and it takes 6 zoom-in clicks before the natural
+  width exceeds the container. Fixed by lengthening the audio to 20
+  seconds (with a pitch sweep + amplitude pulse for visual interest)
+  and bumping the default zoom to 100 px/s with 40 px/s increments.
+  Now every click scrolls the waveform visibly.
+
 ## [2026-04-18] — Advanced integrations, part 2 (11 new)
 
 ### Added

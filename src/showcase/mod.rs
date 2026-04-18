@@ -955,7 +955,7 @@ fn page_head(title: &str) -> Markup {
         meta name="viewport" content="width=device-width, initial-scale=1";
         title { (title) }
         link rel="stylesheet" href=(format!("/css/maud-ui.css?v={}", CSS_VER));
-        style { (showcase_css()) }
+        style { (maud::PreEscaped(showcase_css())) }
     }
 }
 
@@ -964,6 +964,13 @@ fn page_header() -> Markup {
     html! {
         header.mui-showcase__header {
             div class="mui-showcase__header-inner" {
+                // Mobile drawer trigger — visible at narrow viewports
+                // only (see .mui-showcase__menu-btn CSS). Toggles the
+                // sidebar in and out of view on phones.
+                button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle"
+                       aria-label="Toggle navigation" aria-expanded="false" {
+                    span aria-hidden="true" class="mui-showcase__menu-icon" { "\u{2630}" }
+                }
                 a href="/" class="mui-showcase__brand" {
                     span class="mui-showcase__brand-name" { "maud-ui" }
                     span class="mui-showcase__brand-count" {
@@ -973,12 +980,15 @@ fn page_header() -> Markup {
                 // Sidebar search — filters the visible nav list in
                 // real time. Pure DOM filtering (no index, no fetch)
                 // since the list is a few hundred items at most.
+                // Command palette opens via `cmd+k` / `ctrl+k` on the
+                // same search chip; hitting `/` keeps the quick-filter
+                // behaviour for the current sidebar.
                 div class="mui-showcase__search" {
                     span class="mui-showcase__search-icon" aria-hidden="true" {
                         (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>"##.to_string()))
                     }
                     input type="search" id="mui-search" class="mui-showcase__search-input"
-                          placeholder="Search components, blocks, integrations\u{2026}"
+                          placeholder="Search components, blocks, integrations\u{2026} ( \u{2318}K )"
                           aria-label="Search the gallery"
                           spellcheck="false" autocomplete="off";
                     kbd class="mui-showcase__search-hint" aria-hidden="true" { "/" }
@@ -1098,6 +1108,12 @@ fn page_header() -> Markup {
                         "GitHub"
                     }
                 }
+                // Command palette kbd hint on desktop — click opens it.
+                button type="button" class="mui-showcase__palette-btn"
+                       id="mui-palette-open" aria-label="Open command palette" {
+                    kbd { "\u{2318}" }
+                    kbd { "K" }
+                }
                 div class="mui-showcase__tools" {
                     // The bundled `data-mui="theme-toggle"` / `dir-toggle`
                     // behaviours rewrite the button's textContent on every
@@ -1117,6 +1133,41 @@ fn page_header() -> Markup {
                            title="Toggle reading direction" aria-label="Toggle reading direction" {
                         span class="mui-showcase__tool-icon" aria-hidden="true" { "\u{21C4}" }
                     }
+                }
+            }
+        }
+        // Drawer backdrop — click-to-close, sibling of the header so
+        // z-index sits below the header but above the gallery body.
+        div class="mui-showcase__drawer-backdrop" id="mui-drawer-backdrop" aria-hidden="true" {}
+
+        // Command-palette index — published as a JS global for the
+        // palette UI in showcase_js to consume. Generated from the
+        // same Rust constants the sidebar uses so both stay in sync.
+        script { (maud::PreEscaped(palette_index_js())) }
+
+        // Command palette — hidden until cmd+k or the header chip is
+        // clicked. Results are built client-side from the inlined
+        // index below; the selected item's href drives navigation.
+        div class="mui-palette" id="mui-palette" role="dialog" aria-modal="true"
+            aria-label="Command palette" aria-hidden="true" {
+            div class="mui-palette__scrim" id="mui-palette-scrim" {}
+            div class="mui-palette__panel" role="combobox" aria-expanded="true" aria-haspopup="listbox" {
+                div class="mui-palette__search" {
+                    span class="mui-palette__icon" aria-hidden="true" {
+                        (maud::PreEscaped(r##"<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>"##.to_string()))
+                    }
+                    input type="search" id="mui-palette-input"
+                          class="mui-palette__input"
+                          placeholder="Jump to anything\u{2026} components, blocks, integrations, presets"
+                          aria-label="Search" aria-controls="mui-palette-list"
+                          spellcheck="false" autocomplete="off";
+                    span class="mui-palette__hint" aria-hidden="true" { "Esc" }
+                }
+                ul class="mui-palette__list" id="mui-palette-list" role="listbox" {}
+                div class="mui-palette__footer" {
+                    span { kbd { "\u{2191}" } kbd { "\u{2193}" } " navigate" }
+                    span { kbd { "\u{21B5}" } " open" }
+                    span { kbd { "Esc" } " close" }
                 }
             }
         }
@@ -6961,28 +7012,251 @@ fn showcase_css() -> &'static str {
 
 .mui-gallery__back { padding-top: 1rem; }
 
-/* Responsive: collapse sidebar on narrow screens */
-@media (max-width: 768px) {
-    .mui-gallery {
-        grid-template-columns: 1fr;
-    }
+/* ── Responsive: mobile drawer ──────────────────────────────────────
+ * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
+ * the sidebar into an off-canvas drawer triggered by the hamburger
+ * button in the header. A backdrop scrim sits behind it and closes
+ * the drawer on click. The whole mechanism is driven by
+ * `html[data-mui-drawer="open"]` — a class-free state attribute so
+ * CSS + JS stay decoupled. */
+.mui-showcase__menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.mui-showcase__menu-btn:hover { border-color: var(--mui-border-hover); }
+.mui-showcase__menu-icon { font-size: 1rem; line-height: 1; }
+
+.mui-showcase__drawer-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    animation: muiFadeIn 180ms ease;
+}
+@keyframes muiFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+html[data-mui-drawer="open"] { overflow: hidden; }
+html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
+
+@media (max-width: 960px) {
+    .mui-showcase__menu-btn { display: inline-flex; }
+    .mui-gallery { grid-template-columns: 1fr; }
+
     .mui-gallery__sidebar {
-        position: static;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--mui-border);
-        padding: 0.75rem 0;
+        position: fixed !important;
+        top: var(--mui-header-h) !important;
+        left: 0;
+        width: 18rem;
+        max-width: 82vw;
+        height: calc(100vh - var(--mui-header-h)) !important;
+        z-index: 45;
+        background: var(--mui-bg);
+        border-right: 1px solid var(--mui-border);
+        transform: translateX(-100%);
+        transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
     }
-    .mui-gallery__nav-items {
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 0.125rem;
+    html[data-mui-drawer="open"] .mui-gallery__sidebar {
+        transform: translateX(0);
+        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
     }
-    .mui-gallery__nav-item {
-        border-left: none;
-        padding: 0.25rem 0.5rem;
-        border-radius: var(--mui-radius-sm);
+
+    /* Give the sidebar a visible close hint */
+    .mui-gallery__sidebar::after {
+        content: "Tap anywhere outside to close \u2192";
+        display: block;
+        padding: 0.75rem 1rem;
+        font-size: 0.6875rem;
+        color: var(--mui-text-subtle);
+        text-align: center;
     }
+
+    /* Tighten header spacing on narrow viewports */
+    .mui-showcase__header-inner { gap: 0.5rem; row-gap: 0.375rem; }
+    .mui-showcase__nav { order: 10; flex-basis: 100%; }
+    .mui-showcase__search { min-width: 0; flex: 1 1 auto; }
+    .mui-showcase__palette-btn { display: none; }
+}
+
+/* Dismissal via Escape should be accessible; backdrop handles click. */
+
+/* ── Command palette ────────────────────────────────────────────────
+ * Appears on cmd+k / ctrl+k (or click the kbd chip in the header).
+ * Purely CSS-driven visibility via `html[data-mui-palette="open"]`;
+ * JS only toggles that attribute + drives the results list. */
+.mui-showcase__palette-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.25rem 0.375rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: border-color var(--mui-transition);
+}
+.mui-showcase__palette-btn:hover { border-color: var(--mui-border-hover); color: var(--mui-text); }
+.mui-showcase__palette-btn kbd {
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.0625rem 0.25rem;
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: 2px;
+}
+
+.mui-palette {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 6rem 1rem 1rem;
+}
+html[data-mui-palette="open"] .mui-palette { display: flex; }
+
+.mui-palette__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    animation: muiFadeIn 140ms ease;
+}
+
+.mui-palette__panel {
+    position: relative;
+    width: min(42rem, 100%);
+    max-height: calc(100vh - 8rem);
+    display: flex;
+    flex-direction: column;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.55),
+                0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: muiPaletteIn 160ms cubic-bezier(0.2, 0, 0, 1);
+}
+@keyframes muiPaletteIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+}
+
+.mui-palette__search {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+.mui-palette__icon { color: var(--mui-text-muted); display: inline-flex; }
+.mui-palette__input {
+    flex: 1;
+    min-width: 0;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    color: var(--mui-text);
+    border: 0;
+    outline: none;
+    font-size: 1rem;
+    font-family: inherit;
+}
+.mui-palette__input::placeholder { color: var(--mui-text-subtle); }
+.mui-palette__hint {
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+}
+
+.mui-palette__list {
+    list-style: none;
+    margin: 0;
+    padding: 0.375rem 0.375rem;
+    overflow-y: auto;
+    max-height: 26rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+.mui-palette__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--mui-radius-sm);
+    cursor: pointer;
+    color: var(--mui-text);
+}
+.mui-palette__item--active {
+    background: color-mix(in srgb, var(--mui-accent) 20%, transparent);
+}
+.mui-palette__item-kind {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-subtle);
+    padding: 0.125rem 0.375rem;
+    background: var(--mui-bg);
+    border-radius: 3px;
+    min-width: 5rem;
+    text-align: center;
+}
+.mui-palette__item-label { font-size: 0.875rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-palette__item-label mark { background: color-mix(in srgb, var(--mui-accent) 40%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
+.mui-palette__item-path {
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    color: var(--mui-text-subtle);
+}
+.mui-palette__empty {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+}
+
+.mui-palette__footer {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid var(--mui-border);
+    background: var(--mui-bg);
+    font-size: 0.6875rem;
+    color: var(--mui-text-subtle);
+}
+.mui-palette__footer kbd {
+    font-family: var(--mui-font-mono);
+    font-size: 0.625rem;
+    padding: 0.0625rem 0.25rem;
+    background: var(--mui-bg-card);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: 2px;
+    margin-right: 0.25rem;
 }
 
 /* Blocks index grid */
@@ -7456,6 +7730,74 @@ html { scroll-behavior: smooth; }
 
 // ── Embedded JS for the gallery ─────────────────────────────────────────
 
+/// Build the command-palette index as an inline JS array literal.
+/// Includes every component, block, integration, and the top-level
+/// routes. Generated from the same Rust constants the sidebar uses,
+/// so the palette stays in lockstep automatically.
+fn palette_index_js() -> String {
+    use crate::blocks;
+
+    let mut entries: Vec<(String, String, String)> = Vec::new();
+    // Top-level routes
+    for (label, url, kind) in [
+        ("Gallery home",   "/",                "page"),
+        ("Get started",    "/getting-started", "page"),
+        ("Blocks",         "/blocks",          "page"),
+        ("Theme customiser","/theme",          "page"),
+    ] {
+        entries.push((label.to_string(), url.to_string(), kind.to_string()));
+    }
+    // Components (skip any the gallery has no showcase for)
+    for comp in COMPONENT_NAMES.iter() {
+        if component_content(comp).is_some() {
+            entries.push((display_name(comp), format!("/{}", comp), "component".into()));
+        }
+    }
+    // Blocks
+    for slug in blocks::BLOCK_NAMES.iter() {
+        entries.push((
+            blocks::display_name(slug),
+            format!("/blocks/{}", slug),
+            "block".into(),
+        ));
+    }
+    // Integrations — hand-written list (slug, label) so display
+    // names can differ from the URL path.
+    for (slug, label) in [
+        ("monaco-editor", "Monaco editor"),
+        ("xyflow",        "xyflow"),
+        ("excalidraw",    "Excalidraw"),
+        ("tiptap",        "TipTap"),
+        ("mermaid",       "Mermaid"),
+        ("cytoscape",     "Cytoscape"),
+        ("threejs",       "Three.js"),
+        ("ag-grid",       "AG Grid"),
+        ("echarts",       "Apache ECharts"),
+        ("leaflet",       "Leaflet"),
+        ("fullcalendar",  "FullCalendar"),
+        ("wavesurfer",    "Wavesurfer"),
+        ("pdfjs",         "PDF.js"),
+        ("xterm",         "xterm.js"),
+        ("sortable",      "SortableJS"),
+    ] {
+        entries.push((label.to_string(), format!("/integrations/{}", slug), "integration".into()));
+    }
+
+    let json_lines: Vec<String> = entries
+        .iter()
+        .map(|(label, url, kind)| {
+            format!(
+                "  {{ l: {}, u: {}, k: {} }}",
+                serde_json_lite_escape(label),
+                serde_json_lite_escape(url),
+                serde_json_lite_escape(kind),
+            )
+        })
+        .collect();
+
+    format!("window.__MUI_PALETTE__ = [\n{}\n];\n", json_lines.join(",\n"))
+}
+
 fn showcase_js() -> &'static str {
     r#"
 (function() {
@@ -7595,6 +7937,172 @@ fn showcase_js() -> &'static str {
             search.select();
         });
     }
+
+    // ── Mobile drawer ────────────────────────────────────────────
+    var htmlEl = document.documentElement;
+    function setDrawer(open) {
+        if (open) htmlEl.setAttribute('data-mui-drawer', 'open');
+        else      htmlEl.removeAttribute('data-mui-drawer');
+        var btn = document.getElementById('mui-drawer-toggle');
+        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    document.getElementById('mui-drawer-toggle')?.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open');
+    });
+    document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () { setDrawer(false); });
+    // Auto-close when a sidebar link is followed.
+    document.querySelectorAll('.mui-gallery__sidebar a').forEach(function (a) {
+        a.addEventListener('click', function () { setDrawer(false); });
+    });
+
+    // ── Command palette ──────────────────────────────────────────
+    (function () {
+        var palette       = document.getElementById('mui-palette');
+        var paletteInput  = document.getElementById('mui-palette-input');
+        var paletteList   = document.getElementById('mui-palette-list');
+        var paletteScrim  = document.getElementById('mui-palette-scrim');
+        var paletteBtn    = document.getElementById('mui-palette-open');
+        var data          = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
+        if (!palette || !paletteInput || !paletteList) return;
+
+        var filtered = data.slice();
+        var activeIndex = 0;
+
+        function escapeHtml(s) {
+            return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function kindLabel(k) {
+            return k === 'component'   ? 'component'
+                 : k === 'block'       ? 'block'
+                 : k === 'integration' ? 'integration'
+                 : k === 'page'        ? 'page'
+                 : k;
+        }
+
+        function highlight(label, q) {
+            if (!q) return escapeHtml(label);
+            try {
+                var re = new RegExp('(' + escapeRegex(q) + ')', 'ig');
+                return escapeHtml(label).replace(re, '<mark>$1</mark>');
+            } catch { return escapeHtml(label); }
+        }
+
+        function render() {
+            if (filtered.length === 0) {
+                paletteList.replaceChildren();
+                var empty = document.createElement('li');
+                empty.className = 'mui-palette__empty';
+                empty.textContent = 'No matches.';
+                paletteList.appendChild(empty);
+                return;
+            }
+            // Build rows using DOM API — we only use innerHTML for the
+            // highlighted label, where the source is our own palette
+            // data (not user input).
+            paletteList.replaceChildren();
+            for (var i = 0; i < filtered.length; i++) {
+                var e = filtered[i];
+                var li = document.createElement('li');
+                li.className = 'mui-palette__item' + (i === activeIndex ? ' mui-palette__item--active' : '');
+                li.setAttribute('role', 'option');
+                li.setAttribute('data-index', String(i));
+                li.setAttribute('data-url', e.u);
+                var kind = document.createElement('span');
+                kind.className = 'mui-palette__item-kind';
+                kind.textContent = kindLabel(e.k);
+                var label = document.createElement('span');
+                label.className = 'mui-palette__item-label';
+                label.innerHTML = highlight(e.l, paletteInput.value.trim());
+                var path = document.createElement('span');
+                path.className = 'mui-palette__item-path';
+                path.textContent = e.u;
+                li.appendChild(kind);
+                li.appendChild(label);
+                li.appendChild(path);
+                paletteList.appendChild(li);
+            }
+        }
+
+        function filter() {
+            var q = paletteInput.value.trim().toLowerCase();
+            if (!q) {
+                filtered = data.slice();
+            } else {
+                filtered = data
+                    .map(function (e) {
+                        var l = (e.l || '').toLowerCase();
+                        var u = (e.u || '').toLowerCase();
+                        var idx = l.indexOf(q);
+                        var score = idx < 0 ? (u.indexOf(q) < 0 ? -1 : 100 + u.indexOf(q)) : idx;
+                        return score < 0 ? null : { e: e, score: score };
+                    })
+                    .filter(function (x) { return x !== null; })
+                    .sort(function (a, b) { return a.score - b.score; })
+                    .map(function (x) { return x.e; });
+            }
+            activeIndex = 0;
+            render();
+        }
+
+        function open() {
+            htmlEl.setAttribute('data-mui-palette', 'open');
+            paletteInput.value = '';
+            filter();
+            // Focus on the next frame so the modal is painted first.
+            requestAnimationFrame(function () { paletteInput.focus(); });
+        }
+        function close() {
+            htmlEl.removeAttribute('data-mui-palette');
+        }
+        function isOpen() { return htmlEl.getAttribute('data-mui-palette') === 'open'; }
+
+        function moveActive(delta) {
+            if (filtered.length === 0) return;
+            activeIndex = (activeIndex + delta + filtered.length) % filtered.length;
+            render();
+            var active = paletteList.querySelector('.mui-palette__item--active');
+            if (active) active.scrollIntoView({ block: 'nearest' });
+        }
+        function activate() {
+            var e = filtered[activeIndex];
+            if (!e) return;
+            close();
+            window.location.href = e.u;
+        }
+
+        paletteBtn?.addEventListener('click', open);
+        paletteScrim?.addEventListener('click', close);
+        paletteInput.addEventListener('input', filter);
+        paletteInput.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
+            else if (e.key === 'ArrowUp')   { e.preventDefault(); moveActive(-1); }
+            else if (e.key === 'Enter')     { e.preventDefault(); activate(); }
+            else if (e.key === 'Escape')    { e.preventDefault(); close(); }
+        });
+        paletteList.addEventListener('click', function (ev) {
+            var li = ev.target.closest('[data-index]');
+            if (!li) return;
+            activeIndex = parseInt(li.getAttribute('data-index'), 10) || 0;
+            activate();
+        });
+
+        // Global hotkey: cmd+k / ctrl+k (and forward-slash shortcut
+        // already goes to sidebar search, which is still useful).
+        document.addEventListener('keydown', function (e) {
+            if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+                e.preventDefault();
+                if (isOpen()) close(); else open();
+            } else if (e.key === 'Escape' && isOpen()) {
+                close();
+            }
+        });
+    })();
 
     // ── Theme + direction toggles (icon-only, stable text) ──────
     // We override the bundled behaviours so the buttons keep their

@@ -1,6 +1,6 @@
 # maud-ui
 
-**58 headless, accessible UI components for Rust web apps.**
+**59 headless, accessible UI components for Rust web apps — plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,7 +22,11 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **58 primitives** — every shadcn/ui component plus some (data-table, resizable, hover-card, OTP input, command palette, calendar, charts).
+- **59 primitives** — every shadcn/ui component plus some (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **10 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell. Drop-in page templates.
+- **Live theme customiser** at `/theme` — tweak every `--mui-*` token in the browser, persists to `localStorage`, exports a paste-ready `:root { … }` block. 8 Tailwind-based presets.
+- **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.
+- **Global `cmd+k` command palette** — fuzzy jump to any component, block, integration, or page. Indexed from the same Rust constants the sidebar uses.
 - **Accessible by default** — ARIA roles, keyboard navigation, focus management, WCAG-AA contrast in both themes.
 - **Dark + light themes** — flip `data-theme` on `<html>` and the whole tree recolors via CSS variables.
 - **Progressive enhancement** — every component renders correctly without JavaScript. JS adds drag, dropdowns, keyboard shortcuts on top.

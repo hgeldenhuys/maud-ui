@@ -5,6 +5,44 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.2.0] — 2026-04-18
+
+First crates.io release beyond the `0.1.0` first-cut. Summary of
+everything that landed in the 0.1 → 0.2 window:
+
+### Added
+- **Component count 58 → 59**: new `swatch` primitive (colour chip
+  with click-to-copy, design-token mode, Tailwind tone ramps).
+- **Theme customiser** at `/theme`: live-edit every `--mui-*` token
+  with a colour picker + free-text input, 8 Tailwind-based presets
+  (Dark, Light, Slate, Zinc·Violet, Stone·Amber, Emerald, Rose,
+  High-contrast), `localStorage` persistence, `:root { … }` export
+  with Copy + Download.
+- **Integrations shell pattern** — 15 third-party widgets wrapped
+  in a maud-ui chrome: Monaco editor, xyflow, Excalidraw, TipTap,
+  Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet,
+  FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS.
+- **Sticky compact header** with brand · search · nav · icon
+  toggles. `--mui-header-h` CSS var drives the sidebar offset and
+  `scroll-margin-top` on every `[id]` anchor.
+- **Global `cmd+k` command palette** — fuzzy jump to any of 88
+  indexed destinations (pages + components + blocks + integrations).
+  Index generated from the same Rust constants the sidebar uses.
+- **Mobile drawer** — sidebar becomes an off-canvas drawer at
+  `<=960px`, hamburger button in the header.
+- **Interactive `button_group`** modes — `Mode::Exclusive`
+  (segmented control) and `Mode::Multiple` (toggle bar), with
+  `aria-pressed` wiring and a `mui:button-group-change` custom
+  event. Ships as a bundled behaviour (`data-mui="button-group"`).
+- Sidebar search with `/` hotkey, `<mark>` highlighting, empty-group
+  collapse.
+
+### Fixed
+- `showcase_css()` was emitted without `PreEscaped`, so any new
+  `[attr="value"]` selector was HTML-escaped to `[attr=&quot;…"]`
+  and silently dropped by the CSS parser. Wrapped with
+  `maud::PreEscaped` so attribute-selector-driven states work.
+
 ## [2026-04-18] — SortableJS integration (drag & drop)
 
 ### Added

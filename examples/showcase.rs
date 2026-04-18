@@ -50,6 +50,14 @@ async fn main() {
             get(|| async { maud_ui::showcase::integrations_monaco_page() }),
         )
         .route(
+            "/integrations/xyflow",
+            get(|| async { maud_ui::showcase::integrations_xyflow_page() }),
+        )
+        .route(
+            "/integrations/excalidraw",
+            get(|| async { maud_ui::showcase::integrations_excalidraw_page() }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

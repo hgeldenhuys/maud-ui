@@ -94,6 +94,8 @@ async function main() {
       "/getting-started",
       "/blocks",
       "/integrations/monaco-editor",
+      "/integrations/xyflow",
+      "/integrations/excalidraw",
       ...COMPONENTS.map(s => `/${s}`),
       ...BLOCKS.map(s => `/blocks/${s}`),
     ];

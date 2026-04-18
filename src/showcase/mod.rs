@@ -951,8 +951,31 @@ fn page_header() -> Markup {
                     a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Blocks"
                     }
-                    a href="/integrations/monaco-editor" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
-                        "Monaco"
+                    // "Advanced" dropdown — groups heavy-weight third-party
+                    // integrations (Monaco, xyflow, Excalidraw) under a
+                    // single header slot. Uses <details>/<summary> so it
+                    // works with zero JS; the inline CSS below restyles
+                    // the summary to look like a ghost button and pins
+                    // the menu below it.
+                    details class="mui-gallery__nav-advanced" {
+                        summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary" {
+                            "Advanced"
+                            span class="mui-gallery__nav-advanced-caret" aria-hidden="true" { "\u{25be}" }
+                        }
+                        div class="mui-gallery__nav-advanced-menu" role="menu" {
+                            a href="/integrations/monaco-editor" role="menuitem" {
+                                span class="mui-gallery__nav-advanced-label" { "Monaco editor" }
+                                span class="mui-gallery__nav-advanced-sub" { "VS Code's editor, embedded" }
+                            }
+                            a href="/integrations/xyflow" role="menuitem" {
+                                span class="mui-gallery__nav-advanced-label" { "xyflow" }
+                                span class="mui-gallery__nav-advanced-sub" { "React Flow node editor" }
+                            }
+                            a href="/integrations/excalidraw" role="menuitem" {
+                                span class="mui-gallery__nav-advanced-label" { "Excalidraw" }
+                                span class="mui-gallery__nav-advanced-sub" { "Sketchy whiteboard canvas" }
+                            }
+                        }
                     }
                     a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Docs"
@@ -1391,7 +1414,7 @@ pub fn routes() -> Router {
         html lang="en" data-theme="dark" {
             head {
                 (page_head("Monaco editor \u{2014} maud-ui integrations"))
-                style { (maud::PreEscaped(monaco_css())) }
+                style { (maud::PreEscaped(integration_shell_css())) }
             }
             body {
                 (page_header())
@@ -1553,10 +1576,11 @@ html! {
     }
 }
 
-/// Inline CSS for the Monaco integration layout — shell around the
-/// editor, status bar, output panel. Kept inline (not in the bundle)
-/// since it's demo-only, not part of the public `mui-*` API.
-fn monaco_css() -> &'static str {
+/// Inline CSS for the integration layout — shell around the editor,
+/// header/toolbar row, status bar, output panel. Kept inline (not in
+/// the bundle) since it's demo-only, not part of the public `mui-*`
+/// API. Shared by Monaco, xyflow, and Excalidraw integration pages.
+fn integration_shell_css() -> &'static str {
     r#"
 .mui-integration {
     display: flex;
@@ -1906,6 +1930,923 @@ fn monaco_bootstrap() -> &'static str {
 "##
 }
 
+/// `/integrations/xyflow` — embed xyflow (React Flow) node editor
+/// inside a maud-ui shell. Uses native ESM + importmap to pull React
+/// and `@xyflow/react` from esm.sh at runtime, no build step.
+pub fn integrations_xyflow_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("xyflow \u{2014} maud-ui integrations"))
+                // Shell (header/editor/statusbar/output shared with Monaco)
+                // must load BEFORE the per-integration overrides, otherwise
+                // `.mui-integration__editor` has no height and the graph
+                // collapses to 0px.
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(xyflow_css())) }
+                // xyflow ships its CSS separately; pull it from esm.sh so
+                // edges, handles, and controls render correctly.
+                link rel="stylesheet"
+                     href="https://esm.sh/@xyflow/react@12.3.6/dist/style.css";
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Integrations" }
+                            span { " / " }
+                            span { "xyflow" }
+                        }
+
+                        section class="mui-gallery__component" id="integration-xyflow" {
+                            h3 class="mui-gallery__component-name" { "xyflow \u{2014} Node editor" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "A React Flow / xyflow graph editor embedded in a maud-ui shell. "
+                                "Nodes are draggable, edges are connectable, the minimap and controls "
+                                "are wired, and the React Flow colour mode flips automatically with "
+                                "the gallery's "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                " attribute. Loaded from "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "esm.sh" }
+                                " at runtime \u{2014} no bundler."
+                            }
+
+                            div class="mui-integration mui-integration--xyflow" {
+                                // File header row (mirrors the Monaco demo shell)
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(
+                                                r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9"/><path d="M12 12v3"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-xyflow-title" { "flows/api-pipeline.json" }
+                                        span class="mui-integration__dirty" id="mui-xyflow-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        select id="mui-xyflow-layout" class="mui-integration__select" aria-label="Layout" {
+                                            option value="horizontal" selected { "Horizontal" }
+                                            option value="vertical" { "Vertical" }
+                                        }
+                                        button type="button" id="mui-xyflow-add"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "+ Node" }
+                                        button type="button" id="mui-xyflow-fit"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "Fit" }
+                                        button type="button" id="mui-xyflow-reset"
+                                               class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset" }
+                                        button type="button" id="mui-xyflow-export"
+                                               class="mui-btn mui-btn--primary mui-btn--sm" { "Export JSON" }
+                                    }
+                                }
+
+                                // The flow editor mount point — React Flow needs
+                                // a positioned parent with explicit dimensions,
+                                // which `.mui-integration__editor` already provides.
+                                div class="mui-integration__editor" id="mui-xyflow-root" {
+                                    div class="mui-integration__loading" id="mui-xyflow-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading xyflow + React from esm.sh\u{2026}" }
+                                    }
+                                }
+
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-xyflow-status-nodes" { "0 nodes" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-xyflow-status-edges" { "0 edges" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-xyflow-status-selected" { "No selection" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-xyflow-status-theme" {
+                                        "dark"
+                                    }
+                                }
+                            }
+
+                            // Export panel — shows JSON dump of current graph
+                            div class="mui-integration__output" {
+                                div class="mui-integration__output-header" {
+                                    span { "Graph JSON" }
+                                    button type="button" id="mui-xyflow-clear-output"
+                                           class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear" }
+                                }
+                                pre class="mui-integration__output-body" id="mui-xyflow-output" {
+                                    "// Click " span style="color:var(--mui-accent-text);" { "Export JSON" } " to dump the current nodes and edges."
+                                }
+                            }
+
+                            (code_example("Usage \u{2014} mount xyflow inside a maud-ui page", r##"// In your <head>:
+//   <link rel="stylesheet" href="https://esm.sh/@xyflow/react@12.3.6/dist/style.css">
+//   <script type="importmap">
+//     { "imports": {
+//         "react":           "https://esm.sh/react@18.3.1",
+//         "react-dom/client":"https://esm.sh/react-dom@18.3.1/client",
+//         "@xyflow/react":   "https://esm.sh/@xyflow/react@12.3.6?deps=react@18.3.1"
+//     }}
+//   </script>
+//
+// Your maud template renders an empty mount point:
+html! {
+    div class="mui-integration mui-integration--xyflow" {
+        div class="mui-integration__header" { /* toolbar */ }
+        div class="mui-integration__editor" id="flow-root" {}
+    }
+}
+
+// Then a <script type="module"> mounts ReactFlow into the div:
+//   import { createRoot } from 'react-dom/client';
+//   import { ReactFlow, Background, Controls, MiniMap } from '@xyflow/react';
+//   const root = createRoot(document.getElementById('flow-root'));
+//   root.render(React.createElement(ReactFlow, {
+//     defaultNodes: [/* ... */],
+//     defaultEdges: [/* ... */],
+//     fitView: true,
+//     colorMode: document.documentElement.dataset.theme || 'dark',
+//   }, React.createElement(Background), React.createElement(Controls)));
+"##))
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
+                            }
+                        }
+                    }
+                }
+
+                // Native ESM importmap — maps bare specifiers to esm.sh URLs.
+                // `?deps=react@18.3.1,react-dom@18.3.1` pins xyflow's React
+                // to the exact copy we provide, avoiding a dual-React crash
+                // (same root cause as WoW #104 in the Kapable workspace).
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "react":              "https://esm.sh/react@18.3.1",
+    "react-dom":          "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client":   "https://esm.sh/react-dom@18.3.1/client",
+    "react/jsx-runtime":  "https://esm.sh/react@18.3.1/jsx-runtime",
+    "@xyflow/react":      "https://esm.sh/@xyflow/react@12.3.6?deps=react@18.3.1,react-dom@18.3.1"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(xyflow_bootstrap())) }
+
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+/// Inline CSS for the xyflow integration. Scopes overrides to
+/// `.mui-integration--xyflow` so xyflow's own stylesheet still drives
+/// handles / edges / minimap internals, while the host shell gets
+/// theme-aware colours.
+fn xyflow_css() -> &'static str {
+    r#"
+.mui-integration--xyflow .react-flow__renderer,
+.mui-integration--xyflow .react-flow__viewport {
+    background: var(--mui-bg);
+}
+
+/* Tame xyflow's default node chrome to match maud-ui tokens.
+ * We target the *default* node only — custom node types will keep
+ * their own styling. */
+.mui-integration--xyflow .react-flow__node-default,
+.mui-integration--xyflow .react-flow__node-input,
+.mui-integration--xyflow .react-flow__node-output {
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    font-family: var(--mui-font-sans);
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: border-color var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+
+.mui-integration--xyflow .react-flow__node-default:hover,
+.mui-integration--xyflow .react-flow__node-input:hover,
+.mui-integration--xyflow .react-flow__node-output:hover {
+    border-color: var(--mui-border-hover);
+}
+
+.mui-integration--xyflow .react-flow__node.selected > * {
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 30%, transparent);
+}
+
+.mui-integration--xyflow .react-flow__handle {
+    background: var(--mui-accent);
+    border: 2px solid var(--mui-bg);
+    width: 10px;
+    height: 10px;
+}
+
+.mui-integration--xyflow .react-flow__edge-path {
+    stroke: var(--mui-border-hover);
+    stroke-width: 1.5;
+}
+
+.mui-integration--xyflow .react-flow__edge.selected .react-flow__edge-path,
+.mui-integration--xyflow .react-flow__edge:hover .react-flow__edge-path {
+    stroke: var(--mui-accent);
+}
+
+.mui-integration--xyflow .react-flow__minimap {
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+}
+
+.mui-integration--xyflow .react-flow__controls {
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    overflow: hidden;
+    box-shadow: none;
+}
+
+.mui-integration--xyflow .react-flow__controls-button {
+    background: var(--mui-bg-card);
+    border-bottom: 1px solid var(--mui-border);
+    color: var(--mui-text);
+    width: 24px;
+    height: 24px;
+}
+.mui-integration--xyflow .react-flow__controls-button:last-child { border-bottom: 0; }
+.mui-integration--xyflow .react-flow__controls-button:hover {
+    background: var(--mui-bg);
+}
+.mui-integration--xyflow .react-flow__controls-button svg { fill: currentColor; }
+
+.mui-integration--xyflow .react-flow__attribution {
+    background: transparent;
+    color: var(--mui-text-subtle);
+    font-size: 0.625rem;
+    opacity: 0.6;
+}
+.mui-integration--xyflow .react-flow__attribution a { color: var(--mui-text-subtle); }
+
+/* Background pattern colour via CSS var so dot/grid blends into the theme */
+.mui-integration--xyflow .react-flow__background {
+    background-color: var(--mui-bg);
+}
+"#
+}
+
+/// Inline ES module that pulls React + xyflow from esm.sh (via the
+/// importmap above), seeds a sample pipeline graph, and wires the
+/// toolbar / status bar. Kept in one string so the static exporter
+/// ships it verbatim.
+fn xyflow_bootstrap() -> &'static str {
+    r##"
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  MiniMap,
+  addEdge,
+  applyNodeChanges,
+  applyEdgeChanges,
+  MarkerType,
+} from '@xyflow/react';
+
+const h = React.createElement;
+
+// ── Sample graph — a plausible API request pipeline ──────────────
+const INITIAL_NODES = [
+  { id: '1', type: 'input',  position: { x: 0,   y: 80  }, data: { label: 'HTTP Request' } },
+  { id: '2',                 position: { x: 180, y: 80  }, data: { label: 'Auth middleware' } },
+  { id: '3',                 position: { x: 360, y: 0   }, data: { label: 'Validate body' } },
+  { id: '4',                 position: { x: 360, y: 160 }, data: { label: 'Rate limit' } },
+  { id: '5',                 position: { x: 540, y: 80  }, data: { label: 'Handler' } },
+  { id: '6',                 position: { x: 720, y: 0   }, data: { label: 'SQL query' } },
+  { id: '7',                 position: { x: 720, y: 160 }, data: { label: 'Cache write' } },
+  { id: '8', type: 'output', position: { x: 900, y: 80  }, data: { label: 'Response' } },
+];
+
+const INITIAL_EDGES = [
+  { id: 'e1-2', source: '1', target: '2', animated: true,  markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e2-3', source: '2', target: '3', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e2-4', source: '2', target: '4', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e3-5', source: '3', target: '5', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e4-5', source: '4', target: '5', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e5-6', source: '5', target: '6', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e5-7', source: '5', target: '7', markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e6-8', source: '6', target: '8', animated: true, markerEnd: { type: MarkerType.ArrowClosed } },
+  { id: 'e7-8', source: '7', target: '8', animated: true, markerEnd: { type: MarkerType.ArrowClosed } },
+];
+
+function pickColorMode() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+
+function Flow({ onGraphChange, apiRef }) {
+  const [nodes, setNodes] = React.useState(INITIAL_NODES);
+  const [edges, setEdges] = React.useState(INITIAL_EDGES);
+  const [colorMode, setColorMode] = React.useState(pickColorMode());
+  const [selectedId, setSelectedId] = React.useState(null);
+
+  const onNodesChange = React.useCallback(
+    (changes) => setNodes((ns) => applyNodeChanges(changes, ns)),
+    [],
+  );
+  const onEdgesChange = React.useCallback(
+    (changes) => setEdges((es) => applyEdgeChanges(changes, es)),
+    [],
+  );
+  const onConnect = React.useCallback(
+    (params) => setEdges((es) => addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, es)),
+    [],
+  );
+
+  // Publish graph state & imperative API back up to the bootstrap
+  // script so the toolbar can drive it without re-rendering React.
+  React.useEffect(() => {
+    onGraphChange?.(nodes, edges, selectedId);
+  }, [nodes, edges, selectedId, onGraphChange]);
+
+  React.useEffect(() => {
+    apiRef.current = {
+      addNode: (label) => {
+        const id = String(Date.now());
+        const offsetX = 200 + Math.random() * 500;
+        const offsetY = 40 + Math.random() * 200;
+        setNodes((ns) => [...ns, { id, position: { x: offsetX, y: offsetY }, data: { label } }]);
+      },
+      reset: () => {
+        setNodes(INITIAL_NODES);
+        setEdges(INITIAL_EDGES);
+      },
+      layout: (direction) => {
+        // Simple deterministic layout — no dagre dependency, just
+        // bucket nodes by column order and distribute them vertically
+        // (or horizontally, flipped).
+        setNodes((ns) => {
+          const sorted = [...ns].sort((a, b) => Number(a.id) - Number(b.id));
+          return sorted.map((n, i) => ({
+            ...n,
+            position: direction === 'vertical'
+              ? { x: 120 + (i % 3) * 220, y: 40 + Math.floor(i / 3) * 140 }
+              : { x: 40 + i * 150,         y: 80 + (i % 2) * 120 },
+          }));
+        });
+      },
+    };
+  }, [apiRef]);
+
+  // Sync React colorMode with the gallery's data-theme attribute.
+  React.useEffect(() => {
+    const obs = new MutationObserver(() => setColorMode(pickColorMode()));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+
+  // Surface current theme to the status bar.
+  React.useEffect(() => {
+    const badge = document.getElementById('mui-xyflow-status-theme');
+    if (badge) badge.textContent = colorMode;
+  }, [colorMode]);
+
+  return h(
+    ReactFlow,
+    {
+      nodes,
+      edges,
+      onNodesChange,
+      onEdgesChange,
+      onConnect,
+      onSelectionChange: (sel) => {
+        const first = sel.nodes?.[0] || sel.edges?.[0];
+        setSelectedId(first ? first.id : null);
+      },
+      fitView: true,
+      colorMode,
+      proOptions: { hideAttribution: false },
+    },
+    h(Background, { gap: 16, size: 1, color: 'var(--mui-border)' }),
+    h(Controls, { showInteractive: false }),
+    h(MiniMap, { pannable: true, zoomable: true, maskColor: 'rgba(0,0,0,0.4)' }),
+  );
+}
+
+// ── Mount ─────────────────────────────────────────────────────────
+const host = document.getElementById('mui-xyflow-root');
+if (host) {
+  // Hide the loading overlay as soon as we have a first paint.
+  requestAnimationFrame(() => host.setAttribute('data-ready', 'true'));
+
+  const apiRef = { current: null };
+  let latestNodes = INITIAL_NODES, latestEdges = INITIAL_EDGES;
+  const statusNodes = document.getElementById('mui-xyflow-status-nodes');
+  const statusEdges = document.getElementById('mui-xyflow-status-edges');
+  const statusSel   = document.getElementById('mui-xyflow-status-selected');
+  const dirty       = document.getElementById('mui-xyflow-dirty');
+  const output      = document.getElementById('mui-xyflow-output');
+
+  function onGraphChange(nodes, edges, selectedId) {
+    latestNodes = nodes;
+    latestEdges = edges;
+    if (statusNodes) statusNodes.textContent = nodes.length + ' node' + (nodes.length === 1 ? '' : 's');
+    if (statusEdges) statusEdges.textContent = edges.length + ' edge' + (edges.length === 1 ? '' : 's');
+    if (statusSel) {
+      if (selectedId) {
+        const match = nodes.find((n) => n.id === selectedId);
+        statusSel.textContent = match ? 'Selected: ' + (match.data.label || match.id) : 'Edge: ' + selectedId;
+      } else {
+        statusSel.textContent = 'No selection';
+      }
+    }
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  }
+
+  const root = createRoot(host);
+  root.render(h(Flow, { onGraphChange, apiRef }));
+
+  // ── Toolbar wiring ────────────────────────────────────────────
+  const addBtn = document.getElementById('mui-xyflow-add');
+  if (addBtn) {
+    let n = 0;
+    addBtn.addEventListener('click', () => apiRef.current?.addNode('New step ' + (++n)));
+  }
+
+  const resetBtn = document.getElementById('mui-xyflow-reset');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      apiRef.current?.reset();
+      if (dirty) dirty.setAttribute('data-dirty', 'false');
+    });
+  }
+
+  const fitBtn = document.getElementById('mui-xyflow-fit');
+  if (fitBtn) {
+    fitBtn.addEventListener('click', () => {
+      // `Controls` exposes Fit — easiest path is a synthetic click on
+      // xyflow's built-in fit-view control button.
+      const fitControl = host.querySelector('.react-flow__controls-fitview');
+      if (fitControl) fitControl.click();
+    });
+  }
+
+  const layoutSel = document.getElementById('mui-xyflow-layout');
+  if (layoutSel) {
+    layoutSel.addEventListener('change', () => apiRef.current?.layout(layoutSel.value));
+  }
+
+  const exportBtn = document.getElementById('mui-xyflow-export');
+  if (exportBtn && output) {
+    exportBtn.addEventListener('click', () => {
+      const payload = {
+        nodes: latestNodes.map((n) => ({ id: n.id, position: n.position, data: n.data, type: n.type })),
+        edges: latestEdges.map((e) => ({ id: e.id, source: e.source, target: e.target, animated: !!e.animated })),
+      };
+      output.textContent = JSON.stringify(payload, null, 2);
+    });
+  }
+
+  const clearOut = document.getElementById('mui-xyflow-clear-output');
+  if (clearOut && output) {
+    clearOut.addEventListener('click', () => { output.textContent = '// cleared.'; });
+  }
+}
+"##
+}
+
+/// `/integrations/excalidraw` — embed the Excalidraw canvas inside a
+/// maud-ui shell. Same ESM-importmap strategy as the xyflow page.
+pub fn integrations_excalidraw_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Excalidraw \u{2014} maud-ui integrations"))
+                // Shell CSS first, per-integration overrides second.
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(excalidraw_css())) }
+                // Excalidraw ships its own stylesheet — pull it from the
+                // same esm.sh CDN we use for the JS.
+                link rel="stylesheet"
+                     href="https://esm.sh/@excalidraw/excalidraw@0.17.6/index.css";
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Integrations" }
+                            span { " / " }
+                            span { "Excalidraw" }
+                        }
+
+                        section class="mui-gallery__component" id="integration-excalidraw" {
+                            h3 class="mui-gallery__component-name" { "Excalidraw \u{2014} Whiteboard" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "An Excalidraw canvas embedded inside a maud-ui shell. The maud-ui "
+                                "toolbar wraps Excalidraw's imperative API \u{2014} the "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "excalidrawAPI" }
+                                " ref drives export, reset, and shape-insertion. Canvas theme follows "
+                                "the gallery's "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                " attribute."
+                            }
+
+                            div class="mui-integration mui-integration--excalidraw" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(
+                                                r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>"##.to_string()))
+                                        }
+                                        span id="mui-excal-title" { "sketches/architecture.excalidraw" }
+                                        span class="mui-integration__dirty" id="mui-excal-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-excal-rect"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "+ Rect" }
+                                        button type="button" id="mui-excal-ellipse"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "+ Ellipse" }
+                                        button type="button" id="mui-excal-text"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "+ Text" }
+                                        button type="button" id="mui-excal-reset"
+                                               class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset" }
+                                        button type="button" id="mui-excal-png"
+                                               class="mui-btn mui-btn--outline mui-btn--sm" { "PNG" }
+                                        button type="button" id="mui-excal-svg"
+                                               class="mui-btn mui-btn--primary mui-btn--sm" { "SVG" }
+                                    }
+                                }
+
+                                div class="mui-integration__editor mui-integration__editor--excal" id="mui-excal-root" {
+                                    div class="mui-integration__loading" id="mui-excal-loading" {
+                                        span class="mui-spin" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"##.to_string()))
+                                        }
+                                        span { "Loading Excalidraw from esm.sh\u{2026}" }
+                                    }
+                                }
+
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-excal-status-elements" { "0 elements" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-excal-status-selected" { "No selection" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-excal-status-tool" { "Tool: select" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" id="mui-excal-status-theme" {
+                                        "dark"
+                                    }
+                                }
+                            }
+
+                            div class="mui-integration__output" {
+                                div class="mui-integration__output-header" {
+                                    span { "Last export" }
+                                    button type="button" id="mui-excal-clear-output"
+                                           class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear" }
+                                }
+                                pre class="mui-integration__output-body" id="mui-excal-output" {
+                                    "// Click " span style="color:var(--mui-accent-text);" { "PNG" } " or " span style="color:var(--mui-accent-text);" { "SVG" } " to see export metadata here."
+                                }
+                            }
+
+                            (code_example("Usage \u{2014} mount Excalidraw inside a maud-ui page", r##"// In your <head>:
+//   <link rel="stylesheet" href="https://esm.sh/@excalidraw/excalidraw@0.17.6/index.css">
+//   <script type="importmap">
+//     { "imports": {
+//         "react":                 "https://esm.sh/react@18.3.1",
+//         "react-dom/client":      "https://esm.sh/react-dom@18.3.1/client",
+//         "@excalidraw/excalidraw":"https://esm.sh/@excalidraw/excalidraw@0.17.6?deps=react@18.3.1"
+//     }}
+//   </script>
+//
+// Your maud template renders an empty mount point:
+html! {
+    div class="mui-integration mui-integration--excalidraw" {
+        div class="mui-integration__header" { /* toolbar */ }
+        div class="mui-integration__editor" id="excal-root" {}
+    }
+}
+// Then a <script type="module"> mounts Excalidraw:
+//   import { Excalidraw, exportToSvg } from '@excalidraw/excalidraw';
+//   const root = createRoot(document.getElementById('excal-root'));
+//   root.render(React.createElement(Excalidraw, {
+//     theme: document.documentElement.dataset.theme || 'dark',
+//     excalidrawAPI: (api) => window.__excal = api,
+//   }));
+"##))
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
+                            }
+                        }
+                    }
+                }
+
+                // ESM importmap (same pattern as xyflow — pinned React
+                // passed through `?deps=` to avoid duplicate React copies).
+                script type="importmap" {
+                    (maud::PreEscaped(r##"{
+  "imports": {
+    "react":                  "https://esm.sh/react@18.3.1",
+    "react-dom":              "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client":       "https://esm.sh/react-dom@18.3.1/client",
+    "react/jsx-runtime":      "https://esm.sh/react@18.3.1/jsx-runtime",
+    "@excalidraw/excalidraw": "https://esm.sh/@excalidraw/excalidraw@0.17.6?deps=react@18.3.1,react-dom@18.3.1"
+  }
+}"##))
+                }
+                script type="module" { (maud::PreEscaped(excalidraw_bootstrap())) }
+
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+/// Inline CSS for the Excalidraw integration. Excalidraw owns its
+/// inside chrome — we only need to make the *host* div give it the
+/// right box (Excalidraw mounts into `position: absolute; inset: 0`).
+fn excalidraw_css() -> &'static str {
+    r#"
+.mui-integration--excalidraw .mui-integration__editor--excal {
+    /* Excalidraw demands a parent with explicit height *and* position. */
+    height: 32rem;
+    min-height: 26rem;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .mui-integration--excalidraw .mui-integration__editor--excal {
+        height: 36rem;
+    }
+}
+
+/* Excalidraw v0.17 renders a root div with class `excalidraw` — size
+ * it to fill our host. */
+.mui-integration--excalidraw .excalidraw {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Round the corners of the canvas so it blends with the maud-ui
+ * shell instead of fighting it. */
+.mui-integration--excalidraw .excalidraw .App-menu__left,
+.mui-integration--excalidraw .excalidraw .App-toolbar {
+    border-radius: var(--mui-radius-md);
+}
+
+/* Excalidraw's welcome / hint overlay can overflow on small hosts;
+ * hide it to keep the demo tidy. */
+.mui-integration--excalidraw .welcome-screen-center,
+.mui-integration--excalidraw .HintViewer {
+    display: none;
+}
+"#
+}
+
+/// Inline ES module that pulls Excalidraw from esm.sh, captures its
+/// imperative API, and wires the toolbar / status bar.
+fn excalidraw_bootstrap() -> &'static str {
+    r##"
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+// Excalidraw v0.17 ships as CJS; esm.sh wraps it so named exports can
+// land on either the top-level namespace OR on `.default`. Resolve at
+// runtime to cover both shapes — same trick we use for Shiki on
+// esm.sh in other parts of the Kapable stack.
+import * as ExcalidrawNs from '@excalidraw/excalidraw';
+
+const ExcalidrawLib = ExcalidrawNs.Excalidraw ? ExcalidrawNs : (ExcalidrawNs.default || {});
+const Excalidraw    = ExcalidrawLib.Excalidraw;
+const exportToBlob  = ExcalidrawLib.exportToBlob;
+const exportToSvg   = ExcalidrawLib.exportToSvg;
+
+if (!Excalidraw) {
+  console.error('[maud-ui] Could not resolve Excalidraw export from esm.sh — tried namespace and .default.',
+                'Keys on ns:', Object.keys(ExcalidrawNs || {}),
+                'Keys on default:', Object.keys(ExcalidrawNs.default || {}));
+}
+
+const h = React.createElement;
+
+function pickTheme() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+
+// Seed scene — a few shapes so the canvas isn't empty on first load.
+const INITIAL_ELEMENTS = [
+  { type: 'rectangle', version: 1, versionNonce: 1, isDeleted: false,
+    id: 'rect-1', fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid',
+    roughness: 1, opacity: 100, angle: 0, x: 120, y: 80, width: 220, height: 120,
+    strokeColor: '#2563eb', backgroundColor: 'transparent', seed: 1, groupIds: [],
+    frameId: null, roundness: { type: 3 }, boundElements: null, updated: 1,
+    link: null, locked: false },
+  { type: 'text', version: 1, versionNonce: 2, isDeleted: false,
+    id: 'txt-1', fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid',
+    roughness: 1, opacity: 100, angle: 0, x: 150, y: 120, width: 160, height: 25,
+    strokeColor: '#2563eb', backgroundColor: 'transparent', seed: 2, groupIds: [],
+    frameId: null, roundness: null, boundElements: null, updated: 1, link: null, locked: false,
+    fontSize: 20, fontFamily: 1, text: 'maud-ui + Excalidraw',
+    baseline: 18, textAlign: 'left', verticalAlign: 'top',
+    containerId: null, originalText: 'maud-ui + Excalidraw', lineHeight: 1.25 },
+  { type: 'arrow', version: 1, versionNonce: 3, isDeleted: false,
+    id: 'arr-1', fillStyle: 'hachure', strokeWidth: 2, strokeStyle: 'solid',
+    roughness: 1, opacity: 100, angle: 0, x: 360, y: 140, width: 120, height: 0,
+    strokeColor: '#6366f1', backgroundColor: 'transparent', seed: 3, groupIds: [],
+    frameId: null, roundness: { type: 2 }, boundElements: null, updated: 1, link: null, locked: false,
+    points: [[0, 0], [120, 0]], lastCommittedPoint: null, startBinding: null, endBinding: null,
+    startArrowhead: null, endArrowhead: 'arrow' },
+  { type: 'ellipse', version: 1, versionNonce: 4, isDeleted: false,
+    id: 'ell-1', fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid',
+    roughness: 1, opacity: 100, angle: 0, x: 500, y: 80, width: 180, height: 120,
+    strokeColor: '#db2777', backgroundColor: 'transparent', seed: 4, groupIds: [],
+    frameId: null, roundness: null, boundElements: null, updated: 1, link: null, locked: false },
+];
+
+function App({ apiRef, onChange }) {
+  const [theme, setTheme] = React.useState(pickTheme());
+
+  // Theme sync with gallery data-theme attribute.
+  React.useEffect(() => {
+    const obs = new MutationObserver(() => setTheme(pickTheme()));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+
+  React.useEffect(() => {
+    const badge = document.getElementById('mui-excal-status-theme');
+    if (badge) badge.textContent = theme;
+  }, [theme]);
+
+  return h(Excalidraw, {
+    theme,
+    initialData: {
+      elements: INITIAL_ELEMENTS,
+      appState: { viewBackgroundColor: 'transparent', currentItemStrokeColor: '#2563eb' },
+      scrollToContent: true,
+    },
+    excalidrawAPI: (api) => { apiRef.current = api; },
+    onChange: (elements, appState) => onChange?.(elements, appState),
+    UIOptions: {
+      canvasActions: { saveToActiveFile: false, loadScene: false, export: false },
+    },
+  });
+}
+
+// ── Mount ─────────────────────────────────────────────────────────
+const host = document.getElementById('mui-excal-root');
+if (host) {
+  requestAnimationFrame(() => host.setAttribute('data-ready', 'true'));
+
+  const apiRef = { current: null };
+  const statusElements = document.getElementById('mui-excal-status-elements');
+  const statusSel      = document.getElementById('mui-excal-status-selected');
+  const statusTool     = document.getElementById('mui-excal-status-tool');
+  const dirty          = document.getElementById('mui-excal-dirty');
+  const output         = document.getElementById('mui-excal-output');
+
+  let lastElements = INITIAL_ELEMENTS;
+
+  function onChange(elements, appState) {
+    lastElements = elements;
+    const visible = elements.filter((el) => !el.isDeleted);
+    if (statusElements) {
+      statusElements.textContent = visible.length + ' element' + (visible.length === 1 ? '' : 's');
+    }
+    if (statusSel) {
+      const selIds = Object.keys(appState.selectedElementIds || {});
+      statusSel.textContent = selIds.length === 0
+        ? 'No selection'
+        : selIds.length === 1 ? '1 selected' : selIds.length + ' selected';
+    }
+    if (statusTool) {
+      statusTool.textContent = 'Tool: ' + (appState.activeTool?.type || 'select');
+    }
+    if (dirty) dirty.setAttribute('data-dirty', 'true');
+  }
+
+  const root = createRoot(host);
+  root.render(h(App, { apiRef, onChange }));
+
+  // ── Toolbar wiring ────────────────────────────────────────────
+  function makeShape(kind, x, y) {
+    const id = kind + '-' + Date.now();
+    if (kind === 'text') {
+      return {
+        type: 'text', version: 1, versionNonce: Math.random() * 1e9 | 0, isDeleted: false,
+        id, fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid',
+        roughness: 1, opacity: 100, angle: 0, x, y, width: 180, height: 28,
+        strokeColor: '#2563eb', backgroundColor: 'transparent',
+        seed: Math.random() * 1e9 | 0, groupIds: [], frameId: null,
+        roundness: null, boundElements: null, updated: 1, link: null, locked: false,
+        fontSize: 22, fontFamily: 1, text: 'Click to edit',
+        baseline: 20, textAlign: 'left', verticalAlign: 'top',
+        containerId: null, originalText: 'Click to edit', lineHeight: 1.25,
+      };
+    }
+    const base = {
+      version: 1, versionNonce: Math.random() * 1e9 | 0, isDeleted: false,
+      id, fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid',
+      roughness: 1, opacity: 100, angle: 0, x, y, width: 160, height: 100,
+      strokeColor: kind === 'rectangle' ? '#2563eb' : '#db2777',
+      backgroundColor: 'transparent',
+      seed: Math.random() * 1e9 | 0, groupIds: [], frameId: null,
+      roundness: kind === 'rectangle' ? { type: 3 } : null,
+      boundElements: null, updated: 1, link: null, locked: false,
+    };
+    return { ...base, type: kind };
+  }
+
+  function addShape(kind) {
+    const api = apiRef.current;
+    if (!api) return;
+    const existing = api.getSceneElements();
+    const ox = 80 + Math.random() * 400;
+    const oy = 60 + Math.random() * 180;
+    api.updateScene({ elements: [...existing, makeShape(kind, ox, oy)] });
+  }
+
+  document.getElementById('mui-excal-rect')?.addEventListener('click', () => addShape('rectangle'));
+  document.getElementById('mui-excal-ellipse')?.addEventListener('click', () => addShape('ellipse'));
+  document.getElementById('mui-excal-text')?.addEventListener('click', () => addShape('text'));
+
+  document.getElementById('mui-excal-reset')?.addEventListener('click', () => {
+    const api = apiRef.current;
+    if (!api) return;
+    api.updateScene({ elements: INITIAL_ELEMENTS });
+    if (dirty) dirty.setAttribute('data-dirty', 'false');
+  });
+
+  async function writeExport(label, blobOrNode) {
+    if (!output) return;
+    if (label === 'SVG') {
+      const svgText = new XMLSerializer().serializeToString(blobOrNode);
+      const size = new Blob([svgText]).size;
+      output.textContent =
+        '[SVG] ' + size + ' bytes, ' + lastElements.filter((e) => !e.isDeleted).length + ' elements\n\n' +
+        svgText.slice(0, 600) + (svgText.length > 600 ? '\n\n\u2026 (truncated)' : '');
+    } else {
+      output.textContent =
+        '[' + label + '] ' + blobOrNode.size + ' bytes, type=' + blobOrNode.type + '\n' +
+        '  (blob ready to download or POST \u2014 this demo doesn\'t save to disk.)';
+    }
+  }
+
+  document.getElementById('mui-excal-png')?.addEventListener('click', async () => {
+    const api = apiRef.current;
+    if (!api) return;
+    try {
+      const blob = await exportToBlob({
+        elements: api.getSceneElements(),
+        appState: { ...api.getAppState(), exportBackground: true, viewBackgroundColor: '#ffffff' },
+        files: api.getFiles(),
+        mimeType: 'image/png',
+      });
+      writeExport('PNG', blob);
+    } catch (err) {
+      if (output) output.textContent = '[PNG export failed] ' + err.message;
+    }
+  });
+
+  document.getElementById('mui-excal-svg')?.addEventListener('click', async () => {
+    const api = apiRef.current;
+    if (!api) return;
+    try {
+      const svg = await exportToSvg({
+        elements: api.getSceneElements(),
+        appState: { ...api.getAppState(), exportBackground: false },
+        files: api.getFiles(),
+      });
+      writeExport('SVG', svg);
+    } catch (err) {
+      if (output) output.textContent = '[SVG export failed] ' + err.message;
+    }
+  });
+
+  document.getElementById('mui-excal-clear-output')?.addEventListener('click', () => {
+    if (output) output.textContent = '// cleared.';
+  });
+}
+"##
+}
+
 /// Minimal JSON-string escaper for injecting sample code as a JS literal
 /// (avoids pulling in serde as a runtime dependency just for this).
 fn serde_json_lite_escape(s: &str) -> String {
@@ -2236,6 +3177,81 @@ fn showcase_css() -> &'static str {
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
+
+/* ── "Advanced" dropdown in the page header ─────────────────────────
+ * <details>/<summary>-based, so it works without JS. The menu is
+ * positioned absolutely below the summary; `list-style:none` strips
+ * the default disclosure triangle and we supply our own caret that
+ * rotates on [open]. */
+.mui-gallery__nav-advanced {
+    position: relative;
+}
+
+.mui-gallery__nav-advanced-summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    cursor: pointer;
+    user-select: none;
+}
+.mui-gallery__nav-advanced-summary::-webkit-details-marker { display: none; }
+.mui-gallery__nav-advanced-summary::marker { content: ''; }
+
+.mui-gallery__nav-advanced-caret {
+    display: inline-block;
+    font-size: 0.75rem;
+    line-height: 1;
+    transition: transform 150ms ease;
+    color: var(--mui-text-muted);
+}
+.mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
+    transform: rotate(180deg);
+}
+
+.mui-gallery__nav-advanced-menu {
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    right: 0;
+    z-index: 60;
+    min-width: 16rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.375rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
+                0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mui-gallery__nav-advanced-menu a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text);
+    text-decoration: none;
+    transition: background-color var(--mui-transition),
+                color var(--mui-transition);
+}
+.mui-gallery__nav-advanced-menu a:hover,
+.mui-gallery__nav-advanced-menu a:focus-visible {
+    background: var(--mui-bg);
+    outline: none;
+}
+
+.mui-gallery__nav-advanced-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+.mui-gallery__nav-advanced-sub {
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    font-weight: 400;
+}
 "#
 }
 

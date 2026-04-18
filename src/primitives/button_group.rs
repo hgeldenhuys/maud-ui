@@ -1,5 +1,5 @@
 //! ButtonGroup component — groups multiple buttons with shared borders.
-use maud::{html, Markup};
+use maud::{html, Markup, PreEscaped};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Orientation {
@@ -16,11 +16,43 @@ impl Orientation {
     }
 }
 
+/// Interactive mode for the group. `None` renders a pure visual
+/// group (no JS behaviour attached); the host app is expected to
+/// wire its own click handlers. `Some(Exclusive)` renders a
+/// radio-like segmented control where exactly one child button
+/// carries `aria-pressed="true"` at a time. `Some(Multiple)`
+/// renders independent toggles.
+///
+/// In both interactive modes the group emits a
+/// `mui:button-group-change` custom event (bubbles) on activation
+/// with `{ value, pressed, target }` in `detail`, so hosts can
+/// listen without wiring per-button listeners.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Mode {
+    /// Radio-like. Exactly one pressed button at any time.
+    Exclusive,
+    /// Toggle-like. Each button flips independently.
+    Multiple,
+}
+
+impl Mode {
+    fn attr(self) -> &'static str {
+        match self {
+            Mode::Exclusive => "exclusive",
+            Mode::Multiple => "multiple",
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Props {
     pub children: Markup,
     pub orientation: Orientation,
     pub size: Option<String>,
+    /// When `Some`, the group opts into the bundled
+    /// `data-mui="button-group"` behaviour that toggles
+    /// `aria-pressed` on child buttons.
+    pub mode: Option<Mode>,
 }
 
 impl Default for Props {
@@ -29,6 +61,7 @@ impl Default for Props {
             children: html! {},
             orientation: Orientation::Horizontal,
             size: None,
+            mode: None,
         }
     }
 }
@@ -43,10 +76,25 @@ pub fn render(props: Props) -> Markup {
         class.push_str(&size);
     }
 
+    // We build the opening tag manually so we can conditionally
+    // attach `data-mui` / `data-mode` without maud's attribute
+    // interpolation syntax complaining about optional keys.
+    let data_mui = props
+        .mode
+        .map(|_| r#" data-mui="button-group""#)
+        .unwrap_or("");
+    let data_mode = props
+        .mode
+        .map(|m| format!(r#" data-mode="{}""#, m.attr()))
+        .unwrap_or_default();
+
     html! {
-        div class=(class) role="group" {
-            (props.children)
-        }
+        (PreEscaped(format!(
+            r#"<div class="{}" role="group"{}{}>"#,
+            class, data_mui, data_mode,
+        )))
+        (props.children)
+        (PreEscaped("</div>"))
     }
 }
 
@@ -100,23 +148,25 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             section {
                 h2 { "Text alignment toolbar" }
-                p.mui-showcase__caption { "Editor toolbar — exactly one alignment active at a time." }
+                p.mui-showcase__caption { "Editor toolbar — exactly one alignment active at a time. Click or use ← / → to switch." }
                 div.mui-showcase__row {
                     (render(Props {
                         children: buttons_align,
                         orientation: Orientation::Horizontal,
                         size: None,
+                        mode: Some(Mode::Exclusive),
                     }))
                 }
             }
             section {
                 h2 { "Text formatting" }
-                p.mui-showcase__caption { "Rich-text controls — each toggle independent (Bold currently on)." }
+                p.mui-showcase__caption { "Rich-text controls — each toggle independent (Bold currently on). Click any to flip." }
                 div.mui-showcase__row {
                     (render(Props {
                         children: buttons_format,
                         orientation: Orientation::Horizontal,
                         size: None,
+                        mode: Some(Mode::Multiple),
                     }))
                 }
             }
@@ -128,6 +178,7 @@ pub fn showcase() -> Markup {
                         children: buttons_view,
                         orientation: Orientation::Horizontal,
                         size: None,
+                        mode: Some(Mode::Exclusive),
                     }))
                 }
             }

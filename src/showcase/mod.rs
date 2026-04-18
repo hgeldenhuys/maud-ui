@@ -1092,17 +1092,23 @@ fn page_header() -> Markup {
                     }
                 }
                 div class="mui-showcase__tools" {
+                    // The bundled `data-mui="theme-toggle"` / `dir-toggle`
+                    // behaviours rewrite the button's textContent on every
+                    // click (e.g. "Dark mode"). That conflicts with our
+                    // icon-only design — own the toggles locally instead
+                    // and use the `mui-showcase__tool-btn--theme` /
+                    // `--dir` classes as hooks for the showcase JS.
                     button type="button"
-                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn"
-                           data-mui="theme-toggle" id="theme-toggle"
+                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--theme"
+                           id="theme-toggle"
                            title="Toggle theme" aria-label="Toggle theme" {
-                        "\u{25D0}"
+                        span class="mui-showcase__tool-icon" aria-hidden="true" { "\u{25D0}" }
                     }
                     button type="button"
-                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn"
-                           data-mui="dir-toggle" id="dir-toggle"
+                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--dir"
+                           id="dir-toggle"
                            title="Toggle reading direction" aria-label="Toggle reading direction" {
-                        "\u{21C4}"
+                        span class="mui-showcase__tool-icon" aria-hidden="true" { "\u{21C4}" }
                     }
                 }
             }
@@ -7059,6 +7065,43 @@ fn showcase_js() -> &'static str {
             search.focus();
             search.select();
         });
+    }
+
+    // ── Theme + direction toggles (icon-only, stable text) ──────
+    // We override the bundled behaviours so the buttons keep their
+    // glyphs rather than morphing into "Dark mode" / "RTL" labels.
+    // Values persist to localStorage under the same keys the bundled
+    // behaviour uses, so other pages / other visits see the choice.
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mui-theme', theme); } catch {}
+    }
+    function setDir(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        try { localStorage.setItem('mui-dir', dir); } catch {}
+    }
+    try {
+        var savedTheme = localStorage.getItem('mui-theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme);
+        var savedDir = localStorage.getItem('mui-dir');
+        if (savedDir === 'rtl' || savedDir === 'ltr') setDir(savedDir);
+    } catch {}
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function (e) {
+            // Stop the bundled behaviour if it's bound to this node.
+            e.stopImmediatePropagation();
+            var next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        }, true);
+    }
+    var dirBtn = document.getElementById('dir-toggle');
+    if (dirBtn) {
+        dirBtn.addEventListener('click', function (e) {
+            e.stopImmediatePropagation();
+            var next = (document.documentElement.getAttribute('dir') || 'ltr') === 'rtl' ? 'ltr' : 'rtl';
+            setDir(next);
+        }, true);
     }
 
     // ── Swatch click-to-copy ──────────────────────────────────────

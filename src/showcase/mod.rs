@@ -946,6 +946,19 @@ fn page_header() -> Markup {
                         (format!("{} components", COMPONENT_NAMES.len()))
                     }
                 }
+                // Sidebar search — filters the visible nav list in
+                // real time. Pure DOM filtering (no index, no fetch)
+                // since the list is a few hundred items at most.
+                div class="mui-showcase__search" {
+                    span class="mui-showcase__search-icon" aria-hidden="true" {
+                        (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>"##.to_string()))
+                    }
+                    input type="search" id="mui-search" class="mui-showcase__search-input"
+                          placeholder="Search components, blocks, integrations\u{2026}"
+                          aria-label="Search the gallery"
+                          spellcheck="false" autocomplete="off";
+                    kbd class="mui-showcase__search-hint" aria-hidden="true" { "/" }
+                }
                 nav class="mui-showcase__nav" {
                     a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Get started"
@@ -5842,8 +5855,90 @@ html { scroll-behavior: smooth; }
     gap: 0.625rem;
     color: inherit;
     text-decoration: none;
-    margin-right: auto;
     padding-inline: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* Search input — takes flexible middle space, bounded so it doesn't
+ * crowd out the nav on wider viewports. Hotkey: "/" to focus. */
+.mui-showcase__search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 14rem;
+    max-width: 26rem;
+    min-width: 9rem;
+}
+.mui-showcase__search-icon {
+    position: absolute;
+    left: 0.5rem;
+    display: inline-flex;
+    color: var(--mui-text-subtle);
+    pointer-events: none;
+}
+.mui-showcase__search-input {
+    width: 100%;
+    height: 2rem;
+    padding: 0 2rem 0 1.875rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    color: var(--mui-text);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    outline: none;
+    transition: border-color var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-showcase__search-input::placeholder { color: var(--mui-text-subtle); }
+.mui-showcase__search-input:focus-visible {
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+.mui-showcase__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.mui-showcase__search-hint {
+    position: absolute;
+    right: 0.5rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.125rem 0.375rem;
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    pointer-events: none;
+}
+.mui-showcase__search--focused .mui-showcase__search-hint,
+.mui-showcase__search--dirty  .mui-showcase__search-hint { opacity: 0; }
+
+/* When filtering, grey out group headers whose items are all hidden,
+ * and hide the empty group entirely. */
+.mui-gallery__nav-item[hidden] { display: none; }
+.mui-gallery__nav-group[data-mui-search-empty="1"] { display: none; }
+
+/* Search-match highlight in the sidebar text */
+.mui-gallery__nav-item mark {
+    background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
+    color: var(--mui-text);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* No-results state inside the sidebar */
+.mui-gallery__nav-empty {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    display: none;
+}
+.mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
+
+@media (max-width: 760px) {
+    /* Drop the hint + shrink a touch on narrow screens */
+    .mui-showcase__search-hint { display: none; }
+    .mui-showcase__search { min-width: 7rem; }
 }
 .mui-showcase__brand-name {
     font-size: 1rem;
@@ -6038,6 +6133,114 @@ fn showcase_js() -> &'static str {
         for (var k = 0; k < sections.length; k++) {
             observer.observe(sections[k]);
         }
+    }
+
+    // ── Sidebar search ────────────────────────────────────────────
+    // Filters .mui-gallery__nav-item entries against the input value.
+    // Groups whose items are all hidden collapse. "/" focuses the
+    // search box (skipped if the user is already typing into another
+    // input). "Esc" clears and restores the full list.
+    var search = document.getElementById('mui-search');
+    if (search && navItems.length > 0) {
+        var wrap = search.closest('.mui-showcase__search');
+        var nav = document.querySelector('.mui-gallery__nav');
+        var groups = Array.prototype.slice.call(document.querySelectorAll('.mui-gallery__nav-group'));
+
+        // Cache each nav item's display text + its tier header so we
+        // can re-run the filter quickly without hitting DOM on each
+        // keypress.
+        var entries = [];
+        for (var i = 0; i < navItems.length; i++) {
+            var it = navItems[i];
+            entries.push({
+                el: it,
+                label: it.textContent || '',
+                slug: it.getAttribute('data-slug') || '',
+                original: it.innerHTML,
+            });
+        }
+
+        // Ensure "no results" message exists inside the nav container.
+        var empty = nav ? nav.querySelector('.mui-gallery__nav-empty') : null;
+        if (!empty && nav) {
+            empty = document.createElement('div');
+            empty.className = 'mui-gallery__nav-empty';
+            empty.textContent = 'No matches. Press Esc to clear.';
+            nav.appendChild(empty);
+        }
+
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+        }
+
+        function runFilter() {
+            var q = search.value.trim().toLowerCase();
+            var dirty = q.length > 0;
+            wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+
+            var visibleCount = 0;
+            var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
+
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                var label = e.label.toLowerCase();
+                var slug  = e.slug.toLowerCase();
+                var match = !dirty || label.indexOf(q) !== -1 || slug.indexOf(q) !== -1;
+                if (match) {
+                    e.el.hidden = false;
+                    if (dirty) {
+                        e.el.innerHTML = escapeHtml(e.label).replace(pattern, '<mark>$1</mark>');
+                    } else {
+                        e.el.innerHTML = e.original;
+                    }
+                    visibleCount++;
+                } else {
+                    e.el.hidden = true;
+                }
+            }
+
+            // Collapse empty groups. A group is "empty" when all its
+            // child nav items are hidden.
+            for (var g = 0; g < groups.length; g++) {
+                var group = groups[g];
+                var kids = group.querySelectorAll('.mui-gallery__nav-item');
+                var any = false;
+                for (var k = 0; k < kids.length; k++) {
+                    if (!kids[k].hidden) { any = true; break; }
+                }
+                group.setAttribute('data-mui-search-empty', any ? '0' : '1');
+            }
+            if (nav) nav.setAttribute('data-mui-search-empty', visibleCount === 0 && dirty ? '1' : '0');
+        }
+
+        search.addEventListener('input', runFilter);
+        search.addEventListener('focus', function () { wrap.classList.add('mui-showcase__search--focused'); });
+        search.addEventListener('blur',  function () { wrap.classList.remove('mui-showcase__search--focused'); });
+        search.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                search.value = '';
+                runFilter();
+                search.blur();
+            }
+        });
+
+        // Global "/" hotkey — focus unless the user is typing into
+        // another input/textarea/contenteditable.
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== '/') return;
+            var t = e.target;
+            if (!t) return;
+            var tag = (t.tagName || '').toLowerCase();
+            var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable;
+            if (typing) return;
+            e.preventDefault();
+            search.focus();
+            search.select();
+        });
     }
 })();
 "#

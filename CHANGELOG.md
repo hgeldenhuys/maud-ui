@@ -5,6 +5,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — UX: sidebar search + "/" hotkey
+
+### Added
+- **Sidebar search** — new input in the page header filters the
+  sidebar component list in real time. Matches are highlighted
+  inline with `<mark>` chips, empty tier groups collapse, and an
+  "No matches. Press Esc to clear." message shows when nothing hits.
+  Searches across display names and slugs.
+- Global **`/` hotkey** focuses the search bar (GitHub convention —
+  skipped when already typing into another input / textarea /
+  contenteditable). **`Esc`** clears the query and restores the
+  full list.
+
 ## [2026-04-18] — UX: sticky compact header, icon toggles, scroll-anchor offsets
 
 ### Changed

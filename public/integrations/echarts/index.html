@@ -272,8 +272,90 @@ html { scroll-behavior: smooth; }
     gap: 0.625rem;
     color: inherit;
     text-decoration: none;
-    margin-right: auto;
     padding-inline: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* Search input — takes flexible middle space, bounded so it doesn't
+ * crowd out the nav on wider viewports. Hotkey: &quot;/&quot; to focus. */
+.mui-showcase__search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 14rem;
+    max-width: 26rem;
+    min-width: 9rem;
+}
+.mui-showcase__search-icon {
+    position: absolute;
+    left: 0.5rem;
+    display: inline-flex;
+    color: var(--mui-text-subtle);
+    pointer-events: none;
+}
+.mui-showcase__search-input {
+    width: 100%;
+    height: 2rem;
+    padding: 0 2rem 0 1.875rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    color: var(--mui-text);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    outline: none;
+    transition: border-color var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-showcase__search-input::placeholder { color: var(--mui-text-subtle); }
+.mui-showcase__search-input:focus-visible {
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+.mui-showcase__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.mui-showcase__search-hint {
+    position: absolute;
+    right: 0.5rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.125rem 0.375rem;
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    pointer-events: none;
+}
+.mui-showcase__search--focused .mui-showcase__search-hint,
+.mui-showcase__search--dirty  .mui-showcase__search-hint { opacity: 0; }
+
+/* When filtering, grey out group headers whose items are all hidden,
+ * and hide the empty group entirely. */
+.mui-gallery__nav-item[hidden] { display: none; }
+.mui-gallery__nav-group[data-mui-search-empty=&quot;1&quot;] { display: none; }
+
+/* Search-match highlight in the sidebar text */
+.mui-gallery__nav-item mark {
+    background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
+    color: var(--mui-text);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* No-results state inside the sidebar */
+.mui-gallery__nav-empty {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    display: none;
+}
+.mui-gallery__nav[data-mui-search-empty=&quot;1&quot;] .mui-gallery__nav-empty { display: block; }
+
+@media (max-width: 760px) {
+    /* Drop the hint + shrink a touch on narrow screens */
+    .mui-showcase__search-hint { display: none; }
+    .mui-showcase__search { min-width: 7rem; }
 }
 .mui-showcase__brand-name {
     font-size: 1rem;
@@ -609,7 +691,7 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1024px) {
     .mui-integration--echarts .mui-integration__editor { height: 34rem; }
 }
-</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">58 components</span></a><nav class="mui-showcase__nav"><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Blocks</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu" role="menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor" role="menuitem"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap" role="menuitem"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow" role="menuitem"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape" role="menuitem"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid" role="menuitem"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw" role="menuitem"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs" role="menuitem"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid" role="menuitem"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts" role="menuitem"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet" role="menuitem"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar" role="menuitem"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer" role="menuitem"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs" role="menuitem"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm" role="menuitem"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a></nav><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">◐</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="dir-toggle" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction">⇄</button></div></div></header><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></div></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/">Gallery</a><span> / </span><span>Integrations</span><span> / </span><span>Apache ECharts</span></nav><section class="mui-gallery__component" id="integration-echarts"><h3 class="mui-gallery__component-name">Apache ECharts — Charting library</h3><p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;">Apache ECharts inside a maud-ui shell. Switch chart type, randomise data, and download as PNG without leaving the host chrome. ECharts picks up theme from the gallery's data-theme.</p><div class="mui-integration mui-integration--echarts"><div class="mui-integration__header"><div class="mui-integration__filepath"><span class="mui-integration__filepath-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="20" x2="21" y2="20"/><line x1="3" y1="20" x2="3" y2="4"/><rect x="6" y="11" width="3" height="9"/><rect x="11" y="6" width="3" height="14"/><rect x="16" y="14" width="3" height="6"/></svg></span><span id="mui-ec-title">analytics/q2-kpis.json</span><span class="mui-integration__dirty" id="mui-ec-dirty" aria-hidden="true">●</span></div><div class="mui-integration__toolbar"><select id="mui-ec-kind" class="mui-integration__select" aria-label="Chart type"><option value="line" selected>Line + Bar</option><option value="bar">Bar</option><option value="pie">Pie</option><option value="radar">Radar</option><option value="scatter">Scatter</option></select><button type="button" id="mui-ec-shuffle" class="mui-btn mui-btn--outline mui-btn--sm">Randomise</button><button type="button" id="mui-ec-png" class="mui-btn mui-btn--primary mui-btn--sm">PNG</button></div></div><div class="mui-integration__editor" id="mui-ec-root"><div class="mui-integration__loading" id="mui-ec-loading"><span class="mui-spin" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></span><span>Loading ECharts from esm.sh…</span></div></div><div class="mui-integration__statusbar"><span id="mui-ec-status-series">0 series</span><span class="mui-integration__statusbar-sep" aria-hidden="true">•</span><span id="mui-ec-status-points">0 data points</span><span class="mui-integration__statusbar-sep" aria-hidden="true">•</span><span id="mui-ec-status-type">line</span><span class="mui-integration__statusbar-spacer"></span><span class="mui-integration__statusbar-theme" id="mui-ec-status-theme">dark</span></div></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script type="importmap">{"imports":{"echarts":"https://esm.sh/echarts@5.5.1"}}</script><script type="module">
+</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">58 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations…" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav"><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Blocks</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu" role="menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor" role="menuitem"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap" role="menuitem"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow" role="menuitem"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape" role="menuitem"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid" role="menuitem"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw" role="menuitem"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs" role="menuitem"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid" role="menuitem"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts" role="menuitem"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet" role="menuitem"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar" role="menuitem"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer" role="menuitem"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs" role="menuitem"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm" role="menuitem"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a></nav><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">◐</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="dir-toggle" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction">⇄</button></div></div></header><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></div></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/">Gallery</a><span> / </span><span>Integrations</span><span> / </span><span>Apache ECharts</span></nav><section class="mui-gallery__component" id="integration-echarts"><h3 class="mui-gallery__component-name">Apache ECharts — Charting library</h3><p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;">Apache ECharts inside a maud-ui shell. Switch chart type, randomise data, and download as PNG without leaving the host chrome. ECharts picks up theme from the gallery's data-theme.</p><div class="mui-integration mui-integration--echarts"><div class="mui-integration__header"><div class="mui-integration__filepath"><span class="mui-integration__filepath-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="20" x2="21" y2="20"/><line x1="3" y1="20" x2="3" y2="4"/><rect x="6" y="11" width="3" height="9"/><rect x="11" y="6" width="3" height="14"/><rect x="16" y="14" width="3" height="6"/></svg></span><span id="mui-ec-title">analytics/q2-kpis.json</span><span class="mui-integration__dirty" id="mui-ec-dirty" aria-hidden="true">●</span></div><div class="mui-integration__toolbar"><select id="mui-ec-kind" class="mui-integration__select" aria-label="Chart type"><option value="line" selected>Line + Bar</option><option value="bar">Bar</option><option value="pie">Pie</option><option value="radar">Radar</option><option value="scatter">Scatter</option></select><button type="button" id="mui-ec-shuffle" class="mui-btn mui-btn--outline mui-btn--sm">Randomise</button><button type="button" id="mui-ec-png" class="mui-btn mui-btn--primary mui-btn--sm">PNG</button></div></div><div class="mui-integration__editor" id="mui-ec-root"><div class="mui-integration__loading" id="mui-ec-loading"><span class="mui-spin" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg></span><span>Loading ECharts from esm.sh…</span></div></div><div class="mui-integration__statusbar"><span id="mui-ec-status-series">0 series</span><span class="mui-integration__statusbar-sep" aria-hidden="true">•</span><span id="mui-ec-status-points">0 data points</span><span class="mui-integration__statusbar-sep" aria-hidden="true">•</span><span id="mui-ec-status-type">line</span><span class="mui-integration__statusbar-spacer"></span><span class="mui-integration__statusbar-theme" id="mui-ec-status-theme">dark</span></div></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script type="importmap">{"imports":{"echarts":"https://esm.sh/echarts@5.5.1"}}</script><script type="module">
 import * as echarts from 'echarts';
 
 const host = document.getElementById('mui-ec-root');
@@ -725,6 +807,114 @@ if (host) {
         for (var k = 0; k < sections.length; k++) {
             observer.observe(sections[k]);
         }
+    }
+
+    // ── Sidebar search ────────────────────────────────────────────
+    // Filters .mui-gallery__nav-item entries against the input value.
+    // Groups whose items are all hidden collapse. "/" focuses the
+    // search box (skipped if the user is already typing into another
+    // input). "Esc" clears and restores the full list.
+    var search = document.getElementById('mui-search');
+    if (search && navItems.length > 0) {
+        var wrap = search.closest('.mui-showcase__search');
+        var nav = document.querySelector('.mui-gallery__nav');
+        var groups = Array.prototype.slice.call(document.querySelectorAll('.mui-gallery__nav-group'));
+
+        // Cache each nav item's display text + its tier header so we
+        // can re-run the filter quickly without hitting DOM on each
+        // keypress.
+        var entries = [];
+        for (var i = 0; i < navItems.length; i++) {
+            var it = navItems[i];
+            entries.push({
+                el: it,
+                label: it.textContent || '',
+                slug: it.getAttribute('data-slug') || '',
+                original: it.innerHTML,
+            });
+        }
+
+        // Ensure "no results" message exists inside the nav container.
+        var empty = nav ? nav.querySelector('.mui-gallery__nav-empty') : null;
+        if (!empty && nav) {
+            empty = document.createElement('div');
+            empty.className = 'mui-gallery__nav-empty';
+            empty.textContent = 'No matches. Press Esc to clear.';
+            nav.appendChild(empty);
+        }
+
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+        }
+
+        function runFilter() {
+            var q = search.value.trim().toLowerCase();
+            var dirty = q.length > 0;
+            wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+
+            var visibleCount = 0;
+            var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
+
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                var label = e.label.toLowerCase();
+                var slug  = e.slug.toLowerCase();
+                var match = !dirty || label.indexOf(q) !== -1 || slug.indexOf(q) !== -1;
+                if (match) {
+                    e.el.hidden = false;
+                    if (dirty) {
+                        e.el.innerHTML = escapeHtml(e.label).replace(pattern, '<mark>$1</mark>');
+                    } else {
+                        e.el.innerHTML = e.original;
+                    }
+                    visibleCount++;
+                } else {
+                    e.el.hidden = true;
+                }
+            }
+
+            // Collapse empty groups. A group is "empty" when all its
+            // child nav items are hidden.
+            for (var g = 0; g < groups.length; g++) {
+                var group = groups[g];
+                var kids = group.querySelectorAll('.mui-gallery__nav-item');
+                var any = false;
+                for (var k = 0; k < kids.length; k++) {
+                    if (!kids[k].hidden) { any = true; break; }
+                }
+                group.setAttribute('data-mui-search-empty', any ? '0' : '1');
+            }
+            if (nav) nav.setAttribute('data-mui-search-empty', visibleCount === 0 && dirty ? '1' : '0');
+        }
+
+        search.addEventListener('input', runFilter);
+        search.addEventListener('focus', function () { wrap.classList.add('mui-showcase__search--focused'); });
+        search.addEventListener('blur',  function () { wrap.classList.remove('mui-showcase__search--focused'); });
+        search.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                search.value = '';
+                runFilter();
+                search.blur();
+            }
+        });
+
+        // Global "/" hotkey — focus unless the user is typing into
+        // another input/textarea/contenteditable.
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== '/') return;
+            var t = e.target;
+            if (!t) return;
+            var tag = (t.tagName || '').toLowerCase();
+            var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable;
+            if (typing) return;
+            e.preventDefault();
+            search.focus();
+            search.select();
+        });
     }
 })();
 </script></body></html>

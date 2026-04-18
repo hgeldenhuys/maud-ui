@@ -1076,6 +1076,13 @@ fn page_header() -> Markup {
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
+                                span class="mui-gallery__nav-advanced-group-label" { "Drag & Drop" }
+                                a href="/integrations/sortable" role="menuitem" {
+                                    span class="mui-gallery__nav-advanced-label" { "SortableJS" }
+                                    span class="mui-gallery__nav-advanced-sub" { "Reorder list, kanban, tile grid" }
+                                }
+                            }
+                            div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Terminal" }
                                 a href="/integrations/xterm" role="menuitem" {
                                     span class="mui-gallery__nav-advanced-label" { "xterm.js" }
@@ -6189,6 +6196,528 @@ if (host) {
     if (statusTheme) statusTheme.textContent = document.documentElement.getAttribute('data-theme') || 'dark';
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
+"##
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SortableJS — drag-and-drop (reorder, kanban, tile grid)
+// ═══════════════════════════════════════════════════════════════════════
+
+pub fn integrations_sortable_page() -> Markup {
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("SortableJS \u{2014} maud-ui integrations"))
+                style { (maud::PreEscaped(integration_shell_css())) }
+                style { (maud::PreEscaped(sortable_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "SortableJS" }
+                        }
+                        section class="mui-gallery__component" id="integration-sortable" {
+                            h3 class="mui-gallery__component-name" { "SortableJS \u{2014} Drag & drop" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                                "SortableJS inside maud-ui shells \u{2014} three flavours of drag-and-drop: "
+                                "a reorderable list with a drag handle, a three-column kanban board with "
+                                "cross-column drag, and a loose tile grid. Vanilla JS (no framework, no "
+                                "bundler), touch-friendly, works with a keyboard via the "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "Sortable" }
+                                " API."
+                            }
+
+                            // ── Demo 1: Sortable list with drag handle ──────────
+                            div class="mui-integration mui-integration--sortable" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>"##.to_string()))
+                                        }
+                                        span { "lists/priorities.json" }
+                                        span class="mui-integration__dirty" id="mui-sort-list-dirty" aria-hidden="true" { "\u{25cf}" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-sort-list-shuffle" class="mui-btn mui-btn--outline mui-btn--sm" { "Shuffle" }
+                                        button type="button" id="mui-sort-list-reset"   class="mui-btn mui-btn--ghost mui-btn--sm"   { "Reset" }
+                                        button type="button" id="mui-sort-list-export"  class="mui-btn mui-btn--primary mui-btn--sm" { "Export order" }
+                                    }
+                                }
+                                div class="mui-integration__editor mui-sort__list-editor" {
+                                    ul class="mui-sort__list" id="mui-sort-list" data-reset=(r#"["Refactor auth middleware","Ship theme customiser","Wire SSE fallback","Upgrade postgres","Audit role permissions","Add command palette","Deprecate legacy API","Run retrospective"]"#) {
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Refactor auth middleware" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Ship theme customiser" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Wire SSE fallback" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Upgrade postgres" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Audit role permissions" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Add command palette" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Deprecate legacy API" }
+                                        li class="mui-sort__item" { span class="mui-sort__handle" aria-hidden="true" { "\u{2630}" } "Run retrospective" }
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-sort-list-count"  { "8 items" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-sort-list-last"   { "No moves yet" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span class="mui-integration__statusbar-theme" { "Drag handle: " span style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { "\u{2630}" } }
+                                }
+                            }
+
+                            // Output panel for list export
+                            div class="mui-integration__output" {
+                                div class="mui-integration__output-header" {
+                                    span { "Ordered list (JSON)" }
+                                    button type="button" id="mui-sort-list-clear" class="mui-btn mui-btn--ghost mui-btn--sm" { "Clear" }
+                                }
+                                pre class="mui-integration__output-body" id="mui-sort-list-output" {
+                                    "// Drag to reorder, then click " span style="color:var(--mui-accent-text);" { "Export order" } "."
+                                }
+                            }
+
+                            // ── Demo 2: Kanban board ─────────────────────────────
+                            h4 style="margin:2rem 0 0.5rem;font-size:1rem;font-weight:600;color:var(--mui-text);" { "Kanban board" }
+                            p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                                "Three columns sharing a "
+                                code style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { "group: 'kanban'" }
+                                " — drag cards within a column or across columns. Counts update live."
+                            }
+                            div class="mui-integration mui-integration--sortable" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="6" height="18"/><rect x="11" y="3" width="6" height="14"/><rect x="19" y="3" width="2" height="10"/></svg>"##.to_string()))
+                                        }
+                                        span { "boards/sprint-18.kanban" }
+                                    }
+                                    div class="mui-integration__toolbar" {
+                                        button type="button" id="mui-sort-kanban-add"    class="mui-btn mui-btn--outline mui-btn--sm" { "+ Card" }
+                                        button type="button" id="mui-sort-kanban-reset"  class="mui-btn mui-btn--ghost mui-btn--sm"   { "Reset" }
+                                    }
+                                }
+                                div class="mui-integration__editor mui-sort__kanban-editor" {
+                                    div class="mui-sort__kanban" id="mui-sort-kanban" {
+                                        (kanban_column("backlog", "Backlog", &[
+                                            "Migrate billing webhook",
+                                            "Add command palette",
+                                            "Dogfood theme customiser",
+                                            "Harden WAL replay",
+                                        ]))
+                                        (kanban_column("progress", "In progress", &[
+                                            "Sticky header UX",
+                                            "Theme customiser v2",
+                                        ]))
+                                        (kanban_column("done", "Done", &[
+                                            "Swatch primitive",
+                                            "xyflow integration",
+                                            "Excalidraw integration",
+                                        ]))
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span id="mui-sort-kanban-count-backlog"  { "Backlog: 4" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-sort-kanban-count-progress" { "In progress: 2" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-sort-kanban-count-done"     { "Done: 3" }
+                                    span class="mui-integration__statusbar-spacer" {}
+                                    span id="mui-sort-kanban-last" style="color:var(--mui-accent-text);" {}
+                                }
+                            }
+
+                            // ── Demo 3: Tile grid ────────────────────────────────
+                            h4 style="margin:2rem 0 0.5rem;font-size:1rem;font-weight:600;color:var(--mui-text);" { "Tile grid" }
+                            p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                                "Free-form tile rearrangement \u{2014} useful for dashboard widget grids "
+                                "or a photo mosaic. Same SortableJS engine, different layout container."
+                            }
+                            div class="mui-integration mui-integration--sortable" {
+                                div class="mui-integration__header" {
+                                    div class="mui-integration__filepath" {
+                                        span class="mui-integration__filepath-icon" aria-hidden="true" {
+                                            (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>"##.to_string()))
+                                        }
+                                        span { "dashboard/widgets.json" }
+                                    }
+                                }
+                                div class="mui-integration__editor mui-sort__grid-editor" {
+                                    div class="mui-sort__grid" id="mui-sort-grid" {
+                                        (sortable_tile("metric", "Monthly recurring revenue", "$128,430",   "#2563eb"))
+                                        (sortable_tile("metric", "Active orgs",                "2,418",       "#16a34a"))
+                                        (sortable_tile("metric", "Deployments (7d)",           "87",          "#f59e0b"))
+                                        (sortable_tile("metric", "API p95 latency",            "142 ms",      "#8b5cf6"))
+                                        (sortable_tile("metric", "Error rate",                 "0.21%",       "#dc2626"))
+                                        (sortable_tile("metric", "Pipeline success",           "99.3%",       "#0891b2"))
+                                    }
+                                }
+                                div class="mui-integration__statusbar" {
+                                    span { "6 tiles" }
+                                    span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
+                                    span id="mui-sort-grid-last" { "Drag tiles to rearrange" }
+                                }
+                            }
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" }
+                        }
+                    }
+                }
+                script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js" {}
+                script { (maud::PreEscaped(sortable_bootstrap())) }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+            }
+        }
+    }
+}
+
+fn kanban_column(id: &str, title: &str, items: &[&str]) -> Markup {
+    html! {
+        div class="mui-sort__kanban-col" data-col=(id) {
+            div class="mui-sort__kanban-col-header" {
+                span class="mui-sort__kanban-col-title" { (title) }
+                span class="mui-sort__kanban-col-count" id=(format!("mui-sort-kanban-col-count-{}", id)) { (items.len()) }
+            }
+            div class="mui-sort__kanban-cards" data-col=(id) {
+                @for item in items {
+                    div class="mui-sort__kanban-card" { (*item) }
+                }
+            }
+        }
+    }
+}
+
+fn sortable_tile(kind: &str, label: &str, value: &str, accent: &str) -> Markup {
+    let _ = kind;
+    html! {
+        div class="mui-sort__tile" {
+            div class="mui-sort__tile-accent" style=(maud::PreEscaped(format!("background:{};", accent))) {}
+            div class="mui-sort__tile-body" {
+                div class="mui-sort__tile-label" { (label) }
+                div class="mui-sort__tile-value" { (value) }
+            }
+        }
+    }
+}
+
+fn sortable_css() -> &'static str {
+    r#"
+.mui-integration--sortable .mui-integration__editor { padding: 1rem; background: var(--mui-bg); }
+.mui-sort__list-editor  { padding: 0.75rem !important; }
+.mui-sort__kanban-editor, .mui-sort__grid-editor { padding: 1rem !important; overflow-x: auto; }
+
+/* ── Sortable list ──────────────────────────────────────────── */
+.mui-sort__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+.mui-sort__item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    color: var(--mui-text);
+    font-size: 0.875rem;
+    cursor: default;
+    transition: border-color var(--mui-transition);
+}
+.mui-sort__item:hover { border-color: var(--mui-border-hover); }
+.mui-sort__handle {
+    cursor: grab;
+    color: var(--mui-text-subtle);
+    font-family: var(--mui-font-mono);
+    user-select: none;
+    padding: 0 0.25rem;
+}
+.mui-sort__handle:active { cursor: grabbing; }
+
+/* SortableJS applies these classes automatically via its `ghostClass`
+ * / `chosenClass` / `dragClass` options (wired in the bootstrap). */
+.mui-sort--ghost {
+    opacity: 0.35;
+    background: var(--mui-bg-input);
+    border-style: dashed;
+}
+.mui-sort--chosen { border-color: var(--mui-accent); }
+.mui-sort--drag   {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+    transform: rotate(0.5deg);
+}
+
+/* ── Kanban ─────────────────────────────────────────────────── */
+.mui-sort__kanban {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(14rem, 1fr));
+    gap: 0.75rem;
+    min-width: 0;
+}
+@media (max-width: 760px) {
+    .mui-sort__kanban { grid-template-columns: 1fr; }
+}
+.mui-sort__kanban-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    padding: 0.625rem;
+    min-height: 12rem;
+}
+.mui-sort__kanban-col-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.125rem 0.25rem 0.375rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+.mui-sort__kanban-col-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-muted);
+}
+.mui-sort__kanban-col-count {
+    font-size: 0.75rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-subtle);
+    padding: 0.0625rem 0.375rem;
+    background: var(--mui-bg);
+    border-radius: var(--mui-radius-sm);
+}
+.mui-sort__kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-height: 4rem;
+    padding: 0.125rem;
+}
+.mui-sort__kanban-card {
+    padding: 0.5rem 0.75rem;
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    cursor: grab;
+    transition: border-color var(--mui-transition),
+                transform var(--mui-transition);
+}
+.mui-sort__kanban-card:hover {
+    border-color: var(--mui-border-hover);
+    transform: translateX(1px);
+}
+.mui-sort__kanban-card:active { cursor: grabbing; }
+
+/* Highlight the drop target column during drag */
+.mui-sort__kanban-cards.mui-sort--over {
+    background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+    border-radius: var(--mui-radius-sm);
+}
+
+/* ── Tile grid ──────────────────────────────────────────────── */
+.mui-sort__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.75rem;
+}
+.mui-sort__tile {
+    position: relative;
+    display: flex;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    overflow: hidden;
+    cursor: grab;
+    min-height: 5rem;
+    transition: border-color var(--mui-transition),
+                transform 120ms ease;
+}
+.mui-sort__tile:hover { border-color: var(--mui-border-hover); transform: translateY(-1px); }
+.mui-sort__tile:active { cursor: grabbing; }
+.mui-sort__tile-accent { width: 4px; flex-shrink: 0; }
+.mui-sort__tile-body   { padding: 0.75rem 0.875rem; display: flex; flex-direction: column; justify-content: center; gap: 0.25rem; }
+.mui-sort__tile-label  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mui-text-muted); font-weight: 600; }
+.mui-sort__tile-value  { font-size: 1.125rem; font-weight: 700; color: var(--mui-text); font-family: var(--mui-font-sans); }
+"#
+}
+
+fn sortable_bootstrap() -> &'static str {
+    r##"
+(function () {
+  'use strict';
+  if (typeof Sortable === 'undefined') {
+    console.error('[maud-ui] SortableJS global missing — CDN load failed');
+    return;
+  }
+
+  // Common options shared by the three demos.
+  var shared = {
+    animation: 160,
+    ghostClass: 'mui-sort--ghost',
+    chosenClass: 'mui-sort--chosen',
+    dragClass: 'mui-sort--drag',
+    forceFallback: false,
+    fallbackTolerance: 5,
+  };
+
+  // ── Demo 1: sortable list ──────────────────────────────────
+  (function () {
+    var list = document.getElementById('mui-sort-list');
+    if (!list) return;
+    var count = document.getElementById('mui-sort-list-count');
+    var last  = document.getElementById('mui-sort-list-last');
+    var dirty = document.getElementById('mui-sort-list-dirty');
+    var output= document.getElementById('mui-sort-list-output');
+
+    function labelOf(li) { return (li.textContent || '').trim(); }
+    function currentOrder() {
+      return Array.prototype.slice.call(list.children).map(labelOf);
+    }
+    function refreshCount() {
+      var n = list.children.length;
+      if (count) count.textContent = n + ' item' + (n === 1 ? '' : 's');
+    }
+    refreshCount();
+
+    Sortable.create(list, Object.assign({}, shared, {
+      handle: '.mui-sort__handle',
+      onEnd: function (evt) {
+        if (evt.oldIndex === evt.newIndex) return;
+        if (last)  last.textContent  = 'Moved "' + labelOf(evt.item) + '" from #' + (evt.oldIndex + 1) + ' \u2192 #' + (evt.newIndex + 1);
+        if (dirty) dirty.setAttribute('data-dirty', 'true');
+      },
+    }));
+
+    document.getElementById('mui-sort-list-shuffle')?.addEventListener('click', function () {
+      var kids = Array.prototype.slice.call(list.children);
+      for (var i = kids.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        list.insertBefore(kids[j], kids[i].nextSibling);
+        kids = Array.prototype.slice.call(list.children);
+      }
+      if (last)  last.textContent = 'Shuffled';
+      if (dirty) dirty.setAttribute('data-dirty', 'true');
+    });
+    document.getElementById('mui-sort-list-reset')?.addEventListener('click', function () {
+      var original;
+      try { original = JSON.parse(list.getAttribute('data-reset') || '[]'); } catch { original = []; }
+      if (!original.length) return;
+      list.replaceChildren();
+      for (var i = 0; i < original.length; i++) {
+        var li = document.createElement('li');
+        li.className = 'mui-sort__item';
+        var handle = document.createElement('span');
+        handle.className = 'mui-sort__handle';
+        handle.setAttribute('aria-hidden', 'true');
+        handle.textContent = '\u2630';
+        li.appendChild(handle);
+        li.appendChild(document.createTextNode(original[i]));
+        list.appendChild(li);
+      }
+      refreshCount();
+      if (last)  last.textContent = 'Reset';
+      if (dirty) dirty.setAttribute('data-dirty', 'false');
+    });
+    document.getElementById('mui-sort-list-export')?.addEventListener('click', function () {
+      if (output) output.textContent = JSON.stringify(currentOrder(), null, 2);
+    });
+    document.getElementById('mui-sort-list-clear')?.addEventListener('click', function () {
+      if (output) output.textContent = '// cleared.';
+    });
+  })();
+
+  // ── Demo 2: kanban ─────────────────────────────────────────
+  (function () {
+    var board = document.getElementById('mui-sort-kanban');
+    if (!board) return;
+    var cardLists = Array.prototype.slice.call(board.querySelectorAll('.mui-sort__kanban-cards'));
+    var last = document.getElementById('mui-sort-kanban-last');
+
+    function colName(col) {
+      var header = col.parentElement.querySelector('.mui-sort__kanban-col-title');
+      return header ? header.textContent : col.getAttribute('data-col') || '';
+    }
+    function refreshCounts() {
+      for (var i = 0; i < cardLists.length; i++) {
+        var col = cardLists[i];
+        var key = col.getAttribute('data-col');
+        var n = col.children.length;
+        var badge = document.getElementById('mui-sort-kanban-col-count-' + key);
+        if (badge) badge.textContent = n;
+        var statusbar = document.getElementById('mui-sort-kanban-count-' + key);
+        if (statusbar) {
+          var name = colName(col);
+          statusbar.textContent = name + ': ' + n;
+        }
+      }
+    }
+    refreshCounts();
+
+    for (var i = 0; i < cardLists.length; i++) {
+      Sortable.create(cardLists[i], Object.assign({}, shared, {
+        group: 'mui-kanban',
+        onAdd: function (evt) {
+          refreshCounts();
+          if (last) last.textContent = '\u2192 moved "' + (evt.item.textContent || '').trim() + '" to ' + colName(evt.to);
+        },
+        onUpdate: function (evt) {
+          if (evt.oldIndex === evt.newIndex) return;
+          if (last) last.textContent = '\u21cb reordered within ' + colName(evt.to);
+        },
+        onStart: function () {
+          for (var j = 0; j < cardLists.length; j++) cardLists[j].classList.add('mui-sort--over');
+        },
+        onEnd: function () {
+          for (var j = 0; j < cardLists.length; j++) cardLists[j].classList.remove('mui-sort--over');
+          refreshCounts();
+        },
+      }));
+    }
+
+    document.getElementById('mui-sort-kanban-add')?.addEventListener('click', function () {
+      var title = window.prompt('New card title?');
+      if (!title) return;
+      var backlog = cardLists.find(function (c) { return c.getAttribute('data-col') === 'backlog'; });
+      if (!backlog) return;
+      var card = document.createElement('div');
+      card.className = 'mui-sort__kanban-card';
+      card.textContent = title;
+      backlog.appendChild(card);
+      refreshCounts();
+      if (last) last.textContent = '+ added "' + title + '" to Backlog';
+    });
+    document.getElementById('mui-sort-kanban-reset')?.addEventListener('click', function () { location.reload(); });
+  })();
+
+  // ── Demo 3: tile grid ──────────────────────────────────────
+  (function () {
+    var grid = document.getElementById('mui-sort-grid');
+    if (!grid) return;
+    var last = document.getElementById('mui-sort-grid-last');
+    Sortable.create(grid, Object.assign({}, shared, {
+      onEnd: function (evt) {
+        if (evt.oldIndex === evt.newIndex) return;
+        var label = evt.item.querySelector('.mui-sort__tile-label');
+        if (last) last.textContent = '\u2192 moved ' + (label ? label.textContent : 'tile');
+      },
+    }));
+  })();
+})();
 "##
 }
 

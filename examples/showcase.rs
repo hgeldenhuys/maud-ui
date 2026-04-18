@@ -106,6 +106,10 @@ async fn main() {
             get(|| async { maud_ui::showcase::integrations_cytoscape_page() }),
         )
         .route(
+            "/integrations/sortable",
+            get(|| async { maud_ui::showcase::integrations_sortable_page() }),
+        )
+        .route(
             "/css/maud-ui.css",
             get(serve_css),
         )

@@ -108,6 +108,7 @@ async function main() {
       "/integrations/wavesurfer",
       "/integrations/pdfjs",
       "/integrations/cytoscape",
+      "/integrations/sortable",
       ...COMPONENTS.map(s => `/${s}`),
       ...BLOCKS.map(s => `/blocks/${s}`),
     ];

@@ -1353,16 +1353,21 @@ let app = Router::new()
             activate();
         });
 
-        // Global hotkey: cmd+k / ctrl+k (and forward-slash shortcut
-        // already goes to sidebar search, which is still useful).
+        // Global hotkey: cmd+k / ctrl+k. Registered in the capture
+        // phase so we fire before any component-level handlers (the
+        // `command` primitive on the gallery page also binds cmd+k)
+        // and stop the event from propagating further.
         document.addEventListener('keydown', function (e) {
             if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 if (isOpen()) close(); else open();
             } else if (e.key === 'Escape' && isOpen()) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
                 close();
             }
-        });
+        }, true);
     })();
 
     // ── Theme + direction toggles (icon-only, stable text) ──────

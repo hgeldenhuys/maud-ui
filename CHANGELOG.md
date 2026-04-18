@@ -5,6 +5,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — SortableJS integration (drag & drop)
+
+### Added
+- **`/integrations/sortable`** — three drag-and-drop demos backed
+  by SortableJS 1.15.3 (UMD from jsDelivr, ~30 KB, vanilla, no
+  framework):
+  - **Sortable list** with drag handle — Shuffle / Reset / Export
+    order (dumps current order as JSON).
+  - **Kanban board** — 3 columns sharing `group: 'mui-kanban'`,
+    cards drag within and across columns, live column counts, the
+    "last move" line in the statusbar narrates the last action.
+  - **Tile grid** — free-form rearrangement for dashboards.
+- "**Drag & Drop**" group in the Advanced dropdown.
+
+### Changed
+- Static export now ships 88 pages (was 87).
+- Gallery math: 15 integration pages (was 14).
+
 ## [2026-04-18] — Swatch primitive + theme customiser
 
 ### Added

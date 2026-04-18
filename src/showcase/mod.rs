@@ -939,12 +939,14 @@ fn page_head(title: &str) -> Markup {
 fn page_header() -> Markup {
     html! {
         header.mui-showcase__header {
-            div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;" {
-                div {
-                    h1 { a href="/" style="color:inherit;text-decoration:none;" { "maud-ui" } }
-                    p.mui-text-muted { (format!("{} components for maud + htmx", COMPONENT_NAMES.len())) }
+            div class="mui-showcase__header-inner" {
+                a href="/" class="mui-showcase__brand" {
+                    span class="mui-showcase__brand-name" { "maud-ui" }
+                    span class="mui-showcase__brand-count" {
+                        (format!("{} components", COMPONENT_NAMES.len()))
+                    }
                 }
-                div style="display:flex;gap:0.75rem;align-items:center;" {
+                nav class="mui-showcase__nav" {
                     a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Get started"
                     }
@@ -1048,13 +1050,19 @@ fn page_header() -> Markup {
                     a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "GitHub"
                     }
-                    span.mui-text-subtle style="font-size:0.8125rem;" { "Theme:" }
-                    button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="theme-toggle" id="theme-toggle" {
-                        "Toggle theme"
+                }
+                div class="mui-showcase__tools" {
+                    button type="button"
+                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn"
+                           data-mui="theme-toggle" id="theme-toggle"
+                           title="Toggle theme" aria-label="Toggle theme" {
+                        "\u{25D0}"
                     }
-                    span.mui-text-subtle style="font-size:0.8125rem;" { "Dir:" }
-                    button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-mui="dir-toggle" id="dir-toggle" aria-label="Toggle reading direction" {
-                        "RTL"
+                    button type="button"
+                           class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn"
+                           data-mui="dir-toggle" id="dir-toggle"
+                           title="Toggle reading direction" aria-label="Toggle reading direction" {
+                        "\u{21C4}"
                     }
                 }
             }
@@ -5794,6 +5802,111 @@ fn showcase_css() -> &'static str {
 
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
+
+/* ── Sticky compact page header ─────────────────────────────────────
+ * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
+ * + a two-row "brand above nav" layout). The new header is a single
+ * row with brand · nav · tools, pinned to the top with a blurred
+ * backdrop. --mui-header-h is published as a custom property so the
+ * sidebar and section anchors can offset accurately. */
+:root { --mui-header-h: 3.25rem; }
+
+.mui-showcase__header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 0.5rem 1.25rem !important;
+    background: color-mix(in srgb, var(--mui-bg) 82%, transparent);
+    -webkit-backdrop-filter: saturate(150%) blur(14px);
+    backdrop-filter: saturate(150%) blur(14px);
+}
+.mui-showcase__header h1 {
+    /* the old dist rule styled an <h1> inside the header; we no
+     * longer render one, but keep this reset in case something else
+     * hits it. */
+    font-size: 1rem;
+    margin: 0;
+}
+
+.mui-showcase__header-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    min-height: 2.25rem;
+}
+
+.mui-showcase__brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    color: inherit;
+    text-decoration: none;
+    margin-right: auto;
+    padding-inline: 0.25rem;
+}
+.mui-showcase__brand-name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--mui-text);
+}
+.mui-showcase__brand-count {
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+}
+
+.mui-showcase__nav {
+    display: inline-flex;
+    gap: 0.125rem;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Reset the dist CSS default that paints <nav> elements with a
+     * card background — inside the header we want the nav to sit
+     * transparent on the header's own backdrop. */
+    background: transparent;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+.mui-showcase__tools {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--mui-border);
+}
+
+.mui-showcase__tool-btn {
+    min-width: 2rem;
+    padding-inline: 0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* The sidebar stuck to top:0 hid behind the new header; pin it
+ * below the sticky chrome instead. */
+.mui-gallery__sidebar {
+    top: var(--mui-header-h) !important;
+    height: calc(100vh - var(--mui-header-h)) !important;
+}
+
+/* When the user clicks a sidebar / in-page jump link, keep the
+ * target heading below the sticky header instead of jumping it off
+ * the top of the viewport. */
+.mui-gallery__component,
+.mui-gallery__breadcrumb,
+[id] {
+    scroll-margin-top: calc(var(--mui-header-h) + 0.75rem);
+}
+
+/* Narrow screens: let brand + count stack smaller + hide subtitle */
+@media (max-width: 640px) {
+    .mui-showcase__brand-count { display: none; }
+    :root { --mui-header-h: 3rem; }
+}
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
  * <details>/<summary>-based, so it works without JS. The menu is

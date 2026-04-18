@@ -5,6 +5,28 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — UX: sticky compact header, icon toggles, scroll-anchor offsets
+
+### Changed
+- **Page header** is now **sticky** (pinned to the top on scroll) with a
+  translucent `backdrop-filter: blur` chrome, so primary nav is always
+  one click away as you read down a component / integration page.
+- Header restructured to a **single-row compact layout**: brand +
+  component count on the left, primary nav in the middle, icon-only
+  Theme (◐) and Direction (⇄) toggles on the right. Overall header
+  height dropped from ~160 px to ~52 px — a much bigger content viewport.
+- Published `--mui-header-h` as a CSS custom property, used by the
+  sidebar (now sticks below the header instead of top: 0) and by
+  every `[id]` anchor (adds `scroll-margin-top` so jump links land
+  *below* the sticky header instead of vanishing behind it).
+
+### Fixed
+- Dark rectangle bleed behind the nav on first paint: the dist
+  `maud-ui.css` styles `<nav>` elements with a card background by
+  default, which conflicted with the transparent header backdrop.
+  Scoped `background: transparent` + `box-shadow: none` for
+  `.mui-showcase__nav` specifically.
+
 ## [2026-04-18] — Fix: AG Grid empty render + Wavesurfer zoom UX
 
 ### Fixed

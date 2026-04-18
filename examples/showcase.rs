@@ -36,6 +36,10 @@ async fn main() {
             get(|| async { maud_ui::showcase::getting_started_page() }),
         )
         .route(
+            "/theme",
+            get(|| async { maud_ui::showcase::theme_customizer_page() }),
+        )
+        .route(
             "/blocks",
             get(|| async { maud_ui::showcase::blocks_index_page() }),
         )

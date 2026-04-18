@@ -1,0 +1,1219 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Theme customiser — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=136507"><style>
+/* Gallery layout — sidebar + main */
+.mui-gallery {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 80px);
+}
+
+/* Sticky sidebar */
+.mui-gallery__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--mui-border);
+    padding: 1rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-gallery__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mui-gallery__nav-group {
+    padding: 0 0 0.25rem;
+}
+
+.mui-gallery__nav-tier {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    transition: color var(--mui-transition);
+}
+.mui-gallery__nav-tier:hover { color: var(--mui-text); }
+
+.mui-gallery__nav-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.mui-gallery__nav-item {
+    display: block;
+    padding: 0.25rem 1rem 0.25rem 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all var(--mui-transition);
+}
+.mui-gallery__nav-item:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+    border-left-color: var(--mui-border-hover);
+}
+.mui-gallery__nav-item--active {
+    color: var(--mui-text);
+    border-left-color: var(--mui-accent);
+    background: var(--mui-bg-input);
+}
+
+/* Main content */
+.mui-gallery__main {
+    padding: 2rem;
+    max-width: 960px;
+}
+
+.mui-gallery__tier {
+    margin-bottom: 3rem;
+}
+
+.mui-gallery__tier-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-gallery__tier-title {
+    margin: 0 0 0.25rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.mui-gallery__tier-desc {
+    margin: 0;
+    color: var(--mui-text-muted);
+    font-size: 0.875rem;
+}
+
+.mui-gallery__component {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+}
+
+.mui-gallery__component-name {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mui-gallery__anchor {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity var(--mui-transition);
+}
+.mui-gallery__component:hover .mui-gallery__anchor {
+    opacity: 1;
+}
+.mui-gallery__anchor:hover { color: var(--mui-accent); }
+
+.mui-gallery__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    margin-bottom: 1rem;
+}
+.mui-gallery__breadcrumb a {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+}
+.mui-gallery__breadcrumb a:hover {
+    color: var(--mui-text);
+    text-decoration: underline;
+}
+
+.mui-gallery__back { padding-top: 1rem; }
+
+/* Responsive: collapse sidebar on narrow screens */
+@media (max-width: 768px) {
+    .mui-gallery {
+        grid-template-columns: 1fr;
+    }
+    .mui-gallery__sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--mui-border);
+        padding: 0.75rem 0;
+    }
+    .mui-gallery__nav-items {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.125rem;
+    }
+    .mui-gallery__nav-item {
+        border-left: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--mui-radius-sm);
+    }
+}
+
+/* Blocks index grid */
+.mui-showcase__block-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.mui-showcase__block-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color var(--mui-transition), transform var(--mui-transition);
+}
+.mui-showcase__block-card:hover {
+    border-color: var(--mui-border-hover);
+    transform: translateY(-1px);
+}
+.mui-showcase__block-card--placeholder {
+    opacity: 0.55;
+    pointer-events: auto;
+    background: transparent;
+    border-style: dashed;
+}
+.mui-showcase__block-card-category {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-subtle);
+}
+.mui-showcase__block-card-title {
+    margin: 0.25rem 0 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--mui-text);
+}
+.mui-showcase__block-card-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--mui-text-muted);
+    line-height: 1.5;
+    flex: 1;
+}
+.mui-showcase__block-card-uses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+.mui-showcase__block-card-use {
+    font-size: 0.6875rem;
+    font-family: var(--mui-font-mono);
+    padding: 0.125rem 0.4375rem;
+    background: var(--mui-bg-input);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text-muted);
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* ── Swatch primitive ─────────────────────────────────────────────── */
+.mui-swatch {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    min-width: 5rem;
+    padding: 0.25rem;
+    border-radius: var(--mui-radius-md);
+    transition: transform var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-swatch--copyable { cursor: pointer; }
+.mui-swatch--copyable:hover { transform: translateY(-1px); }
+.mui-swatch--copyable:focus-visible {
+    outline: 2px solid var(--mui-border-focus);
+    outline-offset: 2px;
+}
+.mui-swatch__chip {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--mui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--mui-border) 70%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    /* chequered base so translucent swatches are visible */
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.04) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.04) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    position: relative;
+    overflow: hidden;
+}
+/* The per-swatch inline style sets `background: &lt;colour&gt;` on the chip,
+ * which stacks above the chequerboard. */
+.mui-swatch__chip::after {
+    content: &quot;&quot;;
+    position: absolute;
+    inset: 0;
+    background: inherit;
+}
+.mui-swatch--sm .mui-swatch__chip { width: 2rem;   height: 2rem; }
+.mui-swatch--lg .mui-swatch__chip { width: 5rem;   height: 5rem; }
+
+.mui-swatch__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+.mui-swatch__label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--mui-text);
+}
+.mui-swatch__sub {
+    font-size: 0.6875rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mui-swatch__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 0.75rem;
+}
+
+/* Horizontal tone ramp */
+.mui-swatch__scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.mui-swatch__scale-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    color: var(--mui-text-muted);
+    letter-spacing: 0.06em;
+}
+.mui-swatch__scale-row {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(2.25rem, 1fr));
+    gap: 0.25rem;
+}
+.mui-swatch--scale {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.125rem;
+    min-width: 0;
+}
+.mui-swatch--scale .mui-swatch__chip {
+    width: 100%;
+    height: 2.25rem;
+    border-radius: var(--mui-radius-sm);
+}
+.mui-swatch__scale-key {
+    font-size: 0.625rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-subtle);
+    text-align: center;
+}
+
+/* Toast-ish &quot;copied&quot; hint that fades after click */
+.mui-swatch--copied { animation: muiSwatchCopied 900ms ease forwards; }
+@keyframes muiSwatchCopied {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 45%, transparent); }
+    40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--mui-accent) 25%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 0%, transparent); }
+}
+
+/* ── Sticky compact page header ─────────────────────────────────────
+ * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
+ * + a two-row &quot;brand above nav&quot; layout). The new header is a single
+ * row with brand · nav · tools, pinned to the top with a blurred
+ * backdrop. --mui-header-h is published as a custom property so the
+ * sidebar and section anchors can offset accurately. */
+:root { --mui-header-h: 3.25rem; }
+
+.mui-showcase__header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 0.5rem 1.25rem !important;
+    background: color-mix(in srgb, var(--mui-bg) 82%, transparent);
+    -webkit-backdrop-filter: saturate(150%) blur(14px);
+    backdrop-filter: saturate(150%) blur(14px);
+}
+.mui-showcase__header h1 {
+    /* the old dist rule styled an &lt;h1&gt; inside the header; we no
+     * longer render one, but keep this reset in case something else
+     * hits it. */
+    font-size: 1rem;
+    margin: 0;
+}
+
+.mui-showcase__header-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    min-height: 2.25rem;
+}
+
+.mui-showcase__brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    color: inherit;
+    text-decoration: none;
+    padding-inline: 0.25rem;
+    flex-shrink: 0;
+}
+
+/* Search input — takes flexible middle space, bounded so it doesn't
+ * crowd out the nav on wider viewports. Hotkey: &quot;/&quot; to focus. */
+.mui-showcase__search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 14rem;
+    max-width: 26rem;
+    min-width: 9rem;
+}
+.mui-showcase__search-icon {
+    position: absolute;
+    left: 0.5rem;
+    display: inline-flex;
+    color: var(--mui-text-subtle);
+    pointer-events: none;
+}
+.mui-showcase__search-input {
+    width: 100%;
+    height: 2rem;
+    padding: 0 2rem 0 1.875rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    color: var(--mui-text);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    outline: none;
+    transition: border-color var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-showcase__search-input::placeholder { color: var(--mui-text-subtle); }
+.mui-showcase__search-input:focus-visible {
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+.mui-showcase__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.mui-showcase__search-hint {
+    position: absolute;
+    right: 0.5rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.125rem 0.375rem;
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    pointer-events: none;
+}
+.mui-showcase__search--focused .mui-showcase__search-hint,
+.mui-showcase__search--dirty  .mui-showcase__search-hint { opacity: 0; }
+
+/* When filtering, grey out group headers whose items are all hidden,
+ * and hide the empty group entirely. */
+.mui-gallery__nav-item[hidden] { display: none; }
+.mui-gallery__nav-group[data-mui-search-empty=&quot;1&quot;] { display: none; }
+
+/* Search-match highlight in the sidebar text */
+.mui-gallery__nav-item mark {
+    background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
+    color: var(--mui-text);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* No-results state inside the sidebar */
+.mui-gallery__nav-empty {
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    display: none;
+}
+.mui-gallery__nav[data-mui-search-empty=&quot;1&quot;] .mui-gallery__nav-empty { display: block; }
+
+@media (max-width: 760px) {
+    /* Drop the hint + shrink a touch on narrow screens */
+    .mui-showcase__search-hint { display: none; }
+    .mui-showcase__search { min-width: 7rem; }
+}
+.mui-showcase__brand-name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--mui-text);
+}
+.mui-showcase__brand-count {
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+}
+
+.mui-showcase__nav {
+    display: inline-flex;
+    gap: 0.125rem;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Reset the dist CSS default that paints &lt;nav&gt; elements with a
+     * card background — inside the header we want the nav to sit
+     * transparent on the header's own backdrop. */
+    background: transparent;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+.mui-showcase__tools {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    margin-left: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--mui-border);
+}
+
+.mui-showcase__tool-btn {
+    min-width: 2rem;
+    padding-inline: 0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* The sidebar stuck to top:0 hid behind the new header; pin it
+ * below the sticky chrome instead. */
+.mui-gallery__sidebar {
+    top: var(--mui-header-h) !important;
+    height: calc(100vh - var(--mui-header-h)) !important;
+}
+
+/* When the user clicks a sidebar / in-page jump link, keep the
+ * target heading below the sticky header instead of jumping it off
+ * the top of the viewport. */
+.mui-gallery__component,
+.mui-gallery__breadcrumb,
+[id] {
+    scroll-margin-top: calc(var(--mui-header-h) + 0.75rem);
+}
+
+/* Narrow screens: let brand + count stack smaller + hide subtitle */
+@media (max-width: 640px) {
+    .mui-showcase__brand-count { display: none; }
+    :root { --mui-header-h: 3rem; }
+}
+
+/* ── &quot;Advanced&quot; dropdown in the page header ─────────────────────────
+ * &lt;details&gt;/&lt;summary&gt;-based, so it works without JS. The menu is
+ * positioned absolutely below the summary; `list-style:none` strips
+ * the default disclosure triangle and we supply our own caret that
+ * rotates on [open]. */
+.mui-gallery__nav-advanced {
+    position: relative;
+}
+
+.mui-gallery__nav-advanced-summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    cursor: pointer;
+    user-select: none;
+}
+.mui-gallery__nav-advanced-summary::-webkit-details-marker { display: none; }
+.mui-gallery__nav-advanced-summary::marker { content: ''; }
+
+.mui-gallery__nav-advanced-caret {
+    display: inline-block;
+    font-size: 0.75rem;
+    line-height: 1;
+    transition: transform 150ms ease;
+    color: var(--mui-text-muted);
+}
+.mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
+    transform: rotate(180deg);
+}
+
+.mui-gallery__nav-advanced-menu {
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    right: 0;
+    z-index: 60;
+    min-width: 18rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.375rem;
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
+                0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.mui-gallery__nav-advanced-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    padding: 0.25rem 0 0.375rem;
+    border-bottom: 1px solid var(--mui-border);
+}
+.mui-gallery__nav-advanced-group:last-child { border-bottom: 0; }
+
+.mui-gallery__nav-advanced-group-label {
+    display: block;
+    padding: 0.375rem 0.75rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mui-text-subtle);
+}
+
+.mui-gallery__nav-advanced-menu a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.4375rem 0.75rem;
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text);
+    text-decoration: none;
+    transition: background-color var(--mui-transition),
+                color var(--mui-transition);
+}
+.mui-gallery__nav-advanced-menu a:hover,
+.mui-gallery__nav-advanced-menu a:focus-visible {
+    background: var(--mui-bg);
+    outline: none;
+}
+
+.mui-gallery__nav-advanced-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+.mui-gallery__nav-advanced-sub {
+    font-size: 0.75rem;
+    color: var(--mui-text-muted);
+    font-weight: 400;
+}
+</style><style>
+.mui-theme__intro { max-width: none; }
+
+.mui-theme__split {
+    display: grid;
+    grid-template-columns: minmax(20rem, 22rem) 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    margin-top: 1rem;
+}
+@media (max-width: 960px) {
+    .mui-theme__split { grid-template-columns: 1fr; }
+}
+
+/* ── Controls column ────────────────────────────────────────────── */
+.mui-theme__controls {
+    position: sticky;
+    top: calc(var(--mui-header-h, 3.25rem) + 1rem);
+    max-height: calc(100vh - var(--mui-header-h, 3.25rem) - 2rem);
+    overflow-y: auto;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    background: var(--mui-bg-card);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-theme__group {
+    border-bottom: 1px solid var(--mui-border);
+    padding-bottom: 0.5rem;
+}
+.mui-theme__group:last-child { border-bottom: 0; }
+.mui-theme__group[open] .mui-theme__group-caret { transform: rotate(180deg); }
+
+.mui-theme__group-header {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.125rem;
+    cursor: pointer;
+    user-select: none;
+}
+.mui-theme__group-header::-webkit-details-marker { display: none; }
+
+.mui-theme__group-title {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-muted);
+}
+.mui-theme__group-caret {
+    font-size: 0.75rem;
+    color: var(--mui-text-subtle);
+    transition: transform 150ms ease;
+}
+
+.mui-theme__group-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.25rem 0.125rem 0.5rem;
+}
+
+.mui-theme__row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.5rem;
+    row-gap: 0.125rem;
+    align-items: center;
+}
+.mui-theme__row-label {
+    font-size: 0.75rem;
+    color: var(--mui-text);
+    grid-column: 1;
+    grid-row: 1;
+}
+.mui-theme__row-control {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    min-width: 0;
+}
+.mui-theme__row-token {
+    grid-column: 2;
+    grid-row: 2;
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    color: var(--mui-text-subtle);
+}
+
+.mui-theme__color {
+    width: 2rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    cursor: pointer;
+}
+.mui-theme__color::-webkit-color-swatch-wrapper { padding: 0; }
+.mui-theme__color::-webkit-color-swatch {
+    border: none;
+    border-radius: calc(var(--mui-radius-sm) - 1px);
+}
+.mui-theme__text {
+    flex: 1;
+    min-width: 0;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text);
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+}
+.mui-theme__text--wide { width: 100%; }
+.mui-theme__text:focus-visible {
+    outline: none;
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+
+.mui-theme__presets {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    padding: 0.25rem 0.125rem;
+}
+.mui-theme__presets .mui-btn { justify-content: center; }
+.mui-theme__preset-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25rem 0.125rem 0;
+}
+
+/* ── Preview column ─────────────────────────────────────────────── */
+.mui-theme__preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.mui-theme__preview-section {
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    background: var(--mui-bg-card);
+    padding: 1rem;
+}
+
+.mui-theme__section-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-muted);
+}
+
+/* Export box */
+.mui-theme__export {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.mui-theme__export-pre {
+    margin: 0;
+    padding: 0.75rem 0.875rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+    color: var(--mui-text);
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    white-space: pre;
+    overflow-x: auto;
+    max-height: 18rem;
+    overflow-y: auto;
+}
+.mui-theme__export-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">59 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations…" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav"><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Blocks</a><a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Theme</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu" role="menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor" role="menuitem"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap" role="menuitem"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow" role="menuitem"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape" role="menuitem"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid" role="menuitem"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw" role="menuitem"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs" role="menuitem"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid" role="menuitem"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts" role="menuitem"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet" role="menuitem"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar" role="menuitem"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer" role="menuitem"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs" role="menuitem"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm" role="menuitem"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a></nav><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">◐</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn" data-mui="dir-toggle" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction">⇄</button></div></div></header><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/swatch" data-slug="swatch">Swatch</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></div></nav></aside><main class="mui-gallery__main mui-theme"><nav class="mui-gallery__breadcrumb"><a href="/">Gallery</a><span> / </span><span>Theme</span></nav><section class="mui-gallery__component mui-theme__intro" id="theme"><h3 class="mui-gallery__component-name">Theme customiser</h3><p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1rem;line-height:1.55;">Tweak the <code style="font-family:var(--mui-font-mono);font-size:0.875rem;">--mui-*</code> tokens on the left and watch the preview on the right re-render instantly. Changes are saved to <code style="font-family:var(--mui-font-mono);font-size:0.875rem;">localStorage</code> so they survive reloads. Export a <code style="font-family:var(--mui-font-mono);font-size:0.875rem;">:root</code> block when you're happy, paste into your app.</p></section><div class="mui-theme__split"><aside class="mui-theme__controls" id="mui-theme-controls"><div class="mui-theme__group"><div class="mui-theme__group-header"><h4 class="mui-theme__group-title">Presets</h4></div><div class="mui-theme__presets"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="dark">Dark</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="light">Light</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="slate-dark">Slate</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="zinc-violet">Zinc · Violet</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="stone-amber">Stone · Amber</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="emerald">Emerald</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="rose">Rose</button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="high-contrast">High contrast</button></div><div class="mui-theme__preset-actions"><button type="button" id="mui-theme-reset" class="mui-btn mui-btn--ghost mui-btn--sm">Reset to defaults</button></div></div><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Colour — surfaces</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-bg">Background</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-bg-color" class="mui-theme__color" data-theme-token="mui-bg" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-bg" class="mui-theme__text" data-theme-token="mui-bg" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-bg</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-bg-card">Card surface</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-bg-card-color" class="mui-theme__color" data-theme-token="mui-bg-card" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-bg-card" class="mui-theme__text" data-theme-token="mui-bg-card" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-bg-card</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-bg-input">Input surface</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-bg-input-color" class="mui-theme__color" data-theme-token="mui-bg-input" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-bg-input" class="mui-theme__text" data-theme-token="mui-bg-input" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-bg-input</code></div></div></details><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Colour — text</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-text">Body text</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-text-color" class="mui-theme__color" data-theme-token="mui-text" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-text" class="mui-theme__text" data-theme-token="mui-text" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-text</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-text-muted">Muted text</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-text-muted-color" class="mui-theme__color" data-theme-token="mui-text-muted" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-text-muted" class="mui-theme__text" data-theme-token="mui-text-muted" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-text-muted</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-text-subtle">Subtle text</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-text-subtle-color" class="mui-theme__color" data-theme-token="mui-text-subtle" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-text-subtle" class="mui-theme__text" data-theme-token="mui-text-subtle" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-text-subtle</code></div></div></details><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Colour — borders &amp; accent</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-border">Border</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-border-color" class="mui-theme__color" data-theme-token="mui-border" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-border" class="mui-theme__text" data-theme-token="mui-border" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-border</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-border-hover">Border hover</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-border-hover-color" class="mui-theme__color" data-theme-token="mui-border-hover" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-border-hover" class="mui-theme__text" data-theme-token="mui-border-hover" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-border-hover</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-border-focus">Focus ring</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-border-focus-color" class="mui-theme__color" data-theme-token="mui-border-focus" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-border-focus" class="mui-theme__text" data-theme-token="mui-border-focus" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-border-focus</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-accent">Accent</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-accent-color" class="mui-theme__color" data-theme-token="mui-accent" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-accent" class="mui-theme__text" data-theme-token="mui-accent" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-accent</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-accent-text">Accent text</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-accent-text-color" class="mui-theme__color" data-theme-token="mui-accent-text" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-accent-text" class="mui-theme__text" data-theme-token="mui-accent-text" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-accent-text</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-danger">Danger</label><div class="mui-theme__row-control"><input type="color" id="mui-theme-mui-danger-color" class="mui-theme__color" data-theme-token="mui-danger" data-theme-kind="color-picker"><input type="text" id="mui-theme-mui-danger" class="mui-theme__text" data-theme-token="mui-danger" data-theme-kind="color-text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-danger</code></div></div></details><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Radii</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-radius-sm">Small</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-radius-sm" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-radius-sm" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-radius-sm</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-radius-md">Medium</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-radius-md" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-radius-md" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-radius-md</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-radius-lg">Large</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-radius-lg" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-radius-lg" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-radius-lg</code></div></div></details><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Typography</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-font-sans">Sans family</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-font-sans" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-font-sans" data-theme-kind="text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-font-sans</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-font-mono">Mono family</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-font-mono" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-font-mono" data-theme-kind="text" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-font-mono</code></div></div></details><details class="mui-theme__group" open><summary class="mui-theme__group-header"><h4 class="mui-theme__group-title">Spacing</h4><span class="mui-theme__group-caret" aria-hidden="true">▾</span></summary><div class="mui-theme__group-body"><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-spacing-sm">Small</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-spacing-sm" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-spacing-sm" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-spacing-sm</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-spacing-md">Medium</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-spacing-md" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-spacing-md" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-spacing-md</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-spacing-lg">Large</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-spacing-lg" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-spacing-lg" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-spacing-lg</code></div><div class="mui-theme__row"><label class="mui-theme__row-label" for="mui-theme-mui-spacing-xxl">Extra large</label><div class="mui-theme__row-control"><input type="text" id="mui-theme-mui-spacing-xxl" class="mui-theme__text mui-theme__text--wide" data-theme-token="mui-spacing-xxl" data-theme-kind="length" spellcheck="false" autocomplete="off"></div><code class="mui-theme__row-token">--mui-spacing-xxl</code></div></div></details></aside><div class="mui-theme__preview"><div class="mui-theme__preview-section"><h4 class="mui-theme__section-title">Swatch grid (live tokens)</h4><div class="mui-swatch__grid"><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-bg)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-bg);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Background</div><div class="mui-swatch__sub">--mui-bg</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-bg-card)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-bg-card);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Card</div><div class="mui-swatch__sub">--mui-bg-card</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-bg-input)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-bg-input);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Input</div><div class="mui-swatch__sub">--mui-bg-input</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-text)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-text);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Text</div><div class="mui-swatch__sub">--mui-text</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-text-muted)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-text-muted);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Muted</div><div class="mui-swatch__sub">--mui-text-muted</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-text-subtle)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-text-subtle);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Subtle</div><div class="mui-swatch__sub">--mui-text-subtle</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-border)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-border);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Border</div><div class="mui-swatch__sub">--mui-border</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-border-hover)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-border-hover);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Border hover</div><div class="mui-swatch__sub">--mui-border-hover</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-border-focus)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-border-focus);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Border focus</div><div class="mui-swatch__sub">--mui-border-focus</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-accent)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-accent);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Accent</div><div class="mui-swatch__sub">--mui-accent</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-accent-text)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-accent-text);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Accent text</div><div class="mui-swatch__sub">--mui-accent-text</div></div></div><div class="mui-swatch mui-swatch--md mui-swatch--copyable" role="button" tabindex="0" data-mui="swatch-copy" data-swatch-value="var(--mui-danger)" title="Click to copy"><div class="mui-swatch__chip" style="background: var(--mui-danger);"></div><div class="mui-swatch__body"><div class="mui-swatch__label">Danger</div><div class="mui-swatch__sub">--mui-danger</div></div></div></div></div><div class="mui-theme__preview-section"><h4 class="mui-theme__section-title">Buttons</h4><div style="display:flex;flex-wrap:wrap;gap:0.5rem;"><button class="mui-btn mui-btn--primary mui-btn--md" type="button" aria-disabled="false">Primary</button><button class="mui-btn mui-btn--secondary mui-btn--md" type="button" aria-disabled="false">Secondary</button><button class="mui-btn mui-btn--outline mui-btn--md" type="button" aria-disabled="false">Outline</button><button class="mui-btn mui-btn--ghost mui-btn--md" type="button" aria-disabled="false">Ghost</button><button class="mui-btn mui-btn--danger mui-btn--md" type="button" aria-disabled="false">Danger</button></div></div><div class="mui-theme__preview-section"><h4 class="mui-theme__section-title">Form controls</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;max-width:36rem;"><div class="mui-field"><label class="mui-field__label" for="tp-email">Email</label><input class="mui-input" type="text" name="email" id="tp-email" placeholder="you@example.com" value="" /><p class="mui-field__description" id="tp-email-desc">We never share this.</p></div><div class="mui-field"><label class="mui-field__label" for="tp-password">Password</label><input class="mui-input" type="password" name="password" id="tp-password" placeholder="••••••••" value="" /><p class="mui-field__description" id="tp-password-desc">At least 8 characters.</p></div></div></div><div class="mui-theme__preview-section"><h4 class="mui-theme__section-title">Card + badges + alert</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"><div class="mui-card"><div class="mui-card__header"><h3 class="mui-card__title">Deployment status</h3></div><div class="mui-card__body"><div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted);"><div style="display:flex;justify-content:space-between;"><span>Build</span><span class="mui-badge mui-badge--success">green</span></div><div style="display:flex;justify-content:space-between;"><span>Tests</span><span class="mui-badge mui-badge--success">green</span></div><div style="display:flex;justify-content:space-between;"><span>Deploy queue</span><span class="mui-badge mui-badge--warning">busy</span></div><div style="display:flex;justify-content:space-between;"><span>Canary</span><span class="mui-badge mui-badge--danger">holding</span></div></div></div></div><div class="mui-alert mui-alert--info" role="alert"><div class="mui-alert__icon" aria-hidden="true">ⓘ</div><div class="mui-alert__content"><div class="mui-alert__title">Token changes apply live</div><p class="mui-alert__description">Every component that reads --mui-* tokens — from this alert to the minimap on the xyflow page — re-renders instantly.</p></div></div></div></div><div class="mui-theme__preview-section"><h4 class="mui-theme__section-title">Export</h4><p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0 0 0.75rem;">Paste this <code style="font-family:var(--mui-font-mono);font-size:0.8125rem;">:root</code> block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block.</p><div class="mui-theme__export"><pre id="mui-theme-export" class="mui-theme__export-pre">/* ready — the block updates as you tweak tokens */</pre><div class="mui-theme__export-actions"><button type="button" id="mui-theme-copy" class="mui-btn mui-btn--primary mui-btn--sm">Copy CSS</button><button type="button" id="mui-theme-download" class="mui-btn mui-btn--outline mui-btn--sm">Download .css</button></div></div></div></div></div><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=99848" defer></script><script>
+(function() {
+    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+    // Sidebar active state on scroll
+    var navItems = document.querySelectorAll('.mui-gallery__nav-item');
+    if (navItems.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (entry.isIntersecting) {
+                    var id = entry.target.id;
+                    for (var j = 0; j < navItems.length; j++) {
+                        var item = navItems[j];
+                        // Nav items link to /{slug} for cross-page nav,
+                        // so we match by data-slug instead of href.
+                        if (item.getAttribute('data-slug') === id) {
+                            item.classList.add('mui-gallery__nav-item--active');
+                        } else {
+                            item.classList.remove('mui-gallery__nav-item--active');
+                        }
+                    }
+                }
+            }
+        }, { rootMargin: '-20% 0px -60% 0px' });
+
+        var sections = document.querySelectorAll('.mui-gallery__component');
+        for (var k = 0; k < sections.length; k++) {
+            observer.observe(sections[k]);
+        }
+    }
+
+    // ── Sidebar search ────────────────────────────────────────────
+    // Filters .mui-gallery__nav-item entries against the input value.
+    // Groups whose items are all hidden collapse. "/" focuses the
+    // search box (skipped if the user is already typing into another
+    // input). "Esc" clears and restores the full list.
+    var search = document.getElementById('mui-search');
+    if (search && navItems.length > 0) {
+        var wrap = search.closest('.mui-showcase__search');
+        var nav = document.querySelector('.mui-gallery__nav');
+        var groups = Array.prototype.slice.call(document.querySelectorAll('.mui-gallery__nav-group'));
+
+        // Cache each nav item's display text + its tier header so we
+        // can re-run the filter quickly without hitting DOM on each
+        // keypress.
+        var entries = [];
+        for (var i = 0; i < navItems.length; i++) {
+            var it = navItems[i];
+            entries.push({
+                el: it,
+                label: it.textContent || '',
+                slug: it.getAttribute('data-slug') || '',
+                original: it.innerHTML,
+            });
+        }
+
+        // Ensure "no results" message exists inside the nav container.
+        var empty = nav ? nav.querySelector('.mui-gallery__nav-empty') : null;
+        if (!empty && nav) {
+            empty = document.createElement('div');
+            empty.className = 'mui-gallery__nav-empty';
+            empty.textContent = 'No matches. Press Esc to clear.';
+            nav.appendChild(empty);
+        }
+
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+        }
+
+        function runFilter() {
+            var q = search.value.trim().toLowerCase();
+            var dirty = q.length > 0;
+            wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+
+            var visibleCount = 0;
+            var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
+
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                var label = e.label.toLowerCase();
+                var slug  = e.slug.toLowerCase();
+                var match = !dirty || label.indexOf(q) !== -1 || slug.indexOf(q) !== -1;
+                if (match) {
+                    e.el.hidden = false;
+                    if (dirty) {
+                        e.el.innerHTML = escapeHtml(e.label).replace(pattern, '<mark>$1</mark>');
+                    } else {
+                        e.el.innerHTML = e.original;
+                    }
+                    visibleCount++;
+                } else {
+                    e.el.hidden = true;
+                }
+            }
+
+            // Collapse empty groups. A group is "empty" when all its
+            // child nav items are hidden.
+            for (var g = 0; g < groups.length; g++) {
+                var group = groups[g];
+                var kids = group.querySelectorAll('.mui-gallery__nav-item');
+                var any = false;
+                for (var k = 0; k < kids.length; k++) {
+                    if (!kids[k].hidden) { any = true; break; }
+                }
+                group.setAttribute('data-mui-search-empty', any ? '0' : '1');
+            }
+            if (nav) nav.setAttribute('data-mui-search-empty', visibleCount === 0 && dirty ? '1' : '0');
+        }
+
+        search.addEventListener('input', runFilter);
+        search.addEventListener('focus', function () { wrap.classList.add('mui-showcase__search--focused'); });
+        search.addEventListener('blur',  function () { wrap.classList.remove('mui-showcase__search--focused'); });
+        search.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                search.value = '';
+                runFilter();
+                search.blur();
+            }
+        });
+
+        // Global "/" hotkey — focus unless the user is typing into
+        // another input/textarea/contenteditable.
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== '/') return;
+            var t = e.target;
+            if (!t) return;
+            var tag = (t.tagName || '').toLowerCase();
+            var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable;
+            if (typing) return;
+            e.preventDefault();
+            search.focus();
+            search.select();
+        });
+    }
+
+    // ── Swatch click-to-copy ──────────────────────────────────────
+    // Any element with data-mui="swatch-copy" copies its
+    // data-swatch-value to the clipboard on click / Enter / Space,
+    // then animates a brief pulse so the user sees it landed.
+    function copySwatch(el) {
+        var v = el.getAttribute('data-swatch-value');
+        if (!v) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(v).catch(function () {});
+        }
+        el.classList.remove('mui-swatch--copied');
+        // force reflow so re-adding the class restarts the animation
+        void el.offsetWidth;
+        el.classList.add('mui-swatch--copied');
+    }
+    document.addEventListener('click', function (e) {
+        var el = e.target && e.target.closest && e.target.closest('[data-mui="swatch-copy"]');
+        if (el) copySwatch(el);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var t = e.target;
+        if (!t || !t.matches || !t.matches('[data-mui="swatch-copy"]')) return;
+        e.preventDefault();
+        copySwatch(t);
+    });
+})();
+</script><script>
+(function () {
+  'use strict';
+  var LS_KEY = 'mui-theme-overrides';
+
+  // Tokens we manage. Keep this in lockstep with the HTML controls.
+  // Kind is the input shape: 'color' | 'length' | 'text'.
+  var TOKENS = [
+    { name: 'mui-bg',          kind: 'color'  },
+    { name: 'mui-bg-card',     kind: 'color'  },
+    { name: 'mui-bg-input',    kind: 'color'  },
+    { name: 'mui-text',        kind: 'color'  },
+    { name: 'mui-text-muted',  kind: 'color'  },
+    { name: 'mui-text-subtle', kind: 'color'  },
+    { name: 'mui-border',       kind: 'color' },
+    { name: 'mui-border-hover', kind: 'color' },
+    { name: 'mui-border-focus', kind: 'color' },
+    { name: 'mui-accent',       kind: 'color' },
+    { name: 'mui-accent-text',  kind: 'color' },
+    { name: 'mui-danger',       kind: 'color' },
+    { name: 'mui-radius-sm',    kind: 'length' },
+    { name: 'mui-radius-md',    kind: 'length' },
+    { name: 'mui-radius-lg',    kind: 'length' },
+    { name: 'mui-font-sans',    kind: 'text' },
+    { name: 'mui-font-mono',    kind: 'text' },
+    { name: 'mui-spacing-sm',   kind: 'length' },
+    { name: 'mui-spacing-md',   kind: 'length' },
+    { name: 'mui-spacing-lg',   kind: 'length' },
+    { name: 'mui-spacing-xxl',  kind: 'length' },
+  ];
+
+  // Tailwind-family presets. Each preset maps a subset of tokens. Tokens
+  // not listed inherit from the base theme (dark or light).
+  var PRESETS = {
+    'dark':         { _base: 'dark', _clear: true },
+    'light':        { _base: 'light', _clear: true },
+    'slate-dark':   {
+      _base: 'dark',
+      'mui-bg': '#020617', 'mui-bg-card': '#0f172a', 'mui-bg-input': '#1e293b',
+      'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#64748b',
+      'mui-border': '#1e293b', 'mui-border-hover': '#334155', 'mui-border-focus': '#3b82f6',
+      'mui-accent': '#3b82f6', 'mui-accent-text': '#ffffff', 'mui-danger': '#ef4444',
+    },
+    'zinc-violet': {
+      _base: 'dark',
+      'mui-bg': '#09090b', 'mui-bg-card': '#18181b', 'mui-bg-input': '#27272a',
+      'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#71717a',
+      'mui-border': '#27272a', 'mui-border-hover': '#3f3f46', 'mui-border-focus': '#8b5cf6',
+      'mui-accent': '#8b5cf6', 'mui-accent-text': '#ffffff', 'mui-danger': '#f43f5e',
+    },
+    'stone-amber': {
+      _base: 'dark',
+      'mui-bg': '#0c0a09', 'mui-bg-card': '#1c1917', 'mui-bg-input': '#292524',
+      'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#78716c',
+      'mui-border': '#292524', 'mui-border-hover': '#44403c', 'mui-border-focus': '#f59e0b',
+      'mui-accent': '#f59e0b', 'mui-accent-text': '#0c0a09', 'mui-danger': '#dc2626',
+    },
+    'emerald': {
+      _base: 'dark',
+      'mui-bg': '#022c22', 'mui-bg-card': '#064e3b', 'mui-bg-input': '#065f46',
+      'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#34d399',
+      'mui-border': '#065f46', 'mui-border-hover': '#047857', 'mui-border-focus': '#10b981',
+      'mui-accent': '#10b981', 'mui-accent-text': '#022c22', 'mui-danger': '#f87171',
+    },
+    'rose': {
+      _base: 'dark',
+      'mui-bg': '#1f0a17', 'mui-bg-card': '#3a0d27', 'mui-bg-input': '#4c1032',
+      'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#f472b6',
+      'mui-border': '#4c1032', 'mui-border-hover': '#7a1d49', 'mui-border-focus': '#f43f5e',
+      'mui-accent': '#f43f5e', 'mui-accent-text': '#ffffff', 'mui-danger': '#fca5a5',
+    },
+    'high-contrast': {
+      _base: 'dark',
+      'mui-bg': '#000000', 'mui-bg-card': '#111111', 'mui-bg-input': '#1a1a1a',
+      'mui-text': '#ffffff', 'mui-text-muted': '#e5e5e5', 'mui-text-subtle': '#b3b3b3',
+      'mui-border': '#ffffff', 'mui-border-hover': '#ffffff', 'mui-border-focus': '#ffd700',
+      'mui-accent': '#ffd700', 'mui-accent-text': '#000000', 'mui-danger': '#ff4444',
+    },
+  };
+
+  // ── Utilities ──────────────────────────────────────────────────
+  function computed(token) {
+    return getComputedStyle(document.documentElement).getPropertyValue('--' + token).trim();
+  }
+  function applyToken(name, value) {
+    document.documentElement.style.setProperty('--' + name, value);
+  }
+  function isHex(v) { return /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v); }
+  function hexify(v) {
+    if (!v) return '';
+    if (isHex(v)) return v.length === 4 ? ('#' + v[1]+v[1]+v[2]+v[2]+v[3]+v[3]) : v;
+    // Named/hsl/rgb — drop, color picker only accepts #rrggbb. We
+    // stash the raw value on the text input, and leave the color
+    // picker at its previous value so it doesn't corrupt non-hex
+    // values.
+    return null;
+  }
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
+  }
+  function save(obj) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(obj)); } catch {}
+  }
+
+  // ── Controls binding ───────────────────────────────────────────
+  var overrides = load();
+  // Apply stored overrides before first paint of the preview.
+  for (var k in overrides) applyToken(k, overrides[k]);
+
+  for (var i = 0; i < TOKENS.length; i++) {
+    (function (t) {
+      var textEl  = document.getElementById('mui-theme-' + t.name);
+      var colorEl = document.getElementById('mui-theme-' + t.name + '-color');
+      if (!textEl) return;
+      var initial = overrides[t.name] || computed(t.name);
+      textEl.value = initial;
+      if (colorEl) {
+        var hex = hexify(initial);
+        if (hex) colorEl.value = hex;
+      }
+      function apply(val, origin) {
+        applyToken(t.name, val);
+        overrides[t.name] = val;
+        save(overrides);
+        refreshExport();
+        if (origin !== 'text' && textEl)  textEl.value  = val;
+        if (origin !== 'picker' && colorEl) {
+          var h = hexify(val);
+          if (h) colorEl.value = h;
+        }
+      }
+      textEl.addEventListener('input',  function () { apply(textEl.value, 'text'); });
+      if (colorEl) colorEl.addEventListener('input', function () { apply(colorEl.value, 'picker'); });
+    })(TOKENS[i]);
+  }
+
+  // ── Presets ───────────────────────────────────────────────────
+  function applyPreset(key) {
+    var p = PRESETS[key];
+    if (!p) return;
+    if (p._base === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    else                      document.documentElement.setAttribute('data-theme', 'dark');
+    if (p._clear) {
+      overrides = {};
+      // Clear inline overrides so the base theme takes over.
+      for (var j = 0; j < TOKENS.length; j++) {
+        document.documentElement.style.removeProperty('--' + TOKENS[j].name);
+      }
+      // Rehydrate control inputs from base theme values.
+      setTimeout(syncControlsFromComputed, 0);
+    } else {
+      for (var k in p) {
+        if (k.charAt(0) === '_') continue;
+        applyToken(k, p[k]);
+        overrides[k] = p[k];
+      }
+      syncControlsFromComputed();
+    }
+    save(overrides);
+    refreshExport();
+  }
+  function syncControlsFromComputed() {
+    for (var i = 0; i < TOKENS.length; i++) {
+      var t = TOKENS[i];
+      var textEl  = document.getElementById('mui-theme-' + t.name);
+      var colorEl = document.getElementById('mui-theme-' + t.name + '-color');
+      if (!textEl) continue;
+      var v = overrides[t.name] || computed(t.name);
+      textEl.value = v;
+      if (colorEl) { var h = hexify(v); if (h) colorEl.value = h; }
+    }
+  }
+  var presetBtns = document.querySelectorAll('[data-preset]');
+  for (var pb = 0; pb < presetBtns.length; pb++) {
+    (function (btn) {
+      btn.addEventListener('click', function () { applyPreset(btn.getAttribute('data-preset')); });
+    })(presetBtns[pb]);
+  }
+
+  // ── Reset ─────────────────────────────────────────────────────
+  document.getElementById('mui-theme-reset')?.addEventListener('click', function () {
+    if (!window.confirm('Reset all tokens to defaults?')) return;
+    overrides = {};
+    save(overrides);
+    for (var j = 0; j < TOKENS.length; j++) {
+      document.documentElement.style.removeProperty('--' + TOKENS[j].name);
+    }
+    setTimeout(syncControlsFromComputed, 0);
+    refreshExport();
+  });
+
+  // ── Export ────────────────────────────────────────────────────
+  function buildCss() {
+    var keys = Object.keys(overrides);
+    if (keys.length === 0) return '/* No overrides — using maud-ui defaults. */';
+    keys.sort();
+    var lines = [':root {'];
+    for (var i = 0; i < keys.length; i++) {
+      lines.push('  --' + keys[i] + ': ' + overrides[keys[i]] + ';');
+    }
+    lines.push('}');
+    return lines.join('\n');
+  }
+  function refreshExport() {
+    var pre = document.getElementById('mui-theme-export');
+    if (pre) pre.textContent = buildCss();
+  }
+  refreshExport();
+
+  document.getElementById('mui-theme-copy')?.addEventListener('click', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(buildCss());
+    }
+  });
+  document.getElementById('mui-theme-download')?.addEventListener('click', function () {
+    var blob = new Blob([buildCss()], { type: 'text/css' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'maud-ui-theme.css';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  });
+})();
+</script></body></html>

@@ -25,7 +25,7 @@ const COMPONENTS = [
   "input_group","input_otp","kbd","label","menu","menubar","meter","native_select",
   "navigation_menu","number_field","pagination","popover","progress","radio",
   "radio_group","resizable","scroll_area","select","separator","skeleton","slider",
-  "spinner","switch","table","tabs","textarea","toast","toggle","toggle_group",
+  "spinner","swatch","switch","table","tabs","textarea","toast","toggle","toggle_group",
   "tooltip","typography",
 ];
 
@@ -92,6 +92,7 @@ async function main() {
     const routes = [
       "/",
       "/getting-started",
+      "/theme",
       "/blocks",
       "/integrations/monaco-editor",
       "/integrations/xyflow",

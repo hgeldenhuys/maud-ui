@@ -51,6 +51,7 @@ const TIERS: &[Tier] = &[
         description: "Visual indicators and content presentation",
         components: &[
             "badge",
+            "swatch",
             "avatar",
             "separator",
             "progress",
@@ -179,6 +180,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "skeleton",
     "slider",
     "spinner",
+    "swatch",
     "switch",
     "table",
     "tabs",
@@ -345,6 +347,27 @@ let html = badge::render(badge::Props {
     label: "New".into(),
     variant: badge::Variant::Success,
 });"#,
+        "swatch" => r##"use maud_ui::primitives::swatch;
+
+// Raw colour — any valid CSS colour string
+let chip = swatch::render(swatch::Props {
+    label: "Primary".into(),
+    sublabel: Some("#2563eb".into()),
+    mode: swatch::Mode::Raw("#2563eb".into()),
+    size: swatch::Size::Md,
+    copyable: true,
+});
+
+// Design token — reads var(--mui-accent) live, flips with data-theme
+let token = swatch::render(swatch::Props {
+    label: "Accent".into(),
+    sublabel: Some("--mui-accent".into()),
+    mode: swatch::Mode::Token("mui-accent".into()),
+    ..Default::default()
+});
+
+// Tailwind-style ramp (50..950)
+let ramp = swatch::render_scale("blue", &swatch::tailwind_ramp("blue"));"##,
         "alert" => r#"use maud_ui::primitives::alert;
 
 let html = alert::render(alert::Props {
@@ -910,6 +933,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "skeleton" => primitives::skeleton::showcase(),
         "slider" => primitives::slider::showcase(),
         "spinner" => primitives::spinner::showcase(),
+        "swatch" => primitives::swatch::showcase(),
         "switch" => primitives::switch::showcase(),
         "table" => primitives::table::showcase(),
         "tabs" => primitives::tabs::showcase(),
@@ -965,6 +989,9 @@ fn page_header() -> Markup {
                     }
                     a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Blocks"
+                    }
+                    a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Theme"
                     }
                     // "Advanced" dropdown — groups heavy-weight third-party
                     // integrations (Monaco, xyflow, Excalidraw) under a
@@ -1162,6 +1189,680 @@ pub fn showcase_page() -> Markup {
 }
 
 /// Onboarding page at /getting-started — install, first paint, theming, runtime.
+/// Theme customiser page at `/theme`. A two-column page: token
+/// controls on the left, a live preview on the right. Overrides are
+/// applied to `:root` as inline styles, so every page element that
+/// reads `--mui-*` tokens reacts. Persisted to localStorage.
+pub fn theme_customizer_page() -> Markup {
+    use crate::primitives::{alert, badge, button, card, field, input, swatch};
+
+    // Token definitions shown in the left-hand controls. Each entry is
+    // (token-name-without-dashes, human label, control kind, optional default).
+    // The JS reads the live computed value on boot, so no Rust-side
+    // default is needed — but keeping the shape small here makes the
+    // layout predictable.
+    html! {
+        (DOCTYPE)
+        html lang="en" data-theme="dark" {
+            head {
+                (page_head("Theme customiser \u{2014} maud-ui"))
+                style { (maud::PreEscaped(theme_customizer_css())) }
+            }
+            body {
+                (page_header())
+                div class="mui-gallery" {
+                    (sidebar_nav())
+                    main class="mui-gallery__main mui-theme" {
+                        nav class="mui-gallery__breadcrumb" {
+                            a href="/" { "Gallery" }
+                            span { " / " }
+                            span { "Theme" }
+                        }
+
+                        section class="mui-gallery__component mui-theme__intro" id="theme" {
+                            h3 class="mui-gallery__component-name" { "Theme customiser" }
+                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1rem;line-height:1.55;" {
+                                "Tweak the "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "--mui-*" }
+                                " tokens on the left and watch the preview on the right re-render instantly. "
+                                "Changes are saved to "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "localStorage" }
+                                " so they survive reloads. Export a "
+                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { ":root" }
+                                " block when you're happy, paste into your app."
+                            }
+                        }
+
+                        div class="mui-theme__split" {
+                            // ── Left column: controls ───────────────
+                            aside class="mui-theme__controls" id="mui-theme-controls" {
+                                div class="mui-theme__group" {
+                                    div class="mui-theme__group-header" {
+                                        h4 class="mui-theme__group-title" { "Presets" }
+                                    }
+                                    div class="mui-theme__presets" {
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="dark" { "Dark" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="light" { "Light" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="slate-dark" { "Slate" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="zinc-violet" { "Zinc \u{00b7} Violet" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="stone-amber" { "Stone \u{00b7} Amber" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="emerald" { "Emerald" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="rose" { "Rose" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="high-contrast" { "High contrast" }
+                                    }
+                                    div class="mui-theme__preset-actions" {
+                                        button type="button" id="mui-theme-reset" class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset to defaults" }
+                                    }
+                                }
+
+                                (theme_token_group("Colour \u{2014} surfaces", &[
+                                    ("mui-bg",       "Background",    "color"),
+                                    ("mui-bg-card",  "Card surface",  "color"),
+                                    ("mui-bg-input", "Input surface", "color"),
+                                ]))
+                                (theme_token_group("Colour \u{2014} text", &[
+                                    ("mui-text",        "Body text",       "color"),
+                                    ("mui-text-muted",  "Muted text",      "color"),
+                                    ("mui-text-subtle", "Subtle text",     "color"),
+                                ]))
+                                (theme_token_group("Colour \u{2014} borders & accent", &[
+                                    ("mui-border",        "Border",        "color"),
+                                    ("mui-border-hover",  "Border hover",  "color"),
+                                    ("mui-border-focus",  "Focus ring",    "color"),
+                                    ("mui-accent",        "Accent",        "color"),
+                                    ("mui-accent-text",   "Accent text",   "color"),
+                                    ("mui-danger",        "Danger",        "color"),
+                                ]))
+                                (theme_token_group("Radii", &[
+                                    ("mui-radius-sm", "Small",  "length"),
+                                    ("mui-radius-md", "Medium", "length"),
+                                    ("mui-radius-lg", "Large",  "length"),
+                                ]))
+                                (theme_token_group("Typography", &[
+                                    ("mui-font-sans", "Sans family", "text"),
+                                    ("mui-font-mono", "Mono family", "text"),
+                                ]))
+                                (theme_token_group("Spacing", &[
+                                    ("mui-spacing-sm",  "Small",       "length"),
+                                    ("mui-spacing-md",  "Medium",      "length"),
+                                    ("mui-spacing-lg",  "Large",       "length"),
+                                    ("mui-spacing-xxl", "Extra large", "length"),
+                                ]))
+                            }
+
+                            // ── Right column: live preview ─────────
+                            div class="mui-theme__preview" {
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Swatch grid (live tokens)" }
+                                    (swatch::render_tokens(&[
+                                        ("Background",      "mui-bg"),
+                                        ("Card",            "mui-bg-card"),
+                                        ("Input",           "mui-bg-input"),
+                                        ("Text",            "mui-text"),
+                                        ("Muted",           "mui-text-muted"),
+                                        ("Subtle",          "mui-text-subtle"),
+                                        ("Border",          "mui-border"),
+                                        ("Border hover",    "mui-border-hover"),
+                                        ("Border focus",    "mui-border-focus"),
+                                        ("Accent",          "mui-accent"),
+                                        ("Accent text",     "mui-accent-text"),
+                                        ("Danger",          "mui-danger"),
+                                    ]))
+                                }
+
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Buttons" }
+                                    div style="display:flex;flex-wrap:wrap;gap:0.5rem;" {
+                                        (button::render(button::Props { label: "Primary".into(),   variant: button::Variant::Primary,   ..Default::default() }))
+                                        (button::render(button::Props { label: "Secondary".into(), variant: button::Variant::Secondary, ..Default::default() }))
+                                        (button::render(button::Props { label: "Outline".into(),   variant: button::Variant::Outline,   ..Default::default() }))
+                                        (button::render(button::Props { label: "Ghost".into(),     variant: button::Variant::Ghost,     ..Default::default() }))
+                                        (button::render(button::Props { label: "Danger".into(),    variant: button::Variant::Danger,    ..Default::default() }))
+                                    }
+                                }
+
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Form controls" }
+                                    div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;max-width:36rem;" {
+                                        (field::render(field::Props {
+                                            id: "tp-email".into(), label: "Email".into(),
+                                            description: Some("We never share this.".into()),
+                                            children: input::render(input::Props { id: "tp-email".into(), name: "email".into(), placeholder: "you@example.com".into(), ..Default::default() }),
+                                            ..Default::default()
+                                        }))
+                                        (field::render(field::Props {
+                                            id: "tp-password".into(), label: "Password".into(),
+                                            description: Some("At least 8 characters.".into()),
+                                            children: input::render(input::Props { id: "tp-password".into(), name: "password".into(), input_type: input::InputType::Password, placeholder: "\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}\u{2022}".into(), ..Default::default() }),
+                                            ..Default::default()
+                                        }))
+                                    }
+                                }
+
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Card + badges + alert" }
+                                    div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" {
+                                        (card::render(card::Props {
+                                            title: Some("Deployment status".into()),
+                                            description: None,
+                                            children: html! {
+                                                div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted);" {
+                                                    div style="display:flex;justify-content:space-between;" { span { "Build" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Tests" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Deploy queue" } (badge::render(badge::Props { label: "busy".into(),   variant: badge::Variant::Warning })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Canary" }       (badge::render(badge::Props { label: "holding".into(),variant: badge::Variant::Danger })) }
+                                                }
+                                            },
+                                            footer: None,
+                                        }))
+                                        (alert::render(alert::Props {
+                                            title: "Token changes apply live".into(),
+                                            description: Some("Every component that reads --mui-* tokens \u{2014} from this alert to the minimap on the xyflow page \u{2014} re-renders instantly.".into()),
+                                            variant: alert::Variant::Info,
+                                            icon: true,
+                                        }))
+                                    }
+                                }
+
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Export" }
+                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0 0 0.75rem;" {
+                                        "Paste this "
+                                        code style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { ":root" }
+                                        " block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block."
+                                    }
+                                    div class="mui-theme__export" {
+                                        pre id="mui-theme-export" class="mui-theme__export-pre" { "/* ready — the block updates as you tweak tokens */" }
+                                        div class="mui-theme__export-actions" {
+                                            button type="button" id="mui-theme-copy"     class="mui-btn mui-btn--primary mui-btn--sm" { "Copy CSS" }
+                                            button type="button" id="mui-theme-download" class="mui-btn mui-btn--outline mui-btn--sm" { "Download .css" }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        div class="mui-gallery__back" {
+                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                "\u{2190} Back to Gallery"
+                            }
+                        }
+                    }
+                }
+                script src=(format!("/js/maud-ui.js?v={}", JS_VER)) defer {}
+                script { (maud::PreEscaped(showcase_js())) }
+                script { (maud::PreEscaped(theme_customizer_js())) }
+            }
+        }
+    }
+}
+
+/// Render one grouped block of token controls for the left-hand
+/// column of the customiser. Control kind: "color" | "length" | "text".
+fn theme_token_group(title: &str, tokens: &[(&str, &str, &str)]) -> Markup {
+    html! {
+        details class="mui-theme__group" open {
+            summary class="mui-theme__group-header" {
+                h4 class="mui-theme__group-title" { (title) }
+                span class="mui-theme__group-caret" aria-hidden="true" { "\u{25be}" }
+            }
+            div class="mui-theme__group-body" {
+                @for (token, label, kind) in tokens {
+                    div class="mui-theme__row" {
+                        label class="mui-theme__row-label" for=(format!("mui-theme-{}", token)) { (*label) }
+                        div class="mui-theme__row-control" {
+                            @if *kind == "color" {
+                                input type="color"
+                                      id=(format!("mui-theme-{}-color", token))
+                                      class="mui-theme__color"
+                                      data-theme-token=(*token) data-theme-kind="color-picker";
+                                input type="text"
+                                      id=(format!("mui-theme-{}", token))
+                                      class="mui-theme__text"
+                                      data-theme-token=(*token) data-theme-kind="color-text"
+                                      spellcheck="false" autocomplete="off";
+                            } @else {
+                                input type="text"
+                                      id=(format!("mui-theme-{}", token))
+                                      class="mui-theme__text mui-theme__text--wide"
+                                      data-theme-token=(*token) data-theme-kind=(*kind)
+                                      spellcheck="false" autocomplete="off";
+                            }
+                        }
+                        code class="mui-theme__row-token" { (format!("--{}", token)) }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn theme_customizer_css() -> &'static str {
+    r#"
+.mui-theme__intro { max-width: none; }
+
+.mui-theme__split {
+    display: grid;
+    grid-template-columns: minmax(20rem, 22rem) 1fr;
+    gap: 1.25rem;
+    align-items: start;
+    margin-top: 1rem;
+}
+@media (max-width: 960px) {
+    .mui-theme__split { grid-template-columns: 1fr; }
+}
+
+/* ── Controls column ────────────────────────────────────────────── */
+.mui-theme__controls {
+    position: sticky;
+    top: calc(var(--mui-header-h, 3.25rem) + 1rem);
+    max-height: calc(100vh - var(--mui-header-h, 3.25rem) - 2rem);
+    overflow-y: auto;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    background: var(--mui-bg-card);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-theme__group {
+    border-bottom: 1px solid var(--mui-border);
+    padding-bottom: 0.5rem;
+}
+.mui-theme__group:last-child { border-bottom: 0; }
+.mui-theme__group[open] .mui-theme__group-caret { transform: rotate(180deg); }
+
+.mui-theme__group-header {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.125rem;
+    cursor: pointer;
+    user-select: none;
+}
+.mui-theme__group-header::-webkit-details-marker { display: none; }
+
+.mui-theme__group-title {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-muted);
+}
+.mui-theme__group-caret {
+    font-size: 0.75rem;
+    color: var(--mui-text-subtle);
+    transition: transform 150ms ease;
+}
+
+.mui-theme__group-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.25rem 0.125rem 0.5rem;
+}
+
+.mui-theme__row {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.5rem;
+    row-gap: 0.125rem;
+    align-items: center;
+}
+.mui-theme__row-label {
+    font-size: 0.75rem;
+    color: var(--mui-text);
+    grid-column: 1;
+    grid-row: 1;
+}
+.mui-theme__row-control {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    min-width: 0;
+}
+.mui-theme__row-token {
+    grid-column: 2;
+    grid-row: 2;
+    font-family: var(--mui-font-mono);
+    font-size: 0.6875rem;
+    color: var(--mui-text-subtle);
+}
+
+.mui-theme__color {
+    width: 2rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    cursor: pointer;
+}
+.mui-theme__color::-webkit-color-swatch-wrapper { padding: 0; }
+.mui-theme__color::-webkit-color-swatch {
+    border: none;
+    border-radius: calc(var(--mui-radius-sm) - 1px);
+}
+.mui-theme__text {
+    flex: 1;
+    min-width: 0;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text);
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+}
+.mui-theme__text--wide { width: 100%; }
+.mui-theme__text:focus-visible {
+    outline: none;
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+
+.mui-theme__presets {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    padding: 0.25rem 0.125rem;
+}
+.mui-theme__presets .mui-btn { justify-content: center; }
+.mui-theme__preset-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25rem 0.125rem 0;
+}
+
+/* ── Preview column ─────────────────────────────────────────────── */
+.mui-theme__preview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.mui-theme__preview-section {
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    background: var(--mui-bg-card);
+    padding: 1rem;
+}
+
+.mui-theme__section-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mui-text-muted);
+}
+
+/* Export box */
+.mui-theme__export {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.mui-theme__export-pre {
+    margin: 0;
+    padding: 0.75rem 0.875rem;
+    font-family: var(--mui-font-mono);
+    font-size: 0.8125rem;
+    color: var(--mui-text);
+    background: var(--mui-bg);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    white-space: pre;
+    overflow-x: auto;
+    max-height: 18rem;
+    overflow-y: auto;
+}
+.mui-theme__export-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+"#
+}
+
+fn theme_customizer_js() -> &'static str {
+    r##"
+(function () {
+  'use strict';
+  var LS_KEY = 'mui-theme-overrides';
+
+  // Tokens we manage. Keep this in lockstep with the HTML controls.
+  // Kind is the input shape: 'color' | 'length' | 'text'.
+  var TOKENS = [
+    { name: 'mui-bg',          kind: 'color'  },
+    { name: 'mui-bg-card',     kind: 'color'  },
+    { name: 'mui-bg-input',    kind: 'color'  },
+    { name: 'mui-text',        kind: 'color'  },
+    { name: 'mui-text-muted',  kind: 'color'  },
+    { name: 'mui-text-subtle', kind: 'color'  },
+    { name: 'mui-border',       kind: 'color' },
+    { name: 'mui-border-hover', kind: 'color' },
+    { name: 'mui-border-focus', kind: 'color' },
+    { name: 'mui-accent',       kind: 'color' },
+    { name: 'mui-accent-text',  kind: 'color' },
+    { name: 'mui-danger',       kind: 'color' },
+    { name: 'mui-radius-sm',    kind: 'length' },
+    { name: 'mui-radius-md',    kind: 'length' },
+    { name: 'mui-radius-lg',    kind: 'length' },
+    { name: 'mui-font-sans',    kind: 'text' },
+    { name: 'mui-font-mono',    kind: 'text' },
+    { name: 'mui-spacing-sm',   kind: 'length' },
+    { name: 'mui-spacing-md',   kind: 'length' },
+    { name: 'mui-spacing-lg',   kind: 'length' },
+    { name: 'mui-spacing-xxl',  kind: 'length' },
+  ];
+
+  // Tailwind-family presets. Each preset maps a subset of tokens. Tokens
+  // not listed inherit from the base theme (dark or light).
+  var PRESETS = {
+    'dark':         { _base: 'dark', _clear: true },
+    'light':        { _base: 'light', _clear: true },
+    'slate-dark':   {
+      _base: 'dark',
+      'mui-bg': '#020617', 'mui-bg-card': '#0f172a', 'mui-bg-input': '#1e293b',
+      'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#64748b',
+      'mui-border': '#1e293b', 'mui-border-hover': '#334155', 'mui-border-focus': '#3b82f6',
+      'mui-accent': '#3b82f6', 'mui-accent-text': '#ffffff', 'mui-danger': '#ef4444',
+    },
+    'zinc-violet': {
+      _base: 'dark',
+      'mui-bg': '#09090b', 'mui-bg-card': '#18181b', 'mui-bg-input': '#27272a',
+      'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#71717a',
+      'mui-border': '#27272a', 'mui-border-hover': '#3f3f46', 'mui-border-focus': '#8b5cf6',
+      'mui-accent': '#8b5cf6', 'mui-accent-text': '#ffffff', 'mui-danger': '#f43f5e',
+    },
+    'stone-amber': {
+      _base: 'dark',
+      'mui-bg': '#0c0a09', 'mui-bg-card': '#1c1917', 'mui-bg-input': '#292524',
+      'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#78716c',
+      'mui-border': '#292524', 'mui-border-hover': '#44403c', 'mui-border-focus': '#f59e0b',
+      'mui-accent': '#f59e0b', 'mui-accent-text': '#0c0a09', 'mui-danger': '#dc2626',
+    },
+    'emerald': {
+      _base: 'dark',
+      'mui-bg': '#022c22', 'mui-bg-card': '#064e3b', 'mui-bg-input': '#065f46',
+      'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#34d399',
+      'mui-border': '#065f46', 'mui-border-hover': '#047857', 'mui-border-focus': '#10b981',
+      'mui-accent': '#10b981', 'mui-accent-text': '#022c22', 'mui-danger': '#f87171',
+    },
+    'rose': {
+      _base: 'dark',
+      'mui-bg': '#1f0a17', 'mui-bg-card': '#3a0d27', 'mui-bg-input': '#4c1032',
+      'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#f472b6',
+      'mui-border': '#4c1032', 'mui-border-hover': '#7a1d49', 'mui-border-focus': '#f43f5e',
+      'mui-accent': '#f43f5e', 'mui-accent-text': '#ffffff', 'mui-danger': '#fca5a5',
+    },
+    'high-contrast': {
+      _base: 'dark',
+      'mui-bg': '#000000', 'mui-bg-card': '#111111', 'mui-bg-input': '#1a1a1a',
+      'mui-text': '#ffffff', 'mui-text-muted': '#e5e5e5', 'mui-text-subtle': '#b3b3b3',
+      'mui-border': '#ffffff', 'mui-border-hover': '#ffffff', 'mui-border-focus': '#ffd700',
+      'mui-accent': '#ffd700', 'mui-accent-text': '#000000', 'mui-danger': '#ff4444',
+    },
+  };
+
+  // ── Utilities ──────────────────────────────────────────────────
+  function computed(token) {
+    return getComputedStyle(document.documentElement).getPropertyValue('--' + token).trim();
+  }
+  function applyToken(name, value) {
+    document.documentElement.style.setProperty('--' + name, value);
+  }
+  function isHex(v) { return /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(v); }
+  function hexify(v) {
+    if (!v) return '';
+    if (isHex(v)) return v.length === 4 ? ('#' + v[1]+v[1]+v[2]+v[2]+v[3]+v[3]) : v;
+    // Named/hsl/rgb — drop, color picker only accepts #rrggbb. We
+    // stash the raw value on the text input, and leave the color
+    // picker at its previous value so it doesn't corrupt non-hex
+    // values.
+    return null;
+  }
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
+  }
+  function save(obj) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(obj)); } catch {}
+  }
+
+  // ── Controls binding ───────────────────────────────────────────
+  var overrides = load();
+  // Apply stored overrides before first paint of the preview.
+  for (var k in overrides) applyToken(k, overrides[k]);
+
+  for (var i = 0; i < TOKENS.length; i++) {
+    (function (t) {
+      var textEl  = document.getElementById('mui-theme-' + t.name);
+      var colorEl = document.getElementById('mui-theme-' + t.name + '-color');
+      if (!textEl) return;
+      var initial = overrides[t.name] || computed(t.name);
+      textEl.value = initial;
+      if (colorEl) {
+        var hex = hexify(initial);
+        if (hex) colorEl.value = hex;
+      }
+      function apply(val, origin) {
+        applyToken(t.name, val);
+        overrides[t.name] = val;
+        save(overrides);
+        refreshExport();
+        if (origin !== 'text' && textEl)  textEl.value  = val;
+        if (origin !== 'picker' && colorEl) {
+          var h = hexify(val);
+          if (h) colorEl.value = h;
+        }
+      }
+      textEl.addEventListener('input',  function () { apply(textEl.value, 'text'); });
+      if (colorEl) colorEl.addEventListener('input', function () { apply(colorEl.value, 'picker'); });
+    })(TOKENS[i]);
+  }
+
+  // ── Presets ───────────────────────────────────────────────────
+  function applyPreset(key) {
+    var p = PRESETS[key];
+    if (!p) return;
+    if (p._base === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    else                      document.documentElement.setAttribute('data-theme', 'dark');
+    if (p._clear) {
+      overrides = {};
+      // Clear inline overrides so the base theme takes over.
+      for (var j = 0; j < TOKENS.length; j++) {
+        document.documentElement.style.removeProperty('--' + TOKENS[j].name);
+      }
+      // Rehydrate control inputs from base theme values.
+      setTimeout(syncControlsFromComputed, 0);
+    } else {
+      for (var k in p) {
+        if (k.charAt(0) === '_') continue;
+        applyToken(k, p[k]);
+        overrides[k] = p[k];
+      }
+      syncControlsFromComputed();
+    }
+    save(overrides);
+    refreshExport();
+  }
+  function syncControlsFromComputed() {
+    for (var i = 0; i < TOKENS.length; i++) {
+      var t = TOKENS[i];
+      var textEl  = document.getElementById('mui-theme-' + t.name);
+      var colorEl = document.getElementById('mui-theme-' + t.name + '-color');
+      if (!textEl) continue;
+      var v = overrides[t.name] || computed(t.name);
+      textEl.value = v;
+      if (colorEl) { var h = hexify(v); if (h) colorEl.value = h; }
+    }
+  }
+  var presetBtns = document.querySelectorAll('[data-preset]');
+  for (var pb = 0; pb < presetBtns.length; pb++) {
+    (function (btn) {
+      btn.addEventListener('click', function () { applyPreset(btn.getAttribute('data-preset')); });
+    })(presetBtns[pb]);
+  }
+
+  // ── Reset ─────────────────────────────────────────────────────
+  document.getElementById('mui-theme-reset')?.addEventListener('click', function () {
+    if (!window.confirm('Reset all tokens to defaults?')) return;
+    overrides = {};
+    save(overrides);
+    for (var j = 0; j < TOKENS.length; j++) {
+      document.documentElement.style.removeProperty('--' + TOKENS[j].name);
+    }
+    setTimeout(syncControlsFromComputed, 0);
+    refreshExport();
+  });
+
+  // ── Export ────────────────────────────────────────────────────
+  function buildCss() {
+    var keys = Object.keys(overrides);
+    if (keys.length === 0) return '/* No overrides — using maud-ui defaults. */';
+    keys.sort();
+    var lines = [':root {'];
+    for (var i = 0; i < keys.length; i++) {
+      lines.push('  --' + keys[i] + ': ' + overrides[keys[i]] + ';');
+    }
+    lines.push('}');
+    return lines.join('\n');
+  }
+  function refreshExport() {
+    var pre = document.getElementById('mui-theme-export');
+    if (pre) pre.textContent = buildCss();
+  }
+  refreshExport();
+
+  document.getElementById('mui-theme-copy')?.addEventListener('click', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(buildCss());
+    }
+  });
+  document.getElementById('mui-theme-download')?.addEventListener('click', function () {
+    var blob = new Blob([buildCss()], { type: 'text/css' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'maud-ui-theme.css';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  });
+})();
+"##
+}
+
 pub fn getting_started_page() -> Markup {
     use crate::primitives::{alert, badge, button, card, field, input, kbd};
 
@@ -5816,6 +6517,123 @@ fn showcase_css() -> &'static str {
 /* Smooth scrolling */
 html { scroll-behavior: smooth; }
 
+/* ── Swatch primitive ─────────────────────────────────────────────── */
+.mui-swatch {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    min-width: 5rem;
+    padding: 0.25rem;
+    border-radius: var(--mui-radius-md);
+    transition: transform var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-swatch--copyable { cursor: pointer; }
+.mui-swatch--copyable:hover { transform: translateY(-1px); }
+.mui-swatch--copyable:focus-visible {
+    outline: 2px solid var(--mui-border-focus);
+    outline-offset: 2px;
+}
+.mui-swatch__chip {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--mui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--mui-border) 70%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    /* chequered base so translucent swatches are visible */
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.04) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.04) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    position: relative;
+    overflow: hidden;
+}
+/* The per-swatch inline style sets `background: <colour>` on the chip,
+ * which stacks above the chequerboard. */
+.mui-swatch__chip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+}
+.mui-swatch--sm .mui-swatch__chip { width: 2rem;   height: 2rem; }
+.mui-swatch--lg .mui-swatch__chip { width: 5rem;   height: 5rem; }
+
+.mui-swatch__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+.mui-swatch__label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--mui-text);
+}
+.mui-swatch__sub {
+    font-size: 0.6875rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mui-swatch__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: 0.75rem;
+}
+
+/* Horizontal tone ramp */
+.mui-swatch__scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.mui-swatch__scale-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    color: var(--mui-text-muted);
+    letter-spacing: 0.06em;
+}
+.mui-swatch__scale-row {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(2.25rem, 1fr));
+    gap: 0.25rem;
+}
+.mui-swatch--scale {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.125rem;
+    min-width: 0;
+}
+.mui-swatch--scale .mui-swatch__chip {
+    width: 100%;
+    height: 2.25rem;
+    border-radius: var(--mui-radius-sm);
+}
+.mui-swatch__scale-key {
+    font-size: 0.625rem;
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-subtle);
+    text-align: center;
+}
+
+/* Toast-ish "copied" hint that fades after click */
+.mui-swatch--copied { animation: muiSwatchCopied 900ms ease forwards; }
+@keyframes muiSwatchCopied {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 45%, transparent); }
+    40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--mui-accent) 25%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 0%, transparent); }
+}
+
 /* ── Sticky compact page header ─────────────────────────────────────
  * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
  * + a two-row "brand above nav" layout). The new header is a single
@@ -6242,6 +7060,33 @@ fn showcase_js() -> &'static str {
             search.select();
         });
     }
+
+    // ── Swatch click-to-copy ──────────────────────────────────────
+    // Any element with data-mui="swatch-copy" copies its
+    // data-swatch-value to the clipboard on click / Enter / Space,
+    // then animates a brief pulse so the user sees it landed.
+    function copySwatch(el) {
+        var v = el.getAttribute('data-swatch-value');
+        if (!v) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(v).catch(function () {});
+        }
+        el.classList.remove('mui-swatch--copied');
+        // force reflow so re-adding the class restarts the animation
+        void el.offsetWidth;
+        el.classList.add('mui-swatch--copied');
+    }
+    document.addEventListener('click', function (e) {
+        var el = e.target && e.target.closest && e.target.closest('[data-mui="swatch-copy"]');
+        if (el) copySwatch(el);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var t = e.target;
+        if (!t || !t.matches || !t.matches('[data-mui="swatch-copy"]')) return;
+        e.preventDefault();
+        copySwatch(t);
+    });
 })();
 "#
 }

@@ -5,6 +5,30 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-18] — Swatch primitive + theme customiser
+
+### Added
+- **Swatch primitive** (`maud_ui::primitives::swatch`) — colour chips
+  with click-to-copy. Three modes: `Raw` (literal CSS colour value),
+  `Token` (reads `var(--mui-*)` live), and scale ramps via
+  `render_scale(name, stops)`. Ships with a Tailwind-family helper
+  `tailwind_ramp("blue")` that returns all 22 named palettes 50..950.
+  Gallery: `/swatch`.
+- **Theme customiser** at `/theme` — two-column page: left column has
+  grouped token controls (colours, radii, typography, spacing) with
+  both a native colour picker and a free-text input for each; right
+  column is a live preview (swatch grid + buttons + form controls +
+  card + alert) that re-renders instantly as tokens mutate. Ships
+  with **8 presets** grounded in Tailwind palettes (Dark, Light,
+  Slate, Zinc·Violet, Stone·Amber, Emerald, Rose, High contrast).
+  Persists to `localStorage` and exports a paste-ready `:root { ... }`
+  CSS block (copy button + download as `.css`).
+- "Theme" link in the sticky header nav.
+
+### Changed
+- Component count bumped from 58 → 59 (swatch is the new one).
+- Static export now ships 87 pages (was 85).
+
 ## [2026-04-18] — UX: sidebar search + "/" hotkey
 
 ### Added

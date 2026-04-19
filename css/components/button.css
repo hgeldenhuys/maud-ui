@@ -46,6 +46,33 @@
   flex-shrink: 0;
 }
 
+.mui-btn--xs {
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.mui-btn--icon-xs {
+  height: 1.5rem;
+  width: 1.5rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mui-btn--icon-sm {
+  height: 1.75rem;
+  width: 1.75rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mui-btn--icon-lg {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
 /* --- Variant: Default (secondary feel — muted bg, text) --------------- */
 
 .mui-btn--default {

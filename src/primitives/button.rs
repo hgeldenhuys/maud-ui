@@ -17,6 +17,11 @@ fn icon_spinner() -> Markup {
     PreEscaped(r#"<svg xmlns="http://www.w3.org/2000/svg" class="mui-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>"#.to_string())
 }
 
+/// Inline SVG chevron-right (16x16) — demonstrates a trailing icon.
+fn icon_chevron_right() -> Markup {
+    PreEscaped(r#"<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>"#.to_string())
+}
+
 #[derive(Clone, Debug)]
 pub struct Props {
     pub label: String,
@@ -27,7 +32,12 @@ pub struct Props {
     /// Optional leading icon (SVG markup). Use `stroke="currentColor"` so it
     /// inherits the button's text color — emoji characters do NOT inherit
     /// color and will render in OS system colors.
+    /// Emitted as a span with `data-icon="inline-start"`.
     pub leading_icon: Option<Markup>,
+    /// Optional trailing icon (SVG markup). Same rules as `leading_icon` —
+    /// use `stroke="currentColor"` so it inherits the button's text color.
+    /// Emitted as a span with `data-icon="inline-end"` AFTER the label.
+    pub trailing_icon: Option<Markup>,
     /// aria-label override. Required for icon-only buttons (where `label` is
     /// empty) so screen readers announce the button's purpose.
     pub aria_label: Option<String>,
@@ -42,6 +52,7 @@ impl Default for Props {
             disabled: false,
             button_type: "button",
             leading_icon: None,
+            trailing_icon: None,
             aria_label: None,
         }
     }
@@ -64,6 +75,14 @@ pub enum Size {
     Md,
     Lg,
     Icon,
+    /// Extra-small text button (matches shadcn `xs`).
+    Xs,
+    /// Extra-small icon-only button (matches shadcn `icon-xs`).
+    IconXs,
+    /// Small icon-only button (matches shadcn `icon-sm`).
+    IconSm,
+    /// Large icon-only button (matches shadcn `icon-lg`).
+    IconLg,
 }
 
 impl Variant {
@@ -87,11 +106,37 @@ impl Size {
             Size::Md => "mui-btn--md",
             Size::Lg => "mui-btn--lg",
             Size::Icon => "mui-btn--icon",
+            Size::Xs => "mui-btn--xs",
+            Size::IconXs => "mui-btn--icon-xs",
+            Size::IconSm => "mui-btn--icon-sm",
+            Size::IconLg => "mui-btn--icon-lg",
         }
+    }
+
+    /// True for any icon-only size variant. Used by `render()` to enforce the
+    /// aria-label accessibility contract in debug builds.
+    fn is_icon_only(self) -> bool {
+        matches!(
+            self,
+            Size::Icon | Size::IconXs | Size::IconSm | Size::IconLg
+        )
     }
 }
 
+/// Render a Button to Maud `Markup`.
+///
+/// Accessibility contract: any icon-only size (`Size::Icon`, `Size::IconXs`,
+/// `Size::IconSm`, `Size::IconLg`) MUST be paired with a non-`None`
+/// `aria_label`, otherwise screen readers have nothing to announce. This is
+/// enforced at runtime via `debug_assert!` in debug builds — release builds
+/// skip the check to avoid hot-path overhead, matching shadcn's convention
+/// that the ergonomic failure mode is caught during development.
 pub fn render(props: Props) -> Markup {
+    debug_assert!(
+        !props.size.is_icon_only() || props.aria_label.is_some(),
+        "Icon-only Button requires aria_label for accessibility"
+    );
+
     let disabled_attr = if props.disabled { "true" } else { "false" };
 
     let class = format!(
@@ -104,16 +149,22 @@ pub fn render(props: Props) -> Markup {
         @if let Some(label) = &props.aria_label {
             button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) aria-label=(label) {
                 @if let Some(icon) = &props.leading_icon {
-                    span.mui-btn__icon aria-hidden="true" { (icon) }
+                    span.mui-btn__icon data-icon="inline-start" aria-hidden="true" { (icon) }
                 }
                 (props.label)
+                @if let Some(icon) = &props.trailing_icon {
+                    span.mui-btn__icon data-icon="inline-end" aria-hidden="true" { (icon) }
+                }
             }
         } @else {
             button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) {
                 @if let Some(icon) = &props.leading_icon {
-                    span.mui-btn__icon aria-hidden="true" { (icon) }
+                    span.mui-btn__icon data-icon="inline-start" aria-hidden="true" { (icon) }
                 }
                 (props.label)
+                @if let Some(icon) = &props.trailing_icon {
+                    span.mui-btn__icon data-icon="inline-end" aria-hidden="true" { (icon) }
+                }
             }
         }
     }
@@ -133,6 +184,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "submit",
                         leading_icon: None,
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -142,6 +194,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -151,6 +204,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                 }
@@ -166,6 +220,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -175,6 +230,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: None,
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                 }
@@ -190,6 +246,7 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         button_type: "button",
                         leading_icon: Some(icon_spinner()),
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -199,6 +256,7 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         button_type: "button",
                         leading_icon: Some(icon_spinner()),
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                 }
@@ -214,6 +272,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -223,6 +282,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_github()),
+                        trailing_icon: None,
                         aria_label: None,
                     }))
                     (render(Props {
@@ -232,7 +292,122 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         button_type: "button",
                         leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
                         aria_label: Some("Add item".to_string()),
+                    }))
+                }
+            }
+            section {
+                h2 { "Trailing icon + leading/trailing pair" }
+                p.mui-showcase__caption { "Trailing chevrons hint at navigation; pairing both icons frames a label in a command." }
+                div.mui-showcase__row {
+                    (render(Props {
+                        label: "Next step".to_string(),
+                        variant: Variant::Primary,
+                        size: Size::Md,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: None,
+                        trailing_icon: Some(icon_chevron_right()),
+                        aria_label: None,
+                    }))
+                    (render(Props {
+                        label: "Add & continue".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Md,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: Some(icon_plus()),
+                        trailing_icon: Some(icon_chevron_right()),
+                        aria_label: None,
+                    }))
+                }
+            }
+            section {
+                h2 { "Size ladder (shadcn parity)" }
+                p.mui-showcase__caption { "xs / sm / default / lg — plus four icon-only sizes with required aria-label." }
+                div.mui-showcase__row {
+                    (render(Props {
+                        label: "xs".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Xs,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: None,
+                        trailing_icon: None,
+                        aria_label: None,
+                    }))
+                    (render(Props {
+                        label: "sm".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Sm,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: None,
+                        trailing_icon: None,
+                        aria_label: None,
+                    }))
+                    (render(Props {
+                        label: "default".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Md,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: None,
+                        trailing_icon: None,
+                        aria_label: None,
+                    }))
+                    (render(Props {
+                        label: "lg".to_string(),
+                        variant: Variant::Outline,
+                        size: Size::Lg,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: None,
+                        trailing_icon: None,
+                        aria_label: None,
+                    }))
+                }
+                div.mui-showcase__row {
+                    (render(Props {
+                        label: String::new(),
+                        variant: Variant::Outline,
+                        size: Size::IconXs,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
+                        aria_label: Some("Add (xs)".to_string()),
+                    }))
+                    (render(Props {
+                        label: String::new(),
+                        variant: Variant::Outline,
+                        size: Size::IconSm,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
+                        aria_label: Some("Add (sm)".to_string()),
+                    }))
+                    (render(Props {
+                        label: String::new(),
+                        variant: Variant::Outline,
+                        size: Size::Icon,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
+                        aria_label: Some("Add (default)".to_string()),
+                    }))
+                    (render(Props {
+                        label: String::new(),
+                        variant: Variant::Outline,
+                        size: Size::IconLg,
+                        disabled: false,
+                        button_type: "button",
+                        leading_icon: Some(icon_plus()),
+                        trailing_icon: None,
+                        aria_label: Some("Add (lg)".to_string()),
                     }))
                 }
             }

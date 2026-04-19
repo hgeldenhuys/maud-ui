@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Toast — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Toast — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -964,7 +964,159 @@ let html = toast::render(toast::Props {
     id: &quot;save-toast&quot;.into(),
 });
 
-// Trigger from JS: muiToast({ title, description, variant })</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+// Trigger from JS: muiToast({ title, description, variant })</code></pre></div><section class="mui-docs"><h1>Toast</h1>
+<p>Transient notification component with auto-dismiss, variants, and optional action buttons.</p>
+<h2>Description</h2>
+<p>Toast renders a temporary notification message. It supports four variants (Info, Success, Warning, Danger) with appropriate ARIA roles and auto-dismiss timers. An optional <code>action()</code> helper allows embedding inline action buttons (e.g., "Undo", "Retry"). Toasts can be rendered statically or dispatched imperatively via JavaScript.</p>
+<p><strong>Note:</strong> shadcn deprecated the original Toast primitive in favor of Sonner (positioned viewport + richer API). For new call sites, prefer [<code>super::sonner</code>], which re-exports this module and adds a Position enum for viewport placement. This module is retained for backward compatibility.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toast;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toast::{Props, Variant, render, action, viewport};
+
+// Static toast (inline)
+let success = render(Props {
+    title: "Invoice sent".into(),
+    description: Some("Invoice #1042 has been emailed.".into()),
+    variant: Variant::Success,
+    duration_ms: 5000,
+    id: "toast-1".into(),
+});
+
+// Toast with action
+let undo_toast = html! {
+    div.mui-toast.mui-toast--info role="status" aria-live="polite" {
+        div.mui-toast__title { "Message archived" }
+        div.mui-toast__description { "You can restore it from the archive view." }
+        (action("Undo", "MaudUI.toastDismiss('toast-1')"))
+        button type="button" class="mui-toast__close" aria-label="Dismiss" { "×" }
+    }
+};
+
+// Imperative viewport (for programmatic toasts)
+let vp = viewport();
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>title</code></td><td><code>String</code></td><td><code>""</code></td><td>Primary message text</td></tr>
+<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional secondary message</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Info</code></td><td>Visual variant (Info, Success, Warning, Danger)</td></tr>
+<tr><td><code>duration_ms</code></td><td><code>u32</code></td><td><code>5000</code></td><td>Auto-dismiss timeout in milliseconds (0 = no auto-dismiss)</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>""</code></td><td>Unique identifier</td></tr>
+</tbody></table>
+<h2>Variant Enum</h2>
+<pre><code class="language-rust">pub enum Variant {
+    Info,       // Blue, role="status", aria-live="polite"
+    Success,    // Green, role="status", aria-live="polite"
+    Warning,    // Amber, role="status", aria-live="polite"
+    Danger,     // Red, role="alert", aria-live="assertive"
+}
+</code></pre>
+<p>Each variant has a corresponding CSS class and ARIA role:</p>
+<ul>
+<li><strong>Danger</strong> uses <code>role="alert"</code> and <code>aria-live="assertive"</code> for urgent notifications.</li>
+<li><strong>Info, Success, Warning</strong> use <code>role="status"</code> and <code>aria-live="polite"</code>.</li>
+</ul>
+<h2>Helpers</h2>
+<h3>action(label, onclick)</h3>
+<p>Renders an inline action button (e.g., "Undo", "Retry") inside a toast.</p>
+<pre><code class="language-rust">pub fn action(label: &amp;str, onclick: &amp;str) -&gt; Markup
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>label</code>: Button text</li>
+<li><code>onclick</code>: JavaScript to execute (e.g., <code>"MaudUI.toastDismiss('id')"</code>)</li>
+</ul>
+<p><strong>Returns:</strong> Markup for a <code>&lt;button class="mui-toast__action"&gt;</code> element.</p>
+<pre><code class="language-rust">(action("Retry", "MaudUI.toastRetry('upload-123')"))
+</code></pre>
+<h3>viewport()</h3>
+<p>Renders the container for imperative toasts (dispatched via JavaScript).</p>
+<pre><code class="language-rust">pub fn viewport() -&gt; Markup
+</code></pre>
+<p>Emits a <code>&lt;div id="mui-toast-viewport"&gt;</code> with ARIA live region attributes. Place this once in your page layout.</p>
+<h2>Variants</h2>
+<h3>Info</h3>
+<p>Informational message (blue, polite).</p>
+<pre><code class="language-rust">render(Props {
+    title: "Profile updated".into(),
+    description: Some("Your display name has been saved.".into()),
+    variant: Variant::Info,
+    ..Default::default()
+})
+</code></pre>
+<h3>Success</h3>
+<p>Successful action confirmation (green, polite).</p>
+<pre><code class="language-rust">render(Props {
+    title: "Changes saved".into(),
+    variant: Variant::Success,
+    ..Default::default()
+})
+</code></pre>
+<h3>Warning</h3>
+<p>Cautionary message (amber, polite).</p>
+<pre><code class="language-rust">render(Props {
+    title: "Session expiring soon".into(),
+    description: Some("Save your work now.".into()),
+    variant: Variant::Warning,
+    ..Default::default()
+})
+</code></pre>
+<h3>Danger</h3>
+<p>Error or critical alert (red, assertive).</p>
+<pre><code class="language-rust">render(Props {
+    title: "Payment failed".into(),
+    description: Some("Please check your card details and try again.".into()),
+    variant: Variant::Danger,
+    ..Default::default()
+})
+</code></pre>
+<h3>With Action Button</h3>
+<p>Embed an inline action (e.g., "Undo") next to the message.</p>
+<pre><code class="language-rust">html! {
+    div.mui-toast.mui-toast--info role="status" aria-live="polite" {
+        div.mui-toast__title { "Message archived" }
+        div.mui-toast__description { "You can restore it from the archive view." }
+        (action("Undo", "MaudUI.toast({variant:'success', title:'Restored', duration_ms:3000})"))
+        button type="button" class="mui-toast__close" aria-label="Dismiss" { "×" }
+    }
+}
+</code></pre>
+<h3>No Auto-Dismiss</h3>
+<p>Set <code>duration_ms: 0</code> to prevent automatic dismissal.</p>
+<pre><code class="language-rust">render(Props {
+    title: "Important notice".into(),
+    duration_ms: 0,  // User must dismiss manually
+    ..Default::default()
+})
+</code></pre>
+<h3>Imperative API (JavaScript-driven)</h3>
+<p>Dispatch toasts from JavaScript using <code>MaudUI.toast()</code>:</p>
+<pre><code class="language-javascript">MaudUI.toast({
+    variant: 'success',
+    title: 'Changes saved',
+    description: 'Your profile has been updated.',
+    duration_ms: 5000
+});
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>ARIA Roles:</strong> Danger toasts use <code>role="alert"</code> (assertive); others use <code>role="status"</code> (polite).</li>
+<li><strong>Aria-Live:</strong> Danger toasts have <code>aria-live="assertive"</code> for urgent announcements; others have <code>aria-live="polite"</code>.</li>
+<li><strong>Dismiss Button:</strong> Always include a close button with <code>aria-label="Dismiss"</code>.</li>
+<li><strong>Duration:</strong> Auto-dismiss after the specified duration, but allow manual dismissal.</li>
+<li><strong>Action Buttons:</strong> Use clear, action-oriented labels (e.g., "Undo", "Retry", "View").</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/alert.md">Alert</a> — Persistent dismissible alerts</li>
+<li><a href="/docs/components/badge.md">Badge</a> — Status indicators</li>
+<li><a href="/docs/components/button.md">Button</a> — Action triggers</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Toast is deprecated in shadcn in favor of Sonner. This module is retained for backward compatibility. For new projects, use [<code>super::sonner</code>] which provides positioned viewport toasts with a richer API.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tabs — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tabs — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -960,7 +960,139 @@ let html = tabs::render(tabs::Props {
     ],
     default_active: 0,
     aria_label: &quot;Account tabs&quot;.into(),
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Tabs</h1>
+<p>Tabbed interface for organizing content into separate panels with optional orientation and activation mode control.</p>
+<h2>Description</h2>
+<p>Tabs provides a multi-section container where users select between labeled panels. Each tab can be individually disabled. The component supports horizontal and vertical layouts, segmented and underline visual variants, and both automatic (keyboard arrow keys) and manual (requires explicit click/Enter) activation modes.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::tabs;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::{html, Markup};
+use maud_ui::primitives::tabs::{Props, Tab, Orientation, Variant, ActivationMode, render};
+
+let tabs = vec![
+    Tab {
+        id: "account".to_string(),
+        label: "Account".to_string(),
+        content: html! { p { "Account settings here" } },
+        disabled: false,
+    },
+    Tab {
+        id: "password".to_string(),
+        label: "Password".to_string(),
+        content: html! { p { "Change password here" } },
+        disabled: false,
+    },
+];
+
+let tabs_ui = render(Props {
+    tabs,
+    default_active: 0,
+    aria_label: "Settings".to_string(),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>tabs</code></td><td><code>Vec&lt;Tab&gt;</code></td><td><code>vec![]</code></td><td>List of tab definitions</td></tr>
+<tr><td><code>default_active</code></td><td><code>usize</code></td><td><code>0</code></td><td>Index of initially active tab</td></tr>
+<tr><td><code>aria_label</code></td><td><code>String</code></td><td><code>"Tabs"</code></td><td>Accessible label for the tab list</td></tr>
+<tr><td><code>orientation</code></td><td><code>Orientation</code></td><td><code>Horizontal</code></td><td>Layout direction (Horizontal or Vertical)</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Default</code></td><td>Visual style (Default/segmented or Line/underline)</td></tr>
+<tr><td><code>activation_mode</code></td><td><code>ActivationMode</code></td><td><code>Automatic</code></td><td>How tabs activate (Automatic on arrow keys or Manual on click/Enter)</td></tr>
+</tbody></table>
+<h2>Tab</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>""</code></td><td>Unique identifier for the tab (used in aria-controls, etc.)</td></tr>
+<tr><td><code>label</code></td><td><code>String</code></td><td><code>""</code></td><td>Display text on the tab trigger button</td></tr>
+<tr><td><code>content</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Panel content (displayed when tab is active)</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the tab is disabled and unselectable</td></tr>
+</tbody></table>
+<h2>Enums</h2>
+<h3>Orientation</h3>
+<pre><code class="language-rust">pub enum Orientation {
+    #[default]
+    Horizontal,
+    Vertical,
+}
+</code></pre>
+<p>Controls the layout direction of the tab list. Vertical orientation changes <code>aria-orientation="vertical"</code> and applies different CSS layout.</p>
+<h3>Variant</h3>
+<pre><code class="language-rust">pub enum Variant {
+    #[default]
+    Default,    // Segmented tabs with background and border
+    Line,       // Underline style (less prominent)
+}
+</code></pre>
+<p>Controls the visual appearance of the tab triggers.</p>
+<h3>ActivationMode</h3>
+<pre><code class="language-rust">pub enum ActivationMode {
+    #[default]
+    Automatic,  // Arrow keys activate tabs
+    Manual,     // Only click or Enter activates tabs
+}
+</code></pre>
+<p>Controls how users switch between tabs. Automatic mode is responsive to keyboard navigation; Manual requires explicit user action.</p>
+<h2>Variants</h2>
+<h3>Default (Segmented)</h3>
+<p>Horizontal tabs with segmented background and border styling.</p>
+<pre><code class="language-rust">render(Props {
+    tabs,
+    orientation: Orientation::Horizontal,
+    variant: Variant::Default,
+    ..Default::default()
+})
+</code></pre>
+<h3>Line (Underline)</h3>
+<p>Underline style for a minimalist appearance.</p>
+<pre><code class="language-rust">render(Props {
+    tabs,
+    variant: Variant::Line,
+    ..Default::default()
+})
+</code></pre>
+<h3>Vertical</h3>
+<p>Tab triggers arranged vertically on the left, panels on the right.</p>
+<pre><code class="language-rust">render(Props {
+    tabs,
+    orientation: Orientation::Vertical,
+    ..Default::default()
+})
+</code></pre>
+<h3>Disabled Tabs</h3>
+<p>Individual tabs can be disabled to prevent selection.</p>
+<pre><code class="language-rust">let tabs = vec![
+    Tab { disabled: false, ..Default::default() },
+    Tab { disabled: true, ..Default::default() },  // Unselectable
+];
+
+render(Props { tabs, ..Default::default() })
+</code></pre>
+<h3>Manual Activation Mode</h3>
+<p>Tabs only respond to explicit user interaction (click or Enter key).</p>
+<pre><code class="language-rust">render(Props {
+    tabs,
+    activation_mode: ActivationMode::Manual,
+    ..Default::default()
+})
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>ARIA Labels:</strong> Each tab list has an <code>aria-label</code>. Individual tabs have <code>aria-selected</code>, <code>aria-controls</code>, and <code>aria-disabled</code> attributes.</li>
+<li><strong>Keyboard Navigation:</strong> In Automatic mode, arrow keys navigate and activate tabs. In Manual mode, arrow keys navigate but don't activate (requires Enter or click).</li>
+<li><strong>Roving Tabindex:</strong> Only the active (or first) tab is in the DOM tab order; others have <code>tabindex="-1"</code>.</li>
+<li><strong>Panel Association:</strong> Tab panels are linked via <code>aria-labelledby</code> to their triggers.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/button.md">Button</a> — Similar trigger patterns</li>
+<li><a href="/docs/components/card.md">Card</a> — Often paired with tabs for content organization</li>
+<li><a href="/docs/components/dialog.md">Dialog</a> — Alternative modal pattern for multi-step content</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Tabs aligns with shadcn's Tabs component, supporting both Default and Line variants plus orientation options.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

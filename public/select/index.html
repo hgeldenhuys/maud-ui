@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Select — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Select — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -962,7 +962,151 @@ let html = select::render(select::Props {
         select::SelectOption { value: &quot;gb&quot;.into(), label: &quot;United Kingdom&quot;.into(), disabled: false },
     ],
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Select</h1>
+<p>Dropdown select component with support for flat option lists, grouped options, size variants, and invalid state. Native HTML <code>&lt;select&gt;</code>-equivalent with custom styling.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::select::{self, Props, Size, SelectOption, SelectGroup};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::select;
+
+html! {
+    (select::render(select::Props {
+        name: "theme".to_string(),
+        id: "select-theme".to_string(),
+        options: vec![
+            select::SelectOption { value: "light".to_string(), label: "Light".to_string(), disabled: false },
+            select::SelectOption { value: "dark".to_string(), label: "Dark".to_string(), disabled: false },
+        ],
+        selected: Some("light".to_string()),
+        placeholder: "Choose theme…".to_string(),
+        size: select::Size::Default,
+        aria_invalid: false,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td><code>"select"</code></td><td>Input name attribute (sent on form submit).</td></tr>
+<tr><td>id</td><td>String</td><td><code>"select"</code></td><td>Unique identifier for the select button.</td></tr>
+<tr><td>options</td><td>Vec<SelectOption></td><td><code>[]</code></td><td>Flat list of options. Ignored if <code>groups</code> is non-empty.</td></tr>
+<tr><td>groups</td><td>Vec<SelectGroup></td><td><code>[]</code></td><td>Grouped options (overrides <code>options</code> if provided).</td></tr>
+<tr><td>selected</td><td>Option<String></td><td><code>None</code></td><td>Value of the pre-selected option (matches <code>SelectOption.value</code>).</td></tr>
+<tr><td>placeholder</td><td>String</td><td><code>"Select…"</code></td><td>Placeholder text shown when no option is selected.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>If true, select button is disabled.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Default</code></td><td>Size variant: Default or Sm (small).</td></tr>
+<tr><td>aria_invalid</td><td>bool</td><td><code>false</code></td><td>If true, sets <code>aria-invalid="true"</code> on the trigger for error styling.</td></tr>
+</tbody></table>
+<h2>SelectOption Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>value</td><td>String</td><td>Option value (sent on form submit).</td></tr>
+<tr><td>label</td><td>String</td><td>Visible option label.</td></tr>
+<tr><td>disabled</td><td>bool</td><td>If true, option cannot be selected (grayed out).</td></tr>
+</tbody></table>
+<h2>SelectGroup Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td>Group heading (rendered as <code>aria-labelledby</code>).</td></tr>
+<tr><td>options</td><td>Vec<SelectOption></td><td>Options within this group.</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<table><thead><tr><th>Value</th><th>Class</th><th>Description</th></tr></thead><tbody>
+<tr><td>Default</td><td><code>mui-select__trigger</code></td><td>Default size.</td></tr>
+<tr><td>Sm</td><td><code>mui-select__trigger mui-select--sm</code></td><td>Small, compact size.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<h3>scroll_up_button() -&gt; Markup</h3>
+<p>Renders the up-scroll affordance for long dropdowns (<code>▲</code>). Decorative, <code>aria-hidden="true"</code>.</p>
+<pre><code class="language-rust">(select::scroll_up_button())
+</code></pre>
+<h3>scroll_down_button() -&gt; Markup</h3>
+<p>Renders the down-scroll affordance for long dropdowns (<code>▼</code>). Decorative, <code>aria-hidden="true"</code>.</p>
+<pre><code class="language-rust">(select::scroll_down_button())
+</code></pre>
+<h3>separator() -&gt; Markup</h3>
+<p>Renders a thin horizontal rule (<code>&lt;div role="separator"&gt;</code>) between option groups.</p>
+<pre><code class="language-rust">(select::separator())
+</code></pre>
+<h2>Usage Patterns</h2>
+<h3>Flat option list</h3>
+<pre><code class="language-rust">html! {
+    (select::render(select::Props {
+        name: "priority".to_string(),
+        id: "select-priority".to_string(),
+        options: vec![
+            select::SelectOption { value: "low".to_string(), label: "Low".to_string(), disabled: false },
+            select::SelectOption { value: "medium".to_string(), label: "Medium".to_string(), disabled: false },
+            select::SelectOption { value: "high".to_string(), label: "High".to_string(), disabled: false },
+        ],
+        placeholder: "Set priority…".to_string(),
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h3>Grouped options</h3>
+<pre><code class="language-rust">html! {
+    (select::render(select::Props {
+        name: "timezone".to_string(),
+        id: "select-tz".to_string(),
+        groups: vec![
+            select::SelectGroup {
+                label: "North America".to_string(),
+                options: vec![
+                    select::SelectOption { value: "est".to_string(), label: "Eastern".to_string(), disabled: false },
+                    select::SelectOption { value: "cst".to_string(), label: "Central".to_string(), disabled: false },
+                ],
+            },
+            select::SelectGroup {
+                label: "Europe".to_string(),
+                options: vec![
+                    select::SelectOption { value: "gmt".to_string(), label: "London (GMT)".to_string(), disabled: false },
+                ],
+            },
+        ],
+        selected: Some("est".to_string()),
+        placeholder: "Select timezone…".to_string(),
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h3>With error state</h3>
+<pre><code class="language-rust">html! {
+    (select::render(select::Props {
+        name: "country".to_string(),
+        id: "select-country".to_string(),
+        options: vec![
+            select::SelectOption { value: "us".to_string(), label: "United States".to_string(), disabled: false },
+            select::SelectOption { value: "ca".to_string(), label: "Canada".to_string(), disabled: false },
+        ],
+        placeholder: "Select country…".to_string(),
+        aria_invalid: true,  // Shows error styling
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Trigger</strong> is <code>role="combobox"</code> with <code>aria-expanded</code>, <code>aria-haspopup="listbox"</code>, <code>aria-controls</code>.</li>
+<li><strong>Dropdown</strong> is <code>role="listbox"</code> with <code>aria-labelledby</code> pointing to trigger.</li>
+<li><strong>Options</strong> are <code>role="option"</code> with <code>aria-selected</code> (true/false) and optional <code>aria-disabled</code>.</li>
+<li><strong>Option groups</strong> are <code>role="group"</code> with <code>aria-labelledby</code> pointing to group label.</li>
+<li><strong>Selected label</strong> is read from matched option; fallback to placeholder if none selected.</li>
+<li>Keyboard: Up/Down arrows move focus, Enter selects, Escape closes.</li>
+</ul>
+<h2>Data Attributes</h2>
+<ul>
+<li><code>data-mui="select"</code> — root element marker.</li>
+<li><code>data-name</code> — input name attribute (helps with form binding).</li>
+<li><code>data-value</code> — on each option (client JS uses for selection).</li>
+</ul>
+<h2>Hidden Input</h2>
+<p>A <code>&lt;input type="hidden"&gt;</code> carries the current selection value so the form submit includes the selected value.</p>
+<h2>Related</h2>
+<p>Combobox (searchable), Native Select (native HTML), Radio Group (mutually exclusive without dropdown).</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/select</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

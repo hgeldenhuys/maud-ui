@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Accordion — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Accordion — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -959,7 +959,55 @@ let html = accordion::render(accordion::Props {
         accordion::Item { id: &quot;faq-2&quot;.into(), trigger: &quot;Is it free?&quot;.into(), content: html! { p { &quot;Yes, MIT licensed.&quot; } }, open: false },
     ],
     multiple: false,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Accordion</h1>
+<p>Collapsible vertical disclosure widget that can hold multiple expandable sections with optional single-open constraint.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::accordion::{self, Item, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::accordion;
+
+html! {
+    (accordion::render(accordion::Props {
+        items: vec![
+            accordion::Item {
+                id: "item-1".to_string(),
+                trigger: "What is this?".to_string(),
+                content: html! { p { "This is the answer." } },
+                open: false,
+            },
+        ],
+        multiple: false,
+        aria_label: Some("FAQ".to_string()),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>items</td><td>Vec<Item></td><td><code>[]</code></td><td>Array of accordion items, each with id, trigger label, content markup, and open state.</td></tr>
+<tr><td>multiple</td><td>bool</td><td><code>false</code></td><td>If true, multiple items can be open simultaneously; if false, only one item at a time.</td></tr>
+<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Accessible label for the accordion wrapper (emitted as <code>aria-label</code>); provide when there is no surrounding heading.</td></tr>
+</tbody></table>
+<h2>Item Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td>Unique identifier for aria-controls and content linking.</td></tr>
+<tr><td>trigger</td><td>String</td><td>Label text displayed in the trigger button.</td></tr>
+<tr><td>content</td><td>Markup</td><td>Markup content displayed when the item is expanded.</td></tr>
+<tr><td>open</td><td>bool</td><td>Initial open state (default false).</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Emits <code>role="region"</code> on content with <code>aria-labelledby</code> pointing to trigger.</li>
+<li>Trigger button exposes <code>aria-expanded</code> (true/false) and <code>aria-controls</code>.</li>
+<li>Chevron icon marked <code>aria-hidden="true"</code> to avoid double announcement.</li>
+<li><code>aria-label</code> on root required when accordion has no surrounding heading for screen reader context.</li>
+</ul>
+<h2>Related</h2>
+<p>Button, Collapsible, Dialog.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/accordion</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

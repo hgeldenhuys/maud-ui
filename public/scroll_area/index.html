@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Scroll Area — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Scroll Area — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -979,7 +979,100 @@ Author: Alex Chen
 Date:   Thu Apr 9 08:47:33 2026 +0000
 
     fix: breadcrumb separator a11y
-</div></div><div class="mui-scroll-area__scrollbar" aria-hidden="true"><div class="mui-scroll-area__thumb"></div></div></div></div></div></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+</div></div><div class="mui-scroll-area__scrollbar" aria-hidden="true"><div class="mui-scroll-area__thumb"></div></div></div></div></div></div><section class="mui-docs"><h1>ScrollArea</h1>
+<p>Custom-styled scrollbar with auto-hide behavior overlaid on native scroll. Delegates scroll control to the browser's native scrollbar to ensure full keyboard and assistive technology support.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::scroll_area::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::scroll_area;
+
+html! {
+    (scroll_area::render(scroll_area::Props {
+        max_height: "12rem".to_string(),
+        id: "scroll-demo".to_string(),
+        children: html! {
+            div { "Scrollable content here..." }
+        },
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>max_height</td><td>String</td><td><code>"12rem"</code></td><td>CSS value for max-height (e.g., "12rem", "200px", "50vh").</td></tr>
+<tr><td>id</td><td>String</td><td><code>"scroll-area-default"</code></td><td>Unique identifier for the viewport element.</td></tr>
+<tr><td>children</td><td>Markup</td><td><code>html! {}</code></td><td>Content to scroll within the bounded area.</td></tr>
+</tbody></table>
+<h2>Accessibility Decision</h2>
+<p><strong>The viewport is the real scroll container</strong> (has <code>overflow: auto</code>) and is exposed as a focusable <code>role="region"</code> with <code>aria-label="Scrollable region"</code>. This means:</p>
+<ul>
+<li><strong>Keyboard users</strong> interact with native browser scrollbar semantics directly: PageUp/PageDown, arrow keys, Home/End.</li>
+<li><strong>Assistive technology</strong> can read the scrollable region and navigate its content using standard scroll commands.</li>
+<li><strong>All scroll gestures</strong> (mouse wheel, trackpad, touch scroll) work natively without custom JS event handling.</li>
+<li><strong>The custom thumb</strong> (<code>.mui-scroll-area__thumb</code>) is purely a visual decoration that tracks native scroll position via CSS.</li>
+</ul>
+<p>We keep <code>aria-hidden="true"</code> on the scrollbar track rather than promoting it to <code>role="scrollbar"</code> because:</p>
+<ol>
+<li>The custom thumb is <strong>not draggable/interactive</strong>—the native scrollbar is the real control. Promoting the decoration to <code>role="scrollbar"</code> would advertise keyboard/focus semantics the decoration does not implement.</li>
+<li>This matches the shadcn Base UI pattern of delegating to native scroll whenever the platform offers it, and only synthesizing ARIA scrollbar semantics when the component intercepts scroll (e.g., virtualized lists).</li>
+</ol>
+<p><strong>If a future variant virtualizes or intercepts scroll, add a <code>role="scrollbar"</code> path</strong> alongside <code>aria-valuenow</code> / <code>aria-valuemin</code> / <code>aria-valuemax</code> wiring.</p>
+<h2>Usage Pattern</h2>
+<p>Wrap content that should scroll:</p>
+<pre><code class="language-rust">html! {
+    div style="border: 1px solid var(--mui-border); border-radius: 0.5rem;" {
+        (scroll_area::render(scroll_area::Props {
+            max_height: "14rem".to_string(),
+            id: "release-tags".to_string(),
+            children: html! {
+                div {
+                    @for tag in ["v1.0.0", "v0.9.1", "v0.9.0"].iter() {
+                        div style="padding: 0.5rem; border-bottom: 1px solid var(--mui-border);" {
+                            (tag)
+                        }
+                    }
+                }
+            },
+        }))
+    }
+}
+</code></pre>
+<h2>Structure</h2>
+<pre><code class="language-html">&lt;div class="mui-scroll-area"&gt;
+  &lt;!-- Real scroll container --&gt;
+  &lt;div class="mui-scroll-area__viewport"
+       id="scroll-area-default"
+       role="region"
+       aria-label="Scrollable region"
+       tabindex="0"&gt;
+    &lt;!-- Content scrolls here --&gt;
+  &lt;/div&gt;
+  &lt;!-- Visual-only custom scrollbar --&gt;
+  &lt;div class="mui-scroll-area__scrollbar" aria-hidden="true"&gt;
+    &lt;div class="mui-scroll-area__thumb"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Viewport</strong> is <code>role="region"</code> with <code>aria-label="Scrollable region"</code> and <code>tabindex="0"</code>.</li>
+<li><strong>Scrollbar track</strong> is <code>aria-hidden="true"</code> (decorative; native scrollbar is the control).</li>
+<li><strong>Thumb</strong> has no role or focus handling (purely CSS decoration tracking native scroll).</li>
+<li>Native scroll wheel, keyboard (PageUp/PageDown, arrows), and AT scroll commands all work automatically.</li>
+</ul>
+<h2>Variants</h2>
+<p>Currently, a single variant with configurable max-height. Future variants may include:</p>
+<ul>
+<li>Virtualized scrolling (for large lists)</li>
+<li>Horizontal scroll</li>
+<li>Custom scroll interception (e.g., for scroll-linked animations)</li>
+</ul>
+<h2>Related</h2>
+<p>Drawer (scrollable modal), Dialog (scrollable content), Tabs (scroll container).</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/scroll-area</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

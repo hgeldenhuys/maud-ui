@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sonner — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sonner — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -979,7 +979,108 @@ html { scroll-behavior: smooth; }
     });
   }
 })();
-</script></div></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+</script></div></div><section class="mui-docs"><h1>Sonner</h1>
+<p>Positioned toast viewport, shadcn's successor to the legacy <code>toast</code> primitive. Re-exports toast <code>Props</code> / <code>Variant</code> / <code>render</code> API for compatibility. Adds a <code>Position</code> enum (six placements) that drives viewport anchoring via <code>data-position</code> attribute. Brand-new v0.2.1 primitive.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::sonner::{self, Position, Props, Variant};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::sonner;
+
+html! {
+    // Viewport placed at bottom-right (default)
+    (sonner::viewport(sonner::Position::BottomRight))
+    
+    // Or with explicit id for multiple independent viewports
+    (sonner::viewport_with_id("my-viewport", sonner::Position::TopRight))
+    
+    // Render a static toast for SSR or demo
+    (sonner::toast(sonner::Props {
+        variant: sonner::Variant::Success,
+        title: "Saved".to_string(),
+        description: Some("Your changes have been stored.".to_string()),
+        duration_ms: 4000,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<p>Re-exported from <code>toast</code>. Refer to <a href="./toast.md">Toast documentation</a> for complete Props details.</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Toast style: Default, Success, Error, Warning, Info.</td></tr>
+<tr><td>title</td><td>String</td><td>(required)</td><td>Toast title/heading.</td></tr>
+<tr><td>description</td><td>Option<String></td><td><code>None</code></td><td>Optional body text.</td></tr>
+<tr><td>duration_ms</td><td>u32</td><td><code>3000</code></td><td>Time in milliseconds before auto-dismiss.</td></tr>
+</tbody></table>
+<h2>Position Enum</h2>
+<table><thead><tr><th>Variant</th><th>Data Attr</th><th>Placement</th></tr></thead><tbody>
+<tr><td>TopLeft</td><td><code>top-left</code></td><td>Top-left corner.</td></tr>
+<tr><td>TopCenter</td><td><code>top-center</code></td><td>Top center.</td></tr>
+<tr><td>TopRight</td><td><code>top-right</code></td><td>Top-right corner.</td></tr>
+<tr><td>BottomLeft</td><td><code>bottom-left</code></td><td>Bottom-left corner.</td></tr>
+<tr><td>BottomCenter</td><td><code>bottom-center</code></td><td>Bottom center.</td></tr>
+<tr><td>BottomRight</td><td><code>bottom-right</code></td><td>Bottom-right corner (default).</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<h3>viewport</h3>
+<pre><code class="language-rust">sonner::viewport(position: Position) -&gt; Markup
+</code></pre>
+<p>Renders the sonner viewport container at the given position. The element carries <code>id="mui-sonner-viewport"</code> so the behaviour file finds it without a selector walk.</p>
+<h3>viewport_with_id</h3>
+<pre><code class="language-rust">sonner::viewport_with_id(id: &amp;str, position: Position) -&gt; Markup
+</code></pre>
+<p>Renders a sonner viewport with an explicit DOM id. Use this for pages needing multiple independent viewports (rare).</p>
+<h3>toast</h3>
+<pre><code class="language-rust">sonner::toast(props: Props) -&gt; Markup
+</code></pre>
+<p>Thin alias for <code>render(props)</code> mirroring shadcn's JS <code>sonner.toast(...)</code> spelling. Returns markup for a single toast node. For server-rendered static toasts, call this; for imperative dispatch, fire a <code>mui:sonner-toast</code> CustomEvent on <code>window</code>.</p>
+<h2>Variant Styles</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>Neutral toast.</td></tr>
+<tr><td>Success</td><td>Success message (checkmark icon).</td></tr>
+<tr><td>Error</td><td>Error or destructive action feedback.</td></tr>
+<tr><td>Warning</td><td>Warning or caution message.</td></tr>
+<tr><td>Info</td><td>Informational message.</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Viewport container has <code>aria-live="polite"</code> to announce new toasts to screen readers.</li>
+<li>Toast role is implicitly live-region-aware via the container.</li>
+<li>Toasts are announced in the order they appear; stale toasts fade silently.</li>
+<li>Title is the primary announcement; description is secondary.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-sonner</code></td><td>Viewport root container.</td></tr>
+<tr><td><code>mui-toast</code></td><td>Individual toast element.</td></tr>
+<tr><td><code>mui-toast--success</code></td><td>Success variant styling.</td></tr>
+<tr><td><code>mui-toast--error</code></td><td>Error variant styling.</td></tr>
+<tr><td><code>mui-toast--warning</code></td><td>Warning variant styling.</td></tr>
+<tr><td><code>mui-toast--info</code></td><td>Info variant styling.</td></tr>
+</tbody></table>
+<h2>Behaviour</h2>
+<p>The companion JS behaviour (<code>dist/behaviors/toast.js</code>) handles:</p>
+<ul>
+<li>Listening for <code>mui:sonner-toast</code> CustomEvents on <code>window</code>.</li>
+<li>Creating new toast elements and injecting them into the viewport.</li>
+<li>Auto-dismissing after <code>duration_ms</code>.</li>
+<li>Reacting to viewport <code>data-position</code> changes (live theme switching in galleries).</li>
+</ul>
+<p><strong>Dispatching a toast from JS:</strong></p>
+<pre><code class="language-javascript">window.dispatchEvent(new CustomEvent('mui:sonner-toast', {
+  detail: {
+    variant: 'success',
+    title: 'Saved',
+    description: 'Your changes have been stored.',
+    duration_ms: 4000
+  }
+}));
+</code></pre>
+<h2>Related</h2>
+<p>Toast (legacy), Alert, Notification.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/sonner</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

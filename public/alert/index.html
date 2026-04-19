@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alert — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alert — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -958,7 +958,56 @@ let html = alert::render(alert::Props {
     variant: alert::Variant::Success,
     icon: true,
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Alert</h1>
+<p>Prominent callout or banner for important messages, with optional icon, description, and action slot.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::alert::{self, Variant, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::alert;
+
+html! {
+    (alert::render(alert::Props {
+        title: "System maintenance".to_string(),
+        description: Some("API will be offline from 2–3 AM UTC.".to_string()),
+        variant: alert::Variant::Warning,
+        icon: true,
+        action: None,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td><code>""</code></td><td>Alert title text.</td></tr>
+<tr><td>description</td><td>Option<String></td><td><code>None</code></td><td>Optional description text rendered below title.</td></tr>
+<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant controlling color and icon: Default, Info, Success, Warning, Danger.</td></tr>
+<tr><td>icon</td><td>bool</td><td><code>true</code></td><td>Whether to render the icon glyph corresponding to the variant.</td></tr>
+<tr><td>action</td><td>Option<Markup></td><td><code>None</code></td><td>Optional action slot markup (e.g., a button) rendered top-right; wrap with <code>alert::action()</code>.</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Icon</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Default</td><td>○ (circle)</td><td>Neutral informational message.</td></tr>
+<tr><td>Info</td><td>ⓘ (circled i)</td><td>Informational message.</td></tr>
+<tr><td>Success</td><td>✓ (checkmark)</td><td>Positive confirmation or success.</td></tr>
+<tr><td>Warning</td><td>⚠ (triangle)</td><td>Caution or warning requiring attention.</td></tr>
+<tr><td>Danger</td><td>⚠ (triangle)</td><td>Destructive action or error state.</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<ul>
+<li><code>alert::action(children: Markup) -&gt; Markup</code> — Wraps arbitrary markup in the action slot container (top-right) for use with <code>Props { action: Some(...) }</code>.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Emits <code>role="alert"</code> so screen readers announce the message immediately.</li>
+<li>Icon marked <code>aria-hidden="true"</code> to avoid redundant announcement.</li>
+<li>Title and description are plain text content, no special ARIA needed.</li>
+</ul>
+<h2>Related</h2>
+<p>Badge, Button, Toast.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/alert</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

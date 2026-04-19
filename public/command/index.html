@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Command — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Command — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -963,7 +963,70 @@ let html = command::render(command::Props {
         command::CommandItem { label: &quot;New file&quot;.into(), shortcut: Some(&quot;Cmd+N&quot;.into()), group: Some(&quot;File&quot;.into()), disabled: false },
         command::CommandItem { label: &quot;Search&quot;.into(), shortcut: Some(&quot;Cmd+K&quot;.into()), group: Some(&quot;General&quot;.into()), disabled: false },
     ],
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Command</h1>
+<p>Command palette with search, grouped items, and keyboard navigation (Cmd+K pattern).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::command::{self, Props, CommandItem};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::command;
+
+let items = vec![
+    command::CommandItem {
+        label: "New File".to_string(),
+        shortcut: Some("⌘N".to_string()),
+        group: Some("Actions".to_string()),
+        disabled: false,
+    },
+];
+
+html! {
+    (command::render(command::Props {
+        id: "cmd".to_string(),
+        items,
+        placeholder: "Type a command...".to_string(),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"command"</code></td><td>Unique identifier for the dialog</td></tr>
+<tr><td><code>items</code></td><td><code>Vec&lt;CommandItem&gt;</code></td><td><code>vec![]</code></td><td>List of command items</td></tr>
+<tr><td><code>placeholder</code></td><td><code>String</code></td><td><code>"Type a command or search…"</code></td><td>Placeholder text in search input</td></tr>
+</tbody></table>
+<h2>CommandItem Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>label</code></td><td><code>String</code></td><td>—</td><td>Display text for the command</td></tr>
+<tr><td><code>shortcut</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional keyboard shortcut (e.g., "⌘N")</td></tr>
+<tr><td><code>group</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional group name for categorization</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the item is disabled</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<h3><code>trigger(target_id, label) → Markup</code></h3>
+<p>Renders a button that opens the command palette dialog. Data attributes wire JS trigger behavior.</p>
+<h3><code>shortcut(children) → Markup</code></h3>
+<p>Renders a <code>&lt;kbd&gt;</code> element styled for keyboard shortcuts. Use when composing custom item markup.</p>
+<h3><code>separator() → Markup</code></h3>
+<p>Renders a visual divider between command groups.</p>
+<h3><code>empty(text) → Markup</code></h3>
+<p>Renders a no-results empty state. Use when a search yields no matches.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Dialog has <code>aria-label="Command palette"</code> and <code>aria-modal="true"</code></li>
+<li>Search input has <code>aria-label="Search commands"</code></li>
+<li>Items are <code>role="option"</code> with <code>tabindex="-1"</code> in a <code>role="listbox"</code> container</li>
+<li>Disabled items get <code>aria-disabled="true"</code></li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li>Dialog</li>
+<li>Menu</li>
+<li>Combobox</li>
+</ul>
+<h2>Shadcn reference</h2>
+<p><a href="https://ui.shadcn.com/docs/components/command">https://ui.shadcn.com/docs/components/command</a></p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

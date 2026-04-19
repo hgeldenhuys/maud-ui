@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Badge — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Badge — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -955,7 +955,53 @@ html { scroll-behavior: smooth; }
 let html = badge::render(badge::Props {
     label: &quot;New&quot;.into(),
     variant: badge::Variant::Success,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Badge</h1>
+<p>Minimal status indicator for tagging, labeling, and highlighting items with optional leading icon.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::badge::{self, Variant, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::badge;
+
+html! {
+    (badge::render(badge::Props {
+        label: "Live".to_string(),
+        variant: badge::Variant::Success,
+        href: None,
+        leading_icon: None,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td><code>""</code></td><td>Text content displayed in the badge.</td></tr>
+<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant (color scheme): Default, Secondary, Success, Warning, Danger, Outline, Ghost, Link.</td></tr>
+<tr><td>href</td><td>Option<String></td><td><code>None</code></td><td>Optional URL; if Some, badge renders as an <code>&lt;a&gt;</code> element; if None, renders as a <code>&lt;span&gt;</code>.</td></tr>
+<tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered before the label with <code>data-icon="inline-start"</code>.</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>General-purpose status or tag.</td></tr>
+<tr><td>Secondary</td><td>Muted or secondary information.</td></tr>
+<tr><td>Success</td><td>Positive status (approved, live, etc.).</td></tr>
+<tr><td>Warning</td><td>Cautionary status (beta, experimental, etc.).</td></tr>
+<tr><td>Danger</td><td>Error or destructive state.</td></tr>
+<tr><td>Outline</td><td>Outlined badge for subtle emphasis.</td></tr>
+<tr><td>Ghost</td><td>Ghost-style badge with minimal styling.</td></tr>
+<tr><td>Link</td><td>Badge styled as a link for navigation.</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>When <code>href</code> is present, badge is an <code>&lt;a&gt;</code> element with standard link semantics.</li>
+<li>When <code>href</code> is None, badge is a <code>&lt;span&gt;</code> (non-interactive).</li>
+<li>Icon (if present) is inline with the label; no special ARIA needed if icon is decorative.</li>
+</ul>
+<h2>Related</h2>
+<p>Alert, Button, Label, Tag.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/badge</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

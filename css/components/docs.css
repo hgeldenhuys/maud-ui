@@ -1,0 +1,119 @@
+/* API reference rendered from docs/components/<name>.md via pulldown-cmark.
+   Keeps the look-and-feel consistent with the rest of the gallery. */
+
+.mui-docs {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--mui-border);
+  max-width: 48rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--mui-text);
+}
+
+.mui-docs h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+.mui-docs h1 + p {
+  color: var(--mui-text-muted);
+  font-size: 1.0625rem;
+  margin-top: 0;
+}
+
+.mui-docs h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 2rem 0 0.5rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-docs h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--mui-text);
+}
+
+.mui-docs p { margin: 0 0 0.75rem; }
+
+.mui-docs code {
+  font-family: var(--mui-mono, ui-monospace, SFMono-Regular, monospace);
+  font-size: 0.875em;
+  background: var(--mui-bg-input);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--mui-border);
+  color: var(--mui-accent);
+}
+
+.mui-docs pre {
+  margin: 0.75rem 0 1.25rem;
+  padding: 1rem;
+  background: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius);
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+.mui-docs pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--mui-text);
+  font-size: inherit;
+}
+
+.mui-docs table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0 1.25rem;
+  font-size: 0.875rem;
+}
+.mui-docs th,
+.mui-docs td {
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--mui-border);
+  vertical-align: top;
+}
+.mui-docs th {
+  font-weight: 600;
+  color: var(--mui-text);
+  background: var(--mui-bg-input);
+  border-top: 1px solid var(--mui-border);
+}
+.mui-docs td code,
+.mui-docs th code { font-size: 0.8125em; }
+
+.mui-docs ul,
+.mui-docs ol {
+  margin: 0 0 0.75rem;
+  padding-left: 1.5rem;
+}
+.mui-docs li { margin: 0.25rem 0; }
+
+.mui-docs a {
+  color: var(--mui-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.mui-docs a:hover { text-decoration-thickness: 2px; }
+
+.mui-docs blockquote {
+  margin: 0.75rem 0;
+  padding: 0.5rem 1rem;
+  border-left: 3px solid var(--mui-border);
+  color: var(--mui-text-muted);
+  background: var(--mui-bg-input);
+  border-radius: 0 var(--mui-radius) var(--mui-radius) 0;
+}
+
+.mui-docs hr {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: 2rem 0;
+}

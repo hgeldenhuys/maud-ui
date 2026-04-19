@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Table — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Table — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -962,7 +962,139 @@ let html = table::render(table::Props {
     hoverable: true,
     compact: false,
     caption: Some(&quot;Team members&quot;.into()),
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Table</h1>
+<p>A flexible HTML table primitive with support for striped rows, hover states, compact sizing, and rich cell content.</p>
+<h2>Description</h2>
+<p>Table renders semantic HTML tables with built-in support for headers, body rows, and footer rows. Cells can contain plain text or rich Markup content (including nested components like badges). Tables support visual modifiers for better readability and UX patterns.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::table;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::{html, Markup};
+use maud_ui::primitives::table::{Props, CellMarkup, render};
+
+let headers = vec![
+    "Invoice".to_string(),
+    "Status".to_string(),
+    "Amount".to_string(),
+];
+
+let rows = vec![
+    vec!["INV001".to_string(), "Paid".to_string(), "$250.00".to_string()],
+    vec!["INV002".to_string(), "Pending".to_string(), "$150.00".to_string()],
+];
+
+let table = render(Props {
+    headers,
+    rows,
+    striped: true,
+    hoverable: true,
+    right_align_cols: vec![2],
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>headers</code></td><td><code>Vec&lt;String&gt;</code></td><td><code>vec![]</code></td><td>Column header labels</td></tr>
+<tr><td><code>rows</code></td><td><code>Vec&lt;Vec&lt;String&gt;&gt;</code></td><td><code>vec![]</code></td><td>Table body rows (plain text cells)</td></tr>
+<tr><td><code>rich_rows</code></td><td><code>Vec&lt;Vec&lt;CellMarkup&gt;&gt;</code></td><td><code>vec![]</code></td><td>Table body rows (rich Markup cells)</td></tr>
+<tr><td><code>footer_row</code></td><td><code>Vec&lt;CellMarkup&gt;</code></td><td><code>vec![]</code></td><td>Optional footer row (totals, summaries)</td></tr>
+<tr><td><code>striped</code></td><td><code>bool</code></td><td><code>false</code></td><td>Alternating row background colors</td></tr>
+<tr><td><code>hoverable</code></td><td><code>bool</code></td><td><code>false</code></td><td>Row highlight on hover</td></tr>
+<tr><td><code>compact</code></td><td><code>bool</code></td><td><code>false</code></td><td>Reduced padding (compact row heights)</td></tr>
+<tr><td><code>caption</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Table caption (semantic, screen-reader visible)</td></tr>
+<tr><td><code>right_align_cols</code></td><td><code>Vec&lt;usize&gt;</code></td><td><code>vec![]</code></td><td>Column indices to right-align (e.g., numbers)</td></tr>
+</tbody></table>
+<h2>CellMarkup</h2>
+<p>Helper struct for rich (Markup-based) table cells.</p>
+<table><thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>text(s: &amp;str)</code></td><td><code>Self</code></td><td>Create a left-aligned text cell</td></tr>
+<tr><td><code>right(s: &amp;str)</code></td><td><code>Self</code></td><td>Create a right-aligned text cell</td></tr>
+<tr><td><code>markup(m: Markup, align_right: bool)</code></td><td><code>Self</code></td><td>Create a cell with custom Markup (e.g., badges, buttons)</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<h3>Striped</h3>
+<p>Alternating row background colors improve readability for wide tables.</p>
+<pre><code class="language-rust">render(Props {
+    striped: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Hoverable</h3>
+<p>Row background highlights on hover, improving interaction feedback.</p>
+<pre><code class="language-rust">render(Props {
+    hoverable: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Compact</h3>
+<p>Reduced padding for dense data displays.</p>
+<pre><code class="language-rust">render(Props {
+    compact: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Rich Cells (with Markup)</h3>
+<p>Embed components like badges, buttons, or custom HTML inside cells.</p>
+<pre><code class="language-rust">use maud_ui::primitives::{table, badge};
+
+let rich_rows = vec![
+    vec![
+        CellMarkup::text("INV001"),
+        CellMarkup::markup(
+            badge::render(badge::Props {
+                label: "Paid".into(),
+                variant: badge::Variant::Success,
+                ..Default::default()
+            }),
+            false,
+        ),
+        CellMarkup::right("$250.00"),
+    ],
+];
+
+render(Props {
+    headers: vec!["Invoice".into(), "Status".into(), "Amount".into()],
+    rich_rows,
+    ..Default::default()
+})
+</code></pre>
+<h3>With Footer</h3>
+<p>Totals or summary rows with optional right alignment for numbers.</p>
+<pre><code class="language-rust">let footer_row = vec![
+    CellMarkup::text("Total"),
+    CellMarkup::text(""),
+    CellMarkup::right("$1,750.00"),
+];
+
+render(Props {
+    footer_row,
+    ..Default::default()
+})
+</code></pre>
+<h3>With Caption</h3>
+<p>Semantic table captions improve accessibility and provide context.</p>
+<pre><code class="language-rust">render(Props {
+    caption: Some("A list of your recent invoices.".into()),
+    ..Default::default()
+})
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Semantic HTML:</strong> Uses <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, and proper table structure.</li>
+<li><strong>Caption:</strong> Use the <code>caption</code> field for a semantic table title, visible to screen readers.</li>
+<li><strong>Right Alignment:</strong> Declare numeric columns in <code>right_align_cols</code> for proper visual alignment and screen-reader interpretation.</li>
+<li><strong>Hover/Striping:</strong> Visual indicators (hover, striped) reinforce row boundaries but are not required for understanding.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/data-table.md">Data Table</a> — Complex tables with sorting, filtering, and pagination</li>
+<li><a href="/docs/components/badge.md">Badge</a> — Status indicators often embedded in table cells</li>
+<li><a href="/docs/components/typography.md">Typography</a> — Text styling inside cells</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui <code>table</code> is a HTML-semantic wrapper for shadcn's <code>&lt;Table&gt;</code> component pattern.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Radio — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Radio — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -960,7 +960,85 @@ let html = radio::render(radio::Props {
     checked: true,
     description: Some(&quot;Unlimited projects&quot;.into()),
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Radio</h1>
+<p>Single radio button element for selection within a group. Must be paired with Radio Group for mutually exclusive choices.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::radio::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::radio;
+
+html! {
+    (radio::render(radio::Props {
+        id: "plan-pro".to_string(),
+        name: "plan".to_string(),
+        value: "pro".to_string(),
+        label: "Pro".to_string(),
+        description: Some("Unlimited projects".to_string()),
+        checked: false,
+        disabled: false,
+        required: false,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"radio-default"</code></td><td>Unique identifier for the radio input.</td></tr>
+<tr><td>name</td><td>String</td><td><code>"radio"</code></td><td>Input name attribute (groups mutually exclusive radios).</td></tr>
+<tr><td>value</td><td>String</td><td><code>"option"</code></td><td>Input value attribute (sent on form submit).</td></tr>
+<tr><td>label</td><td>String</td><td><code>"Option"</code></td><td>Visible label text rendered in <code>&lt;span class="mui-radio__label"&gt;</code>.</td></tr>
+<tr><td>description</td><td>Option<String></td><td><code>None</code></td><td>Optional supporting text rendered in <code>&lt;span class="mui-radio__description"&gt;</code>.</td></tr>
+<tr><td>checked</td><td>bool</td><td><code>false</code></td><td>Whether the radio is initially checked.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the radio is disabled (aria-disabled set, visual greying).</td></tr>
+<tr><td>required</td><td>bool</td><td><code>false</code></td><td>Sets <code>required</code> attribute on the underlying <code>&lt;input type="radio"&gt;</code>.</td></tr>
+</tbody></table>
+<h2>States</h2>
+<table><thead><tr><th>State</th><th>Checked</th><th>Disabled</th><th>Description</th></tr></thead><tbody>
+<tr><td>Unchecked</td><td>false</td><td>false</td><td>Default state.</td></tr>
+<tr><td>Checked</td><td>true</td><td>false</td><td>Selected option.</td></tr>
+<tr><td>Disabled Unchecked</td><td>false</td><td>true</td><td>Disabled, not selected.</td></tr>
+<tr><td>Disabled Checked</td><td>true</td><td>true</td><td>Disabled, selected (locked in place).</td></tr>
+</tbody></table>
+<h2>Usage</h2>
+<p>Use Radio as an individual component <strong>only</strong> when you need custom layout or a single radio outside a group. For standard mutually exclusive choices, prefer RadioGroup.</p>
+<p>Individual radio in a custom layout:</p>
+<pre><code class="language-rust">html! {
+    fieldset {
+        (radio::render(radio::Props {
+            id: "notify-all".to_string(),
+            name: "notify".to_string(),
+            value: "all".to_string(),
+            label: "All new messages".to_string(),
+            description: Some("Get notified for every message.".to_string()),
+            checked: true,
+            ..Default::default()
+        }))
+        (radio::render(radio::Props {
+            id: "notify-mentions".to_string(),
+            name: "notify".to_string(),
+            value: "mentions".to_string(),
+            label: "Mentions only".to_string(),
+            description: Some("Only when someone mentions you.".to_string()),
+            checked: false,
+            ..Default::default()
+        }))
+    }
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li>Rendered as <code>&lt;label for="{id}"&gt;</code> containing <code>&lt;input type="radio"&gt;</code>.</li>
+<li>Custom indicator: <code>&lt;span class="mui-radio__indicator" aria-hidden="true"&gt;</code> (visual only).</li>
+<li>Label and description are child text nodes (automatically associated to input via label wrap).</li>
+<li><code>disabled</code> attribute disables native form submission handling.</li>
+<li><code>required</code> attribute enables native form validation (one option must be chosen).</li>
+</ul>
+<h2>Related</h2>
+<p>RadioGroup (preferred for mutually exclusive groups), Checkbox (for independent toggles).</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/radio-group</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

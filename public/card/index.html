@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Card — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Card — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -960,7 +960,54 @@ let html = card::render(card::Props {
     footer: Some(html! {
         button.mui-btn.mui-btn--primary.mui-btn--sm { &quot;View details&quot; }
     }),
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Card</h1>
+<p>A container primitive with optional header (title, description, top-right action), body, and footer sections. Flexible layout for displaying grouped content.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::card::{self, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::card;
+
+html! {
+    (card::render(card::Props {
+        title: Some("Settings".into()),
+        description: Some("Manage your preferences.".into()),
+        children: html! { p { "Your content here" } },
+        footer: None,
+        size: card::Size::Default,
+        action: None,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>title</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional card title displayed in header</td></tr>
+<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional subtitle displayed below title in header</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Main content markup (card body)</td></tr>
+<tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional footer markup (bottom section)</td></tr>
+<tr><td><code>size</code></td><td><code>Size</code></td><td><code>Default</code></td><td>Card padding size variant</td></tr>
+<tr><td><code>action</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional top-right header slot (e.g., button for secondary action)</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Size</h3>
+<ul>
+<li><code>Default</code>: standard padding (1.5rem)</li>
+<li><code>Sm</code>: compact padding (0.75rem)</li>
+</ul>
+<h2>Helper Functions</h2>
+<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>action</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Renders the top-right header action slot</td></tr>
+<tr><td><code>content</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Renders the card body wrapper</td></tr>
+<tr><td><code>footer</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Renders the card footer wrapper</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Semantic structure with implicit landmarks (header, main body, footer). Use ARIA labels in the action slot if it contains interactive elements without visible labels.</p>
+<h2>Related</h2>
+<p>Button (for footer CTAs), Switch (for settings cards), Dialog (for modal card variants)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/card</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

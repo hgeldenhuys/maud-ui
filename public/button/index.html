@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Button — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Button — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -958,7 +958,72 @@ let html = button::render(button::Props {
     size: button::Size::Md,
     disabled: false,
     button_type: &quot;submit&quot;,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Button</h1>
+<p>Clickable action element with variants for style (Default, Primary, Secondary, etc.) and sizes (Xs–Lg plus icon-only variants).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::button::{self, Variant, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::button;
+
+html! {
+    (button::render(button::Props {
+        label: "Save changes".to_string(),
+        variant: button::Variant::Primary,
+        size: button::Size::Md,
+        disabled: false,
+        button_type: "submit",
+        leading_icon: None,
+        trailing_icon: None,
+        aria_label: None,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td><code>"Button"</code></td><td>Button text content.</td></tr>
+<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Button size: Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the button is disabled (aria-disabled set).</td></tr>
+<tr><td>button_type</td><td>&amp;'static str</td><td><code>"button"</code></td><td>HTML button type attribute: "button", "submit", "reset".</td></tr>
+<tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup (SVG) rendered before the label with <code>data-icon="inline-start"</code>; use <code>stroke="currentColor"</code>.</td></tr>
+<tr><td>trailing_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered after the label with <code>data-icon="inline-end"</code>; use <code>stroke="currentColor"</code>.</td></tr>
+<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Accessible label; <strong>required</strong> for icon-only sizes (Icon, IconXs, IconSm, IconLg).</td></tr>
+</tbody></table>
+<h2>Variant Styles</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>Default/neutral button.</td></tr>
+<tr><td>Primary</td><td>Primary call-to-action (Save, Submit, Continue).</td></tr>
+<tr><td>Secondary</td><td>Secondary action (Cancel, Back, etc.).</td></tr>
+<tr><td>Outline</td><td>Outlined button for emphasis without primary color.</td></tr>
+<tr><td>Ghost</td><td>Minimal ghost style, usually for low-priority actions.</td></tr>
+<tr><td>Danger</td><td>Destructive actions (Delete, Revoke); use with AlertDialog.</td></tr>
+<tr><td>Link</td><td>Styled as a text link.</td></tr>
+</tbody></table>
+<h2>Size Ladder</h2>
+<table><thead><tr><th>Size</th><th>Class</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Xs</td><td><code>mui-btn--xs</code></td><td>Extra-small text button.</td></tr>
+<tr><td>Sm</td><td><code>mui-btn--sm</code></td><td>Small text button.</td></tr>
+<tr><td>Md</td><td><code>mui-btn--md</code></td><td>Default text button.</td></tr>
+<tr><td>Lg</td><td><code>mui-btn--lg</code></td><td>Large text button.</td></tr>
+<tr><td>Icon</td><td><code>mui-btn--icon</code></td><td>Icon-only button (requires <code>aria_label</code>).</td></tr>
+<tr><td>IconXs</td><td><code>mui-btn--icon-xs</code></td><td>Extra-small icon-only (requires <code>aria_label</code>).</td></tr>
+<tr><td>IconSm</td><td><code>mui-btn--icon-sm</code></td><td>Small icon-only (requires <code>aria_label</code>).</td></tr>
+<tr><td>IconLg</td><td><code>mui-btn--icon-lg</code></td><td>Large icon-only (requires <code>aria_label</code>).</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Icon-only buttons (<code>Size::Icon*</code>) <strong>must</strong> have <code>aria_label</code> set; enforced by <code>debug_assert!</code> at render time in debug builds.</li>
+<li>Icons use <code>stroke="currentColor"</code> to inherit button text color (emoji characters do NOT inherit and render in OS colors).</li>
+<li>Icons marked <code>aria-hidden="true"</code> to prevent double announcement.</li>
+<li>Disabled buttons set <code>aria-disabled="true"</code> (not HTML <code>disabled</code> attribute for better style control).</li>
+</ul>
+<h2>Related</h2>
+<p>ButtonGroup, AlertDialog, Link.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/button</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

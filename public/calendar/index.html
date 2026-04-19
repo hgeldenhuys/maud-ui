@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Calendar — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Calendar — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -960,7 +960,44 @@ let html = calendar::render(calendar::Props {
     min_date: Some((2026, 4, 1)),
     max_date: Some((2026, 12, 31)),
     show_outside_days: true,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Calendar</h1>
+<p>A static HTML calendar grid with month navigation, day selection, and optional min/max date constraints. No external date library — uses Tomohiko Sakamoto's algorithm for day-of-week calculation.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::calendar::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::calendar;
+
+html! {
+    (calendar::render(calendar::Props {
+        id: "check-in".into(),
+        selected: Some((2026, 4, 20)),
+        month: 4,
+        year: 2026,
+        min_date: Some((2026, 4, 16)),
+        max_date: None,
+        show_outside_days: true,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"calendar"</code></td><td>HTML id attribute (also used as hidden input name)</td></tr>
+<tr><td><code>selected</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Currently selected date as (year, month, day); None means no selection</td></tr>
+<tr><td><code>month</code></td><td><code>u32</code></td><td><code>1</code></td><td>Initial displayed month (1-12)</td></tr>
+<tr><td><code>year</code></td><td><code>u32</code></td><td><code>2026</code></td><td>Initial displayed year</td></tr>
+<tr><td><code>min_date</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Earliest selectable date (year, month, day); earlier dates disabled</td></tr>
+<tr><td><code>max_date</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Latest selectable date (year, month, day); later dates disabled</td></tr>
+<tr><td><code>show_outside_days</code></td><td><code>bool</code></td><td><code>true</code></td><td>Show days from adjacent months to fill the grid</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Emits <code>role="grid"</code> on the container with <code>aria-label="Calendar"</code>. Week rows have <code>role="row"</code>, weekday headers have <code>role="columnheader"</code>, and day buttons have <code>role="gridcell"</code> with <code>aria-selected</code> and <code>tabindex</code> states. The title area has <code>aria-live="polite"</code> so month changes are announced. Keyboard navigation: arrow keys move between days, Enter/Space selects.</p>
+<h2>Related</h2>
+<p>Input (for form integration), Dialog (for date-picker overlay)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/calendar</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

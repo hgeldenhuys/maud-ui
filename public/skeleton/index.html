@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Skeleton — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Skeleton — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -956,7 +956,117 @@ let html = skeleton::render(skeleton::Props {
     variant: skeleton::Variant::Text,
     width: Some(&quot;200px&quot;.into()),
     height: Some(&quot;1rem&quot;.into()),
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Skeleton</h1>
+<p>Loading placeholder with shimmer animation. Renders as a bare <code>&lt;div&gt;</code> with <code>aria-hidden="true"</code> so it's skipped by screen readers. Supports three shape variants and custom width/height dimensions.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::skeleton::{self, Variant, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::skeleton;
+
+// Default rect
+html! {
+    (skeleton::render(skeleton::Props::default()))
+}
+
+// Text line
+html! {
+    (skeleton::render(skeleton::Props {
+        variant: skeleton::Variant::Text,
+        width: Some("8rem".into()),
+        height: Some("0.875rem".into()),
+    }))
+}
+
+// Circle avatar
+html! {
+    (skeleton::render(skeleton::Props {
+        variant: skeleton::Variant::Circle,
+        width: Some("2.75rem".into()),
+        height: Some("2.75rem".into()),
+    }))
+}
+
+// Loading post card
+html! {
+    div style="display:flex;gap:0.75rem;" {
+        // Avatar
+        (skeleton::render(skeleton::Props {
+            variant: skeleton::Variant::Circle,
+            width: Some("2.75rem".into()),
+            height: Some("2.75rem".into()),
+        }))
+        div style="flex:1;" {
+            // Title line
+            (skeleton::render(skeleton::Props {
+                variant: skeleton::Variant::Text,
+                width: Some("60%".into()),
+                height: Some("1rem".into()),
+            }))
+            // Body line 1
+            (skeleton::render(skeleton::Props {
+                variant: skeleton::Variant::Text,
+                width: Some("100%".into()),
+                height: None,
+            }))
+            // Body line 2
+            (skeleton::render(skeleton::Props {
+                variant: skeleton::Variant::Text,
+                width: Some("85%".into()),
+                height: None,
+            }))
+        }
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>variant</td><td>Variant</td><td><code>Rect</code></td><td>Shape: Text, Circle, or Rect.</td></tr>
+<tr><td>width</td><td>Option<String></td><td><code>None</code></td><td>Optional width CSS override (e.g., <code>"8rem"</code>, <code>"100%"</code>).</td></tr>
+<tr><td>height</td><td>Option<String></td><td><code>None</code></td><td>Optional height CSS override.</td></tr>
+</tbody></table>
+<h2>Variant Enum</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th><th>Dimensions</th></tr></thead><tbody>
+<tr><td>Text</td><td>Loading text lines (name, title, etc.).</td><td>Default: <code>1em</code> height, 100% width. Aspect is typically wide &amp; shallow.</td></tr>
+<tr><td>Circle</td><td>Loading avatars, profile pictures.</td><td>Default: square (aspect 1:1). Set both width and height equally.</td></tr>
+<tr><td>Rect</td><td>Loading images, cards, blocks.</td><td>Default: square (aspect 1:1) or use width/height.</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Every skeleton has <code>aria-hidden="true"</code> so screen readers skip it.</li>
+<li>When page is fully loaded, skeletons are replaced with real content; no announcement needed.</li>
+<li>ARIA live regions (e.g., <code>aria-live="polite"</code>) should wrap the entire loading container so screen readers announce when content loads.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-skeleton</code></td><td>Root skeleton element.</td></tr>
+<tr><td><code>mui-skeleton--text</code></td><td>Text variant (wide, shallow shimmer).</td></tr>
+<tr><td><code>mui-skeleton--circle</code></td><td>Circle variant (square aspect).</td></tr>
+<tr><td><code>mui-skeleton--rect</code></td><td>Rect variant (default; square or custom dimensions).</td></tr>
+</tbody></table>
+<h2>Sizing</h2>
+<p>By default, skeletons are <strong>square</strong> (except Text, which is wider). Override with:</p>
+<ul>
+<li><code>width="100%"</code> — stretch to container width.</li>
+<li><code>height="1rem"</code> — set explicit height (common for text lines).</li>
+<li>Both set — define exact dimensions.</li>
+</ul>
+<p><strong>Common patterns:</strong></p>
+<table><thead><tr><th>Use Case</th><th>Props</th></tr></thead><tbody>
+<tr><td>Text line (name)</td><td><code>variant: Text, width: "8rem", height: "0.875rem"</code></td></tr>
+<tr><td>Body paragraph (3 lines)</td><td>Render 3x <code>variant: Text, width: "100%"</code>, last one <code>width: "65%"</code></td></tr>
+<tr><td>Avatar</td><td><code>variant: Circle, width: "2.75rem", height: "2.75rem"</code></td></tr>
+<tr><td>Product image</td><td><code>variant: Rect, width: "100%", height: "11rem"</code></td></tr>
+<tr><td>Status badge</td><td><code>variant: Rect, width: "4.5rem", height: "1.25rem"</code></td></tr>
+</tbody></table>
+<h2>Animation</h2>
+<p>The shimmer animation is defined in the CSS module (<code>mui-skeleton</code>). Customisation varies by theme. The animation plays on a loop while the skeleton is mounted.</p>
+<h2>Related</h2>
+<p>Spinner, Card, Progress.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/skeleton</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

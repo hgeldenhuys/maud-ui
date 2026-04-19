@@ -15,6 +15,7 @@ include = [
     "src/**/*.rs",
     "css/**/*.css",
     "dist/**/*",
+    "docs/components/**/*.md",
     "examples/showcase.rs",
     "README.md",
     "LICENSE",
@@ -23,6 +24,7 @@ include = [
 
 [dependencies]
 maud = { version = "0.27", features = ["axum"] }
+pulldown-cmark = { version = "0.10", default-features = false, features = ["html"] }
 
 [dev-dependencies]
 axum = "0.8"

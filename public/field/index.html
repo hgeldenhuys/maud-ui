@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Field — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Field — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -962,7 +962,77 @@ let html = field::render(field::Props {
     children: html! {
         input.mui-input type=&quot;email&quot; id=&quot;signup-email&quot; name=&quot;email&quot; placeholder=&quot;you@example.com&quot;;
     },
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Field</h1>
+<p>Form control wrapper with label, description, error handling, and multiple layout orientations.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::field::{self, Props, Orientation};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::field;
+
+html! {
+    (field::render(field::Props {
+        label: "Email Address".to_string(),
+        id: "email".to_string(),
+        description: Some("We'll never share your email.".to_string()),
+        error: None,
+        required: true,
+        orientation: field::Orientation::Vertical,
+        children: html! {
+            input.mui-input type="email" id="email" name="email" placeholder="you@example.com";
+        },
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>label</code></td><td><code>String</code></td><td><code>"Label"</code></td><td>Label text displayed above/beside the control.</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"field-1"</code></td><td>HTML id attribute. Links label and associates errors.</td></tr>
+<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Helper text shown below the control.</td></tr>
+<tr><td><code>error</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Legacy single-error field (for backward compat).</td></tr>
+<tr><td><code>errors</code></td><td><code>Vec&lt;String&gt;</code></td><td><code>vec![]</code></td><td>Multiple validation errors, rendered after <code>error</code>.</td></tr>
+<tr><td><code>required</code></td><td><code>bool</code></td><td><code>false</code></td><td>Appends a red asterisk to the label.</td></tr>
+<tr><td><code>orientation</code></td><td><code>Orientation</code></td><td><code>Vertical</code></td><td>Layout direction (Vertical, Horizontal, Responsive).</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>&lt;input type="text"&gt;</code></td><td>The control itself (input, textarea, select, etc.).</td></tr>
+</tbody></table>
+<h2>Orientation</h2>
+<pre><code class="language-rust">pub enum Orientation {
+    Vertical,      // Stack label, control, description, error vertically
+    Horizontal,    // Two-column: label left, control + meta right
+    Responsive,    // Vertical on narrow, horizontal at ≥640px
+}
+</code></pre>
+<h2>Helpers</h2>
+<p>Composable field builders for structural flexibility:</p>
+<ul>
+<li><strong><code>label(for_id, text)</code></strong> — <code>&lt;label&gt;</code> bound via <code>for=</code>.</li>
+<li><strong><code>description(text)</code></strong> — Helper text <code>&lt;p&gt;</code>.</li>
+<li><strong><code>error(text)</code></strong> — Error message <code>&lt;p role="alert"&gt;</code>.</li>
+<li><strong><code>group(children)</code></strong> — Vertical stack of fields without border.</li>
+<li><strong><code>legend(text)</code></strong> — <code>&lt;legend&gt;</code> for use in fieldset.</li>
+<li><strong><code>fieldset(legend_text, children)</code></strong> — <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> wrapper.</li>
+<li><strong><code>content(children)</code></strong> — Control slot separator for composed layouts.</li>
+<li><strong><code>separator()</code></strong> — Visual <code>&lt;hr&gt;</code> divider.</li>
+<li><strong><code>title(text)</code></strong> — Section heading for field groups.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Label always linked via <code>for</code> → control <code>id</code>.</li>
+<li>Errors render with <code>role="alert"</code> for screen reader announcement.</li>
+<li>Description and error ids included in <code>aria-describedby</code> when used with input.</li>
+<li>Required indicator marked with <code>aria-label="required"</code>.</li>
+<li><code>data-invalid</code> attribute for CSS and form-framework styling hooks.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="input.md">Input</a> — text/email/password/file inputs.</li>
+<li><a href="fieldset.md">Fieldset</a> — group of related form controls.</li>
+<li><a href="input-group.md">Input Group</a> — input with addons.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Shadows shadcn's Field pattern with orientation variants and helper-function composition.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

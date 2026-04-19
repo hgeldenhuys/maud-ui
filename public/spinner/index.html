@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Spinner — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Spinner — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -955,7 +955,92 @@ html { scroll-behavior: smooth; }
 let html = spinner::render(spinner::Props {
     size: spinner::Size::Md,
     label: Some(&quot;Loading data...&quot;.into()),
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Spinner</h1>
+<p>Circular loading indicator. Renders as a <code>&lt;span&gt;</code> with <code>role="status"</code> and an accessible label. Minimal primitive with three size variants.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::spinner::{self, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::spinner;
+
+// Default medium spinner
+html! {
+    (spinner::render(spinner::Props::default()))
+}
+
+// Small spinner
+html! {
+    (spinner::render(spinner::Props {
+        size: spinner::Size::Sm,
+        label: Some("Checking".into()),
+    }))
+}
+
+// Large spinner
+html! {
+    (spinner::render(spinner::Props {
+        size: spinner::Size::Lg,
+        label: Some("Loading page".into()),
+    }))
+}
+
+// Inside a button
+html! {
+    button class="mui-btn mui-btn--primary" disabled {
+        (spinner::render(spinner::Props {
+            size: spinner::Size::Sm,
+            label: Some("Saving".into()),
+        }))
+        "Saving..."
+    }
+}
+
+// Page-level loading state
+html! {
+    div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;" {
+        (spinner::render(spinner::Props {
+            size: spinner::Size::Lg,
+            label: Some("Loading".into()),
+        }))
+        span style="color:var(--mui-text-muted);" {
+            "Loading your data..."
+        }
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Spinner size: Sm, Md, Lg.</td></tr>
+<tr><td>label</td><td>Option<String></td><td><code>None</code></td><td>Accessible name. Defaults to <code>"Loading"</code> if not set.</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Sm</td><td>Inside buttons, inline status indicators.</td></tr>
+<tr><td>Md</td><td>Standard loading states (default).</td></tr>
+<tr><td>Lg</td><td>Page-level or hero loading screens.</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Root has <code>role="status"</code> to mark it as a live status region.</li>
+<li><code>aria-label</code> carries the label text (defaults to <code>"Loading"</code>).</li>
+<li>Does <strong>not</strong> use <code>aria-busy="true"</code> (that applies to elements that have delayed content; the spinner itself IS the status indicator).</li>
+<li>Screen readers announce the spinner label when it appears and when it's removed.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-spinner</code></td><td>Root spinner element.</td></tr>
+<tr><td><code>mui-spinner--sm</code></td><td>Small size variant.</td></tr>
+<tr><td><code>mui-spinner--md</code></td><td>Medium size variant (default).</td></tr>
+<tr><td><code>mui-spinner--lg</code></td><td>Large size variant.</td></tr>
+</tbody></table>
+<h2>Animation</h2>
+<p>The spinner's animation is defined in the CSS module (<code>mui-spinner</code>). It's a circular rotation with a repeating cycle. The animation runs indefinitely until the element is removed from the DOM.</p>
+<h2>Related</h2>
+<p>Skeleton, Progress, StatusIndicator.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/spinner</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

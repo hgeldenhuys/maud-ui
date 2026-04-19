@@ -7,6 +7,8 @@ use maud::{html, Markup, DOCTYPE};
 
 use crate::{blocks, primitives};
 
+pub mod docs;
+
 // Build-time cache busters. Browsers treat `?v=X` as part of the URL,
 // so changing X (on every build that touches dist/) guarantees a fresh
 // fetch without waiting for `must-revalidate` or manual hard-reloads.
@@ -6894,8 +6896,11 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                         section class="mui-gallery__component" id=(name) {
                             h3 class="mui-gallery__component-name" { (display_name(name)) }
                             (content)
-                            @if let Some(docs) = component_docs(name) {
-                                (docs)
+                            @if let Some(usage) = component_docs(name) {
+                                (usage)
+                            }
+                            @if let Some(api_docs) = docs::render_component_docs(name) {
+                                (api_docs)
                             }
                         }
                         div class="mui-gallery__back" {

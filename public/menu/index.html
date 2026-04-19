@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Menu — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Menu — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -967,7 +967,127 @@ let html = menu::render(menu::Props {
             disabled: false, destructive: true, shortcut: None,
         }),
     ],
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>DropdownMenu</h1>
+<p>Dropdown menu for actions and navigation. Supports items, separators, labels, checkboxes, radio groups, submenus, and grouping.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::menu::{self, Props, MenuItem, MenuEntry, RadioItem};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::menu;
+
+html! {
+    (menu::render(menu::Props {
+        trigger_label: "Actions".into(),
+        id: "demo-menu".into(),
+        items: vec![
+            menu::MenuEntry::Item(menu::MenuItem {
+                label: "Edit".into(),
+                action: "edit".into(),
+                disabled: false,
+                destructive: false,
+                shortcut: Some("⌘E".into()),
+            }),
+            menu::MenuEntry::Separator,
+            menu::MenuEntry::Item(menu::MenuItem {
+                label: "Delete".into(),
+                action: "delete".into(),
+                disabled: false,
+                destructive: true,
+                shortcut: None,
+            }),
+        ],
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>trigger_label</td><td>String</td><td><code>""</code></td><td>Text displayed on the dropdown trigger button.</td></tr>
+<tr><td>id</td><td>String</td><td><code>""</code></td><td>Unique identifier for the menu; used to link trigger and content via ARIA attributes.</td></tr>
+<tr><td>items</td><td>Vec<MenuEntry></td><td><code>vec![]</code></td><td>Menu entries: items, separators, labels, checkboxes, radio groups, submenus, and groups.</td></tr>
+</tbody></table>
+<h2>MenuEntry Enum</h2>
+<p>The <code>MenuEntry</code> enum defines the structure of menu items. All variants are fully supported:</p>
+<h3>MenuEntry::Item(MenuItem)</h3>
+<p>A simple clickable menu item.</p>
+<pre><code class="language-rust">pub struct MenuItem {
+    pub label: String,              // Item text
+    pub action: String,             // Data attribute for event handling
+    pub disabled: bool,             // Disabled state
+    pub destructive: bool,          // Red danger styling (e.g., delete)
+    pub shortcut: Option&lt;String&gt;,   // Keyboard shortcut display (e.g., "⌘Z")
+}
+</code></pre>
+<h3>MenuEntry::Separator</h3>
+<p>A visual divider between menu sections.</p>
+<h3>MenuEntry::Label(String)</h3>
+<p>A non-interactive label or heading for grouping related items.</p>
+<h3>MenuEntry::CheckboxItem</h3>
+<p>A menu item with toggle state (on/off).</p>
+<pre><code class="language-rust">MenuEntry::CheckboxItem {
+    label: String,              // Item text
+    checked: bool,              // Current state
+    disabled: bool,             // Disabled state
+    shortcut: Option&lt;String&gt;,   // Optional keyboard shortcut
+}
+</code></pre>
+<h3>MenuEntry::RadioGroup</h3>
+<p>A named group of mutually exclusive radio options.</p>
+<pre><code class="language-rust">MenuEntry::RadioGroup {
+    name: String,               // Group identifier
+    items: Vec&lt;RadioItem&gt;,      // Radio options
+}
+</code></pre>
+<p>Where <code>RadioItem</code> is:</p>
+<pre><code class="language-rust">pub struct RadioItem {
+    pub label: String,              // Option text
+    pub value: String,              // Option value
+    pub checked: bool,              // Currently selected
+    pub disabled: bool,             // Disabled state
+    pub shortcut: Option&lt;String&gt;,   // Optional keyboard shortcut
+}
+</code></pre>
+<h3>MenuEntry::Sub</h3>
+<p>A submenu trigger with nested menu entries.</p>
+<pre><code class="language-rust">MenuEntry::Sub {
+    trigger_label: String,      // Submenu trigger text
+    items: Vec&lt;MenuEntry&gt;,      // Nested menu entries (any MenuEntry variant)
+}
+</code></pre>
+<p>Submenus can be nested arbitrarily deep.</p>
+<h3>MenuEntry::Group</h3>
+<p>A generic grouping wrapper (renders with <code>role="group"</code>).</p>
+<pre><code class="language-rust">MenuEntry::Group {
+    items: Vec&lt;MenuEntry&gt;,      // Grouped entries
+}
+</code></pre>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Item</td><td>Primary menu action.</td></tr>
+<tr><td>Item (destructive)</td><td>Dangerous action requiring confirmation (delete, remove, etc.).</td></tr>
+<tr><td>Separator</td><td>Visual divider between logical sections.</td></tr>
+<tr><td>Label</td><td>Section header or grouping label.</td></tr>
+<tr><td>CheckboxItem</td><td>Toggle option (show/hide, enable/disable feature).</td></tr>
+<tr><td>RadioGroup</td><td>Single-selection option group (e.g., theme, position).</td></tr>
+<tr><td>Sub</td><td>Nested menu with additional options.</td></tr>
+<tr><td>Group</td><td>Container for related menu entries.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p><strong><code>render_entry(entry: &amp;MenuEntry) -&gt; Markup</code></strong></p>
+<p>Renders a single menu entry. Used internally and can be used in custom menu construction. Public for composability.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Trigger button:</strong> Sets <code>aria-expanded="false"</code> (true when open), <code>aria-haspopup="menu"</code>, and <code>aria-controls</code> pointing to the menu content.</li>
+<li><strong>Menu roles:</strong> Menu items use <code>role="menuitem"</code>, checkboxes use <code>role="menuitemcheckbox"</code> with <code>aria-checked</code>, radio buttons use <code>role="menuitemradio"</code> with <code>aria-checked</code>, and separators use <code>role="separator"</code>.</li>
+<li><strong>Keyboard navigation:</strong> Tabindex is set to <code>-1</code> for all menu items; keyboard navigation (arrow keys, Enter, Escape) is handled via JavaScript.</li>
+<li><strong>Shortcuts:</strong> Displayed as decorative text; not enforced by the component (handled by application).</li>
+<li><strong>Screen readers:</strong> Labels are announced for all entry types; separators are marked as decorative.</li>
+</ul>
+<h2>Related</h2>
+<p>Context Menu, Menubar, Button.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/dropdown-menu</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

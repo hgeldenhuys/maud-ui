@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Slider — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Slider — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -962,7 +962,120 @@ let html = slider::render(slider::Props {
     label: &quot;Volume&quot;.into(),
     show_value: true,
     disabled: false,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Slider</h1>
+<p>Range input with custom styling and progressive enhancement. Supports single-thumb and multi-thumb (range) modes. New in v0.2.1: <code>values: Vec&lt;f64&gt;</code> for multi-thumb, <code>orientation</code> for vertical sliders.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::slider::{self, Orientation, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::slider;
+
+// Single-thumb slider
+html! {
+    (slider::render(slider::Props {
+        name: "volume".into(),
+        id: "slider-volume".into(),
+        value: 72.0,
+        min: 0.0,
+        max: 100.0,
+        step: 1.0,
+        label: "Volume".into(),
+        show_value: true,
+        ..Default::default()
+    }))
+}
+
+// Multi-thumb range slider
+html! {
+    (slider::render(slider::Props {
+        name: "price-range".into(),
+        id: "slider-price".into(),
+        values: vec![80.0, 320.0],
+        min: 0.0,
+        max: 500.0,
+        step: 10.0,
+        label: "Price range".into(),
+        show_value: true,
+        ..Default::default()
+    }))
+}
+
+// Vertical slider
+html! {
+    (slider::render(slider::Props {
+        name: "eq-mid".into(),
+        id: "slider-eq".into(),
+        value: 60.0,
+        min: 0.0,
+        max: 100.0,
+        step: 1.0,
+        label: "Mid frequency".into(),
+        orientation: slider::Orientation::Vertical,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td>(empty)</td><td>HTML name attribute for form submission.</td></tr>
+<tr><td>id</td><td>String</td><td>(empty)</td><td>HTML id attribute for label linkage.</td></tr>
+<tr><td>value</td><td>f64</td><td><code>50.0</code></td><td>Current value (single-thumb mode when <code>values</code> is empty).</td></tr>
+<tr><td>values</td><td>Vec<f64></td><td>(empty)</td><td>Multiple thumb values. When non-empty, renders one thumb per value and fills between min/max. Overrides single <code>value</code>.</td></tr>
+<tr><td>min</td><td>f64</td><td><code>0.0</code></td><td>Minimum value.</td></tr>
+<tr><td>max</td><td>f64</td><td><code>100.0</code></td><td>Maximum value.</td></tr>
+<tr><td>step</td><td>f64</td><td><code>1.0</code></td><td>Step increment.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the slider is disabled.</td></tr>
+<tr><td>label</td><td>String</td><td>(empty)</td><td>ARIA label for the slider.</td></tr>
+<tr><td>show_value</td><td>bool</td><td><code>false</code></td><td>Whether to show the current value label below the track.</td></tr>
+<tr><td>orientation</td><td>Orientation</td><td><code>Horizontal</code></td><td>Slider orientation: Horizontal or Vertical.</td></tr>
+</tbody></table>
+<h2>Orientation Enum</h2>
+<table><thead><tr><th>Variant</th><th>Behavior</th></tr></thead><tbody>
+<tr><td>Horizontal</td><td>Slider track runs left-right; thumb moves horizontally.</td></tr>
+<tr><td>Vertical</td><td>Slider track runs bottom-top; larger values appear higher (standard convention).</td></tr>
+</tbody></table>
+<h2>Modes</h2>
+<h3>Single-Thumb Mode</h3>
+<p>When <code>values</code> is empty, the slider renders one thumb at the position of <code>value</code>. Fill spans from 0 to the thumb.</p>
+<h3>Multi-Thumb (Range) Mode</h3>
+<p>When <code>values</code> is non-empty, the slider renders one thumb per value (sorted). Fill spans between the minimum and maximum values in the set. Single <code>value</code> is reflected to the hidden native <code>&lt;input&gt;</code> for form submission; multi-thumb state is driven by JS on <code>data-values</code> for progressive enhancement.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Root has <code>role="slider"</code> on each thumb (per ARIA spec, though native <code>&lt;input type="range"&gt;</code> is hidden).</li>
+<li>Each thumb has:
+<ul>
+<li><code>aria-valuenow</code>: current thumb value.</li>
+<li><code>aria-valuemin</code> / <code>aria-valuemax</code>: min/max bounds.</li>
+<li><code>aria-orientation</code>: <code>horizontal</code> or <code>vertical</code>.</li>
+<li><code>aria-label</code>: inherited from the Slider's label field.</li>
+<li><code>aria-disabled</code>: set to <code>true</code> when disabled.</li>
+</ul>
+</li>
+<li>Fill bar marked <code>aria-hidden="true"</code> (decorative).</li>
+<li>Native input is <code>aria-hidden="true"</code> and <code>tabindex="-1"</code> (decorative; JS handles the real interaction).</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-slider</code></td><td>Root slider container.</td></tr>
+<tr><td><code>mui-slider--vertical</code></td><td>Vertical orientation variant.</td></tr>
+<tr><td><code>mui-slider__track</code></td><td>Track background bar.</td></tr>
+<tr><td><code>mui-slider__fill</code></td><td>Filled portion of the track (solid bar).</td></tr>
+<tr><td><code>mui-slider__thumb</code></td><td>Individual thumb/handle.</td></tr>
+<tr><td><code>mui-slider__native</code></td><td>Hidden native <code>&lt;input type="range"&gt;</code> for form submission.</td></tr>
+<tr><td><code>mui-slider__value</code></td><td>Value label span (if <code>show_value: true</code>).</td></tr>
+</tbody></table>
+<h2>Value Display</h2>
+<ul>
+<li><strong>Single-thumb:</strong> displays the current value (e.g., <code>72</code>).</li>
+<li><strong>Multi-thumb:</strong> displays a range with an en-dash (e.g., <code>80 — 320</code>).</li>
+<li>Trailing zeros are stripped (e.g., <code>50.0</code> displays as <code>50</code>, not <code>50.0</code>).</li>
+</ul>
+<h2>Related</h2>
+<p>RangeSlider, Input, Form.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/slider</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

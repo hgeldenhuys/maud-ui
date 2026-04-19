@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Switch — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Switch — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -958,7 +958,151 @@ let html = switch::render(switch::Props {
     label: &quot;Dark mode&quot;.into(),
     checked: true,
     disabled: false,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Switch</h1>
+<p>Toggle control rendering as a styled button with hidden form input. Emits <code>data-mui="switch"</code> for behaviour attachment. New in v0.2.1: <code>size</code>, <code>aria_invalid</code>, <code>required</code> props.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::switch::{self, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::switch;
+
+// Default switch with label
+html! {
+    (switch::render(switch::Props {
+        name: "notifications".to_string(),
+        id: "sw-notifications".to_string(),
+        label: "Enable notifications".to_string(),
+        checked: true,
+        ..Default::default()
+    }))
+}
+
+// Switch with external label (no label prop)
+html! {
+    div style="display:flex;align-items:center;justify-content:space-between;" {
+        div {
+            label for="sw-marketing" style="font-weight:500;" {
+                "Marketing emails"
+            }
+            span style="font-size:0.875rem;color:var(--mui-text-muted);" {
+                "Receive emails about new products."
+            }
+        }
+        (switch::render(switch::Props {
+            name: "marketing".to_string(),
+            id: "sw-marketing".to_string(),
+            label: String::new(),
+            checked: false,
+            aria_label: Some("Marketing emails".to_string()),
+            ..Default::default()
+        }))
+    }
+}
+
+// Disabled switch
+html! {
+    (switch::render(switch::Props {
+        name: "airplane".to_string(),
+        id: "sw-airplane".to_string(),
+        label: "Airplane mode".to_string(),
+        checked: false,
+        disabled: true,
+        ..Default::default()
+    }))
+}
+
+// Compact size variant
+html! {
+    (switch::render(switch::Props {
+        name: "compact".to_string(),
+        id: "sw-compact".to_string(),
+        label: "Compact mode".to_string(),
+        checked: false,
+        size: switch::Size::Sm,
+        ..Default::default()
+    }))
+}
+
+// Form integration — required + aria-invalid
+html! {
+    (switch::render(switch::Props {
+        name: "terms".to_string(),
+        id: "sw-terms".to_string(),
+        label: "I agree to the terms".to_string(),
+        checked: false,
+        required: true,
+        ..Default::default()
+    }))
+    (switch::render(switch::Props {
+        name: "consent".to_string(),
+        id: "sw-consent".to_string(),
+        label: "Data consent".to_string(),
+        checked: false,
+        aria_invalid: true,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td><code>"switch"</code></td><td>HTML name attribute (form submission).</td></tr>
+<tr><td>id</td><td>String</td><td><code>"switch"</code></td><td>HTML id attribute (label linkage).</td></tr>
+<tr><td>label</td><td>String</td><td><code>"Toggle"</code></td><td>Visible label text. Leave empty for external label.</td></tr>
+<tr><td>checked</td><td>bool</td><td><code>false</code></td><td>Initial checked state.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the switch is disabled.</td></tr>
+<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Explicit accessible name. Falls back to <code>label</code> if not set. <strong>Required</strong> when <code>label</code> is empty.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Default</code></td><td>Visual size variant: Default (2.75rem × 1.5rem) or Sm (2rem × 1.125rem).</td></tr>
+<tr><td>aria_invalid</td><td>bool</td><td><code>false</code></td><td>Propagates to hidden <code>&lt;input&gt;</code> as <code>aria-invalid="true"</code>.</td></tr>
+<tr><td>required</td><td>bool</td><td><code>false</code></td><td>Propagates to hidden <code>&lt;input&gt;</code> as <code>required</code> attribute.</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<table><thead><tr><th>Variant</th><th>Dimensions</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>2.75rem × 1.5rem</td><td>Standard toggle controls.</td></tr>
+<tr><td>Sm</td><td>2rem × 1.125rem</td><td>Compact layouts, dense forms.</td></tr>
+</tbody></table>
+<h2>Structure</h2>
+<p>The switch renders as a compound element:</p>
+<ul>
+<li><strong>Button</strong> (<code>&lt;button role="switch"&gt;</code>): interactive toggle with <code>aria-checked</code> and <code>data-mui="switch"</code>.</li>
+<li><strong>Thumb</strong> (<code>&lt;span class="mui-switch__thumb"&gt;</code>): animated visual indicator inside the button.</li>
+<li><strong>Hidden input</strong> (<code>&lt;input type="hidden"&gt;</code>): reflects the checked state as <code>value="true"</code> or <code>value="false"</code>. Carries <code>aria-invalid</code> and <code>required</code> attributes for form integration.</li>
+<li><strong>Label</strong> (<code>&lt;label for="..."&gt;</code>): external label element (only rendered if <code>label</code> is not empty).</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Button has <code>role="switch"</code> and <code>aria-checked="true"</code> or <code>"false"</code>.</li>
+<li><code>aria-label</code> is the accessible name (defaults to the visible <code>label</code>; required if label is empty).</li>
+<li>Hidden input carries form attributes: <code>aria-invalid</code>, <code>required</code>.</li>
+<li>Disabled state managed via <code>disabled</code> attribute on the button (CSS can style it differently than <code>aria-disabled</code>).</li>
+<li>Keyboard: Space/Enter toggle the switch.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-switch-wrap</code></td><td>Outer container wrapping button, input, and label.</td></tr>
+<tr><td><code>mui-switch</code></td><td>Root button element.</td></tr>
+<tr><td><code>mui-switch--sm</code></td><td>Compact size variant.</td></tr>
+<tr><td><code>mui-switch__thumb</code></td><td>Animated thumb/indicator inside the button.</td></tr>
+<tr><td><code>mui-switch__value</code></td><td>Hidden input class.</td></tr>
+<tr><td><code>mui-switch__label</code></td><td>External label element.</td></tr>
+</tbody></table>
+<h2>Behaviour</h2>
+<p>The companion JS behaviour (<code>dist/behaviors/switch.js</code>) handles:</p>
+<ul>
+<li>Toggling <code>aria-checked</code> and the hidden input's value on click.</li>
+<li>Keyboard interaction (Space / Enter to toggle).</li>
+<li>Optional DOM sync (e.g., updating related UI when the switch changes).</li>
+</ul>
+<h2>Form Integration</h2>
+<p>The hidden input always reflects the checked state as <code>value="true"</code> or <code>"false"</code>. When the form is submitted:</p>
+<pre><code class="language-html">&lt;input type="hidden" name="notifications" value="true" /&gt;
+</code></pre>
+<p>Form libraries can read and mutate this value directly. The <code>required</code> and <code>aria-invalid</code> attributes propagate to the hidden input, so client-side form validation can treat it like any other input.</p>
+<h2>Related</h2>
+<p>Checkbox, Radio, Toggle.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/switch</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

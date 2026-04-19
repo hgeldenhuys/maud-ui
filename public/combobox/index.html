@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Combobox — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Combobox — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -962,7 +962,61 @@ let html = combobox::render(combobox::Props {
         combobox::ComboboxOption { value: &quot;ts&quot;.into(), label: &quot;TypeScript&quot;.into() },
     ],
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Combobox</h1>
+<p>A searchable select component with optional grouping, multi-select mode, and auto-highlight. Extends Select with text filtering and chip rendering for multi-select.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::combobox::{self, ComboboxOption, ComboboxGroup, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::combobox;
+
+html! {
+    (combobox::render(combobox::Props {
+        id: "framework".into(),
+        name: "framework".into(),
+        options: vec![
+            combobox::ComboboxOption { value: "react".into(), label: "React".into() },
+            combobox::ComboboxOption { value: "vue".into(), label: "Vue".into() },
+        ],
+        selected: Some("react".into()),
+        placeholder: "Select...".into(),
+        search_placeholder: "Search...".into(),
+        empty_text: "No results.".into(),
+        disabled: false,
+        multiple: false,
+        auto_highlight: true,
+        show_clear: true,
+        aria_invalid: false,
+        groups: vec![],
+        selected_values: vec![],
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"combobox"</code></td><td>Unique element id</td></tr>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>"combobox"</code></td><td>Form input name attribute</td></tr>
+<tr><td><code>options</code></td><td><code>Vec&lt;ComboboxOption&gt;</code></td><td><code>vec![]</code></td><td>Flat list of selectable options</td></tr>
+<tr><td><code>selected</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Currently selected value (single-select)</td></tr>
+<tr><td><code>placeholder</code></td><td><code>String</code></td><td><code>"Select…"</code></td><td>Trigger placeholder text when no selection</td></tr>
+<tr><td><code>search_placeholder</code></td><td><code>String</code></td><td><code>"Search…"</code></td><td>Search input placeholder</td></tr>
+<tr><td><code>empty_text</code></td><td><code>String</code></td><td><code>"No results found."</code></td><td>Message when filter returns no matches</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Disables the trigger and all interactions</td></tr>
+<tr><td><code>multiple</code></td><td><code>bool</code></td><td><code>false</code></td><td>Multi-select mode: selected values render as chips</td></tr>
+<tr><td><code>auto_highlight</code></td><td><code>bool</code></td><td><code>false</code></td><td>First filtered option gets aria-selected + data-highlighted for keyboard Enter</td></tr>
+<tr><td><code>show_clear</code></td><td><code>bool</code></td><td><code>false</code></td><td>Render a small X button to clear the selection</td></tr>
+<tr><td><code>aria_invalid</code></td><td><code>bool</code></td><td><code>false</code></td><td>Sets aria-invalid="true" for form validation styling</td></tr>
+<tr><td><code>groups</code></td><td><code>Vec&lt;ComboboxGroup&gt;</code></td><td><code>vec![]</code></td><td>Grouped options; takes precedence over <code>options</code> when non-empty</td></tr>
+<tr><td><code>selected_values</code></td><td><code>Vec&lt;String&gt;</code></td><td><code>vec![]</code></td><td>Selected values for multi-select mode (rendered as chips)</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Trigger has <code>role="combobox"</code> with <code>aria-expanded</code> and <code>aria-haspopup="listbox"</code>. Dropdown list has <code>role="listbox"</code>, options have <code>role="option"</code> with <code>aria-selected</code>. Groups have <code>role="group"</code> with <code>aria-label</code>. When <code>auto_highlight</code> is true, the first matching option has <code>data-highlighted</code> and <code>aria-selected="true"</code> for keyboard activation. Search input has <code>aria-label="Search options"</code>.</p>
+<h2>Related</h2>
+<p>Select (for non-searchable select), Dialog (for modal combobox), Label (for form integration)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/combobox</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

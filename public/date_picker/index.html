@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Date Picker — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Date Picker — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -960,7 +960,67 @@ let html = date_picker::render(date_picker::Props {
     disabled: false,
     min_date: Some((2026, 1, 1)),
     max_date: None,
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>DatePicker</h1>
+<p>Date input with inline calendar dropdown, range selection support, and custom formatting.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::date_picker::{self, Props, Mode};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::date_picker;
+
+html! {
+    (date_picker::render(date_picker::Props {
+        id: "dp".to_string(),
+        name: "date".to_string(),
+        selected: Some((2026, 4, 20)),
+        placeholder: "Pick a date".to_string(),
+        mode: date_picker::Mode::Single,
+        format: Some("yyyy-MM-dd".to_string()),
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"date-picker"</code></td><td>Unique identifier</td></tr>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>"date"</code></td><td>Form field name</td></tr>
+<tr><td><code>selected</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Selected date as (year, month, day); month is 1-based</td></tr>
+<tr><td><code>placeholder</code></td><td><code>String</code></td><td><code>"Pick a date"</code></td><td>Placeholder text</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the picker is disabled</td></tr>
+<tr><td><code>min_date</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Minimum selectable date</td></tr>
+<tr><td><code>max_date</code></td><td><code>Option&lt;(u32, u32, u32)&gt;</code></td><td><code>None</code></td><td>Maximum selectable date</td></tr>
+<tr><td><code>mode</code></td><td><code>Mode</code></td><td><code>Mode::Single</code></td><td>Selection mode: <code>Single</code> or <code>Range</code></td></tr>
+<tr><td><code>format</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Display format token (e.g., <code>"yyyy-MM-dd"</code>). Supports <code>yyyy</code>, <code>MM</code>, <code>dd</code></td></tr>
+</tbody></table>
+<h2>Mode Enum</h2>
+<table><thead><tr><th>Variant</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>Single</code></td><td>Single-date selection (default)</td></tr>
+<tr><td><code>Range</code></td><td>Range selection (start + end). Interaction is a TODO; markup emits <code>data-mode="range"</code> hint</td></tr>
+</tbody></table>
+<h2>Features</h2>
+<ul>
+<li><strong>Format tokens</strong>: <code>yyyy</code> (4-digit year), <code>MM</code> (2-digit month), <code>dd</code> (2-digit day). Without format, displays long form ("April 20, 2026")</li>
+<li><strong>Hidden input</strong>: Stores ISO-formatted date (<code>YYYY-MM-DD</code>) in a hidden <code>&lt;input&gt;</code> for form submission</li>
+<li><strong>Inline calendar</strong>: Month/year navigation buttons, disabled date ranges via min/max</li>
+<li><strong>Day-of-week calculation</strong>: Uses Tomohiko Sakamoto's algorithm; no external date library needed</li>
+<li><strong>Leap year handling</strong>: Correct February counts for leap years</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Trigger button has <code>aria-expanded</code> and <code>aria-haspopup="dialog"</code></li>
+<li>Calendar buttons labeled with <code>aria-label</code> for month navigation</li>
+<li>Disabled dates rendered with <code>disabled</code> attribute and visually distinct</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li>Dialog</li>
+<li>Input</li>
+<li>Combobox</li>
+</ul>
+<h2>Shadcn reference</h2>
+<p><a href="https://ui.shadcn.com/docs/components/date-picker">https://ui.shadcn.com/docs/components/date-picker</a></p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

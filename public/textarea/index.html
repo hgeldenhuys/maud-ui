@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Textarea — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Textarea — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -959,7 +959,142 @@ let html = textarea::render(textarea::Props {
     id: &quot;bio-field&quot;.into(),
     resize: textarea::Resize::Vertical,
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>Textarea</h1>
+<p>Multi-line text input field with resize control, validation states, and screen-reader support.</p>
+<h2>Description</h2>
+<p>Textarea renders an HTML <code>&lt;textarea&gt;</code> element with configurable row height, resize behavior, and form validation states. The component distinguishes between visual invalid state (red border) and semantic ARIA invalid state (for form frameworks that validate independently).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::textarea;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::textarea::{Props, Resize, render};
+
+let feedback = render(Props {
+    name: "feedback".into(),
+    id: "feedback-field".into(),
+    placeholder: "What's on your mind?".into(),
+    rows: 5,
+    ..Default::default()
+});
+
+let invalid_field = render(Props {
+    name: "bio".into(),
+    aria_invalid: true,
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>""</code></td><td>Form field name</td></tr>
+<tr><td><code>placeholder</code></td><td><code>String</code></td><td><code>""</code></td><td>Placeholder text</td></tr>
+<tr><td><code>value</code></td><td><code>String</code></td><td><code>""</code></td><td>Initial text content</td></tr>
+<tr><td><code>rows</code></td><td><code>u32</code></td><td><code>3</code></td><td>Visible row height</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>""</code></td><td>Unique identifier</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the field is disabled</td></tr>
+<tr><td><code>required</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the field is required (adds HTML <code>required</code> attribute)</td></tr>
+<tr><td><code>invalid</code></td><td><code>bool</code></td><td><code>false</code></td><td>Visual invalid state (red border styling)</td></tr>
+<tr><td><code>aria_invalid</code></td><td><code>bool</code></td><td><code>false</code></td><td>Semantic invalid state (emits <code>aria-invalid="true"</code>)</td></tr>
+<tr><td><code>readonly</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the field is read-only</td></tr>
+<tr><td><code>resize</code></td><td><code>Resize</code></td><td><code>Vertical</code></td><td>Resize behavior</td></tr>
+</tbody></table>
+<h2>Resize Enum</h2>
+<pre><code class="language-rust">pub enum Resize {
+    None,                  // No resizing allowed
+    Vertical,              // Resize vertically only
+    Horizontal,            // Resize horizontally only
+    Both,                  // Resize in both directions
+}
+</code></pre>
+<p>Controls CSS <code>resize</code> behavior for the textarea.</p>
+<h2>Variants</h2>
+<h3>Standard Textarea</h3>
+<p>Default multi-line input with vertical resize.</p>
+<pre><code class="language-rust">render(Props {
+    name: "feedback".into(),
+    id: "feedback-field".into(),
+    placeholder: "Tell us what you think".into(),
+    rows: 4,
+    ..Default::default()
+})
+</code></pre>
+<h3>Disabled</h3>
+<p>Prevents user input and shows disabled styling.</p>
+<pre><code class="language-rust">render(Props {
+    name: "archived".into(),
+    disabled: true,
+    value: "This account has been archived".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Invalid (Visual)</h3>
+<p>Shows red border and invalid styling for validation feedback.</p>
+<pre><code class="language-rust">render(Props {
+    name: "bio".into(),
+    invalid: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Aria Invalid (Semantic)</h3>
+<p>Sets <code>aria-invalid="true"</code> for screen readers without triggering visual styling. Used when form frameworks validate independently.</p>
+<pre><code class="language-rust">render(Props {
+    name: "release-notes".into(),
+    aria_invalid: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Required</h3>
+<p>Indicates a required field (adds HTML <code>required</code> attribute).</p>
+<pre><code class="language-rust">render(Props {
+    name: "description".into(),
+    required: true,
+    placeholder: "Describe the issue".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Read-Only</h3>
+<p>Displays text content but prevents editing.</p>
+<pre><code class="language-rust">render(Props {
+    name: "admin-notes".into(),
+    readonly: true,
+    value: "Admin-only field. Flagged 2026-04-10.".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>No Resize</h3>
+<p>Prevent user resizing (fixed dimensions).</p>
+<pre><code class="language-rust">render(Props {
+    name: "signature".into(),
+    rows: 5,
+    resize: Resize::None,
+    ..Default::default()
+})
+</code></pre>
+<h3>Custom Row Height</h3>
+<p>Adjust visible row count based on expected content length.</p>
+<pre><code class="language-rust">render(Props {
+    name: "long-form".into(),
+    rows: 10,
+    placeholder: "Write your full essay here".into(),
+    ..Default::default()
+})
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Aria-Invalid:</strong> Set <code>aria_invalid: true</code> when form frameworks perform validation. Screen readers announce the field as invalid.</li>
+<li><strong>Aria-Invalid vs Invalid:</strong> The <code>invalid</code> field triggers red border styling; <code>aria_invalid</code> emits the semantic attribute. Either can be set independently, but both set the ARIA attribute.</li>
+<li><strong>Label Association:</strong> Pair with a <code>&lt;label&gt;</code> using the textarea's <code>id</code> and the label's <code>for</code> attribute.</li>
+<li><strong>Required:</strong> Use the <code>required</code> field to indicate mandatory input (conveyed to assistive tech and form validation APIs).</li>
+<li><strong>Placeholder:</strong> Not a substitute for labels. Use labels for semantic clarity.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/input.md">Input</a> — Single-line text field</li>
+<li><a href="/docs/components/label.md">Label</a> — Pair with textareas for accessibility</li>
+<li><a href="/docs/components/form.md">Form</a> — Form field patterns and validation</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Textarea maps to shadcn's <code>&lt;Textarea&gt;</code> component with equivalent props and variants.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -970,7 +970,130 @@ let token = swatch::render(swatch::Props {
 });
 
 // Tailwind-style ramp (50..950)
-let ramp = swatch::render_scale(&quot;blue&quot;, &amp;swatch::tailwind_ramp(&quot;blue&quot;));</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+let ramp = swatch::render_scale(&quot;blue&quot;, &amp;swatch::tailwind_ramp(&quot;blue&quot;));</code></pre></div><section class="mui-docs"><h1>Swatch</h1>
+<p>Colour chips with labels, click-to-copy, and a design-token mode. Reads live CSS variables so a swatch grid doubles as a live theme preview. Three rendering modes: Raw (literal colours), Token (CSS variables), and Scale (Tailwind-style ramps).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::swatch::{self, Mode, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::swatch;
+
+// Single raw colour
+html! {
+    (swatch::render(swatch::Props {
+        label: "Primary".into(),
+        sublabel: Some("#2563eb".into()),
+        mode: swatch::Mode::Raw("#2563eb".into()),
+        size: swatch::Size::Md,
+        copyable: true,
+    }))
+}
+
+// Design token (live)
+html! {
+    (swatch::render(swatch::Props {
+        label: "Accent".into(),
+        sublabel: Some("--mui-accent".into()),
+        mode: swatch::Mode::Token("mui-accent".into()),
+        size: swatch::Size::Md,
+        copyable: true,
+    }))
+}
+
+// Scale ramp (Tailwind-style)
+html! {
+    (swatch::render_scale("slate", &amp;swatch::tailwind_ramp("slate")))
+}
+
+// Grid of design tokens (live theme preview)
+html! {
+    (swatch::render_tokens(&amp;[
+        ("Background", "mui-bg"),
+        ("Text", "mui-text"),
+        ("Border", "mui-border"),
+        ("Accent", "mui-accent"),
+    ]))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td>(empty)</td><td>Human-readable name shown under the chip (e.g., "Primary").</td></tr>
+<tr><td>sublabel</td><td>Option<String></td><td><code>None</code></td><td>Optional second line; typically the raw value or token name.</td></tr>
+<tr><td>mode</td><td>Mode</td><td>(required)</td><td>Colour source: Raw(String) or Token(String).</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Chip size: Sm, Md, Lg.</td></tr>
+<tr><td>copyable</td><td>bool</td><td><code>true</code></td><td>Whether clicking the swatch copies the value to clipboard.</td></tr>
+</tbody></table>
+<h2>Mode Enum</h2>
+<table><thead><tr><th>Variant</th><th>Format</th><th>Example</th></tr></thead><tbody>
+<tr><td>Raw(String)</td><td>Literal CSS colour</td><td><code>Raw("#2563eb")</code> or <code>Raw("hsl(210 40% 96%)")</code> or <code>Raw("rgba(37,99,235,0.35)")</code></td></tr>
+<tr><td>Token(String)</td><td>CSS custom-property name (without <code>--</code> prefix)</td><td><code>Token("mui-accent")</code> renders as <code>background: var(--mui-accent)</code>.</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<table><thead><tr><th>Variant</th><th>Dimensions</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Sm</td><td>32×32 px</td><td>Compact galleries or inline previews.</td></tr>
+<tr><td>Md</td><td>56×56 px</td><td>Standard documentation and customiser pages.</td></tr>
+<tr><td>Lg</td><td>80×80 px</td><td>Large focus cards or hero sections.</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<h3>render</h3>
+<pre><code class="language-rust">swatch::render(props: Props) -&gt; Markup
+</code></pre>
+<p>Renders a single swatch chip with label and optional sublabel.</p>
+<h3>render_scale</h3>
+<pre><code class="language-rust">swatch::render_scale(name: &amp;str, stops: &amp;[(&amp;str, &amp;str)]) -&gt; Markup
+</code></pre>
+<p>Renders a horizontal tone ramp — one row of N chips sharing a name and labelled by tone key (e.g., <code>50</code>, <code>100</code>, … <code>950</code>). Each chip is clickable to copy its hex value.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>name</code>: Ramp name (e.g., "slate", "blue").</li>
+<li><code>stops</code>: Array of <code>(key, hex)</code> tuples. Key is typically <code>"50"</code>, <code>"100"</code>, etc.; hex is the colour value.</li>
+</ul>
+<h3>render_tokens</h3>
+<pre><code class="language-rust">swatch::render_tokens(tokens: &amp;[(&amp;str, &amp;str)]) -&gt; Markup
+</code></pre>
+<p>Renders a grid of design-token swatches — one chip per maud-ui <code>--mui-*</code> token. Pass an array of <code>(label, token-name)</code> pairs. Each chip reads <code>var(--{token-name})</code> at paint time, so the grid re-renders when <code>data-theme</code> flips or tokens are mutated. Perfect for live theme previews.</p>
+<h3>tailwind_ramp</h3>
+<pre><code class="language-rust">swatch::tailwind_ramp(name: &amp;str) -&gt; Vec&lt;(&amp;'static str, &amp;'static str)&gt;
+</code></pre>
+<p>Returns a Tailwind-style tone ramp for a given colour name. Supported names: <code>slate</code>, <code>gray</code>, <code>zinc</code>, <code>neutral</code>, <code>stone</code>, <code>red</code>, <code>orange</code>, <code>amber</code>, <code>yellow</code>, <code>lime</code>, <code>green</code>, <code>emerald</code>, <code>teal</code>, <code>cyan</code>, <code>sky</code>, <code>blue</code>, <code>indigo</code>, <code>violet</code>, <code>purple</code>, <code>fuchsia</code>, <code>pink</code>, <code>rose</code>. Returns an empty vec for unknown names.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Copyable swatches have <code>role="button"</code> and <code>tabindex="0"</code> so they're keyboard-accessible.</li>
+<li>Non-copyable swatches have <code>role="presentation"</code> and <code>tabindex="-1"</code>.</li>
+<li>Title attribute on copyable swatches: <code>"Click to copy"</code>.</li>
+<li>Copy value is written to <code>data-swatch-value</code> so the behaviour script reads it.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-swatch</code></td><td>Root swatch container.</td></tr>
+<tr><td><code>mui-swatch--sm</code></td><td>Small size variant.</td></tr>
+<tr><td><code>mui-swatch--md</code></td><td>Medium size variant (default).</td></tr>
+<tr><td><code>mui-swatch--lg</code></td><td>Large size variant.</td></tr>
+<tr><td><code>mui-swatch--copyable</code></td><td>Applied when <code>copyable: true</code>.</td></tr>
+<tr><td><code>mui-swatch__chip</code></td><td>Colour display box.</td></tr>
+<tr><td><code>mui-swatch__body</code></td><td>Label and sublabel container.</td></tr>
+<tr><td><code>mui-swatch__label</code></td><td>Primary label text.</td></tr>
+<tr><td><code>mui-swatch__sub</code></td><td>Sublabel text (smaller, muted).</td></tr>
+<tr><td><code>mui-swatch__scale</code></td><td>Applied to scale ramp chips.</td></tr>
+<tr><td><code>mui-swatch__scale-label</code></td><td>Ramp name heading.</td></tr>
+<tr><td><code>mui-swatch__scale-row</code></td><td>Horizontal row of ramp chips.</td></tr>
+<tr><td><code>mui-swatch__scale-key</code></td><td>Tone key label (50, 100, etc.).</td></tr>
+<tr><td><code>mui-swatch__grid</code></td><td>Grid wrapper for token swatches.</td></tr>
+</tbody></table>
+<h2>Behaviour</h2>
+<p>The companion JS behaviour (<code>dist/behaviors/swatch.js</code>) handles:</p>
+<ul>
+<li>Listening for clicks on <code>[data-mui="swatch-copy"]</code> elements.</li>
+<li>Reading the colour value from <code>data-swatch-value</code>.</li>
+<li>Copying to clipboard via the Clipboard API.</li>
+<li>Optional success feedback (e.g., toast notification).</li>
+</ul>
+<h2>Related</h2>
+<p>ThemeCustomiser, ColourPicker, ColorInput.</p>
+<h2>Shadcn reference</h2>
+<p>Swatch is a maud-ui original primitive for design-token visualization and colour management.</p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

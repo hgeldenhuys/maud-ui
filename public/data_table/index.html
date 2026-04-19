@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Data Table — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=173447"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Data Table — maud-ui</title><link rel="stylesheet" href="/css/maud-ui.css?v=175864"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -965,7 +965,83 @@ let html = data_table::render(data_table::Props {
     page_size: 10,
     searchable: true,
     ..Default::default()
-});</code></pre></div></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
+});</code></pre></div><section class="mui-docs"><h1>DataTable</h1>
+<p>Table with sorting, filtering, pagination, and row selection.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::data_table::{self, Props, Column};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::data_table;
+
+let columns = vec![
+    data_table::Column {
+        key: "name".to_string(),
+        label: "Name".to_string(),
+        sortable: true,
+    },
+];
+
+let rows = vec![
+    vec!["Alice".to_string()],
+    vec!["Bob".to_string()],
+];
+
+html! {
+    (data_table::render(data_table::Props {
+        id: "tbl".to_string(),
+        columns,
+        rows,
+        page_size: 5,
+        searchable: true,
+        search_placeholder: "Filter...".to_string(),
+        selectable: true,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"data-table"</code></td><td>Unique identifier for the table</td></tr>
+<tr><td><code>columns</code></td><td><code>Vec&lt;Column&gt;</code></td><td><code>vec![]</code></td><td>Column definitions</td></tr>
+<tr><td><code>rows</code></td><td><code>Vec&lt;Vec&lt;String&gt;&gt;</code></td><td><code>vec![]</code></td><td>Row data (each row is a Vec of cell strings)</td></tr>
+<tr><td><code>page_size</code></td><td><code>usize</code></td><td><code>5</code></td><td>Number of rows displayed per page</td></tr>
+<tr><td><code>searchable</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether a search/filter input is shown</td></tr>
+<tr><td><code>search_placeholder</code></td><td><code>String</code></td><td><code>"Filter..."</code></td><td>Placeholder text for search input</td></tr>
+<tr><td><code>selectable</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to prepend row-selection checkboxes</td></tr>
+</tbody></table>
+<h2>Column Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>key</code></td><td><code>String</code></td><td>—</td><td>Unique column identifier</td></tr>
+<tr><td><code>label</code></td><td><code>String</code></td><td>—</td><td>Column header text</td></tr>
+<tr><td><code>sortable</code></td><td><code>bool</code></td><td>—</td><td>Whether column can be sorted (shows icon if true)</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<h3><code>column_header(label, sortable) → Markup</code></h3>
+<p>Renders a <code>&lt;th&gt;</code> with optional sort icon and <code>aria-sort</code> attribute. Use when constructing custom table headers.</p>
+<h3><code>view_options(columns) → Markup</code></h3>
+<p>Renders a "Columns ▾" dropdown trigger stub for toggling column visibility. Placeholder implementation; wiring toggles is deferred.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>Pagination</strong>: Previous/Next buttons in footer; rows outside page size are <code>hidden</code></li>
+<li><strong>Selection</strong>: When <code>selectable: true</code>, prepends "Select all" checkbox in header and per-row checkboxes</li>
+<li><strong>Row data</strong>: Each row stored in <code>data-row-data</code> as JSON array for client script access</li>
+<li><strong>Sorting</strong>: Sortable columns emit <code>data-sortable="true"</code> with chevron icon and <code>aria-sort</code> attribute</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Table has standard semantic <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> structure</li>
+<li>Checkboxes have <code>aria-label</code> for accessibility</li>
+<li>Sort icons rendered with <code>aria-sort="none"</code> (values: none, ascending, descending, other, auto per ARIA 1.2)</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li>Table</li>
+<li>Checkbox</li>
+<li>Input (search)</li>
+</ul>
+<h2>Shadcn reference</h2>
+<p><a href="https://ui.shadcn.com/docs/components/data-table">https://ui.shadcn.com/docs/components/data-table</a></p>
+</section></section><div class="mui-gallery__back"><a href="/" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
     // Sidebar active state on scroll

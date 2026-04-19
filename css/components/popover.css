@@ -35,7 +35,8 @@
     transform var(--mui-transition);
 }
 
-.mui-popover__content[data-visible="true"] {
+.mui-popover__content[data-visible="true"],
+.mui-popover__content[data-state="open"] {
   opacity: 1;
   pointer-events: auto;
   transform: var(--mui-popover-translate, none) scale(1);
@@ -45,7 +46,7 @@
   display: none;
 }
 
-/* Placement: Bottom */
+/* Side: Bottom */
 .mui-popover__content--bottom-center {
   top: calc(100% + 0.375rem);
   inset-inline-start: 50%;
@@ -65,7 +66,7 @@
   --mui-popover-origin: right top;
 }
 
-/* Placement: Top */
+/* Side: Top */
 .mui-popover__content--top-center {
   bottom: calc(100% + 0.375rem);
   inset-inline-start: 50%;
@@ -83,4 +84,67 @@
   bottom: calc(100% + 0.375rem);
   inset-inline-end: 0;
   --mui-popover-origin: right bottom;
+}
+
+/* Side: Right (popover appears to the right of the trigger) */
+.mui-popover__content--right-center {
+  inset-inline-start: calc(100% + 0.375rem);
+  top: 50%;
+  --mui-popover-translate: translateY(-50%);
+  --mui-popover-origin: left center;
+}
+
+.mui-popover__content--right-start {
+  inset-inline-start: calc(100% + 0.375rem);
+  top: 0;
+  --mui-popover-origin: left top;
+}
+
+.mui-popover__content--right-end {
+  inset-inline-start: calc(100% + 0.375rem);
+  bottom: 0;
+  --mui-popover-origin: left bottom;
+}
+
+/* Side: Left (popover appears to the left of the trigger) */
+.mui-popover__content--left-center {
+  inset-inline-end: calc(100% + 0.375rem);
+  top: 50%;
+  --mui-popover-translate: translateY(-50%);
+  --mui-popover-origin: right center;
+}
+
+.mui-popover__content--left-start {
+  inset-inline-end: calc(100% + 0.375rem);
+  top: 0;
+  --mui-popover-origin: right top;
+}
+
+.mui-popover__content--left-end {
+  inset-inline-end: calc(100% + 0.375rem);
+  bottom: 0;
+  --mui-popover-origin: right bottom;
+}
+
+/* Subcomponents: header / title / description (shadcn-parity) */
+.mui-popover__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.mui-popover__title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--mui-text);
+}
+
+.mui-popover__description {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--mui-text-muted, var(--mui-text));
 }

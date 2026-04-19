@@ -35,6 +35,13 @@
   min-width: 2rem;
 }
 
+.mui-toggle--lg {
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 1rem;
+  min-width: 2.5rem;
+}
+
 /* --- Variant: Default (ghost-like, no border) -------------------------- */
 
 .mui-toggle:hover:not(:disabled) {

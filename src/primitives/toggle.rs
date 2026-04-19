@@ -6,6 +6,7 @@ pub enum Size {
     #[default]
     Md,
     Sm,
+    Lg,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -43,6 +44,7 @@ pub fn render(props: Props) -> Markup {
     let size_cls = match props.size {
         Size::Md => "mui-toggle--md",
         Size::Sm => "mui-toggle--sm",
+        Size::Lg => "mui-toggle--lg",
     };
     let variant_cls = match props.variant {
         Variant::Default => "",
@@ -147,6 +149,23 @@ pub fn showcase() -> Markup {
                         pressed: false,
                         size: Size::Sm,
                         id: "size-sm-i".to_string(),
+                        ..Default::default()
+                    }))
+                }
+                div.mui-showcase__row {
+                    span.mui-showcase__label { "lg" }
+                    (render(Props {
+                        label: "B".to_string(),
+                        pressed: true,
+                        size: Size::Lg,
+                        id: "size-lg-b".to_string(),
+                        ..Default::default()
+                    }))
+                    (render(Props {
+                        label: "I".to_string(),
+                        pressed: false,
+                        size: Size::Lg,
+                        id: "size-lg-i".to_string(),
                         ..Default::default()
                     }))
                 }

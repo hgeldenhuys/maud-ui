@@ -14,7 +14,11 @@ pub struct Props {
     pub items: Vec<MenuEntry>,
 }
 
-/// Render a context menu with the given properties
+/// Render a context menu with the given properties.
+///
+/// The content element emits `data-side="inline-end"` so RTL (right-to-left)
+/// locales can flip submenu / popover alignment without JS locale detection.
+/// Mirrors Radix/shadcn's `data-side` convention.
 pub fn render(props: Props) -> Markup {
     html! {
         div.mui-context-menu data-mui="context-menu" {
@@ -24,6 +28,7 @@ pub fn render(props: Props) -> Markup {
             div.mui-context-menu__content
                 id=(format!("{}-menu", props.id))
                 role="menu"
+                data-side="inline-end"
                 hidden
                 style="position: fixed; top: 0; left: 0;"
             {
@@ -33,6 +38,37 @@ pub fn render(props: Props) -> Markup {
             }
         }
     }
+}
+
+/// Build a `MenuEntry::Item` pre-set to destructive (for symmetry with
+/// shadcn's `<ContextMenuItem variant="destructive">`).
+///
+/// The `destructive` flag on [`MenuItem`] is the Maud UI equivalent of
+/// shadcn/Radix's `variant="destructive"` — it applies the danger styling
+/// (`mui-menu__item--danger`) used for irreversible actions like Delete,
+/// Sign out, or Discard changes. Prefer this helper over constructing a
+/// `MenuItem` by hand when the action is destructive; it keeps callsites
+/// declarative and matches the shadcn API surface exactly.
+///
+/// # Example
+/// ```ignore
+/// use maud_ui::primitives::context_menu::destructive_item;
+///
+/// let entry = destructive_item("delete", "Delete", false, Some("\u{232b}"));
+/// ```
+pub fn destructive_item(
+    action: &str,
+    label: &str,
+    disabled: bool,
+    shortcut: Option<&str>,
+) -> MenuEntry {
+    MenuEntry::Item(MenuItem {
+        label: label.into(),
+        action: action.into(),
+        disabled,
+        destructive: true,
+        shortcut: shortcut.map(|s| s.into()),
+    })
 }
 
 /// Showcase context menu component
@@ -72,13 +108,7 @@ pub fn showcase() -> Markup {
                                 shortcut: Some("\u{2318}V".into()),
                             }),
                             MenuEntry::Separator,
-                            MenuEntry::Item(MenuItem {
-                                label: "Delete".into(),
-                                action: "delete".into(),
-                                disabled: false,
-                                destructive: true,
-                                shortcut: Some("\u{232b}".into()),
-                            }),
+                            destructive_item("delete", "Delete", false, Some("\u{232b}")),
                         ],
                     }))
                 }

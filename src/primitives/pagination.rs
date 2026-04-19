@@ -10,6 +10,13 @@ pub struct Props {
     pub total_pages: usize,
     /// Maximum visible page buttons (default 5)
     pub max_visible: usize,
+    /// Optional href pattern. When `Some`, page buttons render as `<a>` tags
+    /// with `{page}` in the pattern substituted for the page number.
+    /// Prev/Next also become anchors. When `None`, `<button>` is used.
+    pub href_pattern: Option<String>,
+    /// When true, hide the "Previous"/"Next" text (still announced to SRs
+    /// via a visually-hidden span). Only chevron icons remain visible.
+    pub icons_only: bool,
 }
 
 impl Default for Props {
@@ -18,6 +25,8 @@ impl Default for Props {
             current_page: 1,
             total_pages: 1,
             max_visible: 5,
+            href_pattern: None,
+            icons_only: false,
         }
     }
 }
@@ -61,46 +70,126 @@ impl Props {
     }
 }
 
+/// Substitute `{page}` in the href pattern with the given page number.
+fn render_href(pattern: &str, page: usize) -> String {
+    pattern.replace("{page}", &page.to_string())
+}
+
 /// Render pagination controls
 pub fn render(props: Props) -> Markup {
     let visible = props.visible_pages();
+    let prev_disabled = props.current_page == 1;
+    let next_disabled = props.current_page == props.total_pages;
+    let prev_page = props.current_page.saturating_sub(1).max(1);
+    let next_page = (props.current_page + 1).min(props.total_pages);
 
     html! {
         nav class="mui-pagination" aria-label="Pagination" {
-            button
-                class="mui-pagination__btn mui-pagination__btn--prev"
-                disabled[props.current_page == 1]
-            {
-                span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_LEFT)) }
-                "Previous"
+            @match (&props.href_pattern, prev_disabled) {
+                (Some(pattern), false) => {
+                    a
+                        class="mui-pagination__btn mui-pagination__btn--prev"
+                        href=(render_href(pattern, prev_page))
+                        aria-label="Go to previous page"
+                    {
+                        span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_LEFT)) }
+                        @if props.icons_only {
+                            span class="mui-visually-hidden" { "Previous" }
+                        } @else {
+                            "Previous"
+                        }
+                    }
+                }
+                _ => {
+                    button
+                        class="mui-pagination__btn mui-pagination__btn--prev"
+                        aria-label="Go to previous page"
+                        disabled[prev_disabled]
+                    {
+                        span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_LEFT)) }
+                        @if props.icons_only {
+                            span class="mui-visually-hidden" { "Previous" }
+                        } @else {
+                            "Previous"
+                        }
+                    }
+                }
             }
 
             div class="mui-pagination__pages" {
                 @for page in visible.iter() {
                     @if *page == 0 {
                         // Ellipsis marker
-                        span class="mui-pagination__ellipsis" { "..." }
+                        span class="mui-pagination__ellipsis" aria-hidden="true" { "..." }
                     } @else if *page == props.current_page {
-                        button
-                            class="mui-pagination__page"
-                            aria-current="page"
-                        {
-                            (page)
+                        @match &props.href_pattern {
+                            Some(pattern) => {
+                                a
+                                    class="mui-pagination__page"
+                                    href=(render_href(pattern, *page))
+                                    aria-current="page"
+                                {
+                                    (page)
+                                }
+                            }
+                            None => {
+                                button
+                                    class="mui-pagination__page"
+                                    aria-current="page"
+                                {
+                                    (page)
+                                }
+                            }
                         }
                     } @else {
-                        button class="mui-pagination__page" {
-                            (page)
+                        @match &props.href_pattern {
+                            Some(pattern) => {
+                                a
+                                    class="mui-pagination__page"
+                                    href=(render_href(pattern, *page))
+                                {
+                                    (page)
+                                }
+                            }
+                            None => {
+                                button class="mui-pagination__page" {
+                                    (page)
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            button
-                class="mui-pagination__btn mui-pagination__btn--next"
-                disabled[props.current_page == props.total_pages]
-            {
-                "Next"
-                span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
+            @match (&props.href_pattern, next_disabled) {
+                (Some(pattern), false) => {
+                    a
+                        class="mui-pagination__btn mui-pagination__btn--next"
+                        href=(render_href(pattern, next_page))
+                        aria-label="Go to next page"
+                    {
+                        @if props.icons_only {
+                            span class="mui-visually-hidden" { "Next" }
+                        } @else {
+                            "Next"
+                        }
+                        span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
+                    }
+                }
+                _ => {
+                    button
+                        class="mui-pagination__btn mui-pagination__btn--next"
+                        aria-label="Go to next page"
+                        disabled[next_disabled]
+                    {
+                        @if props.icons_only {
+                            span class="mui-visually-hidden" { "Next" }
+                        } @else {
+                            "Next"
+                        }
+                        span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
+                    }
+                }
             }
         }
     }
@@ -120,6 +209,7 @@ pub fn showcase() -> Markup {
                         current_page: 3,
                         total_pages: 10,
                         max_visible: 5,
+                        ..Props::default()
                     }))
                 }
             }
@@ -130,6 +220,7 @@ pub fn showcase() -> Markup {
                     current_page: 1,
                     total_pages: 10,
                     max_visible: 5,
+                    ..Props::default()
                 }))
             }
 
@@ -139,6 +230,7 @@ pub fn showcase() -> Markup {
                     current_page: 10,
                     total_pages: 10,
                     max_visible: 5,
+                    ..Props::default()
                 }))
             }
 
@@ -148,6 +240,29 @@ pub fn showcase() -> Markup {
                     current_page: 2,
                     total_pages: 3,
                     max_visible: 5,
+                    ..Props::default()
+                }))
+            }
+
+            div {
+                p.mui-showcase__caption { "With href pattern (anchor links)" }
+                (render(Props {
+                    current_page: 2,
+                    total_pages: 5,
+                    max_visible: 5,
+                    href_pattern: Some("#page-{page}".to_string()),
+                    icons_only: false,
+                }))
+            }
+
+            div {
+                p.mui-showcase__caption { "Icons only (prev/next labels hidden)" }
+                (render(Props {
+                    current_page: 3,
+                    total_pages: 10,
+                    max_visible: 5,
+                    href_pattern: None,
+                    icons_only: true,
                 }))
             }
         }

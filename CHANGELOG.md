@@ -24,6 +24,14 @@ These commits land in the repo but do **not** change the published
   content rather than placeholder text.
 - Component count bumped 58 → 64 in banner text and
   `COMPONENT_NAMES.len()` drives the nav badge dynamically.
+- **API reference docs**: one Markdown doc per primitive at
+  `docs/components/<name>.md` — 64 files, 1:1 with the primitive
+  modules. Each doc includes Import, Example, Props table (every
+  pub field with type/default/intent), Variants/Enums, Helper
+  Functions, Accessibility notes, Related primitives, and a
+  shadcn reference URL. Index at `docs/components/README.md`
+  groups by category (Form / Display / Layout / Overlay /
+  Navigation / Interaction / Visualisation).
 
 ### Fixed
 - `/sheet` "Open sheet" button did nothing — Sheet's trigger() emitted
@@ -36,6 +44,12 @@ These commits land in the repo but do **not** change the published
 - `/sonner` position picker + "fire toast" button did nothing — the
   sonner-toast CustomEvent bridge lived in `dist/behaviors/toast.js`
   but hadn't been rebuilt into the bundle either. Same fix.
+- `/sidebar` showcase had a visible 4px jog where the sidebar header's
+  bottom border met the inset bar's bottom border. Root cause: both
+  used `min-height: 3rem` but content-box plus `border-bottom: 1px`
+  pushed each row past the min in different ways. Fixed by pinning
+  both to `height: 3rem; box-sizing: border-box; flex-shrink: 0`
+  so the border sits inside the 48px height box on both rows.
 
 ## [0.2.1] — 2026-04-19
 

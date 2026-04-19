@@ -1,6 +1,16 @@
 //! Dialog component — modal dialog using native <dialog> element with focus trap and ESC/backdrop close.
 use maud::{html, Markup};
 
+/// Dialog size variants
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Size {
+    /// Default size (max-width 32rem, padded)
+    #[default]
+    Default,
+    /// Compact size (max-width 28rem, reduced padding)
+    Sm,
+}
+
 /// Dialog rendering properties
 #[derive(Clone, Debug)]
 pub struct Props {
@@ -16,6 +26,10 @@ pub struct Props {
     pub footer: Option<Markup>,
     /// Initial open state (default false; if true renders with open attribute for SSR)
     pub open: bool,
+    /// Whether to render the close button in the top-right (default true)
+    pub show_close_button: bool,
+    /// Dialog size variant (default Default)
+    pub size: Size,
 }
 
 impl Default for Props {
@@ -27,6 +41,8 @@ impl Default for Props {
             children: html! {},
             footer: None,
             open: false,
+            show_close_button: true,
+            size: Size::Default,
         }
     }
 }
@@ -62,17 +78,24 @@ pub fn render(props: Props) -> Markup {
     let title_id = format!("{}-title", props.id);
     let desc_id = format!("{}-desc", props.id);
     let has_desc = props.description.is_some();
+    let dialog_class = match props.size {
+        Size::Default => "mui-dialog",
+        Size::Sm => "mui-dialog mui-dialog--sm",
+    };
 
     html! {
-        dialog class="mui-dialog"
+        dialog class=(dialog_class)
             id=(props.id)
             data-mui="dialog"
             aria-labelledby=(title_id)
             aria-describedby=[if has_desc { Some(desc_id.as_str()) } else { None }]
+            aria-modal="true"
             open[props.open]
         {
             // Close button — absolute positioned, outside header flow
-            (close_button("Close"))
+            @if props.show_close_button {
+                (close_button("Close"))
+            }
 
             div class="mui-dialog__header" {
                 h2 class="mui-dialog__title" id=(title_id) {
@@ -131,7 +154,7 @@ pub fn showcase() -> Markup {
                         button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
                         button class="mui-btn mui-btn--primary mui-btn--md" { "Save" }
                     }),
-                    open: false,
+                    ..Default::default()
                 }))
             }
 
@@ -161,7 +184,52 @@ pub fn showcase() -> Markup {
                         button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
                         button class="mui-btn mui-btn--primary mui-btn--md" { "Send invite" }
                     }),
-                    open: false,
+                    ..Default::default()
+                }))
+            }
+
+            // Compact (Sm) dialog — demonstrates size: Sm
+            {
+                (trigger("demo-dialog-compact", "Compact Dialog"))
+            }
+            {
+                (render(Props {
+                    id: "demo-dialog-compact".to_string(),
+                    title: "Quick Action".to_string(),
+                    description: Some("A compact dialog for short interactions.".to_string()),
+                    children: html! {
+                        p style="font-size:0.875rem;color:var(--mui-text-muted);" {
+                            "This dialog uses the Sm size variant with reduced padding."
+                        }
+                    },
+                    footer: Some(html! {
+                        button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "OK" }
+                    }),
+                    size: Size::Sm,
+                    ..Default::default()
+                }))
+            }
+
+            // No-close-button dialog — force a footer-only decision
+            {
+                (trigger("demo-dialog-forced-choice", "Forced Choice"))
+            }
+            {
+                (render(Props {
+                    id: "demo-dialog-forced-choice".to_string(),
+                    title: "Confirm Deletion".to_string(),
+                    description: Some("This cannot be undone. Make a choice below.".to_string()),
+                    children: html! {
+                        p style="font-size:0.875rem;color:var(--mui-text-muted);" {
+                            "The top-right close button is hidden — the user must use the footer buttons."
+                        }
+                    },
+                    footer: Some(html! {
+                        button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
+                        button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Delete" }
+                    }),
+                    show_close_button: false,
+                    ..Default::default()
                 }))
             }
         }

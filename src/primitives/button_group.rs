@@ -131,11 +131,19 @@ pub fn render(props: Props) -> Markup {
         .mode
         .map(|m| format!(r#" data-mode="{}""#, m.attr()))
         .unwrap_or_default();
+    // Emit aria-orientation only for vertical groups — horizontal is the
+    // implicit default for role=group (assistive-tech announces arrow-key
+    // behaviour accordingly when the vertical axis is explicit).
+    let aria_orientation = if props.orientation == Orientation::Vertical {
+        r#" aria-orientation="vertical""#
+    } else {
+        ""
+    };
 
     html! {
         (PreEscaped(format!(
-            r#"<div class="{}" role="group"{}{}>"#,
-            class, data_mui, data_mode,
+            r#"<div class="{}" role="group"{}{}{}>"#,
+            class, aria_orientation, data_mui, data_mode,
         )))
         (props.children)
         (PreEscaped("</div>"))

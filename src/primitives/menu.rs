@@ -73,6 +73,7 @@ pub fn render(props: Props) -> Markup {
         div.mui-menu data-mui="menu" {
             button.mui-menu__trigger.mui-btn.mui-btn--default.mui-btn--md
                 type="button"
+                id=(format!("{}-trigger", props.id))
                 aria-expanded="false"
                 aria-haspopup="menu"
                 aria-controls=(format!("{}-items", props.id))
@@ -80,7 +81,7 @@ pub fn render(props: Props) -> Markup {
                 (props.trigger_label)
                 span.mui-menu__chevron aria-hidden="true" { "▾" }
             }
-            div.mui-menu__content id=(format!("{}-items", props.id)) role="menu" hidden {
+            div.mui-menu__content id=(format!("{}-items", props.id)) role="menu" aria-labelledby=(format!("{}-trigger", props.id)) hidden {
                 @for entry in &props.items {
                     (render_entry(entry))
                 }

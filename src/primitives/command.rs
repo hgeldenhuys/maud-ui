@@ -102,6 +102,7 @@ pub fn render(props: Props) -> Markup {
             id=(props.id)
             data-mui="command"
             aria-label="Command palette"
+            aria-modal="true"
         {
             div class="mui-command__search-wrap" {
                 span class="mui-command__search-icon" aria-hidden="true" { "\u{2315}" }

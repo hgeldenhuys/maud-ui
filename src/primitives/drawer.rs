@@ -112,6 +112,7 @@ pub fn render(props: Props) -> Markup {
             id=(props.id)
             data-mui="drawer"
             data-scale-background=[scale_attr]
+            aria-modal="true"
             aria-labelledby=(title_id)
             aria-describedby=[if has_desc { Some(desc_id.as_str()) } else { None }]
         {

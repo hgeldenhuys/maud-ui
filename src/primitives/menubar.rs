@@ -22,7 +22,7 @@ pub struct Props {
 /// Render a menubar with the given properties
 pub fn render(props: Props) -> Markup {
     html! {
-        div.mui-menubar data-mui="menubar" role="menubar" id=(props.id) {
+        div.mui-menubar data-mui="menubar" role="menubar" aria-orientation="horizontal" id=(props.id) {
             @for (i, menu) in props.menus.iter().enumerate() {
                 div.mui-menubar__menu {
                     button.mui-menubar__trigger

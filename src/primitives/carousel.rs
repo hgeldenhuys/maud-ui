@@ -52,7 +52,7 @@ pub fn render(props: Props) -> Markup {
             data-autoplay=(autoplay_str)
         {
             div class="mui-carousel__viewport" {
-                div class="mui-carousel__container" aria-live="off" {
+                div class="mui-carousel__container" aria-live=(if props.auto_play { "polite" } else { "off" }) {
                     @for (i, item) in props.items.iter().enumerate() {
                         div class="mui-carousel__slide"
                             role="group"

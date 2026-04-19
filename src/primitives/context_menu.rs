@@ -28,6 +28,7 @@ pub fn render(props: Props) -> Markup {
             div.mui-context-menu__content
                 id=(format!("{}-menu", props.id))
                 role="menu"
+                aria-orientation="vertical"
                 data-side="inline-end"
                 hidden
                 style="position: fixed; top: 0; left: 0;"

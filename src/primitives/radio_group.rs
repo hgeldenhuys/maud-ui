@@ -84,7 +84,7 @@ pub fn render(props: Props) -> Markup {
         class.push_str(variant_class);
     }
     html! {
-        fieldset class=(class) role="radiogroup" aria-label=(props.label.clone()) {
+        fieldset class=(class) {
             legend class="mui-radio-group__legend" { (props.label) }
             @for opt in props.options {
                 label class="mui-radio" for=(format!("{}-{}", props.name, opt.value)) {

@@ -48,6 +48,37 @@ pub fn trigger(target_id: &str, label: &str) -> Markup {
     }
 }
 
+/// Render a keyboard shortcut slot for a command item.
+///
+/// Matches the `<kbd class="mui-kbd">` markup that `CommandItem::shortcut`
+/// emits inside [`render`], so callers can drop a shortcut inline when
+/// composing their own item markup.
+pub fn shortcut(children: Markup) -> Markup {
+    html! {
+        kbd class="mui-kbd mui-command__shortcut" { (children) }
+    }
+}
+
+/// Render a visual separator between command groups.
+///
+/// Use between groups of items when composing a custom command list.
+pub fn separator() -> Markup {
+    html! {
+        div class="mui-command__separator" role="separator" {}
+    }
+}
+
+/// Render the "no results" empty-state row for a command list.
+///
+/// Use when a search yields no matches and the caller is composing the
+/// list markup by hand rather than relying on [`render`]'s built-in
+/// empty slot.
+pub fn empty(text: &str) -> Markup {
+    html! {
+        div class="mui-command__empty" { (text) }
+    }
+}
+
 /// Render the command palette
 pub fn render(props: Props) -> Markup {
     // Collect unique groups in insertion order
@@ -181,6 +212,43 @@ pub fn showcase() -> Markup {
                     items,
                     placeholder: "Type a command or search\u{2026}".to_string(),
                 }))
+            }
+
+            // Composable slots demo: shortcut() + separator() + empty()
+            div {
+                p.mui-showcase__caption { "Composable slots: shortcut / separator / empty" }
+                div class="mui-command" style="position: static; display: block; max-width: 24rem; width: 100%;" {
+                    div class="mui-command__list" role="listbox" {
+                        div class="mui-command__group" {
+                            div class="mui-command__group-label" { "File" }
+                            div class="mui-command__item" role="option" tabindex="-1" {
+                                span class="mui-command__item-label" { "New File" }
+                                (shortcut(html! { "\u{2318}N" }))
+                            }
+                            div class="mui-command__item" role="option" tabindex="-1" {
+                                span class="mui-command__item-label" { "Save" }
+                                (shortcut(html! { "\u{2318}S" }))
+                            }
+                        }
+                        (separator())
+                        div class="mui-command__group" {
+                            div class="mui-command__group-label" { "Edit" }
+                            div class="mui-command__item" role="option" tabindex="-1" {
+                                span class="mui-command__item-label" { "Undo" }
+                                (shortcut(html! { "\u{2318}Z" }))
+                            }
+                        }
+                    }
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "Empty state" }
+                div class="mui-command" style="position: static; display: block; max-width: 24rem; width: 100%;" {
+                    div class="mui-command__list" role="listbox" {
+                        (empty("No results found."))
+                    }
+                }
             }
         }
     }

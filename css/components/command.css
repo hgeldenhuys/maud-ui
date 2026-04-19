@@ -138,6 +138,22 @@ dialog.mui-command::backdrop {
   flex-shrink: 0;
 }
 
+/* Shortcut slot — mui-command__shortcut is typically applied alongside
+ * .mui-kbd; the margin-inline-start rule above already handles layout when
+ * it lives inside a .mui-command__item. Expose a minimal rule so standalone
+ * usage outside an item still pushes the shortcut to the trailing edge. */
+.mui-command__shortcut {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+/* Separator between groups when composing a list manually */
+.mui-command__separator {
+  height: 1px;
+  background: var(--mui-border);
+  margin: 0.25rem 0.5rem;
+}
+
 /* Empty state */
 
 .mui-command__empty {

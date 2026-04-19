@@ -1,6 +1,9 @@
 (function () {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
 
+  // TODO: implement multi-select chip interaction (data-multiple), clear-button
+  // click handler (.mui-combobox__clear), and auto-highlight commit-on-enter
+  // behaviour. Current JS handles only single-select.
   window.MaudUI.behaviors["combobox"] = function (root) {
     var trigger = root.querySelector(".mui-combobox__trigger");
     var dropdown = root.querySelector(".mui-combobox__dropdown");

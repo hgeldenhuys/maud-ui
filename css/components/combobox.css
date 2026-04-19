@@ -208,6 +208,85 @@
   height: 0;
 }
 
+/* Multi-select chips inside the trigger */
+
+.mui-combobox__chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.mui-combobox__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--mui-bg-input);
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+
+.mui-combobox__chip-remove {
+  cursor: pointer;
+  opacity: 0.7;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  line-height: 1;
+}
+
+.mui-combobox__chip-remove:hover {
+  opacity: 1;
+}
+
+/* Group label inside dropdown */
+
+.mui-combobox__group {
+  display: block;
+}
+
+.mui-combobox__group + .mui-combobox__group {
+  margin-top: 0.25rem;
+}
+
+.mui-combobox__group-label {
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--mui-text-muted);
+}
+
+/* Clear button inside the trigger */
+
+.mui-combobox__clear {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0 0.125rem;
+  font: inherit;
+  color: inherit;
+  line-height: 1;
+}
+
+.mui-combobox__clear:hover {
+  opacity: 1;
+}
+
+/* Invalid state — applied at the root so the trigger border reflects validity */
+
+.mui-combobox[aria-invalid="true"] .mui-combobox__trigger,
+.mui-combobox__trigger[aria-invalid="true"] {
+  border-color: var(--mui-danger, #dc2626);
+}
+
 /* Mobile: trigger spans full width; dropdown clamps to viewport */
 @media (max-width: 640px) {
   .mui-combobox {

@@ -100,3 +100,41 @@
 .mui-slider[data-dragging] .mui-slider__fill {
   transition: none;
 }
+
+/* Vertical orientation — layout only. Thumb positioning uses `bottom:`
+   instead of `left:` (applied inline by the renderer). */
+.mui-slider--vertical {
+  flex-direction: column;
+  width: auto;
+  height: 8rem;
+}
+
+.mui-slider--vertical .mui-slider__track {
+  width: 0.5rem;
+  height: 100%;
+  flex: 1;
+}
+
+.mui-slider--vertical .mui-slider__fill {
+  width: 100%;
+  height: 0;
+  inset-inline-start: 0;
+  bottom: 0;
+  top: auto;
+  transition: height var(--mui-transition);
+}
+
+.mui-slider--vertical .mui-slider__thumb {
+  top: auto;
+  inset-inline-start: 50%;
+  transform: translate(-50%, 50%);
+  transition: bottom var(--mui-transition), box-shadow var(--mui-transition);
+}
+
+.mui-slider--vertical .mui-slider__thumb:active {
+  transform: translate(-50%, 50%) scale(1.1);
+}
+
+.mui-slider--vertical[data-dragging] .mui-slider__fill {
+  transition: none;
+}

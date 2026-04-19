@@ -2,6 +2,14 @@
 
 use maud::{html, Markup};
 
+/// Orientation of the slider
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Orientation {
+    #[default]
+    Horizontal,
+    Vertical,
+}
+
 /// Slider rendering properties
 #[derive(Debug, Clone)]
 pub struct Props {
@@ -9,8 +17,12 @@ pub struct Props {
     pub name: String,
     /// HTML id attribute for label linkage
     pub id: String,
-    /// Current value
+    /// Current value (used when `values` is empty — single-thumb mode)
     pub value: f64,
+    /// Multiple thumb values. When non-empty, renders one thumb per value
+    /// and fills between the min and max of the set (range/multi-thumb mode).
+    /// When empty, falls back to single-thumb mode using `value`.
+    pub values: Vec<f64>,
     /// Minimum value (default 0.0)
     pub min: f64,
     /// Maximum value (default 100.0)
@@ -23,6 +35,8 @@ pub struct Props {
     pub label: String,
     /// Whether to show the current value label
     pub show_value: bool,
+    /// Orientation of the slider (default Horizontal)
+    pub orientation: Orientation,
 }
 
 impl Default for Props {
@@ -31,12 +45,14 @@ impl Default for Props {
             name: String::new(),
             id: String::new(),
             value: 50.0,
+            values: Vec::new(),
             min: 0.0,
             max: 100.0,
             step: 1.0,
             disabled: false,
             label: String::new(),
             show_value: false,
+            orientation: Orientation::Horizontal,
         }
     }
 }
@@ -50,29 +66,116 @@ fn format_value(value: f64) -> String {
     }
 }
 
-/// Render a slider with the given properties
-pub fn render(props: Props) -> Markup {
-    let pct = if props.max != props.min {
-        ((props.value - props.min) / (props.max - props.min)) * 100.0
+/// Convert a value to a percentage position along the track.
+fn to_pct(value: f64, min: f64, max: f64) -> f64 {
+    if max != min {
+        ((value - min) / (max - min)) * 100.0
     } else {
         0.0
+    }
+}
+
+/// Position style for a thumb. Vertical sliders anchor from the bottom
+/// so that larger values appear higher on the track (standard convention).
+fn thumb_style(pct: f64, orientation: Orientation) -> String {
+    match orientation {
+        Orientation::Horizontal => format!("left: {}%", pct),
+        Orientation::Vertical => format!("bottom: {}%", pct),
+    }
+}
+
+/// Fill style — for horizontal a left-anchored width bar, for vertical a
+/// bottom-anchored height bar. When multi-thumb, fill starts at the min
+/// thumb offset.
+fn fill_style(start_pct: f64, extent_pct: f64, orientation: Orientation) -> String {
+    match orientation {
+        Orientation::Horizontal => {
+            format!("left: {}%; width: {}%", start_pct, extent_pct)
+        }
+        Orientation::Vertical => {
+            format!("bottom: {}%; height: {}%", start_pct, extent_pct)
+        }
+    }
+}
+
+/// Render a slider with the given properties
+pub fn render(props: Props) -> Markup {
+    // Collect the thumb values. Multi-thumb mode is active when `values`
+    // is non-empty; otherwise fall back to the single `value`.
+    let mut thumbs: Vec<f64> = if props.values.is_empty() {
+        vec![props.value]
+    } else {
+        props.values.clone()
     };
-    let display_value = format_value(props.value);
+    thumbs.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+
+    // Fill extent. For a single thumb, fill spans from 0 to the thumb.
+    // For multiple thumbs, fill spans between the min and max of the set.
+    let (fill_start_pct, fill_extent_pct) = if thumbs.len() > 1 {
+        let lo = *thumbs.first().unwrap();
+        let hi = *thumbs.last().unwrap();
+        let lo_pct = to_pct(lo, props.min, props.max);
+        let hi_pct = to_pct(hi, props.min, props.max);
+        (lo_pct, (hi_pct - lo_pct).max(0.0))
+    } else {
+        let pct = to_pct(thumbs[0], props.min, props.max);
+        (0.0, pct)
+    };
+
+    let is_vertical = props.orientation == Orientation::Vertical;
+    let orientation_class = if is_vertical {
+        " mui-slider--vertical"
+    } else {
+        ""
+    };
+    let aria_orientation = if is_vertical {
+        "vertical"
+    } else {
+        "horizontal"
+    };
+    let root_class = format!("mui-slider{}", orientation_class);
+
+    // Native input always reflects the single-thumb `value` for form
+    // submission compatibility. Multi-thumb state is driven by JS on top
+    // of `data-values` for progressive enhancement.
+    let data_values_attr = if !props.values.is_empty() {
+        let joined: Vec<String> = thumbs.iter().map(|v| format_value(*v)).collect();
+        Some(joined.join(","))
+    } else {
+        None
+    };
+
+    // Value label — show the range `lo — hi` when multi-thumb.
+    let display_value = if thumbs.len() > 1 {
+        format!(
+            "{} \u{2014} {}",
+            format_value(*thumbs.first().unwrap()),
+            format_value(*thumbs.last().unwrap())
+        )
+    } else {
+        format_value(thumbs[0])
+    };
+
+    let fill_s = fill_style(fill_start_pct, fill_extent_pct, props.orientation);
 
     html! {
         @if props.disabled {
-            div.mui-slider data-mui="slider" data-min=(props.min) data-max=(props.max) data-step=(props.step) data-disabled="true" {
+            div class=(root_class) data-mui="slider" data-min=(props.min) data-max=(props.max) data-step=(props.step) data-orientation=(aria_orientation) data-values=[data_values_attr.as_deref()] data-disabled="true" {
                 div.mui-slider__track {
-                    div.mui-slider__fill style=(format!("width: {}%", pct)) aria-hidden="true" {}
-                    div.mui-slider__thumb
-                        role="slider"
-                        tabindex="0"
-                        aria-valuenow=(props.value)
-                        aria-valuemin=(props.min)
-                        aria-valuemax=(props.max)
-                        aria-label=(props.label)
-                        aria-disabled="true"
-                        style=(format!("left: {}%", pct)) {}
+                    div.mui-slider__fill style=(fill_s) aria-hidden="true" {}
+                    @for (i, v) in thumbs.iter().enumerate() {
+                        div.mui-slider__thumb
+                            role="slider"
+                            tabindex="0"
+                            data-thumb-index=(i)
+                            aria-valuenow=(v)
+                            aria-valuemin=(props.min)
+                            aria-valuemax=(props.max)
+                            aria-orientation=(aria_orientation)
+                            aria-label=(props.label)
+                            aria-disabled="true"
+                            style=(thumb_style(to_pct(*v, props.min, props.max), props.orientation)) {}
+                    }
                 }
                 input.mui-slider__native
                     type="range"
@@ -90,17 +193,21 @@ pub fn render(props: Props) -> Markup {
                 }
             }
         } @else {
-            div.mui-slider data-mui="slider" data-min=(props.min) data-max=(props.max) data-step=(props.step) {
+            div class=(root_class) data-mui="slider" data-min=(props.min) data-max=(props.max) data-step=(props.step) data-orientation=(aria_orientation) data-values=[data_values_attr.as_deref()] {
                 div.mui-slider__track {
-                    div.mui-slider__fill style=(format!("width: {}%", pct)) aria-hidden="true" {}
-                    div.mui-slider__thumb
-                        role="slider"
-                        tabindex="0"
-                        aria-valuenow=(props.value)
-                        aria-valuemin=(props.min)
-                        aria-valuemax=(props.max)
-                        aria-label=(props.label)
-                        style=(format!("left: {}%", pct)) {}
+                    div.mui-slider__fill style=(fill_s) aria-hidden="true" {}
+                    @for (i, v) in thumbs.iter().enumerate() {
+                        div.mui-slider__thumb
+                            role="slider"
+                            tabindex="0"
+                            data-thumb-index=(i)
+                            aria-valuenow=(v)
+                            aria-valuemin=(props.min)
+                            aria-valuemax=(props.max)
+                            aria-orientation=(aria_orientation)
+                            aria-label=(props.label)
+                            style=(thumb_style(to_pct(*v, props.min, props.max), props.orientation)) {}
+                    }
                 }
                 input.mui-slider__native
                     type="range"
@@ -166,6 +273,32 @@ pub fn showcase() -> Markup {
                             }
                         }
                     }
+                    div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mui-text-muted);" {
+                        span { "$0" }
+                        span { "$500" }
+                    }
+                }
+            }
+
+            // Range slider — single track, two thumbs (P1 demo)
+            div {
+                p.mui-showcase__caption { "Range slider (two thumbs)" }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:22rem;" {
+                    div style="display:flex;justify-content:space-between;align-items:center;" {
+                        label style="font-size:0.875rem;color:var(--mui-text);font-weight:500;" { "Budget range" }
+                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" { "$120 \u{2014} $360" }
+                    }
+                    (render(Props {
+                        name: "budget-range".into(),
+                        id: "slider-budget-range".into(),
+                        values: vec![120.0, 360.0],
+                        min: 0.0,
+                        max: 500.0,
+                        step: 10.0,
+                        label: "Budget range".into(),
+                        show_value: true,
+                        ..Default::default()
+                    }))
                     div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mui-text-muted);" {
                         span { "$0" }
                         span { "$500" }
@@ -257,6 +390,55 @@ pub fn showcase() -> Markup {
                             path d="m6.34 17.66-1.41 1.41" {}
                             path d="m19.07 4.93-1.41 1.41" {}
                         }
+                    }
+                }
+            }
+
+            // Vertical slider (P2 demo)
+            div {
+                p.mui-showcase__caption { "Vertical slider" }
+                div style="display:flex;align-items:flex-end;gap:1.5rem;" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                        (render(Props {
+                            name: "equalizer-low".into(),
+                            id: "slider-eq-low".into(),
+                            value: 35.0,
+                            min: 0.0,
+                            max: 100.0,
+                            step: 1.0,
+                            label: "Low frequency".into(),
+                            orientation: Orientation::Vertical,
+                            ..Default::default()
+                        }))
+                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "Low" }
+                    }
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                        (render(Props {
+                            name: "equalizer-mid".into(),
+                            id: "slider-eq-mid".into(),
+                            value: 60.0,
+                            min: 0.0,
+                            max: 100.0,
+                            step: 1.0,
+                            label: "Mid frequency".into(),
+                            orientation: Orientation::Vertical,
+                            ..Default::default()
+                        }))
+                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "Mid" }
+                    }
+                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                        (render(Props {
+                            name: "equalizer-high".into(),
+                            id: "slider-eq-high".into(),
+                            value: 80.0,
+                            min: 0.0,
+                            max: 100.0,
+                            step: 1.0,
+                            label: "High frequency".into(),
+                            orientation: Orientation::Vertical,
+                            ..Default::default()
+                        }))
+                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "High" }
                     }
                 }
             }

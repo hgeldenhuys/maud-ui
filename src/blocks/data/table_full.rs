@@ -276,6 +276,7 @@ pub fn render(props: Props) -> Markup {
                                                                 StatusVariant::Danger => badge::Variant::Danger,
                                                                 StatusVariant::Neutral => badge::Variant::Secondary,
                                                             },
+                                                            ..Default::default()
                                                         }))
                                                     }
                                                     RowCell::Markup(m) => { (m) }

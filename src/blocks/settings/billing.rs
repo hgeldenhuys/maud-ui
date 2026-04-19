@@ -184,14 +184,17 @@ pub fn render(props: Props) -> Markup {
                                     InvoiceStatus::Paid => badge::render(badge::Props {
                                         label: "Paid".into(),
                                         variant: badge::Variant::Success,
+                                    ..Default::default()
                                     }),
                                     InvoiceStatus::Pending => badge::render(badge::Props {
                                         label: "Pending".into(),
                                         variant: badge::Variant::Warning,
+                                    ..Default::default()
                                     }),
                                     InvoiceStatus::Failed => badge::render(badge::Props {
                                         label: "Failed".into(),
                                         variant: badge::Variant::Danger,
+                                    ..Default::default()
                                     }),
                                 };
                                 let download = html! {

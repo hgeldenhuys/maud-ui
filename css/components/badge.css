@@ -53,3 +53,28 @@
   border-color: var(--mui-border);
   color: var(--mui-text);
 }
+
+/* Ghost — transparent bg, subtle hover, no border */
+.mui-badge--ghost {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--mui-text);
+}
+.mui-badge--ghost:hover {
+  background-color: var(--mui-bg-input);
+}
+
+/* Link — inline anchor style, no chrome */
+.mui-badge--link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--mui-accent);
+  padding: 0;
+  height: auto;
+  text-decoration: underline;
+}
+
+/* Inline-start icon — ensure gap between icon and label */
+.mui-badge[data-icon="inline-start"] {
+  gap: 0.25rem;
+}

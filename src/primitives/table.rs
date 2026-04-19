@@ -154,6 +154,7 @@ pub fn showcase() -> Markup {
         badge::render(badge::Props {
             label: label.to_string(),
             variant,
+            ..Default::default()
         })
     };
 

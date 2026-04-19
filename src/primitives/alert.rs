@@ -44,6 +44,8 @@ pub struct Props {
     pub variant: Variant,
     /// Whether to show the icon (default true)
     pub icon: bool,
+    /// Optional action slot (shadcn AlertAction) — rendered top-right
+    pub action: Option<Markup>,
 }
 
 impl Default for Props {
@@ -53,6 +55,18 @@ impl Default for Props {
             description: None,
             variant: Variant::Default,
             icon: true,
+            action: None,
+        }
+    }
+}
+
+/// Wrap arbitrary markup in the alert action slot (top-right).
+///
+/// Use together with `Props { action: Some(alert::action(...)), .. }`.
+pub fn action(children: Markup) -> Markup {
+    html! {
+        div class="mui-alert__action" {
+            (children)
         }
     }
 }
@@ -66,15 +80,16 @@ pub fn render(props: Props) -> Markup {
                     (props.variant.icon_char())
                 }
             }
-            div class="mui-alert__content" {
-                div class="mui-alert__title" {
-                    (props.title)
+            div class="mui-alert__title" {
+                (props.title)
+            }
+            @if let Some(desc) = props.description {
+                p class="mui-alert__description" {
+                    (desc)
                 }
-                @if let Some(desc) = props.description {
-                    p class="mui-alert__description" {
-                        (desc)
-                    }
-                }
+            }
+            @if let Some(action_markup) = props.action {
+                (action_markup)
             }
         }
     }
@@ -92,6 +107,7 @@ pub fn showcase() -> Markup {
                         description: Some("Renew by Apr 19 to keep unlimited builds and priority support. After expiry your workspace drops to the Free tier and projects over 3 will be archived.".into()),
                         variant: Variant::Warning,
                         icon: true,
+                        ..Default::default()
                     }))
                 }
             }
@@ -104,6 +120,7 @@ pub fn showcase() -> Markup {
                         description: Some("Backup codes were emailed to invoice@geldentech.ca. Store them somewhere safe — you'll need one if you lose access to your authenticator.".into()),
                         variant: Variant::Success,
                         icon: true,
+                        ..Default::default()
                     }))
                 }
             }
@@ -116,6 +133,7 @@ pub fn showcase() -> Markup {
                         description: Some("Any services using this key will stop working immediately. This action cannot be undone — you'll need to issue a new key and redeploy.".into()),
                         variant: Variant::Danger,
                         icon: true,
+                        ..Default::default()
                     }))
                 }
             }
@@ -128,6 +146,24 @@ pub fn showcase() -> Markup {
                         description: Some("The build pipeline will be paused for roughly 20 minutes. In-flight deploys will resume automatically once maintenance completes.".into()),
                         variant: Variant::Info,
                         icon: true,
+                        ..Default::default()
+                    }))
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "With action — deletion undo" }
+                div.mui-showcase__column {
+                    (render(Props {
+                        title: "Project \"atlas\" was archived".into(),
+                        description: Some("It will be permanently deleted in 30 days. You can restore it from the Trash until then.".into()),
+                        variant: Variant::Default,
+                        icon: true,
+                        action: Some(action(html! {
+                            button type="button" class="mui-button mui-button--ghost mui-button--sm" {
+                                "Undo"
+                            }
+                        })),
                     }))
                 }
             }

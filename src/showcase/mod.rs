@@ -404,6 +404,7 @@ let html = alert::render(alert::Props {
     description: Some("All services are running.".into()),
     variant: alert::Variant::Success,
     icon: true,
+    ..Default::default()
 });"#
         }
         "toast" => {
@@ -1471,10 +1472,10 @@ pub fn theme_customizer_page() -> Markup {
                                             description: None,
                                             children: html! {
                                                 div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted);" {
-                                                    div style="display:flex;justify-content:space-between;" { span { "Build" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success })) }
-                                                    div style="display:flex;justify-content:space-between;" { span { "Tests" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success })) }
-                                                    div style="display:flex;justify-content:space-between;" { span { "Deploy queue" } (badge::render(badge::Props { label: "busy".into(),   variant: badge::Variant::Warning })) }
-                                                    div style="display:flex;justify-content:space-between;" { span { "Canary" }       (badge::render(badge::Props { label: "holding".into(),variant: badge::Variant::Danger })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Build" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Tests" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Deploy queue" } (badge::render(badge::Props { label: "busy".into(),   variant: badge::Variant::Warning, ..Default::default() })) }
+                                                    div style="display:flex;justify-content:space-between;" { span { "Canary" }       (badge::render(badge::Props { label: "holding".into(),variant: badge::Variant::Danger, ..Default::default() })) }
                                                 }
                                             },
                                             footer: None,
@@ -1484,6 +1485,7 @@ pub fn theme_customizer_page() -> Markup {
                                             description: Some("Every component that reads --mui-* tokens \u{2014} from this alert to the minimap on the xyflow page \u{2014} re-renders instantly.".into()),
                                             variant: alert::Variant::Info,
                                             icon: true,
+                                            ..Default::default()
                                         }))
                                     }
                                 }
@@ -2013,10 +2015,10 @@ pub fn getting_started_page() -> Markup {
                                 "58 headless, accessible components for Rust web apps. Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
                             }
                             div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
-                                (badge::render(badge::Props { label: "58 components".into(), variant: badge::Variant::Default }))
-                                (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary }))
-                                (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success }))
-                                (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline }))
+                                (badge::render(badge::Props { label: "58 components".into(), variant: badge::Variant::Default, ..Default::default() }))
+                                (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary, ..Default::default() }))
+                                (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success, ..Default::default() }))
+                                (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline, ..Default::default() }))
                             }
                         }
 

@@ -74,6 +74,7 @@ pub fn render(props: Props) -> Markup {
                                 (badge::render(badge::Props {
                                     label: "Most popular".into(),
                                     variant: badge::Variant::Default,
+                                ..Default::default()
                                 }))
                             }
                         }

@@ -2,13 +2,13 @@
 
 .mui-alert {
   position: relative;
-  display: flex;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5rem 0.75rem;
   padding: 1rem;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
   width: 100%;
-  align-items: flex-start;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--mui-text);
@@ -16,6 +16,9 @@
 }
 
 .mui-alert__icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: start;
   flex-shrink: 0;
   width: 1rem;
   height: 1rem;
@@ -28,15 +31,10 @@
   color: var(--mui-text);
 }
 
-.mui-alert__content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
 .mui-alert__title {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -45,10 +43,22 @@
 }
 
 .mui-alert__description {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--mui-text-muted);
   margin: 0;
+}
+
+.mui-alert__action {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* Default variant — neutral border, foreground text */

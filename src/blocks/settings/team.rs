@@ -171,14 +171,17 @@ pub fn render(props: Props) -> Markup {
                                                 Status::Active => (badge::render(badge::Props {
                                                     label: "Active".into(),
                                                     variant: badge::Variant::Success,
+                                                ..Default::default()
                                                 })),
                                                 Status::Pending => (badge::render(badge::Props {
                                                     label: "Pending".into(),
                                                     variant: badge::Variant::Warning,
+                                                ..Default::default()
                                                 })),
                                                 Status::Suspended => (badge::render(badge::Props {
                                                     label: "Suspended".into(),
                                                     variant: badge::Variant::Secondary,
+                                                ..Default::default()
                                                 })),
                                             }
                                         }

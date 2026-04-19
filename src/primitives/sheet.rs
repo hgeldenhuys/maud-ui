@@ -62,13 +62,13 @@ impl Default for Props {
 }
 
 /// Render a sheet trigger button that opens the sheet with the given target_id.
-/// Reuses the drawer-trigger behaviour since sheets use the same native
-/// `<dialog>` open/close mechanics.
+/// Reuses the dialog-trigger behaviour since sheets use the same native
+/// `<dialog>` open/close mechanics — no dedicated sheet.js needed.
 pub fn trigger(target_id: &str, label: &str) -> Markup {
     html! {
         button type="button"
             class="mui-btn mui-btn--default mui-btn--md"
-            data-mui="sheet-trigger"
+            data-mui="dialog-trigger"
             data-target=(target_id)
         {
             (label)

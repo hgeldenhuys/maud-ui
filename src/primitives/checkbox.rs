@@ -13,6 +13,7 @@ pub struct Props {
     pub indeterminate: bool,
     pub disabled: bool,
     pub required: bool,
+    pub aria_invalid: bool,
 }
 
 impl Default for Props {
@@ -27,6 +28,7 @@ impl Default for Props {
             indeterminate: false,
             disabled: false,
             required: false,
+            aria_invalid: false,
         }
     }
 }
@@ -38,6 +40,12 @@ pub fn render(props: Props) -> Markup {
         ""
     };
 
+    let invalid_class = if props.aria_invalid {
+        " mui-checkbox--invalid"
+    } else {
+        ""
+    };
+
     let indeterminate_class = if props.indeterminate {
         " mui-checkbox__indicator--indeterminate"
     } else {
@@ -45,35 +53,40 @@ pub fn render(props: Props) -> Markup {
     };
 
     let has_desc = props.description.is_some();
+    let aria_invalid_attr = if props.aria_invalid {
+        Some("true")
+    } else {
+        None
+    };
 
     html! {
-        label class=(format!("mui-checkbox{}", disabled_class)) for=(props.id.clone()) {
+        label class=(format!("mui-checkbox{}{}", disabled_class, invalid_class)) for=(props.id.clone()) {
             @if props.checked {
                 @if props.disabled {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked disabled required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] checked disabled required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked disabled;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] checked disabled;
                     }
                 } @else {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] checked required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) checked;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] checked;
                     }
                 }
             } @else {
                 @if props.disabled {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) disabled required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] disabled required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) disabled;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] disabled;
                     }
                 } @else {
                     @if props.required {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) required;
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr] required;
                     } @else {
-                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value);
+                        input type="checkbox" class="mui-checkbox__input" id=(props.id) name=(props.name) value=(props.value) aria-invalid=[aria_invalid_attr];
                     }
                 }
             }
@@ -110,6 +123,7 @@ pub fn showcase() -> Markup {
                         indeterminate: false,
                         disabled: false,
                         required: false,
+                        aria_invalid: false,
                     }))
                     (render(Props {
                         name: "cb-checked".to_string(),
@@ -121,6 +135,7 @@ pub fn showcase() -> Markup {
                         indeterminate: false,
                         disabled: false,
                         required: false,
+                        aria_invalid: false,
                     }))
                     (render(Props {
                         name: "cb-indeterminate".to_string(),
@@ -132,6 +147,7 @@ pub fn showcase() -> Markup {
                         indeterminate: true,
                         disabled: false,
                         required: false,
+                        aria_invalid: false,
                     }))
                     (render(Props {
                         name: "cb-disabled".to_string(),
@@ -143,6 +159,7 @@ pub fn showcase() -> Markup {
                         indeterminate: false,
                         disabled: true,
                         required: false,
+                        aria_invalid: false,
                     }))
                     (render(Props {
                         name: "cb-disabled-checked".to_string(),
@@ -154,6 +171,7 @@ pub fn showcase() -> Markup {
                         indeterminate: false,
                         disabled: true,
                         required: false,
+                        aria_invalid: false,
                     }))
                     (render(Props {
                         name: "cb-with-desc".to_string(),
@@ -165,6 +183,19 @@ pub fn showcase() -> Markup {
                         indeterminate: false,
                         disabled: false,
                         required: false,
+                        aria_invalid: false,
+                    }))
+                    (render(Props {
+                        name: "cb-invalid".to_string(),
+                        value: "on".to_string(),
+                        label: "You must accept to continue".to_string(),
+                        description: Some("This field is required. Please check the box.".to_string()),
+                        id: "cb-invalid".to_string(),
+                        checked: false,
+                        indeterminate: false,
+                        disabled: false,
+                        required: true,
+                        aria_invalid: true,
                     }))
                 }
             }

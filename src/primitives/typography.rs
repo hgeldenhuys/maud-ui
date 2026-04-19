@@ -47,6 +47,45 @@ pub fn blockquote(text: &str) -> Markup {
     html! { blockquote.mui-blockquote { (text) } }
 }
 
+/// Unordered list (disc markers, 1.5rem indent)
+pub fn list_ul(items: Vec<Markup>) -> Markup {
+    html! {
+        ul.mui-typography-list."mui-typography-list--ul" {
+            @for item in &items {
+                li { (item) }
+            }
+        }
+    }
+}
+
+/// Ordered list (decimal markers, 1.5rem indent)
+pub fn list_ol(items: Vec<Markup>) -> Markup {
+    html! {
+        ol.mui-typography-list."mui-typography-list--ol" {
+            @for item in &items {
+                li { (item) }
+            }
+        }
+    }
+}
+
+/// Large text (1.125rem, semibold) — shadcn `<div class="text-lg font-semibold">` equivalent
+pub fn large(text: &str) -> Markup {
+    html! { div.mui-typography-large { (text) } }
+}
+
+/// Small text (0.75rem, medium) — shadcn `<small>` equivalent
+pub fn small(text: &str) -> Markup {
+    html! { small.mui-typography-small { (text) } }
+}
+
+/// Table wrapper (horizontal scroll for narrow viewports) — wrap a `<table>` in this
+pub fn table(children: Markup) -> Markup {
+    html! {
+        div.mui-typography-table-wrapper { (children) }
+    }
+}
+
 /// Showcase all typography elements
 pub fn showcase() -> Markup {
     html! {
@@ -66,7 +105,25 @@ pub fn showcase() -> Markup {
                 div.mui-showcase__column style="gap:0.75rem" {
                     (lead("A lead paragraph is great for intros. It's visually larger and lighter than body text, drawing the eye without shouting."))
                     (p("Regular paragraph text. This is the standard body copy size used throughout the interface for readable content at comfortable line lengths."))
+                    (large("Large text for emphasis or section intros."))
                     (muted("Muted text for secondary information, timestamps, or helper copy."))
+                    (small("Small text for fine print, captions, or metadata."))
+                }
+            }
+
+            div {
+                p.mui-showcase__caption { "Lists" }
+                div.mui-showcase__column style="gap:0.75rem" {
+                    (list_ul(vec![
+                        html! { "First bullet item" },
+                        html! { "Second bullet item" },
+                        html! { "Third bullet item" },
+                    ]))
+                    (list_ol(vec![
+                        html! { "Step one" },
+                        html! { "Step two" },
+                        html! { "Step three" },
+                    ]))
                 }
             }
 
@@ -82,6 +139,33 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Blockquote" }
                 (blockquote("Design is not just what it looks like and feels like. Design is how it works."))
+            }
+
+            div {
+                p.mui-showcase__caption { "Table" }
+                (table(html! {
+                    table style="border-collapse:collapse;width:100%" {
+                        thead {
+                            tr {
+                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Name" }
+                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Role" }
+                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Status" }
+                            }
+                        }
+                        tbody {
+                            tr {
+                                td style="padding:0.5rem" { "Ada Lovelace" }
+                                td style="padding:0.5rem" { "Mathematician" }
+                                td style="padding:0.5rem" { "Active" }
+                            }
+                            tr {
+                                td style="padding:0.5rem" { "Alan Turing" }
+                                td style="padding:0.5rem" { "Cryptanalyst" }
+                                td style="padding:0.5rem" { "Active" }
+                            }
+                        }
+                    }
+                }))
             }
         }
     }

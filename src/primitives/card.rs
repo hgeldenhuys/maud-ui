@@ -152,6 +152,7 @@ pub fn showcase() -> Markup {
                                     checked: false,
                                     disabled: false,
                                     aria_label: Some("Push notifications".into()),
+                                    ..Default::default()
                                 }))
                             }
                             div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
@@ -168,6 +169,7 @@ pub fn showcase() -> Markup {
                                     checked: true,
                                     disabled: false,
                                     aria_label: Some("Email notifications".into()),
+                                    ..Default::default()
                                 }))
                             }
                         }

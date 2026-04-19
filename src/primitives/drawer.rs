@@ -192,6 +192,7 @@ pub fn showcase() -> Markup {
                             checked: true,
                             disabled: false,
                             aria_label: None,
+                            ..Default::default()
                         }))
                         (switch::render(switch::Props {
                             name: "sounds".to_string(),
@@ -200,6 +201,7 @@ pub fn showcase() -> Markup {
                             checked: false,
                             disabled: false,
                             aria_label: None,
+                            ..Default::default()
                         }))
                     }
                 },

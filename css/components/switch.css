@@ -18,6 +18,27 @@
   transition: background-color var(--mui-transition);
 }
 
+/* Size variant: sm — ~73% of default scale */
+.mui-switch--sm {
+  width: 2rem;
+  height: 1.125rem;
+}
+
+.mui-switch--sm .mui-switch__thumb {
+  width: 0.875rem;
+  height: 0.875rem;
+  top: 0.125rem;
+  inset-inline-start: 0.125rem;
+}
+
+.mui-switch--sm[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(0.875rem);
+}
+
+:dir(rtl) .mui-switch--sm[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(-0.875rem);
+}
+
 .mui-switch[aria-checked="true"] {
   background: var(--mui-accent);
 }

@@ -1,5 +1,17 @@
 /* Drawer Component Styles */
 
+/* Optional hook for Vaul-style "scale background" drawers.
+   The drawer renders `data-scale-background="true"` on itself when
+   `props.should_scale_background` is set; a small script can mirror
+   that to `body[data-drawer-scaling]` while the dialog is open to
+   engage this rule. The attribute on its own is the deliverable —
+   this selector is provided as a convenience. */
+body[data-drawer-scaling] main {
+  transform: scale(0.97);
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
+
 dialog.mui-drawer {
   margin: 0;
   padding: 0;

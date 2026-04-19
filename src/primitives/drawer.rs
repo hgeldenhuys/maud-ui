@@ -44,6 +44,14 @@ pub struct Props {
     pub footer: Option<Markup>,
     /// Which side the drawer slides from (default Right)
     pub side: Side,
+    /// Whether the page background should scale down when the drawer opens
+    /// (mirrors Vaul's `shouldScaleBackground`). Emits
+    /// `data-scale-background="true"` on the root so a script/CSS hook can
+    /// toggle `body[data-drawer-scaling]`. Default: false.
+    pub should_scale_background: bool,
+    /// Whether the built-in close (×) button renders in the header.
+    /// Default: true.
+    pub show_close_button: bool,
 }
 
 impl Default for Props {
@@ -55,6 +63,8 @@ impl Default for Props {
             children: html! {},
             footer: None,
             side: Side::Right,
+            should_scale_background: false,
+            show_close_button: true,
         }
     }
 }
@@ -91,11 +101,17 @@ pub fn render(props: Props) -> Markup {
     let desc_id = format!("{}-desc", props.id);
     let has_desc = props.description.is_some();
     let show_handle = matches!(props.side, Side::Bottom | Side::Top);
+    let scale_attr = if props.should_scale_background {
+        Some("true")
+    } else {
+        None
+    };
 
     html! {
         dialog class={"mui-drawer " (props.side.class_name())}
             id=(props.id)
             data-mui="drawer"
+            data-scale-background=[scale_attr]
             aria-labelledby=(title_id)
             aria-describedby=[if has_desc { Some(desc_id.as_str()) } else { None }]
         {
@@ -108,7 +124,9 @@ pub fn render(props: Props) -> Markup {
                 h2 class="mui-drawer__title" id=(title_id) {
                     (props.title)
                 }
-                (close_button("Close"))
+                @if props.show_close_button {
+                    (close_button("Close"))
+                }
             }
             @if let Some(desc) = props.description {
                 p class="mui-drawer__description" id=(desc_id) {
@@ -190,6 +208,7 @@ pub fn showcase() -> Markup {
                     button class="mui-btn mui-btn--primary mui-btn--md" { "Save changes" }
                 }),
                 side: Side::Right,
+                ..Default::default()
             }))
 
             section {
@@ -217,6 +236,7 @@ pub fn showcase() -> Markup {
                 },
                 footer: None,
                 side: Side::Left,
+                ..Default::default()
             }))
 
             section {
@@ -246,6 +266,51 @@ pub fn showcase() -> Markup {
                     button class="mui-btn mui-btn--primary mui-btn--md" { "Send invite" }
                 }),
                 side: Side::Bottom,
+                ..Default::default()
+            }))
+
+            section {
+                h2 { "Scaled background (Vaul-style)" }
+                div.mui-showcase__row {
+                    (trigger("demo-drawer-4", "Open drawer"))
+                }
+            }
+            (render(Props {
+                id: "demo-drawer-4".to_string(),
+                title: "Confirm action".to_string(),
+                description: Some("The page behind scales down while this drawer is open.".to_string()),
+                children: html! {
+                    p { "Renders with " code { "data-scale-background=\"true\"" } " on the dialog root. Pair with a small script that toggles " code { "body[data-drawer-scaling]" } " to get the Vaul scale-down effect." }
+                },
+                footer: Some(html! {
+                    button class="mui-btn mui-btn--default mui-btn--md" data-mui-close { "Cancel" }
+                    button class="mui-btn mui-btn--primary mui-btn--md" { "Confirm" }
+                }),
+                side: Side::Bottom,
+                should_scale_background: true,
+                ..Default::default()
+            }))
+
+            section {
+                h2 { "No close button (footer-only dismiss)" }
+                div.mui-showcase__row {
+                    (trigger("demo-drawer-5", "Open drawer"))
+                }
+            }
+            (render(Props {
+                id: "demo-drawer-5".to_string(),
+                title: "Terms of service".to_string(),
+                description: Some("You must choose an action below to dismiss this drawer.".to_string()),
+                children: html! {
+                    p { "The built-in × close button is hidden when " code { "show_close_button" } " is false. The footer actions are the only way out." }
+                },
+                footer: Some(html! {
+                    button class="mui-btn mui-btn--default mui-btn--md" data-mui-close { "Decline" }
+                    button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Accept" }
+                }),
+                side: Side::Right,
+                show_close_button: false,
+                ..Default::default()
             }))
         }
     }

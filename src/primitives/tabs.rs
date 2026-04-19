@@ -2,11 +2,44 @@
 
 use maud::{html, Markup};
 
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum Orientation {
+    #[default]
+    Horizontal,
+    Vertical,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum Variant {
+    #[default]
+    Default,
+    Line,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum ActivationMode {
+    #[default]
+    Automatic,
+    Manual,
+}
+
 #[derive(Clone, Debug)]
 pub struct Tab {
     pub id: String,
     pub label: String,
     pub content: Markup,
+    pub disabled: bool,
+}
+
+impl Default for Tab {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            label: String::new(),
+            content: html! {},
+            disabled: false,
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -14,6 +47,9 @@ pub struct Props {
     pub tabs: Vec<Tab>,
     pub default_active: usize,
     pub aria_label: String,
+    pub orientation: Orientation,
+    pub variant: Variant,
+    pub activation_mode: ActivationMode,
 }
 
 impl Default for Props {
@@ -22,16 +58,37 @@ impl Default for Props {
             tabs: vec![],
             default_active: 0,
             aria_label: "Tabs".to_string(),
+            orientation: Orientation::default(),
+            variant: Variant::default(),
+            activation_mode: ActivationMode::default(),
         }
     }
 }
 
 pub fn render(props: Props) -> Markup {
+    let root_class = match props.orientation {
+        Orientation::Horizontal => "mui-tabs",
+        Orientation::Vertical => "mui-tabs mui-tabs--vertical",
+    };
+    let list_class = match props.variant {
+        Variant::Default => "mui-tabs__list",
+        Variant::Line => "mui-tabs__list mui-tabs__list--line",
+    };
+    let activation_mode = match props.activation_mode {
+        ActivationMode::Automatic => "automatic",
+        ActivationMode::Manual => "manual",
+    };
+    let is_vertical = matches!(props.orientation, Orientation::Vertical);
+
     html! {
-        div class="mui-tabs" data-mui="tabs" {
-            div class="mui-tabs__list" role="tablist" aria-label=(props.aria_label) {
+        div class=(root_class) data-mui="tabs" data-activation-mode=(activation_mode) {
+            div class=(list_class)
+                role="tablist"
+                aria-label=(props.aria_label)
+                aria-orientation=[if is_vertical { Some("vertical") } else { None }]
+            {
                 @for (i, tab) in props.tabs.iter().enumerate() {
-                    @let is_active = i == props.default_active;
+                    @let is_active = i == props.default_active && !tab.disabled;
                     @let tabindex = if is_active { "0" } else { "-1" };
                     button type="button"
                         class="mui-tabs__trigger"
@@ -39,21 +96,26 @@ pub fn render(props: Props) -> Markup {
                         id=(format!("{}-trigger", tab.id))
                         aria-controls=(format!("{}-panel", tab.id))
                         aria-selected=(if is_active { "true" } else { "false" })
+                        aria-disabled=[if tab.disabled { Some("true") } else { None }]
+                        disabled[tab.disabled]
                         tabindex=(tabindex) {
                         (tab.label)
                     }
                 }
             }
-            @for (i, tab) in props.tabs.iter().enumerate() {
-                @let is_active = i == props.default_active;
-                div class="mui-tabs__panel"
-                    role="tabpanel"
-                    id=(format!("{}-panel", tab.id))
-                    aria-labelledby=(format!("{}-trigger", tab.id))
-                    tabindex="0"
-                    hidden[!is_active]
-                {
-                    (tab.content)
+            div class="mui-tabs__panels" {
+                @for (i, tab) in props.tabs.iter().enumerate() {
+                    @let is_active = i == props.default_active && !tab.disabled;
+                    @let hidden = !is_active;
+                    div class="mui-tabs__panel"
+                        role="tabpanel"
+                        id=(format!("{}-panel", tab.id))
+                        aria-labelledby=(format!("{}-trigger", tab.id))
+                        tabindex=[if !hidden { Some("0") } else { None }]
+                        hidden[hidden]
+                    {
+                        (tab.content)
+                    }
                 }
             }
         }
@@ -112,6 +174,7 @@ pub fn showcase() -> Markup {
                     }
                 }
             },
+            disabled: false,
         },
         Tab {
             id: "password".to_string(),
@@ -161,6 +224,7 @@ pub fn showcase() -> Markup {
                     }
                 }
             },
+            disabled: false,
         },
         Tab {
             id: "team".to_string(),
@@ -189,14 +253,59 @@ pub fn showcase() -> Markup {
                     }
                 }
             },
+            disabled: false,
         },
     ];
 
-    let props = Props {
-        tabs,
-        default_active: 0,
-        aria_label: "Account settings".to_string(),
-    };
+    let default_tabs = tabs.clone();
+    let line_tabs = tabs.clone();
 
-    render(props)
+    let mut vertical_tabs = tabs.clone();
+    // Mark one tab disabled in the vertical demo
+    if let Some(last) = vertical_tabs.last_mut() {
+        last.disabled = true;
+    }
+
+    html! {
+        div style="display:flex;flex-direction:column;gap:2.5rem;" {
+            section {
+                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                    "Default (horizontal, segmented)"
+                }
+                (render(Props {
+                    tabs: default_tabs,
+                    default_active: 0,
+                    aria_label: "Account settings".to_string(),
+                    ..Default::default()
+                }))
+            }
+
+            section {
+                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                    "Line variant (underline)"
+                }
+                (render(Props {
+                    tabs: line_tabs,
+                    default_active: 0,
+                    aria_label: "Account settings (line)".to_string(),
+                    variant: Variant::Line,
+                    ..Default::default()
+                }))
+            }
+
+            section {
+                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                    "Vertical orientation + disabled tab + manual activation"
+                }
+                (render(Props {
+                    tabs: vertical_tabs,
+                    default_active: 0,
+                    aria_label: "Account settings (vertical)".to_string(),
+                    orientation: Orientation::Vertical,
+                    activation_mode: ActivationMode::Manual,
+                    ..Default::default()
+                }))
+            }
+        }
+    }
 }

@@ -21,12 +21,12 @@ const COMPONENTS = [
   "accordion","alert","alert_dialog","aspect_ratio","avatar","badge","breadcrumb",
   "button","button_group","calendar","card","carousel","chart","checkbox",
   "collapsible","combobox","command","context_menu","data_table","date_picker",
-  "dialog","drawer","empty_state","field","fieldset","hover_card","input",
-  "input_group","input_otp","kbd","label","menu","menubar","meter","native_select",
+  "dialog","direction","drawer","empty_state","field","fieldset","hover_card","input",
+  "input_group","input_otp","item","kbd","label","menu","menubar","meter","native_select",
   "navigation_menu","number_field","pagination","popover","progress","radio",
-  "radio_group","resizable","scroll_area","select","separator","skeleton","slider",
-  "spinner","swatch","switch","table","tabs","textarea","toast","toggle","toggle_group",
-  "tooltip","typography",
+  "radio_group","resizable","scroll_area","select","separator","sheet","sidebar",
+  "skeleton","slider","sonner","spinner","swatch","switch","table","tabs","textarea",
+  "toast","toggle","toggle_group","tooltip","typography",
 ];
 
 // Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.

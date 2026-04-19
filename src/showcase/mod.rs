@@ -77,7 +77,10 @@ const TIERS: &[Tier] = &[
             "pagination",
             "resizable",
             "scroll_area",
+            "sidebar",
+            "item",
             "aspect_ratio",
+            "direction",
         ],
     },
     Tier {
@@ -88,10 +91,12 @@ const TIERS: &[Tier] = &[
             "dialog",
             "alert_dialog",
             "drawer",
+            "sheet",
             "popover",
             "tooltip",
             "hover_card",
             "toast",
+            "sonner",
             "alert",
         ],
     },
@@ -152,6 +157,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "data_table",
     "date_picker",
     "dialog",
+    "direction",
     "drawer",
     "empty_state",
     "field",
@@ -160,6 +166,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "input",
     "input_group",
     "input_otp",
+    "item",
     "kbd",
     "label",
     "menu",
@@ -177,8 +184,11 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "scroll_area",
     "select",
     "separator",
+    "sheet",
+    "sidebar",
     "skeleton",
     "slider",
+    "sonner",
     "spinner",
     "swatch",
     "switch",
@@ -966,6 +976,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "data_table" => primitives::data_table::showcase(),
         "date_picker" => primitives::date_picker::showcase(),
         "dialog" => primitives::dialog::showcase(),
+        "direction" => primitives::direction::showcase(),
         "drawer" => primitives::drawer::showcase(),
         "empty_state" => primitives::empty_state::showcase(),
         "field" => primitives::field::showcase(),
@@ -974,6 +985,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "input" => primitives::input::showcase(),
         "input_group" => primitives::input_group::showcase(),
         "input_otp" => primitives::input_otp::showcase(),
+        "item" => primitives::item::showcase(),
         "kbd" => primitives::kbd::showcase(),
         "label" => primitives::label::showcase(),
         "menu" => primitives::menu::showcase(),
@@ -991,8 +1003,11 @@ fn component_content(name: &str) -> Option<Markup> {
         "scroll_area" => primitives::scroll_area::showcase(),
         "select" => primitives::select::showcase(),
         "separator" => primitives::separator::showcase(),
+        "sheet" => primitives::sheet::showcase(),
+        "sidebar" => primitives::sidebar::showcase(),
         "skeleton" => primitives::skeleton::showcase(),
         "slider" => primitives::slider::showcase(),
+        "sonner" => primitives::sonner::showcase(),
         "spinner" => primitives::spinner::showcase(),
         "swatch" => primitives::swatch::showcase(),
         "switch" => primitives::switch::showcase(),
@@ -2013,10 +2028,10 @@ pub fn getting_started_page() -> Markup {
                         section class="mui-gallery__component" id="hero" {
                             h3 class="mui-gallery__component-name" { "Welcome to maud-ui" }
                             p style="font-size:1rem;line-height:1.6;color:var(--mui-text-muted);max-width:42rem;" {
-                                "58 headless, accessible components for Rust web apps. Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
+                                "64 headless, accessible components for Rust web apps. Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
                             }
                             div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
-                                (badge::render(badge::Props { label: "58 components".into(), variant: badge::Variant::Default, ..Default::default() }))
+                                (badge::render(badge::Props { label: "64 components".into(), variant: badge::Variant::Default, ..Default::default() }))
                                 (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary, ..Default::default() }))
                                 (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success, ..Default::default() }))
                                 (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline, ..Default::default() }))

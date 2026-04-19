@@ -1,9 +1,9 @@
 [package]
 name = "maud-ui"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 license = "MIT"
-description = "59 headless, accessible UI components for Rust web apps — plus block templates, a live theme customiser, and shell hooks for 15 third-party widgets (Monaco, xyflow, Excalidraw, Three.js, AG Grid, Leaflet, FullCalendar, SortableJS, and more). Built on maud + htmx, styled like shadcn/ui."
+description = "64 headless, accessible UI components for Rust web apps — shadcn Base UI API parity. Plus block templates, a live theme customiser, and shell hooks for 15 third-party widgets (Monaco, xyflow, Excalidraw, Three.js, AG Grid, Leaflet, FullCalendar, SortableJS, and more). Built on maud + htmx, styled like shadcn/ui."
 repository = "https://github.com/hgeldenhuys/maud-ui"
 homepage = "https://maudui.herman.engineer"
 documentation = "https://docs.rs/maud-ui"

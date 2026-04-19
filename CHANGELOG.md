@@ -5,6 +5,140 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.2.1] — 2026-04-19
+
+### API parity with shadcn Base UI
+
+A broad alignment pass against the 58 shadcn Base UI components at
+`https://ui.shadcn.com/docs/components/base/*`. Additive throughout —
+every change preserves v0.2.0 call sites.
+
+### Added — 5 new primitives (59 → 64)
+
+- **`primitives::sheet`** — slide-out panel with `Side { Top, Right, Bottom, Left }`.
+  Reuses native `<dialog>` semantics; `show_close_button` opt-out.
+- **`primitives::sidebar`** — collapsible app-shell with 20 subcomponent helpers
+  (provider, header, content, footer, group, group_label, group_action, menu,
+  menu_item, menu_button, menu_action, menu_sub, menu_sub_item, menu_badge,
+  menu_skeleton, trigger, rail, inset). `Side`, `SidebarVariant { Sidebar,
+  Floating, Inset }`, `Collapsible { Offcanvas, Icon, None }`. Global `Cmd/Ctrl+B`
+  toggle hotkey.
+- **`primitives::sonner`** — positioned toast viewport with `Position` enum
+  covering all 6 corners. Re-exports `toast::Props/Variant/render` for symmetry.
+  Shared `buildToastNode` refactor in `dist/behaviors/toast.js` bridges both
+  primitives.
+- **`primitives::item`** — composable list-row with media + content + actions
+  slots. `Variant { Default, Outline, Muted }`, `Size { Default, Sm, Xs }`,
+  `MediaVariant { Default, Icon, Image }`. Nine helper fns.
+- **`primitives::direction`** — tiny `<div dir="ltr|rtl">` provider for RTL
+  cascades. No JS.
+
+### Added — 20+ primitives enhanced
+
+- **alert**: `action: Option<Markup>` + `action()` helper (CSS grid top-right slot).
+- **avatar**: `badge()`, `group()`, `group_count(n)` helpers.
+- **badge**: `Variant::Ghost` + `Variant::Link`; `href: Option<String>`;
+  `leading_icon: Option<Markup>` + `data-icon="inline-start"`.
+- **button**: `Size::Xs`, `Size::IconXs`, `Size::IconSm`, `Size::IconLg`;
+  `trailing_icon: Option<Markup>`; `debug_assert!` catches icon-only buttons
+  without `aria_label`.
+- **button_group**: `separator()` + `text()` helpers.
+- **card**: `size: Size { Default, Sm }`; `action: Option<Markup>` +
+  `action()`/`content()`/`footer()` standalone helpers; header switched
+  to 2-col grid.
+- **checkbox**: `aria_invalid: bool`.
+- **combobox**: `multiple`, `auto_highlight`, `show_clear`, `aria_invalid`;
+  new `ComboboxGroup { label, options }` + `groups: Vec<ComboboxGroup>`.
+- **command**: `shortcut()`, `separator()`, `empty(text)` helpers.
+- **dialog**: `show_close_button: bool` (default true), `size: Size`,
+  `aria-modal="true"`.
+- **alert_dialog**: `media: Option<Markup>` + `media()` helper;
+  `size: Size`; `action(label, variant)` + `cancel(label)` helpers.
+- **drawer**: `should_scale_background: bool`, `show_close_button: bool`.
+- **hover_card**: `side: Placement`, `align: Align`.
+- **input**: `aria_describedby: Option<String>`, `InputType::File` variant.
+- **popover**: `side: Side` (4-way), `side_offset`, `open: Option<bool>`,
+  `header()`/`title()`/`description()` helpers.
+- **menu + menubar**: `MenuEntry::CheckboxItem`, `RadioGroup`, `RadioItem`,
+  `Sub`, `Group` — full dropdown-menu surface. Destructive items emit
+  `data-variant="destructive"`.
+- **empty_state**: `compose()`, `header()`, `media(children, variant)`,
+  `title()`, `description()`, `content()`. `MediaVariant { Default, Icon }`.
+- **field**: `orientation: Orientation { Vertical, Horizontal, Responsive }`;
+  `errors: Vec<String>` multi-error; 9 subcomponent helpers (label, description,
+  error, group, legend, fieldset, content, separator, title).
+- **input_group**: `Align { InlineStart, InlineEnd, BlockStart, BlockEnd }`;
+  `addon()`, `button()`, `text()`, `input_el()`, `textarea()` helpers.
+- **select**: `size: Size`, `aria_invalid: bool`; `SelectGroup` + `groups`;
+  `scroll_up_button()`, `scroll_down_button()`, `separator()` helpers.
+- **tabs**: `orientation`, `variant: { Default, Line }`, `activation_mode`,
+  per-tab `disabled`.
+- **slider**: multi-thumb via `values: Vec<f64>`; `orientation: Orientation`.
+- **typography**: `list_ul()`, `list_ol()`, `large()`, `small()`, `table()`.
+- **switch**: `size: Size`, `aria_invalid`, `required`.
+- **tooltip**: `align: Align`, `side_offset`.
+- **toggle**: `Size::Lg`.
+- **pagination**: `href_pattern` anchor mode, `icons_only`, explicit
+  `aria-label="Go to previous/next page"`, ellipsis `aria-hidden="true"`.
+- **toast**: `action(label, onclick)` helper + shadcn-deprecated doc note.
+- **textarea**: `aria_invalid: bool`.
+- **label**: required indicator switched from `aria-hidden` to
+  `aria-label="required"` (actually announced by SRs).
+- **radio_group**: `required: bool`, `variant: { Default, Comfortable, Compact }`.
+- **input_otp**: `pattern: OtpPattern { Digits, DigitsAndChars, Custom(String) }`,
+  `aria_invalid: bool`.
+- **navigation_menu**: `orientation`, `viewport: bool`, `indicator()` helper,
+  `aria-haspopup="true"` on items with submenus.
+- **progress**: `label(text)`, `value(val)` helpers.
+- **data_table**: `column_header(label, sortable)`, `view_options(columns)`,
+  `selectable: bool`.
+- **date_picker**: `Mode { Single, Range }`, `format: Option<String>`.
+- **chart**: `ChartConfigEntry` + `ChartConfig`, `accessibility_layer: bool`.
+- **context_menu**: `destructive_item()` helper, `data-side="inline-end"`
+  for RTL.
+
+### Added — context_menu, command, drawer, menubar a11y
+
+- `aria-modal="true"` on command + drawer dialogs.
+- `aria-orientation` wired on button_group (vertical), context_menu (vertical),
+  menubar (horizontal).
+- `menu` content div back-references trigger via `aria-labelledby`.
+
+### Fixed
+
+- **SECURITY**: `primitives::input::render()` no longer builds HTML via
+  `format!` + `PreEscaped`. All attribute values now auto-escape through
+  maud's `html!` macro — a caller passing user-controlled text via
+  `value`/`name`/`placeholder`/`id` could previously inject a live
+  `<script>` tag. Three unit tests lock this in:
+  `render_escapes_attribute_values`, `aria_describedby_emitted_only_when_some`,
+  `file_variant_renders_type_file`.
+- **accordion**: new optional `aria_label: Option<String>` Prop for
+  top-level SR context.
+- **avatar**: double-announcement bug — when `src: Some`, the outer
+  `<span>` no longer carries `role="img"` + `aria-label={alt}`; the
+  native `<img alt="…">` takes over as the accessible name. Previously
+  SRs announced the name twice.
+- **breadcrumb**: current-page item wraps in
+  `<span role="link" aria-disabled="true" aria-current="page">` for
+  consistent link-like semantics.
+- **carousel**: `aria-live` flips to `"polite"` when `auto_play=true`
+  so SR users hear slide changes.
+- **radio_group**: dropped `role="radiogroup"` from `<fieldset>`
+  (role-on-fieldset anti-pattern); native fieldset+legend carries
+  the grouping semantics.
+
+### Internal
+
+- `ComboboxGroup`, `RadioItem`, `SelectGroup`, `ChartConfigEntry`,
+  `ChartConfig` all newly public.
+- CSS additions live under `css/components/<name>.css`, imported
+  alphabetically from `css/maud-ui.css`.
+- `Props` in most primitives gained `Default` derives (manual where
+  a non-zero default was needed, e.g. `show_close_button: true`).
+  Existing struct-literal callers updated throughout the repo and
+  blocks to use `..Default::default()` spread for forward-compat.
+
 ## [0.2.0] — 2026-04-18
 
 First crates.io release beyond the `0.1.0` first-cut. Summary of

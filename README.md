@@ -1,6 +1,6 @@
 # maud-ui
 
-**59 headless, accessible UI components for Rust web apps — plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**64 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,7 +22,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **59 primitives** — every shadcn/ui component plus some (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **64 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch). v0.2.1 adds Sheet, Sidebar, Sonner, Item, and Direction primitives plus shadcn-parity Props/subcomponent helpers across the existing set.
 - **10 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell. Drop-in page templates.
 - **Live theme customiser** at `/theme` — tweak every `--mui-*` token in the browser, persists to `localStorage`, exports a paste-ready `:root { … }` block. 8 Tailwind-based presets.
 - **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.

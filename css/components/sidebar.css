@@ -81,15 +81,19 @@
   width: var(--mui-sidebar-w, 16rem) !important;
 }
 
-/* Header — padding matches .mui-sidebar-inset__bar so the bottom border
-   lines up perfectly across the nav/content column split. */
+/* Header — fixed height + box-sizing: border-box so the bottom border
+   lines up pixel-perfectly with .mui-sidebar-inset__bar across the
+   nav/content column split. Using height (not min-height) so variable
+   content can never push the row taller than the inset bar. */
 .mui-sidebar__header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--mui-border);
-  min-height: 3rem;
+  height: 3rem;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .mui-sidebar__brand {
   display: flex;
@@ -356,7 +360,9 @@
   gap: 0.75rem;
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--mui-border);
-  min-height: 3rem;
+  height: 3rem;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .mui-sidebar-inset__title {
   font-weight: 600;

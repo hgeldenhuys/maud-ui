@@ -1,4 +1,28 @@
 //! ScrollArea component — custom-styled scrollbar with auto-hide behavior.
+//!
+//! ## Accessibility decision: delegate to native scroll
+//!
+//! The viewport is the real scroll container (it has `overflow: auto`) and is
+//! exposed as a focusable `role="region"` with `aria-label="Scrollable region"`,
+//! which means assistive technology and keyboard users interact with the native
+//! browser scrollbar semantics directly — PageUp/PageDown, arrow keys, scroll
+//! gestures, and AT-driven scrolling all work for free.
+//!
+//! The custom thumb (`.mui-scroll-area__thumb`) is purely a visual decoration
+//! that tracks native scroll position via CSS. We intentionally keep
+//! `aria-hidden="true"` on the scrollbar track rather than promoting it to
+//! `role="scrollbar"` because:
+//!
+//! 1. Our thumb is not draggable / interactive — the native scrollbar is the
+//!    real control. Promoting the decoration to `role="scrollbar"` would
+//!    advertise keyboard/focus semantics the decoration does not implement,
+//!    which is worse than hiding it.
+//! 2. This matches the shadcn Base UI pattern of delegating to native scroll
+//!    whenever the platform offers it, and only synthesizing ARIA scrollbar
+//!    semantics when the component intercepts scroll (e.g. virtualized lists).
+//!
+//! If a future variant virtualizes or intercepts scroll, add a `role="scrollbar"`
+//! path alongside `aria-valuenow` / `aria-valuemin` / `aria-valuemax` wiring.
 use maud::{html, Markup};
 
 /// ScrollArea rendering properties

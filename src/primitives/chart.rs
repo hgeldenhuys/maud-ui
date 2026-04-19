@@ -1,4 +1,19 @@
 //! Chart component — lightweight inline SVG bar and line charts, no JS needed.
+//!
+//! ## shadcn parity notes
+//!
+//! shadcn's `ChartContainer` accepts a `config: ChartConfig` prop — a map of
+//! series-key → `{ label, color, icon }` — that downstream legends/tooltips read.
+//! Our chart is a fundamentally different beast: it renders a single series of
+//! labeled data points directly to SVG and doesn't carry a tooltip/legend layer,
+//! so a full `ChartConfig` map has no consumer here.
+//!
+//! We still expose `config: Option<ChartConfig>` as an **additive, no-op stub**
+//! for API-shape parity — a caller porting from shadcn can pass their existing
+//! config without a compile break, and when/if a legend is added it can read
+//! from this field. `accessibility_layer` is also wired in the shadcn spirit:
+//! emits `data-accessibility-layer="true"` on the container so downstream CSS
+//! or AT hooks can adapt (focus rings, hit-target enlargement, etc.).
 
 use maud::{html, Markup, PreEscaped};
 
@@ -15,6 +30,26 @@ pub enum ChartType {
     Bar,
     Line,
 }
+
+/// A single entry in a [`ChartConfig`] — maps a series key to a label and optional color.
+///
+/// Mirrors shadcn's `ChartConfig[key] = { label, color }` shape. Currently a no-op
+/// stub: the chart renderer does not consume these fields yet. Kept for API parity
+/// and forward compatibility with a future legend/tooltip layer.
+#[derive(Debug, Clone)]
+pub struct ChartConfigEntry {
+    /// Series key — matches a `DataPoint.label` or a dataset identifier.
+    pub key: String,
+    /// Human-readable label shown in legends/tooltips.
+    pub label: String,
+    /// CSS color value (e.g. `"var(--mui-accent)"`, `"#ff0080"`). Optional.
+    pub color: Option<String>,
+}
+
+/// Ordered series-configuration list, analogous to shadcn's `ChartConfig`.
+///
+/// Currently unused by the renderer — see module docs.
+pub type ChartConfig = Vec<ChartConfigEntry>;
 
 /// Chart rendering properties.
 #[derive(Debug, Clone)]
@@ -33,6 +68,13 @@ pub struct Props {
     pub height: u32,
     /// CSS color for bars/line/dots; defaults to var(--mui-accent)
     pub color: Option<String>,
+    /// Optional series configuration (shadcn-parity stub — currently not consumed).
+    /// See module-level docs.
+    pub config: Option<ChartConfig>,
+    /// When true, emits `data-accessibility-layer="true"` on the container so CSS
+    /// or AT hooks can adapt (enlarged hit targets, visible focus rings, etc.).
+    /// Mirrors shadcn's `accessibilityLayer` prop.
+    pub accessibility_layer: bool,
 }
 
 impl Default for Props {
@@ -45,6 +87,8 @@ impl Default for Props {
             width: 400,
             height: 200,
             color: None,
+            config: None,
+            accessibility_layer: false,
         }
     }
 }
@@ -291,8 +335,18 @@ pub fn render(props: Props) -> Markup {
         ChartType::Line => render_line(&props, &color),
     };
 
+    // Reserved for a future legend pass — silences unused-field warnings while
+    // keeping the shadcn-parity API surface additive.
+    let _ = &props.config;
+
+    let a11y_attr = if props.accessibility_layer {
+        Some("true")
+    } else {
+        None
+    };
+
     html! {
-        div.mui-chart id=(props.id) {
+        div.mui-chart id=(props.id) data-accessibility-layer=[a11y_attr] {
             @if let Some(ref title) = props.title {
                 p.mui-chart__title { (title) }
             }
@@ -384,11 +438,23 @@ pub fn showcase() -> Markup {
                 (render(Props {
                     id: "chart-line-wide".into(),
                     chart_type: ChartType::Line,
-                    data: monthly_data,
+                    data: monthly_data.clone(),
                     title: Some("Pageviews Trend (6 months)".into()),
                     width: 600,
                     height: 250,
                     color: Some("var(--mui-warning)".into()),
+                    ..Default::default()
+                }))
+            }
+            div {
+                p.mui-showcase__caption { "Accessibility layer (emits data-accessibility-layer)" }
+                (render(Props {
+                    id: "chart-a11y-demo".into(),
+                    chart_type: ChartType::Bar,
+                    data: monthly_data,
+                    title: Some("Sessions (a11y layer on)".into()),
+                    accessibility_layer: true,
+                    ..Default::default()
                 }))
             }
         }

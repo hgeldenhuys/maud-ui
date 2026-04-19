@@ -73,3 +73,49 @@
 .mui-tooltip__content[hidden] {
   display: none;
 }
+
+/* --- Alignment modifiers ----------------------------------------------- */
+/* For Top/Bottom placements, align shifts horizontally.
+   For Left/Right placements, align shifts vertically. */
+
+/* Align: start — pin to the start edge of the trigger */
+.mui-tooltip__content--top.mui-tooltip__content--align-start,
+.mui-tooltip__content--bottom.mui-tooltip__content--align-start {
+  inset-inline-start: 0;
+  --mui-tooltip-translate: translateX(0);
+}
+
+.mui-tooltip__content--left.mui-tooltip__content--align-start,
+.mui-tooltip__content--right.mui-tooltip__content--align-start {
+  top: 0;
+  --mui-tooltip-translate: translateY(0);
+}
+
+/* Align: center — default behaviour inherited from placement class,
+   included explicitly for specificity parity when composed. */
+.mui-tooltip__content--top.mui-tooltip__content--align-center,
+.mui-tooltip__content--bottom.mui-tooltip__content--align-center {
+  inset-inline-start: 50%;
+  --mui-tooltip-translate: translateX(-50%);
+}
+
+.mui-tooltip__content--left.mui-tooltip__content--align-center,
+.mui-tooltip__content--right.mui-tooltip__content--align-center {
+  top: 50%;
+  --mui-tooltip-translate: translateY(-50%);
+}
+
+/* Align: end — pin to the end edge of the trigger */
+.mui-tooltip__content--top.mui-tooltip__content--align-end,
+.mui-tooltip__content--bottom.mui-tooltip__content--align-end {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+  --mui-tooltip-translate: translateX(0);
+}
+
+.mui-tooltip__content--left.mui-tooltip__content--align-end,
+.mui-tooltip__content--right.mui-tooltip__content--align-end {
+  top: auto;
+  bottom: 0;
+  --mui-tooltip-translate: translateY(0);
+}

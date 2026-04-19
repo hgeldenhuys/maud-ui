@@ -13,12 +13,47 @@ pub struct MenuItem {
     pub shortcut: Option<String>,
 }
 
-/// Menu entry: item, separator, or label
+/// A single radio option inside a [`MenuEntry::RadioGroup`].
+#[derive(Debug, Clone, Default)]
+pub struct RadioItem {
+    pub label: String,
+    pub value: String,
+    pub checked: bool,
+    pub disabled: bool,
+    /// Optional keyboard shortcut displayed on the right (e.g. "⌘1")
+    pub shortcut: Option<String>,
+}
+
+/// Menu entry: item, separator, label, checkbox, radio group, submenu, or group.
+///
+/// Additive — new variants may be added in minor releases. Existing callers
+/// that construct `Item`, `Separator`, or `Label` remain source-compatible.
 #[derive(Debug, Clone)]
 pub enum MenuEntry {
     Item(MenuItem),
     Separator,
     Label(String),
+    /// A menuitemcheckbox with an on/off state.
+    CheckboxItem {
+        label: String,
+        checked: bool,
+        disabled: bool,
+        shortcut: Option<String>,
+    },
+    /// A named radio group wrapping a set of [`RadioItem`]s.
+    RadioGroup {
+        name: String,
+        items: Vec<RadioItem>,
+    },
+    /// A submenu trigger + nested content.
+    Sub {
+        trigger_label: String,
+        items: Vec<MenuEntry>,
+    },
+    /// Generic grouping wrapper (`role="group"`) for related entries.
+    Group {
+        items: Vec<MenuEntry>,
+    },
 }
 
 /// Menu rendering properties
@@ -54,7 +89,7 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
-/// Render a single menu entry (shared between menu and context menu)
+/// Render a single menu entry (shared between menu, menubar, and context menu).
 pub fn render_entry(entry: &MenuEntry) -> Markup {
     html! {
         @match entry {
@@ -65,6 +100,7 @@ pub fn render_entry(entry: &MenuEntry) -> Markup {
                     role="menuitem"
                     class=(cls)
                     data-action=(item.action)
+                    data-variant=[item.destructive.then_some("destructive")]
                     tabindex="-1"
                     disabled[item.disabled]
                 {
@@ -79,6 +115,72 @@ pub fn render_entry(entry: &MenuEntry) -> Markup {
             }
             MenuEntry::Label(text) => {
                 div.mui-menu__label { (text) }
+            }
+            MenuEntry::CheckboxItem { label, checked, disabled, shortcut } => {
+                button
+                    type="button"
+                    role="menuitemcheckbox"
+                    class="mui-menu__item"
+                    aria-checked=(if *checked { "true" } else { "false" })
+                    aria-disabled=(if *disabled { "true" } else { "false" })
+                    tabindex="-1"
+                    disabled[*disabled]
+                {
+                    span.mui-menu__checkbox-indicator aria-hidden="true" {}
+                    (label.clone())
+                    @if let Some(shortcut) = shortcut {
+                        span.mui-menu__shortcut { (shortcut) }
+                    }
+                }
+            }
+            MenuEntry::RadioGroup { name, items } => {
+                div.mui-menu__radio-group role="group" data-radio-group=(name) {
+                    @for item in items {
+                        button
+                            type="button"
+                            role="menuitemradio"
+                            class="mui-menu__item"
+                            aria-checked=(if item.checked { "true" } else { "false" })
+                            aria-disabled=(if item.disabled { "true" } else { "false" })
+                            data-value=(item.value)
+                            data-radio-group=(name)
+                            tabindex="-1"
+                            disabled[item.disabled]
+                        {
+                            span.mui-menu__radio-indicator aria-hidden="true" {}
+                            (item.label.clone())
+                            @if let Some(shortcut) = &item.shortcut {
+                                span.mui-menu__shortcut { (shortcut) }
+                            }
+                        }
+                    }
+                }
+            }
+            MenuEntry::Sub { trigger_label, items } => {
+                div.mui-menu__sub-wrapper {
+                    button
+                        type="button"
+                        role="menuitem"
+                        class="mui-menu__item mui-menu__sub-trigger"
+                        aria-haspopup="menu"
+                        aria-expanded="false"
+                        tabindex="-1"
+                    {
+                        (trigger_label.clone())
+                    }
+                    div.mui-menu__sub role="menu" hidden {
+                        @for inner in items {
+                            (render_entry(inner))
+                        }
+                    }
+                }
+            }
+            MenuEntry::Group { items } => {
+                div.mui-menu__group role="group" {
+                    @for inner in items {
+                        (render_entry(inner))
+                    }
+                }
             }
         }
     }
@@ -174,6 +276,86 @@ pub fn showcase() -> Markup {
                                 destructive: true,
                                 shortcut: None,
                             }),
+                        ],
+                    }))
+                }
+            }
+            div {
+                p.mui-showcase__caption { "View menu — checkbox + radio + submenu" }
+                div.mui-showcase__row {
+                    (render(Props {
+                        trigger_label: "View".into(),
+                        id: "demo-menu-view".into(),
+                        items: vec![
+                            MenuEntry::Label("Appearance".into()),
+                            MenuEntry::CheckboxItem {
+                                label: "Show Bookmarks Bar".into(),
+                                checked: true,
+                                disabled: false,
+                                shortcut: Some("\u{21e7}\u{2318}B".into()),
+                            },
+                            MenuEntry::CheckboxItem {
+                                label: "Show Full URLs".into(),
+                                checked: false,
+                                disabled: false,
+                                shortcut: None,
+                            },
+                            MenuEntry::Separator,
+                            MenuEntry::Label("Panel position".into()),
+                            MenuEntry::RadioGroup {
+                                name: "panel-position".into(),
+                                items: vec![
+                                    RadioItem {
+                                        label: "Top".into(),
+                                        value: "top".into(),
+                                        checked: false,
+                                        disabled: false,
+                                        shortcut: None,
+                                    },
+                                    RadioItem {
+                                        label: "Right".into(),
+                                        value: "right".into(),
+                                        checked: true,
+                                        disabled: false,
+                                        shortcut: None,
+                                    },
+                                    RadioItem {
+                                        label: "Bottom".into(),
+                                        value: "bottom".into(),
+                                        checked: false,
+                                        disabled: false,
+                                        shortcut: None,
+                                    },
+                                ],
+                            },
+                            MenuEntry::Separator,
+                            MenuEntry::Sub {
+                                trigger_label: "More Tools".into(),
+                                items: vec![
+                                    MenuEntry::Item(MenuItem {
+                                        label: "Save Page As\u{2026}".into(),
+                                        action: "save-page".into(),
+                                        disabled: false,
+                                        destructive: false,
+                                        shortcut: Some("\u{2318}S".into()),
+                                    }),
+                                    MenuEntry::Item(MenuItem {
+                                        label: "Create Shortcut\u{2026}".into(),
+                                        action: "create-shortcut".into(),
+                                        disabled: false,
+                                        destructive: false,
+                                        shortcut: None,
+                                    }),
+                                    MenuEntry::Separator,
+                                    MenuEntry::Item(MenuItem {
+                                        label: "Developer Tools".into(),
+                                        action: "devtools".into(),
+                                        disabled: false,
+                                        destructive: false,
+                                        shortcut: Some("\u{2325}\u{2318}I".into()),
+                                    }),
+                                ],
+                            },
                         ],
                     }))
                 }

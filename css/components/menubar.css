@@ -70,7 +70,14 @@
 .mui-menubar__content .mui-menu__item,
 .mui-menubar__content .mui-menu__separator,
 .mui-menubar__content .mui-menu__label,
-.mui-menubar__content .mui-menu__shortcut {
+.mui-menubar__content .mui-menu__shortcut,
+.mui-menubar__content .mui-menu__checkbox-indicator,
+.mui-menubar__content .mui-menu__radio-indicator,
+.mui-menubar__content .mui-menu__radio-group,
+.mui-menubar__content .mui-menu__group,
+.mui-menubar__content .mui-menu__sub-wrapper,
+.mui-menubar__content .mui-menu__sub,
+.mui-menubar__content .mui-menu__sub-trigger {
   /* Inherits all styles from menu.css — no overrides needed */
 }
 

@@ -1,6 +1,6 @@
 //! Menubar component — horizontal menu bar with top-level triggers and dropdown menus
 
-use crate::primitives::menu::{render_entry, MenuEntry, MenuItem};
+use crate::primitives::menu::{render_entry, MenuEntry, MenuItem, RadioItem};
 use maud::{html, Markup};
 
 /// A single menu within the menubar (e.g. "File", "Edit", "View")
@@ -138,20 +138,74 @@ pub fn showcase() -> Markup {
                             MenubarMenu {
                                 label: "View".into(),
                                 items: vec![
-                                    MenuEntry::Item(MenuItem {
-                                        label: "Zoom In".into(),
-                                        action: "zoom-in".into(),
+                                    MenuEntry::CheckboxItem {
+                                        label: "Show Sidebar".into(),
+                                        checked: true,
                                         disabled: false,
-                                        destructive: false,
-                                        shortcut: Some("\u{2318}+".into()),
-                                    }),
-                                    MenuEntry::Item(MenuItem {
-                                        label: "Zoom Out".into(),
-                                        action: "zoom-out".into(),
+                                        shortcut: Some("\u{2318}\\".into()),
+                                    },
+                                    MenuEntry::CheckboxItem {
+                                        label: "Show Status Bar".into(),
+                                        checked: false,
                                         disabled: false,
-                                        destructive: false,
-                                        shortcut: Some("\u{2318}-".into()),
-                                    }),
+                                        shortcut: None,
+                                    },
+                                    MenuEntry::Separator,
+                                    MenuEntry::Label("Theme".into()),
+                                    MenuEntry::RadioGroup {
+                                        name: "theme".into(),
+                                        items: vec![
+                                            RadioItem {
+                                                label: "Light".into(),
+                                                value: "light".into(),
+                                                checked: false,
+                                                disabled: false,
+                                                shortcut: None,
+                                            },
+                                            RadioItem {
+                                                label: "Dark".into(),
+                                                value: "dark".into(),
+                                                checked: true,
+                                                disabled: false,
+                                                shortcut: None,
+                                            },
+                                            RadioItem {
+                                                label: "System".into(),
+                                                value: "system".into(),
+                                                checked: false,
+                                                disabled: false,
+                                                shortcut: None,
+                                            },
+                                        ],
+                                    },
+                                    MenuEntry::Separator,
+                                    MenuEntry::Sub {
+                                        trigger_label: "Zoom".into(),
+                                        items: vec![
+                                            MenuEntry::Item(MenuItem {
+                                                label: "Zoom In".into(),
+                                                action: "zoom-in".into(),
+                                                disabled: false,
+                                                destructive: false,
+                                                shortcut: Some("\u{2318}+".into()),
+                                            }),
+                                            MenuEntry::Item(MenuItem {
+                                                label: "Zoom Out".into(),
+                                                action: "zoom-out".into(),
+                                                disabled: false,
+                                                destructive: false,
+                                                shortcut: Some("\u{2318}-".into()),
+                                            }),
+                                            MenuEntry::Separator,
+                                            MenuEntry::Item(MenuItem {
+                                                label: "Actual Size".into(),
+                                                action: "zoom-reset".into(),
+                                                disabled: false,
+                                                destructive: false,
+                                                shortcut: Some("\u{2318}0".into()),
+                                            }),
+                                        ],
+                                    },
                                     MenuEntry::Separator,
                                     MenuEntry::Item(MenuItem {
                                         label: "Fullscreen".into(),

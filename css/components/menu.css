@@ -132,3 +132,98 @@
   color: var(--mui-text-muted);
   line-height: 1;
 }
+
+/* --- Checkbox indicator (menuitemcheckbox) ----------------------------- */
+
+.mui-menu__checkbox-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--mui-text);
+}
+
+.mui-menu__item[aria-checked="true"] .mui-menu__checkbox-indicator::before {
+  content: "\2713"; /* ✓ */
+}
+
+/* --- Radio indicator (menuitemradio) ----------------------------------- */
+
+.mui-menu__radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.mui-menu__radio-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.mui-menu__item[aria-checked="true"] .mui-menu__radio-indicator::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: currentColor;
+}
+
+/* --- Group wrapper ----------------------------------------------------- */
+
+.mui-menu__group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Submenu (nested content) ------------------------------------------ */
+
+.mui-menu__sub-wrapper {
+  position: relative;
+}
+
+.mui-menu__sub-trigger::after {
+  content: "\203a"; /* › */
+  margin-inline-start: auto;
+  padding-inline-start: 0.75rem;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.mui-menu__sub {
+  position: absolute;
+  top: -0.25rem;
+  inset-inline-start: 100%;
+  min-width: 12rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: 0.25rem;
+  z-index: 51;
+}
+
+.mui-menu__sub[hidden] {
+  display: none;
+}
+
+/* Reveal submenu on hover or when the trigger is expanded via JS */
+.mui-menu__sub-wrapper:hover > .mui-menu__sub,
+.mui-menu__sub-wrapper:focus-within > .mui-menu__sub,
+.mui-menu__sub-trigger[aria-expanded="true"] + .mui-menu__sub {
+  display: block;
+}
+
+/* Flip submenus to the opposite side in RTL contexts (Radix-style data-side) */
+[data-side="inline-end"] .mui-menu__sub {
+  inset-inline-start: auto;
+  inset-inline-end: 100%;
+}

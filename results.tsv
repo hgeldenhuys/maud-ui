@@ -1,0 +1,6 @@
+commit	issue	status	description	timestamp
+85fb27b	add Sheet primitive (P0 #1)	fixed	new src/primitives/sheet.rs + css/components/sheet.css, 360 LOC, shadcn Base UI parity	2026-04-19T02:15:45Z
+ca98d82	add Sidebar primitive (P0 #2)	fixed	new sidebar.rs/css/js, 782 LOC, 20 subcomponent helpers + 3 enums + Cmd/Ctrl+B hotkey	2026-04-19T02:20:08Z
+c113921	add Sonner primitive (P0 #3)	fixed	new sonner.rs/css, refactored toast.js for shared injection, 234 LOC, positioned toast viewport	2026-04-19T02:23:40Z
+4b3095e	add Item primitive (P1)	fixed	new item.rs/css, 9 helper fns, 433 LOC	2026-04-19T02:27:34Z
+fac07dd	add Direction primitive (P1)	fixed	new direction.rs, 85 LOC, dir= provider	2026-04-19T02:27:34Z

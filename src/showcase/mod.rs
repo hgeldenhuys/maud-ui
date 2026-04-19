@@ -1479,6 +1479,7 @@ pub fn theme_customizer_page() -> Markup {
                                                 }
                                             },
                                             footer: None,
+                                            ..Default::default()
                                         }))
                                         (alert::render(alert::Props {
                                             title: "Token changes apply live".into(),

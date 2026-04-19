@@ -1,6 +1,26 @@
 //! Card component — container with optional header, body, and footer.
 use maud::{html, Markup};
 
+/// Card size variant.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Size {
+    /// Default padding (`1.5rem`).
+    #[default]
+    Default,
+    /// Compact card — reduced padding (`0.75rem`).
+    Sm,
+}
+
+impl Size {
+    /// Returns the modifier class for this size, or an empty string for the default.
+    pub fn as_class(self) -> &'static str {
+        match self {
+            Size::Default => "",
+            Size::Sm => "mui-card--sm",
+        }
+    }
+}
+
 /// Card rendering properties
 #[derive(Debug, Clone)]
 pub struct Props {
@@ -12,6 +32,11 @@ pub struct Props {
     pub children: Markup,
     /// Optional footer markup
     pub footer: Option<Markup>,
+    /// Card size modifier.
+    pub size: Size,
+    /// Optional top-right header slot (shadcn `CardAction` equivalent).
+    /// When `Some`, the header becomes a 2-col grid: `(title/description) | (action)`.
+    pub action: Option<Markup>,
 }
 
 impl Default for Props {
@@ -21,24 +46,40 @@ impl Default for Props {
             description: None,
             children: html! {},
             footer: None,
+            size: Size::default(),
+            action: None,
         }
     }
 }
 
-/// Render a card with the given properties
+/// Render a card with the given properties.
 pub fn render(props: Props) -> Markup {
+    let size_class = props.size.as_class();
+    let card_class = if size_class.is_empty() {
+        "mui-card".to_string()
+    } else {
+        format!("mui-card {size_class}")
+    };
+
     html! {
-        div class="mui-card" {
-            @if props.title.is_some() || props.description.is_some() {
+        div class=(card_class) {
+            @if props.title.is_some() || props.description.is_some() || props.action.is_some() {
                 div class="mui-card__header" {
-                    @if let Some(title) = props.title {
-                        h3 class="mui-card__title" {
-                            (title)
+                    div class="mui-card__header-text" {
+                        @if let Some(title) = props.title {
+                            h3 class="mui-card__title" {
+                                (title)
+                            }
+                        }
+                        @if let Some(desc) = props.description {
+                            p class="mui-card__description" {
+                                (desc)
+                            }
                         }
                     }
-                    @if let Some(desc) = props.description {
-                        p class="mui-card__description" {
-                            (desc)
+                    @if let Some(action_markup) = props.action {
+                        div class="mui-card__action" {
+                            (action_markup)
                         }
                     }
                 }
@@ -46,11 +87,39 @@ pub fn render(props: Props) -> Markup {
             div class="mui-card__body" {
                 (props.children)
             }
-            @if let Some(footer) = props.footer {
+            @if let Some(footer_markup) = props.footer {
                 div class="mui-card__footer" {
-                    (footer)
+                    (footer_markup)
                 }
             }
+        }
+    }
+}
+
+/// Standalone header-action helper — renders the top-right action slot. Use when composing a
+/// Card manually (without `render(Props)`), or to pass into `Props::action`.
+pub fn action(children: Markup) -> Markup {
+    html! {
+        div class="mui-card__action" {
+            (children)
+        }
+    }
+}
+
+/// Standalone content helper — renders the card body wrapper.
+pub fn content(children: Markup) -> Markup {
+    html! {
+        div class="mui-card__body" {
+            (children)
+        }
+    }
+}
+
+/// Standalone footer helper — renders the card footer wrapper.
+pub fn footer(children: Markup) -> Markup {
+    html! {
+        div class="mui-card__footer" {
+            (children)
         }
     }
 }
@@ -113,6 +182,7 @@ pub fn showcase() -> Markup {
                             }))
                         }
                     }),
+                    ..Default::default()
                 }))
             }
 
@@ -131,6 +201,7 @@ pub fn showcase() -> Markup {
                         }
                     },
                     footer: None,
+                    ..Default::default()
                 }))
             }
 
@@ -194,6 +265,48 @@ pub fn showcase() -> Markup {
                             }))
                         }
                     }),
+                    ..Default::default()
+                }))
+            }
+
+            // 4. Compact (Sm) card
+            div {
+                p.mui-showcase__caption { "Compact card (size: Sm)" }
+                (render(Props {
+                    title: Some("Storage".into()),
+                    description: Some("6.2 GB of 15 GB used.".into()),
+                    size: Size::Sm,
+                    children: html! {
+                        div style="height:0.5rem;background:var(--mui-border);border-radius:9999px;overflow:hidden;" {
+                            div style="width:41%;height:100%;background:var(--mui-primary, #2563eb);" {}
+                        }
+                    },
+                    ..Default::default()
+                }))
+            }
+
+            // 5. Card with top-right action slot
+            div {
+                p.mui-showcase__caption { "Card with action slot" }
+                (render(Props {
+                    title: Some("Team members".into()),
+                    description: Some("Manage who has access to this project.".into()),
+                    action: Some(html! {
+                        (button::render(button::Props {
+                            label: "Invite".into(),
+                            variant: button::Variant::Outline,
+                            size: button::Size::Sm,
+                            ..Default::default()
+                        }))
+                    }),
+                    children: html! {
+                        ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem;" {
+                            li style="font-size:0.875rem;" { "Alice Johnson — Owner" }
+                            li style="font-size:0.875rem;" { "Bob Smith — Editor" }
+                            li style="font-size:0.875rem;" { "Carol Davis — Viewer" }
+                        }
+                    },
+                    ..Default::default()
                 }))
             }
         }

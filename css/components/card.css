@@ -10,10 +10,19 @@
 }
 
 .mui-card__header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: start;
+  padding: 1.5rem 1.5rem 0;
+}
+
+/* Text column inside the header (title + description). */
+.mui-card__header-text {
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  padding: 1.5rem 1.5rem 0;
+  min-width: 0;
 }
 
 .mui-card__title {
@@ -30,6 +39,17 @@
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--mui-text-muted);
+}
+
+/* Top-right action slot (shadcn CardAction). */
+.mui-card__action {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 .mui-card__body {
@@ -50,4 +70,28 @@
 /* Collapse top padding on footer when body is above */
 .mui-card__body + .mui-card__footer {
   padding-top: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Size: Sm — compact card with reduced padding                        */
+/* ------------------------------------------------------------------ */
+
+.mui-card--sm .mui-card__header {
+  padding: 0.75rem 0.75rem 0;
+}
+
+.mui-card--sm .mui-card__body {
+  padding: 0.75rem;
+}
+
+.mui-card--sm .mui-card__footer {
+  padding: 0 0.75rem 0.75rem;
+}
+
+.mui-card--sm .mui-card__title {
+  font-size: 1.125rem;
+}
+
+.mui-card--sm .mui-card__description {
+  font-size: 0.8125rem;
 }

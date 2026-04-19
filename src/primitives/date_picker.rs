@@ -2,6 +2,17 @@
 //! Self-contained mini calendar (no dependency on calendar.rs which may not be compiled yet).
 use maud::{html, Markup};
 
+/// Selection mode for the date picker.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
+pub enum Mode {
+    /// Single-date selection (default).
+    #[default]
+    Single,
+    /// Range selection (start + end). Actual range-selection interaction is a TODO;
+    /// markup is rendered with a `data-mode="range"` hint.
+    Range,
+}
+
 /// DatePicker rendering properties
 #[derive(Clone, Debug)]
 pub struct Props {
@@ -19,6 +30,13 @@ pub struct Props {
     pub min_date: Option<(u32, u32, u32)>,
     /// Maximum selectable date (year, month, day)
     pub max_date: Option<(u32, u32, u32)>,
+    /// Selection mode — `Single` (default) or `Range`. Range selection UX is a TODO;
+    /// the attribute is emitted on the root element so client scripts can gate behavior.
+    pub mode: Mode,
+    /// Optional display-format token (e.g. `"yyyy-MM-dd"`). When supplied and a date is
+    /// selected, the trigger label is rendered using this format; otherwise the existing
+    /// long-form display (`"April 20, 2026"`) is used.
+    pub format: Option<String>,
 }
 
 impl Default for Props {
@@ -31,8 +49,22 @@ impl Default for Props {
             disabled: false,
             min_date: None,
             max_date: None,
+            mode: Mode::Single,
+            format: None,
         }
     }
+}
+
+/// Format a selected date using a token string. Supports `yyyy`, `MM`, `dd`.
+/// Falls back to the ISO format when token is empty.
+fn format_with_token(year: u32, month: u32, day: u32, token: &str) -> String {
+    if token.is_empty() {
+        return format_iso(year, month, day);
+    }
+    token
+        .replace("yyyy", &format!("{:04}", year))
+        .replace("MM", &format!("{:02}", month))
+        .replace("dd", &format!("{:02}", day))
 }
 
 /// Format a date tuple as human-readable string (e.g., "April 20, 2026")
@@ -169,7 +201,10 @@ fn render_calendar_grid(
 /// Render the date picker
 pub fn render(props: Props) -> Markup {
     let display_text = match props.selected {
-        Some((y, m, d)) => format_display(y, m, d),
+        Some((y, m, d)) => match props.format.as_deref() {
+            Some(token) => format_with_token(y, m, d, token),
+            None => format_display(y, m, d),
+        },
         None => props.placeholder.clone(),
     };
 
@@ -186,8 +221,13 @@ pub fn render(props: Props) -> Markup {
         None => (2026, 4), // Default display month
     };
 
+    let mode_attr = match props.mode {
+        Mode::Single => "single",
+        Mode::Range => "range",
+    };
+
     html! {
-        div class="mui-date-picker" data-mui="date-picker" {
+        div class="mui-date-picker" data-mui="date-picker" data-mode=(mode_attr) {
             @if props.disabled {
                 button type="button" class="mui-date-picker__trigger mui-input"
                     id=(props.id)
@@ -239,6 +279,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         min_date: None,
                         max_date: None,
+                        ..Default::default()
                     }))
                 }
             }
@@ -253,6 +294,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         min_date: None,
                         max_date: None,
+                        ..Default::default()
                     }))
                 }
             }
@@ -267,6 +309,21 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         min_date: None,
                         max_date: None,
+                        ..Default::default()
+                    }))
+                }
+            }
+            div {
+                p.mui-showcase__caption { "Custom format + range mode" }
+                div.mui-showcase__row {
+                    (render(Props {
+                        id: "dp-4".to_string(),
+                        name: "date-4".to_string(),
+                        selected: Some((2026, 4, 18)),
+                        placeholder: "Pick a start date".to_string(),
+                        mode: Mode::Range,
+                        format: Some("yyyy-MM-dd".to_string()),
+                        ..Default::default()
                     }))
                 }
             }

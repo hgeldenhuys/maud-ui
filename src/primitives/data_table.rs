@@ -16,6 +16,9 @@ pub struct Props {
     pub page_size: usize,
     pub searchable: bool,
     pub search_placeholder: String,
+    /// When true, prepend a "Select all" checkbox column with per-row checkboxes.
+    /// Matches shadcn's DataTable row-selection pattern.
+    pub selectable: bool,
 }
 
 impl Default for Props {
@@ -27,6 +30,47 @@ impl Default for Props {
             page_size: 5,
             searchable: false,
             search_placeholder: "Filter...".to_string(),
+            selectable: false,
+        }
+    }
+}
+
+/// Render a single `<th>` for a column header, with sortable chevron + `aria-sort`
+/// when the column is sortable. Matches shadcn's `DataTableColumnHeader`.
+pub fn column_header(label: &str, sortable: bool) -> Markup {
+    html! {
+        @if sortable {
+            th.mui-table__th.mui-data-table__th
+                data-sortable="true"
+                aria-sort="none" {
+                (label)
+                span.mui-data-table__sort-icon {
+                    (PreEscaped(r#"<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>"#))
+                }
+            }
+        } @else {
+            th.mui-table__th.mui-data-table__th
+                data-sortable="false" {
+                (label)
+            }
+        }
+    }
+}
+
+/// Render a "Columns ▾" dropdown trigger stub to toggle column visibility.
+/// Matches shadcn's `DataTableViewOptions` — placeholder implementation,
+/// wiring up actual toggles is deferred.
+pub fn view_options(columns: &[Column]) -> Markup {
+    html! {
+        div.mui-data-table__view-options data-mui="data-table-view-options" {
+            button type="button" class="mui-button mui-button--secondary mui-data-table__view-options-trigger"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                data-column-count=(columns.len())
+            {
+                "Columns "
+                span aria-hidden="true" { "\u{25BE}" }
+            }
         }
     }
 }
@@ -63,6 +107,13 @@ pub fn render(props: Props) -> Markup {
                 table.mui-table.mui-table--hoverable {
                     thead {
                         tr {
+                            @if props.selectable {
+                                th.mui-table__th.mui-data-table__th.mui-data-table__th--select {
+                                    input type="checkbox"
+                                        class="mui-data-table__select-all"
+                                        aria-label="Select all rows";
+                                }
+                            }
                             @for col in &props.columns {
                                 th.mui-table__th.mui-data-table__th
                                     data-key=(col.key)
@@ -89,6 +140,13 @@ pub fn render(props: Props) -> Markup {
                             tr.mui-table__row
                                 data-row-data=(json_row)
                                 hidden[i >= page_size] {
+                                @if props.selectable {
+                                    td.mui-table__td.mui-data-table__td--select {
+                                        input type="checkbox"
+                                            class="mui-data-table__select-row"
+                                            aria-label="Select row";
+                                    }
+                                }
                                 @for cell in row {
                                     td.mui-table__td { (cell) }
                                 }
@@ -201,6 +259,24 @@ pub fn showcase() -> Markup {
         ],
     ];
 
+    // Small demo set for the selectable + view-options showcase row
+    let demo_columns = vec![
+        Column {
+            key: "name".to_string(),
+            label: "Name".to_string(),
+            sortable: true,
+        },
+        Column {
+            key: "role".to_string(),
+            label: "Role".to_string(),
+            sortable: false,
+        },
+    ];
+    let demo_rows = vec![
+        vec!["Alice".to_string(), "Admin".to_string()],
+        vec!["Bob".to_string(), "Editor".to_string()],
+    ];
+
     html! {
         div.mui-showcase__grid {
             div {
@@ -212,7 +288,32 @@ pub fn showcase() -> Markup {
                     page_size: 5,
                     searchable: true,
                     search_placeholder: "Filter invoices...".to_string(),
+                    ..Default::default()
                 }))
+            }
+            div {
+                p.mui-showcase__caption { "Selectable rows + view options" }
+                (view_options(&demo_columns))
+                (render(Props {
+                    id: "selectable-demo".to_string(),
+                    columns: demo_columns,
+                    rows: demo_rows,
+                    page_size: 5,
+                    searchable: false,
+                    search_placeholder: "Filter...".to_string(),
+                    selectable: true,
+                }))
+            }
+            div {
+                p.mui-showcase__caption { "Standalone column_header() helper" }
+                table.mui-table {
+                    thead {
+                        tr {
+                            (column_header("Sortable column", true))
+                            (column_header("Plain column", false))
+                        }
+                    }
+                }
             }
         }
     }

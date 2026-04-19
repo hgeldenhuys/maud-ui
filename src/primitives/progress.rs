@@ -26,6 +26,22 @@ impl Default for Props {
     }
 }
 
+/// Render a `ProgressLabel`-equivalent span. Matches shadcn's `ProgressLabel`
+/// so callers can decorate a progress bar with semantic label text.
+pub fn label(text: &str) -> Markup {
+    html! {
+        span.mui-progress__label { (text) }
+    }
+}
+
+/// Render a `ProgressValue`-equivalent span (prints "{val}%"). Matches
+/// shadcn's `ProgressValue` so callers can display the numeric value.
+pub fn value(val: u32) -> Markup {
+    html! {
+        span.mui-progress__value { (val) "%" }
+    }
+}
+
 /// Render a progress bar with the given properties
 pub fn render(props: Props) -> Markup {
     let pct = if props.max == 0 {
@@ -96,6 +112,23 @@ pub fn showcase() -> Markup {
                         max: 100,
                         label: "Processing request".into(),
                         indeterminate: true,
+                    }))
+                }
+            }
+
+            // Semantic label + value helpers (shadcn ProgressLabel / ProgressValue parity)
+            div {
+                p.mui-showcase__caption { "With label + value helpers" }
+                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                    div style="display:flex;justify-content:space-between;align-items:center" {
+                        (label("Sync status"))
+                        (value(40))
+                    }
+                    (render(Props {
+                        value: 40,
+                        max: 100,
+                        label: "Sync status, 40 percent".into(),
+                        indeterminate: false,
                     }))
                 }
             }

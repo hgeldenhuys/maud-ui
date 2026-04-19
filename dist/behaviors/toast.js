@@ -20,14 +20,9 @@
     setTimeout(() => el.remove(), 200);
   }
 
-  // Imperative API: window.MaudUI.toast({ title, description, variant, duration_ms })
-  window.MaudUI.toast = function (opts) {
-    const viewport = document.getElementById("mui-toast-viewport");
-    if (!viewport) {
-      console.warn("Toast viewport not found. Call maud_ui::primitives::toast::viewport() in your page.");
-      return;
-    }
-
+  // Build a toast node from opts. Shared by the imperative `MaudUI.toast`
+  // and the sonner dispatcher below — keeps creation logic in one place.
+  function buildToastNode(opts) {
     const variant = opts.variant || "info";
     const title = opts.title || "";
     const description = opts.description || "";
@@ -59,11 +54,43 @@
     closeEl.textContent = "×";
     toast.appendChild(closeEl);
 
-    viewport.appendChild(toast);
+    return toast;
+  }
+
+  // Imperative API: window.MaudUI.toast({ title, description, variant, duration_ms })
+  window.MaudUI.toast = function (opts) {
+    const viewport = document.getElementById("mui-toast-viewport");
+    if (!viewport) {
+      console.warn("Toast viewport not found. Call maud_ui::primitives::toast::viewport() in your page.");
+      return;
+    }
+
+    viewport.appendChild(buildToastNode(opts));
 
     // Trigger behavior attachment if MaudUI.init exists
     if (window.MaudUI.init) window.MaudUI.init(viewport);
   };
+
+  // Sonner API: dispatch `mui:sonner-toast` on window (or call
+  // MaudUI.sonner(opts) directly) to inject into the first `.mui-sonner`
+  // viewport on the page. Reuses buildToastNode — no duplicated injection.
+  function dispatchToSonner(opts) {
+    const viewport = document.querySelector(".mui-sonner");
+    if (!viewport) {
+      console.warn("Sonner viewport not found. Call maud_ui::primitives::sonner::viewport(position) in your page.");
+      return;
+    }
+
+    viewport.appendChild(buildToastNode(opts));
+
+    if (window.MaudUI.init) window.MaudUI.init(viewport);
+  }
+
+  window.MaudUI.sonner = dispatchToSonner;
+
+  window.addEventListener("mui:sonner-toast", function (e) {
+    if (e && e.detail) dispatchToSonner(e.detail);
+  });
 
   // Re-init in case DOMContentLoaded already fired
   if (window.MaudUI.init) window.MaudUI.init();

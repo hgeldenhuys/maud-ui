@@ -1,0 +1,61 @@
+/* Sonner — positioned toast viewport.
+   Individual toast cards reuse .mui-toast / .mui-toast--* from toast.css —
+   this file only styles the viewport container and its six anchor modes. */
+
+.mui-sonner {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  z-index: 50;
+  pointer-events: none;
+  max-width: calc(100vw - 2rem);
+}
+
+/* Children (toasts injected by JS) keep their own pointer events. */
+.mui-sonner > .mui-toast {
+  pointer-events: auto;
+}
+
+/* --- Position anchors ------------------------------------------------- */
+
+.mui-sonner[data-position="top-left"] {
+  top: 0;
+  left: 0;
+  flex-direction: column;
+}
+
+.mui-sonner[data-position="top-center"] {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  flex-direction: column;
+}
+
+.mui-sonner[data-position="top-right"] {
+  top: 0;
+  right: 0;
+  flex-direction: column;
+}
+
+.mui-sonner[data-position="bottom-left"] {
+  bottom: 0;
+  left: 0;
+  flex-direction: column-reverse;
+}
+
+.mui-sonner[data-position="bottom-center"] {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.mui-sonner[data-position="bottom-right"] {
+  bottom: 0;
+  right: 0;
+  flex-direction: column-reverse;
+}

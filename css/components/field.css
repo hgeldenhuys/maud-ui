@@ -7,6 +7,32 @@
   max-width: 24rem;
 }
 
+/* Horizontal: label on the left, control + meta on the right */
+.mui-field--horizontal {
+  display: grid;
+  grid-template-columns: minmax(8rem, auto) 1fr;
+  gap: 0.5rem;
+  align-items: start;
+  max-width: 36rem;
+}
+
+/* Responsive: vertical on narrow viewports, horizontal at ≥ 640px */
+.mui-field--responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .mui-field--responsive {
+    display: grid;
+    grid-template-columns: minmax(8rem, auto) 1fr;
+    gap: 0.5rem;
+    align-items: start;
+    max-width: 36rem;
+  }
+}
+
 .mui-field__label {
   font-size: 0.875rem;
   font-weight: 500;
@@ -19,18 +45,52 @@
 }
 
 .mui-field__description {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--mui-text-muted);
-  margin: 0;
+  margin: 0.25rem 0 0;
 }
 
 .mui-field__error {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  color: var(--mui-danger-text);
-  margin: 0;
+  color: var(--mui-danger-text, var(--mui-danger));
+  margin: 0.25rem 0 0;
 }
 
 .mui-field--invalid .mui-field__label {
   color: var(--mui-text);
+}
+
+/* ---- Helper / compose primitives ---- */
+
+.mui-field__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.mui-field__separator {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: 0.5rem 0;
+}
+
+.mui-field__title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--mui-text);
+}
+
+.mui-field__legend {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--mui-text);
+}
+
+.mui-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }

@@ -46,6 +46,7 @@ pub fn showcase() -> Markup {
                             children: html! {
                                 input.mui-input type="text" id="fs-fname" placeholder="John";
                             },
+                            ..Default::default()
                         }))
                         (field::render(field::Props {
                             label: "Last Name".to_string(),
@@ -56,6 +57,7 @@ pub fn showcase() -> Markup {
                             children: html! {
                                 input.mui-input type="text" id="fs-lname" placeholder="Doe";
                             },
+                            ..Default::default()
                         }))
                     },
                 }))
@@ -76,6 +78,7 @@ pub fn showcase() -> Markup {
                             children: html! {
                                 input.mui-input type="email" id="fs-email" placeholder="you@example.com" disabled;
                             },
+                            ..Default::default()
                         }))
                         (field::render(field::Props {
                             label: "Phone".to_string(),
@@ -86,6 +89,7 @@ pub fn showcase() -> Markup {
                             children: html! {
                                 input.mui-input type="tel" id="fs-phone" placeholder="+1 (555) 000-0000" disabled;
                             },
+                            ..Default::default()
                         }))
                     },
                 }))

@@ -12,6 +12,7 @@ pub enum InputType {
     Tel,
     Search,
     Number,
+    File,
 }
 
 impl InputType {
@@ -24,6 +25,7 @@ impl InputType {
             Self::Tel => "tel",
             Self::Search => "search",
             Self::Number => "number",
+            Self::File => "file",
         }
     }
 }
@@ -49,6 +51,8 @@ pub struct Props {
     pub invalid: bool,
     /// Whether the input is readonly
     pub readonly: bool,
+    /// Optional aria-describedby value linking to descriptive text (e.g. hint or error message)
+    pub aria_describedby: Option<String>,
 }
 
 impl Default for Props {
@@ -63,36 +67,40 @@ impl Default for Props {
             required: false,
             invalid: false,
             readonly: false,
+            aria_describedby: None,
         }
     }
 }
 
-/// Render a single input with the given properties
+/// Render a single input with the given properties.
+///
+/// All attribute values are auto-escaped by maud's `html!` macro, so
+/// user-controlled `name`, `placeholder`, `value`, `id`, and
+/// `aria_describedby` strings cannot break out of their attributes.
 pub fn render(props: Props) -> Markup {
-    use maud::PreEscaped;
-
     let input_type = props.input_type.html_type();
-    let mut html_str = format!(
-        r#"<input class="mui-input" type="{}" name="{}" id="{}" placeholder="{}" value="{}""#,
-        input_type, &props.name, &props.id, &props.placeholder, &props.value
-    );
+    let is_file = matches!(props.input_type, InputType::File);
+    let class = if is_file {
+        "mui-input mui-input--file"
+    } else {
+        "mui-input"
+    };
 
-    if props.required {
-        html_str.push_str(" required");
+    html! {
+        input
+            class=(class)
+            type=(input_type)
+            name=(props.name)
+            id=(props.id)
+            placeholder=(props.placeholder)
+            value=(props.value)
+            required[props.required]
+            disabled[props.disabled]
+            readonly[props.readonly]
+            aria-invalid=[props.invalid.then_some("true")]
+            aria-describedby=[props.aria_describedby.as_deref()]
+            {}
     }
-    if props.disabled {
-        html_str.push_str(" disabled");
-    }
-    if props.readonly {
-        html_str.push_str(" readonly");
-    }
-    if props.invalid {
-        html_str.push_str(r#" aria-invalid="true""#);
-    }
-
-    html_str.push_str(" />");
-
-    PreEscaped(html_str).into()
 }
 
 /// Showcase all input types and states
@@ -134,8 +142,25 @@ pub fn showcase() -> Markup {
                             input_type: InputType::Password,
                             placeholder: "At least 8 characters".into(),
                             required: true,
+                            aria_describedby: Some("demo-password-hint".into()),
                             ..Default::default()
                         }))
+                        p id="demo-password-hint" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);margin:0;" {
+                            "Use at least 8 characters with a mix of letters and numbers."
+                        }
+                    }
+                    label style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.875rem;font-weight:500;" {
+                        "Profile Picture"
+                        (render(Props {
+                            name: "avatar".into(),
+                            id: "demo-avatar".into(),
+                            input_type: InputType::File,
+                            aria_describedby: Some("demo-avatar-hint".into()),
+                            ..Default::default()
+                        }))
+                        p id="demo-avatar-hint" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);margin:0;" {
+                            "PNG or JPG, up to 2MB."
+                        }
                     }
                 }
             }
@@ -208,6 +233,14 @@ pub fn showcase() -> Markup {
                             ..Default::default()
                         }))
                     }
+                    div style="display:flex;flex-direction:column;gap:0.25rem;" {
+                        span style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "File" }
+                        (render(Props {
+                            name: "type-file".into(),
+                            input_type: InputType::File,
+                            ..Default::default()
+                        }))
+                    }
                 }
             }
 
@@ -242,9 +275,10 @@ pub fn showcase() -> Markup {
                             invalid: true,
                             value: "not-an-email".into(),
                             input_type: InputType::Email,
+                            aria_describedby: Some("state-invalid-error".into()),
                             ..Default::default()
                         }))
-                        span style="font-size:0.75rem;color:var(--mui-destructive,#ef4444);" { "Please enter a valid email address." }
+                        span id="state-invalid-error" style="font-size:0.75rem;color:var(--mui-destructive,#ef4444);" { "Please enter a valid email address." }
                     }
                     div style="display:flex;flex-direction:column;gap:0.25rem;" {
                         label for="state-disabled" style="font-size:0.75rem;color:var(--mui-muted-fg,#888);" { "Disabled" }
@@ -269,5 +303,75 @@ pub fn showcase() -> Markup {
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Verify maud's html! macro escapes attribute values, closing the XSS hole
+    /// that the prior `format!`-based render() had.
+    #[test]
+    fn render_escapes_attribute_values() {
+        let malicious = r#""><script>alert(1)</script>"#;
+        let markup = render(Props {
+            name: malicious.into(),
+            value: malicious.into(),
+            placeholder: malicious.into(),
+            ..Default::default()
+        });
+        let html = markup.into_string();
+
+        // The raw, un-escaped form must never appear in output.
+        assert!(
+            !html.contains("<script>alert(1)</script>"),
+            "unescaped script tag leaked into attribute output: {html}"
+        );
+        // The escaped form should appear (maud uses &quot; for " and &lt;/&gt; for angle brackets).
+        assert!(
+            html.contains("&lt;script&gt;alert(1)&lt;/script&gt;"),
+            "expected escaped <script> sequence in output, got: {html}"
+        );
+        assert!(
+            html.contains("&quot;"),
+            "expected escaped double-quote in output, got: {html}"
+        );
+    }
+
+    #[test]
+    fn aria_describedby_emitted_only_when_some() {
+        let without = render(Props {
+            name: "x".into(),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(
+            !without.contains("aria-describedby"),
+            "aria-describedby leaked when None: {without}"
+        );
+
+        let with = render(Props {
+            name: "x".into(),
+            aria_describedby: Some("hint-id".into()),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(
+            with.contains(r#"aria-describedby="hint-id""#),
+            "aria-describedby missing when Some: {with}"
+        );
+    }
+
+    #[test]
+    fn file_variant_renders_type_file() {
+        let html = render(Props {
+            name: "avatar".into(),
+            input_type: InputType::File,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(html.contains(r#"type="file""#));
+        assert!(html.contains("mui-input--file"));
     }
 }

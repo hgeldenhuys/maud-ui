@@ -48,3 +48,28 @@
   background: var(--mui-bg-card);
   cursor: default;
 }
+
+/* File input — the native control paints its own padding/button, so strip
+   ours and let it lay out at intrinsic height. */
+.mui-input--file {
+  padding: 0.375rem 0.5rem;
+  height: auto;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.mui-input--file::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  font: inherit;
+  cursor: pointer;
+  transition: var(--mui-transition);
+}
+
+.mui-input--file:hover:not(:disabled)::file-selector-button {
+  border-color: var(--mui-border-hover);
+}

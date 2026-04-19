@@ -1,4 +1,10 @@
 //! Toast component — transient notifications with dismiss and auto-dismiss.
+//!
+//! **Note:** shadcn deprecated the original `toast` primitive in favour of
+//! `sonner` (positioned viewport + richer API). For new call sites prefer
+//! [`super::sonner`], which re-exports this module's [`Props`] / [`Variant`]
+//! / [`render`] and adds a `Position` enum for viewport placement. This
+//! module is retained for back-compat.
 
 use maud::{html, Markup};
 
@@ -88,6 +94,16 @@ pub fn render(props: Props) -> Markup {
                 "×"
             }
         }
+    }
+}
+
+/// Render a ToastAction slot — an inline button callers can embed next to a
+/// toast (e.g. "Undo", "View"). `onclick` is emitted verbatim as the button's
+/// `onclick` attribute, so callers may pass arbitrary JS (e.g.
+/// `"MaudUI.toastDismiss('my-toast-id')"`).
+pub fn action(label: &str, onclick: &str) -> Markup {
+    html! {
+        button type="button" class="mui-toast__action" onclick=(onclick) { (label) }
     }
 }
 
@@ -196,6 +212,16 @@ pub fn showcase() -> Markup {
                         onclick="MaudUI.toast({variant:'danger', title:'Payment failed', description:'Please check your card details and try again.', duration_ms:5000})"
                     {
                         "Error with description"
+                    }
+                }
+
+                p.mui-showcase__caption { "With action slot" }
+                div style="position: static;" {
+                    div class="mui-toast mui-toast--info" role="status" aria-live="polite" {
+                        div.mui-toast__title { "Message archived" }
+                        div.mui-toast__description { "You can restore it from the archive view." }
+                        (action("Undo", "MaudUI.toast({variant:'success', title:'Restored', duration_ms:3000})"))
+                        button type="button" class="mui-toast__close" aria-label="Dismiss" { "×" }
                     }
                 }
             }

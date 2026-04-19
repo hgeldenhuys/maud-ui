@@ -150,6 +150,7 @@ pub fn render(props: Props) -> Markup {
                                 length: props.length,
                                 group_size: if props.length >= 6 { 3 } else { props.length },
                                 disabled: false,
+                                ..Default::default()
                             }))
                         }
 

@@ -18,6 +18,25 @@
   gap: 1rem;
 }
 
+/* Density variants — override the base gap. Applied after orientation
+   modifiers so .mui-radio-group--horizontal.mui-radio-group--compact still
+   lays out as a row, just with tighter spacing. */
+.mui-radio-group--comfortable {
+  gap: 1rem;
+}
+
+.mui-radio-group--comfortable.mui-radio-group--horizontal {
+  gap: 1.5rem;
+}
+
+.mui-radio-group--compact {
+  gap: 0.25rem;
+}
+
+.mui-radio-group--compact.mui-radio-group--horizontal {
+  gap: 0.75rem;
+}
+
 .mui-radio-group__legend {
   font-size: 0.875rem;
   font-weight: 500;

@@ -38,7 +38,7 @@ pub fn render(props: Props) -> Markup {
             label class=(class) for=(html_for) {
                 (props.text)
                 @if props.required {
-                    span.mui-label__required aria-hidden="true" { " *" }
+                    span.mui-label__required aria-label="required" { " *" }
                 }
             }
         }
@@ -47,7 +47,7 @@ pub fn render(props: Props) -> Markup {
             label class=(class) {
                 (props.text)
                 @if props.required {
-                    span.mui-label__required aria-hidden="true" { " *" }
+                    span.mui-label__required aria-label="required" { " *" }
                 }
             }
         }

@@ -41,6 +41,10 @@ pub struct Props {
     pub required: bool,
     /// Whether field shows invalid state
     pub invalid: bool,
+    /// Explicit `aria-invalid="true"` emission. OR'd with `invalid` so either
+    /// field turns on the attribute; exposed separately so form frameworks
+    /// can set just the ARIA bit without triggering invalid styling.
+    pub aria_invalid: bool,
     /// Whether field is read-only
     pub readonly: bool,
     /// Resize behavior
@@ -53,11 +57,12 @@ impl Default for Props {
             name: String::new(),
             placeholder: String::new(),
             value: String::new(),
-            rows: 4,
+            rows: 3,
             id: String::new(),
             disabled: false,
             required: false,
             invalid: false,
+            aria_invalid: false,
             readonly: false,
             resize: Resize::Vertical,
         }
@@ -77,7 +82,7 @@ pub fn render(props: Props) -> Markup {
     if props.readonly {
         attrs.push_str(" readonly");
     }
-    if props.invalid {
+    if props.invalid || props.aria_invalid {
         attrs.push_str(r#" aria-invalid="true""#);
     }
 
@@ -143,6 +148,25 @@ pub fn showcase() -> Markup {
                     }))
                     p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
                         "Tip: mention where you work, what you build, and where folks can find you."
+                    }
+                }
+            }
+
+            // Invalid (aria_invalid) — form framework flagged field
+            section {
+                h2 { "Invalid (aria)" }
+                p.mui-showcase__caption { "Form framework set aria_invalid without styling as hard error." }
+                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:28rem;" {
+                    label for="invalid-notes" style="font-size:0.875rem;font-weight:500;" { "Release notes" }
+                    (render(Props {
+                        name: "release-notes".into(),
+                        id: "invalid-notes".into(),
+                        placeholder: "Summarise what changed".into(),
+                        aria_invalid: true,
+                        ..Default::default()
+                    }))
+                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                        "Screen readers will announce this field as invalid."
                     }
                 }
             }

@@ -74,11 +74,7 @@ pub fn render(props: Props) -> Markup {
     let input_type = props.input_type.html_type();
     let mut html_str = format!(
         r#"<input class="mui-input" type="{}" name="{}" id="{}" placeholder="{}" value="{}""#,
-        input_type,
-        &props.name,
-        &props.id,
-        &props.placeholder,
-        &props.value
+        input_type, &props.name, &props.id, &props.placeholder, &props.value
     );
 
     if props.required {

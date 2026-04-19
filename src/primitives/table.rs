@@ -199,11 +199,36 @@ pub fn showcase() -> Markup {
 
     // Plain rows for the simpler variants
     let plain_rows = vec![
-        vec!["INV001".into(), "Paid".into(), "Credit Card".into(), "$250.00".into()],
-        vec!["INV002".into(), "Pending".into(), "PayPal".into(), "$150.00".into()],
-        vec!["INV003".into(), "Unpaid".into(), "Bank Transfer".into(), "$350.00".into()],
-        vec!["INV004".into(), "Paid".into(), "Credit Card".into(), "$450.00".into()],
-        vec!["INV005".into(), "Paid".into(), "PayPal".into(), "$550.00".into()],
+        vec![
+            "INV001".into(),
+            "Paid".into(),
+            "Credit Card".into(),
+            "$250.00".into(),
+        ],
+        vec![
+            "INV002".into(),
+            "Pending".into(),
+            "PayPal".into(),
+            "$150.00".into(),
+        ],
+        vec![
+            "INV003".into(),
+            "Unpaid".into(),
+            "Bank Transfer".into(),
+            "$350.00".into(),
+        ],
+        vec![
+            "INV004".into(),
+            "Paid".into(),
+            "Credit Card".into(),
+            "$450.00".into(),
+        ],
+        vec![
+            "INV005".into(),
+            "Paid".into(),
+            "PayPal".into(),
+            "$550.00".into(),
+        ],
     ];
 
     html! {

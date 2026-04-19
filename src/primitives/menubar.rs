@@ -1,7 +1,7 @@
 //! Menubar component — horizontal menu bar with top-level triggers and dropdown menus
 
+use crate::primitives::menu::{render_entry, MenuEntry, MenuItem};
 use maud::{html, Markup};
-use crate::primitives::menu::{MenuEntry, MenuItem, render_entry};
 
 /// A single menu within the menubar (e.g. "File", "Edit", "View")
 #[derive(Debug, Clone)]

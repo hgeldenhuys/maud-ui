@@ -69,8 +69,14 @@ pub struct Row {
 pub enum RowCell {
     Text(String),
     /// Two-line cell: primary + secondary text (name + email pattern).
-    Stacked { primary: String, secondary: String },
-    Status { label: String, variant: StatusVariant },
+    Stacked {
+        primary: String,
+        secondary: String,
+    },
+    Status {
+        label: String,
+        variant: StatusVariant,
+    },
     Markup(Markup),
 }
 
@@ -306,11 +312,21 @@ pub fn preview() -> Markup {
         action: "/customers".into(),
         search_value: String::new(),
         columns: vec![
-            Column { label: "Customer".into() },
-            Column { label: "Plan".into() },
-            Column { label: "MRR".into() },
-            Column { label: "Status".into() },
-            Column { label: "Signed up".into() },
+            Column {
+                label: "Customer".into(),
+            },
+            Column {
+                label: "Plan".into(),
+            },
+            Column {
+                label: "MRR".into(),
+            },
+            Column {
+                label: "Status".into(),
+            },
+            Column {
+                label: "Signed up".into(),
+            },
         ],
         filters: vec![
             Filter {
@@ -347,7 +363,10 @@ pub fn preview() -> Markup {
                     },
                     RowCell::Text("Enterprise".into()),
                     RowCell::Text("$2,490".into()),
-                    RowCell::Status { label: "Active".into(), variant: StatusVariant::Success },
+                    RowCell::Status {
+                        label: "Active".into(),
+                        variant: StatusVariant::Success,
+                    },
                     RowCell::Text("Jan 14, 2024".into()),
                 ],
                 view_href: Some("/customers/c-001".into()),
@@ -361,7 +380,10 @@ pub fn preview() -> Markup {
                     },
                     RowCell::Text("Pro".into()),
                     RowCell::Text("$790".into()),
-                    RowCell::Status { label: "Active".into(), variant: StatusVariant::Success },
+                    RowCell::Status {
+                        label: "Active".into(),
+                        variant: StatusVariant::Success,
+                    },
                     RowCell::Text("Mar 02, 2025".into()),
                 ],
                 view_href: Some("/customers/c-002".into()),
@@ -375,7 +397,10 @@ pub fn preview() -> Markup {
                     },
                     RowCell::Text("Pro".into()),
                     RowCell::Text("$790".into()),
-                    RowCell::Status { label: "Past due".into(), variant: StatusVariant::Warning },
+                    RowCell::Status {
+                        label: "Past due".into(),
+                        variant: StatusVariant::Warning,
+                    },
                     RowCell::Text("Apr 11, 2025".into()),
                 ],
                 view_href: Some("/customers/c-003".into()),
@@ -389,7 +414,10 @@ pub fn preview() -> Markup {
                     },
                     RowCell::Text("Starter".into()),
                     RowCell::Text("$0".into()),
-                    RowCell::Status { label: "Trial".into(), variant: StatusVariant::Neutral },
+                    RowCell::Status {
+                        label: "Trial".into(),
+                        variant: StatusVariant::Neutral,
+                    },
                     RowCell::Text("Apr 14, 2026".into()),
                 ],
                 view_href: Some("/customers/c-004".into()),
@@ -403,7 +431,10 @@ pub fn preview() -> Markup {
                     },
                     RowCell::Text("Enterprise".into()),
                     RowCell::Text("$4,990".into()),
-                    RowCell::Status { label: "Churned".into(), variant: StatusVariant::Danger },
+                    RowCell::Status {
+                        label: "Churned".into(),
+                        variant: StatusVariant::Danger,
+                    },
                     RowCell::Text("Jun 22, 2024".into()),
                 ],
                 view_href: Some("/customers/c-005".into()),

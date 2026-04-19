@@ -351,14 +351,12 @@ pub fn preview() -> Markup {
             },
             NavGroup {
                 label: Some("Account".into()),
-                items: vec![
-                    NavItem {
-                        label: "Settings".into(),
-                        href: "/settings".into(),
-                        icon: Some(icon_settings()),
-                        badge: None,
-                    },
-                ],
+                items: vec![NavItem {
+                    label: "Settings".into(),
+                    href: "/settings".into(),
+                    icon: Some(icon_settings()),
+                    badge: None,
+                }],
             },
         ],
         user: Some(UserBlock {

@@ -104,27 +104,81 @@ pub fn render(props: Props) -> Markup {
 
 pub fn showcase() -> Markup {
     let frameworks = vec![
-        ComboboxOption { value: "react".to_string(), label: "React".to_string() },
-        ComboboxOption { value: "vue".to_string(), label: "Vue".to_string() },
-        ComboboxOption { value: "angular".to_string(), label: "Angular".to_string() },
-        ComboboxOption { value: "svelte".to_string(), label: "Svelte".to_string() },
-        ComboboxOption { value: "nextjs".to_string(), label: "Next.js".to_string() },
-        ComboboxOption { value: "nuxt".to_string(), label: "Nuxt".to_string() },
-        ComboboxOption { value: "sveltekit".to_string(), label: "SvelteKit".to_string() },
-        ComboboxOption { value: "remix".to_string(), label: "Remix".to_string() },
-        ComboboxOption { value: "astro".to_string(), label: "Astro".to_string() },
-        ComboboxOption { value: "solid".to_string(), label: "Solid".to_string() },
+        ComboboxOption {
+            value: "react".to_string(),
+            label: "React".to_string(),
+        },
+        ComboboxOption {
+            value: "vue".to_string(),
+            label: "Vue".to_string(),
+        },
+        ComboboxOption {
+            value: "angular".to_string(),
+            label: "Angular".to_string(),
+        },
+        ComboboxOption {
+            value: "svelte".to_string(),
+            label: "Svelte".to_string(),
+        },
+        ComboboxOption {
+            value: "nextjs".to_string(),
+            label: "Next.js".to_string(),
+        },
+        ComboboxOption {
+            value: "nuxt".to_string(),
+            label: "Nuxt".to_string(),
+        },
+        ComboboxOption {
+            value: "sveltekit".to_string(),
+            label: "SvelteKit".to_string(),
+        },
+        ComboboxOption {
+            value: "remix".to_string(),
+            label: "Remix".to_string(),
+        },
+        ComboboxOption {
+            value: "astro".to_string(),
+            label: "Astro".to_string(),
+        },
+        ComboboxOption {
+            value: "solid".to_string(),
+            label: "Solid".to_string(),
+        },
     ];
 
     let team_members = vec![
-        ComboboxOption { value: "alice".to_string(), label: "Alice Johnson".to_string() },
-        ComboboxOption { value: "bob".to_string(), label: "Bob Smith".to_string() },
-        ComboboxOption { value: "carol".to_string(), label: "Carol Williams".to_string() },
-        ComboboxOption { value: "david".to_string(), label: "David Brown".to_string() },
-        ComboboxOption { value: "elena".to_string(), label: "Elena Garcia".to_string() },
-        ComboboxOption { value: "frank".to_string(), label: "Frank Miller".to_string() },
-        ComboboxOption { value: "grace".to_string(), label: "Grace Lee".to_string() },
-        ComboboxOption { value: "henry".to_string(), label: "Henry Chen".to_string() },
+        ComboboxOption {
+            value: "alice".to_string(),
+            label: "Alice Johnson".to_string(),
+        },
+        ComboboxOption {
+            value: "bob".to_string(),
+            label: "Bob Smith".to_string(),
+        },
+        ComboboxOption {
+            value: "carol".to_string(),
+            label: "Carol Williams".to_string(),
+        },
+        ComboboxOption {
+            value: "david".to_string(),
+            label: "David Brown".to_string(),
+        },
+        ComboboxOption {
+            value: "elena".to_string(),
+            label: "Elena Garcia".to_string(),
+        },
+        ComboboxOption {
+            value: "frank".to_string(),
+            label: "Frank Miller".to_string(),
+        },
+        ComboboxOption {
+            value: "grace".to_string(),
+            label: "Grace Lee".to_string(),
+        },
+        ComboboxOption {
+            value: "henry".to_string(),
+            label: "Henry Chen".to_string(),
+        },
     ];
 
     html! {

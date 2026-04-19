@@ -57,7 +57,7 @@ pub fn render(props: Props) -> Markup {
 
 /// Showcase all card use cases
 pub fn showcase() -> Markup {
-    use crate::primitives::{switch, button, input, label, select};
+    use crate::primitives::{button, input, label, select, switch};
 
     html! {
         div.mui-showcase__grid {

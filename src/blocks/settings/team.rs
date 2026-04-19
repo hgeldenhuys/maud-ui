@@ -214,7 +214,12 @@ pub fn render(props: Props) -> Markup {
 pub fn preview() -> Markup {
     render(Props {
         invite_action: "/settings/team/invite".into(),
-        roles: vec!["Owner".into(), "Admin".into(), "Member".into(), "Viewer".into()],
+        roles: vec![
+            "Owner".into(),
+            "Admin".into(),
+            "Member".into(),
+            "Viewer".into(),
+        ],
         members: vec![
             Member {
                 name: "Sofia Davis".into(),

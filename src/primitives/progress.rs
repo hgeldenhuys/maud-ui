@@ -28,7 +28,11 @@ impl Default for Props {
 
 /// Render a progress bar with the given properties
 pub fn render(props: Props) -> Markup {
-    let pct = if props.max == 0 { 0 } else { (props.value * 100) / props.max };
+    let pct = if props.max == 0 {
+        0
+    } else {
+        (props.value * 100) / props.max
+    };
 
     html! {
         @if props.indeterminate {

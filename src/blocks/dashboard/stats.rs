@@ -180,25 +180,37 @@ pub fn preview() -> Markup {
             StatCard {
                 label: "MRR".into(),
                 value: "$42,310".into(),
-                delta: Some(Delta { value: "+12.4%".into(), positive: true }),
+                delta: Some(Delta {
+                    value: "+12.4%".into(),
+                    positive: true,
+                }),
                 hint: Some("vs last month".into()),
             },
             StatCard {
                 label: "New customers".into(),
                 value: "284".into(),
-                delta: Some(Delta { value: "+8.1%".into(), positive: true }),
+                delta: Some(Delta {
+                    value: "+8.1%".into(),
+                    positive: true,
+                }),
                 hint: Some("vs last month".into()),
             },
             StatCard {
                 label: "Active sessions".into(),
                 value: "1,429".into(),
-                delta: Some(Delta { value: "-3.2%".into(), positive: false }),
+                delta: Some(Delta {
+                    value: "-3.2%".into(),
+                    positive: false,
+                }),
                 hint: Some("vs last month".into()),
             },
             StatCard {
                 label: "Churn".into(),
                 value: "2.1%".into(),
-                delta: Some(Delta { value: "-0.4%".into(), positive: true }),
+                delta: Some(Delta {
+                    value: "-0.4%".into(),
+                    positive: true,
+                }),
                 hint: Some("lower is better".into()),
             },
         ],

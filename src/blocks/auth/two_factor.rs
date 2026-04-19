@@ -102,11 +102,17 @@ pub fn render(props: Props) -> Markup {
     let (heading, subheading) = match props.method {
         Method::Email => (
             "Check your email",
-            format!("We sent a {}-digit code to {}.", props.length, props.sent_to),
+            format!(
+                "We sent a {}-digit code to {}.",
+                props.length, props.sent_to
+            ),
         ),
         Method::Sms => (
             "Check your phone",
-            format!("We texted a {}-digit code to {}.", props.length, props.sent_to),
+            format!(
+                "We texted a {}-digit code to {}.",
+                props.length, props.sent_to
+            ),
         ),
         Method::Authenticator => (
             "Two-factor verification",

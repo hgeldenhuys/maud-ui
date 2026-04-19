@@ -61,7 +61,7 @@ pub fn render(props: Props) -> Markup {
 }
 
 pub fn showcase() -> Markup {
-    use crate::primitives::{input, label, button};
+    use crate::primitives::{button, input, label};
 
     let tabs = vec![
         Tab {

@@ -207,7 +207,8 @@ fn code_example(title: &str, code: &str) -> Markup {
 /// Return a usage code example for a component by slug name.
 fn component_docs(name: &str) -> Option<Markup> {
     let code = match name {
-        "button" => r#"use maud_ui::primitives::button;
+        "button" => {
+            r#"use maud_ui::primitives::button;
 
 let html = button::render(button::Props {
     label: "Save changes".into(),
@@ -215,8 +216,10 @@ let html = button::render(button::Props {
     size: button::Size::Md,
     disabled: false,
     button_type: "submit",
-});"#,
-        "input" => r#"use maud_ui::primitives::input;
+});"#
+        }
+        "input" => {
+            r#"use maud_ui::primitives::input;
 
 let html = input::render(input::Props {
     name: "email".into(),
@@ -225,8 +228,10 @@ let html = input::render(input::Props {
     id: "email-field".into(),
     required: true,
     ..Default::default()
-});"#,
-        "textarea" => r#"use maud_ui::primitives::textarea;
+});"#
+        }
+        "textarea" => {
+            r#"use maud_ui::primitives::textarea;
 
 let html = textarea::render(textarea::Props {
     name: "bio".into(),
@@ -235,8 +240,10 @@ let html = textarea::render(textarea::Props {
     id: "bio-field".into(),
     resize: textarea::Resize::Vertical,
     ..Default::default()
-});"#,
-        "checkbox" => r#"use maud_ui::primitives::checkbox;
+});"#
+        }
+        "checkbox" => {
+            r#"use maud_ui::primitives::checkbox;
 
 let html = checkbox::render(checkbox::Props {
     name: "terms".into(),
@@ -245,8 +252,10 @@ let html = checkbox::render(checkbox::Props {
     id: "terms-cb".into(),
     description: Some("Required to continue.".into()),
     ..Default::default()
-});"#,
-        "radio" => r#"use maud_ui::primitives::radio;
+});"#
+        }
+        "radio" => {
+            r#"use maud_ui::primitives::radio;
 
 let html = radio::render(radio::Props {
     name: "plan".into(),
@@ -256,8 +265,10 @@ let html = radio::render(radio::Props {
     checked: true,
     description: Some("Unlimited projects".into()),
     ..Default::default()
-});"#,
-        "select" => r#"use maud_ui::primitives::select;
+});"#
+        }
+        "select" => {
+            r#"use maud_ui::primitives::select;
 
 let html = select::render(select::Props {
     name: "country".into(),
@@ -269,8 +280,10 @@ let html = select::render(select::Props {
         select::SelectOption { value: "gb".into(), label: "United Kingdom".into(), disabled: false },
     ],
     ..Default::default()
-});"#,
-        "switch" => r#"use maud_ui::primitives::switch;
+});"#
+        }
+        "switch" => {
+            r#"use maud_ui::primitives::switch;
 
 let html = switch::render(switch::Props {
     name: "dark-mode".into(),
@@ -278,8 +291,10 @@ let html = switch::render(switch::Props {
     label: "Dark mode".into(),
     checked: true,
     disabled: false,
-});"#,
-        "dialog" => r#"use maud_ui::primitives::dialog;
+});"#
+        }
+        "dialog" => {
+            r#"use maud_ui::primitives::dialog;
 use maud::html;
 
 // Render the trigger button
@@ -295,8 +310,10 @@ let dlg = dialog::render(dialog::Props {
         button.mui-btn.mui-btn--danger.mui-btn--md { "Confirm" }
     }),
     open: false,
-});"#,
-        "tabs" => r#"use maud_ui::primitives::tabs;
+});"#
+        }
+        "tabs" => {
+            r#"use maud_ui::primitives::tabs;
 use maud::html;
 
 let html = tabs::render(tabs::Props {
@@ -306,8 +323,10 @@ let html = tabs::render(tabs::Props {
     ],
     default_active: 0,
     aria_label: "Account tabs".into(),
-});"#,
-        "accordion" => r#"use maud_ui::primitives::accordion;
+});"#
+        }
+        "accordion" => {
+            r#"use maud_ui::primitives::accordion;
 use maud::html;
 
 let html = accordion::render(accordion::Props {
@@ -316,8 +335,10 @@ let html = accordion::render(accordion::Props {
         accordion::Item { id: "faq-2".into(), trigger: "Is it free?".into(), content: html! { p { "Yes, MIT licensed." } }, open: false },
     ],
     multiple: false,
-});"#,
-        "card" => r#"use maud_ui::primitives::card;
+});"#
+        }
+        "card" => {
+            r#"use maud_ui::primitives::card;
 use maud::html;
 
 let html = card::render(card::Props {
@@ -327,8 +348,10 @@ let html = card::render(card::Props {
     footer: Some(html! {
         button.mui-btn.mui-btn--primary.mui-btn--sm { "View details" }
     }),
-});"#,
-        "table" => r#"use maud_ui::primitives::table;
+});"#
+        }
+        "table" => {
+            r#"use maud_ui::primitives::table;
 
 let html = table::render(table::Props {
     headers: vec!["Name".into(), "Role".into(), "Status".into()],
@@ -340,14 +363,18 @@ let html = table::render(table::Props {
     hoverable: true,
     compact: false,
     caption: Some("Team members".into()),
-});"#,
-        "badge" => r#"use maud_ui::primitives::badge;
+});"#
+        }
+        "badge" => {
+            r#"use maud_ui::primitives::badge;
 
 let html = badge::render(badge::Props {
     label: "New".into(),
     variant: badge::Variant::Success,
-});"#,
-        "swatch" => r##"use maud_ui::primitives::swatch;
+});"#
+        }
+        "swatch" => {
+            r##"use maud_ui::primitives::swatch;
 
 // Raw colour — any valid CSS colour string
 let chip = swatch::render(swatch::Props {
@@ -367,16 +394,20 @@ let token = swatch::render(swatch::Props {
 });
 
 // Tailwind-style ramp (50..950)
-let ramp = swatch::render_scale("blue", &swatch::tailwind_ramp("blue"));"##,
-        "alert" => r#"use maud_ui::primitives::alert;
+let ramp = swatch::render_scale("blue", &swatch::tailwind_ramp("blue"));"##
+        }
+        "alert" => {
+            r#"use maud_ui::primitives::alert;
 
 let html = alert::render(alert::Props {
     title: "Deployment complete".into(),
     description: Some("All services are running.".into()),
     variant: alert::Variant::Success,
     icon: true,
-});"#,
-        "toast" => r#"use maud_ui::primitives::toast;
+});"#
+        }
+        "toast" => {
+            r#"use maud_ui::primitives::toast;
 
 // Add the viewport container once in your layout
 let vp = toast::viewport();
@@ -390,8 +421,10 @@ let html = toast::render(toast::Props {
     id: "save-toast".into(),
 });
 
-// Trigger from JS: muiToast({ title, description, variant })"#,
-        "field" => r#"use maud_ui::primitives::field;
+// Trigger from JS: muiToast({ title, description, variant })"#
+        }
+        "field" => {
+            r#"use maud_ui::primitives::field;
 use maud::html;
 
 let html = field::render(field::Props {
@@ -403,8 +436,10 @@ let html = field::render(field::Props {
     children: html! {
         input.mui-input type="email" id="signup-email" name="email" placeholder="you@example.com";
     },
-});"#,
-        "calendar" => r#"use maud_ui::primitives::calendar;
+});"#
+        }
+        "calendar" => {
+            r#"use maud_ui::primitives::calendar;
 
 let html = calendar::render(calendar::Props {
     id: "booking-cal".into(),
@@ -414,8 +449,10 @@ let html = calendar::render(calendar::Props {
     min_date: Some((2026, 4, 1)),
     max_date: Some((2026, 12, 31)),
     show_outside_days: true,
-});"#,
-        "combobox" => r#"use maud_ui::primitives::combobox;
+});"#
+        }
+        "combobox" => {
+            r#"use maud_ui::primitives::combobox;
 
 let html = combobox::render(combobox::Props {
     id: "lang-combo".into(),
@@ -427,8 +464,10 @@ let html = combobox::render(combobox::Props {
         combobox::ComboboxOption { value: "ts".into(), label: "TypeScript".into() },
     ],
     ..Default::default()
-});"#,
-        "menu" => r#"use maud_ui::primitives::menu;
+});"#
+        }
+        "menu" => {
+            r#"use maud_ui::primitives::menu;
 
 let html = menu::render(menu::Props {
     trigger_label: "Actions".into(),
@@ -445,8 +484,10 @@ let html = menu::render(menu::Props {
             disabled: false, destructive: true, shortcut: None,
         }),
     ],
-});"#,
-        "slider" => r#"use maud_ui::primitives::slider;
+});"#
+        }
+        "slider" => {
+            r#"use maud_ui::primitives::slider;
 
 let html = slider::render(slider::Props {
     name: "volume".into(),
@@ -458,21 +499,27 @@ let html = slider::render(slider::Props {
     label: "Volume".into(),
     show_value: true,
     disabled: false,
-});"#,
-        "spinner" => r#"use maud_ui::primitives::spinner;
+});"#
+        }
+        "spinner" => {
+            r#"use maud_ui::primitives::spinner;
 
 let html = spinner::render(spinner::Props {
     size: spinner::Size::Md,
     label: Some("Loading data...".into()),
-});"#,
-        "skeleton" => r#"use maud_ui::primitives::skeleton;
+});"#
+        }
+        "skeleton" => {
+            r#"use maud_ui::primitives::skeleton;
 
 let html = skeleton::render(skeleton::Props {
     variant: skeleton::Variant::Text,
     width: Some("200px".into()),
     height: Some("1rem".into()),
-});"#,
-        "data_table" => r#"use maud_ui::primitives::data_table;
+});"#
+        }
+        "data_table" => {
+            r#"use maud_ui::primitives::data_table;
 
 let html = data_table::render(data_table::Props {
     id: "users-table".into(),
@@ -487,8 +534,10 @@ let html = data_table::render(data_table::Props {
     page_size: 10,
     searchable: true,
     ..Default::default()
-});"#,
-        "date_picker" => r#"use maud_ui::primitives::date_picker;
+});"#
+        }
+        "date_picker" => {
+            r#"use maud_ui::primitives::date_picker;
 
 let html = date_picker::render(date_picker::Props {
     id: "start-date".into(),
@@ -498,8 +547,10 @@ let html = date_picker::render(date_picker::Props {
     disabled: false,
     min_date: Some((2026, 1, 1)),
     max_date: None,
-});"#,
-        "command" => r#"use maud_ui::primitives::command;
+});"#
+        }
+        "command" => {
+            r#"use maud_ui::primitives::command;
 
 // Render the trigger button
 let trigger = command::trigger("cmd-palette", "Command palette");
@@ -512,7 +563,8 @@ let html = command::render(command::Props {
         command::CommandItem { label: "New file".into(), shortcut: Some("Cmd+N".into()), group: Some("File".into()), disabled: false },
         command::CommandItem { label: "Search".into(), shortcut: Some("Cmd+K".into()), group: Some("General".into()), disabled: false },
     ],
-});"#,
+});"#
+        }
         _ => return None,
     };
     Some(code_example("Usage", code))
@@ -642,7 +694,8 @@ fn block_content(slug: &str) -> Option<Markup> {
 /// on each /blocks/{slug} page.
 fn block_docs(slug: &str) -> Option<Markup> {
     let code = match slug {
-        "auth-signup" => r#"use maud_ui::blocks::auth::signup;
+        "auth-signup" => {
+            r#"use maud_ui::blocks::auth::signup;
 
 signup::render(signup::Props {
     action: "/auth/signup".into(),
@@ -656,8 +709,10 @@ signup::render(signup::Props {
     // name_value: submitted_name,
     // error: Some("Email already in use".into()),
     ..Default::default()
-})"#,
-        "dashboard-stats" => r#"use maud_ui::blocks::dashboard::stats;
+})"#
+        }
+        "dashboard-stats" => {
+            r#"use maud_ui::blocks::dashboard::stats;
 
 stats::render(stats::Props {
     title: Some("Overview".into()),
@@ -680,8 +735,10 @@ stats::render(stats::Props {
     ],
     chart: None,         // Some(html! { (chart::render(...)) })
     activity: None,      // Some(vec![ ActivityItem { .. } ])
-})"#,
-        "shell-sidebar" => r#"use maud_ui::blocks::shell::sidebar;
+})"#
+        }
+        "shell-sidebar" => {
+            r#"use maud_ui::blocks::shell::sidebar;
 use maud::html;
 
 sidebar::render(sidebar::Props {
@@ -720,8 +777,10 @@ sidebar::render(sidebar::Props {
         // your route content here
     },
     ..Default::default()
-})"#,
-        "auth-login" => r#"use maud_ui::blocks::auth::login;
+})"#
+        }
+        "auth-login" => {
+            r#"use maud_ui::blocks::auth::login;
 
 login::render(login::Props {
     action: "/auth/login".into(),
@@ -741,7 +800,8 @@ login::render(login::Props {
     // email_value: submitted_email,
     // error: Some("Invalid credentials".into()),
     ..Default::default()
-})"#,
+})"#
+        }
         _ => return None,
     };
     Some(code_example("Usage", code))
@@ -6779,7 +6839,7 @@ fn serde_json_lite_escape(s: &str) -> String {
     out.push('"');
     for c in s.chars() {
         match c {
-            '"'  => out.push_str("\\\""),
+            '"' => out.push_str("\\\""),
             '\\' => out.push_str("\\\\"),
             '\n' => out.push_str("\\n"),
             '\r' => out.push_str("\\r"),
@@ -7740,10 +7800,10 @@ fn palette_index_js() -> String {
     let mut entries: Vec<(String, String, String)> = Vec::new();
     // Top-level routes
     for (label, url, kind) in [
-        ("Gallery home",   "/",                "page"),
-        ("Get started",    "/getting-started", "page"),
-        ("Blocks",         "/blocks",          "page"),
-        ("Theme customiser","/theme",          "page"),
+        ("Gallery home", "/", "page"),
+        ("Get started", "/getting-started", "page"),
+        ("Blocks", "/blocks", "page"),
+        ("Theme customiser", "/theme", "page"),
     ] {
         entries.push((label.to_string(), url.to_string(), kind.to_string()));
     }
@@ -7765,22 +7825,26 @@ fn palette_index_js() -> String {
     // names can differ from the URL path.
     for (slug, label) in [
         ("monaco-editor", "Monaco editor"),
-        ("xyflow",        "xyflow"),
-        ("excalidraw",    "Excalidraw"),
-        ("tiptap",        "TipTap"),
-        ("mermaid",       "Mermaid"),
-        ("cytoscape",     "Cytoscape"),
-        ("threejs",       "Three.js"),
-        ("ag-grid",       "AG Grid"),
-        ("echarts",       "Apache ECharts"),
-        ("leaflet",       "Leaflet"),
-        ("fullcalendar",  "FullCalendar"),
-        ("wavesurfer",    "Wavesurfer"),
-        ("pdfjs",         "PDF.js"),
-        ("xterm",         "xterm.js"),
-        ("sortable",      "SortableJS"),
+        ("xyflow", "xyflow"),
+        ("excalidraw", "Excalidraw"),
+        ("tiptap", "TipTap"),
+        ("mermaid", "Mermaid"),
+        ("cytoscape", "Cytoscape"),
+        ("threejs", "Three.js"),
+        ("ag-grid", "AG Grid"),
+        ("echarts", "Apache ECharts"),
+        ("leaflet", "Leaflet"),
+        ("fullcalendar", "FullCalendar"),
+        ("wavesurfer", "Wavesurfer"),
+        ("pdfjs", "PDF.js"),
+        ("xterm", "xterm.js"),
+        ("sortable", "SortableJS"),
     ] {
-        entries.push((label.to_string(), format!("/integrations/{}", slug), "integration".into()));
+        entries.push((
+            label.to_string(),
+            format!("/integrations/{}", slug),
+            "integration".into(),
+        ));
     }
 
     let json_lines: Vec<String> = entries
@@ -7795,7 +7859,10 @@ fn palette_index_js() -> String {
         })
         .collect();
 
-    format!("window.__MUI_PALETTE__ = [\n{}\n];\n", json_lines.join(",\n"))
+    format!(
+        "window.__MUI_PALETTE__ = [\n{}\n];\n",
+        json_lines.join(",\n")
+    )
 }
 
 fn showcase_js() -> &'static str {

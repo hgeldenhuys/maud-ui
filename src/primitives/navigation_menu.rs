@@ -95,9 +95,7 @@ pub fn showcase() -> Markup {
                 NavLink {
                     label: "Introduction".to_string(),
                     href: "#introduction".to_string(),
-                    description: Some(
-                        "Re-usable components built with maud and CSS.".to_string(),
-                    ),
+                    description: Some("Re-usable components built with maud and CSS.".to_string()),
                 },
                 NavLink {
                     label: "Installation".to_string(),
@@ -109,7 +107,9 @@ pub fn showcase() -> Markup {
                 NavLink {
                     label: "Typography".to_string(),
                     href: "#typography".to_string(),
-                    description: Some("Styles for headings, paragraphs, lists and more.".to_string()),
+                    description: Some(
+                        "Styles for headings, paragraphs, lists and more.".to_string(),
+                    ),
                 },
             ],
         }),
@@ -124,9 +124,7 @@ pub fn showcase() -> Markup {
                 NavLink {
                     label: "Button".to_string(),
                     href: "#button".to_string(),
-                    description: Some(
-                        "Triggers an action or event when clicked.".to_string(),
-                    ),
+                    description: Some("Triggers an action or event when clicked.".to_string()),
                 },
                 NavLink {
                     label: "Card".to_string(),
@@ -141,16 +139,12 @@ pub fn showcase() -> Markup {
                 NavLink {
                     label: "Documentation".to_string(),
                     href: "#documentation".to_string(),
-                    description: Some(
-                        "Full API reference and usage guides.".to_string(),
-                    ),
+                    description: Some("Full API reference and usage guides.".to_string()),
                 },
                 NavLink {
                     label: "Changelog".to_string(),
                     href: "#changelog".to_string(),
-                    description: Some(
-                        "Latest updates and release notes.".to_string(),
-                    ),
+                    description: Some("Latest updates and release notes.".to_string()),
                 },
             ],
         }),

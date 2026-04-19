@@ -42,7 +42,11 @@ fn escape_for_attr(s: &str) -> String {
 
 pub fn render(props: Props) -> Markup {
     let total = props.rows.len();
-    let page_size = if props.page_size == 0 { 5 } else { props.page_size };
+    let page_size = if props.page_size == 0 {
+        5
+    } else {
+        props.page_size
+    };
     let end = std::cmp::min(page_size, total);
     let start = if total == 0 { 0 } else { 1 };
     let has_next = end < total;
@@ -112,23 +116,89 @@ pub fn render(props: Props) -> Markup {
 
 pub fn showcase() -> Markup {
     let columns = vec![
-        Column { key: "invoice".to_string(), label: "Invoice".to_string(), sortable: true },
-        Column { key: "status".to_string(), label: "Status".to_string(), sortable: true },
-        Column { key: "method".to_string(), label: "Method".to_string(), sortable: true },
-        Column { key: "amount".to_string(), label: "Amount".to_string(), sortable: true },
+        Column {
+            key: "invoice".to_string(),
+            label: "Invoice".to_string(),
+            sortable: true,
+        },
+        Column {
+            key: "status".to_string(),
+            label: "Status".to_string(),
+            sortable: true,
+        },
+        Column {
+            key: "method".to_string(),
+            label: "Method".to_string(),
+            sortable: true,
+        },
+        Column {
+            key: "amount".to_string(),
+            label: "Amount".to_string(),
+            sortable: true,
+        },
     ];
 
     let rows = vec![
-        vec!["INV001".to_string(), "Paid".to_string(), "Credit Card".to_string(), "$250.00".to_string()],
-        vec!["INV002".to_string(), "Pending".to_string(), "PayPal".to_string(), "$150.00".to_string()],
-        vec!["INV003".to_string(), "Unpaid".to_string(), "Bank Transfer".to_string(), "$350.00".to_string()],
-        vec!["INV004".to_string(), "Paid".to_string(), "Credit Card".to_string(), "$450.00".to_string()],
-        vec!["INV005".to_string(), "Paid".to_string(), "PayPal".to_string(), "$550.00".to_string()],
-        vec!["INV006".to_string(), "Pending".to_string(), "Bank Transfer".to_string(), "$200.00".to_string()],
-        vec!["INV007".to_string(), "Paid".to_string(), "Credit Card".to_string(), "$300.00".to_string()],
-        vec!["INV008".to_string(), "Unpaid".to_string(), "PayPal".to_string(), "$400.00".to_string()],
-        vec!["INV009".to_string(), "Paid".to_string(), "Bank Transfer".to_string(), "$500.00".to_string()],
-        vec!["INV010".to_string(), "Pending".to_string(), "Credit Card".to_string(), "$275.00".to_string()],
+        vec![
+            "INV001".to_string(),
+            "Paid".to_string(),
+            "Credit Card".to_string(),
+            "$250.00".to_string(),
+        ],
+        vec![
+            "INV002".to_string(),
+            "Pending".to_string(),
+            "PayPal".to_string(),
+            "$150.00".to_string(),
+        ],
+        vec![
+            "INV003".to_string(),
+            "Unpaid".to_string(),
+            "Bank Transfer".to_string(),
+            "$350.00".to_string(),
+        ],
+        vec![
+            "INV004".to_string(),
+            "Paid".to_string(),
+            "Credit Card".to_string(),
+            "$450.00".to_string(),
+        ],
+        vec![
+            "INV005".to_string(),
+            "Paid".to_string(),
+            "PayPal".to_string(),
+            "$550.00".to_string(),
+        ],
+        vec![
+            "INV006".to_string(),
+            "Pending".to_string(),
+            "Bank Transfer".to_string(),
+            "$200.00".to_string(),
+        ],
+        vec![
+            "INV007".to_string(),
+            "Paid".to_string(),
+            "Credit Card".to_string(),
+            "$300.00".to_string(),
+        ],
+        vec![
+            "INV008".to_string(),
+            "Unpaid".to_string(),
+            "PayPal".to_string(),
+            "$400.00".to_string(),
+        ],
+        vec![
+            "INV009".to_string(),
+            "Paid".to_string(),
+            "Bank Transfer".to_string(),
+            "$500.00".to_string(),
+        ],
+        vec![
+            "INV010".to_string(),
+            "Pending".to_string(),
+            "Credit Card".to_string(),
+            "$275.00".to_string(),
+        ],
     ];
 
     html! {

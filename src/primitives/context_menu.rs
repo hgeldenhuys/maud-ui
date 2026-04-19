@@ -1,7 +1,7 @@
 //! Context menu component — right-click menu overlay
 
+use crate::primitives::menu::{render_entry, MenuEntry, MenuItem};
 use maud::{html, Markup};
-use crate::primitives::menu::{MenuEntry, MenuItem, render_entry};
 
 /// Context menu rendering properties
 #[derive(Debug, Clone)]

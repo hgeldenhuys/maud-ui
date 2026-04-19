@@ -36,7 +36,14 @@ impl Default for Props {
 }
 
 /// Determine the zone class based on value, thresholds, and optimum.
-fn zone_class(value: f64, min: f64, max: f64, low: Option<f64>, high: Option<f64>, optimum: Option<f64>) -> &'static str {
+fn zone_class(
+    value: f64,
+    min: f64,
+    max: f64,
+    low: Option<f64>,
+    high: Option<f64>,
+    optimum: Option<f64>,
+) -> &'static str {
     // If no optimum, always optimum
     if optimum.is_none() {
         return "optimum";
@@ -84,7 +91,14 @@ fn zone_class(value: f64, min: f64, max: f64, low: Option<f64>, high: Option<f64
 /// Render a single meter with the given properties
 pub fn render(props: Props) -> Markup {
     let pct = ((props.value - props.min) / (props.max - props.min) * 100.0).clamp(0.0, 100.0);
-    let zone = zone_class(props.value, props.min, props.max, props.low, props.high, props.optimum);
+    let zone = zone_class(
+        props.value,
+        props.min,
+        props.max,
+        props.low,
+        props.high,
+        props.optimum,
+    );
     let width_style = format!("width: {:.1}%", pct);
 
     html! {

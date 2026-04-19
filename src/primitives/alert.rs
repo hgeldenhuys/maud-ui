@@ -24,11 +24,11 @@ impl Variant {
 
     fn icon_char(&self) -> &'static str {
         match self {
-            Self::Default => "\u{25cb}",  // circle
-            Self::Info => "\u{24d8}",     // circled i
-            Self::Success => "\u{2713}",  // checkmark
-            Self::Warning => "\u{26a0}",  // warning triangle
-            Self::Danger => "\u{26a0}",   // warning triangle (destructive)
+            Self::Default => "\u{25cb}", // circle
+            Self::Info => "\u{24d8}",    // circled i
+            Self::Success => "\u{2713}", // checkmark
+            Self::Warning => "\u{26a0}", // warning triangle
+            Self::Danger => "\u{26a0}",  // warning triangle (destructive)
         }
     }
 }

@@ -92,11 +92,7 @@ impl Size {
 }
 
 pub fn render(props: Props) -> Markup {
-    let disabled_attr = if props.disabled {
-        "true"
-    } else {
-        "false"
-    };
+    let disabled_attr = if props.disabled { "true" } else { "false" };
 
     let class = format!(
         "mui-btn {} {}",

@@ -11,9 +11,7 @@ pub struct Props {
 
 impl Default for Props {
     fn default() -> Self {
-        Self {
-            keys: Vec::new(),
-        }
+        Self { keys: Vec::new() }
     }
 }
 

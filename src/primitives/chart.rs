@@ -246,14 +246,8 @@ fn render_line(props: &Props, color: &str) -> String {
             area.push_str(&format!("{x},{y} "));
         }
         // Close back to baseline under last point
-        area.push_str(&format!(
-            "{},{}",
-            points[points.len() - 1].0,
-            baseline_y
-        ));
-        area.push_str(&format!(
-            r#"" fill="url(#{grad_id})" />"#
-        ));
+        area.push_str(&format!("{},{}", points[points.len() - 1].0, baseline_y));
+        area.push_str(&format!(r#"" fill="url(#{grad_id})" />"#));
         svg.push_str(&area);
     }
 
@@ -326,12 +320,30 @@ fn html_escape(s: &str) -> String {
 /// Showcase bar and line charts with sample data.
 pub fn showcase() -> Markup {
     let monthly_data = vec![
-        DataPoint { label: "Jan".into(), value: 186.0 },
-        DataPoint { label: "Feb".into(), value: 305.0 },
-        DataPoint { label: "Mar".into(), value: 237.0 },
-        DataPoint { label: "Apr".into(), value: 73.0 },
-        DataPoint { label: "May".into(), value: 209.0 },
-        DataPoint { label: "Jun".into(), value: 214.0 },
+        DataPoint {
+            label: "Jan".into(),
+            value: 186.0,
+        },
+        DataPoint {
+            label: "Feb".into(),
+            value: 305.0,
+        },
+        DataPoint {
+            label: "Mar".into(),
+            value: 237.0,
+        },
+        DataPoint {
+            label: "Apr".into(),
+            value: 73.0,
+        },
+        DataPoint {
+            label: "May".into(),
+            value: 209.0,
+        },
+        DataPoint {
+            label: "Jun".into(),
+            value: 214.0,
+        },
     ];
 
     html! {

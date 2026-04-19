@@ -5,6 +5,38 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [Unreleased] — gallery polish after v0.2.1 publish
+
+These commits land in the repo but do **not** change the published
+`maud-ui` crate — they only affect the live gallery at
+`https://maudui.herman.engineer/`. Consumers on crates.io are unaffected.
+
+### Added
+- Five new primitives (Sheet / Sidebar / Sonner / Item / Direction)
+  registered in the showcase gallery — new `TIERS` entries, palette
+  entries, match arms, and static-export slugs. Live at
+  `maudui.herman.engineer/{sheet,sidebar,sonner,item,direction}`.
+- `/sidebar` showcase got a meaningful demo: leading icons on every
+  menu item (so icon-collapsed mode renders icons, not empty squares),
+  a `.mui-sidebar-showcase` wrapper that caps height at 480px so the
+  demo sits inside the gallery card instead of filling `100dvh`, and
+  a 3-tile stats panel in the inset body to represent real app
+  content rather than placeholder text.
+- Component count bumped 58 → 64 in banner text and
+  `COMPONENT_NAMES.len()` drives the nav badge dynamically.
+
+### Fixed
+- `/sheet` "Open sheet" button did nothing — Sheet's trigger() emitted
+  `data-mui="sheet-trigger"` for which no behaviour was registered.
+  Fixed by emitting `data-mui="dialog-trigger"` (target is a native
+  `<dialog>`, so the existing dialog-trigger handler works).
+- `/sidebar` Cmd/Ctrl+B and trigger-click did nothing — `dist/behaviors/sidebar.js`
+  existed on disk but `dist/maud-ui.min.js` had been bundled before the
+  file was added. Fixed by rebuilding the bundle (`bun run build`).
+- `/sonner` position picker + "fire toast" button did nothing — the
+  sonner-toast CustomEvent bridge lived in `dist/behaviors/toast.js`
+  but hadn't been rebuilt into the bundle either. Same fix.
+
 ## [0.2.1] — 2026-04-19
 
 ### API parity with shadcn Base UI

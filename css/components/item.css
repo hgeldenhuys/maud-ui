@@ -1,0 +1,167 @@
+/* Item component — media + content + actions list row. Sibling to
+   EmptyState. Three variants (default / outline / muted), three densities
+   (default / sm / xs), and a media sub-variant (default / icon / image). */
+
+.mui-item-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mui-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--mui-radius-md);
+  background: transparent;
+  color: var(--mui-text);
+  /* Allow header/footer rows to stack above/below the media+content flex row */
+  flex-wrap: wrap;
+}
+
+.mui-item--default {
+  /* No frame — inherits background from the surrounding surface. */
+}
+
+.mui-item--outline {
+  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-card);
+}
+
+.mui-item--muted {
+  background: var(--mui-bg-input);
+}
+
+/* Density */
+.mui-item--sm {
+  padding: 0.5rem;
+  gap: 0.5rem;
+}
+
+.mui-item--xs {
+  padding: 0.25rem 0.5rem;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+}
+
+/* Media slot */
+.mui-item__media {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mui-text-muted);
+}
+
+.mui-item__media--default {
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.mui-item__media--icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.mui-item__media--image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+}
+
+.mui-item__media--image > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Content stack */
+.mui-item__content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0; /* allow text truncation inside */
+}
+
+.mui-item__title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--mui-text);
+  /* Truncate single-line overflow cleanly */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mui-item__description {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--mui-text-muted);
+  /* Clamp to 2 lines where supported */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Actions trail */
+.mui-item__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+/* Optional header / footer strips */
+.mui-item__header,
+.mui-item__footer {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+}
+
+.mui-item__header {
+  margin-bottom: 0.125rem;
+}
+
+.mui-item__footer {
+  margin-top: 0.125rem;
+}
+
+/* Separator between items in a group */
+.mui-item__separator {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: 0.25rem 0;
+  width: 100%;
+}
+
+/* XS variant tightens typography */
+.mui-item--xs .mui-item__title {
+  font-size: 0.8125rem;
+}
+
+.mui-item--xs .mui-item__description {
+  font-size: 0.75rem;
+}
+
+/* Hover affordance on outline rows (mirrors the subtle bg lift used
+   across other interactive primitives). */
+.mui-item--outline:hover {
+  border-color: var(--mui-border-hover);
+}

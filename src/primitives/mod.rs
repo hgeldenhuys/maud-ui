@@ -29,6 +29,7 @@ pub mod hover_card;
 pub mod input;
 pub mod input_group;
 pub mod input_otp;
+pub mod item;
 pub mod kbd;
 pub mod label;
 pub mod menu;

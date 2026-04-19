@@ -8,6 +8,14 @@
   padding: 3rem 2rem;
 }
 
+/* Header slot — groups media + title + description (shadcn EmptyHeader) */
+.mui-empty-state__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 .mui-empty-state__icon {
   font-size: 3rem;
   margin-bottom: 1.25rem;
@@ -17,6 +25,19 @@
   color: var(--mui-text-subtle);
   opacity: 0.6;
   line-height: 1;
+}
+
+/* MediaVariant::Default — larger decorative block */
+.mui-empty-state__icon--default {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* MediaVariant::Icon — smaller glyph sized for lucide-style icons */
+.mui-empty-state__icon--icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.75rem;
 }
 
 .mui-empty-state__title {
@@ -32,6 +53,15 @@
   color: var(--mui-text-muted);
   margin: 0;
   max-width: 20rem;
+}
+
+/* Content slot — holds secondary actions / body content (shadcn EmptyContent) */
+.mui-empty-state__content {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .mui-empty-state__action {

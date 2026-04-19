@@ -4814,7 +4814,7 @@ dialog.mui-sheet--bottom {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--mui-border);
   min-height: 3rem;
 }

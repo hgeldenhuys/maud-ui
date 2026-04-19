@@ -81,12 +81,13 @@
   width: var(--mui-sidebar-w, 16rem) !important;
 }
 
-/* Header */
+/* Header — padding matches .mui-sidebar-inset__bar so the bottom border
+   lines up perfectly across the nav/content column split. */
 .mui-sidebar__header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--mui-border);
   min-height: 3rem;
 }

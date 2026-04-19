@@ -263,7 +263,16 @@ pub fn inset(children: Markup) -> Markup {
 }
 
 /// Showcase — small left sidebar with header, two groups, and a footer.
+///
+/// Note: each menu_button gets a leading icon span marked `aria-hidden="true"`
+/// so CSS `span:not([aria-hidden="true"])` hides the label in icon-collapsed
+/// mode but keeps the icon visible. Without the icon, icon-collapsed is blank.
 pub fn showcase() -> Markup {
+    // Tiny helper — a decorative glyph slot consistent with the group-label
+    // hiding selector in sidebar.css.
+    let ico = |glyph: &'static str| -> Markup {
+        html! { span class="mui-sidebar__menu-icon" aria-hidden="true" { (glyph) } }
+    };
     html! {
         div class="mui-showcase__grid" {
             section {
@@ -271,74 +280,100 @@ pub fn showcase() -> Markup {
                 p class="mui-showcase__caption" {
                     "Press " kbd { "Cmd/Ctrl" } " + " kbd { "B" } " to toggle, or click the menu button."
                 }
-                (provider(html! {
-                    (render(Props {
-                        id: "demo-sidebar".to_string(),
-                        side: Side::Left,
-                        variant: SidebarVariant::Sidebar,
-                        collapsible: Collapsible::Icon,
-                        default_open: true,
-                        children: html! {
-                            (header(html! {
-                                div class="mui-sidebar__brand" {
-                                    span class="mui-sidebar__brand-mark" aria-hidden="true" { "M" }
-                                    span class="mui-sidebar__brand-name" { "maud-ui" }
-                                }
-                            }))
-                            (content(html! {
-                                (group(html! {
-                                    (group_label(html! { "Platform" }))
-                                    (group_content(html! {
-                                        (menu(html! {
-                                            (menu_item(menu_button(html! {
-                                                span { "Dashboard" }
-                                            })))
-                                            (menu_item(menu_button(html! {
-                                                span { "Projects" }
-                                                (menu_badge(html! { "12" }))
-                                            })))
-                                            (menu_item(menu_button(html! {
-                                                span { "Deployments" }
-                                            })))
+                div class="mui-sidebar-showcase" {
+                    (provider(html! {
+                        (render(Props {
+                            id: "demo-sidebar".to_string(),
+                            side: Side::Left,
+                            variant: SidebarVariant::Sidebar,
+                            collapsible: Collapsible::Icon,
+                            default_open: true,
+                            children: html! {
+                                (header(html! {
+                                    div class="mui-sidebar__brand" {
+                                        span class="mui-sidebar__brand-mark" aria-hidden="true" { "M" }
+                                        span class="mui-sidebar__brand-name" { "maud-ui" }
+                                    }
+                                }))
+                                (content(html! {
+                                    (group(html! {
+                                        (group_label(html! { "Platform" }))
+                                        (group_content(html! {
+                                            (menu(html! {
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{25a0}"))
+                                                    span { "Dashboard" }
+                                                })))
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{2630}"))
+                                                    span { "Projects" }
+                                                    (menu_badge(html! { "12" }))
+                                                })))
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{2191}"))
+                                                    span { "Deployments" }
+                                                })))
+                                            }))
+                                        }))
+                                    }))
+                                    (group(html! {
+                                        (group_label(html! { "Workspace" }))
+                                        (group_content(html! {
+                                            (menu(html! {
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{25cb}"))
+                                                    span { "Members" }
+                                                })))
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{25c6}"))
+                                                    span { "Billing" }
+                                                })))
+                                                (menu_item(menu_button(html! {
+                                                    (ico("\u{2699}"))
+                                                    span { "Settings" }
+                                                })))
+                                            }))
                                         }))
                                     }))
                                 }))
-                                (group(html! {
-                                    (group_label(html! { "Workspace" }))
-                                    (group_content(html! {
-                                        (menu(html! {
-                                            (menu_item(menu_button(html! {
-                                                span { "Members" }
-                                            })))
-                                            (menu_item(menu_button(html! {
-                                                span { "Billing" }
-                                            })))
-                                            (menu_item(menu_button(html! {
-                                                span { "Settings" }
-                                            })))
-                                        }))
-                                    }))
+                                (footer(html! {
+                                    div class="mui-sidebar__user" {
+                                        span class="mui-sidebar__user-avatar" aria-hidden="true" { "JD" }
+                                        span class="mui-sidebar__user-name" { "Jane Doe" }
+                                    }
                                 }))
-                            }))
-                            (footer(html! {
-                                div class="mui-sidebar__user" {
-                                    span class="mui-sidebar__user-avatar" aria-hidden="true" { "JD" }
-                                    span class="mui-sidebar__user-name" { "Jane Doe" }
+                                (rail())
+                            },
+                        }))
+                        (inset(html! {
+                            div class="mui-sidebar-inset__bar" {
+                                (trigger("demo-sidebar", "Toggle sidebar"))
+                                span class="mui-sidebar-inset__title" { "Dashboard" }
+                            }
+                            div class="mui-sidebar-inset__body" {
+                                div class="mui-sidebar-demo__stats" {
+                                    div class="mui-sidebar-demo__stat" {
+                                        span class="mui-sidebar-demo__stat-label" { "Build status" }
+                                        span class="mui-sidebar-demo__stat-value" { "Passing" }
+                                    }
+                                    div class="mui-sidebar-demo__stat" {
+                                        span class="mui-sidebar-demo__stat-label" { "Active deploys" }
+                                        span class="mui-sidebar-demo__stat-value" { "3" }
+                                    }
+                                    div class="mui-sidebar-demo__stat" {
+                                        span class="mui-sidebar-demo__stat-label" { "Last release" }
+                                        span class="mui-sidebar-demo__stat-value" { "v0.2.1" }
+                                    }
                                 }
-                            }))
-                            (rail())
-                        },
+                                p class="mui-sidebar-demo__note" {
+                                    "Replace this inset with your app's content. The sidebar width animates between "
+                                    kbd { "16rem" } " and " kbd { "3rem" } " via "
+                                    kbd { "data-state" } "."
+                                }
+                            }
+                        }))
                     }))
-                    (inset(html! {
-                        div class="mui-sidebar-inset__bar" {
-                            (trigger("demo-sidebar", "Toggle sidebar"))
-                            span class="mui-sidebar-inset__title" { "Dashboard" }
-                        }
-                        div class="mui-sidebar-inset__body" {
-                            p class="mui-placeholder" { "Main content goes here." }
-                        }
-                    }))
-                }))
+                }
             }
         }
     }

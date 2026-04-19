@@ -66,16 +66,13 @@ These commits land in the repo but do **not** change the published
 - `pulldown-cmark 0.10` added as a dependency (default-features
   off, HTML-only; minimal transitive deps).
 
-### Blocked — gallery deploy stuck on Connect App pre-flight
-- Commit `7e4d61e` is on forgejo + github but NOT live on
-  `maudui.herman.engineer`. The Connect App Pipeline pre-flight
-  returns `git ls-remote failed — Stderr: (empty)` for both repo
-  URLs, while the same `git ls-remote` succeeds in <1s from the
-  `deploy` user on kapable-prod. Root cause is a sandbox regression
-  on the `kapable-api` service (restarted 2026-04-19T11:29:54Z) —
-  not a maud-ui issue. See `memory/feedback_connect-app-pipeline-preflight-sandbox-regression.md`
-  for diagnosis + likely fix. Gallery will update automatically
-  once the platform fix lands.
+### Platform note — earlier deploy block (resolved)
+- Between 11:30 and ~12:30 UTC on 2026-04-19 the Connect App Pipeline's
+  pre-flight clone check returned empty-stderr failures for every app,
+  rooted in the kapable-api redeploy at 11:29:54Z. The platform self-
+  recovered (or a fix shipped upstream) around ~12:45Z and a single
+  retry pushed this commit live. Docs sections now render on every
+  `/<primitive>` route.
 
 ## [0.2.1] — 2026-04-19
 

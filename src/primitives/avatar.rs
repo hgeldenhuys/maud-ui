@@ -55,6 +55,42 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
+/// Status pip rendered at the bottom-right of an [`render`]ed avatar.
+///
+/// Shadcn parity: `AvatarBadge`. Pair this with a relatively-positioned
+/// wrapper (or rely on `.mui-avatar { position: relative; }`) so the
+/// absolute badge anchors to the avatar surface.
+pub fn badge(children: Markup) -> Markup {
+    html! {
+        span class="mui-avatar__badge" aria-hidden="true" {
+            (children)
+        }
+    }
+}
+
+/// Wrap a set of [`render`]ed avatars in a horizontal, overlapping group.
+///
+/// Shadcn parity: `AvatarGroup`.
+pub fn group(children: Markup) -> Markup {
+    html! {
+        div class="mui-avatar-group" role="group" {
+            (children)
+        }
+    }
+}
+
+/// Tail marker for an [`group`] showing the number of additional members.
+///
+/// Shadcn parity: `AvatarGroupCount`. Renders `+{n}` with an accessible label.
+pub fn group_count(n: usize) -> Markup {
+    let label = format!("{n} more");
+    html! {
+        div class="mui-avatar mui-avatar-group__count" aria-label=(label) {
+            (format!("+{n}"))
+        }
+    }
+}
+
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
@@ -116,10 +152,26 @@ pub fn showcase() -> Markup {
                 }
             }
 
-            // Team avatar group
+            // Avatar with status badge helper
+            section {
+                h2 { "Status Badge" }
+                div.mui-showcase__row {
+                    span style="position:relative;display:inline-block;" {
+                        (render(Props {
+                            src: Some("https://i.pravatar.cc/120?img=47".to_string()),
+                            alt: "Online".to_string(),
+                            fallback: "ON".to_string(),
+                            size: Size::Lg,
+                        }))
+                        (badge(html! { }))
+                    }
+                }
+            }
+
+            // Team avatar group with group_count tail
             section {
                 h2 { "Team" }
-                div.mui-avatar-group {
+                (group(html! {
                     (render(Props {
                         src: Some("https://i.pravatar.cc/120?img=5".to_string()),
                         alt: "Alice".to_string(),
@@ -139,12 +191,13 @@ pub fn showcase() -> Markup {
                         size: Size::Md,
                     }))
                     (render(Props {
-                        src: None,
-                        alt: "3 more members".to_string(),
-                        fallback: "+3".to_string(),
+                        src: Some("https://i.pravatar.cc/120?img=22".to_string()),
+                        alt: "Dan".to_string(),
+                        fallback: "D".to_string(),
                         size: Size::Md,
                     }))
-                }
+                    (group_count(3))
+                }))
             }
 
             // Sizes and fallbacks

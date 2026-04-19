@@ -1,6 +1,7 @@
 /* Avatar component — maud-ui Wave 1 */
 
 .mui-avatar {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -13,6 +14,27 @@
   user-select: none;
   flex-shrink: 0;
   border: 1px solid var(--mui-border);
+}
+
+/* Status pip (shadcn AvatarBadge) — sits bottom-right of an avatar */
+.mui-avatar__badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  min-width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid var(--mui-bg-card);
+  background: var(--mui-success, #10b981);
+  color: var(--mui-bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  line-height: 1;
+  padding: 0 0.1875rem;
+  box-sizing: content-box;
+  z-index: 1;
 }
 
 /* Size: Small */
@@ -57,18 +79,26 @@
   justify-content: center;
 }
 
-/* Avatar group — overlapping avatars */
+/* Avatar group — overlapping avatars (shadcn AvatarGroup) */
 .mui-avatar-group {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+  align-items: center;
 }
 
 .mui-avatar-group .mui-avatar {
-  margin-inline-start: -0.5rem;
-  border: 2px solid var(--mui-bg);
+  margin-left: -0.5rem;
+  border: 2px solid var(--mui-bg-card);
+  box-sizing: content-box;
 }
 
-.mui-avatar-group .mui-avatar:last-child {
-  margin-inline-start: 0;
+.mui-avatar-group .mui-avatar:first-child {
+  margin-left: 0;
+}
+
+/* Tail marker for AvatarGroup — `+N` count */
+.mui-avatar-group__count {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  font-size: 0.75rem;
+  font-weight: 500;
 }

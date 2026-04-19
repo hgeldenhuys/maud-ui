@@ -14,6 +14,50 @@ impl Orientation {
             Orientation::Vertical => "mui-button-group--vertical",
         }
     }
+
+    fn aria_value(self) -> &'static str {
+        match self {
+            Orientation::Horizontal => "horizontal",
+            Orientation::Vertical => "vertical",
+        }
+    }
+
+    fn opposite(self) -> Self {
+        match self {
+            Orientation::Horizontal => Orientation::Vertical,
+            Orientation::Vertical => Orientation::Horizontal,
+        }
+    }
+}
+
+/// Renders a visual separator cell inside a button group.
+///
+/// The `orientation` argument is the separator's OWN orientation, i.e. the
+/// axis along which the separator line runs. For a horizontal button group
+/// (buttons in a row), pass `Orientation::Vertical` to draw a vertical rule
+/// between buttons. When building a separator alongside a known group, prefer
+/// [`separator_for_group`] which picks the opposite automatically.
+pub fn separator(orientation: Orientation) -> Markup {
+    html! {
+        div class="mui-button-group__separator" role="separator"
+            aria-orientation=(orientation.aria_value()) {}
+    }
+}
+
+/// Convenience: renders a separator whose orientation is the opposite of the
+/// containing group's orientation (the visually-correct default).
+pub fn separator_for_group(group_orientation: Orientation) -> Markup {
+    separator(group_orientation.opposite())
+}
+
+/// Renders a non-interactive text cell inside a button group (e.g. a page
+/// indicator "Page 1 of 10" between paging buttons).
+pub fn text(children: Markup) -> Markup {
+    html! {
+        div class="mui-button-group__text" {
+            (children)
+        }
+    }
 }
 
 /// Interactive mode for the group. `None` renders a pure visual
@@ -144,6 +188,32 @@ pub fn showcase() -> Markup {
         }
     };
 
+    // Pager with separator — [Prev] [|] [Next], sm size.
+    let buttons_pager_separator = html! {
+        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" {
+            span aria-hidden="true" { "\u{2039}" }
+            " Prev"
+        }
+        (separator_for_group(Orientation::Horizontal))
+        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" {
+            "Next "
+            span aria-hidden="true" { "\u{203a}" }
+        }
+    };
+
+    // Pager with text cell — [Page 1 of 10] [Prev] [Next].
+    let buttons_pager_text = html! {
+        (text(html! { "Page 1 of 10" }))
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" {
+            span aria-hidden="true" { "\u{2039}" }
+            " Prev"
+        }
+        button type="button" class="mui-btn mui-btn--outline mui-btn--md" {
+            "Next "
+            span aria-hidden="true" { "\u{203a}" }
+        }
+    };
+
     html! {
         div.mui-showcase__grid {
             section {
@@ -179,6 +249,30 @@ pub fn showcase() -> Markup {
                         orientation: Orientation::Horizontal,
                         size: None,
                         mode: Some(Mode::Exclusive),
+                    }))
+                }
+            }
+            section {
+                h2 { "Pager with separator" }
+                p.mui-showcase__caption { "Sm-size pager — [Prev] [separator] [Next]. The separator is a vertical rule between buttons in a horizontal group." }
+                div.mui-showcase__row {
+                    (render(Props {
+                        children: buttons_pager_separator,
+                        orientation: Orientation::Horizontal,
+                        size: None,
+                        mode: None,
+                    }))
+                }
+            }
+            section {
+                h2 { "Pager with text indicator" }
+                p.mui-showcase__caption { "Non-interactive text cell — [Page 1 of 10] [Prev] [Next]. Useful for status read-outs inside toolbars." }
+                div.mui-showcase__row {
+                    (render(Props {
+                        children: buttons_pager_text,
+                        orientation: Orientation::Horizontal,
+                        size: None,
+                        mode: None,
                     }))
                 }
             }

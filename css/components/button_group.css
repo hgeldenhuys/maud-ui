@@ -73,3 +73,39 @@
 .mui-button-group--vertical > .mui-btn:only-child {
   border-radius: var(--mui-radius-md);
 }
+
+/* Separator cell — visual rule between buttons.
+ * aria-orientation describes the separator's OWN axis. In a horizontal
+ * group (buttons in a row) the separator runs VERTICALLY between them. */
+.mui-button-group__separator[aria-orientation="vertical"] {
+  width: 1px;
+  align-self: stretch;
+  background: var(--mui-border);
+}
+
+.mui-button-group__separator[aria-orientation="horizontal"] {
+  height: 1px;
+  align-self: stretch;
+  background: var(--mui-border);
+}
+
+/* Text cell — non-interactive label sharing the group's baseline. */
+.mui-button-group__text {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  color: var(--mui-text-muted);
+  font-size: 0.875rem;
+}
+
+/* Neighbor buttons in horizontal group should not collapse their border
+ * into the separator — drop the -1px overlap when a separator sits between. */
+.mui-button-group--horizontal > .mui-button-group__separator + .mui-btn,
+.mui-button-group--horizontal > .mui-button-group__text + .mui-btn {
+  margin-inline-start: 0;
+}
+
+.mui-button-group--vertical > .mui-button-group__separator + .mui-btn,
+.mui-button-group--vertical > .mui-button-group__text + .mui-btn {
+  margin-top: 0;
+}

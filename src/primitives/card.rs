@@ -245,6 +245,7 @@ pub fn showcase() -> Markup {
                                     selected: None,
                                     placeholder: "Select a framework\u{2026}".into(),
                                     disabled: false,
+                                    ..Default::default()
                                 }))
                             }
                         }

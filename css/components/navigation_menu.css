@@ -16,6 +16,35 @@
   border-radius: var(--mui-radius-md);
 }
 
+/* Vertical orientation — stacks top-level items in a column. */
+.mui-nav-menu--vertical {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* NavigationMenuIndicator — small chevron/arrow between active triggers. */
+.mui-nav-menu__indicator {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  line-height: 1;
+}
+
+/* Per-item popover wrapper (viewport=false). Keeps the same visual as the
+   shared viewport panel, but scoped to a single trigger. */
+.mui-nav-menu__popover {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  inset-inline-start: 0;
+  z-index: 50;
+}
+
+.mui-nav-menu__popover[hidden] {
+  display: none;
+}
+
 /* ── Direct links ────────────────────────────────────────────────────── */
 
 .mui-nav-menu__link {

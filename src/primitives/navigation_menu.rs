@@ -2,6 +2,14 @@
 
 use maud::{html, Markup};
 
+/// Orientation of the navigation menu list.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Orientation {
+    #[default]
+    Horizontal,
+    Vertical,
+}
+
 /// A direct navigation link.
 #[derive(Clone, Debug)]
 pub struct NavLink {
@@ -29,6 +37,11 @@ pub enum NavItem {
 pub struct Props {
     pub id: String,
     pub items: Vec<NavItem>,
+    /// Horizontal (default) or vertical layout of the top-level list.
+    pub orientation: Orientation,
+    /// When `true` (default), dropdown content is rendered in a shared viewport panel.
+    /// When `false`, each trigger carries its own per-item popover wrapper.
+    pub viewport: bool,
 }
 
 impl Default for Props {
@@ -36,15 +49,32 @@ impl Default for Props {
         Self {
             id: "nav-menu".to_string(),
             items: vec![],
+            orientation: Orientation::Horizontal,
+            viewport: true,
         }
+    }
+}
+
+/// Render a small chevron/arrow between active triggers (NavigationMenuIndicator).
+///
+/// Purely decorative — `aria-hidden="true"` so screen readers skip it.
+pub fn indicator() -> Markup {
+    html! {
+        span class="mui-nav-menu__indicator" aria-hidden="true" { "\u{25BE}" }
     }
 }
 
 /// Render a navigation menu with the given properties.
 pub fn render(props: Props) -> Markup {
+    let list_class = match props.orientation {
+        Orientation::Horizontal => "mui-nav-menu__list",
+        Orientation::Vertical => "mui-nav-menu__list mui-nav-menu--vertical",
+    };
+    let viewport_attr = if props.viewport { "shared" } else { "per-item" };
+
     html! {
-        nav class="mui-nav-menu" data-mui="nav-menu" id=(props.id) aria-label="Primary" {
-            ul class="mui-nav-menu__list" {
+        nav class="mui-nav-menu" data-mui="nav-menu" id=(props.id) aria-label="Primary" data-viewport=(viewport_attr) {
+            ul class=(list_class) {
                 @for item in &props.items {
                     @match item {
                         NavItem::Link(link) => {
@@ -56,20 +86,43 @@ pub fn render(props: Props) -> Markup {
                         }
                         NavItem::Menu(menu) => {
                             li class="mui-nav-menu__item" data-has-content {
-                                button class="mui-nav-menu__trigger" aria-expanded="false" {
+                                button class="mui-nav-menu__trigger" aria-expanded="false" aria-haspopup="true" {
                                     (menu.label) " \u{25BE}"
                                 }
-                                div class="mui-nav-menu__content" hidden {
-                                    ul class="mui-nav-menu__sub-list" {
-                                        @for link in &menu.links {
-                                            li {
-                                                a class="mui-nav-menu__sub-link" href=(link.href) {
-                                                    div class="mui-nav-menu__sub-title" {
-                                                        (link.label)
+                                @if props.viewport {
+                                    div class="mui-nav-menu__content" hidden {
+                                        ul class="mui-nav-menu__sub-list" {
+                                            @for link in &menu.links {
+                                                li {
+                                                    a class="mui-nav-menu__sub-link" href=(link.href) {
+                                                        div class="mui-nav-menu__sub-title" {
+                                                            (link.label)
+                                                        }
+                                                        @if let Some(desc) = &link.description {
+                                                            div class="mui-nav-menu__sub-desc" {
+                                                                (desc)
+                                                            }
+                                                        }
                                                     }
-                                                    @if let Some(desc) = &link.description {
-                                                        div class="mui-nav-menu__sub-desc" {
-                                                            (desc)
+                                                }
+                                            }
+                                        }
+                                    }
+                                } @else {
+                                    div class="mui-nav-menu__popover" data-viewport="per-item" hidden {
+                                        div class="mui-nav-menu__content" {
+                                            ul class="mui-nav-menu__sub-list" {
+                                                @for link in &menu.links {
+                                                    li {
+                                                        a class="mui-nav-menu__sub-link" href=(link.href) {
+                                                            div class="mui-nav-menu__sub-title" {
+                                                                (link.label)
+                                                            }
+                                                            @if let Some(desc) = &link.description {
+                                                                div class="mui-nav-menu__sub-desc" {
+                                                                    (desc)
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -155,10 +208,56 @@ pub fn showcase() -> Markup {
         }),
     ];
 
-    let props = Props {
+    let horizontal = Props {
         id: "demo-nav-menu".to_string(),
-        items,
+        items: items.clone(),
+        ..Props::default()
     };
 
-    render(props)
+    let vertical_items = vec![
+        NavItem::Menu(NavMenu {
+            label: "Getting Started".to_string(),
+            links: vec![
+                NavLink {
+                    label: "Introduction".to_string(),
+                    href: "#introduction".to_string(),
+                    description: Some("Overview of the design system.".to_string()),
+                },
+                NavLink {
+                    label: "Installation".to_string(),
+                    href: "#installation".to_string(),
+                    description: None,
+                },
+            ],
+        }),
+        NavItem::Link(NavLink {
+            label: "Docs".to_string(),
+            href: "#docs".to_string(),
+            description: None,
+        }),
+        NavItem::Link(NavLink {
+            label: "GitHub".to_string(),
+            href: "https://github.com".to_string(),
+            description: None,
+        }),
+    ];
+
+    let vertical = Props {
+        id: "demo-nav-menu-vertical".to_string(),
+        items: vertical_items,
+        orientation: Orientation::Vertical,
+        viewport: false,
+    };
+
+    html! {
+        div class="mui-nav-menu__showcase" {
+            (render(horizontal))
+            div class="mui-nav-menu__showcase-indicator" {
+                span { "Active" }
+                (indicator())
+                span { "Next" }
+            }
+            (render(vertical))
+        }
+    }
 }

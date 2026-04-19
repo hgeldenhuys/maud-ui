@@ -42,11 +42,18 @@ pub fn render(props: Props) -> Markup {
     let size_class = props.size.class_name();
     let class = format!("mui-avatar {}", size_class);
 
+    // A11y: avoid double-announcement when a real <img> is present.
+    // - src Some: the native <img alt="…"> carries the accessible name; the outer
+    //   span must NOT also carry `role="img"` + `aria-label`, else SRs announce twice.
+    // - src None: there is no <img>, so the outer span becomes the image role and
+    //   exposes `alt` as its accessible name.
     html! {
-        span class=(class) role="img" aria-label=(props.alt) {
-            @if let Some(src) = &props.src {
-                img class="mui-avatar__img" src=(src) alt="" {}
-            } @else {
+        @if let Some(src) = &props.src {
+            span class=(class) {
+                img class="mui-avatar__img" src=(src) alt=(props.alt) {}
+            }
+        } @else {
+            span class=(class) role="img" aria-label=(props.alt) {
                 span class="mui-avatar__fallback" aria-hidden="true" {
                     (props.fallback.to_uppercase())
                 }

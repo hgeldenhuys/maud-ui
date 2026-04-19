@@ -22,6 +22,10 @@ pub struct Props {
     pub items: Vec<Item>,
     /// If true, multiple items can be open; if false, only one item at a time
     pub multiple: bool,
+    /// Optional accessible label for the accordion wrapper (emitted as `aria-label`).
+    /// shadcn/Radix exposes this on the root — provide a descriptive label when the
+    /// accordion has no surrounding heading (e.g. "FAQ", "Product specifications").
+    pub aria_label: Option<String>,
 }
 
 impl Default for Props {
@@ -29,6 +33,7 @@ impl Default for Props {
         Self {
             items: vec![],
             multiple: false,
+            aria_label: None,
         }
     }
 }
@@ -38,7 +43,11 @@ pub fn render(props: Props) -> Markup {
     let multiple_attr = if props.multiple { "true" } else { "false" };
 
     html! {
-        div class="mui-accordion" data-mui="accordion" data-multiple=(multiple_attr) {
+        div class="mui-accordion"
+            data-mui="accordion"
+            data-multiple=(multiple_attr)
+            aria-label=[props.aria_label.as_deref()]
+        {
             @for item in props.items {
                 div class="mui-accordion__item" {
                     button type="button"
@@ -99,6 +108,7 @@ pub fn showcase() -> Markup {
                         },
                     ],
                     multiple: false,
+                    aria_label: Some("Frequently asked questions".to_string()),
                 }))
             }
 
@@ -127,6 +137,7 @@ pub fn showcase() -> Markup {
                         },
                     ],
                     multiple: true,
+                    aria_label: Some("Expandable sections".to_string()),
                 }))
             }
         }

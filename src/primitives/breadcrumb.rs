@@ -48,8 +48,13 @@ pub fn render(props: Props) -> Markup {
                             }
                         }
                     } @else {
-                        li class="mui-breadcrumb__item mui-breadcrumb__item--current" aria-current="page" {
-                            span { (item.label) }
+                        li class="mui-breadcrumb__item mui-breadcrumb__item--current" {
+                            // role="link" + aria-disabled="true" + aria-current="page":
+                            // gives SR users link-like semantics on the current page
+                            // without making the element activatable. Matches shadcn/Radix.
+                            span role="link" aria-disabled="true" aria-current="page" {
+                                (item.label)
+                            }
                         }
                     }
                 }

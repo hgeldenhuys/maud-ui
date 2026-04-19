@@ -51,6 +51,32 @@ These commits land in the repo but do **not** change the published
   both to `height: 3rem; box-sizing: border-box; flex-shrink: 0`
   so the border sits inside the 48px height box on both rows.
 
+### Added (docs rendering — committed but NOT live yet)
+- **Inline API reference on every component page.** Each primitive
+  page at `/button`, `/sheet`, `/sidebar`, etc now renders the full
+  `docs/components/<name>.md` content as styled HTML below the
+  live showcase. New `src/showcase/docs.rs` uses `pulldown-cmark`
+  to parse the Markdown with tables + strikethrough enabled, wraps
+  the output in a `<section class="mui-docs">`, and returns `None`
+  when no doc file exists. The docs ship with the crate via the
+  Cargo.toml `include` list.
+- New `css/components/docs.css` styles the rendered markdown —
+  headings, tables, code blocks, blockquotes, lists, links — using
+  `--mui-*` tokens so it respects dark/light themes.
+- `pulldown-cmark 0.10` added as a dependency (default-features
+  off, HTML-only; minimal transitive deps).
+
+### Blocked — gallery deploy stuck on Connect App pre-flight
+- Commit `7e4d61e` is on forgejo + github but NOT live on
+  `maudui.herman.engineer`. The Connect App Pipeline pre-flight
+  returns `git ls-remote failed — Stderr: (empty)` for both repo
+  URLs, while the same `git ls-remote` succeeds in <1s from the
+  `deploy` user on kapable-prod. Root cause is a sandbox regression
+  on the `kapable-api` service (restarted 2026-04-19T11:29:54Z) —
+  not a maud-ui issue. See `memory/feedback_connect-app-pipeline-preflight-sandbox-regression.md`
+  for diagnosis + likely fix. Gallery will update automatically
+  once the platform fix lands.
+
 ## [0.2.1] — 2026-04-19
 
 ### API parity with shadcn Base UI

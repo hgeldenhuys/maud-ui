@@ -28,13 +28,11 @@
   box-shadow: var(--mui-shadow-md);
   outline: none;
   z-index: 50;
-  top: calc(100% + 0.375rem);
-  inset-inline-start: 0;
   /* Animation: fade + scale like shadcn */
   opacity: 0;
   pointer-events: none;
-  transform-origin: left top;
-  transform: scale(0.95);
+  transform-origin: var(--mui-hover-card-origin, left top);
+  transform: var(--mui-hover-card-translate, none) scale(0.95);
   transition:
     opacity var(--mui-transition),
     transform var(--mui-transition);
@@ -43,11 +41,86 @@
 .mui-hover-card__content[data-visible="true"] {
   opacity: 1;
   pointer-events: auto;
-  transform: scale(1);
+  transform: var(--mui-hover-card-translate, none) scale(1);
 }
 
 .mui-hover-card__content[hidden] {
   display: none;
+}
+
+/* Side: anchor to a side of the trigger */
+.mui-hover-card__content--bottom {
+  top: calc(100% + 0.375rem);
+  --mui-hover-card-origin: center top;
+}
+
+.mui-hover-card__content--top {
+  bottom: calc(100% + 0.375rem);
+  --mui-hover-card-origin: center bottom;
+}
+
+.mui-hover-card__content--right {
+  inset-inline-start: calc(100% + 0.375rem);
+  top: 0;
+  --mui-hover-card-origin: left center;
+}
+
+.mui-hover-card__content--left {
+  inset-inline-end: calc(100% + 0.375rem);
+  top: 0;
+  --mui-hover-card-origin: right center;
+}
+
+/* Align: position along the trigger edge (applies to top/bottom sides) */
+.mui-hover-card__content--align-start {
+  inset-inline-start: 0;
+}
+
+.mui-hover-card__content--align-center {
+  inset-inline-start: 50%;
+  --mui-hover-card-translate: translateX(-50%);
+}
+
+.mui-hover-card__content--align-end {
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+}
+
+/* Align overrides for side=left/right (align along vertical axis) */
+.mui-hover-card__content--right.mui-hover-card__content--align-start,
+.mui-hover-card__content--left.mui-hover-card__content--align-start {
+  top: 0;
+  inset-inline-start: calc(100% + 0.375rem);
+}
+
+.mui-hover-card__content--left.mui-hover-card__content--align-start {
+  inset-inline-start: auto;
+  inset-inline-end: calc(100% + 0.375rem);
+}
+
+.mui-hover-card__content--right.mui-hover-card__content--align-center,
+.mui-hover-card__content--left.mui-hover-card__content--align-center {
+  top: 50%;
+  --mui-hover-card-translate: translateY(-50%);
+  inset-inline-start: calc(100% + 0.375rem);
+}
+
+.mui-hover-card__content--left.mui-hover-card__content--align-center {
+  inset-inline-start: auto;
+  inset-inline-end: calc(100% + 0.375rem);
+}
+
+.mui-hover-card__content--right.mui-hover-card__content--align-end,
+.mui-hover-card__content--left.mui-hover-card__content--align-end {
+  top: auto;
+  bottom: 0;
+  inset-inline-start: calc(100% + 0.375rem);
+  inset-inline-end: auto;
+}
+
+.mui-hover-card__content--left.mui-hover-card__content--align-end {
+  inset-inline-start: auto;
+  inset-inline-end: calc(100% + 0.375rem);
 }
 
 /* User profile card styling */

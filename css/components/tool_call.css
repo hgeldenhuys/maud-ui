@@ -1,0 +1,106 @@
+/* Tool call — collapsible agent-tool invocation with kind-coloured accent. */
+.mui-tool-call {
+  border: 1px solid var(--mui-border);
+  border-left-width: 3px;
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+  font-size: 0.8125rem;
+}
+.mui-tool-call__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.375rem 0.625rem;
+  background: transparent;
+  border: 0;
+  color: var(--mui-text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.mui-tool-call__trigger:hover { background: var(--mui-bg-input); }
+.mui-tool-call__glyph {
+  font-family: var(--mui-font-mono);
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  width: 1rem;
+  text-align: center;
+}
+.mui-tool-call__name {
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mui-tool-call__summary {
+  flex: 1 1 auto;
+  font-family: var(--mui-font-mono);
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mui-tool-call__status {
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.4375rem;
+  border-radius: var(--mui-radius-sm);
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.mui-tool-call__status--success  { color: var(--mui-success); border-color: color-mix(in srgb, var(--mui-success) 40%, transparent); }
+.mui-tool-call__status--running  { color: var(--mui-warning); border-color: color-mix(in srgb, var(--mui-warning) 40%, transparent); animation: mui-tool-pulse 1.4s ease-in-out infinite; }
+.mui-tool-call__status--error    { color: var(--mui-danger);  border-color: color-mix(in srgb, var(--mui-danger) 40%, transparent); }
+.mui-tool-call__status--pending  { color: var(--mui-text-muted); border-color: var(--mui-border); }
+@keyframes mui-tool-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+.mui-tool-call__chevron {
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  transition: transform 150ms ease;
+}
+.mui-tool-call__trigger[aria-expanded="true"] .mui-tool-call__chevron { transform: rotate(180deg); }
+
+.mui-tool-call__body {
+  padding: 0.5rem 0.75rem 0.625rem;
+  border-top: 1px solid var(--mui-border);
+  background: var(--mui-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.mui-tool-call__section-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mui-text-muted);
+  margin-bottom: 0.1875rem;
+}
+.mui-tool-call__section-body pre {
+  margin: 0;
+  padding: 0.5rem 0.625rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-sm);
+  font-family: var(--mui-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  color: var(--mui-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Kind accent colours (left border) */
+.mui-tool-call--edit   { border-left-color: var(--mui-accent); }
+.mui-tool-call--write  { border-left-color: var(--mui-success); }
+.mui-tool-call--read   { border-left-color: #7EB6D4; }
+.mui-tool-call--bash   { border-left-color: var(--mui-warning); }
+.mui-tool-call--grep,
+.mui-tool-call--glob,
+.mui-tool-call--search { border-left-color: #b28fd8; }
+.mui-tool-call--task,
+.mui-tool-call--agent  { border-left-color: var(--mui-danger); }
+.mui-tool-call--custom { border-left-color: var(--mui-border); }

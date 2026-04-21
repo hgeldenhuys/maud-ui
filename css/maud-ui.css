@@ -14,6 +14,7 @@
 @import "components/carousel.css";
 @import "components/chart.css";
 @import "components/checkbox.css";
+@import "components/code_block.css";
 @import "components/collapsible.css";
 @import "components/combobox.css";
 @import "components/command.css";
@@ -21,6 +22,7 @@
 @import "components/data_table.css";
 @import "components/date_picker.css";
 @import "components/dialog.css";
+@import "components/diff.css";
 @import "components/docs.css";
 @import "components/drawer.css";
 @import "components/empty_state.css";
@@ -35,6 +37,7 @@
 @import "components/label.css";
 @import "components/menu.css";
 @import "components/menubar.css";
+@import "components/message.css";
 @import "components/meter.css";
 @import "components/native_select.css";
 @import "components/navigation_menu.css";
@@ -54,6 +57,7 @@
 @import "components/slider.css";
 @import "components/sonner.css";
 @import "components/spinner.css";
+@import "components/streaming_cursor.css";
 @import "components/switch.css";
 @import "components/table.css";
 @import "components/tabs.css";
@@ -61,6 +65,7 @@
 @import "components/toast.css";
 @import "components/toggle_group.css";
 @import "components/toggle.css";
+@import "components/tool_call.css";
 @import "components/tooltip.css";
 @import "components/typography.css";
 

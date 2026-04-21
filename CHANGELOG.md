@@ -5,6 +5,26 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [2026-04-21] — Conductor-flavoured primitives
+
+### Added
+
+Five new primitives modelled after Conductor UI's most distinctive components, shipped so any maud consumer can rebuild a Claude-Code-style agent surface without reinventing them:
+
+- **`message`** — chat bubble with `Role` variants (`User` / `Assistant` / `System`), avatar + initials + optional colour, timestamp, `is_live` flag that pulses the avatar ring during streaming, and a footer slot for inline tool chips. File: `src/primitives/message.rs`, styles in `css/components/message.css`.
+- **`code_block`** — mono pre-formatted code with optional header (language + filename + copy button). Accepts raw `code: String` or `pre_rendered: Option<String>` for syntax-highlighted HTML. Optional `max_height` enables vertical scroll. Inline copy behaviour via `navigator.clipboard.writeText`.
+- **`tool_call`** — collapsible agent-tool invocation with `Kind` (Edit / Write / Read / Bash / Grep / Glob / Task / Agent / Search / Custom) and `Status` (Success / Running / Error / Pending). Colour-coded left border per kind, animated "running" status pill, args + result panes in the expanded body.
+- **`diff`** — unified diff viewer with `LineKind` (Context / Add / Remove / Hunk), optional line numbers, ± counts auto-computed from the `lines` vector. Hunk rows render without sigil/line-numbers; context/add/remove rows show full layout with colour-coded backgrounds.
+- **`streaming_cursor`** — three variants of "work-in-progress" indicator: `Cursor` (blinking block cursor, inline with text), `Dots` (three-dot pulse, "thinking" indicator), `Pulse` (ring pulse, status beacon). Optional label slot.
+
+All five follow the existing Props/Variant convention, include `Default` impls and `showcase()` functions, and are registered in `src/primitives/mod.rs`. Five matching stylesheets added under `css/components/` and `@import`ed from the master `css/maud-ui.css`. `dist/maud-ui.css` and `dist/maud-ui.min.css` rebuilt via `bun run build` — bundle grew ~14KB unminified.
+
+### Rationale
+
+Came out of decomposing `@kapable/conductor` (React Router 7 package in `claude-code-sdk`) into reusable primitives. Companion storybook app at `dev.kapable.maud-ui-examples/conductor-story/` demonstrates all five in realistic fixtures, plus five more derived components composed from existing primitives (thinking block, working indicator, session list, composer, conductor header, full-layout).
+
+---
+
 ## [Unreleased] — gallery polish after v0.2.1 publish
 
 These commits land in the repo but do **not** change the published

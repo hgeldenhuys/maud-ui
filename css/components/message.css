@@ -1,0 +1,94 @@
+/* Message bubble — chat message with avatar + author + timestamp + body + footer slot. */
+.mui-message {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  align-items: flex-start;
+}
+.mui-message__avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--mui-bg);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+.mui-message__avatar--live {
+  animation: mui-avatar-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mui-avatar-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-accent); }
+  50%      { box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 8px rgba(232, 160, 122, 0.15); }
+}
+.mui-message__body-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.mui-message__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+.mui-message__author {
+  font-weight: 600;
+  color: var(--mui-text);
+}
+.mui-message__timestamp {
+  color: var(--mui-text-muted);
+  font-size: 0.75rem;
+}
+.mui-message__body {
+  font-size: 0.875rem;
+  color: var(--mui-text);
+  line-height: 1.55;
+  word-wrap: break-word;
+}
+.mui-message__body p { margin: 0 0 0.5rem; }
+.mui-message__body p:last-child { margin-bottom: 0; }
+.mui-message__body code {
+  font-family: var(--mui-font-mono);
+  font-size: 0.8125rem;
+  padding: 0.125rem 0.3125rem;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-sm);
+}
+.mui-message__footer {
+  margin-top: 0.375rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+/* Role variants */
+.mui-message--user .mui-message__avatar {
+  background: #7EB6D4;
+  color: #0b1320;
+}
+.mui-message--assistant .mui-message__avatar {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+.mui-message--system {
+  opacity: 0.75;
+}
+.mui-message--system .mui-message__avatar {
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+  font-size: 0.625rem;
+}
+.mui-message--system .mui-message__body {
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+  font-style: italic;
+}

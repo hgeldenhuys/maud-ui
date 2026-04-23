@@ -23,6 +23,12 @@ pub struct Props {
     pub items: Vec<CommandItem>,
     /// Placeholder text for the search input
     pub placeholder: String,
+    /// Whether the palette should render in the open state. Emits the
+    /// native `<dialog open>` attribute when `true`. Matches
+    /// `popover::Props.open` so SSR consumers can open the palette on
+    /// page load (e.g. via a `?cmdk=1` query param) without shipping
+    /// their own `showModal()` shim.
+    pub open: bool,
 }
 
 impl Default for Props {
@@ -31,6 +37,7 @@ impl Default for Props {
             id: "command".to_string(),
             items: vec![],
             placeholder: "Type a command or search\u{2026}".to_string(),
+            open: false,
         }
     }
 }
@@ -103,6 +110,7 @@ pub fn render(props: Props) -> Markup {
             data-mui="command"
             aria-label="Command palette"
             aria-modal="true"
+            open[props.open]
         {
             div class="mui-command__search-wrap" {
                 span class="mui-command__search-icon" aria-hidden="true" { "\u{2315}" }
@@ -212,6 +220,7 @@ pub fn showcase() -> Markup {
                     id: "demo-command".to_string(),
                     items,
                     placeholder: "Type a command or search\u{2026}".to_string(),
+                    ..Default::default()
                 }))
             }
 

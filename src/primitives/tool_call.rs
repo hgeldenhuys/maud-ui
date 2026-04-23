@@ -38,16 +38,16 @@ impl Kind {
 
     fn glyph(&self) -> &'static str {
         match self {
-            Self::Edit => "\u{270E}",   // ✎
-            Self::Write => "\u{2795}",  // ➕
-            Self::Read => "\u{1F4D6}",  // 📖
-            Self::Bash => "\u{203A}_",  // › _
-            Self::Grep => "\u{1F50D}",  // 🔍
-            Self::Glob => "\u{2731}",   // ✱
-            Self::Task => "\u{2756}",   // ❖
-            Self::Agent => "\u{25C6}",  // ◆
-            Self::Search => "\u{1F50E}",// 🔎
-            Self::Custom => "\u{2022}", // •
+            Self::Edit => "\u{270E}",    // ✎
+            Self::Write => "\u{2795}",   // ➕
+            Self::Read => "\u{1F4D6}",   // 📖
+            Self::Bash => "\u{203A}_",   // › _
+            Self::Grep => "\u{1F50D}",   // 🔍
+            Self::Glob => "\u{2731}",    // ✱
+            Self::Task => "\u{2756}",    // ❖
+            Self::Agent => "\u{25C6}",   // ◆
+            Self::Search => "\u{1F50E}", // 🔎
+            Self::Custom => "\u{2022}",  // •
         }
     }
 }
@@ -105,7 +105,14 @@ pub struct Props {
 
 /// Render a single tool call.
 pub fn render(props: Props) -> Markup {
-    let body_id = format!("{}-body", if props.id.is_empty() { "tool" } else { &props.id });
+    let body_id = format!(
+        "{}-body",
+        if props.id.is_empty() {
+            "tool"
+        } else {
+            &props.id
+        }
+    );
     let aria_expanded = if props.open { "true" } else { "false" };
 
     html! {

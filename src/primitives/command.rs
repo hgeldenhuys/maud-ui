@@ -117,6 +117,7 @@ pub fn render(props: Props) -> Markup {
                 input type="text" class="mui-command__search"
                     placeholder=(props.placeholder)
                     autocomplete="off"
+                    autofocus[props.open]
                     aria-label="Search commands";
             }
             div class="mui-command__list" role="listbox" {

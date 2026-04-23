@@ -1,6 +1,12 @@
 //! Data Table component — composes Table + sorting + filtering + pagination.
 use maud::{html, Markup, PreEscaped};
 
+// Re-export CellMarkup from the `table` primitive so consumers can build rich
+// cells with a single import path (`data_table::CellMarkup`) without also
+// importing `table`. Keeps `table::CellMarkup` as the single canonical type —
+// no duplicate struct, no conversion impls needed.
+pub use super::table::CellMarkup;
+
 #[derive(Clone, Debug)]
 pub struct Column {
     pub key: String,
@@ -13,6 +19,20 @@ pub struct Props {
     pub id: String,
     pub columns: Vec<Column>,
     pub rows: Vec<Vec<String>>,
+    /// Rich-markup rows. When non-empty, takes precedence over `rows` and each
+    /// cell renders its `CellMarkup::content` (avatars, badges, buttons, etc.)
+    /// with optional right-alignment. Mirrors `table::Props.rich_rows`.
+    ///
+    /// Backwards-compat: when empty (the default), the plain `rows` path is
+    /// used unchanged — existing consumers need no migration.
+    ///
+    /// Note: the client-side sort/filter JS reads `data-row-data` attributes
+    /// built from the plain `rows` field. When `rich_rows` is in use, no
+    /// `data-row-data` is emitted and client-side sorting/filtering is a
+    /// no-op — consumers using rich cells are expected to drive sort/filter
+    /// server-side (which is typically what they want anyway, since rich
+    /// cells carry structured content that doesn't sort as strings).
+    pub rich_rows: Vec<Vec<CellMarkup>>,
     pub page_size: usize,
     pub searchable: bool,
     pub search_placeholder: String,
@@ -27,6 +47,7 @@ impl Default for Props {
             id: "data-table".to_string(),
             columns: vec![],
             rows: vec![],
+            rich_rows: vec![],
             page_size: 5,
             searchable: false,
             search_placeholder: "Filter...".to_string(),
@@ -85,7 +106,12 @@ fn escape_for_attr(s: &str) -> String {
 }
 
 pub fn render(props: Props) -> Markup {
-    let total = props.rows.len();
+    let has_rich = !props.rich_rows.is_empty();
+    let total = if has_rich {
+        props.rich_rows.len()
+    } else {
+        props.rows.len()
+    };
     let page_size = if props.page_size == 0 {
         5
     } else {
@@ -129,26 +155,47 @@ pub fn render(props: Props) -> Markup {
                         }
                     }
                     tbody.mui-data-table__body {
-                        @for (i, row) in props.rows.iter().enumerate() {
-                            @let json_row = format!(
-                                "[{}]",
-                                row.iter()
-                                    .map(|c| format!("\"{}\"", escape_for_attr(c)))
-                                    .collect::<Vec<_>>()
-                                    .join(",")
-                            );
-                            tr.mui-table__row
-                                data-row-data=(json_row)
-                                hidden[i >= page_size] {
-                                @if props.selectable {
-                                    td.mui-table__td.mui-data-table__td--select {
-                                        input type="checkbox"
-                                            class="mui-data-table__select-row"
-                                            aria-label="Select row";
+                        @if has_rich {
+                            @for (i, row) in props.rich_rows.iter().enumerate() {
+                                tr.mui-table__row hidden[i >= page_size] {
+                                    @if props.selectable {
+                                        td.mui-table__td.mui-data-table__td--select {
+                                            input type="checkbox"
+                                                class="mui-data-table__select-row"
+                                                aria-label="Select row";
+                                        }
+                                    }
+                                    @for cell in row {
+                                        @if cell.align_right {
+                                            td.mui-table__td style="text-align:right;" { (cell.content) }
+                                        } @else {
+                                            td.mui-table__td { (cell.content) }
+                                        }
                                     }
                                 }
-                                @for cell in row {
-                                    td.mui-table__td { (cell) }
+                            }
+                        } @else {
+                            @for (i, row) in props.rows.iter().enumerate() {
+                                @let json_row = format!(
+                                    "[{}]",
+                                    row.iter()
+                                        .map(|c| format!("\"{}\"", escape_for_attr(c)))
+                                        .collect::<Vec<_>>()
+                                        .join(",")
+                                );
+                                tr.mui-table__row
+                                    data-row-data=(json_row)
+                                    hidden[i >= page_size] {
+                                    @if props.selectable {
+                                        td.mui-table__td.mui-data-table__td--select {
+                                            input type="checkbox"
+                                                class="mui-data-table__select-row"
+                                                aria-label="Select row";
+                                        }
+                                    }
+                                    @for cell in row {
+                                        td.mui-table__td { (cell) }
+                                    }
                                 }
                             }
                         }
@@ -302,6 +349,7 @@ pub fn showcase() -> Markup {
                     searchable: false,
                     search_placeholder: "Filter...".to_string(),
                     selectable: true,
+                    ..Default::default()
                 }))
             }
             div {

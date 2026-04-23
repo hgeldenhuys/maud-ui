@@ -66,3 +66,58 @@
   padding: 0;
   color: inherit;
 }
+
+/* ----------------------------------------------------------------------
+ * Syntax highlighting tokens.
+ *
+ * Palette: VSCode Dark+ (inspired). Picked because it reads as "default
+ * code editor" to almost every developer on sight, and its hues map 1:1
+ * onto our token kinds without adding noise. Exposed as theme-aware CSS
+ * vars (`--mui-code-*`) so theme packs can retune without touching the
+ * classes. Light mode overrides follow the One Light palette.
+ * ---------------------------------------------------------------------- */
+
+:root,
+[data-theme="dark"] {
+  --mui-code-keyword:  #c586c0;
+  --mui-code-string:   #ce9178;
+  --mui-code-number:   #b5cea8;
+  --mui-code-comment:  #6a9955;
+  --mui-code-type:     #4ec9b0;
+  --mui-code-attr:     #9cdcfe;
+  --mui-code-lifetime: #569cd6;
+  --mui-code-flag:     #9cdcfe;
+  --mui-code-var:      #dcdcaa;
+  --mui-code-bool:     #569cd6;
+  --mui-code-null:     #569cd6;
+  --mui-code-punct:    inherit;
+}
+
+[data-theme="light"] {
+  --mui-code-keyword:  #a626a4;
+  --mui-code-string:   #50a14f;
+  --mui-code-number:   #986801;
+  --mui-code-comment:  #a0a1a7;
+  --mui-code-type:     #c18401;
+  --mui-code-attr:     #4078f2;
+  --mui-code-lifetime: #0184bc;
+  --mui-code-flag:     #4078f2;
+  --mui-code-var:      #e45649;
+  --mui-code-bool:     #0184bc;
+  --mui-code-null:     #0184bc;
+  --mui-code-punct:    inherit;
+}
+
+.mui-code__tok             { color: inherit; }
+.mui-code__tok--keyword    { color: var(--mui-code-keyword); }
+.mui-code__tok--string     { color: var(--mui-code-string); }
+.mui-code__tok--number     { color: var(--mui-code-number); }
+.mui-code__tok--comment    { color: var(--mui-code-comment); font-style: italic; }
+.mui-code__tok--type       { color: var(--mui-code-type); }
+.mui-code__tok--attribute  { color: var(--mui-code-attr); }
+.mui-code__tok--lifetime   { color: var(--mui-code-lifetime); }
+.mui-code__tok--flag       { color: var(--mui-code-flag); }
+.mui-code__tok--variable   { color: var(--mui-code-var); }
+.mui-code__tok--boolean    { color: var(--mui-code-bool); }
+.mui-code__tok--null       { color: var(--mui-code-null); }
+.mui-code__tok--punct      { color: var(--mui-code-punct); }

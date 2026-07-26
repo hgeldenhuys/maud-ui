@@ -61,6 +61,8 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
         "empty_state" => Some(include_str!("../../docs/components/empty_state.md")),
         "field" => Some(include_str!("../../docs/components/field.md")),
         "fieldset" => Some(include_str!("../../docs/components/fieldset.md")),
+        "form" => Some(include_str!("../../docs/components/form.md")),
+        "grid" => Some(include_str!("../../docs/components/grid.md")),
         "hover_card" => Some(include_str!("../../docs/components/hover_card.md")),
         "input" => Some(include_str!("../../docs/components/input.md")),
         "input_group" => Some(include_str!("../../docs/components/input_group.md")),

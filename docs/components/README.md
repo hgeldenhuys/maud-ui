@@ -16,11 +16,11 @@ Each doc follows the same structure:
 
 ## Alphabetical index
 
-**Form controls** · [button](button.md) · [input](input.md) · [textarea](textarea.md) · [checkbox](checkbox.md) · [radio](radio.md) · [radio_group](radio_group.md) · [select](select.md) · [switch](switch.md) · [slider](slider.md) · [number_field](number_field.md) · [field](field.md) · [fieldset](fieldset.md) · [label](label.md) · [native_select](native_select.md) · [input_group](input_group.md) · [input_otp](input_otp.md) · [combobox](combobox.md)
+**Form controls** · [form](form.md) · [button](button.md) · [input](input.md) · [textarea](textarea.md) · [checkbox](checkbox.md) · [radio](radio.md) · [radio_group](radio_group.md) · [select](select.md) · [switch](switch.md) · [slider](slider.md) · [number_field](number_field.md) · [field](field.md) · [fieldset](fieldset.md) · [label](label.md) · [native_select](native_select.md) · [input_group](input_group.md) · [input_otp](input_otp.md) · [combobox](combobox.md)
 
 **Display** · [badge](badge.md) · [swatch](swatch.md) · [avatar](avatar.md) · [separator](separator.md) · [progress](progress.md) · [meter](meter.md) · [kbd](kbd.md) · [skeleton](skeleton.md) · [spinner](spinner.md) · [typography](typography.md) · [empty_state](empty_state.md) · [item](item.md)
 
-**Layout** · [stack](stack.md) · [card](card.md) · [accordion](accordion.md) · [collapsible](collapsible.md) · [aspect_ratio](aspect_ratio.md) · [tabs](tabs.md) · [resizable](resizable.md) · [scroll_area](scroll_area.md) · [direction](direction.md) · [sidebar](sidebar.md) · [table](table.md) · [data_table](data_table.md)
+**Layout** · [stack](stack.md) · [grid](grid.md) · [card](card.md) · [accordion](accordion.md) · [collapsible](collapsible.md) · [aspect_ratio](aspect_ratio.md) · [tabs](tabs.md) · [resizable](resizable.md) · [scroll_area](scroll_area.md) · [direction](direction.md) · [sidebar](sidebar.md) · [table](table.md) · [data_table](data_table.md)
 
 **Overlay** · [dialog](dialog.md) · [alert_dialog](alert_dialog.md) · [sheet](sheet.md) · [drawer](drawer.md) · [popover](popover.md) · [hover_card](hover_card.md) · [tooltip](tooltip.md) · [toast](toast.md) · [sonner](sonner.md)
 

@@ -78,6 +78,8 @@ Cross-axis alignment (`align-items`).
 - `End`: pack to the cross-axis end (`flex-end`)
 - `Baseline`: align children's text baselines
 
+`Stretch` is the default because it matches flexbox's own, and it is what you want for a column of inputs or cards. It is **not** what you want for a column containing an intrinsically-sized child — a badge in a `Vertical` stack stretches into a full-width bar rather than staying a chip. Use `Align::Start` there.
+
 ### Justify
 Main-axis distribution (`justify-content`).
 

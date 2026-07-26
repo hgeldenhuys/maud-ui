@@ -44,6 +44,8 @@ assert_showcase_renders!(
     empty_state,
     field,
     fieldset,
+    form,
+    grid,
     hover_card,
     input,
     input_group,
@@ -469,5 +471,254 @@ mod stack_layout {
         let helper = stack::vertical(html! {}).into_string();
         let explicit = stack::render(Props::default()).into_string();
         assert_eq!(helper, explicit);
+    }
+}
+
+/// Grid — the two-dimensional container. Same reasoning as `stack_layout`:
+/// the class attribute IS the CSS contract, and the props that silently do
+/// nothing (min_column on a fixed count) have to actually stay silent.
+mod grid_layout {
+    use maud::html;
+    use maud_ui::primitives::grid::{self, Align, Columns, MinColumn, Props, Space};
+
+    #[test]
+    fn default_props_emit_only_the_base_class() {
+        let out = grid::render(Props::default()).into_string();
+        assert_eq!(out, r#"<div class="mui-grid"></div>"#, "got: {out}");
+    }
+
+    #[test]
+    fn every_non_default_modifier_reaches_the_class_attribute() {
+        let out = grid::render(Props {
+            columns: Columns::Four,
+            gap: Space::Xl,
+            padding: Space::Sm,
+            align: Align::Center,
+            ..Default::default()
+        })
+        .into_string();
+        for expected in [
+            "mui-grid",
+            "mui-grid--cols-4",
+            "mui-grid--gap-xl",
+            "mui-grid--p-sm",
+            "mui-grid--align-center",
+            // Fixed counts collapse on narrow viewports by default.
+            "mui-grid--collapse",
+        ] {
+            assert!(out.contains(expected), "missing {expected} in: {out}");
+        }
+    }
+
+    /// `min_column` only means anything for auto-fit tracks. Emitting it on a
+    /// fixed count would put a class in the HTML that changes nothing — a lie
+    /// to anyone reading the markup to work out what the layout does.
+    #[test]
+    fn min_column_is_suppressed_on_fixed_counts() {
+        let auto_fit = grid::render(Props {
+            min_column: MinColumn::Xl,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(auto_fit.contains("mui-grid--min-xl"), "got: {auto_fit}");
+
+        let fixed = grid::render(Props {
+            columns: Columns::Three,
+            min_column: MinColumn::Xl,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(!fixed.contains("mui-grid--min"), "inert class emitted: {fixed}");
+    }
+
+    /// Auto-fit already reflows, so the collapse modifier would be dead weight.
+    #[test]
+    fn collapse_is_suppressed_on_auto_fit_and_when_opted_out() {
+        let auto_fit = grid::render(Props::default()).into_string();
+        assert!(!auto_fit.contains("mui-grid--collapse"), "got: {auto_fit}");
+
+        let opted_out = grid::render(Props {
+            columns: Columns::Six,
+            collapse_narrow: false,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(!opted_out.contains("mui-grid--collapse"), "got: {opted_out}");
+    }
+
+    #[test]
+    fn column_classes_and_counts_agree() {
+        for (columns, class, count) in [
+            (Columns::One, "mui-grid--cols-1", Some(1u8)),
+            (Columns::Two, "mui-grid--cols-2", Some(2)),
+            (Columns::Three, "mui-grid--cols-3", Some(3)),
+            (Columns::Four, "mui-grid--cols-4", Some(4)),
+            (Columns::Five, "mui-grid--cols-5", Some(5)),
+            (Columns::Six, "mui-grid--cols-6", Some(6)),
+            (Columns::Twelve, "mui-grid--cols-12", Some(12)),
+        ] {
+            assert_eq!(columns.as_class(), class);
+            assert_eq!(columns.count(), count);
+        }
+        assert_eq!(Columns::AutoFit.as_class(), "");
+        assert_eq!(Columns::AutoFit.count(), None);
+    }
+
+    /// grid and stack must keep sharing ONE scale — a second copy would drift.
+    #[test]
+    fn grid_and_stack_share_the_same_space_and_align_types() {
+        let from_stack: Space = maud_ui::primitives::stack::Space::Lg;
+        let from_grid: Space = Space::Lg;
+        assert_eq!(from_stack, from_grid);
+
+        let from_stack: Align = maud_ui::primitives::stack::Align::Center;
+        assert_eq!(from_stack, Align::Center);
+    }
+
+    #[test]
+    fn children_pass_through_and_id_is_emitted() {
+        let out = grid::render(Props {
+            id: Some("tiles".into()),
+            children: html! { span { "a" } span { "b" } },
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains(r#"id="tiles""#), "got: {out}");
+        assert!(out.contains("<span>a</span><span>b</span>"), "got: {out}");
+    }
+
+    #[test]
+    fn helpers_match_their_documented_props() {
+        assert_eq!(
+            grid::auto(html! {}).into_string(),
+            grid::render(Props::default()).into_string()
+        );
+        assert_eq!(
+            grid::columns(Columns::Three, html! {}).into_string(),
+            grid::render(Props {
+                columns: Columns::Three,
+                ..Default::default()
+            })
+            .into_string()
+        );
+    }
+}
+
+/// Form — the submission contract. Every assertion here is about an attribute
+/// a BROWSER acts on, so "it compiles" is worth nothing: a missing enctype
+/// silently uploads filenames instead of files, and a defaulted method decides
+/// whether a password ends up in the URL.
+mod form_contract {
+    use maud::html;
+    use maud_ui::primitives::form::{self, Enctype, Method, Props};
+
+    /// The one deliberate divergence from HTML. If this ever flips back to the
+    /// platform default, a form whose author forgot `method` starts putting
+    /// every field into the URL, browser history, and the Referer header.
+    #[test]
+    fn method_defaults_to_post_not_html_default_get() {
+        let out = form::render(Props::default()).into_string();
+        assert!(out.contains(r#"method="post""#), "got: {out}");
+        assert_eq!(Method::Post, Method::default());
+    }
+
+    #[test]
+    fn default_form_omits_every_optional_attribute() {
+        let out = form::render(Props::default()).into_string();
+        assert_eq!(
+            out,
+            r#"<form class="mui-form" method="post"></form>"#,
+            "a default form should carry method and nothing else: {out}"
+        );
+    }
+
+    /// urlencoded is the HTML default, so emitting it would be noise; multipart
+    /// is NOT optional for file uploads and must always reach the markup.
+    #[test]
+    fn enctype_is_omitted_when_default_and_emitted_otherwise() {
+        assert_eq!(Enctype::UrlEncoded.as_attr(), None);
+        let default = form::render(Props::default()).into_string();
+        assert!(!default.contains("enctype"), "got: {default}");
+
+        let multipart = form::render(Props {
+            enctype: Enctype::Multipart,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(
+            multipart.contains(r#"enctype="multipart/form-data""#),
+            "got: {multipart}"
+        );
+    }
+
+    #[test]
+    fn every_method_maps_to_its_attribute() {
+        for (method, attr) in [
+            (Method::Get, "get"),
+            (Method::Post, "post"),
+            (Method::Dialog, "dialog"),
+        ] {
+            assert_eq!(method.as_attr(), attr);
+            let out = form::render(Props {
+                method,
+                ..Default::default()
+            })
+            .into_string();
+            assert!(out.contains(&format!(r#"method="{attr}""#)), "got: {out}");
+        }
+    }
+
+    /// `autocomplete` is inverted: the default (true) is the browser's own
+    /// behaviour and emits nothing; only opting OUT produces an attribute.
+    #[test]
+    fn autocomplete_only_emits_when_disabled() {
+        let on = form::render(Props::default()).into_string();
+        assert!(!on.contains("autocomplete"), "got: {on}");
+
+        let off = form::render(Props {
+            autocomplete: false,
+            ..Default::default()
+        })
+        .into_string();
+        assert!(off.contains(r#"autocomplete="off""#), "got: {off}");
+    }
+
+    #[test]
+    fn novalidate_is_a_boolean_attribute() {
+        let off = form::render(Props::default()).into_string();
+        assert!(!off.contains("novalidate"), "got: {off}");
+
+        let on = form::render(Props {
+            novalidate: true,
+            ..Default::default()
+        })
+        .into_string();
+        // Boolean attributes render bare, not `novalidate="true"`.
+        assert!(on.contains("novalidate"), "got: {on}");
+        assert!(!on.contains("novalidate="), "got: {on}");
+    }
+
+    #[test]
+    fn action_and_labels_are_emitted_when_present() {
+        let out = form::render(Props {
+            action: Some("/login".into()),
+            id: Some("login-form".into()),
+            aria_label: Some("Sign in".into()),
+            children: html! { input name="email"; },
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains(r#"action="/login""#), "got: {out}");
+        assert!(out.contains(r#"id="login-form""#), "got: {out}");
+        assert!(out.contains(r#"aria-label="Sign in""#), "got: {out}");
+        assert!(out.contains(r#"<input name="email">"#), "got: {out}");
+    }
+
+    #[test]
+    fn stacked_is_a_post_form_wrapping_a_stack() {
+        let out = form::stacked("/save", html! { span { "field" } }).into_string();
+        assert!(out.starts_with(r#"<form class="mui-form" action="/save" method="post">"#), "got: {out}");
+        assert!(out.contains(r#"<div class="mui-stack mui-stack--gap-lg">"#), "got: {out}");
+        assert!(out.contains("<span>field</span>"), "got: {out}");
     }
 }

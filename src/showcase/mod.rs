@@ -32,6 +32,7 @@ const TIERS: &[Tier] = &[
         title: "Form Controls",
         description: "Interactive inputs for collecting user data",
         components: &[
+            "form",
             "button",
             "input",
             "textarea",
@@ -71,6 +72,7 @@ const TIERS: &[Tier] = &[
         description: "Structural components for organizing content",
         components: &[
             "stack",
+            "grid",
             "card",
             "accordion",
             "collapsible",
@@ -164,6 +166,8 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "empty_state",
     "field",
     "fieldset",
+    "form",
+    "grid",
     "hover_card",
     "input",
     "input_group",
@@ -521,6 +525,68 @@ let html = slider::render(slider::Props {
 let html = spinner::render(spinner::Props {
     size: spinner::Size::Md,
     label: Some("Loading data...".into()),
+});"#
+        }
+        "form" => {
+            r#"use maud::html;
+use maud_ui::primitives::{button, form, input};
+
+// The common shape: a POST form wrapping a vertical stack.
+let profile = form::stacked("/account/profile", html! {
+    (input::render(input::Props { name: "display_name".into(), ..Default::default() }))
+    (button::render(button::Props {
+        label: "Save".into(),
+        variant: button::Variant::Primary,
+        button_type: "submit",
+        ..Default::default()
+    }))
+});
+
+// GET for searches — the result URL should be linkable.
+let search = form::render(form::Props {
+    action: Some("/search".into()),
+    method: form::Method::Get,
+    aria_label: Some("Search the catalogue".into()),
+    ..Default::default()
+});
+
+// Multipart is REQUIRED for file inputs, or the browser
+// submits the filename and not the file.
+let upload = form::render(form::Props {
+    action: Some("/avatar".into()),
+    enctype: form::Enctype::Multipart,
+    ..Default::default()
+});
+
+// NOTE: method defaults to Post, NOT html's Get — a forgotten
+// method must not serialise a password into the URL."#
+        }
+        "grid" => {
+            r#"use maud::html;
+use maud_ui::primitives::{card, grid};
+
+// Auto-fit: as many >=18rem columns as fit. No media query, and it
+// responds to its CONTAINER, not the viewport.
+let cards = grid::render(grid::Props {
+    min_column: grid::MinColumn::Lg,
+    gap: grid::Space::Lg,
+    children: html! {
+        @for title in ["Revenue", "Subscriptions", "Active now"] {
+            (card::render(card::Props { title: Some(title.into()), ..Default::default() }))
+        }
+    },
+    ..Default::default()
+});
+
+// A fixed count, collapsing to one column below 40rem (the default).
+let three = grid::columns(grid::Columns::Three, html! { /* ... */ });
+
+// Opt out of collapsing when the cells are genuinely small.
+let palette = grid::render(grid::Props {
+    columns: grid::Columns::Six,
+    collapse_narrow: false,
+    gap: grid::Space::Sm,
+    ..Default::default()
 });"#
         }
         "stack" => {
@@ -1014,6 +1080,8 @@ fn component_content(name: &str) -> Option<Markup> {
         "empty_state" => primitives::empty_state::showcase(),
         "field" => primitives::field::showcase(),
         "fieldset" => primitives::fieldset::showcase(),
+        "form" => primitives::form::showcase(),
+        "grid" => primitives::grid::showcase(),
         "hover_card" => primitives::hover_card::showcase(),
         "input" => primitives::input::showcase(),
         "input_group" => primitives::input_group::showcase(),

@@ -33,11 +33,40 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
   the scale was hardcoded per component. Now declared once, theme-independent, and covered by a test
   asserting `Space::as_length()` matches `tokens::spacing`.
 
+- **`grid`** — the two-dimensional container. Shares `stack`'s vocabulary rather than duplicating
+  it: `gap` is the same `Space` and `align` the same `Align`, re-exported, so there is one scale to
+  learn and one for tooling to describe. `src/primitives/grid.rs`, `css/components/grid.css`.
+
+  `Columns { AutoFit, One…Six, Twelve }` and `MinColumn { Sm, Md, Lg, Xl }`. The default is
+  `AutoFit` — `repeat(auto-fit, minmax(…, 1fr))` — which reflows against its **container**, not the
+  viewport, so a grid inside a sidebar behaves correctly without knowing it is in a sidebar.
+
+  `collapse_narrow` defaults to **true**: fixed column counts become a single column below `40rem`.
+  Four columns on a phone is four unreadable slivers, and the crate offers no class escape hatch a
+  consumer could use to fix that themselves, so the responsive behaviour has to live in the
+  primitive. Opt out for genuinely small cells (a colour palette, a keypad).
+
+- **`form`** (65 → 67 primitives with `grid`) — the `<form>` element. Nothing emitted one before:
+  every form in `src/blocks/**` hand-wrote the tag, so the submission contract was retyped per site.
+  `src/primitives/form.rs`, `css/components/form.css`.
+
+  `Method { Get, Post, Dialog }` and `Enctype { UrlEncoded, Multipart, TextPlain }`.
+  **`method` defaults to `Post`, not HTML's `GET`** — the one knowing divergence from the platform.
+  `GET` serialises every field into the URL, where it lands in browser history, access logs, and the
+  `Referer` header sent to third parties; a login form whose author forgot to set `method` should
+  not leak the password that way.
+
+  Deliberately **semantic only** — no layout. A form is a column of fields and `stack` already is
+  that column; `form::stacked(action, children)` pairs them in one call.
+
 ### Changed
 
 - The showcase hero's component count is **derived from `COMPONENT_NAMES.len()`** instead of typed.
   It had drifted to a stale hardcoded `64` while the site header three sections away already
   computed the same number.
+- `docs/components/stack.md` now warns that `Align::Stretch` (the default, matching flexbox) turns
+  an intrinsically-sized child such as a badge into a full-width bar. Found by looking at the
+  rendered grid showcase, not by reading the code.
 
 ## [0.3.0] — 2026-07-25 — primitives earned by a real migration
 

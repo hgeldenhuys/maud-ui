@@ -132,7 +132,6 @@ const TIERS: &[Tier] = &[
             "carousel",
             "chart",
             "date_picker",
-            "toolbar",
         ],
     },
 ];

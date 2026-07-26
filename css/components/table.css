@@ -6,6 +6,13 @@
   width: 100%;
 }
 
+/* The wrapper carries tabindex="0" so the scroll container is keyboard
+   reachable; it needs a visible focus ring like any other tab stop. */
+.mui-table-wrapper:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
 .mui-table {
   width: 100%;
   border-collapse: collapse;
@@ -73,4 +80,12 @@
 
 .mui-table--compact .mui-table__td {
   padding: 0.375rem 0.75rem;
+}
+
+/* Narrow-viewport column drop — columns named in `hide_cols_sm` shed below
+   45rem rather than squeezing the whole row into illegibility. */
+@media (max-width: 45rem) {
+  .mui-table [data-hide-sm] {
+    display: none;
+  }
 }

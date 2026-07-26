@@ -1,18 +1,7 @@
 /* Pagination component — page navigation with prev/next and numbered pages */
 
-/* Screen-reader-only utility: visible to assistive tech, invisible to sighted users.
- * Used for icons_only mode where prev/next labels must still be announced. */
-.mui-visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+/* `.mui-visually-hidden` (used by icons_only mode) is a shared utility and
+ * lives in the global block of css/maud-ui.css, next to .mui-text-muted. */
 
 /* Anchor variants inherit the same visual treatment as the button variants */
 a.mui-pagination__btn,

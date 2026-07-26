@@ -29,22 +29,47 @@
   color: var(--mui-text-muted);
 }
 
-/* Success — solid green, white text */
+/* Success — solid green fill; ink is a token, not a literal, so a consumer
+   whose palette puts a LIGHT green here can flip it (see --mui-*-fg). */
 .mui-badge--success {
   background-color: var(--mui-success);
-  color: #fff;
+  color: var(--mui-success-fg);
 }
 
-/* Warning — solid amber, white text for contrast */
+/* Warning — solid amber fill */
 .mui-badge--warning {
   background-color: var(--mui-warning);
-  color: #fff;
+  color: var(--mui-warning-fg);
 }
 
-/* Danger / destructive — solid red, white text */
+/* Danger / destructive — solid red fill */
 .mui-badge--danger {
   background-color: var(--mui-danger);
-  color: #fff;
+  color: var(--mui-danger-fg);
+}
+
+/* Info — solid blue fill */
+.mui-badge--info {
+  background-color: var(--mui-info);
+  color: var(--mui-info-fg);
+}
+
+/* Accent — brand accent solid */
+.mui-badge--accent {
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+/* Violet — taxonomy hue */
+.mui-badge--violet {
+  background-color: var(--mui-violet);
+  color: var(--mui-violet-fg);
+}
+
+/* Rose — taxonomy hue */
+.mui-badge--rose {
+  background-color: var(--mui-rose);
+  color: var(--mui-rose-fg);
 }
 
 /* Outline — transparent bg, border, text inherits */
@@ -77,4 +102,11 @@
 /* Inline-start icon — ensure gap between icon and label */
 .mui-badge[data-icon="inline-start"] {
   gap: 0.25rem;
+}
+
+/* Monospace face — shas, ids, counts. Tightened tracking keeps the pill
+   from bloating, since mono glyphs are wider than the sans stack. */
+.mui-badge--mono {
+  font-family: var(--mui-font-mono);
+  letter-spacing: -0.01em;
 }

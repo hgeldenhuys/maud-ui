@@ -165,3 +165,32 @@
 .mui-item--outline:hover {
   border-color: var(--mui-border-hover);
 }
+
+/* Status dot — a state pip for the media slot. The dot is aria-hidden and
+   ships with a visually-hidden text label, so colour is never the only
+   channel carrying the state. */
+.mui-item__status {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mui-item__dot {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-text-subtle);
+}
+
+.mui-item__dot--ok { background: var(--mui-success-text); }
+.mui-item__dot--warn { background: var(--mui-warning-text); }
+.mui-item__dot--down { background: var(--mui-danger-text); }
+.mui-item__dot--unknown { background: var(--mui-text-subtle); }
+
+/* Row tint — a wash keyed to the same tone, faint enough that the row still
+   reads as part of the surface rather than as an alert. */
+.mui-item--tone-ok { background: color-mix(in srgb, var(--mui-success) 6%, transparent); }
+.mui-item--tone-warn { background: color-mix(in srgb, var(--mui-warning) 8%, transparent); }
+.mui-item--tone-down { background: color-mix(in srgb, var(--mui-danger) 9%, transparent); }
+.mui-item--tone-unknown { opacity: 0.65; }

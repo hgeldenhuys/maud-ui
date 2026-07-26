@@ -40,6 +40,11 @@ pub struct Props {
     pub caption: Option<String>,
     /// Column indices that should be right-aligned in headers
     pub right_align_cols: Vec<usize>,
+    /// Column indices dropped below 45rem. A five-column row that merely
+    /// squeezes on a phone becomes unreadable; naming the columns that carry
+    /// the least signal lets the table shed them instead. Emits `data-hide-sm`
+    /// on the matching `th`/`td`.
+    pub hide_cols_sm: Vec<usize>,
 }
 
 impl Default for Props {
@@ -54,6 +59,7 @@ impl Default for Props {
             compact: false,
             caption: None,
             right_align_cols: vec![],
+            hide_cols_sm: vec![],
         }
     }
 }
@@ -75,8 +81,19 @@ pub fn render(props: Props) -> Markup {
     let has_rich = !props.rich_rows.is_empty();
     let has_footer = !props.footer_row.is_empty();
 
+    // The wrapper scrolls horizontally (overflow-x: auto). A scroll container
+    // that isn't focusable can't be scrolled by keyboard at all — the columns
+    // past the fold become unreachable without a pointer (axe
+    // scrollable-region-focusable). tabindex="0" puts it in the tab order; a
+    // caption, when there is one, additionally names the region so screen
+    // readers announce what just took focus.
+    let region_label = props.caption.clone();
     html! {
-        div.mui-table-wrapper {
+        div.mui-table-wrapper
+            tabindex="0"
+            role=[region_label.as_ref().map(|_| "region")]
+            aria-label=[region_label.as_deref()]
+        {
             table class=(class) {
                 @if let Some(caption_text) = props.caption {
                     caption.mui-table__caption { (caption_text) }
@@ -84,10 +101,11 @@ pub fn render(props: Props) -> Markup {
                 thead {
                     tr {
                         @for (i, header) in props.headers.iter().enumerate() {
+                            @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
                             @if props.right_align_cols.contains(&i) {
-                                th.mui-table__th style="text-align:right;" { (header) }
+                                th.mui-table__th style="text-align:right;" data-hide-sm=[hide_sm] { (header) }
                             } @else {
-                                th.mui-table__th { (header) }
+                                th.mui-table__th data-hide-sm=[hide_sm] { (header) }
                             }
                         }
                     }
@@ -96,11 +114,12 @@ pub fn render(props: Props) -> Markup {
                     @if has_rich {
                         @for row in &props.rich_rows {
                             tr.mui-table__row {
-                                @for cell in row {
+                                @for (i, cell) in row.iter().enumerate() {
+                                    @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
                                     @if cell.align_right {
-                                        td.mui-table__td style="text-align:right;" { (cell.content) }
+                                        td.mui-table__td style="text-align:right;" data-hide-sm=[hide_sm] { (cell.content) }
                                     } @else {
-                                        td.mui-table__td { (cell.content) }
+                                        td.mui-table__td data-hide-sm=[hide_sm] { (cell.content) }
                                     }
                                 }
                             }
@@ -108,8 +127,9 @@ pub fn render(props: Props) -> Markup {
                     } @else {
                         @for row in &props.rows {
                             tr.mui-table__row {
-                                @for cell in row {
-                                    td.mui-table__td { (cell) }
+                                @for (i, cell) in row.iter().enumerate() {
+                                    @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
+                                    td.mui-table__td data-hide-sm=[hide_sm] { (cell) }
                                 }
                             }
                         }
@@ -118,11 +138,12 @@ pub fn render(props: Props) -> Markup {
                 @if has_footer {
                     tfoot {
                         tr.mui-table__row {
-                            @for cell in &props.footer_row {
+                            @for (i, cell) in props.footer_row.iter().enumerate() {
+                                @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
                                 @if cell.align_right {
-                                    td.mui-table__td style="text-align:right;font-weight:600;" { (cell.content) }
+                                    td.mui-table__td style="text-align:right;font-weight:600;" data-hide-sm=[hide_sm] { (cell.content) }
                                 } @else {
-                                    td.mui-table__td style="font-weight:600;" { (cell.content) }
+                                    td.mui-table__td style="font-weight:600;" data-hide-sm=[hide_sm] { (cell.content) }
                                 }
                             }
                         }

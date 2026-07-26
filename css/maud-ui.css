@@ -68,6 +68,7 @@
 @import "components/tool_call.css";
 @import "components/tooltip.css";
 @import "components/typography.css";
+@import "components/utilities.css";
 
 /* Blocks — pre-composed templates */
 @import "blocks/common.css";
@@ -97,6 +98,11 @@
   --mui-success: #15803d;
   --mui-warning: #a16207;
   --mui-danger: #dc2626;
+  /* Taxonomy hues — for category/label sets that outgrow the four semantic
+     states. Same solid-fill contract: paired with white text. */
+  --mui-info: #1d4ed8;
+  --mui-violet: #6d28d9;
+  --mui-rose: #be123c;
   /* Text-on-bg variants — lighter for dark backgrounds so error/status
      text passes 4.5:1. The solid tokens above are tuned for use as a
      background paired with white text (button, badge fill). */
@@ -104,6 +110,19 @@
   --mui-success-text: #4ade80;
   --mui-warning-text: #fbbf24;
   --mui-danger-text: #f87171;
+  --mui-info-text: #60a5fa;
+  --mui-violet-text: #c4b5fd;
+  --mui-rose-text: #fda4af;
+  /* Ink for the solid fills above. A literal #fff only works while the fill
+     stays dark; a consumer theme whose success/warning tokens are LIGHT (the
+     usual choice for dark themes, where those same tokens double as status
+     text) needs to flip this. Tokenised so the pair travels together. */
+  --mui-success-fg: #fff;
+  --mui-warning-fg: #fff;
+  --mui-danger-fg: #fff;
+  --mui-info-fg: #fff;
+  --mui-violet-fg: #fff;
+  --mui-rose-fg: #fff;
   --mui-radius-sm: calc(0.5rem - 2px);
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
@@ -134,11 +153,17 @@
   --mui-success: #15803d;
   --mui-warning: #a16207;
   --mui-danger: #b91c1c;
+  --mui-info: #1d4ed8;
+  --mui-violet: #6d28d9;
+  --mui-rose: #be123c;
   /* Text variants — darker on light bg for 4.5:1. */
   --mui-accent-text: #1d4ed8;
   --mui-success-text: #15803d;
   --mui-warning-text: #a16207;
   --mui-danger-text: #b91c1c;
+  --mui-info-text: #1d4ed8;
+  --mui-violet-text: #6d28d9;
+  --mui-rose-text: #be123c;
   --mui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --mui-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --mui-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -154,8 +179,8 @@ body {
   line-height: 1.5;
 }
 
-.mui-text-muted { color: var(--mui-text-muted); }
-.mui-text-subtle { color: var(--mui-text-subtle); }
+/* Shared utilities (.mui-text-muted, .mui-visually-hidden, …) live in
+   components/utilities.css so a subset vendoring can pick them up. */
 
 /* Showcase layout */
 .mui-showcase__header {

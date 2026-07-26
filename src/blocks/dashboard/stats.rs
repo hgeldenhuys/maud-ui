@@ -22,6 +22,7 @@
 //!             value: "$42,310".into(),
 //!             delta: Some(stats::Delta { value: "+12.4%".into(), positive: true }),
 //!             hint: Some("vs last month".into()),
+//!             ..Default::default()
 //!         },
 //!     ],
 //!     chart: None,
@@ -53,7 +54,7 @@ pub struct Props {
 }
 
 /// A single KPI card.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct StatCard {
     /// Small uppercase label ("MRR", "Active users").
     pub label: String,
@@ -63,6 +64,11 @@ pub struct StatCard {
     pub delta: Option<Delta>,
     /// Small gray text after the delta (e.g. "vs last month").
     pub hint: Option<String>,
+    /// Optional stable DOM id on the *value* node. Server-rendered stats go
+    /// stale the moment they're painted; a live patcher (SSE, htmx OOB swap,
+    /// WebSocket) needs an addressable target that survives a re-render.
+    /// Without it the only handle is a class shared by every card.
+    pub value_id: Option<String>,
 }
 
 /// Period-over-period delta, color-coded by direction.
@@ -112,7 +118,7 @@ pub fn render(props: Props) -> Markup {
                         children: html! {
                             div class="mui-block--stats__card" {
                                 p class="mui-block--stats__label" { (c.label) }
-                                p class="mui-block--stats__value" { (c.value) }
+                                p class="mui-block--stats__value" id=[c.value_id.as_deref()] { (c.value) }
                                 @if c.delta.is_some() || c.hint.is_some() {
                                     p class="mui-block--stats__delta-row" {
                                         @if let Some(d) = &c.delta {
@@ -185,6 +191,7 @@ pub fn preview() -> Markup {
                     positive: true,
                 }),
                 hint: Some("vs last month".into()),
+                ..Default::default()
             },
             StatCard {
                 label: "New customers".into(),
@@ -194,6 +201,7 @@ pub fn preview() -> Markup {
                     positive: true,
                 }),
                 hint: Some("vs last month".into()),
+                ..Default::default()
             },
             StatCard {
                 label: "Active sessions".into(),
@@ -203,6 +211,7 @@ pub fn preview() -> Markup {
                     positive: false,
                 }),
                 hint: Some("vs last month".into()),
+                ..Default::default()
             },
             StatCard {
                 label: "Churn".into(),
@@ -212,6 +221,7 @@ pub fn preview() -> Markup {
                     positive: true,
                 }),
                 hint: Some("lower is better".into()),
+                ..Default::default()
             },
         ],
         chart: None,

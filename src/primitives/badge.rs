@@ -11,6 +11,15 @@ pub enum Variant {
     Success,
     Warning,
     Danger,
+    /// Informational blue — the neutral-but-noteworthy tier.
+    Info,
+    /// Brand accent solid — same hue as `Default` but semantic, so a
+    /// consumer can retint `Default` without losing the accent slot.
+    Accent,
+    /// Violet — for taxonomy hues beyond the four semantic states.
+    Violet,
+    /// Rose — for taxonomy hues beyond the four semantic states.
+    Rose,
     Outline,
     Ghost,
     Link,
@@ -24,6 +33,10 @@ impl Variant {
             Self::Success => "mui-badge--success",
             Self::Warning => "mui-badge--warning",
             Self::Danger => "mui-badge--danger",
+            Self::Info => "mui-badge--info",
+            Self::Accent => "mui-badge--accent",
+            Self::Violet => "mui-badge--violet",
+            Self::Rose => "mui-badge--rose",
             Self::Outline => "mui-badge--outline",
             Self::Ghost => "mui-badge--ghost",
             Self::Link => "mui-badge--link",
@@ -42,11 +55,17 @@ pub struct Props {
     pub href: Option<String>,
     /// Optional leading icon — rendered before the label with `data-icon="inline-start"`
     pub leading_icon: Option<Markup>,
+    /// Render the label in the monospace face — for shas, ids, counts, and
+    /// other machine-register text that should not reflow with the sans stack.
+    pub mono: bool,
 }
 
 /// Render a single badge with the given properties
 pub fn render(props: Props) -> Markup {
-    let class = format!("mui-badge {}", props.variant.class());
+    let mut class = format!("mui-badge {}", props.variant.class());
+    if props.mono {
+        class.push_str(" mui-badge--mono");
+    }
     let data_icon = if props.leading_icon.is_some() {
         Some("inline-start")
     } else {
@@ -85,6 +104,10 @@ pub fn showcase() -> Markup {
                     (render(Props { label: "Success".into(), variant: Variant::Success, ..Default::default() }))
                     (render(Props { label: "Warning".into(), variant: Variant::Warning, ..Default::default() }))
                     (render(Props { label: "Danger".into(), variant: Variant::Danger, ..Default::default() }))
+                    (render(Props { label: "Info".into(), variant: Variant::Info, ..Default::default() }))
+                    (render(Props { label: "Accent".into(), variant: Variant::Accent, ..Default::default() }))
+                    (render(Props { label: "Violet".into(), variant: Variant::Violet, ..Default::default() }))
+                    (render(Props { label: "Rose".into(), variant: Variant::Rose, ..Default::default() }))
                     (render(Props { label: "Outline".into(), variant: Variant::Outline, ..Default::default() }))
                     (render(Props { label: "Ghost".into(), variant: Variant::Ghost, ..Default::default() }))
                     (render(Props {
@@ -117,7 +140,18 @@ pub fn showcase() -> Markup {
                         variant: Variant::Link,
                         href: Some("#".into()),
                         leading_icon: Some(html! { span style="font-size:0.625rem;line-height:1;" { "→" } }),
+                        ..Default::default()
                     }))
+                }
+            }
+
+            // Monospace face — shas, ids, counts
+            section {
+                h2 { "Monospace" }
+                div.mui-showcase__row {
+                    (render(Props { label: "b6e38d1e".into(), variant: Variant::Outline, mono: true, ..Default::default() }))
+                    (render(Props { label: "IMP-2491".into(), variant: Variant::Secondary, mono: true, ..Default::default() }))
+                    (render(Props { label: "v0.3.0".into(), variant: Variant::Info, mono: true, ..Default::default() }))
                 }
             }
 

@@ -14,6 +14,11 @@ pub struct Props {
     pub open: bool,
     /// Unique identifier for aria-controls and content linking
     pub id: String,
+    /// Render as a native `<details>`/`<summary>` pair instead of the
+    /// scripted button. Toggling then costs no JavaScript — the section still
+    /// opens with scripts blocked, failed, or not yet loaded — at the price of
+    /// the height animation. Prefer it for content-only disclosures.
+    pub native: bool,
 }
 
 impl Default for Props {
@@ -23,6 +28,7 @@ impl Default for Props {
             content: html! {},
             open: false,
             id: "collapsible".to_string(),
+            native: false,
         }
     }
 }
@@ -31,6 +37,24 @@ impl Default for Props {
 pub fn render(props: Props) -> Markup {
     let content_id = format!("{}-content", props.id);
     let aria_expanded = if props.open { "true" } else { "false" };
+
+    if props.native {
+        return html! {
+            details class="mui-collapsible mui-collapsible--native"
+                data-mui="collapsible"
+                id=(props.id)
+                open[props.open]
+            {
+                summary class="mui-collapsible__trigger" {
+                    span class="mui-collapsible__label" { (props.trigger_label) }
+                    span class="mui-collapsible__chevron" aria-hidden="true" { "\u{25BE}" }
+                }
+                div class="mui-collapsible__content" id=(content_id) {
+                    (props.content)
+                }
+            }
+        };
+    }
 
     html! {
         div class="mui-collapsible" data-mui="collapsible" {
@@ -62,6 +86,7 @@ pub fn showcase() -> Markup {
                 content: html! { p { "Headless accessible UI components for maud + htmx." } },
                 open: false,
                 id: "demo-col-1".to_string(),
+                ..Default::default()
             }))
 
             // Open collapsible
@@ -70,6 +95,7 @@ pub fn showcase() -> Markup {
                 content: html! { p { "Currently in active development. APIs may change." } },
                 open: true,
                 id: "demo-col-2".to_string(),
+                ..Default::default()
             }))
 
             // Nested content with list
@@ -83,6 +109,16 @@ pub fn showcase() -> Markup {
                 },
                 open: false,
                 id: "demo-col-3".to_string(),
+                ..Default::default()
+            }))
+
+            // Native <details> — toggles with JavaScript disabled
+            (render(Props {
+                trigger_label: "Works with JS disabled".to_string(),
+                content: html! { p { "Rendered as <details>/<summary>; the browser owns the toggle." } },
+                open: false,
+                id: "demo-col-4".to_string(),
+                native: true,
             }))
         }
     }

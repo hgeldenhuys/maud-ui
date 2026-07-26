@@ -58,3 +58,19 @@
 .mui-collapsible__content[hidden] {
   display: none;
 }
+
+/* ── Native <details> variant ──
+   Same skin, browser-owned toggle. The default disclosure triangle is
+   suppressed so the shared chevron is the only affordance. */
+.mui-collapsible--native > .mui-collapsible__trigger {
+  list-style: none;
+  cursor: pointer;
+}
+
+.mui-collapsible--native > .mui-collapsible__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.mui-collapsible--native[open] > .mui-collapsible__trigger .mui-collapsible__chevron {
+  transform: rotate(180deg);
+}

@@ -65,6 +65,43 @@ impl MediaVariant {
     }
 }
 
+/// Health / connection tone — a *state* readout, not progress. Drives the
+/// [`status_dot`] colour and, via [`Props::tone`], a faint row tint.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Tone {
+    /// Healthy, reachable, up to date.
+    Ok,
+    /// Degraded — reachable but stale or partially failing.
+    Warn,
+    /// Unreachable or failing.
+    Down,
+    /// No signal — never reported, or the probe itself failed.
+    #[default]
+    Unknown,
+}
+
+impl Tone {
+    fn as_class(&self) -> &'static str {
+        match self {
+            Tone::Ok => "ok",
+            Tone::Warn => "warn",
+            Tone::Down => "down",
+            Tone::Unknown => "unknown",
+        }
+    }
+
+    /// Text equivalent of the colour — the dot itself is `aria-hidden`, so
+    /// colour must never be the only channel carrying the state.
+    fn label(&self) -> &'static str {
+        match self {
+            Tone::Ok => "Healthy",
+            Tone::Warn => "Degraded",
+            Tone::Down => "Down",
+            Tone::Unknown => "Unknown",
+        }
+    }
+}
+
 /// Item rendering properties.
 #[derive(Clone, Debug, Default)]
 pub struct Props {
@@ -74,6 +111,9 @@ pub struct Props {
     pub variant: Variant,
     /// Density.
     pub size: Size,
+    /// Optional health tone — tints the row background to match the
+    /// [`status_dot`] in its media slot.
+    pub tone: Option<Tone>,
     /// Row contents — typically composed from `media`, `content`, `actions`.
     pub children: Markup,
 }
@@ -82,12 +122,29 @@ pub struct Props {
 pub fn render(props: Props) -> Markup {
     let variant_cls = format!("mui-item--{}", props.variant.as_class());
     let size_cls = format!("mui-item--{}", props.size.as_class());
+    let tone_cls = props
+        .tone
+        .map(|t| format!(" mui-item--tone-{}", t.as_class()))
+        .unwrap_or_default();
     html! {
-        div class={"mui-item " (variant_cls) " " (size_cls)}
+        div class={"mui-item " (variant_cls) " " (size_cls) (tone_cls)}
             id=[props.id.as_deref()]
             data-mui="item"
         {
             (props.children)
+        }
+    }
+}
+
+/// Status dot — a coloured state pip for the media slot. Pairs the
+/// `aria-hidden` dot with a visually-hidden text label so the state survives
+/// with colour perception removed (WCAG 1.4.1 use-of-colour).
+pub fn status_dot(tone: Tone) -> Markup {
+    let cls = format!("mui-item__dot mui-item__dot--{}", tone.as_class());
+    html! {
+        span class="mui-item__status" {
+            span class=(cls) aria-hidden="true" {}
+            span class="mui-visually-hidden" { (tone.label()) }
         }
     }
 }
@@ -222,6 +279,33 @@ pub fn showcase() -> Markup {
                         },
                         ..Default::default()
                     }))
+                }))
+            }
+
+            section {
+                h2 { "Status tones — service health rows" }
+                p.mui-showcase__caption {
+                    "status_dot in the media slot, Props.tone tinting the row. Each dot ships a visually-hidden label."
+                }
+                (group(html! {
+                    @for (name, tone, age) in [
+                        ("kapable-auth", Tone::Ok, "2d"),
+                        ("kapable-host", Tone::Warn, "19d"),
+                        ("kapable-relay", Tone::Down, "—"),
+                        ("kapable-scribe", Tone::Unknown, "—"),
+                    ] {
+                        (render(Props {
+                            variant: Variant::Outline,
+                            size: Size::Xs,
+                            tone: Some(tone),
+                            children: html! {
+                                (media(MediaVariant::Icon, status_dot(tone)))
+                                (content(html! { (title(html! { (name) })) }))
+                                (actions(html! { span.mui-text-muted { (age) } }))
+                            },
+                            ..Default::default()
+                        }))
+                    }
                 }))
             }
 

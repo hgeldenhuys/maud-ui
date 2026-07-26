@@ -212,6 +212,7 @@ pub fn render(props: Props) -> Markup {
                             }).collect(),
                             footer_row: Vec::new(),
                             right_align_cols: vec![2, 4],
+                            hide_cols_sm: Vec::new(),
                             striped: false,
                             hoverable: true,
                             compact: false,

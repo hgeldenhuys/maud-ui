@@ -109,3 +109,110 @@
   overflow-x: auto;
   margin: 0.5rem 0;
 }
+
+/* ── Eyebrow ──
+   Small uppercase section label. Sits below the h1/h2 scale on purpose: it
+   labels a band of content without claiming the visual weight of a heading. */
+.mui-eyebrow {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  color: var(--mui-text-muted);
+}
+
+/* ── Prose ──
+   Styles a server-rendered HTML blob (rendered markdown, a CMS field). Scoped
+   to descendants because the markup arrives whole — there is no per-element
+   hook to hang a class on. */
+.mui-prose {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--mui-text);
+}
+
+.mui-prose > :first-child { margin-top: 0; }
+.mui-prose > :last-child { margin-bottom: 0; }
+
+/* Heading scale. prose() demotes a blob's headings to start at h4, so h4/h5/h6
+   carry the weight the source's h1/h2/h3 asked for; h1-h3 keep matching rules
+   for callers that pass an already-levelled blob via prose_at(). */
+.mui-prose h1,
+.mui-prose h4 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 1.25em 0 0.5em;
+  color: var(--mui-text);
+}
+
+.mui-prose h2,
+.mui-prose h5 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 1.15em 0 0.4em;
+  color: var(--mui-text);
+}
+
+.mui-prose h3,
+.mui-prose h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.45;
+  margin: 1.1em 0 0.35em;
+  color: var(--mui-text);
+}
+
+.mui-prose p,
+.mui-prose ul,
+.mui-prose ol {
+  margin: 0 0 0.75em;
+}
+
+.mui-prose ul,
+.mui-prose ol {
+  padding-inline-start: 1.5rem;
+}
+
+.mui-prose li { margin-bottom: 0.25em; }
+
+.mui-prose a {
+  color: var(--mui-accent-text);
+  text-decoration: underline;
+}
+
+.mui-prose code {
+  font-family: var(--mui-font-mono);
+  font-size: 0.8125em;
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-sm);
+  padding: 0.1em 0.35em;
+}
+
+.mui-prose pre {
+  background: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.75rem;
+  overflow-x: auto;
+  margin: 0 0 0.75em;
+}
+
+/* A code span inside a pre block already sits on the block's surface — the
+   inline chip treatment would double the background. */
+.mui-prose pre code {
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+}
+
+.mui-prose blockquote {
+  margin: 0 0 0.75em;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 2px solid var(--mui-border);
+  color: var(--mui-text-muted);
+}

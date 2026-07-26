@@ -57,6 +57,7 @@
 @import "components/slider.css";
 @import "components/sonner.css";
 @import "components/spinner.css";
+@import "components/stack.css";
 @import "components/streaming_cursor.css";
 @import "components/switch.css";
 @import "components/table.css";
@@ -127,6 +128,16 @@
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
   --mui-radius-full: 9999px;
+  /* Spacing scale — the steps `tokens::spacing` mirrors, and the scale the
+     `stack` primitive's gap/padding modifiers resolve through. Declared here
+     (not per-theme) because spacing is theme-independent: `[data-theme=…]`
+     blocks override colour only, and `:root` still matches under them. */
+  --mui-space-xs: 0.25rem;
+  --mui-space-sm: 0.5rem;
+  --mui-space-md: 0.75rem;
+  --mui-space-lg: 1rem;
+  --mui-space-xl: 1.5rem;
+  --mui-space-xxl: 2rem;
   --mui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --mui-font-mono: "SF Mono", "JetBrains Mono", Monaco, Menlo, monospace;
   --mui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);

@@ -1,0 +1,62 @@
+/* Stack — the general layout container. One flex axis, one token gap.
+   Every modifier is emitted only when it differs from the default, so the
+   base class alone is "vertical, 0.75rem gap, stretch, start, no wrap". */
+
+.mui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-md);
+  /* Flex items default to min-width:auto, which refuses to shrink below their
+     content and blows out the parent instead. Nested stacks are the common
+     case here, so opt every stack into shrinking. */
+  min-width: 0;
+}
+
+.mui-stack--horizontal {
+  flex-direction: row;
+}
+
+.mui-stack--wrap {
+  flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Gap scale — mirrors `tokens::spacing` and the Space enum            */
+/* ------------------------------------------------------------------ */
+
+.mui-stack--gap-none { gap: 0; }
+.mui-stack--gap-xs { gap: var(--mui-space-xs); }
+.mui-stack--gap-sm { gap: var(--mui-space-sm); }
+.mui-stack--gap-lg { gap: var(--mui-space-lg); }
+.mui-stack--gap-xl { gap: var(--mui-space-xl); }
+.mui-stack--gap-xxl { gap: var(--mui-space-xxl); }
+
+/* ------------------------------------------------------------------ */
+/* Padding scale — same steps, applied as an inset                     */
+/* ------------------------------------------------------------------ */
+
+.mui-stack--p-xs { padding: var(--mui-space-xs); }
+.mui-stack--p-sm { padding: var(--mui-space-sm); }
+.mui-stack--p-md { padding: var(--mui-space-md); }
+.mui-stack--p-lg { padding: var(--mui-space-lg); }
+.mui-stack--p-xl { padding: var(--mui-space-xl); }
+.mui-stack--p-xxl { padding: var(--mui-space-xxl); }
+
+/* ------------------------------------------------------------------ */
+/* Cross-axis alignment (align-items)                                  */
+/* ------------------------------------------------------------------ */
+
+.mui-stack--align-start { align-items: flex-start; }
+.mui-stack--align-center { align-items: center; }
+.mui-stack--align-end { align-items: flex-end; }
+.mui-stack--align-baseline { align-items: baseline; }
+
+/* ------------------------------------------------------------------ */
+/* Main-axis distribution (justify-content)                            */
+/* ------------------------------------------------------------------ */
+
+.mui-stack--justify-center { justify-content: center; }
+.mui-stack--justify-end { justify-content: flex-end; }
+.mui-stack--justify-between { justify-content: space-between; }
+.mui-stack--justify-around { justify-content: space-around; }
+.mui-stack--justify-evenly { justify-content: space-evenly; }

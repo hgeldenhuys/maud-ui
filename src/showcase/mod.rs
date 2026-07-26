@@ -70,6 +70,7 @@ const TIERS: &[Tier] = &[
         title: "Layout",
         description: "Structural components for organizing content",
         components: &[
+            "stack",
             "card",
             "accordion",
             "collapsible",
@@ -192,6 +193,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "slider",
     "sonner",
     "spinner",
+    "stack",
     "swatch",
     "switch",
     "table",
@@ -520,6 +522,36 @@ let html = slider::render(slider::Props {
 let html = spinner::render(spinner::Props {
     size: spinner::Size::Md,
     label: Some("Loading data...".into()),
+});"#
+        }
+        "stack" => {
+            r#"use maud::html;
+use maud_ui::primitives::{button, stack};
+
+// A row: centred, spaced apart, wrapping on narrow viewports.
+let toolbar = stack::render(stack::Props {
+    direction: stack::Direction::Horizontal,
+    gap: stack::Space::Sm,
+    align: stack::Align::Center,
+    justify: stack::Justify::Between,
+    wrap: true,
+    ..Default::default()
+});
+
+// The two common cases, without the Props ceremony:
+let column = stack::vertical(html! { p { "One" } p { "Two" } });
+let row = stack::horizontal(html! {
+    (button::render(button::Props { label: "Cancel".into(), ..Default::default() }))
+    (button::render(button::Props { label: "Save".into(), ..Default::default() }))
+});
+
+// Semantic containers keep landmarks intact. Tag::Section REQUIRES aria_label.
+let region = stack::render(stack::Props {
+    tag: stack::Tag::Section,
+    padding: stack::Space::Xl,
+    aria_label: Some("Release notes".into()),
+    children: html! { p { "…" } },
+    ..Default::default()
 });"#
         }
         "skeleton" => {
@@ -1011,6 +1043,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "slider" => primitives::slider::showcase(),
         "sonner" => primitives::sonner::showcase(),
         "spinner" => primitives::spinner::showcase(),
+        "stack" => primitives::stack::showcase(),
         "swatch" => primitives::swatch::showcase(),
         "switch" => primitives::switch::showcase(),
         "table" => primitives::table::showcase(),
@@ -2030,10 +2063,14 @@ pub fn getting_started_page() -> Markup {
                         section class="mui-gallery__component" id="hero" {
                             h3 class="mui-gallery__component-name" { "Welcome to maud-ui" }
                             p style="font-size:1rem;line-height:1.6;color:var(--mui-text-muted);max-width:42rem;" {
-                                "64 headless, accessible components for Rust web apps. Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
+                                // Derived, not typed: this claim drifted to a stale
+                                // "64" while the header count next to it was already
+                                // computed. One source of truth for both.
+                                (format!("{} headless, accessible components for Rust web apps.", COMPONENT_NAMES.len()))
+                                " Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
                             }
                             div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
-                                (badge::render(badge::Props { label: "64 components".into(), variant: badge::Variant::Default, ..Default::default() }))
+                                (badge::render(badge::Props { label: format!("{} components", COMPONENT_NAMES.len()), variant: badge::Variant::Default, ..Default::default() }))
                                 (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary, ..Default::default() }))
                                 (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success, ..Default::default() }))
                                 (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline, ..Default::default() }))

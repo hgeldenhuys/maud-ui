@@ -5894,6 +5894,83 @@ dialog.mui-sheet--bottom {
   border-width: 2.5px;
 }
 
+/* css/components/stack.css */
+.mui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-md);
+  min-width: 0;
+}
+.mui-stack--horizontal {
+  flex-direction: row;
+}
+.mui-stack--wrap {
+  flex-wrap: wrap;
+}
+.mui-stack--gap-none {
+  gap: 0;
+}
+.mui-stack--gap-xs {
+  gap: var(--mui-space-xs);
+}
+.mui-stack--gap-sm {
+  gap: var(--mui-space-sm);
+}
+.mui-stack--gap-lg {
+  gap: var(--mui-space-lg);
+}
+.mui-stack--gap-xl {
+  gap: var(--mui-space-xl);
+}
+.mui-stack--gap-xxl {
+  gap: var(--mui-space-xxl);
+}
+.mui-stack--p-xs {
+  padding: var(--mui-space-xs);
+}
+.mui-stack--p-sm {
+  padding: var(--mui-space-sm);
+}
+.mui-stack--p-md {
+  padding: var(--mui-space-md);
+}
+.mui-stack--p-lg {
+  padding: var(--mui-space-lg);
+}
+.mui-stack--p-xl {
+  padding: var(--mui-space-xl);
+}
+.mui-stack--p-xxl {
+  padding: var(--mui-space-xxl);
+}
+.mui-stack--align-start {
+  align-items: flex-start;
+}
+.mui-stack--align-center {
+  align-items: center;
+}
+.mui-stack--align-end {
+  align-items: flex-end;
+}
+.mui-stack--align-baseline {
+  align-items: baseline;
+}
+.mui-stack--justify-center {
+  justify-content: center;
+}
+.mui-stack--justify-end {
+  justify-content: flex-end;
+}
+.mui-stack--justify-between {
+  justify-content: space-between;
+}
+.mui-stack--justify-around {
+  justify-content: space-around;
+}
+.mui-stack--justify-evenly {
+  justify-content: space-evenly;
+}
+
 /* css/components/streaming_cursor.css */
 .mui-streaming {
   display: inline-flex;
@@ -8274,6 +8351,12 @@ dialog.mui-sheet--bottom {
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
   --mui-radius-full: 9999px;
+  --mui-space-xs: 0.25rem;
+  --mui-space-sm: 0.5rem;
+  --mui-space-md: 0.75rem;
+  --mui-space-lg: 1rem;
+  --mui-space-xl: 1.5rem;
+  --mui-space-xxl: 2rem;
   --mui-font-sans:
     -apple-system,
     BlinkMacSystemFont,

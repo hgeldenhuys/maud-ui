@@ -5,6 +5,40 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [Unreleased] — layout primitives
+
+### Added
+
+- **`stack`** (64 → 65 primitives) — the general layout container, and the crate's **first** one.
+  Before this there was no stack, box, flex, grid, row, or column of any kind: every block in
+  `src/blocks/**` hand-wrote its own `div` with an inline `style="display:flex;…"`, and nothing
+  could be composed as a tree of containers holding leaves. `src/primitives/stack.rs`,
+  `css/components/stack.css`.
+
+  Every appearance prop is a **closed enum**, not a free-form string, so tooling can enumerate the
+  legal values — `Direction { Vertical, Horizontal }`, `Space { None, Xs, Sm, Md, Lg, Xl, Xxl }`
+  (shared by `gap` and `padding`), `Align { Stretch, Start, Center, End, Baseline }`,
+  `Justify { Start, Center, End, Between, Around, Evenly }`, and
+  `Tag { Div, Section, Article, Aside, Nav, Header, Footer, Main }`. Helpers `stack::vertical` and
+  `stack::horizontal` cover the two common cases without the `Props` ceremony.
+
+  Two deliberate omissions, both accessibility calls: **no reversed directions** (`row-reverse`
+  decouples visual order from DOM order, sending keyboard focus and screen-reader output somewhere
+  other than what a sighted user sees), and **`Tag::Section` requires `aria_label`**, enforced by a
+  `debug_assert!` — an unnamed `<section>` is stripped of its `region` role, so the grouping the tag
+  was chosen for silently does not exist for screen-reader users.
+
+- **`--mui-space-*` custom properties** (`xs`…`xxl`) in `css/maud-ui.css`. `tokens.rs` documented its
+  `spacing` constants as mirroring the CSS custom properties, but no spacing properties existed —
+  the scale was hardcoded per component. Now declared once, theme-independent, and covered by a test
+  asserting `Space::as_length()` matches `tokens::spacing`.
+
+### Changed
+
+- The showcase hero's component count is **derived from `COMPONENT_NAMES.len()`** instead of typed.
+  It had drifted to a stale hardcoded `64` while the site header three sections away already
+  computed the same number.
+
 ## [0.3.0] — 2026-07-25 — primitives earned by a real migration
 
 Grown to serve an actual surface port (kv2-pulse: askama → maud + maud-ui), not speculatively.

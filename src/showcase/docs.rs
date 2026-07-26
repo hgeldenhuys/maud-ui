@@ -89,6 +89,7 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
         "slider" => Some(include_str!("../../docs/components/slider.md")),
         "sonner" => Some(include_str!("../../docs/components/sonner.md")),
         "spinner" => Some(include_str!("../../docs/components/spinner.md")),
+        "stack" => Some(include_str!("../../docs/components/stack.md")),
         "swatch" => Some(include_str!("../../docs/components/swatch.md")),
         "switch" => Some(include_str!("../../docs/components/switch.md")),
         "table" => Some(include_str!("../../docs/components/table.md")),

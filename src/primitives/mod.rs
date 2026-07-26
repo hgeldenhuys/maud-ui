@@ -57,6 +57,7 @@ pub mod skeleton;
 pub mod slider;
 pub mod sonner;
 pub mod spinner;
+pub mod stack;
 pub mod streaming_cursor;
 pub mod swatch;
 pub mod switch;

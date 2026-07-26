@@ -68,6 +68,7 @@ assert_showcase_renders!(
     skeleton,
     slider,
     spinner,
+    stack,
     switch,
     table,
     tabs,
@@ -297,5 +298,176 @@ mod growth_0_3_0 {
         let out = typography::prose_at(maud::PreEscaped("<h1>T</h1>".to_string()), 1)
             .into_string();
         assert!(out.contains("<h1>T</h1>"), "got: {out}");
+    }
+}
+
+/// Stack — the layout primitive. Asserted on the rendered HTML rather than on
+/// "it compiles", because every one of these is a contract something outside
+/// Rust depends on: the class names are the CSS seam, the element name is the
+/// accessibility-tree seam, and the absence of default modifiers is what keeps
+/// generated markup readable.
+mod stack_layout {
+    use maud::html;
+    use maud_ui::primitives::stack::{self, Align, Direction, Justify, Props, Space, Tag};
+    use maud_ui::tokens::spacing;
+
+    #[test]
+    fn default_props_emit_only_the_base_class() {
+        let out = stack::render(Props::default()).into_string();
+        assert!(
+            out.contains(r#"<div class="mui-stack">"#),
+            "default stack should carry no modifier classes: {out}"
+        );
+        assert!(!out.contains("id="), "no id when None: {out}");
+        assert!(!out.contains("aria-label"), "no aria-label when None: {out}");
+    }
+
+    #[test]
+    fn children_pass_through_and_nest() {
+        let out = stack::render(Props {
+            children: stack::horizontal(html! { span { "leaf" } }),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains("<span>leaf</span>"), "children lost: {out}");
+        assert_eq!(
+            out,
+            concat!(
+                r#"<div class="mui-stack">"#,
+                r#"<div class="mui-stack mui-stack--horizontal mui-stack--align-center">"#,
+                "<span>leaf</span>",
+                "</div></div>"
+            ),
+            "nesting or class order changed"
+        );
+    }
+
+    #[test]
+    fn every_non_default_modifier_reaches_the_class_attribute() {
+        let out = stack::render(Props {
+            direction: Direction::Horizontal,
+            gap: Space::Xl,
+            padding: Space::Sm,
+            align: Align::Center,
+            justify: Justify::Between,
+            wrap: true,
+            ..Default::default()
+        })
+        .into_string();
+        for expected in [
+            "mui-stack",
+            "mui-stack--horizontal",
+            "mui-stack--gap-xl",
+            "mui-stack--p-sm",
+            "mui-stack--align-center",
+            "mui-stack--justify-between",
+            "mui-stack--wrap",
+        ] {
+            assert!(out.contains(expected), "missing {expected} in: {out}");
+        }
+    }
+
+    #[test]
+    fn default_variants_emit_no_class_but_gap_none_does() {
+        // Md is the gap default, so it is carried by `.mui-stack` itself.
+        assert_eq!(Space::Md.gap_class(), "");
+        // ...but "no gap at all" is NOT the default and must be explicit.
+        assert_eq!(Space::None.gap_class(), "mui-stack--gap-none");
+        // Padding runs the other way: None is the default, Md is explicit.
+        assert_eq!(Space::None.padding_class(), "");
+        assert_eq!(Space::Md.padding_class(), "mui-stack--p-md");
+        assert_eq!(Direction::Vertical.as_class(), "");
+        assert_eq!(Align::Stretch.as_class(), "");
+        assert_eq!(Justify::Start.as_class(), "");
+    }
+
+    #[test]
+    fn every_tag_renders_its_own_element() {
+        for (tag, element) in [
+            (Tag::Div, "div"),
+            (Tag::Article, "article"),
+            (Tag::Aside, "aside"),
+            (Tag::Nav, "nav"),
+            (Tag::Header, "header"),
+            (Tag::Footer, "footer"),
+            (Tag::Main, "main"),
+        ] {
+            let out = stack::render(Props {
+                tag,
+                ..Default::default()
+            })
+            .into_string();
+            assert!(
+                out.starts_with(&format!("<{element} ")) && out.ends_with(&format!("</{element}>")),
+                "Tag::{tag:?} should render <{element}>: {out}"
+            );
+            assert_eq!(tag.as_element(), element);
+        }
+    }
+
+    #[test]
+    fn id_and_aria_label_are_emitted_when_present() {
+        let out = stack::render(Props {
+            tag: Tag::Nav,
+            id: Some("primary-nav".into()),
+            aria_label: Some("Primary".into()),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains(r#"id="primary-nav""#), "id missing: {out}");
+        assert!(out.contains(r#"aria-label="Primary""#), "aria-label missing: {out}");
+    }
+
+    /// An unnamed `<section>` is stripped of its `region` role, so the grouping
+    /// silently does not exist for screen-reader users. Debug builds refuse it.
+    #[test]
+    #[cfg(debug_assertions)]
+    #[should_panic(expected = "requires aria_label")]
+    fn section_without_aria_label_panics_in_debug() {
+        let _ = stack::render(Props {
+            tag: Tag::Section,
+            ..Default::default()
+        });
+    }
+
+    #[test]
+    fn named_section_is_accepted() {
+        let out = stack::render(Props {
+            tag: Tag::Section,
+            aria_label: Some("Release notes".into()),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.starts_with("<section "), "got: {out}");
+    }
+
+    /// `Space::as_length` is documented as mirroring `tokens::spacing`. If the
+    /// two ever drift, the docs and the CSS custom properties disagree with the
+    /// Rust constants and nothing else would catch it.
+    #[test]
+    fn space_scale_mirrors_the_spacing_tokens() {
+        assert_eq!(Space::Xs.as_length(), spacing::XS);
+        assert_eq!(Space::Sm.as_length(), spacing::SM);
+        assert_eq!(Space::Md.as_length(), spacing::MD);
+        assert_eq!(Space::Lg.as_length(), spacing::LG);
+        assert_eq!(Space::Xl.as_length(), spacing::XL);
+        assert_eq!(Space::Xxl.as_length(), spacing::XXL);
+        assert_eq!(Space::None.as_length(), "0");
+    }
+
+    #[test]
+    fn helpers_match_their_documented_props() {
+        let helper = stack::horizontal(html! {}).into_string();
+        let explicit = stack::render(Props {
+            direction: Direction::Horizontal,
+            align: Align::Center,
+            ..Default::default()
+        })
+        .into_string();
+        assert_eq!(helper, explicit);
+
+        let helper = stack::vertical(html! {}).into_string();
+        let explicit = stack::render(Props::default()).into_string();
+        assert_eq!(helper, explicit);
     }
 }

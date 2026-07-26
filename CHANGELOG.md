@@ -5,6 +5,51 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.3.0] — 2026-07-25 — primitives earned by a real migration
+
+Grown to serve an actual surface port (kv2-pulse: askama → maud + maud-ui), not speculatively.
+Every item below existed because a real page needed it and could not be built without it.
+
+### Added
+
+- **`typography::eyebrow(text)`** — uppercase, letter-spaced section heading. `src/primitives/typography.rs`.
+- **`typography::prose(children)`** — wrapper for server-rendered markdown blobs. **Demotes incoming
+  heading levels**, so an untrusted HTML blob cannot inject page-level `h1`s. The donor page rendered
+  **189 `h1` elements** from markdown bodies; after this, 1.
+- **`item::status_dot(tone)`** + `Tone { Ok, Warn, Down, Unknown }` — health indicator for list rows.
+
+### Changed
+
+- **`badge`** — new `mono: bool` prop (mono face for shas/ids/counts), and hue expansion with
+  `Info`, `Accent`, `Violet`, `Rose` plus matching `--mui-*` tokens. **Every hue/background pair was
+  recomputed to clear WCAG AA 4.5:1 and verified by browser pixel sampling** (tightest: light
+  warning at 4.527:1). The donor surface's own badges failed at **4.04:1 across 73 nodes** — those
+  values were deliberately *not* ported.
+- **`stats::StatCard`** — new `value_id: Option<String>`, rendering a stable DOM id on the value node.
+  **Required by any live-patched dashboard.** Without it an SSE/websocket client has no element to
+  address: the page renders correctly, the numbers freeze permanently, and nothing errors. No build
+  check catches this.
+- **`table`** — new `hide_cols_sm: Vec<usize>` for responsive column drop via `data-hide-sm`.
+- **`collapsible`** — new `native: bool` rendering a real `<details>/<summary>`, so disclosure works
+  with JavaScript disabled.
+
+### Verified
+
+- **Z-index audit against a host app with sticky chrome.** maud-ui's maximum is `toast` at **90**,
+  deliberately below a host header at 100 (rationale recorded inline at `css/components/toast.css:11`).
+  Any overlay at ≥100 paints over a sticky app header. Re-audit when adding overlay components.
+- Consuming surface reached **0 axe violations** (WCAG 2.2 A+AA) using only these primitives.
+
+### Note for consumers
+
+maud-ui declares its tokens under `:root, [data-theme="dark"]` / `[data-theme="light"]` and resets
+`body`. If your host app already ships a palette on those same selectors, **strip maud-ui's token
+block and body reset and bridge `--mui-*` onto your own tokens** — otherwise the later sheet
+silently replaces the host palette. See `vendor-maud-ui.sh` in the kv2-pulse repo for a working
+subsetting script (it ships 27 KB of the 192 KB bundle by including only the components in use).
+
+---
+
 ## [2026-04-21] — Conductor-flavoured primitives
 
 ### Added

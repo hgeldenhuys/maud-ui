@@ -90,6 +90,15 @@
   --mui-bg-input: #18181b;
   --mui-border: #27272a;
   --mui-border-hover: #3f3f46;
+  /* Boundary of an INTERACTIVE control (checkbox, radio, switch track, select
+     trigger). Deliberately separate from --mui-border, which draws cards and
+     dividers: WCAG 1.4.11 requires 3:1 for the visual boundary of a UI
+     component, and --mui-border (#27272a) is 1.27:1 on a card — an unchecked
+     checkbox was literally invisible, just a floating label. Decorative rules
+     have no such requirement, so raising --mui-border globally would have made
+     every card heavier to fix a control problem. #71717a clears 3:1 on all
+     three surfaces (card 3.90:1, bg 4.09:1, input 3.67:1). */
+  --mui-border-control: #71717a;
   /* Focus indication is brand-coloured, not neutral. A grey ring reads as an
      unstyled browser default and — at the 4px double-ring inputs use — as a
      hard band rather than a halo. This one token feeds every focus outline
@@ -160,6 +169,7 @@
   --mui-bg-input: #f4f4f5;
   --mui-border: #e4e4e7;
   --mui-border-hover: #d4d4d8;
+  --mui-border-control: #71717a;
   --mui-border-focus: #2563eb;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #09090b;

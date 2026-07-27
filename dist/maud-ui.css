@@ -1156,7 +1156,7 @@ dialog.mui-alert-dialog::backdrop {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-sm);
   background: transparent;
   display: flex;
@@ -4693,7 +4693,7 @@ a.mui-pagination__page {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-full);
   background: transparent;
   display: flex;
@@ -4764,7 +4764,7 @@ a.mui-pagination__page {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-full);
   background: transparent;
   display: flex;
@@ -5040,7 +5040,7 @@ a.mui-pagination__page {
   padding: 0 0.75rem;
   background: transparent;
   color: var(--mui-text);
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-md);
   font-family: inherit;
   font-size: 0.875rem;
@@ -6188,7 +6188,7 @@ dialog.mui-sheet--bottom {
 .mui-switch {
   width: 2.75rem;
   height: 1.5rem;
-  border: none;
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-full);
   background: var(--mui-bg-input);
   position: relative;
@@ -6213,6 +6213,7 @@ dialog.mui-sheet--bottom {
   transform: translateX(-0.875rem);
 }
 .mui-switch[aria-checked=true] {
+  border-color: var(--mui-accent);
   background: var(--mui-accent);
 }
 .mui-switch__thumb {
@@ -8459,6 +8460,7 @@ dialog.mui-sheet--bottom {
   --mui-bg-input: #18181b;
   --mui-border: #27272a;
   --mui-border-hover: #3f3f46;
+  --mui-border-control: #71717a;
   --mui-border-focus: #60a5fa;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #fafafa;
@@ -8520,6 +8522,7 @@ dialog.mui-sheet--bottom {
   --mui-bg-input: #f4f4f5;
   --mui-border: #e4e4e7;
   --mui-border-hover: #d4d4d8;
+  --mui-border-control: #71717a;
   --mui-border-focus: #2563eb;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #09090b;

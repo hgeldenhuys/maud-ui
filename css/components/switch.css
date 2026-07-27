@@ -9,7 +9,13 @@
 .mui-switch {
   width: 2.75rem;
   height: 1.5rem;
-  border: none;
+  /* The OFF track is --mui-bg-input on a card: 1.06:1. The knob keeps the
+     control locatable, but its boundary — where the track ends and the card
+     begins — was invisible, so "off" read as a floating dot rather than a
+     switch in a slot. A 1px control border restores the shape without
+     touching the on-state, which is already a solid accent fill.
+     WCAG 1.4.11 (3:1 for a component's visual boundary). */
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-full);
   background: var(--mui-bg-input);
   position: relative;
@@ -40,6 +46,7 @@
 }
 
 .mui-switch[aria-checked="true"] {
+  border-color: var(--mui-accent);
   background: var(--mui-accent);
 }
 

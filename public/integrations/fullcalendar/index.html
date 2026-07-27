@@ -69,7 +69,22 @@
 /* Main content */
 .mui-gallery__main {
     padding: 2rem;
-    max-width: 960px;
+    /* The cap is a readable measure, but without the auto margins it jammed
+       against the sidebar and left the entire right half of a wide window
+       empty — it read as a broken layout rather than a deliberate column.
+       Centred in the remaining track instead.
+
+       `justify-self`, NOT `margin-inline: auto`: auto margins on a grid item
+       absorb the free space BEFORE alignment, which makes the item shrink to
+       fit its content instead of filling to the cap. That collapsed the column
+       to 881px on a 2080px viewport — narrower than before the "fix".
+       `width: 100%` fills the track up to the cap; `justify-self` centres what
+       is left. `min-width: 0` stops a wide demo (data_table, calendar) from
+       forcing the grid track past the viewport. */
+    width: 100%;
+    max-width: 1280px;
+    justify-self: center;
+    min-width: 0;
 }
 
 .mui-gallery__tier {
@@ -672,6 +687,32 @@ html { scroll-behavior: smooth; }
 
 /* When filtering, grey out group headers whose items are all hidden,
  * and hide the empty group entirely. */
+.mui-gallery__seq {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+}
+.mui-gallery__seq-link {
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--mui-radius-sm);
+    white-space: nowrap;
+    max-width: 14rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--mui-transition), background var(--mui-transition);
+}
+.mui-gallery__seq-link:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+}
+/* Placeholder that holds the slot at the first component, so `next` stays put
+   instead of jumping left on exactly one page. */
+.mui-gallery__seq-link--end { pointer-events: none; }
+
 .mui-gallery__nav-item[hidden] { display: none; }
 .mui-gallery__nav-group[data-mui-search-empty="1"] { display: none; }
 
@@ -1229,6 +1270,28 @@ html { scroll-behavior: smooth; }
 </script><script src="/js/maud-ui.js?v=106722" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+
+    // ── Keep the current component visible in the sidebar ──────────
+    // The sidebar lists 72 items in tier order and scrolls independently.
+    // Navigating to a component left the sidebar wherever it was, so the
+    // page you were ON was usually off-screen and picking a neighbour meant
+    // hunting for your place first. Mark the current slug from the URL
+    // (server-rendered pages have no scroll event to trigger the observer
+    // below) and bring it into view.
+    var here = location.pathname.replace(/^\/+|\/+$/g, '');
+    if (here) {
+        var current = document.querySelector('.mui-gallery__nav-item[data-slug="' + CSS.escape(here) + '"]');
+        if (current) {
+            current.classList.add('mui-gallery__nav-item--active');
+            current.setAttribute('aria-current', 'page');
+            // `nearest` scrolls only if it is actually out of view, so an
+            // already-visible item does not jolt the sidebar on every load.
+            // Scoped to the sidebar's own scroll container, so the main
+            // document does not move with it.
+            current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+    }
+
     // Sidebar active state on scroll
     var navItems = document.querySelectorAll('.mui-gallery__nav-item');
     if (navItems.length > 0) {

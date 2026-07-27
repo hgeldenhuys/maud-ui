@@ -172,6 +172,20 @@ pub fn tiers() -> Vec<(&'static str, &'static str, &'static str, &'static [&'sta
         .collect()
 }
 
+/// The component before and after `slug` in TIER order — the order the sidebar
+/// presents, not alphabetical, so "next" matches what the eye expects.
+/// `None` at either end; the gallery does not wrap.
+fn adjacent(slug: &str) -> (Option<&'static str>, Option<&'static str>) {
+    let order = tier_slugs();
+    match order.iter().position(|s| *s == slug) {
+        None => (None, None),
+        Some(i) => (
+            if i == 0 { None } else { order.get(i - 1).copied() },
+            order.get(i + 1).copied(),
+        ),
+    }
+}
+
 /// All component slug names, used for nav generation and route dispatch.
 pub const COMPONENT_NAMES: &[&str] = &[
     "accordion",
@@ -7040,6 +7054,29 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                             a href="/" { "Gallery" }
                             span { " / " }
                             span { (display_name(name)) }
+                            // Sequential nav. Sits in the breadcrumb row rather
+                            // than the site header: it is page-scoped, and the
+                            // header is shared with routes that have no
+                            // neighbours (/, /theme, /blocks).
+                            @let (prev, next) = adjacent(name);
+                            div class="mui-gallery__seq" {
+                                @if let Some(p) = prev {
+                                    a class="mui-gallery__seq-link" href=(format!("/{p}"))
+                                      rel="prev" title=(format!("Previous: {}", display_name(p))) {
+                                        span aria-hidden="true" { "\u{2190} " }
+                                        (display_name(p))
+                                    }
+                                } @else {
+                                    span class="mui-gallery__seq-link mui-gallery__seq-link--end" aria-hidden="true" {}
+                                }
+                                @if let Some(n) = next {
+                                    a class="mui-gallery__seq-link mui-gallery__seq-link--next" href=(format!("/{n}"))
+                                      rel="next" title=(format!("Next: {}", display_name(n))) {
+                                        (display_name(n))
+                                        span aria-hidden="true" { " \u{2192}" }
+                                    }
+                                }
+                            }
                         }
                         section class="mui-gallery__component" id=(name) {
                             h3 class="mui-gallery__component-name" { (display_name(name)) }
@@ -7170,7 +7207,22 @@ fn showcase_css() -> &'static str {
 /* Main content */
 .mui-gallery__main {
     padding: 2rem;
-    max-width: 960px;
+    /* The cap is a readable measure, but without the auto margins it jammed
+       against the sidebar and left the entire right half of a wide window
+       empty — it read as a broken layout rather than a deliberate column.
+       Centred in the remaining track instead.
+
+       `justify-self`, NOT `margin-inline: auto`: auto margins on a grid item
+       absorb the free space BEFORE alignment, which makes the item shrink to
+       fit its content instead of filling to the cap. That collapsed the column
+       to 881px on a 2080px viewport — narrower than before the "fix".
+       `width: 100%` fills the track up to the cap; `justify-self` centres what
+       is left. `min-width: 0` stops a wide demo (data_table, calendar) from
+       forcing the grid track past the viewport. */
+    width: 100%;
+    max-width: 1280px;
+    justify-self: center;
+    min-width: 0;
 }
 
 .mui-gallery__tier {
@@ -7773,6 +7825,32 @@ html { scroll-behavior: smooth; }
 
 /* When filtering, grey out group headers whose items are all hidden,
  * and hide the empty group entirely. */
+.mui-gallery__seq {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+}
+.mui-gallery__seq-link {
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--mui-radius-sm);
+    white-space: nowrap;
+    max-width: 14rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--mui-transition), background var(--mui-transition);
+}
+.mui-gallery__seq-link:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+}
+/* Placeholder that holds the slot at the first component, so `next` stays put
+   instead of jumping left on exactly one page. */
+.mui-gallery__seq-link--end { pointer-events: none; }
+
 .mui-gallery__nav-item[hidden] { display: none; }
 .mui-gallery__nav-group[data-mui-search-empty="1"] { display: none; }
 
@@ -8040,6 +8118,28 @@ fn showcase_js() -> &'static str {
     r#"
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+
+    // ── Keep the current component visible in the sidebar ──────────
+    // The sidebar lists 72 items in tier order and scrolls independently.
+    // Navigating to a component left the sidebar wherever it was, so the
+    // page you were ON was usually off-screen and picking a neighbour meant
+    // hunting for your place first. Mark the current slug from the URL
+    // (server-rendered pages have no scroll event to trigger the observer
+    // below) and bring it into view.
+    var here = location.pathname.replace(/^\/+|\/+$/g, '');
+    if (here) {
+        var current = document.querySelector('.mui-gallery__nav-item[data-slug="' + CSS.escape(here) + '"]');
+        if (current) {
+            current.classList.add('mui-gallery__nav-item--active');
+            current.setAttribute('aria-current', 'page');
+            // `nearest` scrolls only if it is actually out of view, so an
+            // already-visible item does not jolt the sidebar on every load.
+            // Scoped to the sidebar's own scroll container, so the main
+            // document does not move with it.
+            current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        }
+    }
+
     // Sidebar active state on scroll
     var navItems = document.querySelectorAll('.mui-gallery__nav-item');
     if (navItems.length > 0) {

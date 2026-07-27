@@ -1242,8 +1242,24 @@ fn page_header() -> Markup {
                     // wrong tint whenever the two disagree. Inlined, it reads
                     // --mui-accent-text and tracks the toggle like everything
                     // else on the page.
+                    // viewBox is cropped to the MARK'S INK, not the favicon's
+                    // 32x32 square. The favicon needs that padding — an icon
+                    // that bleeds to the tile edge looks wrong — but in a
+                    // lockup the padding is invisible weight that makes the
+                    // glyph impossible to size against type. Measured against
+                    // the wordmark, the padded version drew 14.24px of ink
+                    // beside an 11.27px cap height: 26% oversized, overshooting
+                    // the cap line by 2.25px and hanging below the baseline.
+                    //
+                    // Ink bounds: paths span x 5..27, y 4..28, and a 3-wide
+                    // round-capped stroke extends 1.5 past each end.
+                    //
+                    // Sized in `em` so it tracks the wordmark instead of being
+                    // pinned to today's 16px. 0.75em ≈ cap height plus a small
+                    // overshoot, which round terminals need to look level with
+                    // flat-topped letters.
                     span class="mui-showcase__brand-mark" aria-hidden="true" {
-                        (maud::PreEscaped(r##"<svg viewBox="0 0 32 32" width="19" height="19" style="display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg>"##))
+                        (maud::PreEscaped(r##"<svg viewBox="3.5 2.5 25 27" style="height:0.75em;width:auto;display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg>"##))
                     }
                     span class="mui-showcase__brand-name" { "maud-ui" }
                     span class="mui-showcase__brand-count" {

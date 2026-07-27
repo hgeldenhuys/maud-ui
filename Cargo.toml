@@ -13,6 +13,11 @@ keywords = ["maud", "htmx", "ui", "components", "shadcn"]
 categories = ["web-programming", "gui", "template-engine"]
 include = [
     "src/**/*.rs",
+    # `src/**/*.rs` alone is not enough: src/showcase/landing.css is include_str!'d by
+    # landing.rs, and a .css file under src/ matches no other glob here. Without this the
+    # PACKAGED crate fails to compile — the local build is fine, so only
+    # `cargo publish --dry-run` catches it. It did.
+    "src/**/*.css",
     "css/**/*.css",
     "dist/**/*",
     # examples/showcase.rs include_bytes!s the brand assets, so a published

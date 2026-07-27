@@ -314,6 +314,73 @@ fn static_export_css_matches_the_built_bundle() {
     );
 }
 
+/// The link-preview card is a RASTERISED PNG, so the "72 components" on it is
+/// baked into pixels and no amount of reading `COMPONENT_NAMES` at runtime can
+/// correct it. Same class of bug as the Cargo.toml/README counts above, with a
+/// worse failure mode: the number is wrong only in the image every share of
+/// the site renders, where nobody on the project ever looks.
+///
+/// Guards the HTML the PNG is rendered from. Regenerate with
+/// `bun run build:og` after changing it.
+#[test]
+fn og_card_component_count_matches_reality() {
+    let n = COMPONENT_NAMES.len();
+    let source = read("assets/og-source.html");
+    assert!(
+        source.contains(&format!(r#"<span class="n">{n}</span>"#)),
+        "assets/og-source.html does not state {n} as a stat — there are {n} \
+         components. Update the card and run `bun run build:og` to re-render \
+         assets/og.png, then commit both."
+    );
+
+    // The rendered PNG must exist and be the exact size declared in
+    // page_head()'s og:image:width / og:image:height. A mismatch makes some
+    // crawlers fall back to a small summary card with no image at all.
+    let png = repo_root().join("assets/og.png");
+    assert!(
+        png.exists(),
+        "assets/og.png is missing but every page's og:image points at it. \
+         Fix: bun run build:og"
+    );
+    let bytes = fs::read(&png).expect("cannot read assets/og.png");
+    // PNG IHDR: 8-byte signature, 4-byte length, 4-byte "IHDR", then width and
+    // height as big-endian u32.
+    let width = u32::from_be_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]);
+    let height = u32::from_be_bytes([bytes[20], bytes[21], bytes[22], bytes[23]]);
+    assert_eq!(
+        (width, height),
+        (1200, 630),
+        "assets/og.png is {width}x{height}, but page_head() declares \
+         og:image:width=1200 og:image:height=630. Re-render with \
+         `bun run build:og`."
+    );
+}
+
+/// XML forbids a double hyphen inside a comment, and the token names this
+/// project documents everywhere START with one. Writing `--mui-accent` inside
+/// a comment in the favicon makes the whole file fail to parse: every browser
+/// silently renders a broken-image glyph and nothing logs an error. That
+/// happened while authoring the mark, and it is invisible outside a browser.
+#[test]
+fn favicon_svg_is_parseable() {
+    let svg = read("assets/favicon.svg");
+    for (i, chunk) in svg.split("<!--").enumerate().skip(1) {
+        let body = chunk.split("-->").next().unwrap_or("");
+        assert!(
+            !body.contains("--"),
+            "assets/favicon.svg comment #{i} contains a double hyphen, which is \
+             illegal inside an XML comment — the SVG will not parse and every \
+             browser will show a broken image with no error. Write token names \
+             without their leading dashes (mui-accent, not the full form)."
+        );
+    }
+    assert!(
+        svg.contains("prefers-color-scheme"),
+        "assets/favicon.svg lost its prefers-color-scheme rule — the mark will \
+         sit at one fixed tint and disappear against one of the two themes."
+    );
+}
+
 /// `include` entries in Cargo.toml are GLOBS, not paths. A bare `"README.md"`
 /// matches nested readmes anywhere in the tree — it was pulling
 /// `node_modules/esbuild/README.md` into the published package, caught only by

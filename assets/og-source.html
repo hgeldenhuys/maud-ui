@@ -1,0 +1,102 @@
+<!-- Source for assets/og.png. Rendered at exactly 1200x630 by
+     `bun run js/build-og.mjs`; the PNG is committed because crawlers fetch a
+     URL, not a build step.
+
+     Colours are the dark-theme token values from css/maud-ui.css, written as
+     literals: this file is rasterised once, so it cannot read a live custom
+     property, and a stale hex here is a visible design bug rather than a
+     silent one. If the dark theme's accent or background changes, re-run the
+     build and commit the new PNG.
+
+     The mark's braces carry stroke #60a5fa (mui-accent-text) rather than
+     #2563eb (mui-accent), because this card is always dark. -->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0a0a0b;
+    color: #fafafa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 84px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* One hairline, the same language the landing page uses. */
+  .rule { height: 3px; width: 92px; background: #2563eb; border-radius: 999px; margin-bottom: 44px; }
+
+  .brand { display: flex; align-items: center; gap: 18px; margin-bottom: 30px; }
+  .brand svg { width: 54px; height: 54px; display: block; }
+  .brand .name { font-size: 34px; font-weight: 600; letter-spacing: -0.02em; }
+
+  h1 {
+    font-size: 68px;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+    font-weight: 650;
+    margin: 0 0 28px;
+    max-width: 17ch;
+  }
+  h1 span { color: #a1a1aa; }
+
+  p { font-size: 25px; line-height: 1.45; color: #a1a1aa; margin: 0; max-width: 40ch; }
+  p code { font-family: "SF Mono", "JetBrains Mono", Monaco, Menlo, monospace; font-size: 0.92em; color: #fafafa; }
+
+  .stats {
+    display: flex;
+    gap: 52px;
+    margin-top: 52px;
+    padding-top: 34px;
+    border-top: 1px solid #27272a;
+  }
+  .stat .n {
+    font-family: "SF Mono", "JetBrains Mono", Monaco, Menlo, monospace;
+    font-size: 34px; font-weight: 600; line-height: 1; letter-spacing: -0.02em;
+    display: block; margin-bottom: 9px;
+  }
+  .stat .l { font-size: 17px; color: #a1a1aa; }
+
+  .install {
+    position: absolute;
+    right: 84px;
+    bottom: 56px;
+    font-family: "SF Mono", "JetBrains Mono", Monaco, Menlo, monospace;
+    font-size: 20px;
+    color: #fafafa;
+    border: 1px solid #27272a;
+    border-radius: 10px;
+    padding: 13px 20px;
+  }
+  .install i { color: #8e8e93; font-style: normal; }
+</style>
+
+<div class="rule"></div>
+
+<div class="brand">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="#60a5fa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/>
+      <path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/>
+    </g>
+    <rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" fill="#60a5fa"/>
+  </svg>
+  <span class="name">maud-ui</span>
+</div>
+
+<h1>Server-rendered UI components <span>for Rust.</span></h1>
+
+<p>Typed <code>maud</code> components with shadcn Base UI parity. No bundler, no <code>node_modules</code>.</p>
+
+<div class="stats">
+  <div class="stat"><span class="n">72</span><span class="l">components</span></div>
+  <div class="stat"><span class="n">10</span><span class="l">block templates</span></div>
+  <div class="stat"><span class="n">15</span><span class="l">JS libraries pre-wired</span></div>
+  <div class="stat"><span class="n">0</span><span class="l">node dependencies</span></div>
+</div>
+
+<div class="install"><i>$</i> cargo add maud-ui</div>

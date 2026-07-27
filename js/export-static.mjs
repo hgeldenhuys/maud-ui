@@ -128,6 +128,24 @@ async function main() {
       cpSync(join(ROOT, "dist", f), join(PUBLIC_DIR, f.endsWith(".css") ? "css" : "js", f));
     }
 
+    // 6. Brand assets at the ROOT of the site. These are copied rather than
+    //    fetched as routes because the route loop writes every path as
+    //    `<path>/index.html`, which would turn /og.png into og.png/index.html —
+    //    a directory where crawlers expect an image. They must sit at exactly
+    //    the paths page_head() and the absolute og:image URL point at.
+    for (const f of ["favicon.svg", "apple-touch-icon.png", "og.png"]) {
+      const src = join(ROOT, "assets", f);
+      if (!existsSync(src)) {
+        throw new Error(
+          `assets/${f} is missing, so the static site would 404 on /${f} ` +
+            `while every page still links to it. Fix: run \`bun run build:og\` ` +
+            `(regenerates og.png and apple-touch-icon.png), or restore ` +
+            `assets/favicon.svg from git.`,
+        );
+      }
+      cpSync(src, join(PUBLIC_DIR, f));
+    }
+
     log(`done — ${routes.length} pages + assets in public/`);
   } finally {
     server.kill("SIGTERM");

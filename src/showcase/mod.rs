@@ -1189,11 +1189,34 @@ fn component_content(name: &str) -> Option<Markup> {
 }
 
 /// Shared HTML head used by both the gallery and individual component pages.
+/// Absolute origin for link-preview metadata. `og:image` MUST be absolute:
+/// crawlers resolve it with no page context, so a root-relative path yields no
+/// preview card at all — and yields it silently, since nothing in the page
+/// errors. Mirrors `homepage` in Cargo.toml.
+const SITE_ORIGIN: &str = "https://maudui.herman.engineer";
+
 fn page_head(title: &str) -> Markup {
     html! {
         meta charset="utf-8";
         meta name="viewport" content="width=device-width, initial-scale=1";
         title { (title) }
+
+        // The mark. An SVG favicon carries its own prefers-color-scheme rule,
+        // so it follows the reader's theme the way every component does.
+        // apple-touch-icon is the opaque fallback: iOS ignores rel="icon" for
+        // a home-screen tile and would render the transparent mark black.
+        link rel="icon" href="/favicon.svg" type="image/svg+xml";
+        link rel="apple-touch-icon" href="/apple-touch-icon.png";
+
+        meta property="og:type" content="website";
+        meta property="og:site_name" content="maud-ui";
+        meta property="og:title" content=(title);
+        meta property="og:image" content=(format!("{SITE_ORIGIN}/og.png"));
+        meta property="og:image:width" content="1200";
+        meta property="og:image:height" content="630";
+        meta name="twitter:card" content="summary_large_image";
+        meta name="twitter:image" content=(format!("{SITE_ORIGIN}/og.png"));
+
         link rel="stylesheet" href=(format!("/css/maud-ui.css?v={}", CSS_VER));
         style { (maud::PreEscaped(showcase_css())) }
     }
@@ -1212,6 +1235,16 @@ fn page_header() -> Markup {
                     span aria-hidden="true" class="mui-showcase__menu-icon" { "\u{2630}" }
                 }
                 a href="/" class="mui-showcase__brand" {
+                    // The mark, inline rather than <img src="/favicon.svg">.
+                    // The file version colours itself from prefers-color-scheme
+                    // (the OS), but this site has an explicit theme toggle that
+                    // does NOT follow the OS — so an <img> would sit at the
+                    // wrong tint whenever the two disagree. Inlined, it reads
+                    // --mui-accent-text and tracks the toggle like everything
+                    // else on the page.
+                    span class="mui-showcase__brand-mark" aria-hidden="true" {
+                        (maud::PreEscaped(r##"<svg viewBox="0 0 32 32" width="19" height="19" style="display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg>"##))
+                    }
                     span class="mui-showcase__brand-name" { "maud-ui" }
                     span class="mui-showcase__brand-count" {
                         (format!("{} components", COMPONENT_NAMES.len()))

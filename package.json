@@ -7,6 +7,7 @@
     "build": "node js/build.mjs",
     "build:watch": "node --watch js/build.mjs",
     "build:static": "bun run js/export-static.mjs",
+    "build:og": "bun run js/build-og.mjs",
     "start": "bun server.ts",
     "gallery": "./scripts/gallery.sh",
     "gallery:stop": "./scripts/gallery.sh --stop"

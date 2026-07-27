@@ -30,6 +30,44 @@ async fn serve_js() -> impl IntoResponse {
     )
 }
 
+/// The mark. Long cache: the bytes are content-stable and a favicon refetch on
+/// every navigation is pure waste.
+async fn serve_favicon() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [
+            (header::CONTENT_TYPE, "image/svg+xml"),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        include_str!("../assets/favicon.svg"),
+    )
+}
+
+async fn serve_touch_icon() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [
+            (header::CONTENT_TYPE, "image/png"),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        include_bytes!("../assets/apple-touch-icon.png").as_slice(),
+    )
+}
+
+/// Link-preview card. Fetched by crawlers (X, Slack, Discord, iMessage,
+/// Mastodon), which is why it is a committed PNG rather than rendered on
+/// demand — none of them will run a build step.
+async fn serve_og() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [
+            (header::CONTENT_TYPE, "image/png"),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        include_bytes!("../assets/og.png").as_slice(),
+    )
+}
+
 #[tokio::main]
 async fn main() {
     let app =
@@ -119,6 +157,9 @@ async fn main() {
             )
             .route("/css/maud-ui.css", get(serve_css))
             .route("/js/maud-ui.js", get(serve_js))
+            .route("/favicon.svg", get(serve_favicon))
+            .route("/apple-touch-icon.png", get(serve_touch_icon))
+            .route("/og.png", get(serve_og))
             .route(
                 "/{component}",
                 get(|Path(name): Path<String>| async move {

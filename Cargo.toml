@@ -15,6 +15,9 @@ include = [
     "src/**/*.rs",
     "css/**/*.css",
     "dist/**/*",
+    # examples/showcase.rs include_bytes!s the brand assets, so a published
+    # crate without them cannot build its own example.
+    "assets/**/*",
     "docs/components/**/*.md",
     "examples/showcase.rs",
     # Anchored with "/" — a bare "README.md" glob-matches NESTED readmes and

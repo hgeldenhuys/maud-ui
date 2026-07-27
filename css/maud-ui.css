@@ -144,6 +144,11 @@
   --mui-radius-md: 0.5rem;
   --mui-radius-lg: 0.75rem;
   --mui-radius-full: 9999px;
+
+  /* Sidebar width. Consumers override this; defined here so it is
+     discoverable in the token list rather than living only as an inline
+     fallback inside sidebar.css. */
+  --mui-sidebar-w: 16rem;
   /* Spacing scale — the steps `tokens::spacing` mirrors, and the scale the
      `stack` primitive's gap/padding modifiers resolve through. Declared here
      (not per-theme) because spacing is theme-independent: `[data-theme=…]`
@@ -212,7 +217,7 @@ body {
 
 /* Showcase layout */
 .mui-showcase__header {
-  padding: var(--mui-spacing-xxl, 2rem) 2rem 1rem;
+  padding: var(--mui-space-xxl) 2rem 1rem;
   border-bottom: 1px solid var(--mui-border);
 }
 .mui-showcase__header h1 { margin: 0 0 0.25rem; font-size: 1.75rem; }

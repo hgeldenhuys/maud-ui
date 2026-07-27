@@ -383,7 +383,7 @@
 .mui-sidebar-showcase {
   height: 480px;
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius);
+  border-radius: var(--mui-radius-md);
   overflow: hidden;
   background: var(--mui-bg-card);
 }
@@ -435,7 +435,7 @@
   gap: 0.25rem;
   padding: 0.75rem;
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius);
+  border-radius: var(--mui-radius-md);
   background: var(--mui-bg);
 }
 .mui-sidebar-demo__stat-label {

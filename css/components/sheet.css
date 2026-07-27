@@ -119,7 +119,7 @@ dialog.mui-sheet--bottom {
 }
 
 .mui-sheet__close:hover {
-  background: var(--mui-bg-hover);
+  background: var(--mui-bg-input);
   border-color: var(--mui-border-hover, var(--mui-border));
 }
 

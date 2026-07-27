@@ -59,10 +59,10 @@ impl Default for Props {
 }
 
 /// Render an alert dialog trigger button that opens the dialog with the given target_id
-pub fn trigger(target_id: &str, label: &str, variant: &str) -> Markup {
+pub fn trigger(target_id: &str, label: &str, variant: ButtonVariant) -> Markup {
     html! {
         button type="button"
-            class=(format!("mui-btn mui-btn--{} mui-btn--md", variant))
+            class=(format!("mui-btn {} mui-btn--md", variant_class(variant)))
             data-mui="alert-dialog-trigger"
             data-target=(target_id)
         {
@@ -178,7 +178,7 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             // Delete Account — destructive confirmation
             {
-                (trigger("demo-alert-delete", "Delete account", "danger"))
+                (trigger("demo-alert-delete", "Delete account", ButtonVariant::Danger))
             }
             {
                 (render(Props {
@@ -196,7 +196,7 @@ pub fn showcase() -> Markup {
 
             // Discard Changes — non-destructive confirmation
             {
-                (trigger("demo-alert-discard", "Discard changes", "default"))
+                (trigger("demo-alert-discard", "Discard changes", ButtonVariant::Default))
             }
             {
                 (render(Props {
@@ -214,7 +214,7 @@ pub fn showcase() -> Markup {
 
             // Compact (Size::Sm) with media icon + helper-built footer
             {
-                (trigger("demo-alert-compact", "Revoke session", "outline"))
+                (trigger("demo-alert-compact", "Revoke session", ButtonVariant::Outline))
             }
             {
                 (render(Props {

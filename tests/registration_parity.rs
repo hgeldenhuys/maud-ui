@@ -381,6 +381,110 @@ fn favicon_svg_is_parseable() {
     );
 }
 
+/// Every `include_str!` / `include_bytes!` target must be shippable in the package.
+///
+/// `include` listed `src/**/*.rs`, and nothing else matched a NON-`.rs` file under `src/`. So
+/// `src/showcase/landing.css` — pulled in by `include_str!("landing.css")` — was silently
+/// dropped from the tarball and the PUBLISHED crate failed to compile:
+///
+/// ```text
+/// error: couldn't read `src/showcase/landing.css`: No such file or directory
+/// ```
+///
+/// The local build cannot see this: the file is right there on disk. Only
+/// `cargo publish --dry-run` catches it, which means it is caught at the most expensive
+/// possible moment — mid-release, after the version bump and the changelog. This test moves
+/// the catch to `cargo test`.
+///
+/// Deliberately coarse: it resolves each macro's path argument relative to the including
+/// file and checks SOME `include` entry could match it. It is a smoke alarm, not a glob
+/// engine — `cargo publish --dry-run` remains the authority.
+#[test]
+fn included_files_are_packaged() {
+    let root = repo_root();
+    let manifest = read("Cargo.toml");
+    let include_block = manifest
+        .split_once("include = [")
+        .and_then(|(_, rest)| rest.split_once(']'))
+        .map(|(body, _)| body)
+        .expect("Cargo.toml has no include list");
+    // Extensions the package is allowed to carry, per directory prefix.
+    let patterns: Vec<String> = include_block
+        .lines()
+        .filter_map(|l| l.trim().strip_prefix('"'))
+        .filter_map(|l| l.split('"').next())
+        .filter(|e| !e.is_empty())
+        .map(str::to_string)
+        .collect();
+
+    fn covered(rel: &str, patterns: &[String]) -> bool {
+        patterns.iter().any(|p| {
+            let p = p.trim_start_matches('/');
+            match p.rsplit_once("**/*") {
+                // "src/**/*.rs" → prefix "src/", suffix ".rs"
+                Some((prefix, suffix)) => rel.starts_with(prefix) && rel.ends_with(suffix),
+                None => p == rel || (p.ends_with("/**/*") && rel.starts_with(&p[..p.len() - 5])),
+            }
+        })
+    }
+
+    let mut missing: Vec<String> = Vec::new();
+    let mut stack = vec![root.join("src")];
+    while let Some(dir) = stack.pop() {
+        for entry in fs::read_dir(&dir).expect("cannot read src/") {
+            let path = entry.expect("bad dir entry").path();
+            if path.is_dir() {
+                stack.push(path);
+                continue;
+            }
+            if path.extension().and_then(|e| e.to_str()) != Some("rs") {
+                continue;
+            }
+            let src = fs::read_to_string(&path).unwrap_or_default();
+            // Match the macro *call* — `include_str!("` with no gap — not the bare name.
+            // This file's own showcase renders `include_str!` INSIDE string literals as
+            // sample code, and a looser split happily "found" those and reported
+            // `src/showcase/accordion` as a missing include.
+            for macro_name in ["include_str!(\"", "include_bytes!(\""] {
+                for chunk in src.split(macro_name).skip(1) {
+                    let Some(arg) = chunk.split('"').next() else { continue };
+                    // Resolve relative to the including file's directory.
+                    let mut target = path.parent().expect("file has no parent").to_path_buf();
+                    for seg in arg.split('/') {
+                        if seg == ".." {
+                            target.pop();
+                        } else if seg != "." {
+                            target.push(seg);
+                        }
+                    }
+                    // A target that does not exist cannot be a real include: the crate
+                    // compiles locally, so every genuine one resolves. Anything else is a
+                    // parse artifact (a path inside a doc comment or a sample snippet).
+                    if !target.exists() {
+                        continue;
+                    }
+                    let Ok(rel) = target.strip_prefix(&root) else { continue };
+                    let rel = rel.to_string_lossy().replace('\\', "/");
+                    if !covered(&rel, &patterns) {
+                        missing.push(format!("{rel}  (from {})", path.display()));
+                    }
+                }
+            }
+        }
+    }
+    missing.sort();
+    missing.dedup();
+    assert!(
+        missing.is_empty(),
+        "these files are include_str!/include_bytes!'d but match NO glob in Cargo.toml's \
+         `include`, so they are dropped from the published package and the crate will fail to \
+         compile for consumers (the local build is unaffected, which is why only \
+         `cargo publish --dry-run` would otherwise catch it):\n  {}\n\
+         Add a covering glob, e.g. \"src/**/*.css\".",
+        missing.join("\n  ")
+    );
+}
+
 /// `include` entries in Cargo.toml are GLOBS, not paths. A bare `"README.md"`
 /// matches nested readmes anywhere in the tree — it was pulling
 /// `node_modules/esbuild/README.md` into the published package, caught only by

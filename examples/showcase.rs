@@ -34,7 +34,11 @@ async fn serve_js() -> impl IntoResponse {
 async fn main() {
     let app =
         Router::new()
-            .route("/", get(|| async { maud_ui::showcase::showcase_page() }))
+            .route("/", get(|| async { maud_ui::showcase::landing_page() }))
+            // The 72-component index. It lived at `/` until the landing page
+            // took that slot; a static route outranks the `/{component}`
+            // catch-all below, so no component slug can shadow it.
+            .route("/gallery", get(|| async { maud_ui::showcase::showcase_page() }))
             .route(
                 "/getting-started",
                 get(|| async { maud_ui::showcase::getting_started_page() }),

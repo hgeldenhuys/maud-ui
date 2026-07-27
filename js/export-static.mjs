@@ -90,6 +90,7 @@ async function main() {
     //    every component route + every block route.
     const routes = [
       "/",
+      "/gallery",
       "/getting-started",
       "/theme",
       "/blocks",

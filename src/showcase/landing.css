@@ -1,0 +1,419 @@
+/* Landing page — the front door at `/`.
+ *
+ * NOT part of the shipped bundle. This file is `include_str!`'d into
+ * `landing.rs` and inlined as a <style> tag, the same way the integration
+ * pages carry their own shell CSS. It deliberately does NOT live in
+ * css/maud-ui.css: consumers vendor that file to get components, and a
+ * marketing page's layout is not a component.
+ *
+ * Every colour here is a --mui-* token, so the page follows the theme
+ * toggle in both directions with no light/dark forks of its own.
+ *
+ * The visual argument: the page is a FRAME, the components are the
+ * CONTENT. Sections are separated by hairline rules on the page
+ * background rather than floated in rounded cards, so the only rounded,
+ * filled, shadowed things on screen are real maud-ui primitives. A card
+ * grid would camouflage them.
+ */
+
+.lp {
+  --lp-measure: 34rem;
+  --lp-gutter: 1.5rem;
+  --lp-max: 76rem;
+  max-width: var(--lp-max);
+  margin: 0 auto;
+  padding: 0 var(--lp-gutter);
+}
+
+/* ---- Section rhythm -------------------------------------------------- */
+
+/* A hairline is the ONLY separator. `--mui-border` is the decorative
+   token by design (see css/maud-ui.css) — nothing here is operable. */
+.lp__section {
+  border-top: 1px solid var(--mui-border);
+  padding: 5rem 0;
+}
+.lp__section:first-of-type { border-top: 0; }
+
+/* Section marker. The source design used ten uppercase letter-spaced
+   eyebrows; those read as template furniture. A mono ordinal is the same
+   affordance — "you are at step N of an argument" — without the shout,
+   and it matches the library's own `mui-badge--mono` register. */
+.lp__marker {
+  font-family: var(--mui-font-mono);
+  font-size: 0.8125rem;
+  color: var(--mui-text-subtle);
+  margin: 0 0 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+.lp__marker-num { color: var(--mui-accent-text); }
+
+.lp__h2 {
+  font-size: clamp(1.75rem, 1.2rem + 1.9vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+.lp__lede {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--mui-text-muted);
+  margin: 0;
+  max-width: var(--lp-measure);
+}
+.lp__lede + .lp__lede { margin-top: 0.875rem; }
+
+/* Full-width sections put the headline and the lede side by side. Stacked,
+   both hug a measure on the left and leave the right half of a 76rem page
+   empty — a void that reads as a layout bug rather than as whitespace.
+   Split sections do not use this: their prose column IS the measure. */
+.lp__section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+.lp__section-head .lp__h2 { margin-bottom: 0; }
+@media (max-width: 62rem) {
+  .lp__section-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+}
+.lp__lede code {
+  font-family: var(--mui-font-mono);
+  font-size: 0.9375em;
+  color: var(--mui-text);
+}
+.lp__lede strong { color: var(--mui-text); font-weight: 600; }
+
+/* ---- Hero ------------------------------------------------------------ */
+
+.lp__hero {
+  padding: clamp(3.5rem, 8vh, 7rem) 0 4.5rem;
+}
+.lp__hero-h1 {
+  font-size: clamp(2.5rem, 1.4rem + 4.4vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 650;
+  margin: 0 0 1.5rem;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+/* The second clause of the headline drops to muted so the sentence has a
+   stress pattern instead of one flat block of large type. */
+.lp__hero-h1 span { color: var(--mui-text-muted); }
+
+.lp__hero-lede {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--mui-text-muted);
+  margin: 0 0 2.25rem;
+  max-width: 44ch;
+}
+.lp__hero-lede strong { color: var(--mui-text); font-weight: 600; }
+
+.lp__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+/* The CTAs are anchors carrying `mui-btn` classes — the same construction the
+   gallery header uses. An <a> wrapping a real <button> would be invalid HTML
+   and would swallow the link's keyboard semantics. */
+.lp__cta a { text-decoration: none; }
+
+/* The header's sidebar filter has no sidebar to filter on this page, and its
+   handler is guarded on nav items existing — so it would render as a search
+   box that silently does nothing. The command palette beside it works
+   everywhere (it reads an inlined index, not the DOM) and stays. */
+.lp-page .mui-showcase__search { display: none; }
+
+/* Install line. Monospace, hairline box, no fill — it is a fact to read,
+   not a surface to click. */
+.lp__install {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--mui-font-mono);
+  font-size: 0.875rem;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: 0.625rem 0.875rem;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.lp__install-prompt { color: var(--mui-text-subtle); user-select: none; }
+
+/* Stat rule — the three verified claims, on one line, divided by rules
+   rather than boxed. */
+.lp__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2.5rem;
+  margin-top: 3rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--mui-border);
+}
+.lp__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+}
+.lp__stat-n {
+  font-family: var(--mui-font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.lp__stat-label {
+  font-size: 0.8125rem;
+  color: var(--mui-text-muted);
+}
+
+/* ---- Two-column section body ----------------------------------------- */
+
+/* Prose left, specimen right. Collapses to one column below 62rem — the
+   demos need real width before they say anything. */
+.lp__split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+.lp__split--wide { grid-template-columns: minmax(0, 1fr); }
+.lp__split--flip .lp__split-prose { order: 2; }
+
+@media (max-width: 62rem) {
+  .lp__split { grid-template-columns: minmax(0, 1fr); gap: 2.25rem; }
+  .lp__split--flip .lp__split-prose { order: 0; }
+}
+
+/* The specimen frame. One hairline and one card fill, so a demo reads as
+   "a screenshot of your app" rather than another marketing tile. */
+.lp__specimen {
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  padding: 1.5rem;
+  min-width: 0;
+}
+.lp__specimen--flush { padding: 0; overflow: hidden; }
+
+/* Caption under a specimen — names what you are looking at. */
+.lp__caption {
+  font-family: var(--mui-font-mono);
+  font-size: 0.75rem;
+  color: var(--mui-text-subtle);
+  margin: 0.75rem 0 0;
+}
+
+/* ---- Feature list (used in prose columns) ---------------------------- */
+
+.lp__list {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.lp__list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--mui-text-muted);
+}
+.lp__list b {
+  color: var(--mui-text);
+  font-weight: 600;
+}
+/* A rule, not a bullet glyph: aligns with the page's hairline language. */
+.lp__list li::before {
+  content: "";
+  width: 0.875rem;
+  height: 1px;
+  background: var(--mui-border-control);
+  margin-top: 0.7rem;
+}
+
+/* ---- Token demo ------------------------------------------------------ */
+
+.lp__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.lp__swatch {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--mui-radius-md);
+  border: 1px solid var(--mui-border);
+}
+
+/* ---- Integrations ----------------------------------------------------- */
+
+/* A rule-separated table of rows, not 15 cards. Fifteen tiles is the exact
+   shape the source design used and the exact shape being rejected here:
+   the list is a reference you scan, so it should read like an index. */
+.lp__int-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0 2.5rem;
+  margin-top: 2.5rem;
+}
+.lp__int {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--mui-border);
+  text-decoration: none;
+  color: inherit;
+}
+.lp__int-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.lp__int-name {
+  font-weight: 550;
+  font-size: 0.9375rem;
+  color: var(--mui-text);
+}
+.lp__int:hover .lp__int-name { color: var(--mui-accent-text); }
+.lp__int-kind {
+  font-family: var(--mui-font-mono);
+  font-size: 0.6875rem;
+  color: var(--mui-text-subtle);
+  white-space: nowrap;
+}
+.lp__int-desc {
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+}
+
+/* ---- Block specimen frame --------------------------------------------- */
+
+/* The dashboard block is a full app surface; it needs its own padding and a
+   horizontal escape hatch so a wide table cannot push the page sideways. */
+.lp__frame {
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+@media (max-width: 40rem) {
+  .lp__frame { padding: 1rem; }
+}
+
+/* ---- Component index preview ----------------------------------------- */
+
+/* All 72 names as a dense text index. A wall of names IS the argument for
+   this section; rendering it as 72 cards would be unreadable and would
+   contradict the page's own restraint. */
+.lp__index {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 0.125rem 1.5rem;
+  margin: 2.5rem 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+.lp__index a {
+  display: block;
+  padding: 0.3125rem 0;
+  font-size: 0.875rem;
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.lp__index a:hover {
+  color: var(--mui-text);
+  border-bottom-color: var(--mui-border-control);
+}
+
+/* ---- Closing ---------------------------------------------------------- */
+
+.lp__close {
+  border-top: 1px solid var(--mui-border);
+  padding: 5rem 0 6rem;
+  text-align: center;
+}
+.lp__close .lp__h2 { max-width: none; margin-inline: auto; }
+.lp__close .lp__lede { margin-inline: auto; }
+.lp__close .lp__cta { justify-content: center; margin-top: 2rem; margin-bottom: 0; }
+
+.lp__footer {
+  border-top: 1px solid var(--mui-border);
+  padding: 2rem 0 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--mui-text-subtle);
+}
+.lp__footer nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+.lp__footer a { color: var(--mui-text-muted); text-decoration: none; }
+.lp__footer a:hover { color: var(--mui-text); text-decoration: underline; }
+
+/* ---- Motion ----------------------------------------------------------- */
+
+/* One decorative animation on the page: the hero's accent rule drawing
+   itself once on load. It is a flourish, not a signal.
+   Library convention (css/components/{spinner,skeleton}.css): SLOW motion
+   that carries meaning, STOP motion that only decorates. This one stops.
+   The component demos below carry their own guards — the streaming cursor
+   keeps a solid caret, the spinner slows to 2.4s — so this page must not
+   blanket-disable animation and undo them. */
+@keyframes lp-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.lp__rule {
+  height: 2px;
+  width: 4rem;
+  background: var(--mui-accent);
+  border-radius: var(--mui-radius-full);
+  margin: 0 0 2rem;
+  transform-origin: left center;
+  animation: lp-draw 600ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp__rule { animation: none; }
+}
+
+/* ---- Narrow viewports -------------------------------------------------- */
+
+@media (max-width: 40rem) {
+  .lp { --lp-gutter: 1.125rem; }
+  .lp__section { padding: 3.5rem 0; }
+  .lp__hero { padding: 2.5rem 0 3rem; }
+  .lp__specimen { padding: 1rem; }
+  .lp__stats { gap: 0 1.75rem; }
+  .lp__cta { gap: 0.625rem; }
+  /* Full-width CTAs below 30rem — two half-width buttons wrap badly. */
+}
+@media (max-width: 30rem) {
+  .lp__cta { display: grid; grid-template-columns: 1fr; }
+  .lp__cta a { width: 100%; }
+}

@@ -1,4 +1,5 @@
-//! Live component gallery. Serves `showcase_page()` as the `showcase` axum example.
+//! Live component gallery. Serves `showcase_page()` at `/gallery` in the
+//! `showcase` axum example; `/` serves [`landing::landing_page`].
 //! Each component also has its own route via `component_page_by_name()`.
 //! Components are grouped into tiers: Form Controls, Display, Layout, Overlay,
 //! Navigation, and Composite.
@@ -8,6 +9,9 @@ use maud::{html, Markup, DOCTYPE};
 use crate::{blocks, primitives};
 
 pub mod docs;
+pub mod landing;
+
+pub use landing::landing_page;
 
 // Build-time cache busters. Browsers treat `?v=X` as part of the URL,
 // so changing X (on every build that touches dist/) guarantees a fresh
@@ -1022,7 +1026,7 @@ pub fn blocks_index_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Blocks" }
                         }
@@ -1034,7 +1038,7 @@ pub fn blocks_index_page() -> Markup {
                             (blocks_index_grid())
                         }
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -1063,7 +1067,7 @@ pub fn block_page_by_name(slug: &str) -> Markup {
                         (sidebar_nav())
                         main class="mui-gallery__main" {
                             nav class="mui-gallery__breadcrumb" {
-                                a href="/" { "Gallery" }
+                                a href="/gallery" { "Gallery" }
                                 span { " / " }
                                 a href="/blocks" { "Blocks" }
                                 span { " / " }
@@ -1230,6 +1234,11 @@ fn page_header() -> Markup {
                     kbd class="mui-showcase__search-hint" aria-hidden="true" { "/" }
                 }
                 nav class="mui-showcase__nav" {
+                    // `/` is the landing page, so the gallery needs its own
+                    // header slot — the brand mark no longer reaches it.
+                    a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                        "Components"
+                    }
                     a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
                         "Get started"
                     }
@@ -1420,7 +1429,7 @@ fn sidebar_nav() -> Markup {
                         // Tier header → `/#slug` so it always navigates to the
                         // index gallery first and then scrolls to the tier
                         // section, no matter which page the user is on.
-                        a class="mui-gallery__nav-tier" href=(format!("/#{}", tier.slug)) {
+                        a class="mui-gallery__nav-tier" href=(format!("/gallery#{}", tier.slug)) {
                             (tier.title)
                         }
                         div class="mui-gallery__nav-items" {
@@ -1514,7 +1523,7 @@ pub fn theme_customizer_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main mui-theme" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Theme" }
                         }
@@ -1685,7 +1694,7 @@ pub fn theme_customizer_page() -> Markup {
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -2180,7 +2189,7 @@ pub fn getting_started_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Get started" }
                         }
@@ -2429,7 +2438,7 @@ let app = Router::new()
                                     title: Some("Browse the gallery".into()),
                                     description: Some("Every component with code snippets.".into()),
                                     children: html! {
-                                        a href="/" class="mui-btn mui-btn--primary mui-btn--sm" style="text-decoration:none;" { "Open gallery" }
+                                        a href="/gallery" class="mui-btn mui-btn--primary mui-btn--sm" style="text-decoration:none;" { "Open gallery" }
                                     },
                                     ..Default::default()
                                 }))
@@ -2453,7 +2462,7 @@ let app = Router::new()
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -2515,7 +2524,7 @@ pub fn routes() -> Router {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Integrations" }
                             span { " / " }
@@ -2639,7 +2648,7 @@ html! {
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -3049,7 +3058,7 @@ pub fn integrations_xyflow_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Integrations" }
                             span { " / " }
@@ -3165,7 +3174,7 @@ html! {
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -3537,7 +3546,7 @@ pub fn integrations_excalidraw_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { "Integrations" }
                             span { " / " }
@@ -3643,7 +3652,7 @@ html! {
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -3960,7 +3969,7 @@ pub fn integrations_xterm_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "xterm.js" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "xterm.js" }
                         }
                         section class="mui-gallery__component" id="integration-xterm" {
                             h3 class="mui-gallery__component-name" { "xterm.js \u{2014} Terminal emulator" }
@@ -4006,7 +4015,7 @@ pub fn integrations_xterm_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -4201,7 +4210,7 @@ pub fn integrations_fullcalendar_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "FullCalendar" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "FullCalendar" }
                         }
                         section class="mui-gallery__component" id="integration-fullcalendar" {
                             h3 class="mui-gallery__component-name" { "FullCalendar \u{2014} Scheduling" }
@@ -4252,7 +4261,7 @@ pub fn integrations_fullcalendar_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" {}
@@ -4393,7 +4402,7 @@ pub fn integrations_leaflet_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Leaflet" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Leaflet" }
                         }
                         section class="mui-gallery__component" id="integration-leaflet" {
                             h3 class="mui-gallery__component-name" { "Leaflet \u{2014} Interactive map" }
@@ -4442,7 +4451,7 @@ pub fn integrations_leaflet_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" {}
@@ -4579,7 +4588,7 @@ pub fn integrations_tiptap_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "TipTap" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "TipTap" }
                         }
                         section class="mui-gallery__component" id="integration-tiptap" {
                             h3 class="mui-gallery__component-name" { "TipTap \u{2014} Rich text editor" }
@@ -4639,7 +4648,7 @@ pub fn integrations_tiptap_page() -> Markup {
                                 pre class="mui-integration__output-body" id="mui-tt-output" { "<!-- live HTML will render here as you type -->" }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -4831,7 +4840,7 @@ pub fn integrations_threejs_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Three.js" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Three.js" }
                         }
                         section class="mui-gallery__component" id="integration-threejs" {
                             h3 class="mui-gallery__component-name" { "Three.js \u{2014} WebGL 3D" }
@@ -4882,7 +4891,7 @@ pub fn integrations_threejs_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -5061,7 +5070,7 @@ pub fn integrations_aggrid_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "AG Grid" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "AG Grid" }
                         }
                         section class="mui-gallery__component" id="integration-aggrid" {
                             h3 class="mui-gallery__component-name" { "AG Grid \u{2014} Enterprise data grid" }
@@ -5106,7 +5115,7 @@ pub fn integrations_aggrid_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script src="https://cdn.jsdelivr.net/npm/ag-grid-community@32.3.3/dist/ag-grid-community.min.js" {}
@@ -5286,7 +5295,7 @@ pub fn integrations_mermaid_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Mermaid" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Mermaid" }
                         }
                         section class="mui-gallery__component" id="integration-mermaid" {
                             h3 class="mui-gallery__component-name" { "Mermaid \u{2014} Text to diagram" }
@@ -5334,7 +5343,7 @@ pub fn integrations_mermaid_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -5534,7 +5543,7 @@ pub fn integrations_echarts_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Apache ECharts" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Apache ECharts" }
                         }
                         section class="mui-gallery__component" id="integration-echarts" {
                             h3 class="mui-gallery__component-name" { "Apache ECharts \u{2014} Charting library" }
@@ -5583,7 +5592,7 @@ pub fn integrations_echarts_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -5720,7 +5729,7 @@ pub fn integrations_wavesurfer_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Wavesurfer" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Wavesurfer" }
                         }
                         section class="mui-gallery__component" id="integration-wavesurfer" {
                             h3 class="mui-gallery__component-name" { "Wavesurfer.js \u{2014} Audio waveform" }
@@ -5771,7 +5780,7 @@ pub fn integrations_wavesurfer_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -6049,7 +6058,7 @@ pub fn integrations_pdfjs_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "PDF.js" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "PDF.js" }
                         }
                         section class="mui-gallery__component" id="integration-pdfjs" {
                             h3 class="mui-gallery__component-name" { "PDF.js \u{2014} Inline PDF viewer" }
@@ -6095,7 +6104,7 @@ pub fn integrations_pdfjs_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -6280,7 +6289,7 @@ pub fn integrations_cytoscape_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Cytoscape" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "Cytoscape" }
                         }
                         section class="mui-gallery__component" id="integration-cytoscape" {
                             h3 class="mui-gallery__component-name" { "Cytoscape.js \u{2014} Network graph" }
@@ -6334,7 +6343,7 @@ pub fn integrations_cytoscape_page() -> Markup {
                                 }
                             }
                         }
-                        div class="mui-gallery__back" { a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
+                        div class="mui-gallery__back" { a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" } }
                     }
                 }
                 script type="importmap" {
@@ -6511,7 +6520,7 @@ pub fn integrations_sortable_page() -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "SortableJS" }
+                            a href="/gallery" { "Gallery" } span { " / " } span { "Integrations" } span { " / " } span { "SortableJS" }
                         }
                         section class="mui-gallery__component" id="integration-sortable" {
                             h3 class="mui-gallery__component-name" { "SortableJS \u{2014} Drag & drop" }
@@ -6656,7 +6665,7 @@ pub fn integrations_sortable_page() -> Markup {
                         }
 
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" }
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" { "\u{2190} Back to Gallery" }
                         }
                     }
                 }
@@ -7051,7 +7060,7 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
                         nav class="mui-gallery__breadcrumb" {
-                            a href="/" { "Gallery" }
+                            a href="/gallery" { "Gallery" }
                             span { " / " }
                             span { (display_name(name)) }
                             // Sequential nav. Sits in the breadcrumb row rather
@@ -7089,7 +7098,7 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                             }
                         }
                         div class="mui-gallery__back" {
-                            a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                            a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
                             }
                         }
@@ -7120,7 +7129,7 @@ pub fn component_page_by_name(name: &str) -> Markup {
                             section class="mui-gallery__component" {
                                 h3 { "Component not found" }
                                 p { "No component named \"" (name) "\" exists." }
-                                a href="/" class="mui-btn mui-btn--outline mui-btn--sm" {
+                                a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                     "\u{2190} Back to Gallery"
                                 }
                             }
@@ -8049,7 +8058,8 @@ fn palette_index_js() -> String {
     let mut entries: Vec<(String, String, String)> = Vec::new();
     // Top-level routes
     for (label, url, kind) in [
-        ("Gallery home", "/", "page"),
+        ("Home", "/", "page"),
+        ("Component gallery", "/gallery", "page"),
         ("Get started", "/getting-started", "page"),
         ("Blocks", "/blocks", "page"),
         ("Theme customiser", "/theme", "page"),

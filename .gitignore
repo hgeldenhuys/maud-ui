@@ -3,3 +3,9 @@
 .DS_Store
 *.log
 # dist/ IS committed — built artifacts ship with the crate
+
+# Agent/session working state — internal process detail, never part of the library.
+# Untracked from the public repo on 2026-07-27; history retains earlier copies.
+.claude/
+.autoagent/
+evals/

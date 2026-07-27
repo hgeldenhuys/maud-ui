@@ -9,7 +9,7 @@
   flex-direction: column-reverse;
   gap: 0.5rem;
   /* 90, not 100: host apps commonly park a sticky app header at z-index 100
-     (the Kapable fleet-chrome contract mandates exactly that). A toast at
+     (a shared app-chrome contract may mandate exactly that). A toast at
      100 ties with the header and — being later in the DOM — paints over it.
      90 still clears every other maud-ui overlay (menus 50/51, context menu 60). */
   z-index: 90;

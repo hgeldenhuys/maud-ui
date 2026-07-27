@@ -289,10 +289,10 @@ pub fn showcase() -> Markup {
                 }
                 (group(html! {
                     @for (name, tone, age) in [
-                        ("kapable-auth", Tone::Ok, "2d"),
-                        ("kapable-host", Tone::Warn, "19d"),
-                        ("kapable-relay", Tone::Down, "—"),
-                        ("kapable-scribe", Tone::Unknown, "—"),
+                        ("auth-service", Tone::Ok, "2d"),
+                        ("web-gateway", Tone::Warn, "19d"),
+                        ("event-relay", Tone::Down, "—"),
+                        ("log-scribe", Tone::Unknown, "—"),
                     ] {
                         (render(Props {
                             variant: Variant::Outline,
@@ -321,7 +321,7 @@ pub fn showcase() -> Markup {
                             (media(MediaVariant::Icon, html! { "\u{1F514}" }))
                             (content(html! {
                                 (title(html! { "Build finished" }))
-                                (description(html! { "kapable-api \u{00b7} blue slot \u{00b7} 00:42 elapsed" }))
+                                (description(html! { "api-service \u{00b7} blue slot \u{00b7} 00:42 elapsed" }))
                             }))
                             (footer(html! {
                                 span.mui-text-subtle { "deploy-daemon" }

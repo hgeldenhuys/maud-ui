@@ -1,6 +1,6 @@
-//! Registration parity — the five-point lockstep, enforced.
+//! Registration parity — the registration lockstep, enforced.
 //!
-//! Adding a primitive means touching five places by hand, and nothing used to
+//! Adding a primitive means touching EIGHT places by hand, and nothing used to
 //! check that you did:
 //!
 //!   1. `src/primitives/mod.rs`            — `pub mod <slug>;`
@@ -9,8 +9,9 @@
 //!   4. `src/showcase/docs.rs`             — the `include_str!` arm
 //!   5. `tests/render_tests.rs`            — `assert_showcase_renders!`
 //!
-//! plus `component_content()`'s dispatch arm, `docs/components/<slug>.md`, and
-//! the `@import` in `css/maud-ui.css`.
+//! plus `component_content()`'s dispatch arm, `docs/components/<slug>.md`, the
+//! `@import` in `css/maud-ui.css`, and the static-export list in
+//! `js/export-static.mjs` (now derived, not restated).
 //!
 //! That invariant had drifted three separate ways by the time these tests were
 //! written, each silent:
@@ -264,5 +265,29 @@ fn published_component_count_matches_reality() {
     assert!(
         readme.contains(&format!("{n} primitives")),
         "README.md must say \"{n} primitives\" — there are {n} components"
+    );
+}
+
+/// The static-site export used to carry its OWN hardcoded copy of the component
+/// list, under a "keep in lockstep with COMPONENT_NAMES" comment — a ninth
+/// registration surface, and one where the failure is invisible: the component
+/// works everywhere except that it never ships a page on the public site.
+/// It now parses `COMPONENT_NAMES` instead. This keeps it that way.
+#[test]
+fn static_export_derives_its_component_list_from_source() {
+    let src = read("js/export-static.mjs");
+    assert!(
+        src.contains("COMPONENT_NAMES"),
+        "js/export-static.mjs must parse COMPONENT_NAMES from src/showcase/mod.rs, not restate it"
+    );
+    // A re-introduced literal list would show up as many quoted slugs in a row.
+    let literal_run = COMPONENT_NAMES
+        .iter()
+        .filter(|n| src.contains(&format!("\"{n}\",")))
+        .count();
+    assert!(
+        literal_run < 5,
+        "js/export-static.mjs looks like it hardcodes the component list again \
+         ({literal_run} slugs found as string literals) — derive it from COMPONENT_NAMES"
     );
 }

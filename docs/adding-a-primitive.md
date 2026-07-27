@@ -44,6 +44,10 @@ Then:
 Optional: an arm in `component_docs()` for a hand-written usage snippet. Only 29 of 72 components
 have one, so it is genuinely optional — the doc file already carries Import and Example.
 
+There used to be a ninth: `js/export-static.mjs` kept its own copy of the component list under a
+"keep in lockstep" comment, so a fully-registered component could still fail to ship a page on the
+public site. It now parses `COMPONENT_NAMES` from source, and a parity test keeps it that way.
+
 ## Then
 
 ```bash

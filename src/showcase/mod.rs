@@ -6359,7 +6359,7 @@ if (host) {
 
   const SEED = {
     nodes: [
-      { data: { id: 'api',     label: 'kapable-api' } },
+      { data: { id: 'api',     label: 'api-service' } },
       { data: { id: 'proxy',   label: 'kapable-proxy' } },
       { data: { id: 'forge',   label: 'forge' } },
       { data: { id: 'worker',  label: 'worker' } },

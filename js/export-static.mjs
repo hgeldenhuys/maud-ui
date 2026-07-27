@@ -14,20 +14,19 @@ const PORT = 3458;
 const ROOT = process.cwd();
 const PUBLIC_DIR = join(ROOT, "public");
 
-// Component slugs — keep in lockstep with COMPONENT_NAMES in
-// src/showcase/mod.rs. Any new component added there must be added here
-// too, otherwise its page won't ship.
-const COMPONENTS = [
-  "accordion","alert","alert_dialog","aspect_ratio","avatar","badge","breadcrumb",
-  "button","button_group","calendar","card","carousel","chart","checkbox",
-  "collapsible","combobox","command","context_menu","data_table","date_picker",
-  "dialog","direction","drawer","empty_state","field","fieldset","hover_card","input",
-  "input_group","input_otp","item","kbd","label","menu","menubar","meter","native_select",
-  "navigation_menu","number_field","pagination","popover","progress","radio",
-  "radio_group","resizable","scroll_area","select","separator","sheet","sidebar",
-  "skeleton","slider","sonner","spinner","swatch","switch","table","tabs","textarea",
-  "toast","toggle","toggle_group","tooltip","typography",
-];
+// Component slugs — PARSED from src/showcase/mod.rs rather than duplicated.
+// This list used to be hand-maintained with a "keep in lockstep" comment, which
+// made it a ninth registration surface: a component added everywhere else still
+// silently failed to ship a static page. COMPONENT_NAMES is the single source of
+// truth; tests/registration_parity.rs guards every other copy of it.
+const COMPONENTS = (() => {
+  const src = readFileSync(join(ROOT, "src/showcase/mod.rs"), "utf8");
+  const m = src.match(/pub const COMPONENT_NAMES: &\[&str\] = &\[([\s\S]*?)\];/);
+  if (!m) throw new Error("could not find COMPONENT_NAMES in src/showcase/mod.rs");
+  const slugs = [...m[1].matchAll(/"([a-z0-9_]+)"/g)].map((x) => x[1]);
+  if (slugs.length === 0) throw new Error("COMPONENT_NAMES parsed as empty");
+  return slugs;
+})();
 
 // Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.
 const BLOCKS = [

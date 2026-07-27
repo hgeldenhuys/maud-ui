@@ -112,7 +112,7 @@ pub fn showcase() -> Markup {
                 ..Default::default()
             }))
             (render(Props {
-                code: "curl -X POST https://api.kapable.dev/v1/sessions \\\n  -H 'x-api-key: sk_live_…' \\\n  -d '{\"prompt\":\"hi\"}'".into(),
+                code: "curl -X POST https://api.example.com/v1/sessions \\\n  -H 'x-api-key: sk_live_…' \\\n  -d '{\"prompt\":\"hi\"}'".into(),
                 language: Some("bash".into()),
                 show_copy: true,
                 ..Default::default()

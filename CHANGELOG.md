@@ -113,7 +113,7 @@ publicly reachable for the first time:
 
 ## [0.3.0] — 2026-07-25 — primitives earned by a real migration
 
-Grown to serve an actual surface port (kv2-pulse: askama → maud + maud-ui), not speculatively.
+Grown to serve an actual surface port (an internal dashboard, askama → maud + maud-ui), not speculatively.
 Every item below existed because a real page needed it and could not be built without it.
 
 ### Added
@@ -151,7 +151,7 @@ Every item below existed because a real page needed it and could not be built wi
 maud-ui declares its tokens under `:root, [data-theme="dark"]` / `[data-theme="light"]` and resets
 `body`. If your host app already ships a palette on those same selectors, **strip maud-ui's token
 block and body reset and bridge `--mui-*` onto your own tokens** — otherwise the later sheet
-silently replaces the host palette. See `vendor-maud-ui.sh` in the kv2-pulse repo for a working
+silently replaces the host palette. See the consuming app's `vendor-maud-ui.sh` for a working
 subsetting script (it ships 27 KB of the 192 KB bundle by including only the components in use).
 
 ---
@@ -172,7 +172,7 @@ All five follow the existing Props/Variant convention, include `Default` impls a
 
 ### Rationale
 
-Came out of decomposing `@kapable/conductor` (React Router 7 package in `claude-code-sdk`) into reusable primitives. Companion storybook app at `dev.kapable.maud-ui-examples/conductor-story/` demonstrates all five in realistic fixtures, plus five more derived components composed from existing primitives (thinking block, working indicator, session list, composer, conductor header, full-layout).
+Came out of decomposing an internal React Router 7 agent-console package into reusable primitives. A companion storybook app demonstrates all five in realistic fixtures, plus five more derived components composed from existing primitives (thinking block, working indicator, session list, composer, conductor header, full-layout).
 
 ---
 
@@ -240,7 +240,7 @@ These commits land in the repo but do **not** change the published
 ### Platform note — earlier deploy block (resolved)
 - Between 11:30 and ~12:30 UTC on 2026-04-19 the Connect App Pipeline's
   pre-flight clone check returned empty-stderr failures for every app,
-  rooted in the kapable-api redeploy at 11:29:54Z. The platform self-
+  rooted in an upstream API redeploy at 11:29:54Z. The platform self-
   recovered (or a fix shipped upstream) around ~12:45Z and a single
   retry pushed this commit live. Docs sections now render on every
   `/<primitive>` route.

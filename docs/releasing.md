@@ -75,7 +75,19 @@ curl -s https://crates.io/api/v1/crates/maud-ui | python3 -m json.tool | head -2
 
 ## After publishing
 
-- Confirm: `curl -s https://crates.io/api/v1/crates/maud-ui | grep -o '"max_version":"[^"]*"'`
+**The crates.io API rejects requests with no User-Agent** — it answers `403` with an
+"API data access policy" body, which is easy to misread as "this crate does not exist". That
+misread happened twice in one session: once concluding the name was unclaimed (it was published
+in April, with 184 downloads), and once concluding a just-succeeded publish had not landed. Always
+send a UA:
+
+```bash
+curl -s -A "maud-ui-release-check" https://crates.io/api/v1/crates/maud-ui \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['crate']['max_version'])"
+```
+
+A `403` from that endpoint is a *client* problem until proven otherwise. Check the response body
+before drawing any conclusion about the crate.
 - docs.rs builds on its own; check it a few minutes later.
 - The **website** is a separate deploy — see below. Publishing the crate does not update it.
 

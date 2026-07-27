@@ -150,9 +150,13 @@
 }
 
 /* Disabled */
+/* Dimmed ONCE, not twice. This stacked `--mui-text-subtle` (already a muted
+   token) with `opacity: 0.35`, landing the digits at 1.74:1 against the card —
+   below even the 3:1 large-text floor, so a user could not read WHICH dates
+   were unavailable. Opacity alone, at the 0.5 the rest of the library uses,
+   reads as clearly disabled at ~5:1. */
 .mui-calendar__day:disabled {
-  color: var(--mui-text-subtle);
-  opacity: 0.35;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

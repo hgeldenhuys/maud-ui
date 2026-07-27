@@ -76,9 +76,12 @@
   transform: translateY(-50%) scale(0.95);
 }
 
+/* 0.25 put the arrow at 2.17:1 — present but genuinely hard to see, so "no more
+   slides" read as "the control vanished". 0.4 keeps it obviously inactive while
+   staying findable. */
 .mui-carousel__prev:disabled,
 .mui-carousel__next:disabled {
-  opacity: 0.25;
+  opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
 }

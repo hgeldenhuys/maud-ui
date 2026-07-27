@@ -17,8 +17,10 @@ include = [
     "dist/**/*",
     "docs/components/**/*.md",
     "examples/showcase.rs",
-    "README.md",
-    "LICENSE",
+    # Anchored with "/" — a bare "README.md" glob-matches NESTED readmes and
+    # was pulling node_modules/esbuild/README.md into the published crate.
+    "/README.md",
+    "/LICENSE",
     "Cargo.toml",
 ]
 

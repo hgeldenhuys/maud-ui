@@ -53,7 +53,7 @@ public site. It now parses `COMPONENT_NAMES` from source, and a parity test keep
 ```bash
 cargo test                    # parity + render tests
 node js/build.mjs             # ONLY if you touched css/ or dist/behaviors/
-cargo run --example showcase  # http://127.0.0.1:3456/spinner
+bun run gallery               # prints the URL; picks a free port
 ```
 
 **Rebuild `dist/` whenever you touch CSS.** `dist/maud-ui.css` is committed, ships in the crate, and

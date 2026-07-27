@@ -9,3 +9,5 @@
 .claude/
 .autoagent/
 evals/
+.gallery.pid
+.gallery.log

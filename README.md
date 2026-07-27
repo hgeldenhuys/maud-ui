@@ -231,7 +231,7 @@ touches eight files and `tests/registration_parity.rs` will name whichever one y
 ```bash
 cargo check                     # Type-check the crate
 cargo test                      # Render tests for all 72 components + registration parity
-cargo run --example showcase    # Gallery + getting-started at :3456
+bun run gallery                 # Gallery on the first FREE port (see scripts/gallery.sh)
 
 # Rebuild dist/ artifacts (requires Node + esbuild)
 bun install

@@ -79,6 +79,13 @@ slot and a closed enum prop.
 - **Every field gets a `Default`**, and `Props` gets a hand-written `impl Default` if any field's
   correct default is not its zero value. `code_block::show_copy` was documented as "default true"
   while a derived `Default` silently made it `false`.
+- **Pick the right border token.** `--mui-border` draws *decoration* — cards, dividers, section
+  rules, floating panels. `--mui-border-control` draws the *boundary of an interactive control* —
+  an input, a checkbox indicator, a radio ring, a switch track, a select trigger, an outline
+  button. WCAG 1.4.11 requires 3:1 for the second and nothing for the first, and they are
+  deliberately different values (1.27:1 vs 3.90:1 on a card). Using the decorative one on a
+  control is how this library shipped checkboxes with no visible box at all — just a floating
+  label. If you are unsure which you have: can the user click it? Then it is a control.
 - **Colour is never the only channel.** Pair it with text or a shape, and put the text where
   assistive tech will actually read it — `item::status_dot` and `diff`'s visually-hidden
   `"Added: "` / `"Removed: "` are the precedents. In an ARIA table, that text must sit *inside* the

@@ -225,6 +225,9 @@ Components are pure functions: `(props) -> Markup`. No state, no framework. Pair
 
 ## Development
 
+Known gaps? **[docs/audit-backlog.md](docs/audit-backlog.md)** — deferred items from the
+2026-07-27 design + a11y audit, each with numbers and a cause.
+
 Releasing? **[docs/releasing.md](docs/releasing.md)** — publishing is irreversible; the order
 and the stowaway check both matter.
 

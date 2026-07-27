@@ -6776,7 +6776,7 @@ dialog.mui-sheet--bottom {
   color: var(--mui-accent);
 }
 .mui-toggle--outline {
-  border-color: var(--mui-border);
+  border-color: var(--mui-border-control);
   background: transparent;
 }
 .mui-toggle--outline:hover:not(:disabled) {

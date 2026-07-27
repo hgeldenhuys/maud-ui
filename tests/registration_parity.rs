@@ -349,3 +349,60 @@ fn cargo_include_entries_are_anchored_or_explicit_globs() {
          {unanchored:?}\nAnchor them with a leading slash, e.g. \"/README.md\"."
     );
 }
+
+/// WCAG 1.4.11: a control's visual boundary needs 3:1. This library has two
+/// border tokens for exactly that reason — `--mui-border` is decorative
+/// (1.27:1 on a card: cards, dividers, floating panels) and
+/// `--mui-border-control` is 3.90:1 for anything the user can operate.
+///
+/// The distinction is invisible at a glance, which is how it went wrong: a
+/// first pass fixed checkbox/radio/select/switch and declared victory, and an
+/// audit then found Input and Textarea — the most-used controls in the library
+/// — still on the decorative token. Same violation, less obvious, because a
+/// 36px box makes a faint edge traceable where a 16px checkbox does not.
+///
+/// This asserts the invariant so the next component cannot reintroduce it.
+#[test]
+fn interactive_controls_do_not_use_the_decorative_border_token() {
+    // Components whose primary element IS an operable control.
+    const CONTROLS: &[&str] = &[
+        "input", "textarea", "checkbox", "radio", "radio_group", "select",
+        "native_select", "switch", "number_field", "input_group", "input_otp",
+        "combobox", "toggle", "toggle_group",
+    ];
+    // Properties that DRAW A BOUNDARY. `background` is a fill and
+    // `border-inline-*` inside an already-bounded control is an internal
+    // divider — neither is the boundary 1.4.11 governs.
+    // A control component may also own a floating PANEL (its dropdown/menu).
+    // Those are surfaces — a card that happens to float — and 1.4.11 governs a
+    // control's boundary, not a panel's decorative edge. Tracked by selector so
+    // the exemption is explicit rather than a silently skipped file.
+    const SURFACE_SUFFIXES: &[&str] = &["__dropdown", "__panel", "__menu", "__popover", "__listbox"];
+
+    let mut offenders: Vec<String> = Vec::new();
+    for name in CONTROLS {
+        let path = format!("css/components/{name}.css");
+        if !repo_root().join(&path).exists() {
+            continue;
+        }
+        let mut in_surface = false;
+        for (i, line) in read(&path).lines().enumerate() {
+            let t = line.trim();
+            // Track which rule we are inside so a panel's border can be exempt.
+            if t.ends_with('{') {
+                in_surface = SURFACE_SUFFIXES.iter().any(|sfx| t.contains(sfx));
+            }
+            let is_boundary = t.starts_with("border:") || t.starts_with("border-color:");
+            if is_boundary && !in_surface && t.contains("var(--mui-border)") {
+                offenders.push(format!("{path}:{} — {t}", i + 1));
+            }
+        }
+    }
+    assert!(
+        offenders.is_empty(),
+        "these interactive controls draw their boundary with the DECORATIVE \
+         --mui-border (1.27:1 on a card), which fails WCAG 1.4.11's 3:1 for a \
+         control boundary. Use --mui-border-control:\n  {}",
+        offenders.join("\n  ")
+    );
+}

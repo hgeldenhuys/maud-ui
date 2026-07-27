@@ -62,7 +62,7 @@
 /* --- Variant: Outline -------------------------------------------------- */
 
 .mui-toggle--outline {
-  border-color: var(--mui-border);
+  border-color: var(--mui-border-control);
   background: transparent;
 }
 

@@ -7,7 +7,21 @@
 
 /* Trigger — styled to match .mui-input (same height, border, radius) */
 
-.mui-date-picker__trigger {
+/* The trigger carries BOTH `mui-date-picker__trigger` and `mui-input`, and
+   `.mui-input` sets `display: block`. Both selectors are specificity (0,1,0),
+   so the cascade falls through to source order — and `input.css` is @imported
+   AFTER `date_picker.css`, so block won and silently killed the flex layout,
+   taking `justify-content`, `align-items` and `gap` with it (they are inert on
+   a block box). The visible symptom was the calendar icon sitting glued to the
+   end of the value text — "April 20, 2026<icon>" — drifting horizontally with
+   the value's length instead of resting at the trailing edge.
+
+   The compound selector below is (0,2,0), so it wins regardless of import
+   order. Keep the bare selector too: the trigger is only styled correctly
+   because of BOTH rules, and a future caller that drops `mui-input` still
+   needs a flex box. */
+.mui-date-picker__trigger,
+.mui-date-picker__trigger.mui-input {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;

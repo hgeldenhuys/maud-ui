@@ -2002,7 +2002,8 @@ dialog.mui-command::backdrop {
   display: inline-block;
   position: relative;
 }
-.mui-date-picker__trigger {
+.mui-date-picker__trigger,
+.mui-date-picker__trigger.mui-input {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;

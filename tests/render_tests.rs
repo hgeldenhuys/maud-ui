@@ -892,3 +892,43 @@ mod conversation_0_4_0 {
         );
     }
 }
+
+/// CSS cascade collisions — the failure mode with no error message.
+///
+/// A component whose element carries BOTH its own class and a shared skin class
+/// is at the mercy of @import order whenever the two set the same property at
+/// equal specificity. Nothing warns; the losing rule simply evaporates, and any
+/// property that depends on it evaporates with it.
+mod css_cascade {
+    fn css(name: &str) -> String {
+        std::fs::read_to_string(format!(
+            "{}/css/components/{name}.css",
+            env!("CARGO_MANIFEST_DIR")
+        ))
+        .unwrap()
+    }
+
+    /// `.mui-date-picker__trigger` and `.mui-input` are both on the trigger and
+    /// both set `display`. They are both (0,1,0), so source order decided it —
+    /// and `input.css` is imported after `date_picker.css`, so `display: block`
+    /// won. That silently disabled `justify-content`, `align-items` and `gap`
+    /// (all inert on a block box), which parked the calendar icon against the
+    /// end of the value text instead of the trailing edge, drifting with the
+    /// value's length. The compound selector is (0,2,0) and wins on merit.
+    #[test]
+    fn date_picker_trigger_beats_the_shared_input_display() {
+        let dp = css("date_picker");
+        assert!(
+            dp.contains(".mui-date-picker__trigger.mui-input"),
+            "the compound selector is what keeps the trigger a flex box against \
+             `.mui-input {{ display: block }}` — without it the calendar icon \
+             un-aligns and gap/justify-content stop applying"
+        );
+        // And the shared class it has to beat must still be the thing we think.
+        assert!(
+            css("input").contains("display: block"),
+            "input.css no longer sets display:block — re-check whether the \
+             date_picker compound override is still needed, and why"
+        );
+    }
+}

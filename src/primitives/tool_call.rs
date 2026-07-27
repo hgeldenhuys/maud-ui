@@ -38,16 +38,19 @@ impl Kind {
 
     fn glyph(&self) -> &'static str {
         match self {
-            Self::Edit => "\u{270E}",    // ✎
-            Self::Write => "\u{2795}",   // ➕
-            Self::Read => "\u{1F4D6}",   // 📖
-            Self::Bash => "\u{203A}_",   // › _
-            Self::Grep => "\u{1F50D}",   // 🔍
-            Self::Glob => "\u{2731}",    // ✱
-            Self::Task => "\u{2756}",    // ❖
-            Self::Agent => "\u{25C6}",   // ◆
-            Self::Search => "\u{1F50E}", // 🔎
-            Self::Custom => "\u{2022}",  // •
+            // All text-presentation marks, never emoji. Emoji ignore `color`
+            // (see button.rs) so they render in full OS colour inside a
+            // monochrome inspector — and they cannot carry the per-kind hue.
+            Self::Edit => "\u{270E}",   // ✎
+            Self::Write => "\u{271A}",  // ✚
+            Self::Read => "\u{25A4}",   // ▤
+            Self::Bash => "\u{203A}_",  // › _
+            Self::Grep => "\u{2315}",   // ⌕
+            Self::Glob => "\u{2731}",   // ✱
+            Self::Task => "\u{2756}",   // ❖
+            Self::Agent => "\u{25C6}",  // ◆
+            Self::Search => "\u{2315}", // ⌕
+            Self::Custom => "\u{2022}", // •
         }
     }
 }

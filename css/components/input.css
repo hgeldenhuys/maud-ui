@@ -24,10 +24,14 @@
   border-color: var(--mui-border-hover);
 }
 
+/* The ring sits directly on the border rather than floating 2px off it behind a
+   background-coloured gap. The gap version drew two hard concentric bands and
+   read as a chunky halo; this is one 3px accent glow with the border tinted to
+   match, which is what the field actually needs to say "you are here". */
 .mui-input:focus-visible {
   outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+  border-color: var(--mui-border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-border-focus) 25%, transparent);
 }
 
 .mui-input[aria-invalid="true"] {
@@ -35,7 +39,8 @@
 }
 
 .mui-input[aria-invalid="true"]:focus-visible {
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
+  border-color: var(--mui-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-danger) 25%, transparent);
 }
 
 .mui-input:disabled {

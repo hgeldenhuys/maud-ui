@@ -208,3 +208,10 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* A frozen spinner stops reporting that work is in flight, so reduced motion
+   slows it rather than stopping it — under the 5s threshold that would make it
+   'moving content' users must be able to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-spin { animation-duration: 2.4s; }
+}

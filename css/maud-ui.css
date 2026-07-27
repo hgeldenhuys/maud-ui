@@ -90,7 +90,12 @@
   --mui-bg-input: #18181b;
   --mui-border: #27272a;
   --mui-border-hover: #3f3f46;
-  --mui-border-focus: #a1a1aa;
+  /* Focus indication is brand-coloured, not neutral. A grey ring reads as an
+     unstyled browser default and — at the 4px double-ring inputs use — as a
+     hard band rather than a halo. This one token feeds every focus outline
+     and ring in the library (35 files), so retinting it here fixes them all
+     consistently. */
+  --mui-border-focus: #60a5fa;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #fafafa;
   --mui-text-muted: #a1a1aa;
@@ -155,7 +160,7 @@
   --mui-bg-input: #f4f4f5;
   --mui-border: #e4e4e7;
   --mui-border-hover: #d4d4d8;
-  --mui-border-focus: #71717a;
+  --mui-border-focus: #2563eb;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #09090b;
   --mui-text-muted: #71717a;

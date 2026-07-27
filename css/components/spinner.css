@@ -37,3 +37,9 @@
   height: 2.5rem;
   border-width: 2.5px;
 }
+
+/* Slowed, not stopped: this IS the loading signal. Removing the motion would
+   leave a static ring that says nothing. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-spinner { animation-duration: 2.4s; }
+}

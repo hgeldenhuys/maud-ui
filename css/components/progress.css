@@ -33,3 +33,9 @@
     transform: translateX(250%);
   }
 }
+
+/* An indeterminate bar that stops moving reads as a determinate bar stuck at
+   whatever width it froze on — actively misleading. Slowed instead. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-progress--indeterminate .mui-progress__bar { animation-duration: 4s; }
+}

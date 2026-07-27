@@ -61,3 +61,9 @@
   gap: 0.5rem;
   padding-top: 0.25rem;
 }
+
+/* The shimmer is decoration; the tinted block alone already reads as a
+   placeholder. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-skeleton { animation: none; }
+}

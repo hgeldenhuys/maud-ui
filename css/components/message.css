@@ -92,3 +92,8 @@
   color: var(--mui-text-muted);
   font-style: italic;
 }
+
+/* A decorative liveness pulse. The message content carries the meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-message__avatar--live { animation: none; }
+}

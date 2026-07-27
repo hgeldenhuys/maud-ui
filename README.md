@@ -93,16 +93,31 @@ async fn main() {
 }
 ```
 
-Better yet, clone the repo and run the full component gallery:
+Better yet, clone the repo and run the site locally:
 
 ```bash
 git clone https://github.com/hgeldenhuys/maud-ui
 cd maud-ui
-cargo run --example showcase
-# open http://127.0.0.1:3456
+bun run gallery     # builds, picks a FREE port, waits until it really serves, prints the URL
 ```
 
-The gallery has every component, a live theme toggle, per-component routes with code samples, and a `/getting-started` page.
+Use `bun run gallery` rather than `cargo run --example showcase` — the example hardcodes
+:3456, and a port collision answers every route with an empty 404 that reads exactly like a
+broken site. `scripts/gallery.sh` refuses a busy port and says which process holds it.
+
+Routes:
+
+| Path | What it is |
+|---|---|
+| `/` | Landing page — the pitch, built out of the library's own primitives |
+| `/gallery` | The component index: all 72, grouped by tier, with a sidebar filter |
+| `/{component}` | One component's page — variants, code samples, API docs |
+| `/blocks`, `/blocks/{slug}` | The 10 pre-composed block templates |
+| `/theme` | Live theme customiser (edits tokens, persists to localStorage) |
+| `/getting-started` | Install, first paint, theming, runtime |
+| `/integrations/{slug}` | The 15 third-party widget integrations |
+
+Every page has a live theme toggle and a `⌘K` command palette.
 
 ## Usage
 
@@ -217,8 +232,10 @@ dist/               # Pre-built bundles — serve these to the browser
   ├─ maud-ui.min.css
   ├─ maud-ui.min.js
   └─ behaviors/*.js
+assets/             # Brand — favicon.svg, og.png, apple-touch-icon.png (see docs/brand.md)
 js/build.mjs        # esbuild pipeline that concatenates + minifies dist/
-examples/showcase.rs  # axum server that renders the full gallery
+js/build-og.mjs     # Rasterises assets/og-source.html → og.png + apple-touch-icon.png
+examples/showcase.rs  # axum server that renders the landing page + gallery
 ```
 
 Components are pure functions: `(props) -> Markup`. No state, no framework. Pair with htmx for interactivity that spans requests, or with vanilla JS for in-page behavior.
@@ -234,14 +251,21 @@ and the stowaway check both matter.
 Adding a component? **[docs/adding-a-primitive.md](docs/adding-a-primitive.md)** — registration
 touches eight files and `tests/registration_parity.rs` will name whichever one you missed.
 
+Changing the mark, favicon or link-preview card? **[docs/brand.md](docs/brand.md)** — two of the
+three traps there are invisible outside a browser.
+
 ```bash
 cargo check                     # Type-check the crate
 cargo test                      # Render tests for all 72 components + registration parity
-bun run gallery                 # Gallery on the first FREE port (see scripts/gallery.sh)
+bun run gallery                 # Site on the first FREE port (see scripts/gallery.sh)
 
-# Rebuild dist/ artifacts (requires Node + esbuild)
+# Rebuild artifacts. These are THREE different outputs from three commands —
+# running one does not refresh the others, and cargo test guards the mismatch.
 bun install
-node js/build.mjs
+bun run build                   # → dist/    the bundle the CRATE ships
+bun run build:static            # → public/  the pre-rendered site the WEBSITE serves
+bun run build:og                # → assets/  og.png + apple-touch-icon.png (only when the
+                                #            card's source or the mark changes)
 ```
 
 ## Tailwind

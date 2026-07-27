@@ -6,9 +6,15 @@ mistake below ships forever. Each rule here exists because it was nearly (or act
 ## The order that matters
 
 ```bash
-# 1. Regenerate BOTH artifacts. They are built by different commands.
+# 1. Regenerate the artifacts. They are built by DIFFERENT commands.
 bun run build          # → dist/    (what the CRATE ships)
 bun run build:static   # → public/  (what the WEBSITE serves)
+bun run build:og       # → assets/  (og.png + apple-touch-icon.png) — only needed when
+                       #            assets/og-source.html or the mark changed. The card
+                       #            RASTERISES the component count, so a release that adds
+                       #            a component without re-rendering ships a link preview
+                       #            that understates the library. cargo test catches it:
+                       #            og_card_component_count_matches_reality.
 
 # 2. Gates.
 cargo test             # includes the parity guards; see below
@@ -16,7 +22,7 @@ cargo test             # includes the parity guards; see below
 # 3. Bump the version + write the CHANGELOG entry. Commit.
 
 # 4. Inspect what will actually ship — BEFORE anything permanent.
-cargo package --list | grep -v '^\(src/\|css/\|dist/\|docs/components/\|examples/\|README\|LICENSE\|Cargo\)'
+cargo package --list | grep -v '^\(src/\|css/\|dist/\|assets/\|docs/components/\|examples/\|README\|LICENSE\|Cargo\)'
 #    ^ anything printed is a stowaway. Investigate before continuing.
 
 cargo publish --dry-run
@@ -35,7 +41,7 @@ instead. Check with:
 
 ```bash
 git diff --name-only vX.Y.Z..HEAD | \
-  grep -E '^(src/|css/|dist/|docs/components/|examples/showcase\.rs|README\.md|LICENSE|Cargo\.toml)'
+  grep -E '^(src/|css/|dist/|assets/|docs/components/|examples/showcase.rs|README.md|LICENSE|Cargo.toml)'
 ```
 
 **Tag AFTER the publish succeeds, never before.** A tag is a claim that a version exists; make it

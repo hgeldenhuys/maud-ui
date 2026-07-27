@@ -7413,6 +7413,10 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
     .mui-showcase__nav { order: 10; flex-basis: 100%; }
     .mui-showcase__search { min-width: 0; flex: 1 1 auto; }
     .mui-showcase__palette-btn { display: none; }
+    /* The palette chip carries the auto margin that right-anchors the utility
+     * cluster; it is hidden here, so the tools have to take it over or they
+     * collapse back against the brand. */
+    .mui-showcase__tools { margin-inline-start: auto; }
 }
 
 /* Dismissal via Escape should be accessible; backdrop handles click. */
@@ -7942,6 +7946,18 @@ html { scroll-behavior: smooth; }
     border: 0;
     box-shadow: none;
 }
+
+/* Push the utility cluster to the far edge of the header.
+ *
+ * The palette chip and the theme/direction toggles are page-level controls,
+ * not navigation, and they belong at the opposite end from the brand. They
+ * used to simply trail the nav, which looked right ONLY on pages where the
+ * sidebar search grew to fill the gap — on any page without it (the landing
+ * page hides the search, since there is no sidebar to filter) the whole
+ * header bunched against the left edge with dead space to the right.
+ * Anchoring them explicitly makes the layout independent of whether the
+ * search happens to be present. */
+.mui-showcase__palette-btn { margin-inline-start: auto; }
 
 .mui-showcase__tools {
     display: inline-flex;

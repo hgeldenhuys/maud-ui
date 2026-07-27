@@ -3,9 +3,17 @@
 //!
 //! Built-in syntax highlighting is emitted as `<span class="mui-code__tok
 //! mui-code__tok--<kind>">…</span>` spans when [`Props::language`] is one of
-//! `rust`/`rs`, `bash`/`sh`, `typescript`/`ts`/`tsx`/`js`/`jsx`, or `json`.
+//! `rust`/`rs`, `bash`/`sh`/`shell`, `typescript`/`ts`/`tsx`/`javascript`/`js`/
+//! `jsx`, `json`, or `css`.
 //! Token classes are styled in `css/components/code_block.css` using theme-aware
 //! CSS vars (`--mui-code-*`) that flip between dark and `[data-theme="light"]`.
+//!
+//! ANY OTHER VALUE renders the source unhighlighted, wrapped in a
+//! `<span data-mui-highlight="unsupported" data-language="…">` marker. The
+//! marker exists because the failure is otherwise invisible: flat grey code
+//! sitting next to coloured code reads as a broken highlighter, not as an
+//! uncovered language. If a snippet looks dead, grep the rendered HTML for
+//! `data-mui-highlight` before suspecting the stylesheet.
 //!
 //! Callers that want an external highlighter (syntect, shiki rendered
 //! server-side, etc.) keep the escape hatch via [`Props::pre_rendered`], which
@@ -175,7 +183,22 @@ fn highlight(source: &str, language: &str) -> Markup {
         "bash" | "sh" | "shell" => tokenize_bash(source),
         "typescript" | "ts" | "tsx" | "javascript" | "js" | "jsx" => tokenize_ts(source),
         "json" => tokenize_json(source),
-        _ => return html! { (source) },
+        "css" => tokenize_css(source),
+        // Unsupported language. The snippet still renders — losing the code
+        // would be far worse than losing its colour — but it renders FLAT, and
+        // flat grey code next to highlighted code reads as "the highlighter is
+        // broken" rather than "this language isn't covered". That ambiguity
+        // cost a real diagnosis: a `css` snippet on the landing page rendered
+        // dead and looked like a styling bug.
+        //
+        // So the fallback is no longer silent. The marker names the language
+        // that was asked for, which is what you need to know to either add a
+        // tokenizer or fix a typo'd label.
+        _ => {
+            return html! {
+                span data-mui-highlight="unsupported" data-language=(language) { (source) }
+            }
+        }
     };
     html! {
         @for (tok, text) in &spans {
@@ -802,6 +825,207 @@ fn tokenize_ts(src: &str) -> Vec<(Tok, &str)> {
 
 // --- JSON ------------------------------------------------------------------
 
+/// CSS tokenizer.
+///
+/// Added because this library's entire argument is its custom properties, and
+/// every snippet that showed one rendered as flat grey text — `css` fell
+/// through to the unhighlighted branch. A token system you cannot read is a
+/// poor advertisement for a token system.
+///
+/// Two pieces of context decide how an identifier is tagged, so both are
+/// tracked as we go:
+///
+///   - `blocks`: a stack of "is this a declaration block?". A `{` opens a
+///     declaration block normally, but NOT after an at-rule — the body of
+///     `@media { … }` holds more selectors, not properties. Without this,
+///     every selector nested in a media query got tagged as a property.
+///   - `in_value`: set by `:` inside a declaration block, cleared by `;` `{`
+///     `}`. It is what separates `color` (property) from `red` (value), and
+///     it is deliberately NOT set by `:` at selector level so `a:hover` stays
+///     a selector.
+///
+/// Coarse by design, like its siblings above: it is a showcase highlighter,
+/// not a CSS parser.
+fn tokenize_css(src: &str) -> Vec<(Tok, &str)> {
+    let bytes = src.as_bytes();
+    let mut out = Vec::new();
+    let mut i = 0;
+    // Stack of block kinds; `true` = declarations live here.
+    let mut blocks: Vec<bool> = Vec::new();
+    let mut in_value = false;
+    let mut pending_at_rule = false;
+
+    let in_decl = |blocks: &Vec<bool>| *blocks.last().unwrap_or(&false);
+
+    while i < bytes.len() {
+        let b = bytes[i];
+
+        if b.is_ascii_whitespace() {
+            let start = i;
+            while i < bytes.len() && bytes[i].is_ascii_whitespace() {
+                i += 1;
+            }
+            out.push((Tok::Text, &src[start..i]));
+            continue;
+        }
+
+        // Comments. Unterminated ones run to EOF rather than panicking.
+        if b == b'/' && i + 1 < bytes.len() && bytes[i + 1] == b'*' {
+            let start = i;
+            i += 2;
+            while i + 1 < bytes.len() && !(bytes[i] == b'*' && bytes[i + 1] == b'/') {
+                i += 1;
+            }
+            i = (i + 2).min(bytes.len());
+            out.push((Tok::Comment, &src[start..i]));
+            continue;
+        }
+
+        if b == b'"' || b == b'\'' {
+            let n = scan_string(&bytes[i..], b);
+            out.push((Tok::StringLit, &src[i..i + n]));
+            i += n;
+            continue;
+        }
+
+        // At-rule: @media, @import, @supports…
+        if b == b'@' {
+            let n = 1 + scan_css_ident(&bytes[i + 1..]);
+            out.push((Tok::Keyword, &src[i..i + n]));
+            i += n;
+            pending_at_rule = true;
+            continue;
+        }
+
+        // Custom property — `--mui-accent`. The single most important thing on
+        // screen for this library, so it gets its own colour rather than
+        // sharing the generic property tint.
+        if b == b'-' && i + 1 < bytes.len() && bytes[i + 1] == b'-' {
+            let n = 2 + scan_css_ident(&bytes[i + 2..]);
+            out.push((Tok::Variable, &src[i..i + n]));
+            i += n;
+            continue;
+        }
+
+        // `#` is a hex colour in a value position and an id selector outside
+        // one. Same character, two meanings, and only the context separates
+        // them.
+        if b == b'#' {
+            let n = 1 + scan_css_ident(&bytes[i + 1..]);
+            let tok = if in_value { Tok::Number } else { Tok::Type };
+            out.push((tok, &src[i..i + n]));
+            i += n;
+            continue;
+        }
+
+        // Class selector / decimal-leading number.
+        if b == b'.' {
+            if i + 1 < bytes.len() && bytes[i + 1].is_ascii_digit() {
+                let start = i;
+                i += 1 + scan_css_number_tail(&bytes[i + 1..]);
+                out.push((Tok::Number, &src[start..i]));
+                continue;
+            }
+            let n = 1 + scan_css_ident(&bytes[i + 1..]);
+            if n > 1 {
+                out.push((Tok::Type, &src[i..i + n]));
+                i += n;
+                continue;
+            }
+        }
+
+        if b.is_ascii_digit() {
+            let start = i;
+            i += scan_css_number_tail(&bytes[i..]);
+            out.push((Tok::Number, &src[start..i]));
+            continue;
+        }
+
+        if is_ident_start(b) || b == b'-' {
+            let n = scan_css_ident(&bytes[i..]);
+            let word = &src[i..i + n];
+            let next_non_space = bytes[i + n..]
+                .iter()
+                .find(|c| !c.is_ascii_whitespace())
+                .copied();
+            let tok = if next_non_space == Some(b'(') {
+                // A function: var(), calc(), rgb(), clamp()…
+                Tok::Type
+            } else if in_decl(&blocks) && !in_value {
+                Tok::Attribute
+            } else if in_decl(&blocks) {
+                Tok::Text
+            } else {
+                // Selector level: element names, and the keywords inside an
+                // at-rule prelude.
+                Tok::Type
+            };
+            out.push((tok, word));
+            i += n;
+            continue;
+        }
+
+        match b {
+            b'{' => {
+                blocks.push(!pending_at_rule);
+                pending_at_rule = false;
+                in_value = false;
+            }
+            b'}' => {
+                blocks.pop();
+                in_value = false;
+            }
+            b';' => {
+                in_value = false;
+                pending_at_rule = false;
+            }
+            b':' => {
+                if in_decl(&blocks) {
+                    in_value = true;
+                }
+            }
+            _ => {}
+        }
+
+        if is_punct(b) || b == b'%' {
+            out.push((Tok::Punct, &src[i..i + 1]));
+            i += 1;
+            continue;
+        }
+
+        let ch_len = next_char_len(&bytes[i..]);
+        out.push((Tok::Text, &src[i..i + ch_len]));
+        i += ch_len;
+    }
+    out
+}
+
+/// CSS identifiers may contain hyphens, which `scan_ident` (alphanumeric plus
+/// underscore) stops at — it would split `border-radius` into three tokens.
+fn scan_css_ident(bytes: &[u8]) -> usize {
+    let mut n = 0;
+    while n < bytes.len() && (is_ident_cont(bytes[n]) || bytes[n] == b'-') {
+        n += 1;
+    }
+    n
+}
+
+/// A CSS number carries its unit: `0.75rem`, `100%`, `2px`, `1e3`. Keeping the
+/// unit inside the number token stops `rem` being re-read as a property name.
+fn scan_css_number_tail(bytes: &[u8]) -> usize {
+    let mut n = 0;
+    while n < bytes.len() && (bytes[n].is_ascii_digit() || bytes[n] == b'.') {
+        n += 1;
+    }
+    while n < bytes.len() && bytes[n].is_ascii_alphabetic() {
+        n += 1;
+    }
+    if n < bytes.len() && bytes[n] == b'%' {
+        n += 1;
+    }
+    n
+}
+
 fn tokenize_json(src: &str) -> Vec<(Tok, &str)> {
     let bytes = src.as_bytes();
     let mut out = Vec::new();
@@ -886,6 +1110,84 @@ mod tests {
             .collect::<Vec<_>>()
     }
 
+    /// Finds the token kind a given piece of source text was tagged with.
+    fn kind_of<'a>(spans: &'a [(Tok, &str)], needle: &str) -> Option<&'static str> {
+        spans
+            .iter()
+            .find(|(_, text)| *text == needle)
+            .and_then(|(t, _)| t.class())
+    }
+
+    #[test]
+    fn css_separates_properties_from_values_and_selectors() {
+        let src = ".card {\n  color: red;\n  border-radius: 0.5rem;\n}";
+        let toks = tokenize_css(src);
+        assert_eq!(kind_of(&toks, ".card"), Some("type"), "selector");
+        assert_eq!(kind_of(&toks, "color"), Some("attribute"), "property name");
+        // `red` sits after the colon, so it must NOT be tagged as a property.
+        assert_eq!(kind_of(&toks, "red"), None, "value");
+        assert_eq!(
+            kind_of(&toks, "border-radius"),
+            Some("attribute"),
+            "hyphenated property must stay one token"
+        );
+        assert_eq!(kind_of(&toks, "0.5rem"), Some("number"), "number keeps unit");
+    }
+
+    #[test]
+    fn css_tags_custom_properties_and_functions() {
+        let src = ":root { --mui-accent: #2563eb; }\n.b { color: var(--mui-accent); }";
+        let toks = tokenize_css(src);
+        assert_eq!(kind_of(&toks, "--mui-accent"), Some("variable"));
+        assert_eq!(kind_of(&toks, "var"), Some("type"), "function call");
+        assert_eq!(kind_of(&toks, "#2563eb"), Some("number"), "hex in a value");
+    }
+
+    /// The bug this tokenizer's block stack exists to prevent: inside
+    /// `@media { … }` the nested `.card` is a SELECTOR, but a naive
+    /// "any brace opens a declaration block" rule tags it as a property name.
+    #[test]
+    fn css_selectors_nested_in_an_at_rule_are_not_properties() {
+        let src = "@media (min-width: 40rem) {\n  .card { color: red; }\n}";
+        let toks = tokenize_css(src);
+        assert_eq!(kind_of(&toks, "@media"), Some("keyword"));
+        assert_eq!(
+            kind_of(&toks, ".card"),
+            Some("type"),
+            "a selector inside @media must not be tagged as a property"
+        );
+        assert_eq!(kind_of(&toks, "color"), Some("attribute"));
+    }
+
+    /// `#` is a hex colour in a value and an id selector outside one.
+    #[test]
+    fn css_hash_is_context_sensitive() {
+        let toks = tokenize_css("#main { color: #fff; }");
+        assert_eq!(kind_of(&toks, "#main"), Some("type"), "id selector");
+        assert_eq!(kind_of(&toks, "#fff"), Some("number"), "hex colour");
+    }
+
+    /// Tokenizers must never lose or reorder source. Reassembling every span
+    /// has to reproduce the input byte for byte.
+    #[test]
+    fn css_tokenizer_is_lossless() {
+        let src = "/* c */\n@media (min-width: 40rem) {\n  .a::after { content: \"x\"; width: 50%; }\n}\n";
+        let joined: String = tokenize_css(src).iter().map(|(_, t)| *t).collect();
+        assert_eq!(joined, src, "tokenizer dropped or reordered source");
+    }
+
+    /// An unsupported language must still render its source, and must say so.
+    #[test]
+    fn unsupported_language_renders_source_with_a_marker() {
+        let html = highlight("SELECT 1;", "sql").into_string();
+        assert!(html.contains("SELECT 1;"), "source must survive");
+        assert!(
+            html.contains(r#"data-mui-highlight="unsupported""#),
+            "an uncovered language must be inspectable, not silently flat"
+        );
+        assert!(html.contains(r#"data-language="sql""#));
+    }
+
     #[test]
     fn rust_tags_keywords_types_strings_numbers_comments() {
         let src = "// hi\nfn main() { let x: u32 = 42; println!(\"hi\"); }";
@@ -955,11 +1257,22 @@ mod tests {
     }
 
     #[test]
-    fn unknown_language_passes_through() {
-        // call via the public-to-module highlight() so we exercise the
-        // match-arm that returns plain markup for unknown langs.
+    fn unknown_language_passes_through_unhighlighted() {
+        // Exercises the match-arm for unknown languages. It used to return the
+        // source completely bare; it now wraps it in an inert marker span.
+        //
+        // The assertion was deliberately loosened rather than the behaviour
+        // reverted: bare output made an uncovered language indistinguishable
+        // from a broken stylesheet, which is exactly how a flat `css` snippet
+        // on the landing page got misread. What actually matters here — and
+        // what this still pins — is that NO token classes are applied and the
+        // source survives intact.
         let out = highlight("totally plain", "cobol").into_string();
-        assert_eq!(out, "totally plain");
+        assert!(out.contains("totally plain"), "source must survive");
+        assert!(
+            !out.contains("mui-code__tok"),
+            "an unknown language must not get token classes"
+        );
     }
 
     #[test]

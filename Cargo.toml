@@ -21,7 +21,7 @@ include = [
     # was pulling node_modules/esbuild/README.md into the published crate.
     "/README.md",
     "/LICENSE",
-    "Cargo.toml",
+    "/Cargo.toml",
 ]
 
 [dependencies]

@@ -225,6 +225,9 @@ Components are pure functions: `(props) -> Markup`. No state, no framework. Pair
 
 ## Development
 
+Releasing? **[docs/releasing.md](docs/releasing.md)** — publishing is irreversible; the order
+and the stowaway check both matter.
+
 Adding a component? **[docs/adding-a-primitive.md](docs/adding-a-primitive.md)** — registration
 touches eight files and `tests/registration_parity.rs` will name whichever one you missed.
 

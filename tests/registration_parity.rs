@@ -313,3 +313,39 @@ fn static_export_css_matches_the_built_bundle() {
          previous build while the repo looks correct."
     );
 }
+
+/// `include` entries in Cargo.toml are GLOBS, not paths. A bare `"README.md"`
+/// matches nested readmes anywhere in the tree — it was pulling
+/// `node_modules/esbuild/README.md` into the published package, caught only by
+/// reading `cargo package --list` by hand before the first publish.
+///
+/// crates.io versions are immutable, so a stowaway ships forever. Root-level
+/// entries must be anchored with a leading `/`.
+#[test]
+fn cargo_include_entries_are_anchored_or_explicit_globs() {
+    let manifest = read("Cargo.toml");
+    let include = manifest
+        .split_once("include = [")
+        .and_then(|(_, rest)| rest.split_once(']'))
+        .map(|(body, _)| body)
+        .expect("Cargo.toml has no include list");
+
+    let unanchored: Vec<String> = include
+        .lines()
+        .filter_map(|l| l.trim().strip_prefix('"'))
+        .filter_map(|l| l.split('"').next())
+        .filter(|e| !e.is_empty())
+        // A path segment separator makes the pattern specific enough to be safe;
+        // a leading slash anchors it to the repo root. Anything else is a bare
+        // filename that will match at any depth.
+        .filter(|e| !e.starts_with('/') && !e.contains('/'))
+        .map(str::to_string)
+        .collect();
+
+    assert!(
+        unanchored.is_empty(),
+        "these Cargo.toml `include` entries are bare filenames, so they glob-match \
+         nested files anywhere in the tree (this shipped node_modules readmes once): \
+         {unanchored:?}\nAnchor them with a leading slash, e.g. \"/README.md\"."
+    );
+}

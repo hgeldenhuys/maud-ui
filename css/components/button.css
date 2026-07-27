@@ -77,7 +77,7 @@
 
 .mui-btn--default {
   background: var(--mui-bg-input);
-  border-color: var(--mui-border);
+  border-color: var(--mui-border-control);
   color: var(--mui-text);
 }
 
@@ -104,7 +104,7 @@
 
 .mui-btn--secondary {
   background: var(--mui-bg-input);
-  border-color: var(--mui-border);
+  border-color: var(--mui-border-control);
   color: var(--mui-text);
 }
 
@@ -117,7 +117,7 @@
 
 .mui-btn--outline {
   background: transparent;
-  border-color: var(--mui-border);
+  border-color: var(--mui-border-control);
   color: var(--mui-text);
 }
 

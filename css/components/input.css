@@ -6,7 +6,7 @@
   height: 2.25rem;
   background: transparent;
   color: var(--mui-text);
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-md);
   padding: 0.5rem 0.75rem;
   font-family: inherit;
@@ -68,7 +68,7 @@
   padding: 0.25rem 0.625rem;
   background: var(--mui-bg-card);
   color: var(--mui-text);
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-sm);
   font: inherit;
   cursor: pointer;

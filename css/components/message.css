@@ -70,10 +70,22 @@
   gap: 0.25rem;
 }
 
-/* Role variants */
+/* Role variants.
+   `--user` was the only one of the three hardcoding literal hex (#7EB6D4 on
+   #0b1320) while `--assistant` and `--system` directly below both used tokens.
+   A consumer retheming the library got two avatars that followed and one that
+   didn't.
+
+   Violet, not info: `--mui-info` (#1d4ed8) sits right next to the `--mui-accent`
+   (#2563eb) that `--assistant` uses, so tokenising to it would have made the two
+   roles near-indistinguishable — the literal hex was distinct from the assistant
+   by LIGHTNESS, and that distinction is the whole point of a role variant.
+   Violet is one of the token file's declared "taxonomy hues, for category sets
+   that outgrow the four semantic states", which is exactly what speaker roles
+   are. Its paired ink is `--mui-violet-fg`. */
 .mui-message--user .mui-message__avatar {
-  background: #7EB6D4;
-  color: #0b1320;
+  background: var(--mui-violet);
+  color: var(--mui-violet-fg);
 }
 .mui-message--assistant .mui-message__avatar {
   background: var(--mui-accent);

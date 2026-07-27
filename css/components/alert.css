@@ -85,8 +85,14 @@
   color: var(--mui-danger-text);
 }
 
+/* Softened rather than set to the title's colour. Painting both the same value
+   left the alert with no title/body hierarchy at all — the one variant on the
+   page where the eye had nothing to land on first. Every other variant reads
+   `title: --mui-text` over `description: --mui-text-muted`; this keeps that
+   relationship while retaining the danger tint the variant exists to carry.
+   (shadcn does the same thing with `text-destructive/90`.) */
 .mui-alert--danger .mui-alert__description {
-  color: var(--mui-danger-text);
+  color: color-mix(in srgb, var(--mui-danger-text) 72%, var(--mui-text-muted));
 }
 
 /* Info variant — accent border, subtle tint */

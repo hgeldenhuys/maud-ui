@@ -226,7 +226,7 @@ dialog.mui-alert-dialog::backdrop {
   color: var(--mui-danger-text);
 }
 .mui-alert--danger .mui-alert__description {
-  color: var(--mui-danger-text);
+  color: color-mix(in srgb, var(--mui-danger-text) 72%, var(--mui-text-muted));
 }
 .mui-alert--info {
   border-color: var(--mui-accent);
@@ -3994,8 +3994,8 @@ dialog.mui-drawer--bottom {
   gap: 0.25rem;
 }
 .mui-message--user .mui-message__avatar {
-  background: #7EB6D4;
-  color: #0b1320;
+  background: var(--mui-violet);
+  color: var(--mui-violet-fg);
 }
 .mui-message--assistant .mui-message__avatar {
   background: var(--mui-accent);

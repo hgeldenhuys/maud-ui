@@ -33,6 +33,7 @@ assert_showcase_renders!(
     carousel,
     chart,
     checkbox,
+    code_block,
     collapsible,
     combobox,
     command,
@@ -40,6 +41,7 @@ assert_showcase_renders!(
     data_table,
     date_picker,
     dialog,
+    diff,
     direction,
     drawer,
     empty_state,
@@ -56,6 +58,7 @@ assert_showcase_renders!(
     label,
     menu,
     menubar,
+    message,
     meter,
     native_select,
     navigation_menu,
@@ -76,6 +79,7 @@ assert_showcase_renders!(
     sonner,
     spinner,
     stack,
+    streaming_cursor,
     swatch,
     switch,
     table,
@@ -84,6 +88,7 @@ assert_showcase_renders!(
     toast,
     toggle,
     toggle_group,
+    tool_call,
     tooltip,
     typography,
 );
@@ -726,5 +731,164 @@ mod form_contract {
         assert!(out.starts_with(r#"<form class="mui-form" action="/save" method="post">"#), "got: {out}");
         assert!(out.contains(r#"<div class="mui-stack mui-stack--gap-lg">"#), "got: {out}");
         assert!(out.contains("<span>field</span>"), "got: {out}");
+    }
+}
+
+/// The conversation tier — five primitives that shipped finished but
+/// registered nowhere until 0.4.0. Each assertion below is a defect found
+/// while writing their docs, so each one is a regression guard, not a
+/// restatement of the implementation.
+mod conversation_0_4_0 {
+    use maud_ui::primitives::{code_block, diff, streaming_cursor};
+
+    /// A diff conveys add-vs-remove by row tint and a `+`/`-` sigil that is
+    /// `aria-hidden`. Without a text channel a screen reader gets the line
+    /// content and no way to tell an addition from a deletion — the one thing
+    /// a diff exists to say. Same contract `item::status_dot` already keeps.
+    #[test]
+    fn diff_rows_announce_add_and_remove_to_assistive_tech() {
+        let out = diff::render(diff::Props {
+            lines: vec![
+                diff::Line {
+                    kind: diff::LineKind::Add,
+                    old_line_no: None,
+                    new_line_no: Some(1),
+                    text: "let x = 1;".into(),
+                },
+                diff::Line {
+                    kind: diff::LineKind::Remove,
+                    old_line_no: Some(1),
+                    new_line_no: None,
+                    text: "let x = 0;".into(),
+                },
+                diff::Line {
+                    kind: diff::LineKind::Context,
+                    old_line_no: Some(2),
+                    new_line_no: Some(2),
+                    text: "println!();".into(),
+                },
+            ],
+            ..Default::default()
+        })
+        .into_string();
+
+        assert!(
+            out.contains(r#"<span class="mui-visually-hidden">Added: </span>let x = 1;"#),
+            "added line must carry a text state, not colour alone: {out}"
+        );
+        assert!(
+            out.contains(r#"<span class="mui-visually-hidden">Removed: </span>let x = 0;"#),
+            "removed line must carry a text state, not colour alone: {out}"
+        );
+        // Context lines are the baseline — prefixing every unchanged line would
+        // bury the two states that matter.
+        assert!(
+            !out.contains("Unchanged"),
+            "context lines must not be announced: {out}"
+        );
+        assert_eq!(
+            out.matches("mui-visually-hidden").count(),
+            2,
+            "exactly the add and the remove row: {out}"
+        );
+    }
+
+    /// The announcement has to sit INSIDE the role="cell" span: content in a
+    /// role="row" but outside a cell is not reliably announced.
+    #[test]
+    fn diff_announcement_is_inside_the_cell() {
+        let out = diff::render(diff::Props {
+            lines: vec![diff::Line {
+                kind: diff::LineKind::Add,
+                old_line_no: None,
+                new_line_no: Some(1),
+                text: "x".into(),
+            }],
+            ..Default::default()
+        })
+        .into_string();
+        assert!(
+            out.contains(
+                r#"<span class="mui-diff__text" role="cell"><span class="mui-visually-hidden">Added: </span>x</span>"#
+            ),
+            "got: {out}"
+        );
+    }
+
+    /// `show_copy` was documented as "default true" while a derived `Default`
+    /// made it `false`, so every `..Default::default()` silently dropped the
+    /// copy button.
+    #[test]
+    fn code_block_show_copy_defaults_to_true_as_documented() {
+        assert!(code_block::Props::default().show_copy);
+        let out = code_block::render(code_block::Props {
+            code: "let x = 1;".into(),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains("copy"), "copy affordance missing: {out}");
+    }
+
+    /// All three streaming indicators animate infinitely. Reduced-motion users
+    /// must get a static indicator that is still VISIBLE — not a removed one.
+    #[test]
+    fn streaming_indicators_have_a_reduced_motion_fallback() {
+        let css = std::fs::read_to_string(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/css/components/streaming_cursor.css"
+        ))
+        .unwrap();
+        let (_, reduced) = css
+            .split_once("@media (prefers-reduced-motion: reduce)")
+            .expect("no prefers-reduced-motion block — three infinite animations run unconditionally");
+        for selector in [
+            ".mui-streaming__cursor",
+            ".mui-streaming__dots span",
+            ".mui-streaming__pulse",
+        ] {
+            assert!(
+                reduced.contains(selector),
+                "{selector} still animates under reduced motion"
+            );
+        }
+        assert!(
+            reduced.contains("animation: none"),
+            "fallback must stop the animation, leaving the indicator visible"
+        );
+        // display:none / opacity:0 would remove the indicator instead of
+        // stilling it — the user would lose the signal entirely.
+        let block_end = reduced.find('\n').map(|_| reduced).unwrap_or(reduced);
+        assert!(
+            !block_end.contains("display: none") && !block_end.contains("opacity: 0"),
+            "reduced motion must still the indicator, not hide it"
+        );
+    }
+
+    /// Every conversation primitive is reachable through the public dispatch —
+    /// the thing that was broken for all five until 0.4.0.
+    #[test]
+    fn all_five_conversation_primitives_render_a_real_page() {
+        for slug in [
+            "message",
+            "streaming_cursor",
+            "code_block",
+            "diff",
+            "tool_call",
+        ] {
+            let page = maud_ui::showcase::component_page_by_name(slug).into_string();
+            assert!(
+                !page.contains("Component not found"),
+                "{slug} falls through to the 404 page"
+            );
+        }
+    }
+
+    #[test]
+    fn streaming_cursor_marks_the_caret_decorative() {
+        let out = streaming_cursor::render(streaming_cursor::Props::default()).into_string();
+        assert!(
+            out.contains(r#"aria-hidden="true""#),
+            "the caret is decoration; screen readers must not announce it: {out}"
+        );
     }
 }

@@ -31,6 +31,18 @@ impl LineKind {
             Self::Hunk => "@",
         }
     }
+
+    /// Text announced to assistive tech in place of the (aria-hidden) sigil and
+    /// the row tint. `None` for context lines — they are the baseline, and
+    /// prefixing every unchanged line with "Unchanged" would bury the two
+    /// states that actually matter.
+    fn announcement(&self) -> Option<&'static str> {
+        match self {
+            Self::Add => Some("Added: "),
+            Self::Remove => Some("Removed: "),
+            Self::Context | Self::Hunk => None,
+        }
+    }
 }
 
 /// A single line inside a diff.
@@ -104,7 +116,19 @@ pub fn render(props: Props) -> Markup {
                                 }
                             }
                             span class="mui-diff__sigil" aria-hidden="true" { (line.kind.sigil()) }
-                            span class="mui-diff__text" role="cell" { (line.text) }
+                            span class="mui-diff__text" role="cell" {
+                                // The +/- sigil is aria-hidden and the row tint
+                                // is colour, so without this a screen reader
+                                // gets the line text and no way to tell an
+                                // addition from a deletion — which is the only
+                                // thing a diff exists to convey. Lives INSIDE
+                                // the cell: content sitting in a role="row" but
+                                // outside a cell is not reliably announced.
+                                @if let Some(state) = line.kind.announcement() {
+                                    span class="mui-visually-hidden" { (state) }
+                                }
+                                (line.text)
+                            }
                         }
                     }
                 }

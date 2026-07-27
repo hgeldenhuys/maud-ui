@@ -13,7 +13,7 @@
 use maud::{html, Markup, PreEscaped};
 
 /// Code block rendering properties.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Props {
     /// Raw source — used when `pre_rendered` is `None`. Highlighted per
     /// [`Props::language`] when the language is recognised.
@@ -31,6 +31,25 @@ pub struct Props {
     pub show_copy: bool,
     /// Optional max-height (CSS) — enables vertical scrolling when set.
     pub max_height: Option<String>,
+}
+
+impl Default for Props {
+    /// Hand-written rather than derived because `show_copy` must default to
+    /// `true`: the field has always been documented as "default true", but a
+    /// derived `Default` gave it `bool::default()` — `false` — so every
+    /// `..Default::default()` construction silently dropped the copy button.
+    /// Safe to correct now; this primitive was registered nowhere until 0.4.0,
+    /// so nothing depended on the wrong value.
+    fn default() -> Self {
+        Self {
+            code: String::new(),
+            pre_rendered: None,
+            language: None,
+            filename: None,
+            show_copy: true,
+            max_height: None,
+        }
+    }
 }
 
 /// Render a single code block.

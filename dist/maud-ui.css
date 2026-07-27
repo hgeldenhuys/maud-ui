@@ -6145,6 +6145,13 @@ dialog.mui-sheet--bottom {
     box-shadow: 0 0 0 0 transparent;
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .mui-streaming__cursor,
+  .mui-streaming__dots span,
+  .mui-streaming__pulse {
+    animation: none;
+  }
+}
 
 /* css/components/switch.css */
 .mui-switch-wrap {

@@ -60,3 +60,21 @@
   70%  { box-shadow: 0 0 0 6px transparent; }
   100% { box-shadow: 0 0 0 0 transparent; }
 }
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/* ------------------------------------------------------------------ */
+
+/* All three indicators animate infinitely, which is exactly the pattern
+   WCAG 2.2.2 and vestibular-sensitivity guidance ask you not to force on
+   people. Each one degrades to its STATIC, still-visible state rather than
+   disappearing: none of the base rules set opacity or transform, so removing
+   the animation leaves a solid caret, three solid dots, and a solid status
+   dot. The indicator keeps indicating; it just stops moving. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-streaming__cursor,
+  .mui-streaming__dots span,
+  .mui-streaming__pulse {
+    animation: none;
+  }
+}

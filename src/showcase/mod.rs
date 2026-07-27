@@ -136,7 +136,41 @@ const TIERS: &[Tier] = &[
             "date_picker",
         ],
     },
+    // The AI-chat / agent surface kit. These five shipped finished but
+    // registered nowhere for two releases; grouping them makes the capability
+    // legible instead of scattering them through Display.
+    Tier {
+        slug: "conversation",
+        title: "Conversation",
+        description: "Chat, streaming, and agent tool-call surfaces",
+        components: &[
+            "message",
+            "streaming_cursor",
+            "code_block",
+            "diff",
+            "tool_call",
+        ],
+    },
 ];
+
+/// Every component slug in tier order — the order the gallery nav presents
+/// them in, as opposed to [`COMPONENT_NAMES`]'s alphabetical order.
+///
+/// Exposed so consumers can build their own tiered navigation, and so the
+/// registration-parity test can check `TIERS` against `COMPONENT_NAMES`
+/// without parsing this file.
+pub fn tier_slugs() -> Vec<&'static str> {
+    TIERS.iter().flat_map(|t| t.components.iter().copied()).collect()
+}
+
+/// The tier groupings themselves: `(slug, title, description, component slugs)`.
+/// Same data the gallery nav is built from.
+pub fn tiers() -> Vec<(&'static str, &'static str, &'static str, &'static [&'static str])> {
+    TIERS
+        .iter()
+        .map(|t| (t.slug, t.title, t.description, t.components))
+        .collect()
+}
 
 /// All component slug names, used for nav generation and route dispatch.
 pub const COMPONENT_NAMES: &[&str] = &[
@@ -154,6 +188,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "carousel",
     "chart",
     "checkbox",
+    "code_block",
     "collapsible",
     "combobox",
     "command",
@@ -161,6 +196,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "data_table",
     "date_picker",
     "dialog",
+    "diff",
     "direction",
     "drawer",
     "empty_state",
@@ -177,6 +213,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "label",
     "menu",
     "menubar",
+    "message",
     "meter",
     "native_select",
     "navigation_menu",
@@ -197,6 +234,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "sonner",
     "spinner",
     "stack",
+    "streaming_cursor",
     "swatch",
     "switch",
     "table",
@@ -205,6 +243,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "toast",
     "toggle",
     "toggle_group",
+    "tool_call",
     "tooltip",
     "typography",
 ];
@@ -1068,6 +1107,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "carousel" => primitives::carousel::showcase(),
         "chart" => primitives::chart::showcase(),
         "checkbox" => primitives::checkbox::showcase(),
+        "code_block" => primitives::code_block::showcase(),
         "collapsible" => primitives::collapsible::showcase(),
         "combobox" => primitives::combobox::showcase(),
         "command" => primitives::command::showcase(),
@@ -1075,6 +1115,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "data_table" => primitives::data_table::showcase(),
         "date_picker" => primitives::date_picker::showcase(),
         "dialog" => primitives::dialog::showcase(),
+        "diff" => primitives::diff::showcase(),
         "direction" => primitives::direction::showcase(),
         "drawer" => primitives::drawer::showcase(),
         "empty_state" => primitives::empty_state::showcase(),
@@ -1091,6 +1132,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "label" => primitives::label::showcase(),
         "menu" => primitives::menu::showcase(),
         "menubar" => primitives::menubar::showcase(),
+        "message" => primitives::message::showcase(),
         "meter" => primitives::meter::showcase(),
         "native_select" => primitives::native_select::showcase(),
         "navigation_menu" => primitives::navigation_menu::showcase(),
@@ -1111,6 +1153,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "sonner" => primitives::sonner::showcase(),
         "spinner" => primitives::spinner::showcase(),
         "stack" => primitives::stack::showcase(),
+        "streaming_cursor" => primitives::streaming_cursor::showcase(),
         "swatch" => primitives::swatch::showcase(),
         "switch" => primitives::switch::showcase(),
         "table" => primitives::table::showcase(),
@@ -1119,6 +1162,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "toast" => primitives::toast::showcase(),
         "toggle" => primitives::toggle::showcase(),
         "toggle_group" => primitives::toggle_group::showcase(),
+        "tool_call" => primitives::tool_call::showcase(),
         "tooltip" => primitives::tooltip::showcase(),
         "typography" => primitives::typography::showcase(),
         _ => return None,

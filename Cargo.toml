@@ -1,6 +1,6 @@
 [package]
 name = "maud-ui"
-version = "0.4.1"
+version = "0.5.0"
 edition = "2021"
 license = "MIT"
 description = "72 headless, accessible UI components for Rust web apps — shadcn Base UI API parity. Plus block templates, a live theme customiser, and shell hooks for 15 third-party widgets (Monaco, xyflow, Excalidraw, Three.js, AG Grid, Leaflet, FullCalendar, SortableJS, and more). Built on maud + htmx, styled like shadcn/ui."

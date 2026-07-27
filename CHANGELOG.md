@@ -5,6 +5,85 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.5.0] — 2026-07-27 — the slider actually slides, and CSS is highlighted
+
+Two of these are real consumer-facing bugs that a render test can never catch: both live in the
+progressive-enhancement layer, where the server markup and the behaviour script are separate
+implementations that can silently disagree.
+
+**This is 0.5.0 rather than 0.4.2 because of one breaking signature.** For a `0.x` crate Cargo
+treats the MINOR as the breaking position: `0.4.1` and `0.4.2` are compatible, so anyone
+depending on `maud-ui = "0.4"` would have been auto-upgraded into a compile error.
+
+### Breaking
+
+- **`alert_dialog::trigger`'s `variant` is now `ButtonVariant`, not `&str`.** It matches
+  `alert_dialog::action` in the same module, and a typo like `"dangerous"` previously rendered an
+  unstyled button with no error at all. Migration is mechanical:
+
+  ```rust
+  // before
+  trigger("confirm-delete", "Delete account", "danger")
+  // after
+  trigger("confirm-delete", "Delete account", ButtonVariant::Danger)
+  ```
+
+### Fixed
+
+- **Vertical sliders animated the wrong axis, and range sliders had one live thumb.** The
+  renderer was never at fault — it already emitted `data-orientation`, `data-values` and a
+  `data-thumb-index` per thumb, so the initial paint was always correct. The behaviour script
+  read none of it: drag maths was `clientX`/`rect.width` unconditionally and it wrote
+  `thumb.style.left` + `fill.style.width`. On a vertical slider the CSS fills bottom-up via
+  `height`, so dragging grew the track sideways instead of moving the thumb. Separately,
+  `querySelector` (singular) bound only the first thumb, leaving a range slider's second thumb
+  inert while the fill used single-thumb maths (`0..value`) instead of spanning `lo..hi`. The
+  behaviour is now per-thumb and orientation-aware throughout.
+
+- **A slider whose `min` was not a multiple of `step` could never reach its own minimum.**
+  Snapping was `round(v / step) * step`, which places the stops on multiples of *step* rather
+  than of *min* — so `min=5 step=10` snapped to 0 or 10 and 5 was unreachable. Now snaps relative
+  to `min`.
+
+- **Sliders did not work under touch at all.** The behaviour bound mouse events only. It now uses
+  pointer events with pointer capture, so touch and pen work and a drag survives the pointer
+  leaving the track. Thumbs also clamp against their neighbours instead of crossing, a track
+  click moves the nearest thumb, and the native input now emits `input`/`change` so forms, htmx
+  bindings and validation actually observe a value change.
+
+- **Five `var(--mui-*)` references pointed at tokens that do not exist** — `--mui-mono`,
+  a bare `--mui-radius`, `--mui-bg-hover`, `--mui-spacing-xxl` — across `docs`, `drawer`,
+  `sheet` and `sidebar`. Each silently fell back to the property's initial value. `--mui-sidebar-w`
+  is now declared in the token block rather than living only as an inline fallback, and
+  `tests/css_token_integrity.rs` guards the invariant.
+
+### Added
+
+- **CSS syntax highlighting in `code_block`.** `css` previously fell through to the unhighlighted
+  branch, so every CSS snippet rendered as flat grey text — a poor advertisement for a library
+  whose entire argument is its custom properties. The tokenizer tracks two pieces of context
+  because both are needed to tag an identifier: a stack of "is this a declaration block?" (the
+  body of `@media` holds selectors, not properties) and an in-value flag set by `:` only inside a
+  declaration block (so `a:hover` stays a selector). Custom properties get their own token kind,
+  and `#` resolves as a hex colour in a value and an id selector outside one.
+
+- **Unsupported languages in `code_block` are no longer silent.** The source still renders —
+  losing code is worse than losing colour — but wrapped in
+  `<span data-mui-highlight="unsupported" data-language="…">`. Flat grey code beside coloured code
+  reads as a broken highlighter rather than an uncovered language, and that ambiguity cost a real
+  misdiagnosis.
+
+- **Brand assets** — `assets/favicon.svg`, `assets/og.png`, `assets/apple-touch-icon.png`, plus
+  `bun run build:og` to regenerate the raster pair. `assets/**/*` joins `Cargo.toml`'s `include`
+  because `examples/showcase.rs` now `include_bytes!`s them, so a published crate without them
+  could not build its own example.
+
+- **A landing page at `/`; the component gallery moved to `/gallery`.** Gallery-only change — no
+  consumer API is affected. Documented in the README's new route table, with `docs/brand.md` for
+  the mark.
+
+---
+
 ## [0.4.1] — 2026-07-27 — design corrections, and the first crates.io release
 
 0.4.0 was tagged but never published. This is the first release on crates.io, and it carries the

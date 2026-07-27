@@ -732,6 +732,11 @@ dialog.mui-alert-dialog::backdrop {
     transform: rotate(360deg);
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .mui-spin {
+    animation-duration: 2.4s;
+  }
+}
 
 /* css/components/card.css */
 .mui-card {
@@ -3391,14 +3396,15 @@ dialog.mui-drawer--bottom {
 }
 .mui-input:focus-visible {
   outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+  border-color: var(--mui-border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-border-focus) 25%, transparent);
 }
 .mui-input[aria-invalid=true] {
   border-color: var(--mui-danger);
 }
 .mui-input[aria-invalid=true]:focus-visible {
-  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
+  border-color: var(--mui-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-danger) 25%, transparent);
 }
 .mui-input:disabled {
   opacity: 0.5;
@@ -4007,6 +4013,11 @@ dialog.mui-drawer--bottom {
   font-size: 0.8125rem;
   color: var(--mui-text-muted);
   font-style: italic;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-message__avatar--live {
+    animation: none;
+  }
 }
 
 /* css/components/meter.css */
@@ -4619,6 +4630,11 @@ a.mui-pagination__page {
   }
   100% {
     transform: translateX(250%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-progress--indeterminate .mui-progress__bar {
+    animation-duration: 4s;
   }
 }
 
@@ -5794,6 +5810,11 @@ dialog.mui-sheet--bottom {
   gap: 0.5rem;
   padding-top: 0.25rem;
 }
+@media (prefers-reduced-motion: reduce) {
+  .mui-skeleton {
+    animation: none;
+  }
+}
 
 /* css/components/slider.css */
 .mui-slider {
@@ -5989,6 +6010,11 @@ dialog.mui-sheet--bottom {
   width: 2.5rem;
   height: 2.5rem;
   border-width: 2.5px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-spinner {
+    animation-duration: 2.4s;
+  }
 }
 
 /* css/components/stack.css */
@@ -6780,8 +6806,8 @@ dialog.mui-sheet--bottom {
 
 /* css/components/tool_call.css */
 .mui-tool-call {
+  --mui-tool-accent: var(--mui-text-muted);
   border: 1px solid var(--mui-border);
-  border-left-width: 3px;
   border-radius: var(--mui-radius-md);
   background: var(--mui-bg-card);
   overflow: hidden;
@@ -6806,18 +6832,21 @@ dialog.mui-sheet--bottom {
 .mui-tool-call__glyph {
   font-family: var(--mui-font-mono);
   font-size: 0.875rem;
-  color: var(--mui-text-muted);
+  color: var(--mui-tool-accent);
   width: 1rem;
   text-align: center;
+  flex: none;
 }
 .mui-tool-call__name {
-  font-weight: 600;
+  font-family: var(--mui-font-mono);
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-weight: 500;
+  color: var(--mui-text);
+  flex: none;
 }
 .mui-tool-call__summary {
   flex: 1 1 auto;
+  min-width: 0;
   font-family: var(--mui-font-mono);
   font-size: 0.75rem;
   color: var(--mui-text-muted);
@@ -6826,28 +6855,25 @@ dialog.mui-sheet--bottom {
   white-space: nowrap;
 }
 .mui-tool-call__status {
+  flex: none;
   font-size: 0.6875rem;
+  font-weight: 500;
   padding: 0.125rem 0.4375rem;
   border-radius: var(--mui-radius-sm);
-  font-weight: 500;
-  border: 1px solid transparent;
+  background: color-mix(in srgb, currentColor 14%, transparent);
 }
 .mui-tool-call__status--success {
-  color: var(--mui-success);
-  border-color: color-mix(in srgb, var(--mui-success) 40%, transparent);
+  color: var(--mui-success-text);
 }
 .mui-tool-call__status--running {
-  color: var(--mui-warning);
-  border-color: color-mix(in srgb, var(--mui-warning) 40%, transparent);
+  color: var(--mui-warning-text);
   animation: mui-tool-pulse 1.4s ease-in-out infinite;
 }
 .mui-tool-call__status--error {
-  color: var(--mui-danger);
-  border-color: color-mix(in srgb, var(--mui-danger) 40%, transparent);
+  color: var(--mui-danger-text);
 }
 .mui-tool-call__status--pending {
   color: var(--mui-text-muted);
-  border-color: var(--mui-border);
 }
 @keyframes mui-tool-pulse {
   0%, 100% {
@@ -6857,7 +6883,16 @@ dialog.mui-sheet--bottom {
     opacity: 0.45;
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .mui-tool-call__status--running {
+    animation: none;
+  }
+  .mui-tool-call__chevron {
+    transition: none;
+  }
+}
 .mui-tool-call__chevron {
+  flex: none;
   font-size: 0.75rem;
   color: var(--mui-text-muted);
   transition: transform 150ms ease;
@@ -6873,11 +6908,12 @@ dialog.mui-sheet--bottom {
   flex-direction: column;
   gap: 0.5rem;
 }
+.mui-tool-call__body[hidden] {
+  display: none;
+}
 .mui-tool-call__section-label {
   font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--mui-text-muted);
+  color: var(--mui-text-subtle);
   margin-bottom: 0.1875rem;
 }
 .mui-tool-call__section-body pre {
@@ -6893,28 +6929,28 @@ dialog.mui-sheet--bottom {
   word-break: break-word;
 }
 .mui-tool-call--edit {
-  border-left-color: var(--mui-accent);
+  --mui-tool-accent: var(--mui-accent-text);
 }
 .mui-tool-call--write {
-  border-left-color: var(--mui-success);
+  --mui-tool-accent: var(--mui-success-text);
 }
 .mui-tool-call--read {
-  border-left-color: #7EB6D4;
+  --mui-tool-accent: var(--mui-info-text);
 }
 .mui-tool-call--bash {
-  border-left-color: var(--mui-warning);
+  --mui-tool-accent: var(--mui-warning-text);
 }
 .mui-tool-call--grep,
 .mui-tool-call--glob,
 .mui-tool-call--search {
-  border-left-color: #b28fd8;
+  --mui-tool-accent: var(--mui-violet-text);
 }
 .mui-tool-call--task,
 .mui-tool-call--agent {
-  border-left-color: var(--mui-danger);
+  --mui-tool-accent: var(--mui-rose-text);
 }
 .mui-tool-call--custom {
-  border-left-color: var(--mui-border);
+  --mui-tool-accent: var(--mui-text-muted);
 }
 
 /* css/components/tooltip.css */
@@ -8424,7 +8460,7 @@ dialog.mui-sheet--bottom {
   --mui-bg-input: #18181b;
   --mui-border: #27272a;
   --mui-border-hover: #3f3f46;
-  --mui-border-focus: #a1a1aa;
+  --mui-border-focus: #60a5fa;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #fafafa;
   --mui-text-muted: #a1a1aa;
@@ -8485,7 +8521,7 @@ dialog.mui-sheet--bottom {
   --mui-bg-input: #f4f4f5;
   --mui-border: #e4e4e7;
   --mui-border-hover: #d4d4d8;
-  --mui-border-focus: #71717a;
+  --mui-border-focus: #2563eb;
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
   --mui-text: #09090b;
   --mui-text-muted: #71717a;

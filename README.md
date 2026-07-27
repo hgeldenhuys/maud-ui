@@ -22,7 +22,9 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **72 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch). v0.2.1 adds Sheet, Sidebar, Sonner, Item, and Direction primitives plus shadcn-parity Props/subcomponent helpers across the existing set.
+- **72 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
+- **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
 - **10 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell. Drop-in page templates.
 - **Live theme customiser** at `/theme` — tweak every `--mui-*` token in the browser, persists to `localStorage`, exports a paste-ready `:root { … }` block. 8 Tailwind-based presets.
 - **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.
@@ -97,7 +99,7 @@ Better yet, clone the repo and run the full component gallery:
 git clone https://github.com/hgeldenhuys/maud-ui
 cd maud-ui
 cargo run --example showcase
-# open http://127.0.0.1:3457
+# open http://127.0.0.1:3456
 ```
 
 The gallery has every component, a live theme toggle, per-component routes with code samples, and a `/getting-started` page.
@@ -182,28 +184,33 @@ The full token list is in [css/maud-ui.css](css/maud-ui.css).
 ## Component reference
 
 <details>
-<summary><strong>58 components across three tiers</strong> (click to expand)</summary>
+<summary><strong>72 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
 
 ### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
-Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button Group • Card • Chart • Checkbox • Empty State • Field • Fieldset • Input • Kbd • Label • Meter • Native Select • Number Field • Pagination • Progress • Radio • Radio Group • Separator • Skeleton • Spinner • Table • Textarea • Typography
+Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button Group • Card • Chart • Checkbox • Diff • Empty State • Field • Fieldset • Form • Grid • Input • Item • Kbd • Label • Message • Meter • Native Select • Number Field • Pagination • Progress • Radio • Radio Group • Separator • Skeleton • Spinner • Stack • Streaming Cursor • Table • Textarea • Typography
 
 ### Tier 2 — JS-enhanced (renders without JS; full interactivity with it)
 
-Accordion • Collapsible • Hover Card • Input Group • Input OTP • Switch • Tabs • Toast • Toggle • Toggle Group • Tooltip
+Accordion • Code Block • Collapsible • Direction • Hover Card • Input Group • Input OTP • Swatch • Switch • Tabs • Toast • Toggle • Toggle Group • Tool Call • Tooltip
 
 ### Tier 3 — Requires JS for core functionality
 
-Alert Dialog • Calendar • Carousel • Combobox • Command • Context Menu • Data Table • Date Picker • Dialog • Drawer • Menu • Menubar • Navigation Menu • Popover • Resizable • Scroll Area • Select • Slider
+Alert Dialog • Calendar • Carousel • Combobox • Command • Context Menu • Data Table • Date Picker • Dialog • Drawer • Menu • Menubar • Navigation Menu • Popover • Resizable • Scroll Area • Select • Sheet • Sidebar • Slider • Sonner
 
 </details>
 
-Each component's props and variants are documented in its module — run `cargo doc --open` after adding the crate.
+The authoritative, always-current list is **[`docs/components/`](docs/components/)** — one Markdown
+reference per primitive, shipped inside the crate — and the [live gallery](https://maudui.herman.engineer).
+`tests/registration_parity.rs` keeps those two in lockstep with the code; the tier lists above are
+hand-maintained and are the one place that can still drift.
+
+Each component's props and variants are also documented in its module — run `cargo doc --open`.
 
 ## Architecture
 
 ```
-src/primitives/     # 58 component modules (Props, Variant, render(), showcase())
+src/primitives/     # 72 component modules (Props, Variant, render(), showcase())
 src/tokens.rs       # Rust constants mirroring CSS custom properties
 css/                # Source styles (one file per component + maud-ui.css tokens)
 dist/               # Pre-built bundles — serve these to the browser
@@ -218,10 +225,13 @@ Components are pure functions: `(props) -> Markup`. No state, no framework. Pair
 
 ## Development
 
+Adding a component? **[docs/adding-a-primitive.md](docs/adding-a-primitive.md)** — registration
+touches eight files and `tests/registration_parity.rs` will name whichever one you missed.
+
 ```bash
 cargo check                     # Type-check the crate
-cargo test                      # Run render tests for all 58 components
-cargo run --example showcase    # Gallery + getting-started at :3457
+cargo test                      # Render tests for all 72 components + registration parity
+cargo run --example showcase    # Gallery + getting-started at :3456
 
 # Rebuild dist/ artifacts (requires Node + esbuild)
 bun install

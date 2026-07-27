@@ -5,9 +5,52 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
-## [Unreleased] — layout primitives
+## [0.4.0] — 2026-07-26 — the containers, and the five that were already here
 
-### Added
+64 → 72 primitives. Three of the eight are new layout containers; **five were finished months ago
+and registered nowhere**, so no consumer could reach them. Both halves trace to the same root
+cause, now fixed: adding a primitive meant updating five separate lists by hand and nothing ever
+checked that you had.
+
+### Added — registration parity is now enforced
+
+- **`tests/registration_parity.rs`** — ten checks that fail the build when the five-point lockstep
+  drifts: a module registered nowhere, a `TIERS` slug with no component behind it, a slug that
+  falls through to the 404 page, a missing docs arm or doc file, a stylesheet that exists but is
+  never `@import`ed, a component absent from the render-test macro, and the hardcoded component
+  counts in `Cargo.toml`/`README.md` disagreeing with `COMPONENT_NAMES.len()`.
+
+  This invariant had already drifted **three** separate ways, each silently, none catchable by
+  `cargo build` — they are cross-file agreements, not type errors. The test was written first and
+  watched to fail on all five orphans before they were registered.
+
+- **`showcase::tier_slugs()` / `showcase::tiers()`** — the tier groupings, public so consumers can
+  build their own tiered navigation and so the parity test can check `TIERS` without parsing source.
+
+### Added — the Conversation tier
+
+Five primitives that shipped complete, with their own CSS, and were never registered:
+**`message`**, **`streaming_cursor`**, **`code_block`** (954 lines, with a real syntax highlighter
+for Rust/Bash/TS-JS/JSON), **`diff`**, and **`tool_call`**. They now have a tier of their own rather
+than being scattered through Display — they are an AI-chat/agent surface kit, and grouping them
+makes that capability legible.
+
+Writing their API docs surfaced three genuine defects, all fixed here before the components became
+publicly reachable for the first time:
+
+- **`diff` was inaccessible in the one way that mattered.** Add/remove was conveyed by row tint plus
+  a `+`/`-` sigil that was marked `aria-hidden` — so a screen reader got the line text and no way to
+  tell an addition from a deletion. Now emits a visually-hidden `"Added: "` / `"Removed: "` inside
+  the row's `role="cell"` span (outside a cell it would not be reliably announced). Context lines
+  stay silent by design.
+- **`streaming_cursor` ignored `prefers-reduced-motion`.** Three infinite animations ran
+  unconditionally. Each now degrades to its static but still **visible** state — a solid caret,
+  three solid dots, a solid status dot — so the indicator keeps indicating and stops moving.
+- **`code_block::Props::show_copy` defaulted to `false` while documented as "default true".** The
+  derived `Default` gave `bool::default()`, so every `..Default::default()` silently dropped the
+  copy button. Now a hand-written `impl Default`.
+
+### Added — layout primitives
 
 - **`stack`** (64 → 65 primitives) — the general layout container, and the crate's **first** one.
   Before this there was no stack, box, flex, grid, row, or column of any kind: every block in

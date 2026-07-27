@@ -1,3 +1,15 @@
+/* ⚠ SOURCE STYLESHEET — DO NOT SHIP THIS FILE TO A BROWSER.
+ *
+ * It @imports ~58 per-component stylesheets. CSS @import is render-blocking
+ * AND serial: the browser must fetch and parse this file before it can even
+ * discover the imports, then fetch each one, painting nothing until all of
+ * them land. Vendoring this into an app turned one request into 57 and took
+ * a page from 76ms to 1.6s on localhost — on a loaded machine it reads as a
+ * hang (found dogfooding in the Conductor daemon UI, 2026-07-27).
+ *
+ * Ship `dist/maud-ui.min.css` instead — same rules, one request, no imports.
+ * This file exists so the components stay editable in isolation.
+ */
 /* maud-ui — design tokens + minimal showcase layout. Component styles added per wave. */
 
 @import "components/accordion.css";

@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.4] — 2026-07-27 — transparent scrollbar tracks everywhere
+
+Operator standing order: no scrollbar track may paint a background. One inherited
+`scrollbar-color: var(--mui-border) transparent` on `:root` (Firefox + Chromium 121+) plus
+`::-webkit-scrollbar-track/-corner { background: transparent }` and a tokened thumb for engines
+without `scrollbar-color`. Surfaces with bespoke scrollbar styling already complied; this closes
+the default-scrollbar gap on every unstyled overflow surface.
+
+---
+
 ## [0.6.3] — 2026-07-27 — asleep bar is content-sized
 
 The Asleep composer bar was a fixed 46px box; a consumer auto-grow enhancement

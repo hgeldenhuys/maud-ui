@@ -8947,6 +8947,17 @@ dialog.mui-sheet--bottom {
 * {
   box-sizing: border-box;
 }
+:root {
+  scrollbar-color: var(--mui-border) transparent;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--mui-border);
+  border-radius: var(--mui-radius-full);
+}
 body {
   margin: 0;
   background: var(--mui-bg);

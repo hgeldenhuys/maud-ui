@@ -223,6 +223,22 @@
 
 * { box-sizing: border-box; }
 
+/* Scrollbars — transparent track everywhere, tokened thumb (operator standing
+   order 2026-07-27). scrollbar-color inherits from the root in Firefox and
+   Chromium 121+; the ::-webkit-* rules cover engines without it. Never paint
+   a scrollbar track or corner. */
+:root {
+  scrollbar-color: var(--mui-border) transparent;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--mui-border);
+  border-radius: var(--mui-radius-full);
+}
+
 body {
   margin: 0;
   background: var(--mui-bg);

@@ -1,0 +1,34 @@
+/* Attention pill — accent form draws the eye; muted zero-state recedes. */
+
+.mui-attention-pill {
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background-color: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+  color: var(--mui-accent-text);
+  font-family: var(--mui-font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mui-attention-pill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--mui-radius-full);
+  background-color: var(--mui-accent);
+  flex: none;
+}
+.mui-attention-pill__label { line-height: 1; }
+
+/* Zero state — no accent at all. */
+.mui-attention-pill--muted {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+}
+.mui-attention-pill--muted .mui-attention-pill__dot {
+  background-color: var(--mui-text-subtle);
+}

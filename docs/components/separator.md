@@ -141,11 +141,26 @@ html! {
 - **Decorative**: `aria-hidden="true"` — screen readers skip it entirely.
   - Use when content structure is already clear from headings/elements.
 
+## Labelled separator
+
+`render_labelled(label)` draws a mono, letter-spaced, muted label followed by a 1px hairline rule that fills the remaining width — a transcript turn divider. It is decorative (the label already conveys the structure), so no extra ARIA is needed.
+
+```rust
+use maud_ui::primitives::separator;
+
+html! {
+    (separator::render_labelled("TURN 12 · 41s"))
+    // …turn content…
+    (separator::render_labelled("REASONING"))
+}
+```
+
 ## CSS Classes
 
 - `mui-separator` — base class.
 - `mui-separator--horizontal` — added when `orientation: Horizontal`.
 - `mui-separator--vertical` — added when `orientation: Vertical`.
+- `mui-separator-labelled` / `__label` / `__rule` — the labelled turn-divider variant.
 
 ## Related
 

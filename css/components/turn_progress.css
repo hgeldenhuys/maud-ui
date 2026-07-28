@@ -1,0 +1,13 @@
+/* Turn progress — a 2px hard two-stop gradient. The fill percent arrives as
+   an inline --mui-turn-pct custom property (with a 0% fallback). */
+
+.mui-turn-progress {
+  width: 100%;
+  height: 2px;
+  border-radius: var(--mui-radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--mui-accent) 0 var(--mui-turn-pct, 0%),
+    color-mix(in srgb, var(--mui-accent) 10%, transparent) var(--mui-turn-pct, 0%) 100%
+  );
+}

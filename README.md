@@ -1,6 +1,6 @@
 # maud-ui
 
-**72 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**79 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,7 +22,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **72 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **79 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
 - **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
 - **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
 - **10 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell. Drop-in page templates.
@@ -199,7 +199,7 @@ The full token list is in [css/maud-ui.css](css/maud-ui.css).
 ## Component reference
 
 <details>
-<summary><strong>72 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
+<summary><strong>79 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
 
 ### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
@@ -256,7 +256,7 @@ three traps there are invisible outside a browser.
 
 ```bash
 cargo check                     # Type-check the crate
-cargo test                      # Render tests for all 72 components + registration parity
+cargo test                      # Render tests for all 79 components + registration parity
 bun run gallery                 # Site on the first FREE port (see scripts/gallery.sh)
 
 # Rebuild artifacts. These are THREE different outputs from three commands —

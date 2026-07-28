@@ -1,0 +1,180 @@
+/* Composer — the multi-state prompt dock. Colours are tokens only; the warm
+   palette in the design sheets is a consumer theme mapped onto these. */
+
+.mui-composer {
+  display: block;
+  max-width: var(--mui-composer-max, 67.5rem); /* caps at the 1080px code measure */
+}
+
+/* The field: a card-surfaced box with a foreground-10% hairline. */
+.mui-composer__field {
+  background-color: var(--mui-bg-card);
+  border: 1px solid color-mix(in srgb, var(--mui-text) 10%, transparent);
+  border-radius: 10px;
+  padding: 11px 13px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color var(--mui-transition), box-shadow var(--mui-transition);
+}
+
+.mui-composer__input {
+  width: 100%;
+  min-height: 48px;                              /* 2 rows at 15/24 */
+  max-height: var(--mui-composer-max-h, 40vh);   /* grows to a cap, then scrolls */
+  overflow-y: auto;
+  resize: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mui-text);
+  font-family: var(--mui-font-sans);
+  font-size: 15px;
+  line-height: 24px;
+}
+.mui-composer__input::placeholder { color: var(--mui-text-muted); }
+.mui-composer__input:focus { outline: none; }
+
+.mui-composer__actions { display: flex; align-items: center; gap: 7px; }
+.mui-composer__spacer { flex: 1 1 auto; }
+
+/* Leading mono chips — model, auto-accept, attachments. */
+.mui-composer__chip {
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 3px;
+  background-color: var(--mui-bg-input);
+  font-family: var(--mui-font-mono);
+  font-size: 10.5px;
+  line-height: 1;
+  color: var(--mui-text-muted);
+  white-space: nowrap;
+}
+.mui-composer__chip--accent {
+  background-color: color-mix(in srgb, var(--mui-accent) 14%, transparent);
+  color: var(--mui-accent-text);
+}
+
+/* Voice — a 28px square hollow icon button. */
+.mui-composer__voice {
+  height: 28px;
+  width: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--mui-text) 12%, transparent);
+  background: transparent;
+  font-family: var(--mui-font-mono);
+  font-size: 11px;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  transition: border-color var(--mui-transition), color var(--mui-transition);
+}
+.mui-composer__voice:hover {
+  border-color: color-mix(in srgb, var(--mui-text) 22%, transparent);
+  color: var(--mui-text);
+}
+
+/* Primary — the accent send/queue button. */
+.mui-composer__send {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-family: var(--mui-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__send:hover { background-color: var(--mui-accent-hover); }
+.mui-composer__kbd {
+  font-family: var(--mui-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: color-mix(in srgb, var(--mui-accent-fg) 55%, transparent);
+}
+
+/* Secondary — the hollow-destructive Interrupt. */
+.mui-composer__interrupt {
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 11px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--mui-danger) 45%, transparent);
+  background: transparent;
+  color: var(--mui-danger-text);
+  font-family: var(--mui-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__interrupt:hover {
+  background-color: color-mix(in srgb, var(--mui-danger) 12%, transparent);
+}
+
+/* The "beside" data line — mono, 11px, deeply muted. */
+.mui-composer__status {
+  margin-top: 7px;
+  display: flex;
+  gap: 14px;
+  font-family: var(--mui-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: color-mix(in srgb, var(--mui-text-muted) 42%, transparent);
+}
+
+/* Growing — focused: an accent ring on the field. */
+.mui-composer--growing .mui-composer__field {
+  border-color: color-mix(in srgb, var(--mui-accent) 45%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-accent) 10%, transparent);
+}
+
+/* Asleep — a 46px dashed bar on the same anchor line. */
+.mui-composer--asleep .mui-composer__sleepbar {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 13px;
+  border: 1px dashed color-mix(in srgb, var(--mui-text) 14%, transparent);
+  border-radius: 10px;
+}
+.mui-composer__state-tag {
+  font-family: var(--mui-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--mui-text) 34%, transparent);
+}
+.mui-composer__sleep-hint {
+  font-size: 14px;
+  color: var(--mui-text-muted);
+}
+.mui-composer__wake {
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--mui-text) 16%, transparent);
+  background: transparent;
+  color: var(--mui-text);
+  font-family: var(--mui-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__wake:hover { background-color: var(--mui-bg-input); }

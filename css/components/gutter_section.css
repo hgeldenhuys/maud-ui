@@ -1,0 +1,13 @@
+/* Gutter section — a mono uppercase header over a content slot. */
+
+.mui-gutter-section { display: block; }
+
+.mui-gutter-section__title {
+  margin: 0 0 8px;
+  font-family: var(--mui-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--mui-text-subtle) 85%, transparent);
+}

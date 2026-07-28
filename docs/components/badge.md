@@ -32,6 +32,32 @@ html! {
 | variant | Variant | `Default` | Visual variant (color scheme): Default, Secondary, Success, Warning, Danger, Outline, Ghost, Link. |
 | href | Option<String> | `None` | Optional URL; if Some, badge renders as an `<a>` element; if None, renders as a `<span>`. |
 | leading_icon | Option<Markup> | `None` | Optional icon markup rendered before the label with `data-icon="inline-start"`. |
+| mono | bool | `false` | Render the label in the monospace face — for shas, ids, counts. |
+| chip | bool | `false` | Render as a taller (26px) hollow chip: bordered-transparent, 1px foreground-10% border, 6px radius. The counterpart to the filled pill. |
+| trailing_count | Option<String> | `None` | Trailing count set apart in the mono face — the `2` in `mail 2`. |
+| kbd | Option<String> | `None` | Trailing kbd hint in a subtle key cap — the `⌘K` in a command chip. |
+
+## Hollow chip
+
+`chip: true` swaps the pill for a taller bordered-transparent chip sized to sit inline with 24–28px controls. It carries an optional `trailing_count` or `kbd`:
+
+```rust
+badge::render(badge::Props {
+    label: "mail".into(),
+    variant: badge::Variant::Outline,
+    chip: true,
+    trailing_count: Some("2".into()),
+    ..Default::default()
+});
+
+badge::render(badge::Props {
+    label: "Command".into(),
+    variant: badge::Variant::Outline,
+    chip: true,
+    kbd: Some("⌘K".into()),
+    ..Default::default()
+});
+```
 
 ## Variants
 

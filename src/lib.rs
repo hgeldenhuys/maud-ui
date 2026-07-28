@@ -7,4 +7,5 @@
 pub mod blocks;
 pub mod primitives;
 pub mod showcase;
+pub mod time;
 pub mod tokens;

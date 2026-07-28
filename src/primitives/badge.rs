@@ -58,6 +58,17 @@ pub struct Props {
     /// Render the label in the monospace face — for shas, ids, counts, and
     /// other machine-register text that should not reflow with the sans stack.
     pub mono: bool,
+    /// Render as a hollow CHIP: a taller (26px) bordered-transparent pill with
+    /// a 1px foreground-10% border and a 6px radius, sized to sit inline with
+    /// controls. The filled variants above ignore this; it is the counterpart
+    /// to the pill `Badge`, for a taggable, dismissable, count-bearing chip.
+    pub chip: bool,
+    /// Optional trailing count — the `2` in `mail 2`. Rendered as a mono
+    /// figure set slightly apart from the label.
+    pub trailing_count: Option<String>,
+    /// Optional trailing kbd hint — the `⌘K` in a command chip. Rendered in
+    /// the mono face inside a subtle key cap.
+    pub kbd: Option<String>,
 }
 
 /// Render a single badge with the given properties
@@ -65,6 +76,9 @@ pub fn render(props: Props) -> Markup {
     let mut class = format!("mui-badge {}", props.variant.class());
     if props.mono {
         class.push_str(" mui-badge--mono");
+    }
+    if props.chip {
+        class.push_str(" mui-badge--chip");
     }
     let data_icon = if props.leading_icon.is_some() {
         Some("inline-start")
@@ -79,6 +93,12 @@ pub fn render(props: Props) -> Markup {
                     (icon)
                 }
                 (props.label)
+                @if let Some(count) = props.trailing_count.as_ref() {
+                    span class="mui-badge__count" { (count) }
+                }
+                @if let Some(kbd) = props.kbd.as_ref() {
+                    span class="mui-badge__kbd" { (kbd) }
+                }
             }
         } @else {
             span class=(class) data-icon=[data_icon] {
@@ -86,6 +106,12 @@ pub fn render(props: Props) -> Markup {
                     (icon)
                 }
                 (props.label)
+                @if let Some(count) = props.trailing_count.as_ref() {
+                    span class="mui-badge__count" { (count) }
+                }
+                @if let Some(kbd) = props.kbd.as_ref() {
+                    span class="mui-badge__kbd" { (kbd) }
+                }
             }
         }
     }
@@ -152,6 +178,25 @@ pub fn showcase() -> Markup {
                     (render(Props { label: "b6e38d1e".into(), variant: Variant::Outline, mono: true, ..Default::default() }))
                     (render(Props { label: "IMP-2491".into(), variant: Variant::Secondary, mono: true, ..Default::default() }))
                     (render(Props { label: "v0.3.0".into(), variant: Variant::Info, mono: true, ..Default::default() }))
+                }
+            }
+
+            // Hollow chip — bordered transparent, with trailing count / kbd
+            section {
+                h2 { "Hollow chip" }
+                p.mui-showcase__caption { "The taller bordered-transparent counterpart to the filled pill — carries a trailing count or a kbd hint." }
+                div.mui-showcase__row {
+                    (render(Props { label: "mail".into(), variant: Variant::Outline, chip: true, trailing_count: Some("2".into()), ..Default::default() }))
+                    (render(Props { label: "issues".into(), variant: Variant::Outline, chip: true, trailing_count: Some("14".into()), ..Default::default() }))
+                    (render(Props { label: "Command".into(), variant: Variant::Outline, chip: true, kbd: Some("\u{2318}K".into()), ..Default::default() }))
+                    (render(Props {
+                        label: "user.rs".into(),
+                        variant: Variant::Outline,
+                        chip: true,
+                        mono: true,
+                        trailing_count: Some("\u{00d7}".into()),
+                        ..Default::default()
+                    }))
                 }
             }
 

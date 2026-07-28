@@ -5,6 +5,47 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.0] — 2026-07-27 — the agent session-view kit
+
+Seven new primitives, a `Session` tier, and two extended components — the surface a Conductor
+session view is built from. The component count moves 72 → 79. No new tokens: the warm palette in
+the design sheets is a consumer theme, and every colour here maps to an existing `--mui-*` token
+or a `color-mix()` over one, so `css_token_integrity` stays green.
+
+**This is 0.6.0 rather than 0.5.1 because of one additive-but-breaking signature.** `badge::Props`
+gained four public fields (`chip`, `trailing_count`, `kbd`, plus the previously-undocumented
+`mono`); a consumer who constructs `Props { .. }` WITHOUT `..Default::default()` will no longer
+compile. For a `0.x` crate Cargo treats the MINOR as the breaking position, so anyone on
+`maud-ui = "0.5"` is not auto-upgraded into that error.
+
+### Added
+
+- **`composer`** — the multi-state prompt dock: Ready / Growing / Executing / Asleep. Server-rendered
+  as a plain `<form>` + `<textarea rows="2">` (works JS-off); auto-grow, `⌘↵` and voice are an additive
+  JS layer. Geometry knobs `--mui-composer-max` / `--mui-composer-max-h`.
+- **`segmented_control`** — a boxed switch rendered as real `<a>` links (`aria-current="page"`), so it
+  switches views with JavaScript disabled.
+- **`status_dot`** — a 6px semantic dot (success / accent / warning / neutral / destructive) with a
+  hollow "observing" variant.
+- **`attention_pill`** — an accent-tinted "wants a look" pill with a muted zero-state that spends no
+  accent at all.
+- **`turn_progress`** — a 2px hard two-stop gradient strip; fill carried by an inline `--mui-turn-pct`.
+- **`facts_list`** — mono subtle labels + foreground values as a semantic `<dl>`, on the 4px rhythm.
+- **`gutter_section`** — a mono uppercase section header over a content slot; the inspector-gutter unit.
+- **`time` module** — `relative_time` (`41s`, `2m 08s`, `4h`, `1d`), `duration_long` (`4h 12m`), and
+  `asleep_label` (`asleep 4h 12m`), unit-tested at the 59s/60s, 59m/60m, 23h/24h boundaries.
+- **`separator::render_labelled`** — a mono letter-spaced label + hairline rule, for transcript turn
+  dividers.
+
+### Breaking
+
+- **`badge::Props` gained `chip`, `trailing_count`, `kbd`, `mono`.** The hollow chip is the taller
+  (26px) bordered-transparent counterpart to the filled pill, with an optional trailing count
+  (`mail 2`) or kbd hint (`⌘K`). Migration is mechanical — add `..Default::default()` to any explicit
+  `Props { .. }` literal.
+
+---
+
 ## [0.5.0] — 2026-07-27 — the slider actually slides, and CSS is highlighted
 
 Two of these are real consumer-facing bugs that a render test can never catch: both live in the

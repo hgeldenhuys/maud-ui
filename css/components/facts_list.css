@@ -1,0 +1,32 @@
+/* Facts list — mono subtle labels, foreground values, rows on the 4px rhythm. */
+
+.mui-facts {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.mui-facts__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mui-facts__label {
+  font-family: var(--mui-font-mono);
+  font-size: 11px;
+  color: var(--mui-text-subtle);
+  white-space: nowrap;
+}
+
+.mui-facts__value {
+  margin: 0;
+  font-size: 12px;
+  color: var(--mui-text);
+  text-align: right;
+}
+.mui-facts__value--mono {
+  font-family: var(--mui-font-mono);
+  letter-spacing: -0.01em;
+}

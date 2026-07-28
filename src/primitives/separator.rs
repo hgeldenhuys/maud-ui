@@ -57,6 +57,23 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
+/// Render a labelled separator — a mono, letter-spaced, muted label followed
+/// by a 1px hairline rule that fills the remaining width. Used as a transcript
+/// turn divider, where the label names the turn and the rule carries the eye
+/// across.
+///
+/// Decorative by default (the label already conveys the structure to assistive
+/// tech), so it is exposed as a plain heading-less row.
+pub fn render_labelled(label: impl Into<String>) -> Markup {
+    let label = label.into();
+    html! {
+        div class="mui-separator-labelled" {
+            span class="mui-separator-labelled__label" { (label) }
+            span class="mui-separator-labelled__rule" aria-hidden="true" {}
+        }
+    }
+}
+
 /// Showcase all separator variants and use cases
 pub fn showcase() -> Markup {
     html! {
@@ -115,6 +132,17 @@ pub fn showcase() -> Markup {
                         input type="password" placeholder="Password" class="mui-input" style="width: 100%;";
                     }
                     button class="mui-btn mui-btn--primary mui-btn--md" type="submit" { "Sign in" }
+                }
+            }
+
+            // Labelled separator — transcript turn dividers
+            section {
+                h2 { "Labelled — turn dividers" }
+                p.mui-showcase__caption { "A mono, letter-spaced, muted label and a hairline rule that carries the eye across. Used between transcript turns." }
+                div style="display:flex;flex-direction:column;gap:1rem;max-width:34rem;" {
+                    (render_labelled("TURN 12 · 41s"))
+                    (render_labelled("REASONING"))
+                    (render_labelled("TOOL CALLS"))
                 }
             }
 

@@ -8949,6 +8949,11 @@ dialog.mui-sheet--bottom {
 }
 :root {
   scrollbar-color: var(--mui-border) transparent;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
@@ -8956,7 +8961,12 @@ dialog.mui-sheet--bottom {
 }
 ::-webkit-scrollbar-thumb {
   background: var(--mui-border);
-  border-radius: var(--mui-radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mui-border-hover);
 }
 body {
   margin: 0;

@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.5] — 2026-07-27 — slim floating scrollbar thumb
+
+`scrollbar-width: thin` joins the transparent-track rule; WebKit gets a 10px gutter with a
+6px thumb floated by a 2px transparent border + `background-clip: padding-box`, radius 5px,
+hover to `--mui-border-hover`. The thumb should never be the brightest object on a page.
+
+---
+
 ## [0.6.4] — 2026-07-27 — transparent scrollbar tracks everywhere
 
 Operator standing order: no scrollbar track may paint a background. One inherited

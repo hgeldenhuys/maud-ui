@@ -2026,11 +2026,12 @@ dialog.mui-command::backdrop {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-accent) 10%, transparent);
 }
 .mui-composer--asleep .mui-composer__sleepbar {
-  height: 46px;
+  box-sizing: border-box;
+  min-height: 46px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 13px;
+  padding: 8px 13px;
   border: 1px dashed color-mix(in srgb, var(--mui-text) 14%, transparent);
   border-radius: 10px;
 }

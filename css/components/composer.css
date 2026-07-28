@@ -147,13 +147,19 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mui-accent) 10%, transparent);
 }
 
-/* Asleep — a 46px dashed bar on the same anchor line. */
+/* Asleep — a 46px dashed bar on the same anchor line. Content-sized
+   rather than height-clamped, so a consumer enhancement that grows the
+   field on typing grows the bar with it — the field can never overflow
+   or clip against a fixed box. 8px vertical padding: the 28px Wake
+   button computes 28+16+2 = 46px exactly; the 24px text line (42px)
+   rests on the min-height. */
 .mui-composer--asleep .mui-composer__sleepbar {
-  height: 46px;
+  box-sizing: border-box;
+  min-height: 46px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 13px;
+  padding: 8px 13px;
   border: 1px dashed color-mix(in srgb, var(--mui-text) 14%, transparent);
   border-radius: 10px;
 }

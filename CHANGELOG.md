@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.3] — 2026-07-27 — asleep bar is content-sized
+
+The Asleep composer bar was a fixed 46px box; a consumer auto-grow enhancement
+that expands the field on typing overflowed it (reproduced at 72px). The bar is
+now content-sized — `min-height: 46px` with 10px vertical padding, so one 24px
+line still computes to exactly 46px and any growth carries the dashed bar with
+it. No markup or API change.
+
+---
+
 ## [0.6.2] — 2026-07-27 — the composer's no-JS contract, made literal
 
 Two adversarial-review findings, both violations of the component's own "works with

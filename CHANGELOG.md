@@ -5,6 +5,26 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.2] — 2026-07-27 — the composer's no-JS contract, made literal
+
+Two adversarial-review findings, both violations of the component's own "works with
+JavaScript disabled" doc:
+
+- **Asleep had no field.** The bar rendered a decorative hint span, so `Wake` POSTed a form
+  with no `message` — a consumer's typed Form extractor rejects that before any handler runs.
+  The bar now contains a real single-row `textarea` (`__input--sleep`); "type to wake" is
+  literally true. The `__sleep-hint` class is retired.
+- **Interrupt was JS-only.** `secondary_label` rendered `type="button"`. New
+  `secondary_action` prop: when set, the root becomes a `<div>` holding the main form plus an
+  empty sibling form, and Interrupt is a real submit targeting it via the HTML5 `form`
+  attribute (nested forms are invalid HTML). Unset keeps the legacy button.
+
+Structural note: the root element changed `<form>` → `<div class="mui-composer">` with the
+form inside as `__form`. All styling keys off classes, so consumer CSS is unaffected unless
+it matched on the `form` element itself.
+
+---
+
 ## [0.6.1] — 2026-07-27 — composer contrast fix
 
 Two composer text rules shipped as alpha `color-mix()` washes that composite below AA on the

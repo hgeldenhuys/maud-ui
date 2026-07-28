@@ -14,8 +14,18 @@
 //!                            disabled) so a follow-up can be queued; an
 //!                            `Interrupt` hollow-destructive button appears
 //!                            beside the primary.
-//!   * [`State::Asleep`]    — a 46px dashed bar with a mono state tag and a
-//!                            neutral `Wake` button.
+//!   * [`State::Asleep`]    — a 46px dashed bar: mono state tag, a REAL
+//!                            single-row textarea ("Type to wake…" is its
+//!                            placeholder, not decoration), and a neutral
+//!                            `Wake` submit. Same plain-form contract as
+//!                            Ready — waking types and submits with JS off.
+//!
+//! The secondary action (Interrupt) is a real `<form>` too: the root is a
+//! `<div>` holding the main form plus an empty sibling form, and the
+//! secondary button targets it via the HTML5 `form` attribute — nested
+//! forms are invalid HTML, but a button may submit a form it is not inside.
+//! With [`Props::secondary_action`] unset the button renders `type="button"`
+//! and does nothing without a consumer JS layer (legacy behaviour).
 
 use maud::{html, Markup};
 
@@ -89,6 +99,11 @@ pub struct Props {
     /// (the `Interrupt` affordance) before the primary. Only meaningful while
     /// executing.
     pub secondary_label: Option<String>,
+    /// `<form action>` for the secondary button. When set, the button is a
+    /// real submit targeting a sibling form (HTML5 `form` attribute), so the
+    /// action works with JavaScript disabled. When unset the button renders
+    /// `type="button"` and needs a consumer JS layer.
+    pub secondary_action: Option<String>,
     /// Primary button label — `Send`, `Queue`, …
     pub primary_label: String,
     /// Optional kbd hint shown inside the primary button (`⌘↵`).
@@ -110,6 +125,7 @@ impl Default for Props {
             chips: Vec::new(),
             show_voice: false,
             secondary_label: None,
+            secondary_action: None,
             primary_label: "Send".into(),
             primary_kbd: None,
             status: None,
@@ -129,8 +145,14 @@ fn chip_markup(chip: &Chip) -> Markup {
 /// Render the composer for the given state.
 pub fn render(props: Props) -> Markup {
     let class = format!("mui-composer {}", props.state.class());
+    // The secondary form's id must be stable per composer instance. One
+    // composer per pane is the design's contract, so a fixed id suffices;
+    // a consumer rendering two composers on one page would need to extend
+    // this with an id prop.
+    let secondary_form_id = "mui-composer-secondary";
 
-    // Asleep is structurally its own thing — a dashed bar, no field.
+    // Asleep keeps its own compact bar shape, but the bar CONTAINS a real
+    // single-row field — "type to wake" must be literally true with JS off.
     if props.state == State::Asleep {
         let wake = if props.primary_label.is_empty() {
             "Wake".to_string()
@@ -138,14 +160,19 @@ pub fn render(props: Props) -> Markup {
             props.primary_label.clone()
         };
         return html! {
-            form class=(class) action=(props.action) method=(props.method) {
-                div class="mui-composer__sleepbar" {
-                    span class="mui-composer__state-tag" { "ASLEEP" }
-                    span class="mui-composer__sleep-hint" {
-                        @if props.placeholder.is_empty() { "Type to wake" } @else { (props.placeholder) }
+            div class=(class) {
+                form class="mui-composer__form" action=(props.action) method=(props.method) {
+                    div class="mui-composer__sleepbar" {
+                        span class="mui-composer__state-tag" { "ASLEEP" }
+                        textarea
+                            class="mui-composer__input mui-composer__input--sleep"
+                            name=(props.field_name)
+                            rows="1"
+                            placeholder=(if props.placeholder.is_empty() { "Type to wake" } else { &props.placeholder }) {
+                            (props.value)
+                        }
+                        button type="submit" class="mui-composer__wake" { (wake) }
                     }
-                    span class="mui-composer__spacer" {}
-                    button type="submit" class="mui-composer__wake" { (wake) }
                 }
             }
         };
@@ -154,38 +181,55 @@ pub fn render(props: Props) -> Markup {
     let executing = props.state == State::Executing;
 
     html! {
-        form class=(class) action=(props.action) method=(props.method) {
-            div class="mui-composer__field" {
-                textarea
-                    class="mui-composer__input"
-                    name=(props.field_name)
-                    rows="2"
-                    placeholder=(props.placeholder) {
-                    (props.value)
+        div class=(class) {
+            form class="mui-composer__form" action=(props.action) method=(props.method) {
+                div class="mui-composer__field" {
+                    textarea
+                        class="mui-composer__input"
+                        name=(props.field_name)
+                        rows="2"
+                        placeholder=(props.placeholder) {
+                        (props.value)
+                    }
+                    div class="mui-composer__actions" {
+                        @for chip in &props.chips {
+                            (chip_markup(chip))
+                        }
+                        span class="mui-composer__spacer" {}
+                        @if props.show_voice {
+                            button type="button" class="mui-composer__voice" aria-label="Voice input" { "◉" }
+                        }
+                        @if executing {
+                            @if let Some(label) = props.secondary_label.as_ref() {
+                                @if props.secondary_action.is_some() {
+                                    // Submits the sibling form below — a real
+                                    // POST with JavaScript disabled.
+                                    button type="submit" form=(secondary_form_id)
+                                        class="mui-composer__interrupt" { (label) }
+                                } @else {
+                                    button type="button" class="mui-composer__interrupt" { (label) }
+                                }
+                            }
+                        }
+                        button type="submit" class="mui-composer__send" {
+                            (props.primary_label)
+                            @if let Some(kbd) = props.primary_kbd.as_ref() {
+                                span class="mui-composer__kbd" { (kbd) }
+                            }
+                        }
+                    }
                 }
-                div class="mui-composer__actions" {
-                    @for chip in &props.chips {
-                        (chip_markup(chip))
-                    }
-                    span class="mui-composer__spacer" {}
-                    @if props.show_voice {
-                        button type="button" class="mui-composer__voice" aria-label="Voice input" { "◉" }
-                    }
-                    @if executing {
-                        @if let Some(label) = props.secondary_label.as_ref() {
-                            button type="button" class="mui-composer__interrupt" { (label) }
-                        }
-                    }
-                    button type="submit" class="mui-composer__send" {
-                        (props.primary_label)
-                        @if let Some(kbd) = props.primary_kbd.as_ref() {
-                            span class="mui-composer__kbd" { (kbd) }
-                        }
-                    }
+                @if let Some(status) = props.status.as_ref() {
+                    div class="mui-composer__status" { (status) }
                 }
             }
-            @if let Some(status) = props.status.as_ref() {
-                div class="mui-composer__status" { (status) }
+            @if executing {
+                @if let Some(action) = props.secondary_action.as_ref() {
+                    // Empty sibling form the Interrupt button targets via the
+                    // `form` attribute (nested forms are invalid HTML).
+                    form id=(secondary_form_id) class="mui-composer__secondary"
+                        action=(action) method="post" {}
+                }
             }
         }
     }

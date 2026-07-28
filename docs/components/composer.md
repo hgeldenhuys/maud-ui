@@ -2,7 +2,7 @@
 
 The multi-state prompt dock for an agent session view. Server-rendered as a plain `<form>` wrapping a `<textarea rows="2">`, so it submits with JavaScript disabled — auto-grow, `⌘↵`-to-send and voice capture are a JS layer the consumer adds on top.
 
-Four states share one anchor line (the dock never moves): **Ready** (the 84px resting dock), **Growing** (focused, ringed, grows then scrolls), **Executing** (a turn is running; the field stays *writable*, and an `Interrupt` hollow-destructive appears), and **Asleep** (a 46px dashed bar with a `Wake` button).
+Four states share one anchor line (the dock never moves): **Ready** (the 84px resting dock), **Growing** (focused, ringed, grows then scrolls), **Executing** (a turn is running; the field stays *writable*, and an `Interrupt` hollow-destructive appears), and **Asleep** (a 46px dashed bar whose "type to wake" field is a real single-row textarea, plus a `Wake` submit).
 
 ## Import
 
@@ -42,6 +42,7 @@ composer::render(Props {
 | chips | Vec\<Chip\> | `[]` | Leading mono chips (model, auto-accept, attachments). |
 | show_voice | bool | `false` | Show the voice-capture button before the primary. |
 | secondary_label | Option\<String\> | `None` | Renders a hollow-destructive `Interrupt` button (executing state). |
+| secondary_action | Option\<String\> | `None` | `<form action>` for the secondary button. When set, Interrupt is a real submit targeting an empty sibling form via the HTML5 `form` attribute — it POSTs with JS disabled. Unset → `type="button"` (consumer JS wires it). |
 | primary_label | String | `"Send"` | Primary submit-button label. |
 | primary_kbd | Option\<String\> | `None` | Kbd hint inside the primary button (`⌘↵`). |
 | status | Option\<Markup\> | `None` | Mono status line below the field — the "beside" data. |
@@ -53,7 +54,7 @@ composer::render(Props {
 | Ready | The 84px resting dock. |
 | Growing | Focused; field ringed, grows to a cap then scrolls internally. |
 | Executing | A turn is running; field writable, `Interrupt` shown. |
-| Asleep | 46px dashed bar with a mono state tag and a `Wake` button. |
+| Asleep | 46px dashed bar: mono state tag, a real single-row textarea ("type to wake" is literal — it submits with JS off), and a `Wake` button. |
 
 ## Chip
 
@@ -70,9 +71,9 @@ The writable states are a real form: with JS off, the textarea submits and the p
 
 ## CSS classes
 
-- `mui-composer` + one of `mui-composer--ready` / `--growing` / `--executing` / `--asleep`.
+- `mui-composer` (root `<div>`) + one of `mui-composer--ready` / `--growing` / `--executing` / `--asleep`; the form inside is `mui-composer__form`, the secondary target `mui-composer__secondary`.
 - `mui-composer__field`, `__input`, `__actions`, `__chip` (+ `--accent`), `__voice`, `__send`, `__kbd`, `__interrupt`, `__status`.
-- Asleep: `mui-composer__sleepbar`, `__state-tag`, `__sleep-hint`, `__wake`.
+- Asleep: `mui-composer__sleepbar`, `__state-tag`, `__input--sleep`, `__wake`.
 
 ## Related
 

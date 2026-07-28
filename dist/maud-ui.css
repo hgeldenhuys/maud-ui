@@ -1889,6 +1889,12 @@ dialog.mui-command::backdrop {
   display: block;
   max-width: var(--mui-composer-max, 67.5rem);
 }
+.mui-composer__form {
+  display: block;
+}
+.mui-composer__secondary {
+  display: none;
+}
 .mui-composer__field {
   background-color: var(--mui-bg-card);
   border: 1px solid color-mix(in srgb, var(--mui-text) 10%, transparent);
@@ -2036,8 +2042,16 @@ dialog.mui-command::backdrop {
   letter-spacing: 0.1em;
   color: var(--mui-text-subtle);
 }
-.mui-composer__sleep-hint {
+.mui-composer__input--sleep {
+  flex: 1 1 auto;
+  width: auto;
+  min-height: 24px;
+  height: 24px;
+  overflow: hidden;
   font-size: 14px;
+  line-height: 24px;
+}
+.mui-composer__input--sleep::placeholder {
   color: var(--mui-text-muted);
 }
 .mui-composer__wake {

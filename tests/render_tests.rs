@@ -939,3 +939,59 @@ mod css_cascade {
         );
     }
 }
+
+/// The composer's no-JS contract (0.6.2) — both fixes exist to be true with
+/// JavaScript disabled, so they are asserted on the HTML, not the API.
+mod composer_no_js_contract {
+    use maud_ui::primitives::composer::{self, State};
+
+    /// "Type to wake" must be literal: the asleep bar carries a real
+    /// single-row textarea that posts with the Wake submit. (It shipped as a
+    /// decorative span first — clicking Wake POSTed no `message` field and
+    /// the consumer's Form extractor 422'd before any handler ran.)
+    #[test]
+    fn asleep_state_has_a_real_field_that_posts() {
+        let out = composer::render(composer::Props {
+            state: State::Asleep,
+            action: "/x/_prompt".into(),
+            placeholder: "Type to wake ch".into(),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(out.contains("<textarea"), "asleep bar needs a real field: {out}");
+        assert!(out.contains(r#"name="message""#), "field must post as `message`: {out}");
+        assert!(out.contains(r#"action="/x/_prompt""#), "wake posts to the prompt action: {out}");
+        assert!(!out.contains("mui-composer__sleep-hint"), "the decorative hint span is retired: {out}");
+    }
+
+    /// With a secondary_action, Interrupt is a real submit targeting the empty
+    /// sibling form via the HTML5 `form` attribute — a nested form would be
+    /// invalid HTML, and a `type="button"` needs JS the constraint forbids.
+    #[test]
+    fn secondary_action_makes_interrupt_a_real_submit() {
+        let out = composer::render(composer::Props {
+            state: State::Executing,
+            action: "/x/_prompt".into(),
+            secondary_label: Some("Interrupt".into()),
+            secondary_action: Some("/x/_interrupt".into()),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(
+            out.contains(r#"form="mui-composer-secondary""#),
+            "interrupt must submit the sibling form: {out}"
+        );
+        assert!(
+            out.contains(r#"id="mui-composer-secondary""#) && out.contains(r#"action="/x/_interrupt""#),
+            "the sibling form must exist and carry the interrupt action: {out}"
+        );
+        // And without an action, the legacy JS-wired button shape persists.
+        let legacy = composer::render(composer::Props {
+            state: State::Executing,
+            secondary_label: Some("Interrupt".into()),
+            ..Default::default()
+        })
+        .into_string();
+        assert!(legacy.contains(r#"type="button""#), "no action → type=button: {legacy}");
+    }
+}

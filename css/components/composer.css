@@ -6,6 +6,13 @@
   max-width: var(--mui-composer-max, 67.5rem); /* caps at the 1080px code measure */
 }
 
+/* The root is a <div>; the form inside carries no box of its own. The empty
+   sibling form (the secondary action's submit target — nested forms are
+   invalid HTML, so the Interrupt button reaches it via the `form`
+   attribute) must never take up space. */
+.mui-composer__form { display: block; }
+.mui-composer__secondary { display: none; }
+
 /* The field: a card-surfaced box with a foreground-10% hairline. */
 .mui-composer__field {
   background-color: var(--mui-bg-card);
@@ -158,10 +165,20 @@
   letter-spacing: 0.1em;
   color: var(--mui-text-subtle);
 }
-.mui-composer__sleep-hint {
+/* The asleep bar's field is a REAL single-row textarea — "type to wake" is
+   the literal contract, so the input exists with JS off. It borrows the
+   bar's box entirely: no border, no background, one 24px line, vertically
+   centred by the bar's flex. */
+.mui-composer__input--sleep {
+  flex: 1 1 auto;
+  width: auto;
+  min-height: 24px;
+  height: 24px;
+  overflow: hidden;
   font-size: 14px;
-  color: var(--mui-text-muted);
+  line-height: 24px;
 }
+.mui-composer__input--sleep::placeholder { color: var(--mui-text-muted); }
 .mui-composer__wake {
   height: 28px;
   display: inline-flex;

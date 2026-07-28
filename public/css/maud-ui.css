@@ -2013,7 +2013,7 @@ dialog.mui-command::backdrop {
   font-family: var(--mui-font-mono);
   font-size: 11px;
   line-height: 1;
-  color: color-mix(in srgb, var(--mui-text-muted) 42%, transparent);
+  color: var(--mui-text-subtle);
 }
 .mui-composer--growing .mui-composer__field {
   border-color: color-mix(in srgb, var(--mui-accent) 45%, transparent);
@@ -2034,7 +2034,7 @@ dialog.mui-command::backdrop {
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.1em;
-  color: color-mix(in srgb, var(--mui-text) 34%, transparent);
+  color: var(--mui-text-subtle);
 }
 .mui-composer__sleep-hint {
   font-size: 14px;

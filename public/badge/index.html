@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Badge — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Badge — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206047"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Badge — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Badge — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=205981"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -1052,7 +1052,29 @@ html! {
 <tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant (color scheme): Default, Secondary, Success, Warning, Danger, Outline, Ghost, Link.</td></tr>
 <tr><td>href</td><td>Option<String></td><td><code>None</code></td><td>Optional URL; if Some, badge renders as an <code>&lt;a&gt;</code> element; if None, renders as a <code>&lt;span&gt;</code>.</td></tr>
 <tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered before the label with <code>data-icon="inline-start"</code>.</td></tr>
+<tr><td>mono</td><td>bool</td><td><code>false</code></td><td>Render the label in the monospace face — for shas, ids, counts.</td></tr>
+<tr><td>chip</td><td>bool</td><td><code>false</code></td><td>Render as a taller (26px) hollow chip: bordered-transparent, 1px foreground-10% border, 6px radius. The counterpart to the filled pill.</td></tr>
+<tr><td>trailing_count</td><td>Option<String></td><td><code>None</code></td><td>Trailing count set apart in the mono face — the <code>2</code> in <code>mail 2</code>.</td></tr>
+<tr><td>kbd</td><td>Option<String></td><td><code>None</code></td><td>Trailing kbd hint in a subtle key cap — the <code>⌘K</code> in a command chip.</td></tr>
 </tbody></table>
+<h2>Hollow chip</h2>
+<p><code>chip: true</code> swaps the pill for a taller bordered-transparent chip sized to sit inline with 24–28px controls. It carries an optional <code>trailing_count</code> or <code>kbd</code>:</p>
+<pre><code class="language-rust">badge::render(badge::Props {
+    label: "mail".into(),
+    variant: badge::Variant::Outline,
+    chip: true,
+    trailing_count: Some("2".into()),
+    ..Default::default()
+});
+
+badge::render(badge::Props {
+    label: "Command".into(),
+    variant: badge::Variant::Outline,
+    chip: true,
+    kbd: Some("⌘K".into()),
+    ..Default::default()
+});
+</code></pre>
 <h2>Variants</h2>
 <table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
 <tr><td>Default</td><td>General-purpose status or tag.</td></tr>

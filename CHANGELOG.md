@@ -5,6 +5,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.6.1] — 2026-07-27 — composer contrast fix
+
+Two composer text rules shipped as alpha `color-mix()` washes that composite below AA on the
+library's own backgrounds: `__status` (`--mui-text-muted` at 42% ≈ 2.5:1) and `__state-tag`
+(`--mui-text` at 34% ≈ 2.7:1). Both now use solid `--mui-text-subtle` (5.91:1 on `--mui-bg`,
+the documented contrast floor). Found by alpha-aware compositing during the Conductor
+session-view build — canvas-readback probes that drop the fg alpha report the base token and
+false-pass exactly this pattern.
+
+---
+
 ## [0.6.0] — 2026-07-27 — the agent session-view kit
 
 Seven new primitives, a `Session` tier, and two extended components — the surface a Conductor

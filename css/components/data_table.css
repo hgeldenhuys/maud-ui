@@ -141,7 +141,7 @@
 }
 
 /* Mobile: stack toolbar/footer, full-width search */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-data-table__toolbar {
     flex-direction: column;
     align-items: stretch;

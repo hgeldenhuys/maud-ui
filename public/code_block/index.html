@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Code Block — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Code Block — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Code Block — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Code Block — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1047,23 +1095,23 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>code</code></td><td><code>String</code></td><td><code>String::new()</code> (<code>""</code>)</td><td>Raw source — used when <code>pre_rendered</code> is <code>None</code>. Highlighted per <code>language</code> when the language is recognised.</td></tr>
-<tr><td><code>pre_rendered</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional pre-rendered HTML (e.g. from a syntax-highlighter such as syntect or server-rendered shiki). Takes precedence over <code>code</code> and the built-in highlighter when set.</td></tr>
-<tr><td><code>language</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Language label shown in the header (e.g. <code>"rust"</code>, <code>"bash"</code>). When set to a recognised token, drives the built-in highlighter; unknown values fall back to plain-text rendering.</td></tr>
-<tr><td><code>filename</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional filename shown next to the language.</td></tr>
-<tr><td><code>show_copy</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to render the copy button.</td></tr>
-<tr><td><code>max_height</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional max-height (CSS) — enables vertical scrolling when set.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>code</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>String::new()</code> (<code>""</code>)</td><td data-label="Description">Raw source — used when <code>pre_rendered</code> is <code>None</code>. Highlighted per <code>language</code> when the language is recognised.</td></tr>
+<tr><td data-label="Field"><code>pre_rendered</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional pre-rendered HTML (e.g. from a syntax-highlighter such as syntect or server-rendered shiki). Takes precedence over <code>code</code> and the built-in highlighter when set.</td></tr>
+<tr><td data-label="Field"><code>language</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Language label shown in the header (e.g. <code>"rust"</code>, <code>"bash"</code>). When set to a recognised token, drives the built-in highlighter; unknown values fall back to plain-text rendering.</td></tr>
+<tr><td data-label="Field"><code>filename</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional filename shown next to the language.</td></tr>
+<tr><td data-label="Field"><code>show_copy</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>true</code></td><td data-label="Description">Whether to render the copy button.</td></tr>
+<tr><td data-label="Field"><code>max_height</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional max-height (CSS) — enables vertical scrolling when set.</td></tr>
+</tbody></table></div>
 <p><strong>Note on <code>show_copy</code>'s default:</strong> this field is <code>true</code> by default, and <code>Props</code> has a hand-written <code>impl Default</code> rather than a derived one specifically to make that so. Until 0.4.0 the <code>Default</code> was derived, which gave <code>bool::default()</code> — <code>false</code> — while the field's own doc comment claimed "default true"; every <code>..Default::default()</code> construction silently dropped the copy button. Corrected in 0.4.0, when this primitive was first registered.</p>
 <p><strong>Header visibility:</strong> the header row (language/filename/copy button) only renders when at least one of <code>language</code>, <code>filename</code> is <code>Some(_)</code>, or <code>show_copy</code> is <code>true</code> (<code>has_header = props.language.is_some() || props.filename.is_some() || show_copy</code>). Otherwise <code>render</code> emits a bare <code>&lt;pre&gt;&lt;code&gt;</code> with no header.</p>
 <p><strong>Language selection &amp; built-in highlighting:</strong> <code>language</code> is matched case-insensitively (<code>to_ascii_lowercase()</code>) against:</p>
-<table><thead><tr><th>Tokens</th><th>Highlighter</th></tr></thead><tbody>
-<tr><td><code>rust</code>, <code>rs</code></td><td><code>tokenize_rust</code></td></tr>
-<tr><td><code>bash</code>, <code>sh</code>, <code>shell</code></td><td><code>tokenize_bash</code></td></tr>
-<tr><td><code>typescript</code>, <code>ts</code>, <code>tsx</code>, <code>javascript</code>, <code>js</code>, <code>jsx</code></td><td><code>tokenize_ts</code> (one shared tokenizer for the whole TS/JS family)</td></tr>
-<tr><td><code>json</code></td><td><code>tokenize_json</code></td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Tokens</th><th>Highlighter</th></tr></thead><tbody>
+<tr><td data-label="Tokens"><code>rust</code>, <code>rs</code></td><td data-label="Highlighter"><code>tokenize_rust</code></td></tr>
+<tr><td data-label="Tokens"><code>bash</code>, <code>sh</code>, <code>shell</code></td><td data-label="Highlighter"><code>tokenize_bash</code></td></tr>
+<tr><td data-label="Tokens"><code>typescript</code>, <code>ts</code>, <code>tsx</code>, <code>javascript</code>, <code>js</code>, <code>jsx</code></td><td data-label="Highlighter"><code>tokenize_ts</code> (one shared tokenizer for the whole TS/JS family)</td></tr>
+<tr><td data-label="Tokens"><code>json</code></td><td data-label="Highlighter"><code>tokenize_json</code></td></tr>
+</tbody></table></div>
 <p>Any other value (or <code>language: None</code>) skips the tokenizer entirely and renders <code>code</code> as plain, unhighlighted text. <code>pre_rendered</code>, when <code>Some</code>, bypasses the built-in highlighter regardless of <code>language</code>.</p>
 <h2>Variants / Enums</h2>
 <p>None. <code>code_block</code> has no <code>pub</code> enum — the module does define a private <code>enum Tok</code> (<code>Text</code>, <code>Keyword</code>, <code>StringLit</code>, <code>Number</code>, <code>Comment</code>, <code>Type</code>, <code>Attribute</code>, <code>Lifetime</code>, <code>Flag</code>, <code>Variable</code>, <code>Boolean</code>, <code>Null</code>, <code>Punct</code>) used internally to classify highlighter spans into <code>mui-code__tok--&lt;kind&gt;</code> CSS classes, but it is not part of the public API and cannot be constructed or matched on by callers.</p>
@@ -1082,7 +1130,7 @@ html! {
 <p>Message, Diff, ToolCall, StreamingCursor — CodeBlock is part of the AI-chat/agent primitive family and commonly appears embedded inside Message bodies, Diff views, and ToolCall output panels.</p>
 <h2>Shadcn reference</h2>
 <p>No shadcn equivalent — <code>code_block</code> is a custom AI-chat/agent-family primitive with no corresponding component in shadcn/ui.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

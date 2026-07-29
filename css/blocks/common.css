@@ -21,7 +21,7 @@
     border: 1px solid var(--mui-border);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-block__frame {
         padding: 1rem 0.5rem;
         min-height: 32rem;

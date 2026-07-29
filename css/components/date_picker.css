@@ -264,7 +264,7 @@
 }
 
 /* Mobile: trigger expands to fit, dropdown clamps to viewport */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-date-picker {
     display: block;
     width: 100%;

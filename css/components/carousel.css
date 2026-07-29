@@ -7,7 +7,7 @@
 }
 
 /* Mobile: ensure carousel never exceeds viewport at 375px */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-carousel {
     max-width: 100%;
   }

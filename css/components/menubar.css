@@ -82,7 +82,7 @@
 }
 
 /* Mobile: allow menubar to wrap and dropdowns to fit viewport */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-menubar {
     display: flex;
     flex-wrap: wrap;

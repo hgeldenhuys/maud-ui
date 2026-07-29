@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Meter — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Meter — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Meter — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Meter — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1046,24 +1094,24 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>value</td><td>f64</td><td><code>0.0</code></td><td>Current numeric value of the meter.</td></tr>
-<tr><td>min</td><td>f64</td><td><code>0.0</code></td><td>Minimum value of the scale.</td></tr>
-<tr><td>max</td><td>f64</td><td><code>100.0</code></td><td>Maximum value of the scale.</td></tr>
-<tr><td>low</td><td>Option<f64></td><td><code>None</code></td><td>Lower threshold; values below this (when optimum is high) or above this (when optimum is low) enter suboptimal/danger zones.</td></tr>
-<tr><td>high</td><td>Option<f64></td><td><code>None</code></td><td>Upper threshold; values above this (when optimum is high) or below this (when optimum is low) move towards optimal/danger zones.</td></tr>
-<tr><td>optimum</td><td>Option<f64></td><td><code>None</code></td><td>Ideal value; determines which side of the scale is "good." If None, all values are optimum.</td></tr>
-<tr><td>label</td><td>String</td><td><code>""</code></td><td>Accessibility label for the meter. Announced by screen readers.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">value</td><td data-label="Type">f64</td><td data-label="Default"><code>0.0</code></td><td data-label="Description">Current numeric value of the meter.</td></tr>
+<tr><td data-label="Field">min</td><td data-label="Type">f64</td><td data-label="Default"><code>0.0</code></td><td data-label="Description">Minimum value of the scale.</td></tr>
+<tr><td data-label="Field">max</td><td data-label="Type">f64</td><td data-label="Default"><code>100.0</code></td><td data-label="Description">Maximum value of the scale.</td></tr>
+<tr><td data-label="Field">low</td><td data-label="Type">Option<f64></td><td data-label="Default"><code>None</code></td><td data-label="Description">Lower threshold; values below this (when optimum is high) or above this (when optimum is low) enter suboptimal/danger zones.</td></tr>
+<tr><td data-label="Field">high</td><td data-label="Type">Option<f64></td><td data-label="Default"><code>None</code></td><td data-label="Description">Upper threshold; values above this (when optimum is high) or below this (when optimum is low) move towards optimal/danger zones.</td></tr>
+<tr><td data-label="Field">optimum</td><td data-label="Type">Option<f64></td><td data-label="Default"><code>None</code></td><td data-label="Description">Ideal value; determines which side of the scale is "good." If None, all values are optimum.</td></tr>
+<tr><td data-label="Field">label</td><td data-label="Type">String</td><td data-label="Default"><code>""</code></td><td data-label="Description">Accessibility label for the meter. Announced by screen readers.</td></tr>
+</tbody></table></div>
 <h2>Zone Logic</h2>
 <p>The meter automatically determines which visual zone (optimum, suboptimum, danger) to display based on the relationship between <code>value</code>, <code>low</code>, <code>high</code>, and <code>optimum</code>:</p>
 <h3>Higher Is Better (optimum &gt;= midpoint)</h3>
 <p>Used for battery level, signal strength, or other metrics where higher values are desirable.</p>
-<table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
-<tr><td>&lt; low</td><td>Danger</td><td>Red indicator</td></tr>
-<tr><td>&gt;= low &amp;&amp; &lt; high</td><td>Suboptimal</td><td>Yellow indicator</td></tr>
-<tr><td>&gt;= high</td><td>Optimum</td><td>Green indicator</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
+<tr><td data-label="Value">&lt; low</td><td data-label="Zone">Danger</td><td data-label="Styling">Red indicator</td></tr>
+<tr><td data-label="Value">&gt;= low &amp;&amp; &lt; high</td><td data-label="Zone">Suboptimal</td><td data-label="Styling">Yellow indicator</td></tr>
+<tr><td data-label="Value">&gt;= high</td><td data-label="Zone">Optimum</td><td data-label="Styling">Green indicator</td></tr>
+</tbody></table></div>
 <p><strong>Example:</strong> Battery with <code>min=0, max=100, low=20, high=80, optimum=100</code></p>
 <ul>
 <li>15% → Danger (red)</li>
@@ -1072,11 +1120,11 @@ html! {
 </ul>
 <h3>Lower Is Better (optimum &lt; midpoint)</h3>
 <p>Used for disk usage, temperature, latency, or other metrics where lower values are desirable.</p>
-<table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
-<tr><td>&lt;= optimum_threshold</td><td>Optimum</td><td>Green indicator</td></tr>
-<tr><td>&gt; optimum_threshold &amp;&amp; &lt;= high</td><td>Suboptimal</td><td>Yellow indicator</td></tr>
-<tr><td>&gt; high</td><td>Danger</td><td>Red indicator</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
+<tr><td data-label="Value">&lt;= optimum_threshold</td><td data-label="Zone">Optimum</td><td data-label="Styling">Green indicator</td></tr>
+<tr><td data-label="Value">&gt; optimum_threshold &amp;&amp; &lt;= high</td><td data-label="Zone">Suboptimal</td><td data-label="Styling">Yellow indicator</td></tr>
+<tr><td data-label="Value">&gt; high</td><td data-label="Zone">Danger</td><td data-label="Styling">Red indicator</td></tr>
+</tbody></table></div>
 <p><strong>Example:</strong> Disk usage with <code>min=0, max=100, low=20, high=80, optimum=0</code></p>
 <ul>
 <li>25% → Optimum (green)</li>
@@ -1086,14 +1134,14 @@ html! {
 <h3>No Optimum</h3>
 <p>When <code>optimum</code> is <code>None</code>, the meter is always rendered in the optimum zone (green).</p>
 <h2>Variants</h2>
-<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
-<tr><td>Battery level</td><td>Higher is better (optimum = max)</td><td>Device power, charge level.</td></tr>
-<tr><td>Disk usage</td><td>Lower is better (optimum = min)</td><td>Storage capacity, free space.</td></tr>
-<tr><td>Signal strength</td><td>Higher is better (optimum = max)</td><td>Network signal, WiFi strength.</td></tr>
-<tr><td>Temperature</td><td>Lower is better (optimum = min)</td><td>CPU temp, water cooling.</td></tr>
-<tr><td>Memory usage</td><td>Lower is better (optimum = min)</td><td>RAM, heap size.</td></tr>
-<tr><td>Upload progress</td><td>Higher is better (optimum = max)</td><td>File transfer, data sync.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td data-label="Variant">Battery level</td><td data-label="Configuration">Higher is better (optimum = max)</td><td data-label="Use Case">Device power, charge level.</td></tr>
+<tr><td data-label="Variant">Disk usage</td><td data-label="Configuration">Lower is better (optimum = min)</td><td data-label="Use Case">Storage capacity, free space.</td></tr>
+<tr><td data-label="Variant">Signal strength</td><td data-label="Configuration">Higher is better (optimum = max)</td><td data-label="Use Case">Network signal, WiFi strength.</td></tr>
+<tr><td data-label="Variant">Temperature</td><td data-label="Configuration">Lower is better (optimum = min)</td><td data-label="Use Case">CPU temp, water cooling.</td></tr>
+<tr><td data-label="Variant">Memory usage</td><td data-label="Configuration">Lower is better (optimum = min)</td><td data-label="Use Case">RAM, heap size.</td></tr>
+<tr><td data-label="Variant">Upload progress</td><td data-label="Configuration">Higher is better (optimum = max)</td><td data-label="Use Case">File transfer, data sync.</td></tr>
+</tbody></table></div>
 <h2>Helpers</h2>
 <p>None. The component uses internal <code>zone_class()</code> to determine the visual state.</p>
 <h2>Accessibility</h2>
@@ -1106,7 +1154,7 @@ html! {
 <p>Progress, Slider, Input, Number Field.</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/progress</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

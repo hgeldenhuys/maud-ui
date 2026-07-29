@@ -81,7 +81,7 @@
     max-width: 14rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-block--data__bulk {
         flex-wrap: wrap;
     }

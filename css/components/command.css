@@ -177,7 +177,7 @@ dialog.mui-command::backdrop {
 }
 
 /* Mobile: full-width command palette with tighter padding */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-command {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);

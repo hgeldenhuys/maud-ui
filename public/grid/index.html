@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Grid — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Grid — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Grid — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Grid — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1077,16 +1125,16 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>columns</code></td><td><code>Columns</code></td><td><code>AutoFit</code></td><td>Column track definition</td></tr>
-<tr><td><code>min_column</code></td><td><code>MinColumn</code></td><td><code>Md</code> (<code>14rem</code>)</td><td>Minimum column width for <code>AutoFit</code>; no effect on fixed counts</td></tr>
-<tr><td><code>gap</code></td><td><code>Space</code></td><td><code>Md</code> (<code>0.75rem</code>)</td><td>Space between both rows and columns</td></tr>
-<tr><td><code>padding</code></td><td><code>Space</code></td><td><code>None</code></td><td>Inset applied by the container itself</td></tr>
-<tr><td><code>align</code></td><td><code>Align</code></td><td><code>Stretch</code></td><td>Block-axis alignment of items within their track (<code>align-items</code>)</td></tr>
-<tr><td><code>collapse_narrow</code></td><td><code>bool</code></td><td><code>true</code></td><td>Collapse fixed column counts to one column below <code>40rem</code></td></tr>
-<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references</td></tr>
-<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Grid children — each becomes one grid item</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>columns</code></td><td data-label="Type"><code>Columns</code></td><td data-label="Default"><code>AutoFit</code></td><td data-label="Description">Column track definition</td></tr>
+<tr><td data-label="Field"><code>min_column</code></td><td data-label="Type"><code>MinColumn</code></td><td data-label="Default"><code>Md</code> (<code>14rem</code>)</td><td data-label="Description">Minimum column width for <code>AutoFit</code>; no effect on fixed counts</td></tr>
+<tr><td data-label="Field"><code>gap</code></td><td data-label="Type"><code>Space</code></td><td data-label="Default"><code>Md</code> (<code>0.75rem</code>)</td><td data-label="Description">Space between both rows and columns</td></tr>
+<tr><td data-label="Field"><code>padding</code></td><td data-label="Type"><code>Space</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Inset applied by the container itself</td></tr>
+<tr><td data-label="Field"><code>align</code></td><td data-label="Type"><code>Align</code></td><td data-label="Default"><code>Stretch</code></td><td data-label="Description">Block-axis alignment of items within their track (<code>align-items</code>)</td></tr>
+<tr><td data-label="Field"><code>collapse_narrow</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>true</code></td><td data-label="Description">Collapse fixed column counts to one column below <code>40rem</code></td></tr>
+<tr><td data-label="Field"><code>id</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references</td></tr>
+<tr><td data-label="Field"><code>children</code></td><td data-label="Type"><code>Markup</code></td><td data-label="Default"><code>html! {}</code></td><td data-label="Description">Grid children — each becomes one grid item</td></tr>
+</tbody></table></div>
 <h2>Variants / Enums</h2>
 <h3>Columns</h3>
 <ul>
@@ -1107,14 +1155,14 @@ html! {
 <h3>Align</h3>
 <p>Re-exported from <a href="stack.md">stack</a> — <code>Stretch</code> · <code>Start</code> · <code>Center</code> · <code>End</code> · <code>Baseline</code>.</p>
 <h2>Helper Functions</h2>
-<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>auto</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Auto-fitting grid with the default gap and minimum column width</td></tr>
-<tr><td><code>columns</code></td><td><code>fn(Columns, Markup) -&gt; Markup</code></td><td>Fixed-column grid with the default gap, collapsing on narrow viewports</td></tr>
-<tr><td><code>Columns::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a track definition, empty for the default</td></tr>
-<tr><td><code>Columns::count</code></td><td><code>fn(self) -&gt; Option&lt;u8&gt;</code></td><td>The number of columns, or <code>None</code> for <code>AutoFit</code></td></tr>
-<tr><td><code>MinColumn::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class, empty for the default</td></tr>
-<tr><td><code>MinColumn::as_length</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The CSS length a step resolves to</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td data-label="Function"><code>auto</code></td><td data-label="Signature"><code>fn(Markup) -&gt; Markup</code></td><td data-label="Purpose">Auto-fitting grid with the default gap and minimum column width</td></tr>
+<tr><td data-label="Function"><code>columns</code></td><td data-label="Signature"><code>fn(Columns, Markup) -&gt; Markup</code></td><td data-label="Purpose">Fixed-column grid with the default gap, collapsing on narrow viewports</td></tr>
+<tr><td data-label="Function"><code>Columns::as_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for a track definition, empty for the default</td></tr>
+<tr><td data-label="Function"><code>Columns::count</code></td><td data-label="Signature"><code>fn(self) -&gt; Option&lt;u8&gt;</code></td><td data-label="Purpose">The number of columns, or <code>None</code> for <code>AutoFit</code></td></tr>
+<tr><td data-label="Function"><code>MinColumn::as_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class, empty for the default</td></tr>
+<tr><td data-label="Function"><code>MinColumn::as_length</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">The CSS length a step resolves to</td></tr>
+</tbody></table></div>
 <h2>Accessibility</h2>
 <p>A grid is presentational: it changes visual position without changing DOM order, so keyboard focus and screen-reader order continue to follow source order. Keep the children in the order they should be read.</p>
 <p><code>collapse_narrow</code> defaults to <code>true</code> because a four-column grid on a phone is four unreadable slivers, and this crate offers no class escape hatch a consumer could use to fix that themselves — so the responsive behaviour has to live in the primitive. Set it to <code>false</code> only when the cells are genuinely small (a colour palette, a keypad) and should stay side by side at every width.</p>
@@ -1123,7 +1171,7 @@ html! {
 <p>Stack (one-axis container; the two compose — grid for columns, stack for each cell's rows), Card (the usual grid child), AspectRatio (fixed-ratio media cells), Table (tabular <em>data</em>, not layout)</p>
 <h2>Shadcn reference</h2>
 <p>No direct shadcn/Base UI equivalent — shadcn leans on Tailwind utility classes (<code>grid grid-cols-3 gap-4</code>) for this role. <code>grid</code> fills the same need in a utility-free, enumerable form.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

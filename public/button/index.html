@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Button — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Button — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Button — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Button — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1054,37 +1102,37 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>label</td><td>String</td><td><code>"Button"</code></td><td>Button text content.</td></tr>
-<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link.</td></tr>
-<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Button size: Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg.</td></tr>
-<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the button is disabled (aria-disabled set).</td></tr>
-<tr><td>button_type</td><td>&amp;'static str</td><td><code>"button"</code></td><td>HTML button type attribute: "button", "submit", "reset".</td></tr>
-<tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup (SVG) rendered before the label with <code>data-icon="inline-start"</code>; use <code>stroke="currentColor"</code>.</td></tr>
-<tr><td>trailing_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered after the label with <code>data-icon="inline-end"</code>; use <code>stroke="currentColor"</code>.</td></tr>
-<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Accessible label; <strong>required</strong> for icon-only sizes (Icon, IconXs, IconSm, IconLg).</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">label</td><td data-label="Type">String</td><td data-label="Default"><code>"Button"</code></td><td data-label="Description">Button text content.</td></tr>
+<tr><td data-label="Field">variant</td><td data-label="Type">Variant</td><td data-label="Default"><code>Default</code></td><td data-label="Description">Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link.</td></tr>
+<tr><td data-label="Field">size</td><td data-label="Type">Size</td><td data-label="Default"><code>Md</code></td><td data-label="Description">Button size: Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg.</td></tr>
+<tr><td data-label="Field">disabled</td><td data-label="Type">bool</td><td data-label="Default"><code>false</code></td><td data-label="Description">Whether the button is disabled (aria-disabled set).</td></tr>
+<tr><td data-label="Field">button_type</td><td data-label="Type">&amp;'static str</td><td data-label="Default"><code>"button"</code></td><td data-label="Description">HTML button type attribute: "button", "submit", "reset".</td></tr>
+<tr><td data-label="Field">leading_icon</td><td data-label="Type">Option<Markup></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional icon markup (SVG) rendered before the label with <code>data-icon="inline-start"</code>; use <code>stroke="currentColor"</code>.</td></tr>
+<tr><td data-label="Field">trailing_icon</td><td data-label="Type">Option<Markup></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional icon markup rendered after the label with <code>data-icon="inline-end"</code>; use <code>stroke="currentColor"</code>.</td></tr>
+<tr><td data-label="Field">aria_label</td><td data-label="Type">Option<String></td><td data-label="Default"><code>None</code></td><td data-label="Description">Accessible label; <strong>required</strong> for icon-only sizes (Icon, IconXs, IconSm, IconLg).</td></tr>
+</tbody></table></div>
 <h2>Variant Styles</h2>
-<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
-<tr><td>Default</td><td>Default/neutral button.</td></tr>
-<tr><td>Primary</td><td>Primary call-to-action (Save, Submit, Continue).</td></tr>
-<tr><td>Secondary</td><td>Secondary action (Cancel, Back, etc.).</td></tr>
-<tr><td>Outline</td><td>Outlined button for emphasis without primary color.</td></tr>
-<tr><td>Ghost</td><td>Minimal ghost style, usually for low-priority actions.</td></tr>
-<tr><td>Danger</td><td>Destructive actions (Delete, Revoke); use with AlertDialog.</td></tr>
-<tr><td>Link</td><td>Styled as a text link.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td data-label="Variant">Default</td><td data-label="Use Case">Default/neutral button.</td></tr>
+<tr><td data-label="Variant">Primary</td><td data-label="Use Case">Primary call-to-action (Save, Submit, Continue).</td></tr>
+<tr><td data-label="Variant">Secondary</td><td data-label="Use Case">Secondary action (Cancel, Back, etc.).</td></tr>
+<tr><td data-label="Variant">Outline</td><td data-label="Use Case">Outlined button for emphasis without primary color.</td></tr>
+<tr><td data-label="Variant">Ghost</td><td data-label="Use Case">Minimal ghost style, usually for low-priority actions.</td></tr>
+<tr><td data-label="Variant">Danger</td><td data-label="Use Case">Destructive actions (Delete, Revoke); use with AlertDialog.</td></tr>
+<tr><td data-label="Variant">Link</td><td data-label="Use Case">Styled as a text link.</td></tr>
+</tbody></table></div>
 <h2>Size Ladder</h2>
-<table><thead><tr><th>Size</th><th>Class</th><th>Notes</th></tr></thead><tbody>
-<tr><td>Xs</td><td><code>mui-btn--xs</code></td><td>Extra-small text button.</td></tr>
-<tr><td>Sm</td><td><code>mui-btn--sm</code></td><td>Small text button.</td></tr>
-<tr><td>Md</td><td><code>mui-btn--md</code></td><td>Default text button.</td></tr>
-<tr><td>Lg</td><td><code>mui-btn--lg</code></td><td>Large text button.</td></tr>
-<tr><td>Icon</td><td><code>mui-btn--icon</code></td><td>Icon-only button (requires <code>aria_label</code>).</td></tr>
-<tr><td>IconXs</td><td><code>mui-btn--icon-xs</code></td><td>Extra-small icon-only (requires <code>aria_label</code>).</td></tr>
-<tr><td>IconSm</td><td><code>mui-btn--icon-sm</code></td><td>Small icon-only (requires <code>aria_label</code>).</td></tr>
-<tr><td>IconLg</td><td><code>mui-btn--icon-lg</code></td><td>Large icon-only (requires <code>aria_label</code>).</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Size</th><th>Class</th><th>Notes</th></tr></thead><tbody>
+<tr><td data-label="Size">Xs</td><td data-label="Class"><code>mui-btn--xs</code></td><td data-label="Notes">Extra-small text button.</td></tr>
+<tr><td data-label="Size">Sm</td><td data-label="Class"><code>mui-btn--sm</code></td><td data-label="Notes">Small text button.</td></tr>
+<tr><td data-label="Size">Md</td><td data-label="Class"><code>mui-btn--md</code></td><td data-label="Notes">Default text button.</td></tr>
+<tr><td data-label="Size">Lg</td><td data-label="Class"><code>mui-btn--lg</code></td><td data-label="Notes">Large text button.</td></tr>
+<tr><td data-label="Size">Icon</td><td data-label="Class"><code>mui-btn--icon</code></td><td data-label="Notes">Icon-only button (requires <code>aria_label</code>).</td></tr>
+<tr><td data-label="Size">IconXs</td><td data-label="Class"><code>mui-btn--icon-xs</code></td><td data-label="Notes">Extra-small icon-only (requires <code>aria_label</code>).</td></tr>
+<tr><td data-label="Size">IconSm</td><td data-label="Class"><code>mui-btn--icon-sm</code></td><td data-label="Notes">Small icon-only (requires <code>aria_label</code>).</td></tr>
+<tr><td data-label="Size">IconLg</td><td data-label="Class"><code>mui-btn--icon-lg</code></td><td data-label="Notes">Large icon-only (requires <code>aria_label</code>).</td></tr>
+</tbody></table></div>
 <h2>Accessibility</h2>
 <ul>
 <li>Icon-only buttons (<code>Size::Icon*</code>) <strong>must</strong> have <code>aria_label</code> set; enforced by <code>debug_assert!</code> at render time in debug builds.</li>
@@ -1096,7 +1144,7 @@ html! {
 <p>ButtonGroup, AlertDialog, Link.</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/button</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

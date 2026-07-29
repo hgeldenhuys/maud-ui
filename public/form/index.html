@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Form — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Form — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Form — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Form — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1081,16 +1129,16 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>action</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Submission target; <code>None</code> omits the attribute, submitting to the current URL</td></tr>
-<tr><td><code>method</code></td><td><code>Method</code></td><td><code>Post</code></td><td>HTTP method — <strong>diverges from HTML's <code>GET</code></strong>, see Accessibility &amp; safety</td></tr>
-<tr><td><code>enctype</code></td><td><code>Enctype</code></td><td><code>UrlEncoded</code></td><td>Body encoding; the attribute is omitted for the default</td></tr>
-<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>For <code>aria-labelledby</code>, and for submit buttons placed outside the form via <code>form="&lt;id&gt;"</code></td></tr>
-<tr><td><code>aria_label</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Accessible name — required for the form to be a landmark</td></tr>
-<tr><td><code>novalidate</code></td><td><code>bool</code></td><td><code>false</code></td><td>Skip the browser's built-in constraint validation</td></tr>
-<tr><td><code>autocomplete</code></td><td><code>bool</code></td><td><code>true</code></td><td><code>false</code> emits <code>autocomplete="off"</code></td></tr>
-<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Fields and the submit control</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>action</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Submission target; <code>None</code> omits the attribute, submitting to the current URL</td></tr>
+<tr><td data-label="Field"><code>method</code></td><td data-label="Type"><code>Method</code></td><td data-label="Default"><code>Post</code></td><td data-label="Description">HTTP method — <strong>diverges from HTML's <code>GET</code></strong>, see Accessibility &amp; safety</td></tr>
+<tr><td data-label="Field"><code>enctype</code></td><td data-label="Type"><code>Enctype</code></td><td data-label="Default"><code>UrlEncoded</code></td><td data-label="Description">Body encoding; the attribute is omitted for the default</td></tr>
+<tr><td data-label="Field"><code>id</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">For <code>aria-labelledby</code>, and for submit buttons placed outside the form via <code>form="&lt;id&gt;"</code></td></tr>
+<tr><td data-label="Field"><code>aria_label</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Accessible name — required for the form to be a landmark</td></tr>
+<tr><td data-label="Field"><code>novalidate</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Skip the browser's built-in constraint validation</td></tr>
+<tr><td data-label="Field"><code>autocomplete</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>true</code></td><td data-label="Description"><code>false</code> emits <code>autocomplete="off"</code></td></tr>
+<tr><td data-label="Field"><code>children</code></td><td data-label="Type"><code>Markup</code></td><td data-label="Default"><code>html! {}</code></td><td data-label="Description">Fields and the submit control</td></tr>
+</tbody></table></div>
 <h2>Variants / Enums</h2>
 <h3>Method</h3>
 <ul>
@@ -1106,11 +1154,11 @@ html! {
 <li><code>TextPlain</code>: <code>text/plain</code> — debugging only; it does not escape reliably</li>
 </ul>
 <h2>Helper Functions</h2>
-<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>stacked</code></td><td><code>fn(impl Into&lt;String&gt;, Markup) -&gt; Markup</code></td><td>A <code>POST</code> form wrapping its children in a vertical stack — the shape almost every form takes</td></tr>
-<tr><td><code>Method::as_attr</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The <code>method</code> attribute value</td></tr>
-<tr><td><code>Enctype::as_attr</code></td><td><code>fn(self) -&gt; Option&lt;&amp;'static str&gt;</code></td><td>The <code>enctype</code> attribute value, or <code>None</code> for the HTML default</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td data-label="Function"><code>stacked</code></td><td data-label="Signature"><code>fn(impl Into&lt;String&gt;, Markup) -&gt; Markup</code></td><td data-label="Purpose">A <code>POST</code> form wrapping its children in a vertical stack — the shape almost every form takes</td></tr>
+<tr><td data-label="Function"><code>Method::as_attr</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">The <code>method</code> attribute value</td></tr>
+<tr><td data-label="Function"><code>Enctype::as_attr</code></td><td data-label="Signature"><code>fn(self) -&gt; Option&lt;&amp;'static str&gt;</code></td><td data-label="Purpose">The <code>enctype</code> attribute value, or <code>None</code> for the HTML default</td></tr>
+</tbody></table></div>
 <h2>Accessibility &amp; safety</h2>
 <p><strong><code>method</code> defaults to <code>Post</code>, not HTML's <code>GET</code>.</strong> This is the one place the primitive knowingly diverges from the platform. <code>GET</code> serialises every field into the URL, where it lands in browser history, server access logs, and the <code>Referer</code> header sent to third parties. A login form whose author forgot to set <code>method</code> should not leak the password that way. Set <code>Method::Get</code> explicitly for searches and filters, where a linkable result URL is the point.</p>
 <p>A <code>&lt;form&gt;</code> is exposed as a <code>form</code> landmark <strong>only</strong> when it has an accessible name, so pass <code>aria_label</code> on any page carrying more than one form. A single unnamed form is fine — it simply is not a landmark, which is the correct outcome when there is nothing to distinguish it from.</p>
@@ -1119,7 +1167,7 @@ html! {
 <p>Stack (the column a form's fields live in — <code>form::stacked</code> pairs them), Field (label + control + description + errors), Fieldset (grouping related controls under a legend), Button (<code>button_type: "submit"</code>), Input, Textarea, Select, Checkbox</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/form — note that shadcn's Form is a React Hook Form binding, a different concern. This primitive is the HTML element and its submission contract; validation state is <a href="field.md">field</a>'s job.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

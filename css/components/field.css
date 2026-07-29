@@ -23,7 +23,7 @@
   gap: 0.375rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40rem) {
   .mui-field--responsive {
     display: grid;
     grid-template-columns: minmax(8rem, auto) 1fr;

@@ -161,7 +161,7 @@ dialog.mui-sheet--bottom {
 }
 
 /* Mobile: side sheets take full width, reduce interior padding */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-sheet--right,
   dialog.mui-sheet--left {
     width: 100vw;

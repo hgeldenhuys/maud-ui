@@ -1833,12 +1833,15 @@ fn theme_customizer_css() -> &'static str {
 
 .mui-theme__split {
     display: grid;
-    grid-template-columns: minmax(20rem, 22rem) 1fr;
+    /* `minmax(0, 1fr)` rather than a bare `1fr`: an auto-minimum track grows to
+       its content, so the preview column pushed the page ~10px wide on desktop.
+       Same fix, and same reason, as `.mui-grid` in css/components/grid.css. */
+    grid-template-columns: minmax(20rem, 22rem) minmax(0, 1fr);
     gap: 1.25rem;
     align-items: start;
     margin-top: 1rem;
 }
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-theme__split { grid-template-columns: 1fr; }
 }
 
@@ -2360,7 +2363,7 @@ async fn main() {
                         section class="mui-gallery__component" id="your-first-component" {
                             h3 class="mui-gallery__component-name" { "3. Your first component" }
                             p.mui-showcase__caption { "Every component is a Props struct and a render() function. Start typing — the compiler will guide you." }
-                            div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1rem;" {
+                            div class="mui-two-up" {
                                 div {
                                     p.mui-showcase__caption { "You write:" }
                                     (code_example("", r#"button::render(button::Props {
@@ -2844,7 +2847,7 @@ fn integration_shell_css() -> &'static str {
     background: var(--mui-bg);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration__editor {
         height: 28rem;
     }
@@ -3773,7 +3776,7 @@ fn excalidraw_css() -> &'static str {
     overflow: hidden;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--excalidraw .mui-integration__editor--excal {
         height: 36rem;
     }
@@ -4359,7 +4362,7 @@ fn fullcalendar_css() -> &'static str {
     padding: 0.75rem;
     overflow: auto;
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--fullcalendar .mui-integration__editor { height: 40rem; }
 }
 .mui-integration--fullcalendar .fc {
@@ -4548,7 +4551,7 @@ fn leaflet_css() -> &'static str {
     height: 28rem;
     padding: 0;
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--leaflet .mui-integration__editor { height: 34rem; }
 }
 .mui-integration--leaflet .leaflet-container { height: 100% !important; width: 100% !important; background: var(--mui-bg); }
@@ -4757,7 +4760,7 @@ fn tiptap_css() -> &'static str {
     line-height: 1.65;
     color: var(--mui-text);
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--tiptap .mui-integration__editor { height: 28rem; }
 }
 .mui-integration--tiptap .ProseMirror { outline: none; min-height: 100%; }
@@ -4996,7 +4999,7 @@ fn threejs_css() -> &'static str {
     padding: 0;
     background: var(--mui-bg);
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--threejs .mui-integration__editor { height: 38rem; }
 }
 .mui-integration--threejs canvas { display: block; width: 100% !important; height: 100% !important; }
@@ -5212,7 +5215,7 @@ fn aggrid_css() -> &'static str {
     height: 30rem;
     padding: 0;
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--aggrid .mui-integration__editor { height: 36rem; }
 }
 .mui-integration--aggrid .ag-theme-quartz,
@@ -5444,7 +5447,7 @@ fn mermaid_css() -> &'static str {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--mermaid .mui-integration__editor { height: 34rem; }
 }
 .mui-integration--mermaid textarea {
@@ -5692,7 +5695,7 @@ fn echarts_css() -> &'static str {
     padding: 0;
     background: var(--mui-bg-card);
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--echarts .mui-integration__editor { height: 34rem; }
 }
 "#
@@ -6214,7 +6217,7 @@ fn pdfjs_css() -> &'static str {
     align-items: center;
     gap: 1rem;
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--pdfjs .mui-integration__editor { height: 42rem; }
 }
 .mui-integration--pdfjs canvas {
@@ -6443,7 +6446,7 @@ fn cytoscape_css() -> &'static str {
     padding: 0;
     background: var(--mui-bg);
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--cytoscape .mui-integration__editor { height: 36rem; }
 }
 "#
@@ -6844,7 +6847,7 @@ fn sortable_css() -> &'static str {
     gap: 0.75rem;
     min-width: 0;
 }
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     .mui-sort__kanban { grid-template-columns: 1fr; }
 }
 .mui-sort__kanban-col {
@@ -7422,7 +7425,7 @@ fn showcase_css() -> &'static str {
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -7963,7 +7966,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -8038,9 +8041,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────

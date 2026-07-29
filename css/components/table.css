@@ -84,7 +84,7 @@
 
 /* Narrow-viewport column drop — columns named in `hide_cols_sm` shed below
    45rem rather than squeezing the whole row into illegibility. */
-@media (max-width: 45rem) {
+@media (max-width: 40rem) {
   .mui-table [data-hide-sm] {
     display: none;
   }

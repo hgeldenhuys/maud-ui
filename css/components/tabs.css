@@ -129,7 +129,7 @@
 }
 
 /* Mobile: enable horizontal scroll for long tab lists */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-tabs__list {
     max-width: 100%;
     overflow-x: auto;

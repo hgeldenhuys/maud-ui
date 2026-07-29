@@ -185,7 +185,7 @@
 }
 
 /* Mobile: wrap list, clamp dropdown to viewport, single-column sub-list */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-nav-menu__list {
     display: flex;
     flex-wrap: wrap;

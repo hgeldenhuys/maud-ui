@@ -43,6 +43,12 @@
 .mui-composer__input:focus { outline: none; }
 
 .mui-composer__actions { display: flex; align-items: center; gap: 7px; }
+/* The action buttons are `white-space: nowrap`, so without wrapping the row
+   sets a min-content width the composer cannot go below — on a phone that
+   widens the whole page rather than the composer. */
+@media (max-width: 40rem) {
+  .mui-composer__actions { flex-wrap: wrap; }
+}
 .mui-composer__spacer { flex: 1 1 auto; }
 
 /* Leading mono chips — model, auto-accept, attachments. */

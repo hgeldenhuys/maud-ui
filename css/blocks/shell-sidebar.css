@@ -257,7 +257,7 @@
 
 /* ── Responsive ──────────────────────────────────────────────── */
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
     .mui-block--shell {
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;

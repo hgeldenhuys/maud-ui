@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Number Field — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Number Field — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Number Field — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Number Field — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1049,25 +1097,25 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>name</td><td>String</td><td><code>""</code></td><td>HTML <code>name</code> attribute for form submission.</td></tr>
-<tr><td>id</td><td>String</td><td><code>""</code></td><td>HTML <code>id</code> attribute; should match the associated label's <code>for</code> attribute.</td></tr>
-<tr><td>value</td><td>f64</td><td><code>0.0</code></td><td>Current numeric value displayed in the input.</td></tr>
-<tr><td>min</td><td>Option<f64></td><td><code>None</code></td><td>Minimum allowed value. If set, values below this are invalid.</td></tr>
-<tr><td>max</td><td>Option<f64></td><td><code>None</code></td><td>Maximum allowed value. If set, values above this are invalid.</td></tr>
-<tr><td>step</td><td>f64</td><td><code>1.0</code></td><td>Increment/decrement amount for +/− buttons and keyboard arrow keys.</td></tr>
-<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Disables the entire field; user cannot interact with input or buttons.</td></tr>
-<tr><td>label</td><td>String</td><td><code>""</code></td><td>Accessibility label for the number field group. Announced by screen readers.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">name</td><td data-label="Type">String</td><td data-label="Default"><code>""</code></td><td data-label="Description">HTML <code>name</code> attribute for form submission.</td></tr>
+<tr><td data-label="Field">id</td><td data-label="Type">String</td><td data-label="Default"><code>""</code></td><td data-label="Description">HTML <code>id</code> attribute; should match the associated label's <code>for</code> attribute.</td></tr>
+<tr><td data-label="Field">value</td><td data-label="Type">f64</td><td data-label="Default"><code>0.0</code></td><td data-label="Description">Current numeric value displayed in the input.</td></tr>
+<tr><td data-label="Field">min</td><td data-label="Type">Option<f64></td><td data-label="Default"><code>None</code></td><td data-label="Description">Minimum allowed value. If set, values below this are invalid.</td></tr>
+<tr><td data-label="Field">max</td><td data-label="Type">Option<f64></td><td data-label="Default"><code>None</code></td><td data-label="Description">Maximum allowed value. If set, values above this are invalid.</td></tr>
+<tr><td data-label="Field">step</td><td data-label="Type">f64</td><td data-label="Default"><code>1.0</code></td><td data-label="Description">Increment/decrement amount for +/− buttons and keyboard arrow keys.</td></tr>
+<tr><td data-label="Field">disabled</td><td data-label="Type">bool</td><td data-label="Default"><code>false</code></td><td data-label="Description">Disables the entire field; user cannot interact with input or buttons.</td></tr>
+<tr><td data-label="Field">label</td><td data-label="Type">String</td><td data-label="Default"><code>""</code></td><td data-label="Description">Accessibility label for the number field group. Announced by screen readers.</td></tr>
+</tbody></table></div>
 <h2>Variants</h2>
-<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
-<tr><td>Simple counter</td><td><code>min: None, max: None</code></td><td>Unbounded counter (like a quantity setter).</td></tr>
-<tr><td>Range-bounded</td><td><code>min: Some(X), max: Some(Y)</code></td><td>Constrained input (age, servings, file count).</td></tr>
-<tr><td>Fixed maximum</td><td><code>min: Some(X), max: Some(X)</code></td><td>Read-only field; user cannot change.</td></tr>
-<tr><td>Large step</td><td><code>step: 5.0</code> or <code>10.0</code></td><td>Coarse adjustments (e.g., volume in 5% increments).</td></tr>
-<tr><td>Decimal step</td><td><code>step: 0.1</code></td><td>Precise adjustments (prices, measurements).</td></tr>
-<tr><td>Disabled</td><td><code>disabled: true</code></td><td>Read-only or unavailable field.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td data-label="Variant">Simple counter</td><td data-label="Configuration"><code>min: None, max: None</code></td><td data-label="Use Case">Unbounded counter (like a quantity setter).</td></tr>
+<tr><td data-label="Variant">Range-bounded</td><td data-label="Configuration"><code>min: Some(X), max: Some(Y)</code></td><td data-label="Use Case">Constrained input (age, servings, file count).</td></tr>
+<tr><td data-label="Variant">Fixed maximum</td><td data-label="Configuration"><code>min: Some(X), max: Some(X)</code></td><td data-label="Use Case">Read-only field; user cannot change.</td></tr>
+<tr><td data-label="Variant">Large step</td><td data-label="Configuration"><code>step: 5.0</code> or <code>10.0</code></td><td data-label="Use Case">Coarse adjustments (e.g., volume in 5% increments).</td></tr>
+<tr><td data-label="Variant">Decimal step</td><td data-label="Configuration"><code>step: 0.1</code></td><td data-label="Use Case">Precise adjustments (prices, measurements).</td></tr>
+<tr><td data-label="Variant">Disabled</td><td data-label="Configuration"><code>disabled: true</code></td><td data-label="Use Case">Read-only or unavailable field.</td></tr>
+</tbody></table></div>
 <h2>Helpers</h2>
 <p>None. The component renders a composite structure with an input and two buttons.</p>
 <h2>Accessibility</h2>
@@ -1100,7 +1148,7 @@ html! {
 <p>Input, Slider, Meter, Label.</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/input</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

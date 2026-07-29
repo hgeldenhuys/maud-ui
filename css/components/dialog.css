@@ -122,7 +122,7 @@ dialog.mui-dialog::backdrop {
 }
 
 /* Mobile: reduce padding and stack footer buttons full-width */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-dialog {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);

@@ -24,7 +24,7 @@
     gap: 1.25rem;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-block--auth__card {
         padding: 1.5rem;
         gap: 1rem;

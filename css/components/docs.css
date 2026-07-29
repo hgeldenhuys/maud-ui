@@ -9,6 +9,11 @@
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--mui-text);
+  /* Every component doc ends with a bare Shadcn reference URL, and prop
+     prose carries long `path::like::this` tokens. With the default
+     `overflow-wrap: normal` these cannot break, so they overflow their
+     paragraph and widen the whole document on a phone. */
+  overflow-wrap: break-word;
 }
 
 .mui-docs h1 {
@@ -67,10 +72,24 @@
   font-size: inherit;
 }
 
+/* Prop tables carry long type signatures and description prose, so at
+   in-between widths their min-content width can still exceed the column.
+   The wrapper (emitted by `wrap_tables` in src/showcase/docs.rs) scrolls
+   the table in its own box instead of widening the document.
+   `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone computes
+   overflow-y to auto and can raise a stray vertical scrollbar. */
+.mui-docs__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0.5rem 0 1.25rem;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+}
+
 .mui-docs table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0.5rem 0 1.25rem;
+  margin: 0;
   font-size: 0.875rem;
 }
 .mui-docs th,
@@ -116,4 +135,63 @@
   border: 0;
   border-top: 1px solid var(--mui-border);
   margin: 2rem 0;
+}
+
+/* ── Prop tables on a phone ──────────────────────────────────────────
+ * A four-column table cannot be read through a ~276px window: forcing it
+ * wide enough to keep its columns intact means the columns pad out to fill
+ * that width, so you scroll past mostly empty space to reach the
+ * description. Below 640px each row becomes its own card instead, with the
+ * column header printed above each value (`data-label`, stamped onto every
+ * cell by `wrap_tables` in src/showcase/docs.rs). No sideways scroll, no
+ * dead space, and the description gets the full column measure. */
+@media (max-width: 40rem) {
+  /* Nothing left to scroll once the rows are stacked. */
+  .mui-docs__scroll {
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
+  .mui-docs table,
+  .mui-docs tbody,
+  .mui-docs tr,
+  .mui-docs td {
+    display: block;
+    width: 100%;
+  }
+
+  /* The headers move into each cell via ::before. `display: none` would
+     also drop them from the accessibility tree, so keep them clipped. */
+  .mui-docs thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .mui-docs tr {
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    background: var(--mui-bg-input);
+    padding: 0.5rem 0.875rem 0.75rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .mui-docs td {
+    border-bottom: 0;
+    padding: 0.375rem 0 0;
+  }
+
+  .mui-docs td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mui-text-muted);
+  }
 }

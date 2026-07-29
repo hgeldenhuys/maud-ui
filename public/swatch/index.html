@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Swatch — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Swatch — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1090,24 +1138,24 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>label</td><td>String</td><td>(empty)</td><td>Human-readable name shown under the chip (e.g., "Primary").</td></tr>
-<tr><td>sublabel</td><td>Option<String></td><td><code>None</code></td><td>Optional second line; typically the raw value or token name.</td></tr>
-<tr><td>mode</td><td>Mode</td><td>(required)</td><td>Colour source: Raw(String) or Token(String).</td></tr>
-<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Chip size: Sm, Md, Lg.</td></tr>
-<tr><td>copyable</td><td>bool</td><td><code>true</code></td><td>Whether clicking the swatch copies the value to clipboard.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">label</td><td data-label="Type">String</td><td data-label="Default">(empty)</td><td data-label="Description">Human-readable name shown under the chip (e.g., "Primary").</td></tr>
+<tr><td data-label="Field">sublabel</td><td data-label="Type">Option<String></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional second line; typically the raw value or token name.</td></tr>
+<tr><td data-label="Field">mode</td><td data-label="Type">Mode</td><td data-label="Default">(required)</td><td data-label="Description">Colour source: Raw(String) or Token(String).</td></tr>
+<tr><td data-label="Field">size</td><td data-label="Type">Size</td><td data-label="Default"><code>Md</code></td><td data-label="Description">Chip size: Sm, Md, Lg.</td></tr>
+<tr><td data-label="Field">copyable</td><td data-label="Type">bool</td><td data-label="Default"><code>true</code></td><td data-label="Description">Whether clicking the swatch copies the value to clipboard.</td></tr>
+</tbody></table></div>
 <h2>Mode Enum</h2>
-<table><thead><tr><th>Variant</th><th>Format</th><th>Example</th></tr></thead><tbody>
-<tr><td>Raw(String)</td><td>Literal CSS colour</td><td><code>Raw("#2563eb")</code> or <code>Raw("hsl(210 40% 96%)")</code> or <code>Raw("rgba(37,99,235,0.35)")</code></td></tr>
-<tr><td>Token(String)</td><td>CSS custom-property name (without <code>--</code> prefix)</td><td><code>Token("mui-accent")</code> renders as <code>background: var(--mui-accent)</code>.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Format</th><th>Example</th></tr></thead><tbody>
+<tr><td data-label="Variant">Raw(String)</td><td data-label="Format">Literal CSS colour</td><td data-label="Example"><code>Raw("#2563eb")</code> or <code>Raw("hsl(210 40% 96%)")</code> or <code>Raw("rgba(37,99,235,0.35)")</code></td></tr>
+<tr><td data-label="Variant">Token(String)</td><td data-label="Format">CSS custom-property name (without <code>--</code> prefix)</td><td data-label="Example"><code>Token("mui-accent")</code> renders as <code>background: var(--mui-accent)</code>.</td></tr>
+</tbody></table></div>
 <h2>Size Enum</h2>
-<table><thead><tr><th>Variant</th><th>Dimensions</th><th>Use Case</th></tr></thead><tbody>
-<tr><td>Sm</td><td>32×32 px</td><td>Compact galleries or inline previews.</td></tr>
-<tr><td>Md</td><td>56×56 px</td><td>Standard documentation and customiser pages.</td></tr>
-<tr><td>Lg</td><td>80×80 px</td><td>Large focus cards or hero sections.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Dimensions</th><th>Use Case</th></tr></thead><tbody>
+<tr><td data-label="Variant">Sm</td><td data-label="Dimensions">32×32 px</td><td data-label="Use Case">Compact galleries or inline previews.</td></tr>
+<tr><td data-label="Variant">Md</td><td data-label="Dimensions">56×56 px</td><td data-label="Use Case">Standard documentation and customiser pages.</td></tr>
+<tr><td data-label="Variant">Lg</td><td data-label="Dimensions">80×80 px</td><td data-label="Use Case">Large focus cards or hero sections.</td></tr>
+</tbody></table></div>
 <h2>Helper Functions</h2>
 <h3>render</h3>
 <pre><code class="language-rust">swatch::render(props: Props) -&gt; Markup
@@ -1138,22 +1186,22 @@ html! {
 <li>Copy value is written to <code>data-swatch-value</code> so the behaviour script reads it.</li>
 </ul>
 <h2>CSS Classes</h2>
-<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>mui-swatch</code></td><td>Root swatch container.</td></tr>
-<tr><td><code>mui-swatch--sm</code></td><td>Small size variant.</td></tr>
-<tr><td><code>mui-swatch--md</code></td><td>Medium size variant (default).</td></tr>
-<tr><td><code>mui-swatch--lg</code></td><td>Large size variant.</td></tr>
-<tr><td><code>mui-swatch--copyable</code></td><td>Applied when <code>copyable: true</code>.</td></tr>
-<tr><td><code>mui-swatch__chip</code></td><td>Colour display box.</td></tr>
-<tr><td><code>mui-swatch__body</code></td><td>Label and sublabel container.</td></tr>
-<tr><td><code>mui-swatch__label</code></td><td>Primary label text.</td></tr>
-<tr><td><code>mui-swatch__sub</code></td><td>Sublabel text (smaller, muted).</td></tr>
-<tr><td><code>mui-swatch__scale</code></td><td>Applied to scale ramp chips.</td></tr>
-<tr><td><code>mui-swatch__scale-label</code></td><td>Ramp name heading.</td></tr>
-<tr><td><code>mui-swatch__scale-row</code></td><td>Horizontal row of ramp chips.</td></tr>
-<tr><td><code>mui-swatch__scale-key</code></td><td>Tone key label (50, 100, etc.).</td></tr>
-<tr><td><code>mui-swatch__grid</code></td><td>Grid wrapper for token swatches.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td data-label="Class"><code>mui-swatch</code></td><td data-label="Purpose">Root swatch container.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch--sm</code></td><td data-label="Purpose">Small size variant.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch--md</code></td><td data-label="Purpose">Medium size variant (default).</td></tr>
+<tr><td data-label="Class"><code>mui-swatch--lg</code></td><td data-label="Purpose">Large size variant.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch--copyable</code></td><td data-label="Purpose">Applied when <code>copyable: true</code>.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__chip</code></td><td data-label="Purpose">Colour display box.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__body</code></td><td data-label="Purpose">Label and sublabel container.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__label</code></td><td data-label="Purpose">Primary label text.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__sub</code></td><td data-label="Purpose">Sublabel text (smaller, muted).</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__scale</code></td><td data-label="Purpose">Applied to scale ramp chips.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__scale-label</code></td><td data-label="Purpose">Ramp name heading.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__scale-row</code></td><td data-label="Purpose">Horizontal row of ramp chips.</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__scale-key</code></td><td data-label="Purpose">Tone key label (50, 100, etc.).</td></tr>
+<tr><td data-label="Class"><code>mui-swatch__grid</code></td><td data-label="Purpose">Grid wrapper for token swatches.</td></tr>
+</tbody></table></div>
 <h2>Behaviour</h2>
 <p>The companion JS behaviour (<code>dist/behaviors/swatch.js</code>) handles:</p>
 <ul>
@@ -1166,7 +1214,7 @@ html! {
 <p>ThemeCustomiser, ColourPicker, ColorInput.</p>
 <h2>Shadcn reference</h2>
 <p>Swatch is a maud-ui original primitive for design-token visualization and colour management.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

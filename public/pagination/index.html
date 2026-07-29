@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pagination — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Pagination — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pagination — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Pagination — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1066,13 +1114,13 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>current_page</td><td>usize</td><td><code>1</code></td><td>Currently active page (1-indexed). Page 1 is the first page.</td></tr>
-<tr><td>total_pages</td><td>usize</td><td><code>1</code></td><td>Total number of pages available.</td></tr>
-<tr><td>max_visible</td><td>usize</td><td><code>5</code></td><td>Maximum number of page buttons to display before using ellipsis. Always shows first and last page.</td></tr>
-<tr><td>href_pattern</td><td>Option<String></td><td><code>None</code></td><td>URL pattern for page links. When Some, page buttons render as <code>&lt;a&gt;</code> tags with <code>{page}</code> substituted. When None, <code>&lt;button&gt;</code> is used. Example: <code>/results?page={page}</code> or <code>#page-{page}</code>.</td></tr>
-<tr><td>icons_only</td><td>bool</td><td><code>false</code></td><td>When true, "Previous" and "Next" button text is hidden; only chevron icons remain visible. Visually-hidden text still announced to screen readers.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">current_page</td><td data-label="Type">usize</td><td data-label="Default"><code>1</code></td><td data-label="Description">Currently active page (1-indexed). Page 1 is the first page.</td></tr>
+<tr><td data-label="Field">total_pages</td><td data-label="Type">usize</td><td data-label="Default"><code>1</code></td><td data-label="Description">Total number of pages available.</td></tr>
+<tr><td data-label="Field">max_visible</td><td data-label="Type">usize</td><td data-label="Default"><code>5</code></td><td data-label="Description">Maximum number of page buttons to display before using ellipsis. Always shows first and last page.</td></tr>
+<tr><td data-label="Field">href_pattern</td><td data-label="Type">Option<String></td><td data-label="Default"><code>None</code></td><td data-label="Description">URL pattern for page links. When Some, page buttons render as <code>&lt;a&gt;</code> tags with <code>{page}</code> substituted. When None, <code>&lt;button&gt;</code> is used. Example: <code>/results?page={page}</code> or <code>#page-{page}</code>.</td></tr>
+<tr><td data-label="Field">icons_only</td><td data-label="Type">bool</td><td data-label="Default"><code>false</code></td><td data-label="Description">When true, "Previous" and "Next" button text is hidden; only chevron icons remain visible. Visually-hidden text still announced to screen readers.</td></tr>
+</tbody></table></div>
 <h2>Page Display Logic</h2>
 <p>The component intelligently determines which page numbers to show:</p>
 <ul>
@@ -1084,14 +1132,14 @@ html! {
 </code></pre>
 <p>The current page is always centered in the visible range (within bounds).</p>
 <h2>Variants</h2>
-<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
-<tr><td>Button navigation</td><td><code>href_pattern: None</code></td><td>Interactive apps with JavaScript handlers.</td></tr>
-<tr><td>Anchor navigation</td><td><code>href_pattern: Some(...)</code></td><td>Static sites, SEO-friendly, works without JavaScript.</td></tr>
-<tr><td>Icons only</td><td><code>icons_only: true</code></td><td>Mobile-optimized, compact layout.</td></tr>
-<tr><td>Full labels</td><td><code>icons_only: false</code></td><td>Desktop-friendly, explicit text.</td></tr>
-<tr><td>Few pages</td><td><code>total_pages: 3-5</code></td><td>Short result sets; all pages always visible.</td></tr>
-<tr><td>Many pages</td><td><code>total_pages: 100+</code></td><td>Large result sets; intelligent ellipsis.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td data-label="Variant">Button navigation</td><td data-label="Configuration"><code>href_pattern: None</code></td><td data-label="Use Case">Interactive apps with JavaScript handlers.</td></tr>
+<tr><td data-label="Variant">Anchor navigation</td><td data-label="Configuration"><code>href_pattern: Some(...)</code></td><td data-label="Use Case">Static sites, SEO-friendly, works without JavaScript.</td></tr>
+<tr><td data-label="Variant">Icons only</td><td data-label="Configuration"><code>icons_only: true</code></td><td data-label="Use Case">Mobile-optimized, compact layout.</td></tr>
+<tr><td data-label="Variant">Full labels</td><td data-label="Configuration"><code>icons_only: false</code></td><td data-label="Use Case">Desktop-friendly, explicit text.</td></tr>
+<tr><td data-label="Variant">Few pages</td><td data-label="Configuration"><code>total_pages: 3-5</code></td><td data-label="Use Case">Short result sets; all pages always visible.</td></tr>
+<tr><td data-label="Variant">Many pages</td><td data-label="Configuration"><code>total_pages: 100+</code></td><td data-label="Use Case">Large result sets; intelligent ellipsis.</td></tr>
+</tbody></table></div>
 <h2>Helpers</h2>
 <p><strong><code>render_href(pattern: &amp;str, page: usize) -&gt; String</code></strong></p>
 <p>Internal helper that substitutes <code>{page}</code> placeholder in the href pattern. Can be used if building custom pagination UI.</p>
@@ -1141,7 +1189,7 @@ href_pattern: Some("#page-{page}".into())
 <p>Button, Link, Navigation Menu.</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/pagination</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

@@ -88,7 +88,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 
 /* Mobile: narrower margins, full-width stacked footer */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-alert-dialog {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);

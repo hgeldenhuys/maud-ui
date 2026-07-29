@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Stack — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Stack — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Stack — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Stack — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1079,18 +1127,18 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>direction</code></td><td><code>Direction</code></td><td><code>Vertical</code></td><td>Main-axis direction — column or row</td></tr>
-<tr><td><code>gap</code></td><td><code>Space</code></td><td><code>Md</code> (<code>0.75rem</code>)</td><td>Space between children</td></tr>
-<tr><td><code>padding</code></td><td><code>Space</code></td><td><code>None</code></td><td>Inset applied by the container itself; <code>None</code> keeps a stack a drop-in wrapper</td></tr>
-<tr><td><code>align</code></td><td><code>Align</code></td><td><code>Stretch</code></td><td>Cross-axis alignment (<code>align-items</code>)</td></tr>
-<tr><td><code>justify</code></td><td><code>Justify</code></td><td><code>Start</code></td><td>Main-axis distribution (<code>justify-content</code>)</td></tr>
-<tr><td><code>wrap</code></td><td><code>bool</code></td><td><code>false</code></td><td>Allow children to wrap onto additional lines</td></tr>
-<tr><td><code>tag</code></td><td><code>Tag</code></td><td><code>Div</code></td><td>The HTML element to render as</td></tr>
-<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references</td></tr>
-<tr><td><code>aria_label</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Accessible name — <strong>required</strong> when <code>tag</code> is <code>Section</code></td></tr>
-<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>The stacked content</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>direction</code></td><td data-label="Type"><code>Direction</code></td><td data-label="Default"><code>Vertical</code></td><td data-label="Description">Main-axis direction — column or row</td></tr>
+<tr><td data-label="Field"><code>gap</code></td><td data-label="Type"><code>Space</code></td><td data-label="Default"><code>Md</code> (<code>0.75rem</code>)</td><td data-label="Description">Space between children</td></tr>
+<tr><td data-label="Field"><code>padding</code></td><td data-label="Type"><code>Space</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Inset applied by the container itself; <code>None</code> keeps a stack a drop-in wrapper</td></tr>
+<tr><td data-label="Field"><code>align</code></td><td data-label="Type"><code>Align</code></td><td data-label="Default"><code>Stretch</code></td><td data-label="Description">Cross-axis alignment (<code>align-items</code>)</td></tr>
+<tr><td data-label="Field"><code>justify</code></td><td data-label="Type"><code>Justify</code></td><td data-label="Default"><code>Start</code></td><td data-label="Description">Main-axis distribution (<code>justify-content</code>)</td></tr>
+<tr><td data-label="Field"><code>wrap</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Allow children to wrap onto additional lines</td></tr>
+<tr><td data-label="Field"><code>tag</code></td><td data-label="Type"><code>Tag</code></td><td data-label="Default"><code>Div</code></td><td data-label="Description">The HTML element to render as</td></tr>
+<tr><td data-label="Field"><code>id</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references</td></tr>
+<tr><td data-label="Field"><code>aria_label</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Accessible name — <strong>required</strong> when <code>tag</code> is <code>Section</code></td></tr>
+<tr><td data-label="Field"><code>children</code></td><td data-label="Type"><code>Markup</code></td><td data-label="Default"><code>html! {}</code></td><td data-label="Description">The stacked content</td></tr>
+</tbody></table></div>
 <h2>Variants / Enums</h2>
 <h3>Direction</h3>
 <ul>
@@ -1142,17 +1190,17 @@ html! {
 <li><code>Main</code>: the document's primary content — at most one per page</li>
 </ul>
 <h2>Helper Functions</h2>
-<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>vertical</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Vertical stack with the default gap — the common case, without the <code>Props</code> ceremony</td></tr>
-<tr><td><code>horizontal</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Horizontal stack, vertically centred, default gap — a toolbar row, a button pair</td></tr>
-<tr><td><code>Direction::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a direction, empty for the default</td></tr>
-<tr><td><code>Space::gap_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a step used as <code>gap</code>, empty for <code>Md</code></td></tr>
-<tr><td><code>Space::padding_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a step used as <code>padding</code>, empty for <code>None</code></td></tr>
-<tr><td><code>Space::as_length</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The CSS length a step resolves to — mirrors <code>tokens::spacing</code></td></tr>
-<tr><td><code>Align::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for an alignment, empty for the default</td></tr>
-<tr><td><code>Justify::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a distribution, empty for the default</td></tr>
-<tr><td><code>Tag::as_element</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The element name a tag renders as</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td data-label="Function"><code>vertical</code></td><td data-label="Signature"><code>fn(Markup) -&gt; Markup</code></td><td data-label="Purpose">Vertical stack with the default gap — the common case, without the <code>Props</code> ceremony</td></tr>
+<tr><td data-label="Function"><code>horizontal</code></td><td data-label="Signature"><code>fn(Markup) -&gt; Markup</code></td><td data-label="Purpose">Horizontal stack, vertically centred, default gap — a toolbar row, a button pair</td></tr>
+<tr><td data-label="Function"><code>Direction::as_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for a direction, empty for the default</td></tr>
+<tr><td data-label="Function"><code>Space::gap_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for a step used as <code>gap</code>, empty for <code>Md</code></td></tr>
+<tr><td data-label="Function"><code>Space::padding_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for a step used as <code>padding</code>, empty for <code>None</code></td></tr>
+<tr><td data-label="Function"><code>Space::as_length</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">The CSS length a step resolves to — mirrors <code>tokens::spacing</code></td></tr>
+<tr><td data-label="Function"><code>Align::as_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for an alignment, empty for the default</td></tr>
+<tr><td data-label="Function"><code>Justify::as_class</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">Modifier class for a distribution, empty for the default</td></tr>
+<tr><td data-label="Function"><code>Tag::as_element</code></td><td data-label="Signature"><code>fn(self) -&gt; &amp;'static str</code></td><td data-label="Purpose">The element name a tag renders as</td></tr>
+</tbody></table></div>
 <h2>Accessibility</h2>
 <p><code>Tag::Section</code> MUST be paired with a non-<code>None</code> <code>aria_label</code>. A <code>&lt;section&gt;</code> with no accessible name is stripped of its <code>region</code> role by the HTML-AAM mapping, so the grouping the tag was chosen for silently does not exist for screen-reader users. This is enforced at runtime by a <code>debug_assert!</code> in debug builds — release builds skip the check, matching <code>button</code>'s icon-only <code>aria_label</code> rule.</p>
 <p><code>Tag::Nav</code> and <code>Tag::Aside</code> are landmarks with or without a name, but a page carrying more than one of either should label each so they can be told apart. <code>Tag::Main</code> should appear at most once per document.</p>
@@ -1161,7 +1209,7 @@ html! {
 <p>Card (a styled container with header/body/footer, often filled with a stack), Separator (a rule between stacked items), Item (a row with leading/trailing slots), AspectRatio (fixed-ratio box)</p>
 <h2>Shadcn reference</h2>
 <p>No direct shadcn/Base UI equivalent — shadcn leans on Tailwind utility classes (<code>flex flex-col gap-4</code>) for this role. <code>stack</code> fills the same need in a utility-free, enumerable form.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

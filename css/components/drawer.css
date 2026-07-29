@@ -228,7 +228,7 @@ dialog.mui-drawer--bottom {
 }
 
 /* Mobile: side drawers take nearly full width, reduce interior padding */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-drawer--right,
   dialog.mui-drawer--left {
     width: 100vw;

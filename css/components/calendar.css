@@ -178,7 +178,7 @@
 }
 
 /* Mobile: allow calendar to flex with container */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-calendar {
     width: 100%;
     max-width: 100%;

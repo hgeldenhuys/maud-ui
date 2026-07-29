@@ -150,7 +150,12 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Navigation" }
                 p.mui-showcase__caption { "Vertical separator between primary nav and user menu." }
-                nav style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border: 1px solid var(--mui-border); border-radius: 0.5rem; height: 2.75rem;" {
+                // The nav strip is legitimately horizontal — the vertical
+                // separator only reads against items on one line — so on a
+                // phone it scrolls inside its own box instead of widening
+                // the page. `overflow-y: hidden` keeps the fixed height from
+                // raising a vertical scrollbar alongside it.
+                nav style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border: 1px solid var(--mui-border); border-radius: 0.5rem; height: 2.75rem; max-width: 100%; overflow-x: auto; overflow-y: hidden;" {
                     a href="#" style="font-weight: 500; text-decoration: none; color: inherit;" { "Dashboard" }
                     a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Projects" }
                     a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Billing" }

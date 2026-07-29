@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ECharts — maud-ui integrations</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="ECharts — maud-ui integrations"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>ECharts — maud-ui integrations</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="ECharts — maud-ui integrations"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -994,7 +1042,7 @@ html { scroll-behavior: smooth; }
     background: var(--mui-bg);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration__editor {
         height: 28rem;
     }
@@ -1085,7 +1133,7 @@ html { scroll-behavior: smooth; }
     padding: 0;
     background: var(--mui-bg-card);
 }
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
     .mui-integration--echarts .mui-integration__editor { height: 34rem; }
 }
 </style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle" aria-label="Toggle navigation" aria-expanded="false"><span aria-hidden="true" class="mui-showcase__menu-icon">☰</span></button><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-mark" aria-hidden="true"><svg viewBox="3.5 2.5 25 27" style="height:0.75em;width:auto;display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg></span><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">79 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations… ( ⌘K )" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav"><a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Components</a><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Blocks</a><a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Theme</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu" role="menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor" role="menuitem"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap" role="menuitem"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow" role="menuitem"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape" role="menuitem"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid" role="menuitem"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw" role="menuitem"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs" role="menuitem"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid" role="menuitem"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts" role="menuitem"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet" role="menuitem"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar" role="menuitem"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer" role="menuitem"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs" role="menuitem"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Drag &amp; Drop</span><a href="/integrations/sortable" role="menuitem"><span class="mui-gallery__nav-advanced-label">SortableJS</span><span class="mui-gallery__nav-advanced-sub">Reorder list, kanban, tile grid</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm" role="menuitem"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a></nav><button type="button" class="mui-showcase__palette-btn" id="mui-palette-open" aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--theme" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span class="mui-showcase__tool-icon" aria-hidden="true">◐</span></button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--dir" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction"><span class="mui-showcase__tool-icon" aria-hidden="true">⇄</span></button></div></div></header><div class="mui-showcase__drawer-backdrop" id="mui-drawer-backdrop" aria-hidden="true"></div><script>window.__MUI_PALETTE__ = [
@@ -1286,7 +1334,7 @@ if (host) {
     document.getElementById('mui-ec-status-theme').textContent = document.documentElement.getAttribute('data-theme') || 'dark';
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
-</script><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</script><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

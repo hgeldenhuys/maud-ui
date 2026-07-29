@@ -25,7 +25,9 @@
   border-radius: var(--mui-radius-lg);
   padding: 0.875rem 2.5rem 0.875rem 1rem;
   box-shadow: var(--mui-shadow-lg);
-  min-width: 20rem;
+  /* `min-width: 20rem` is a floor the toast cannot go below, so on a 360px
+     phone it overflows its container. Clamp it to the space available. */
+  min-width: min(20rem, 100%);
   max-width: 24rem;
   position: relative;
   animation: mui-toast-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);

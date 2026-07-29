@@ -129,7 +129,7 @@ dialog.mui-alert-dialog::backdrop {
   justify-content: flex-end;
   padding: 0 1.5rem 1.5rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-alert-dialog {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);
@@ -1005,7 +1005,7 @@ dialog.mui-alert-dialog::backdrop {
   overflow: hidden;
   pointer-events: none;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-calendar {
     width: 100%;
     max-width: 100%;
@@ -1027,7 +1027,7 @@ dialog.mui-alert-dialog::backdrop {
   width: 100%;
   max-width: 24rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-carousel {
     max-width: 100%;
   }
@@ -1712,7 +1712,7 @@ dialog.mui-alert-dialog::backdrop {
 .mui-combobox__trigger[aria-invalid=true] {
   border-color: var(--mui-danger, #dc2626);
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-combobox {
     display: block;
     width: 100%;
@@ -1868,7 +1868,7 @@ dialog.mui-command::backdrop {
 .mui-command__group[data-hidden=true] {
   display: none;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-command {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);
@@ -1929,6 +1929,11 @@ dialog.mui-command::backdrop {
   display: flex;
   align-items: center;
   gap: 7px;
+}
+@media (max-width: 40rem) {
+  .mui-composer__actions {
+    flex-wrap: wrap;
+  }
 }
 .mui-composer__spacer {
   flex: 1 1 auto;
@@ -2223,7 +2228,7 @@ dialog.mui-command::backdrop {
   cursor: not-allowed;
   pointer-events: none;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-data-table__toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -2449,7 +2454,7 @@ dialog.mui-command::backdrop {
   width: 0;
   height: 0;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-date-picker {
     display: block;
     width: 100%;
@@ -2571,7 +2576,7 @@ dialog.mui-dialog::backdrop {
   justify-content: flex-end;
   padding: 0 1.5rem 1.5rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-dialog {
     width: calc(100vw - 1.5rem);
     max-width: calc(100vw - 1.5rem);
@@ -2692,6 +2697,7 @@ dialog.mui-dialog::backdrop {
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--mui-text);
+  overflow-wrap: break-word;
 }
 .mui-docs h1 {
   font-size: 1.5rem;
@@ -2745,10 +2751,17 @@ dialog.mui-dialog::backdrop {
   color: var(--mui-text);
   font-size: inherit;
 }
+.mui-docs__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0.5rem 0 1.25rem;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+}
 .mui-docs table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0.5rem 0 1.25rem;
+  margin: 0;
   font-size: 0.875rem;
 }
 .mui-docs th,
@@ -2796,6 +2809,48 @@ dialog.mui-dialog::backdrop {
   border: 0;
   border-top: 1px solid var(--mui-border);
   margin: 2rem 0;
+}
+@media (max-width: 40rem) {
+  .mui-docs__scroll {
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+  .mui-docs table,
+  .mui-docs tbody,
+  .mui-docs tr,
+  .mui-docs td {
+    display: block;
+    width: 100%;
+  }
+  .mui-docs thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .mui-docs tr {
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    background: var(--mui-bg-input);
+    padding: 0.5rem 0.875rem 0.75rem;
+    margin-bottom: 0.625rem;
+  }
+  .mui-docs td {
+    border-bottom: 0;
+    padding: 0.375rem 0 0;
+  }
+  .mui-docs td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mui-text-muted);
+  }
 }
 
 /* css/components/drawer.css */
@@ -3003,7 +3058,7 @@ dialog.mui-drawer--bottom {
   justify-content: flex-end;
   flex-shrink: 0;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-drawer--right,
   dialog.mui-drawer--left {
     width: 100vw;
@@ -3132,7 +3187,7 @@ dialog.mui-drawer--bottom {
   flex-direction: column;
   gap: 0.375rem;
 }
-@media (min-width: 640px) {
+@media (min-width: 40rem) {
   .mui-field--responsive {
     display: grid;
     grid-template-columns: minmax(8rem, auto) 1fr;
@@ -4189,7 +4244,7 @@ dialog.mui-drawer--bottom {
 .mui-menubar__content .mui-menu__sub,
 .mui-menubar__content .mui-menu__sub-trigger {
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-menubar {
     display: flex;
     flex-wrap: wrap;
@@ -4542,7 +4597,7 @@ dialog.mui-drawer--bottom {
   color: var(--mui-text-muted);
   margin-top: 0.25rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-nav-menu__list {
     display: flex;
     flex-wrap: wrap;
@@ -4746,7 +4801,7 @@ a.mui-pagination__page {
   letter-spacing: 0.1em;
   user-select: none;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-pagination {
     gap: 0.5rem;
     flex-wrap: wrap;
@@ -5667,7 +5722,7 @@ dialog.mui-sheet--bottom {
   justify-content: flex-end;
   flex-shrink: 0;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   dialog.mui-sheet--right,
   dialog.mui-sheet--left {
     width: 100vw;
@@ -6704,7 +6759,7 @@ dialog.mui-sheet--bottom {
 .mui-table--compact .mui-table__td {
   padding: 0.375rem 0.75rem;
 }
-@media (max-width: 45rem) {
+@media (max-width: 40rem) {
   .mui-table [data-hide-sm] {
     display: none;
   }
@@ -6817,7 +6872,7 @@ dialog.mui-sheet--bottom {
   border-right: 2px solid var(--mui-accent, var(--mui-text));
   border-bottom: none;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-tabs__list {
     max-width: 100%;
     overflow-x: auto;
@@ -6903,7 +6958,7 @@ dialog.mui-sheet--bottom {
   border-radius: var(--mui-radius-lg);
   padding: 0.875rem 2.5rem 0.875rem 1rem;
   box-shadow: var(--mui-shadow-lg);
-  min-width: 20rem;
+  min-width: min(20rem, 100%);
   max-width: 24rem;
   position: relative;
   animation: mui-toast-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -7660,7 +7715,7 @@ dialog.mui-sheet--bottom {
   border-radius: var(--mui-radius-lg);
   border: 1px solid var(--mui-border);
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-block__frame {
     padding: 1rem 0.5rem;
     min-height: 32rem;
@@ -7688,7 +7743,7 @@ dialog.mui-sheet--bottom {
   flex-direction: column;
   gap: 1.25rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-block--auth__card {
     padding: 1.5rem;
     gap: 1rem;
@@ -7951,7 +8006,7 @@ dialog.mui-sheet--bottom {
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-block--stats__grid {
     grid-template-columns: 1fr;
   }
@@ -8027,7 +8082,7 @@ dialog.mui-sheet--bottom {
   min-width: 0;
   max-width: 14rem;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-block--data__bulk {
     flex-wrap: wrap;
   }
@@ -8359,7 +8414,7 @@ dialog.mui-sheet--bottom {
 .mui-block--team__invite .mui-native-select {
   width: 100%;
 }
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .mui-block--team__invite {
     grid-template-columns: 1fr;
   }
@@ -8784,7 +8839,7 @@ dialog.mui-sheet--bottom {
   overflow-y: auto;
   background: var(--mui-bg);
 }
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .mui-block--shell {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;

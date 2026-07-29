@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Drawer — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Drawer — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Drawer — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Drawer — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1047,23 +1095,23 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>id</code></td><td><code>String</code></td><td><code>"drawer"</code></td><td>Unique identifier (used by trigger to open)</td></tr>
-<tr><td><code>title</code></td><td><code>String</code></td><td><code>"Drawer"</code></td><td>Drawer title/heading</td></tr>
-<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional description below title</td></tr>
-<tr><td><code>children</code></td><td><code>Markup</code></td><td>—</td><td>Body content</td></tr>
-<tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional footer markup pinned at bottom</td></tr>
-<tr><td><code>side</code></td><td><code>Side</code></td><td><code>Side::Right</code></td><td>Which side the drawer slides from</td></tr>
-<tr><td><code>should_scale_background</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether page background scales down when open (Vaul pattern). Emits <code>data-scale-background="true"</code></td></tr>
-<tr><td><code>show_close_button</code></td><td><code>bool</code></td><td><code>true</code></td><td>Whether to render × close button in header</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>id</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>"drawer"</code></td><td data-label="Description">Unique identifier (used by trigger to open)</td></tr>
+<tr><td data-label="Field"><code>title</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>"Drawer"</code></td><td data-label="Description">Drawer title/heading</td></tr>
+<tr><td data-label="Field"><code>description</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional description below title</td></tr>
+<tr><td data-label="Field"><code>children</code></td><td data-label="Type"><code>Markup</code></td><td data-label="Default">—</td><td data-label="Description">Body content</td></tr>
+<tr><td data-label="Field"><code>footer</code></td><td data-label="Type"><code>Option&lt;Markup&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional footer markup pinned at bottom</td></tr>
+<tr><td data-label="Field"><code>side</code></td><td data-label="Type"><code>Side</code></td><td data-label="Default"><code>Side::Right</code></td><td data-label="Description">Which side the drawer slides from</td></tr>
+<tr><td data-label="Field"><code>should_scale_background</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Whether page background scales down when open (Vaul pattern). Emits <code>data-scale-background="true"</code></td></tr>
+<tr><td data-label="Field"><code>show_close_button</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>true</code></td><td data-label="Description">Whether to render × close button in header</td></tr>
+</tbody></table></div>
 <h2>Side Enum</h2>
-<table><thead><tr><th>Variant</th><th>CSS Class</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>Left</code></td><td><code>mui-drawer--left</code></td><td>Slides from left edge</td></tr>
-<tr><td><code>Right</code></td><td><code>mui-drawer--right</code></td><td>Slides from right edge (default)</td></tr>
-<tr><td><code>Top</code></td><td><code>mui-drawer--top</code></td><td>Slides from top; renders grab handle</td></tr>
-<tr><td><code>Bottom</code></td><td><code>mui-drawer--bottom</code></td><td>Slides from bottom; renders grab handle</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>CSS Class</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Variant"><code>Left</code></td><td data-label="CSS Class"><code>mui-drawer--left</code></td><td data-label="Description">Slides from left edge</td></tr>
+<tr><td data-label="Variant"><code>Right</code></td><td data-label="CSS Class"><code>mui-drawer--right</code></td><td data-label="Description">Slides from right edge (default)</td></tr>
+<tr><td data-label="Variant"><code>Top</code></td><td data-label="CSS Class"><code>mui-drawer--top</code></td><td data-label="Description">Slides from top; renders grab handle</td></tr>
+<tr><td data-label="Variant"><code>Bottom</code></td><td data-label="CSS Class"><code>mui-drawer--bottom</code></td><td data-label="Description">Slides from bottom; renders grab handle</td></tr>
+</tbody></table></div>
 <h2>Helper Functions</h2>
 <h3><code>trigger(target_id, label) → Markup</code></h3>
 <p>Renders a button with <code>data-mui="drawer-trigger"</code> and <code>data-target</code> attributes.</p>
@@ -1091,7 +1139,7 @@ html! {
 </ul>
 <h2>Shadcn reference</h2>
 <p><a href="https://ui.shadcn.com/docs/components/drawer">https://ui.shadcn.com/docs/components/drawer</a></p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

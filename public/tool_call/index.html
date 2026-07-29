@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tool Call — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Tool Call — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tool Call — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Tool Call — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1047,16 +1095,16 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>id</code></td><td><code>String</code></td><td><code>""</code></td><td>Unique DOM id — used to wire the details disclosure</td></tr>
-<tr><td><code>kind</code></td><td><code>Kind</code></td><td><code>Kind::Custom</code></td><td>Tool family (drives accent colour + glyph)</td></tr>
-<tr><td><code>name</code></td><td><code>String</code></td><td><code>""</code></td><td>Tool name (e.g. "Edit", "Bash")</td></tr>
-<tr><td><code>summary</code></td><td><code>String</code></td><td><code>""</code></td><td>One-line summary shown in the trigger (e.g. file path, command)</td></tr>
-<tr><td><code>status</code></td><td><code>Status</code></td><td><code>Status::Success</code></td><td>Current execution status</td></tr>
-<tr><td><code>args</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional args panel — rendered in the expanded body</td></tr>
-<tr><td><code>result</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional result panel — rendered in the expanded body</td></tr>
-<tr><td><code>open</code></td><td><code>bool</code></td><td><code>false</code></td><td>Initial open state (default false — collapsed)</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field"><code>id</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>""</code></td><td data-label="Description">Unique DOM id — used to wire the details disclosure</td></tr>
+<tr><td data-label="Field"><code>kind</code></td><td data-label="Type"><code>Kind</code></td><td data-label="Default"><code>Kind::Custom</code></td><td data-label="Description">Tool family (drives accent colour + glyph)</td></tr>
+<tr><td data-label="Field"><code>name</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>""</code></td><td data-label="Description">Tool name (e.g. "Edit", "Bash")</td></tr>
+<tr><td data-label="Field"><code>summary</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>""</code></td><td data-label="Description">One-line summary shown in the trigger (e.g. file path, command)</td></tr>
+<tr><td data-label="Field"><code>status</code></td><td data-label="Type"><code>Status</code></td><td data-label="Default"><code>Status::Success</code></td><td data-label="Description">Current execution status</td></tr>
+<tr><td data-label="Field"><code>args</code></td><td data-label="Type"><code>Option&lt;Markup&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional args panel — rendered in the expanded body</td></tr>
+<tr><td data-label="Field"><code>result</code></td><td data-label="Type"><code>Option&lt;Markup&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional result panel — rendered in the expanded body</td></tr>
+<tr><td data-label="Field"><code>open</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Initial open state (default false — collapsed)</td></tr>
+</tbody></table></div>
 <p><code>Props</code> derives <code>Default</code>, so defaults above come from <code>#[derive(Default)]</code> on <code>Props</code>, <code>Kind</code>, and <code>Status</code> (each enum marks its default variant with <code>#[default]</code>) — there is no hand-written <code>impl Default</code> block.</p>
 <h2>Variants / Enums</h2>
 <h3>Kind</h3>
@@ -1096,7 +1144,7 @@ html! {
 <p>CodeBlock (for rendering args/result as code), Message (the chat bubble a tool call typically nests inside), Diff (for edit-style results), StreamingCursor (for an in-flight response alongside a <code>Running</code> tool call)</p>
 <h2>Shadcn reference</h2>
 <p>No shadcn/ui equivalent — this is an agent/tool-invocation primitive with no upstream shadcn component to reference.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

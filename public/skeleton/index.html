@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Skeleton — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Skeleton — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=206714"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Skeleton — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Skeleton — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=207878"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -196,7 +196,7 @@
 html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
-@media (max-width: 960px) {
+@media (max-width: 60rem) {
     .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
@@ -737,7 +737,7 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
-@media (max-width: 760px) {
+@media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }
     .mui-showcase__search { min-width: 7rem; }
@@ -812,9 +812,57 @@ html { scroll-behavior: smooth; }
 }
 
 /* Narrow screens: let brand + count stack smaller + hide subtitle */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 3rem; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
 }
 
 /* ── "Advanced" dropdown in the page header ─────────────────────────
@@ -1094,17 +1142,17 @@ html! {
 }
 </code></pre>
 <h2>Props</h2>
-<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>variant</td><td>Variant</td><td><code>Rect</code></td><td>Shape: Text, Circle, or Rect.</td></tr>
-<tr><td>width</td><td>Option<String></td><td><code>None</code></td><td>Optional width CSS override (e.g., <code>"8rem"</code>, <code>"100%"</code>).</td></tr>
-<tr><td>height</td><td>Option<String></td><td><code>None</code></td><td>Optional height CSS override.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td data-label="Field">variant</td><td data-label="Type">Variant</td><td data-label="Default"><code>Rect</code></td><td data-label="Description">Shape: Text, Circle, or Rect.</td></tr>
+<tr><td data-label="Field">width</td><td data-label="Type">Option<String></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional width CSS override (e.g., <code>"8rem"</code>, <code>"100%"</code>).</td></tr>
+<tr><td data-label="Field">height</td><td data-label="Type">Option<String></td><td data-label="Default"><code>None</code></td><td data-label="Description">Optional height CSS override.</td></tr>
+</tbody></table></div>
 <h2>Variant Enum</h2>
-<table><thead><tr><th>Variant</th><th>Use Case</th><th>Dimensions</th></tr></thead><tbody>
-<tr><td>Text</td><td>Loading text lines (name, title, etc.).</td><td>Default: <code>1em</code> height, 100% width. Aspect is typically wide &amp; shallow.</td></tr>
-<tr><td>Circle</td><td>Loading avatars, profile pictures.</td><td>Default: square (aspect 1:1). Set both width and height equally.</td></tr>
-<tr><td>Rect</td><td>Loading images, cards, blocks.</td><td>Default: square (aspect 1:1) or use width/height.</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Variant</th><th>Use Case</th><th>Dimensions</th></tr></thead><tbody>
+<tr><td data-label="Variant">Text</td><td data-label="Use Case">Loading text lines (name, title, etc.).</td><td data-label="Dimensions">Default: <code>1em</code> height, 100% width. Aspect is typically wide &amp; shallow.</td></tr>
+<tr><td data-label="Variant">Circle</td><td data-label="Use Case">Loading avatars, profile pictures.</td><td data-label="Dimensions">Default: square (aspect 1:1). Set both width and height equally.</td></tr>
+<tr><td data-label="Variant">Rect</td><td data-label="Use Case">Loading images, cards, blocks.</td><td data-label="Dimensions">Default: square (aspect 1:1) or use width/height.</td></tr>
+</tbody></table></div>
 <h2>Accessibility</h2>
 <ul>
 <li>Every skeleton has <code>aria-hidden="true"</code> so screen readers skip it.</li>
@@ -1112,12 +1160,12 @@ html! {
 <li>ARIA live regions (e.g., <code>aria-live="polite"</code>) should wrap the entire loading container so screen readers announce when content loads.</li>
 </ul>
 <h2>CSS Classes</h2>
-<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
-<tr><td><code>mui-skeleton</code></td><td>Root skeleton element.</td></tr>
-<tr><td><code>mui-skeleton--text</code></td><td>Text variant (wide, shallow shimmer).</td></tr>
-<tr><td><code>mui-skeleton--circle</code></td><td>Circle variant (square aspect).</td></tr>
-<tr><td><code>mui-skeleton--rect</code></td><td>Rect variant (default; square or custom dimensions).</td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td data-label="Class"><code>mui-skeleton</code></td><td data-label="Purpose">Root skeleton element.</td></tr>
+<tr><td data-label="Class"><code>mui-skeleton--text</code></td><td data-label="Purpose">Text variant (wide, shallow shimmer).</td></tr>
+<tr><td data-label="Class"><code>mui-skeleton--circle</code></td><td data-label="Purpose">Circle variant (square aspect).</td></tr>
+<tr><td data-label="Class"><code>mui-skeleton--rect</code></td><td data-label="Purpose">Rect variant (default; square or custom dimensions).</td></tr>
+</tbody></table></div>
 <h2>Sizing</h2>
 <p>By default, skeletons are <strong>square</strong> (except Text, which is wider). Override with:</p>
 <ul>
@@ -1126,20 +1174,20 @@ html! {
 <li>Both set — define exact dimensions.</li>
 </ul>
 <p><strong>Common patterns:</strong></p>
-<table><thead><tr><th>Use Case</th><th>Props</th></tr></thead><tbody>
-<tr><td>Text line (name)</td><td><code>variant: Text, width: "8rem", height: "0.875rem"</code></td></tr>
-<tr><td>Body paragraph (3 lines)</td><td>Render 3x <code>variant: Text, width: "100%"</code>, last one <code>width: "65%"</code></td></tr>
-<tr><td>Avatar</td><td><code>variant: Circle, width: "2.75rem", height: "2.75rem"</code></td></tr>
-<tr><td>Product image</td><td><code>variant: Rect, width: "100%", height: "11rem"</code></td></tr>
-<tr><td>Status badge</td><td><code>variant: Rect, width: "4.5rem", height: "1.25rem"</code></td></tr>
-</tbody></table>
+<div class="mui-docs__scroll"><table><thead><tr><th>Use Case</th><th>Props</th></tr></thead><tbody>
+<tr><td data-label="Use Case">Text line (name)</td><td data-label="Props"><code>variant: Text, width: "8rem", height: "0.875rem"</code></td></tr>
+<tr><td data-label="Use Case">Body paragraph (3 lines)</td><td data-label="Props">Render 3x <code>variant: Text, width: "100%"</code>, last one <code>width: "65%"</code></td></tr>
+<tr><td data-label="Use Case">Avatar</td><td data-label="Props"><code>variant: Circle, width: "2.75rem", height: "2.75rem"</code></td></tr>
+<tr><td data-label="Use Case">Product image</td><td data-label="Props"><code>variant: Rect, width: "100%", height: "11rem"</code></td></tr>
+<tr><td data-label="Use Case">Status badge</td><td data-label="Props"><code>variant: Rect, width: "4.5rem", height: "1.25rem"</code></td></tr>
+</tbody></table></div>
 <h2>Animation</h2>
 <p>The shimmer animation is defined in the CSS module (<code>mui-skeleton</code>). Customisation varies by theme. The animation plays on a loop while the skeleton is mounted.</p>
 <h2>Related</h2>
 <p>Spinner, Card, Progress.</p>
 <h2>Shadcn reference</h2>
 <p>https://ui.shadcn.com/docs/components/base/skeleton</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=112507" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
 (function() {
     // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
 

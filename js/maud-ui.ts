@@ -1,3 +1,13 @@
+// ⚠ NOT SHIPPED — THIS FILE IS NOT BUILT AND NOT SERVED.
+//
+// `js/build.mjs` builds the runtime from `dist/maud-ui.js.bak`, never from this
+// file. Editing here changes nothing a browser will ever run, and the two have
+// already diverged (this copy has no `htmx:oobAfterSwap` / `htmx:historyRestore`
+// handling and its `init()` misses the swapped node itself).
+//
+// It is kept only as the typed reference for a future migration. Until
+// `build.mjs` reads it, treat `dist/maud-ui.js.bak` as the source of truth.
+//
 // maud-ui runtime — behaviors register into MaudUI.behaviors and self-initialize
 // via `data-mui="<name>"` attributes. Wave 2/3 agents add behaviors here.
 

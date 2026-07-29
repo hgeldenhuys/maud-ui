@@ -1,21 +1,41 @@
 // maud-ui runtime — behaviors register into MaudUI.behaviors and self-initialize
 // via `data-mui="<name>"` attributes. Wave 2/3 agents add behaviors here.
+//
+// THIS FILE IS THE SHIPPED RUNTIME BASE. `js/build.mjs` reads it and
+// concatenates `dist/behaviors/*.js` onto it. (`js/maud-ui.ts` is NOT built —
+// see the banner in that file.)
 (function () {
   "use strict";
 
   var MaudUI = {
     behaviors: {},
+
+    // Attach a behavior to one element, once.
+    attach: function (el) {
+      if (el.hasAttribute("data-mui-init")) return;
+      var type = el.getAttribute("data-mui");
+      if (type && MaudUI.behaviors[type]) {
+        MaudUI.behaviors[type](el);
+        el.setAttribute("data-mui-init", "");
+      }
+    },
+
+    // Initialise `root` AND its descendants.
+    //
+    // Matching `root` itself is load-bearing: htmx sets the swap event's target
+    // to the swapped node, and with `hx-swap="outerHTML"` (or an OOB swap of a
+    // component's own element) that node IS the `[data-mui]` element rather than
+    // its parent. `querySelectorAll` alone looks only at descendants, so those
+    // swaps produced markup with no behavior attached — no error, no console
+    // warning, just a control that does nothing when clicked.
     init: function (root) {
       if (!root) root = document.body;
+      if (root.nodeType === 1 && root.hasAttribute("data-mui")) {
+        MaudUI.attach(root);
+      }
       var els = root.querySelectorAll("[data-mui]");
       for (var i = 0; i < els.length; i++) {
-        var el = els[i];
-        if (el.hasAttribute("data-mui-init")) continue;
-        var type = el.getAttribute("data-mui");
-        if (type && MaudUI.behaviors[type]) {
-          MaudUI.behaviors[type](el);
-          el.setAttribute("data-mui-init", "");
-        }
+        MaudUI.attach(els[i]);
       }
     },
   };
@@ -25,7 +45,34 @@
   document.addEventListener("DOMContentLoaded", function () {
     MaudUI.init();
   });
-  document.addEventListener("htmx:afterSwap", function (e) {
-    if (e.target instanceof Element) MaudUI.init(e.target);
+
+  // Server-rendered markup: fresh HTML, no guard attributes, plain init.
+  //
+  //   afterSwap    — the ordinary swap
+  //   oobAfterSwap — hx-swap-oob content, which does NOT raise afterSwap for
+  //                  the out-of-band node
+  //
+  // Hooking only afterSwap (as this file did until 2026-07-28) left every
+  // out-of-band swap with no behaviors at all.
+  var SWAP_EVENTS = ["htmx:afterSwap", "htmx:oobAfterSwap"];
+  for (var e = 0; e < SWAP_EVENTS.length; e++) {
+    document.addEventListener(SWAP_EVENTS[e], function (evt) {
+      if (evt.target instanceof Element) MaudUI.init(evt.target);
+    });
+  }
+
+  // History restore is NOT a swap and needs the guard cleared first.
+  //
+  // htmx snapshots innerHTML into its history cache — including the
+  // `data-mui-init` attributes we stamped on. Restoring that HTML brings the
+  // attributes back but not the listeners, which died with the old DOM. A
+  // plain init() would see the guard and skip every element, leaving a page
+  // that looks initialised and responds to nothing. Strip, then attach.
+  document.addEventListener("htmx:historyRestore", function () {
+    var stale = document.querySelectorAll("[data-mui][data-mui-init]");
+    for (var i = 0; i < stale.length; i++) {
+      stale[i].removeAttribute("data-mui-init");
+    }
+    MaudUI.init(document.body);
   });
 })();

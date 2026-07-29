@@ -301,17 +301,62 @@ fn static_export_derives_its_component_list_from_source() {
 /// exact mistake shipped a "fixed" design commit whose fixes were absent from
 /// the deployed site: the platform deployed the right SHA, and the right SHA
 /// contained last build's HTML.
+/// Assert two built artefacts are byte-identical WITHOUT dumping them.
+///
+/// `assert_eq!` on two ~112 KB bundles prints both in full — 233 KB of noise in
+/// which the one useful sentence is invisible. Compare first, then report only
+/// the sizes and the first line that differs.
+fn assert_same_bytes(dist_path: &str, public_path: &str) {
+    let dist = read(dist_path);
+    let public = read(public_path);
+    if dist == public {
+        return;
+    }
+    let first_diff = dist
+        .lines()
+        .zip(public.lines())
+        .enumerate()
+        .find(|(_, (a, b))| a != b)
+        .map(|(i, (a, b))| {
+            format!(
+                "\n  first difference at line {}:\n    {dist_path}: {}\n    {public_path}: {}",
+                i + 1,
+                a.trim().chars().take(90).collect::<String>(),
+                b.trim().chars().take(90).collect::<String>(),
+            )
+        })
+        .unwrap_or_else(|| "\n  (one file is a prefix of the other)".to_string());
+
+    panic!(
+        "{public_path} differs from {dist_path} — the static site is stale.\n\
+         Run `bun run js/export-static.mjs` (not just js/build.mjs) and commit public/ \
+         alongside dist/, or the deployed site will serve the previous build while the \
+         repo looks correct.\n  {dist_path}: {} bytes\n  {public_path}: {} bytes{first_diff}",
+        dist.len(),
+        public.len(),
+    );
+}
+
 #[test]
 fn static_export_css_matches_the_built_bundle() {
-    let dist = read("dist/maud-ui.css");
-    let public = read("public/css/maud-ui.css");
-    assert_eq!(
-        dist, public,
-        "public/css/maud-ui.css differs from dist/maud-ui.css — the static site \
-         is stale. Run `bun run js/export-static.mjs` (not just js/build.mjs) \
-         and commit public/ alongside dist/, or the deployed site will serve the \
-         previous build while the repo looks correct."
-    );
+    assert_same_bytes("dist/maud-ui.css", "public/css/maud-ui.css");
+}
+
+/// The JS half of the same contract, and the one that was missing.
+///
+/// Only the CSS pair was guarded until 2026-07-28, so a change to the runtime
+/// base (`dist/maud-ui.js.bak`) could be built into `dist/` and committed while
+/// `public/js/` still held the previous bundle — the deployed site serving old
+/// behaviour from a repo that looks correct, with every test green. Caught the
+/// day the htmx `init()` fix landed: `dist/maud-ui.js` and `public/js/maud-ui.js`
+/// had different hashes and nothing said so.
+///
+/// Both the readable and minified bundles are checked; the site loads the
+/// minified one, so that is the pair that actually decides what a visitor runs.
+#[test]
+fn static_export_js_matches_the_built_bundle() {
+    assert_same_bytes("dist/maud-ui.js", "public/js/maud-ui.js");
+    assert_same_bytes("dist/maud-ui.min.js", "public/js/maud-ui.min.js");
 }
 
 /// The link-preview card is a RASTERISED PNG, so the "72 components" on it is

@@ -10,7 +10,8 @@
     "build:og": "bun run js/build-og.mjs",
     "start": "bun server.ts",
     "gallery": "./scripts/gallery.sh",
-    "gallery:stop": "./scripts/gallery.sh --stop"
+    "gallery:stop": "./scripts/gallery.sh --stop",
+    "test:js": "bun run js/runtime-test.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.21.0"

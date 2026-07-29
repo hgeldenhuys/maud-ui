@@ -5,6 +5,44 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [Unreleased] — htmx runtime fix + CI
+
+**Fixed — `MaudUI.init()` reached descendants only.** htmx sets a swap event's
+target to the swapped node, so with `hx-swap="outerHTML"` on a component — or any
+out-of-band swap of a component's own element — the node handed to `init()` *was*
+the `[data-mui]` element. `root.querySelectorAll()` never looks at `root` itself,
+so those swaps produced live-looking markup with no behavior attached: no error,
+no console warning, a control that does nothing when clicked. `init()` now matches
+`root` as well as its descendants.
+
+**Fixed — only `htmx:afterSwap` was hooked.** `htmx:oobAfterSwap` and
+`htmx:historyRestore` now initialise too. History restore additionally clears the
+`data-mui-init` guard first: htmx caches innerHTML *including* that attribute, so
+restored markup came back marked-as-initialised with none of its listeners alive.
+
+**Added — `bun run test:js`.** Seven runtime assertions executed against the built
+bundle in real headless Chrome (`js/runtime-test.mjs`), covering both swap shapes,
+OOB, history restore, idempotence, and unknown-behavior handling. No DOM shim,
+nothing mocked. The bugs above were invisible to `cargo test`, which never runs JS.
+
+**Added — CI (`.github/workflows/ci.yml`).** The repo's ~1,900 lines of invariant
+guards previously ran only when someone typed `cargo test`. `fmt`/`clippy` are
+advisory, not gates — both fail on the current tree (47 clippy findings) and a
+red-from-day-one CI teaches everyone to ignore it.
+
+**Added — `static_export_js_matches_the_built_bundle`.** The staleness guard
+covered CSS only, so a runtime change could be built into `dist/` and committed
+while `public/js/` kept the previous bundle — the deployed site serving old
+behaviour from a repo that looks correct. Caught exactly that, on this change.
+Both staleness assertions now report sizes and the first differing line instead of
+dumping 233 KB of bundle.
+
+**Docs — `js/maud-ui.ts` marked NOT SHIPPED.** `js/build.mjs` builds from
+`dist/maud-ui.js.bak`; the typed entry has never been built and had already
+diverged. It misled a reader this week.
+
+---
+
 ## [0.6.5] — 2026-07-27 — slim floating scrollbar thumb
 
 `scrollbar-width: thin` joins the transparent-track rule; WebKit gets a 10px gutter with a

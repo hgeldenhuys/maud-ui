@@ -1,0 +1,104 @@
+name: CI
+
+# The repo carries ~1,900 lines of invariant guards — registration parity, CSS
+# token integrity, the breakpoint scale, render smoke tests — plus a real-browser
+# runtime suite. Until 2026-07-28 none of them ran unless a human typed
+# `cargo test`, so a push could break any of them silently.
+#
+# Nothing here takes untrusted event input, so there is no injection surface.
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
+      # FIRST, and deliberately so. `registration_parity` compares the COMMITTED
+      # dist/ against the COMMITTED public/ to prove they were built and
+      # committed together. Rebuilding before this point would regenerate dist/
+      # and mask exactly the staleness it exists to catch.
+      - name: cargo test
+        run: cargo test --all-targets --all-features
+
+      # Doc-tests are a separate cargo pass and --all-targets skips them.
+      - name: cargo test --doc
+        run: cargo test --doc
+
+      # Drives the COMMITTED dist/maud-ui.js in real headless Chrome — the exact
+      # bytes a consumer loads. ubuntu-latest ships Google Chrome at
+      # /usr/bin/google-chrome, which js/runtime-test.mjs already looks for.
+      - name: Install JS deps
+        run: bun install --frozen-lockfile
+
+      - name: Runtime tests (real browser)
+        run: bun run test:js
+
+      # Catches the "edited dist/maud-ui.js.bak but forgot to rebuild" mistake.
+      # Verified deterministic: building twice yields byte-identical output, so a
+      # diff here means the committed bundle genuinely does not match its source.
+      - name: Built bundle matches its sources
+        run: |
+          bun run build
+          if ! git diff --exit-code --stat -- dist/; then
+            echo "::error::dist/ is stale — it does not match the sources it is built from."
+            echo "Fix: bun run build && bun run build:static, then commit dist/ and public/ together."
+            exit 1
+          fi
+
+      # The crate ships docs/components/*.md and css/ via Cargo.toml include
+      # globs; a packaging break is invisible until `cargo publish` day.
+      - name: cargo publish --dry-run
+        run: cargo publish --dry-run
+
+  # Informational only. `cargo fmt --check` and `clippy -D warnings` both fail on
+  # the tree today (47 clippy findings as of 2026-07-28). Gating on them would
+  # make CI red from its first run, which teaches everyone to ignore it. This
+  # keeps the debt visible and countable without blocking a push; promote to a
+  # gate once the tree is clean.
+  lint:
+    name: lint (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: cargo fmt --check
+        run: cargo fmt --check
+        continue-on-error: true
+
+      - name: cargo clippy
+        run: cargo clippy --all-targets -- -D warnings
+        continue-on-error: true

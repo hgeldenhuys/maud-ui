@@ -20,6 +20,24 @@ import { tmpdir } from "node:os";
 
 const ROOT = process.cwd();
 const BUNDLE = join(ROOT, "dist/maud-ui.js");
+const STYLES = join(ROOT, "dist/maud-ui.css");
+// Layout cases run against the REAL exported page, so the markup under test is
+// the markup that ships rather than a hand-written approximation that drifts.
+const EXPORTED_DIALOG_PAGE = join(ROOT, "public/dialog/index.html");
+
+/// Pull one `<dialog id="...">…</dialog>` out of an exported page.
+function extractDialog(html, id) {
+  const open = html.indexOf(`<dialog class="mui-dialog" id="${id}"`);
+  if (open === -1) {
+    throw new Error(
+      `no dialog with id "${id}" in public/dialog/index.html — the layout cases read the\n` +
+        `exported page so they test shipped markup. If the demo was renamed, update the id here;\n` +
+        `if public/ is stale, run \`bun run build:static\`.`,
+    );
+  }
+  const close = html.indexOf("</dialog>", open);
+  return html.slice(open, close + "</dialog>".length);
+}
 
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
@@ -115,10 +133,64 @@ const CASES = `
   host.appendChild(unknown);
   window.MaudUI.init(unknown);
   results.unknown_behavior_left_unmarked = !unknown.hasAttribute("data-mui-init");
+
+  // ── Layout ────────────────────────────────────────────────────────────
+  // A form inside a dialog must fill the dialog's content column. It did not:
+  // .mui-field carries max-width: 24rem as a measure guard for a field on an
+  // open page, and inside a 32rem dialog that became a second, narrower cap —
+  // the title and description spanned the full 464px column while every field
+  // stopped at 384px, an 80px ragged edge down the right of the form. Reported
+  // by eye, twice, because nothing measured it.
+  function dialogFieldGaps(id) {
+    var dlg = document.getElementById(id);
+    if (!dlg) return null;
+    dlg.showModal();
+    var body = dlg.querySelector(".mui-dialog__body");
+    var bcs = getComputedStyle(body);
+    var br = body.getBoundingClientRect();
+    var colRight = br.right - parseFloat(bcs.paddingRight);
+    var gaps = [];
+    var targets = dlg.querySelectorAll(".mui-field, .mui-input, .mui-select__trigger, .mui-textarea");
+    for (var i = 0; i < targets.length; i++) {
+      gaps.push(colRight - targets[i].getBoundingClientRect().right);
+    }
+    dlg.close();
+    return { count: targets.length, worst: gaps.length ? Math.max.apply(null, gaps) : 0 };
+  }
+
+  // 1px of tolerance for sub-pixel rounding; the bug was 80px, so this is not
+  // a threshold anything can hide behind.
+  var edit = dialogFieldGaps("demo-dialog-edit-profile");
+  results.dialog_form_fills_the_column =
+    !!edit && edit.count > 0 && edit.worst <= 1;
+
+  var share = dialogFieldGaps("demo-dialog-share-doc");
+  results.share_dialog_form_fills_the_column =
+    !!share && share.count > 0 && share.worst <= 1;
+
+  // The cap must SURVIVE outside a dialog — removing it altogether would let a
+  // form stretch to the full window width on an open page.
+  var loose = document.createElement("div");
+  loose.className = "mui-field";
+  document.body.appendChild(loose);
+  results.field_keeps_its_measure_outside_a_dialog =
+    getComputedStyle(loose).maxWidth !== "none";
+  loose.remove();
 `;
 
+const exportedPage = readFileSync(EXPORTED_DIALOG_PAGE, "utf8");
+
 const page = `<!doctype html><meta charset="utf-8"><title>maud-ui runtime tests</title>
+<style>${readFileSync(STYLES, "utf8")}</style>
+<style>
+  /* Kill the 150ms enter animation. It transforms scale(0.95)→scale(1), so a
+     measurement taken mid-flight reads every box 5% narrow — which is exactly
+     how a first pass at this bug produced numbers that were all subtly wrong. */
+  dialog.mui-dialog, dialog.mui-alert-dialog { animation: none !important; }
+</style>
 <body>
+${extractDialog(exportedPage, "demo-dialog-edit-profile")}
+${extractDialog(exportedPage, "demo-dialog-share-doc")}
 <script>${readFileSync(BUNDLE, "utf8")}</script>
 <script>
   var results = {};
@@ -202,10 +274,29 @@ for (const name of names) {
 }
 
 if (failed.length) {
+  // Point at the right source. A layout failure is CSS; a behaviour failure is
+  // the runtime base — and that base is NOT the file most people open first.
+  const layoutFailed = failed.filter((k) => /column|measure/.test(k));
+  const behaviourFailed = failed.filter((k) => !/column|measure/.test(k));
+
+  let hint = "";
+  if (behaviourFailed.length) {
+    hint +=
+      `\nBehaviour (${behaviourFailed.join(", ")}):\n` +
+      `  Source is dist/maud-ui.js.bak — NOT js/maud-ui.ts, which is never built.\n` +
+      `  Edit it, then \`bun run build\` to regenerate dist/maud-ui.js.`;
+  }
+  if (layoutFailed.length) {
+    hint +=
+      `\nLayout (${layoutFailed.join(", ")}):\n` +
+      `  Source is css/, most likely a width or max-width cap. These cases measure the\n` +
+      `  REAL exported dialog from public/dialog/index.html, so also confirm public/ is\n` +
+      `  current (\`bun run build:static\`) before hunting a CSS cause that isn't there.\n` +
+      `  Edit css/, then \`bun run build\` to regenerate dist/maud-ui.css.`;
+  }
+
   console.error(
-    `\n${failed.length} of ${names.length} runtime assertion(s) failed: ${failed.join(", ")}\n` +
-      `The runtime base is dist/maud-ui.js.bak (NOT js/maud-ui.ts, which is not built).\n` +
-      `After editing it run \`bun run build\` to regenerate dist/maud-ui.js, then re-run this.`,
+    `\n${failed.length} of ${names.length} assertion(s) failed.${hint}`,
   );
   process.exit(1);
 }

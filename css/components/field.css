@@ -7,6 +7,25 @@
   max-width: 24rem;
 }
 
+/* A field inside a surface that has already capped its own width.
+ *
+ * The 24rem above is a measure guard for a field sitting on an open page, where
+ * nothing else stops an input growing to the full window. Inside a dialog it
+ * becomes a SECOND and narrower cap: the dialog is 32rem, so its content column
+ * is 464px, and the title and description fill that column while every field
+ * stops at 384px — an 80px ragged edge down the right-hand side of the form.
+ *
+ * The surface has already made the measure decision. Yield to it.
+ *
+ * Only the surfaces WIDER than 24rem need this: sheet and drawer are themselves
+ * 24rem, so their fields are already bounded by the container and this rule
+ * would be a no-op there. Listing them anyway would be stating a fix for a
+ * problem they do not have. */
+dialog.mui-dialog .mui-field,
+dialog.mui-alert-dialog .mui-field {
+  max-width: none;
+}
+
 /* Horizontal: label on the left, control + meta on the right */
 .mui-field--horizontal {
   display: grid;

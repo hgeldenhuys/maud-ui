@@ -1955,6 +1955,42 @@ dialog.mui-command::backdrop {
   background-color: color-mix(in srgb, var(--mui-accent) 14%, transparent);
   color: var(--mui-accent-text);
 }
+.mui-composer__chip--control {
+  position: relative;
+  padding: 0;
+}
+.mui-composer__chip--control select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  height: 100%;
+  padding: 0 18px 0 8px;
+  font-family: var(--mui-font-mono);
+  font-size: 10.5px;
+  line-height: 1;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+}
+.mui-composer__chip--control::after {
+  content: "\25be";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 8px;
+  color: color-mix(in srgb, var(--mui-text-muted) 70%, transparent);
+}
+.mui-composer__chip--control select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--mui-accent) 60%, transparent);
+  outline-offset: 1px;
+  border-radius: 3px;
+}
+.mui-composer__chip--control select option {
+  background-color: var(--mui-bg-card);
+  color: var(--mui-text);
+}
 .mui-composer__voice {
   height: 28px;
   width: 28px;
@@ -2034,6 +2070,7 @@ dialog.mui-command::backdrop {
   box-sizing: border-box;
   min-height: 46px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   padding: 8px 13px;
@@ -2077,6 +2114,13 @@ dialog.mui-command::backdrop {
 }
 .mui-composer__wake:hover {
   background-color: var(--mui-bg-input);
+}
+.mui-composer--asleep .mui-composer__chip--control {
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 3px;
+  background: var(--mui-bg-input);
 }
 
 /* css/components/context_menu.css */

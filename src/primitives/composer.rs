@@ -93,6 +93,12 @@ pub struct Props {
     pub value: String,
     /// Leading mono chips (model, auto-accept, attachments).
     pub chips: Vec<Chip>,
+    /// Interactive chips — each Markup is a FORM CONTROL (typically a
+    /// `<select name=…>`) rendered inside the chip row, wrapped in
+    /// `.mui-composer__chip--control` so it takes the chip treatment.
+    /// Controls live inside the composer's form, so they submit with the
+    /// message and work with JavaScript disabled. Rendered after `chips`.
+    pub control_chips: Vec<Markup>,
     /// Show the voice-capture button before the primary action.
     pub show_voice: bool,
     /// Optional secondary action label — renders a hollow-destructive button
@@ -123,6 +129,7 @@ impl Default for Props {
             placeholder: String::new(),
             value: String::new(),
             chips: Vec::new(),
+            control_chips: Vec::new(),
             show_voice: false,
             secondary_label: None,
             secondary_action: None,
@@ -171,6 +178,16 @@ pub fn render(props: Props) -> Markup {
                             placeholder=(if props.placeholder.is_empty() { "Type to wake" } else { &props.placeholder }) {
                             (props.value)
                         }
+                        // The wake prompt is a real prompt — the same
+                        // control chips apply to it (a wake may pick model /
+                        // effort / permissions). They sit inside the form so
+                        // they submit with the message, JS-off. The bar is
+                        // content-sized and wraps rather than clipping.
+                        @for control in &props.control_chips {
+                            span class="mui-composer__chip mui-composer__chip--control" {
+                                (control)
+                            }
+                        }
                         button type="submit" class="mui-composer__wake" { (wake) }
                     }
                 }
@@ -194,6 +211,11 @@ pub fn render(props: Props) -> Markup {
                     div class="mui-composer__actions" {
                         @for chip in &props.chips {
                             (chip_markup(chip))
+                        }
+                        @for control in &props.control_chips {
+                            span class="mui-composer__chip mui-composer__chip--control" {
+                                (control)
+                            }
                         }
                         span class="mui-composer__spacer" {}
                         @if props.show_voice {
@@ -254,7 +276,13 @@ pub fn showcase() -> Markup {
                 (render(Props {
                     state: State::Ready,
                     placeholder: "Message refactor-auth-middleware…".into(),
-                    chips: vec![Chip::new("sonnet-4.6"), Chip::new("auto-accept: off"), Chip::new("+ attach")],
+                    chips: vec![Chip::new("auto-accept: off"), Chip::new("+ attach")],
+                    control_chips: vec![html! {
+                        select name="model" aria-label="Model" {
+                            option selected { "sonnet-4.6" }
+                            option { "opus-5" }
+                        }
+                    }],
                     show_voice: true,
                     primary_label: "Send".into(),
                     primary_kbd: Some("⌘↵".into()),

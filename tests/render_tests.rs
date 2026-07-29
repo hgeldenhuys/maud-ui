@@ -945,6 +945,29 @@ mod css_cascade {
 mod composer_no_js_contract {
     use maud_ui::primitives::composer::{self, State};
 
+    /// 0.7.0: control chips are real form controls INSIDE the composer's
+    /// form — they submit with the message, JS off. The wrapper class is the
+    /// styling contract the consumer relies on.
+    #[test]
+    fn control_chips_render_inside_the_form_with_the_chip_treatment() {
+        let out = composer::render(composer::Props {
+            state: State::Ready,
+            action: "/prompt".into(),
+            control_chips: vec![maud::html! {
+                select name="effort" { option { "high" } }
+            }],
+            ..Default::default()
+        })
+        .into_string();
+        let form_start = out.find("<form").expect("composer renders a form");
+        let select_at = out.find(r#"<select name="effort""#).expect("control select renders: {out}");
+        assert!(select_at > form_start, "control must be inside the form");
+        assert!(
+            out.contains("mui-composer__chip--control"),
+            "control chip wrapper class missing: {out}"
+        );
+    }
+
     /// "Type to wake" must be literal: the asleep bar carries a real
     /// single-row textarea that posts with the Wake submit. (It shipped as a
     /// decorative span first — clicking Wake POSTed no `message` field and

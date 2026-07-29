@@ -7,6 +7,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ## [Unreleased] — htmx runtime fix + CI
 
+**Composer:** the Asleep bar now renders `control_chips` inside its form (before the Wake
+button) — a wake prompt is a real prompt and may carry per-prompt controls; the bar wraps
+(content-sized) rather than clipping. Control chips inside the sleepbar get an explicit chip
+box (`--mui-bg-input`) since the bar itself is the field. (Conductor review finding #4,
+2026-07-29.)
+
 **Fixed — `MaudUI.init()` reached descendants only.** htmx sets a swap event's
 target to the swapped node, so with `hx-swap="outerHTML"` on a component — or any
 out-of-band swap of a component's own element — the node handed to `init()` *was*
@@ -40,6 +46,17 @@ dumping 233 KB of bundle.
 **Docs — `js/maud-ui.ts` marked NOT SHIPPED.** `js/build.mjs` builds from
 `dist/maud-ui.js.bak`; the typed entry has never been built and had already
 diverged. It misled a reader this week.
+
+---
+
+## [0.7.0] — 2026-07-29 — composer control chips
+
+`composer::Props` gains `control_chips: Vec<Markup>` — interactive chips whose content is a
+real form control (typically a `<select name=…>`), wrapped in `.mui-composer__chip--control`
+so it takes the chip treatment (mono 10.5, chip bg, a currentColor caret glyph — no images,
+no literals). Controls sit INSIDE the composer's form, so they submit with the message and
+work with JavaScript disabled. Minor (not patch) for the same reason as 0.6.0: a new public
+field on `Props` breaks exhaustive literal construction without `..Default::default()`.
 
 ---
 

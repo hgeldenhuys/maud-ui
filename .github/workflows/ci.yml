@@ -59,6 +59,13 @@ jobs:
       - name: Runtime tests (real browser)
         run: bun run test:js
 
+      # Sweeps every exported page for horizontal overflow. This is the bug class
+      # that actually reached users: on 2026-07-28, 74 of 82 routes scrolled
+      # sideways on a phone while every structural test above was green.
+      # Runs against the COMMITTED public/, same as the parity tests.
+      - name: No page overflows on a phone
+        run: bun run sweep:overflow -- 390
+
       # Catches the "edited dist/maud-ui.js.bak but forgot to rebuild" mistake.
       # Verified deterministic: building twice yields byte-identical output, so a
       # diff here means the committed bundle genuinely does not match its source.

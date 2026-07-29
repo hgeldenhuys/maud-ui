@@ -254,6 +254,14 @@ touches eight files and `tests/registration_parity.rs` will name whichever one y
 Changing the mark, favicon or link-preview card? **[docs/brand.md](docs/brand.md)** — two of the
 three traps there are invisible outside a browser.
 
+Writing or debugging a test? **[docs/testing.md](docs/testing.md)** — `cargo test` never executes
+JavaScript and never lays anything out, so `bun run test:js` runs the built bundle and stylesheet
+in real Chrome. Says what is guarded, what is not, and the two traps that produce confidently
+wrong measurements.
+
+Picking a breakpoint? **[docs/breakpoints.md](docs/breakpoints.md)** — five declared values, and
+the reason a breakpoint cannot be a CSS custom property.
+
 ```bash
 cargo check                     # Type-check the crate
 cargo test                      # Render tests for all 79 components + registration parity

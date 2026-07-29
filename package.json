@@ -11,7 +11,8 @@
     "start": "bun server.ts",
     "gallery": "./scripts/gallery.sh",
     "gallery:stop": "./scripts/gallery.sh --stop",
-    "test:js": "bun run js/runtime-test.mjs"
+    "test:js": "bun run js/runtime-test.mjs",
+    "sweep:overflow": "bun run js/overflow-sweep.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.21.0"

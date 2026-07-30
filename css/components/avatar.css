@@ -23,7 +23,7 @@
   right: 0;
   min-width: 0.75rem;
   height: 0.75rem;
-  border-radius: 9999px;
+  border-radius: var(--mui-radius-full);
   border: 2px solid var(--mui-bg-card);
   background: var(--mui-success, #10b981);
   color: var(--mui-bg-card);

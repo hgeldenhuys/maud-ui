@@ -148,7 +148,7 @@ dialog.mui-drawer--bottom {
 .mui-drawer__handle-bar {
   width: 2.5rem;
   height: 0.25rem;
-  border-radius: 9999px;
+  border-radius: var(--mui-radius-full);
   background: var(--mui-text-muted);
   opacity: 0.4;
 }

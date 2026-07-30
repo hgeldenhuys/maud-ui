@@ -58,10 +58,12 @@ pub struct Props {
     /// Render the label in the monospace face — for shas, ids, counts, and
     /// other machine-register text that should not reflow with the sans stack.
     pub mono: bool,
-    /// Render as a hollow CHIP: a taller (26px) bordered-transparent pill with
-    /// a 1px foreground-10% border and a 6px radius, sized to sit inline with
-    /// controls. The filled variants above ignore this; it is the counterpart
-    /// to the pill `Badge`, for a taggable, dismissable, count-bearing chip.
+    /// Render as a hollow CHIP: a taller (26px) bordered-transparent badge with
+    /// a 1px foreground-10% border, sized to sit inline with controls. Its
+    /// corner is `--mui-radius-sm`, the same as a filled badge — the consumer's
+    /// token, not a fixed 6px. The filled variants above ignore this; it is the
+    /// counterpart to the solid `Badge`, for a taggable, dismissable,
+    /// count-bearing chip.
     pub chip: bool,
     /// Optional trailing count — the `2` in `mail 2`. Rendered as a mono
     /// figure set slightly apart from the label.

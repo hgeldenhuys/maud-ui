@@ -5,7 +5,49 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
-## [Unreleased] — htmx runtime fix + CI
+## [0.7.1] — 2026-07-30 — badges go machined, danger ink becomes a token
+
+**Badges take `--mui-radius-sm` instead of `--mui-radius-full`.** The corner is now the
+consumer's, which is the whole point: a brand decides how machined its chips read, and
+Kapable's reserves the full round for the logo mark, avatars and the concierge FAB alone —
+so under that theme every badge in the kit was contradicting the brand it was themed to.
+Anything genuinely *circular* keeps `--mui-radius-full`, because a circle is not a chip:
+`status_dot`, the `attention_pill` dot, `item__dot`, the toast title dot, carousel dots,
+radio and menu-radio indicators, spinners, avatars and avatar pips. Bars and tracks keep
+their stadium caps for the same reason (`progress`, `meter`, `turn_progress`, `slider`,
+the scroll-area thumb, the drawer grab handle) — a round cap on a value bar is the bar's
+cap, not a corner. The `switch` also stays round: there, roundness is what separates a
+toggle from a checkbox at a glance, so it is carrying meaning rather than decoration.
+
+Four rules moved together, three of them badges wearing another name:
+`.mui-badge` · `.mui-attention-pill` · `.mui-combobox__chip` · `.mui-sidebar__menu-badge`
+· `.mui-block--shell__nav-badge`. `.mui-badge--chip` now agrees with the base instead of
+overriding it, and its stale `/* 6px */` annotation is gone — the value is the consumer's.
+
+**Fixed — `.mui-attention-pill` had the only shape in the kit immune to theming.** Its
+corner was a bare `6px` literal that happened to equal *this* library's `--mui-radius-sm`,
+so it looked correct here and silently ignored every consumer that retuned the token.
+
+**Fixed — `.mui-btn--danger` hardcoded `color: #fff`.** It now reads
+`var(--mui-danger-fg, #fff)`, matching every other button variant and `.mui-badge--danger`.
+White ink assumes the consumer's danger fill is dark enough to carry it; against a lighter
+fill it measured **2.74:1** on Conductor's Delete-session button. That went unnoticed
+because the control lives inside a closed `<dialog>` and a contrast sweep only measures
+visible subjects — Conductor had to carry a local override until now. A sweep of the whole
+CSS tree confirms this was the only hardcoded foreground colour in the library.
+
+**Fixed — three `9999px` radius literals** (`avatar__badge`, the menu radio indicator, the
+drawer grab handle) now reference `--mui-radius-full`. Same rendering today; the point is
+that a literal cannot be themed, which is the failure `css_token_integrity` exists to catch
+and could not see, because a literal is not an undefined `var()`.
+
+*Patch, not minor.* This repo reserves a minor for public `Props` changes that break
+exhaustive construction (0.6.0, 0.7.0) and ships consumer-visible CSS as a patch (0.6.1,
+0.6.4, 0.6.5); no Rust API moved here. It is still the most visible patch the library has
+shipped — every badge in every consumer changes shape on upgrade. Stay on 0.7.0 if a
+consumer wants the round pill.
+
+### Also in this release — htmx runtime fix + CI
 
 **Composer:** the Asleep bar now renders `control_chips` inside its form (before the Wake
 button) — a wake prompt is a real prompt and may carry per-prompt controls; the bar wraps

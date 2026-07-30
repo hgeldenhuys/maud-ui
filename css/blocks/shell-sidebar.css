@@ -145,7 +145,7 @@
     padding: 0.0625rem 0.4375rem;
     background: var(--mui-bg);
     border: 1px solid var(--mui-border);
-    border-radius: var(--mui-radius-full);
+    border-radius: var(--mui-radius-sm);
     color: var(--mui-text-muted);
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;

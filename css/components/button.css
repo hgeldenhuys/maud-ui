@@ -140,10 +140,16 @@
 
 /* --- Variant: Danger / Destructive ------------------------------------ */
 
+/* Ink is a token, matching every other variant and .mui-badge--danger: a hard
+   #fff assumes the consumer's danger fill is dark enough to carry white, and a
+   lighter fill drops it to 2.74:1 — measured on Conductor's Delete-session
+   button, where it was invisible to a contrast sweep because the control lives
+   inside a closed <dialog>. The fallback keeps the old ink for a consumer that
+   imports components without this library's token block. */
 .mui-btn--danger {
   background: var(--mui-danger);
   border-color: var(--mui-danger);
-  color: #fff;
+  color: var(--mui-danger-fg, #fff);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 

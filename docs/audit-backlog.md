@@ -116,3 +116,50 @@ the layout assertions and the 2026-07-27 contrast numbers are all dark-only.
 **The GitHub repo description still reads "58 headless, accessible UI components".** It is 79 —
 now 21 behind, and still the first line a visitor reads. `gh repo edit hgeldenhuys/maud-ui
 --description "…"`. Unchanged from the previous audit; belongs to the maintainer.
+
+---
+
+# From the stack bench, 2026-07-30 — findings from an outside consumer
+
+These came from an independent builder in `~/WebstormProjects/todos-stack-bench` (arm B) who had
+no stake in this library, was told only to use it as a consumer would, and could not see the
+competing arms. That makes them the closest thing this repo has had to an unbiased adoption
+report. The arm passed all seven acceptance items and did so in **1,029 LOC with zero
+hand-written JavaScript**, against a control arm's 1,221 LOC and 203 lines of JS — so these are
+complaints from a build that *succeeded*.
+
+## P1
+
+**No primitive accepts arbitrary attributes, so `hx-*` has nowhere to live.** Verified across all
+73 primitives in the version they used. For a library whose tagline is "Built on maud + htmx",
+there is no way to put `hx-post` / `hx-target` / `hx-swap` on a rendered element. The practical
+consequence: **`form::render` is unusable for any form that does anything**, and the arm
+hand-wrote all four of its mutation `<form>` tags. `hx-boost` on a wrapper was considered and
+rejected, because each row needs its own target and `item` has no attribute hatch either.
+
+Proposed fix, from the report: one `attrs: Vec<(String, String)>` field per `Props`. That is a
+wide but mechanical change, and it converts the htmx claim in the README from aspiration into
+something a consumer can actually use.
+
+**The library owns `--mui-*` with a hardcoded palette and offers no way to adopt a host design
+system.** Achieving fleet-token compliance (`--kp-accent`) needed a ~30-line hand-written bridge.
+It works without forking, but only because both systems happen to scope on `[data-theme]` — the
+arm wrote its bridge at `:root[data-theme=…]` specificity so a stylesheet reorder would not
+silently break it. This is the same integration gap identified from the platform side on
+2026-07-29; an independent builder has now hit it from the consumer side. A supported
+token-aliasing layer (or documenting the bridge as the sanctioned pattern) closes it.
+
+## P2
+
+**crates.io is two minor versions behind the repo, and the docs describe the unpublished one.**
+Verified against the registry index: published versions are 0.1.0, 0.2.0, 0.2.1, 0.4.1, **0.5.0**
+— described there as *"72 headless, accessible UI components"*. The repo is **0.7.1 with 79
+primitives**. So `cargo add maud-ui` gets a consumer 72 components while the README, the gallery
+and `docs/components/*.md` all describe 79.
+
+It cost the arm two compile errors before it understood why: `stack::Direction::Row` does not
+exist in 0.5.0, and `empty_state::Props` has no `Default` — the latter also contradicting the
+README's "every component has `Default::default()`" promise in whichever version is authoritative.
+
+If staying unpublished is deliberate, the README and the gallery should say **which version a
+consumer actually gets**, because today they advertise a version nobody can install.

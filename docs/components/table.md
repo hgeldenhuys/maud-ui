@@ -51,7 +51,8 @@ let table = render(Props {
 | `hoverable` | `bool` | `false` | Row highlight on hover |
 | `compact` | `bool` | `false` | Reduced padding (compact row heights) |
 | `caption` | `Option<String>` | `None` | Table caption (semantic, screen-reader visible) |
-| `right_align_cols` | `Vec<usize>` | `vec![]` | Column indices to right-align (e.g., numbers) |
+| `right_align_cols` | `Vec<usize>` | `vec![]` | Numeric columns: right-align headers, plain/rich rows and footer; use tabular numerals. |
+| `hide_cols_sm` | `Vec<usize>` | `vec![]` | Optional columns to hide at 40rem and below; keep essential information visible. |
 
 ## CellMarkup
 
@@ -76,7 +77,7 @@ render(Props {
 ```
 
 ### Hoverable
-Row background highlights on hover, improving interaction feedback.
+Row background highlights on hover and when a row action receives keyboard focus.
 
 ```rust
 render(Props {
@@ -151,9 +152,9 @@ render(Props {
 
 ## Accessibility
 
-- **Semantic HTML:** Uses `<thead>`, `<tbody>`, `<tfoot>`, and proper table structure.
+- **Semantic HTML:** Uses `<thead>`, `<tbody>`, `<tfoot>`, and column headers with `scope="col"`.
 - **Caption:** Use the `caption` field for a semantic table title, visible to screen readers.
-- **Right Alignment:** Declare numeric columns in `right_align_cols` for proper visual alignment and screen-reader interpretation.
+- **Right Alignment:** Declare numeric columns in `right_align_cols` for visual alignment; numeric styling does not change the spoken value.
 - **Hover/Striping:** Visual indicators (hover, striped) reinforce row boundaries but are not required for understanding.
 
 ## Related

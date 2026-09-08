@@ -70,6 +70,7 @@ pub fn trigger(target_id: &str, label: &str) -> Markup {
             class="mui-btn mui-btn--default mui-btn--md"
             data-mui="dialog-trigger"
             data-target=(target_id)
+            aria-controls=(target_id) aria-haspopup="dialog"
         {
             (label)
         }
@@ -130,39 +131,53 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
-/// Showcase all sheet use cases
+/// Showcase every edge, labelled fields, and a long scrollable body.
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
-            section {
-                h2 { "Right (default)" }
-                div.mui-showcase__row {
-                    (trigger("demo-sheet-right", "Open sheet"))
+            @for (side, key, label) in [
+                (Side::Right, "right", "Edit guest details"),
+                (Side::Left, "left", "Guest details"),
+                (Side::Top, "top", "Arrival summary"),
+                (Side::Bottom, "bottom", "Handover notes"),
+            ] {
+                @let id = format!("demo-sheet-{key}");
+                section {
+                    p.mui-showcase__caption { (key) " edge" }
+                    (trigger(&id, label))
+                    (render(Props {
+                        id: id.clone(),
+                        title: label.into(),
+                        description: Some(if key == "bottom" {
+                            "Read the handover. The footer stays in reach while the notes scroll."
+                        } else {
+                            "Review the guest information. Close or press Escape to return."
+                        }.into()),
+                        children: html! {
+                            @if key == "bottom" {
+                                @for number in 1..=10 {
+                                    h3 { "Handover note " (number) }
+                                    p { "Sofia arrives after 18:00. Confirm the room is ready, keep the guest's access instructions at reception, and pass any updates to the evening team." }
+                                }
+                            } @else {
+                                div class="mui-field" {
+                                    label class="mui-label" for=(format!("{id}-name")) { "Guest name" }
+                                    input class="mui-input" id=(format!("{id}-name")) type="text" value="Sofia Davis";
+                                }
+                                div class="mui-field" {
+                                    label class="mui-label" for=(format!("{id}-reference")) { "Reservation" }
+                                    input class="mui-input" id=(format!("{id}-reference")) type="text" value="RS-2048" readonly;
+                                }
+                            }
+                        },
+                        footer: Some(html! {
+                            button type="button" class="mui-btn mui-btn--outline mui-btn--md" data-mui-close { "Cancel" }
+                            button type="button" class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Done reviewing" }
+                        }),
+                        side, ..Default::default()
+                    }))
                 }
             }
-            (render(Props {
-                id: "demo-sheet-right".to_string(),
-                title: "Edit Profile".to_string(),
-                description: Some("Update your personal information. Click save when you're done.".to_string()),
-                children: html! {
-                    div style="display:flex;flex-direction:column;gap:1rem;" {
-                        div class="mui-field" {
-                            label class="mui-label" { "Name" }
-                            input class="mui-input" type="text" value="Jane Doe" {}
-                        }
-                        div class="mui-field" {
-                            label class="mui-label" { "Username" }
-                            input class="mui-input" type="text" value="@janedoe" {}
-                        }
-                    }
-                },
-                footer: Some(html! {
-                    button class="mui-btn mui-btn--default mui-btn--md" data-mui-close { "Cancel" }
-                    button class="mui-btn mui-btn--primary mui-btn--md" { "Save changes" }
-                }),
-                side: Side::Right,
-                ..Default::default()
-            }))
         }
     }
 }

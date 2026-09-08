@@ -12,7 +12,7 @@ sidebar::render(Props {
     header: Some(html! { label { "Workspace" select { option { "Front desk" } } } }),
     nav_groups: vec![NavGroup {
         label: Some("Operations".into()),
-        items: vec![NavItem { label: "Reservations".into(), href: "/reservations".into(), icon: None, badge: Some("48".into()) }],
+        items: vec![NavItem { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None, badge: Some("48".into()) }],
     }],
     active_path: "/reservations".into(),
     mobile_navigation: MobileNavigation::Tabs,
@@ -35,7 +35,9 @@ sidebar::render(Props {
 | topbar_actions | Markup | empty | Topbar controls. |
 | children | Markup | empty | Route content; the shell supplies main. |
 
-`NavItem` fields: label/href: String, icon: Option<Markup>, badge: Option<String>. A group's label names its accessible group. `Tabs` uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with `data-mui-nav-search` for local destination filtering.
+`NavItem` fields: label/href: String, short_label: Option<String>, icon: Option<Markup>, badge: Option<String>. A group's label names its accessible group. `Tabs` uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with `data-mui-nav-search` for local destination filtering.
 
 ## Accessibility and behavior
 Native page links and `aria-current`, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique `id` for each shell. Do not nest this block inside another main landmark.
+
+Use `short_label: Some("Stays".into())` to fit a long label such as Reservations in a bottom tab. Use `None` to display the full label. Empty or whitespace-only short labels fall back to the full label. Labels stay on one line and ellipsize; five destinations use a smaller type size. The accessible name includes both the visible short label and the full label, so voice control and screen readers retain context. Sidebar labels stay full-length.

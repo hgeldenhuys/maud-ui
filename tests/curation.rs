@@ -37,6 +37,19 @@ fn counted_filters_keep_native_navigation_one_current_and_escaped_labels() {
     assert_eq!(output.matches("<a ").count(), 5);
     assert!(output.contains("href=\"/records?q=one&amp;status=two\""));
     assert!(output.contains("&lt;script&gt;guest&lt;/script&gt;"));
+    assert_eq!(
+        output
+            .matches("class=\"mui-sr-only\"> 0 items</span>")
+            .count(),
+        5
+    );
+    assert_eq!(
+        output
+            .matches("class=\"mui-status-chip-group__count\" aria-hidden=\"true\">0</span>")
+            .count(),
+        5
+    );
+    assert!(!output.contains(": "));
     for tone in ["neutral", "info", "success", "warning", "danger"] {
         assert!(output.contains(&format!("data-tone=\"{tone}\"")));
     }
@@ -51,6 +64,7 @@ fn mobile_navigation_hands_more_to_a_dialog_and_retains_its_fallback() {
     let output = bar::render(bar::Props {
         items: vec![bar::Item {
             label: "Home".into(),
+            short_label: None,
             href: "/".into(),
             icon: None,
         }],
@@ -78,12 +92,117 @@ fn mobile_navigation_never_silently_discards_a_sixth_destination() {
         items: (0..6)
             .map(|i| bar::Item {
                 label: i.to_string(),
+                short_label: None,
                 href: format!("/{i}"),
                 icon: None,
             })
             .collect(),
         ..Default::default()
     });
+}
+
+#[test]
+fn mobile_short_labels_preserve_full_names_and_fall_back_when_empty() {
+    let output = bar::render(bar::Props {
+        items: vec![
+            bar::Item {
+                label: "Reservations".into(),
+                short_label: Some("Stays".into()),
+                href: "/stays".into(),
+                icon: None,
+            },
+            bar::Item {
+                label: "Guest <directory>".into(),
+                short_label: Some("  ".into()),
+                href: "/guests".into(),
+                icon: None,
+            },
+            bar::Item {
+                label: "Tasks".into(),
+                short_label: None,
+                href: "/tasks".into(),
+                icon: None,
+            },
+        ],
+        current_href: Some("/stays".into()),
+        ..Default::default()
+    })
+    .into_string();
+    assert!(output.contains("data-items=\"3\""));
+    assert!(output.contains("aria-label=\"Stays — Reservations\""));
+    assert!(output.contains("class=\"mui-bottom-tab-bar__label\">Stays</span>"));
+    assert!(output.contains("class=\"mui-bottom-tab-bar__label\">Guest &lt;directory&gt;</span>"));
+    assert_eq!(output.matches("aria-current=\"page\"").count(), 1);
+    assert!(bar::showcase().into_string().contains("data-items=\"5\""));
+    let shell = sidebar::preview().into_string();
+    assert!(shell.contains("aria-label=\"Home — Dashboard\""));
+    assert!(shell.contains("class=\"mui-block--shell__nav-label\">Dashboard</span>"));
+}
+
+#[test]
+fn link_and_post_actions_share_button_skin_classes() {
+    fn classes(markup: &str) -> &str {
+        let start = markup
+            .find("class=\"mui-btn ")
+            .expect("action has button classes")
+            + 7;
+        markup[start..].split('"').next().unwrap()
+    }
+    for primary in [true, false] {
+        let render = |action: Action| {
+            record::header::render(record::header::Props {
+                primary_action: primary.then(|| action.clone()),
+                secondary_actions: if primary { vec![] } else { vec![action] },
+                ..Default::default()
+            })
+            .into_string()
+        };
+        let link = render(Action::link("Check in", "/check-in"));
+        let post = render(Action {
+            label: "Check in".into(),
+            target: Target::Post {
+                action: "/check-in".into(),
+                hidden_fields: vec![],
+            },
+        });
+        assert!(link.contains("<a class=\"mui-btn "));
+        assert!(post.contains("<button class=\"mui-btn "));
+        assert_eq!(classes(&link), classes(&post));
+        assert_eq!(
+            classes(&link),
+            if primary {
+                "mui-btn mui-btn--primary mui-btn--md"
+            } else {
+                "mui-btn mui-btn--outline mui-btn--row"
+            }
+        );
+    }
+}
+
+#[test]
+fn numeric_columns_align_across_plain_rich_and_footer_rows() {
+    use maud_ui::primitives::table::{self, CellMarkup};
+    for rich in [false, true] {
+        let output = table::render(table::Props {
+            headers: vec!["Invoice".into(), "Amount".into()],
+            rows: vec![vec!["INV001".into(), "$123.45".into()]],
+            rich_rows: if rich {
+                vec![vec![
+                    CellMarkup::text("INV001"),
+                    CellMarkup::text("$123.45"),
+                ]]
+            } else {
+                vec![]
+            },
+            footer_row: vec![CellMarkup::text("Total"), CellMarkup::text("$123.45")],
+            right_align_cols: vec![1],
+            ..Default::default()
+        })
+        .into_string();
+        assert_eq!(output.matches("mui-table__cell--numeric").count(), 3);
+        assert_eq!(output.matches("scope=\"col\"").count(), 2);
+        assert_eq!(output.matches("$123.45").count(), 2);
+    }
 }
 
 #[test]
@@ -168,6 +287,7 @@ fn shell_group_header_ids_and_more_current_survive_without_javascript() {
             items: (0..6)
                 .map(|i| sidebar::NavItem {
                     label: format!("Destination {i}"),
+                    short_label: None,
                     href: format!("/{i}"),
                     icon: None,
                     badge: None,

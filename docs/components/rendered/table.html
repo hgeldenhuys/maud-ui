@@ -39,7 +39,8 @@ let table = render(Props {
 <tr><td><code>hoverable</code></td><td><code>bool</code></td><td><code>false</code></td><td>Row highlight on hover</td></tr>
 <tr><td><code>compact</code></td><td><code>bool</code></td><td><code>false</code></td><td>Reduced padding (compact row heights)</td></tr>
 <tr><td><code>caption</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Table caption (semantic, screen-reader visible)</td></tr>
-<tr><td><code>right_align_cols</code></td><td><code>Vec&lt;usize&gt;</code></td><td><code>vec![]</code></td><td>Column indices to right-align (e.g., numbers)</td></tr>
+<tr><td><code>right_align_cols</code></td><td><code>Vec&lt;usize&gt;</code></td><td><code>vec![]</code></td><td>Numeric columns: right-align headers, plain/rich rows and footer; use tabular numerals.</td></tr>
+<tr><td><code>hide_cols_sm</code></td><td><code>Vec&lt;usize&gt;</code></td><td><code>vec![]</code></td><td>Optional columns to hide at 40rem and below; keep essential information visible.</td></tr>
 </tbody></table>
 <h2>CellMarkup</h2>
 <p>Helper struct for rich (Markup-based) table cells.</p>
@@ -57,7 +58,7 @@ let table = render(Props {
 })
 </code></pre>
 <h3>Hoverable</h3>
-<p>Row background highlights on hover, improving interaction feedback.</p>
+<p>Row background highlights on hover and when a row action receives keyboard focus.</p>
 <pre><code class="language-rust">render(Props {
     hoverable: true,
     ..Default::default()
@@ -117,9 +118,9 @@ render(Props {
 </code></pre>
 <h2>Accessibility</h2>
 <ul>
-<li><strong>Semantic HTML:</strong> Uses <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, and proper table structure.</li>
+<li><strong>Semantic HTML:</strong> Uses <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, and column headers with <code>scope="col"</code>.</li>
 <li><strong>Caption:</strong> Use the <code>caption</code> field for a semantic table title, visible to screen readers.</li>
-<li><strong>Right Alignment:</strong> Declare numeric columns in <code>right_align_cols</code> for proper visual alignment and screen-reader interpretation.</li>
+<li><strong>Right Alignment:</strong> Declare numeric columns in <code>right_align_cols</code> for visual alignment; numeric styling does not change the spoken value.</li>
 <li><strong>Hover/Striping:</strong> Visual indicators (hover, striped) reinforce row boundaries but are not required for understanding.</li>
 </ul>
 <h2>Related</h2>

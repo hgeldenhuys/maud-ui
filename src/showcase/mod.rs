@@ -493,12 +493,14 @@ sidebar::render(sidebar::Props {
             items: vec![
                 sidebar::NavItem {
                     label: "Dashboard".into(),
+                    short_label: Some("Home".into()),
                     href: "/dashboard".into(),
                     icon: None,
                     badge: None,
                 },
                 sidebar::NavItem {
                     label: "Inbox".into(),
+                    short_label: None,
                     href: "/inbox".into(),
                     icon: None,
                     badge: Some("12".into()),
@@ -553,34 +555,25 @@ login::render(login::Props {
 /// Render the content list of all blocks as a card grid — used by
 /// the /blocks index page.
 fn blocks_index_grid() -> Markup {
+    let mut categories = Vec::new();
+    for entry in BLOCK_CATALOG {
+        if !categories.contains(&entry.category) { categories.push(entry.category); }
+    }
     html! {
-        div class="mui-showcase__block-grid" {
-            @for entry in BLOCK_CATALOG {
-                a class="mui-showcase__block-card" href=(format!("/blocks/{}", entry.slug)) {
-                    div class="mui-showcase__block-card-header" {
-                        span class="mui-showcase__block-card-category" { (entry.category) }
-                        h3 class="mui-showcase__block-card-title" { (entry.title) }
-                    }
-                    p class="mui-showcase__block-card-desc" { (entry.description) }
-                    div class="mui-showcase__block-card-uses" {
-                        @for u in entry.uses {
-                            span class="mui-showcase__block-card-use" { (u) }
+        @for category in categories {
+            section class="mui-showcase__block-category" {
+                h2 class="mui-showcase__block-category-title" { (category) }
+                div class="mui-showcase__block-grid" {
+                    @for entry in BLOCK_CATALOG.iter().filter(|entry| entry.category == category) {
+                        a class="mui-showcase__block-card" href=(format!("/blocks/{}", entry.slug)) {
+                            h3 class="mui-showcase__block-card-title" { (entry.title) }
+                            p class="mui-showcase__block-card-desc" { (entry.description) }
+                            div class="mui-showcase__block-card-uses" {
+                                @for u in entry.uses {
+                                    span class="mui-showcase__block-card-use" { (u) }
+                                }
+                            }
                         }
-                    }
-                }
-            }
-            @if BLOCK_CATALOG.len() < 10 {
-                div class="mui-showcase__block-card mui-showcase__block-card--placeholder" {
-                    div class="mui-showcase__block-card-header" {
-                        span class="mui-showcase__block-card-category" { "Coming soon" }
-                        h3 class="mui-showcase__block-card-title" { "More blocks on the way" }
-                    }
-                    p class="mui-showcase__block-card-desc" {
-                        "Signup, two-factor, sidebar shell, dashboard stats, settings profile, billing, pricing tiers, data-table with filters. "
-                        a href="https://github.com/hgeldenhuys/maud-ui/issues" target="_blank" rel="noopener" style="color:var(--mui-accent-text);" {
-                            "Open an issue"
-                        }
-                        " if you want a specific one prioritised."
                     }
                 }
             }
@@ -607,7 +600,7 @@ pub fn blocks_index_page() -> Markup {
                             span { "Blocks" }
                         }
                         section class="mui-gallery__component" id="blocks" {
-                            h3 class="mui-gallery__component-name" { "Blocks" }
+                            h1 class="mui-gallery__component-name" { "Blocks" }
                             p style="color:var(--mui-text-muted);font-size:0.9375rem;max-width:42rem;margin:0 0 1.5rem;" {
                                 "Pre-composed templates built from primitives. Drop into real apps — customize by reading the source and paste-editing into your own module. Each block renders to plain HTML; no framework needed on the client side."
                             }
@@ -816,7 +809,7 @@ fn page_header() -> Markup {
                 // only (see .mui-showcase__menu-btn CSS). Toggles the
                 // sidebar in and out of view on phones.
                 button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle"
-                       aria-label="Toggle navigation" aria-expanded="false" {
+                       aria-label="Open navigation" aria-controls="mui-gallery-navigation" aria-expanded="false" {
                     span aria-hidden="true" class="mui-showcase__menu-icon" { "\u{2630}" }
                 }
                 a href="/" class="mui-showcase__brand" {
@@ -867,19 +860,19 @@ fn page_header() -> Markup {
                           spellcheck="false" autocomplete="off";
                     kbd class="mui-showcase__search-hint" aria-hidden="true" { "/" }
                 }
-                nav class="mui-showcase__nav" {
+                nav class="mui-showcase__nav" id="mui-site-navigation" aria-label="Site" {
                     // `/` is the landing page, so the gallery needs its own
                     // header slot — the brand mark no longer reaches it.
-                    a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "Components"
                     }
-                    a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "Get started"
                     }
-                    a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "Blocks"
                     }
-                    a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "Theme"
                     }
                     // "Advanced" dropdown — groups heavy-weight third-party
@@ -893,97 +886,97 @@ fn page_header() -> Markup {
                             "Advanced"
                             span class="mui-gallery__nav-advanced-caret" aria-hidden="true" { "\u{25be}" }
                         }
-                        div class="mui-gallery__nav-advanced-menu" role="menu" {
+                        div class="mui-gallery__nav-advanced-menu" {
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Code & Text" }
-                                a href="/integrations/monaco-editor" role="menuitem" {
+                                a href="/integrations/monaco-editor" {
                                     span class="mui-gallery__nav-advanced-label" { "Monaco editor" }
                                     span class="mui-gallery__nav-advanced-sub" { "VS Code's editor, embedded" }
                                 }
-                                a href="/integrations/tiptap" role="menuitem" {
+                                a href="/integrations/tiptap" {
                                     span class="mui-gallery__nav-advanced-label" { "TipTap" }
                                     span class="mui-gallery__nav-advanced-sub" { "Rich text prose editor" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Diagrams & Graphs" }
-                                a href="/integrations/xyflow" role="menuitem" {
+                                a href="/integrations/xyflow" {
                                     span class="mui-gallery__nav-advanced-label" { "xyflow" }
                                     span class="mui-gallery__nav-advanced-sub" { "React Flow node editor" }
                                 }
-                                a href="/integrations/cytoscape" role="menuitem" {
+                                a href="/integrations/cytoscape" {
                                     span class="mui-gallery__nav-advanced-label" { "Cytoscape" }
                                     span class="mui-gallery__nav-advanced-sub" { "Network graph visualisation" }
                                 }
-                                a href="/integrations/mermaid" role="menuitem" {
+                                a href="/integrations/mermaid" {
                                     span class="mui-gallery__nav-advanced-label" { "Mermaid" }
                                     span class="mui-gallery__nav-advanced-sub" { "Text-to-diagram renderer" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Canvas" }
-                                a href="/integrations/excalidraw" role="menuitem" {
+                                a href="/integrations/excalidraw" {
                                     span class="mui-gallery__nav-advanced-label" { "Excalidraw" }
                                     span class="mui-gallery__nav-advanced-sub" { "Sketchy whiteboard canvas" }
                                 }
-                                a href="/integrations/threejs" role="menuitem" {
+                                a href="/integrations/threejs" {
                                     span class="mui-gallery__nav-advanced-label" { "Three.js" }
                                     span class="mui-gallery__nav-advanced-sub" { "WebGL 3D scene" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Data" }
-                                a href="/integrations/ag-grid" role="menuitem" {
+                                a href="/integrations/ag-grid" {
                                     span class="mui-gallery__nav-advanced-label" { "AG Grid" }
                                     span class="mui-gallery__nav-advanced-sub" { "Enterprise data grid" }
                                 }
-                                a href="/integrations/echarts" role="menuitem" {
+                                a href="/integrations/echarts" {
                                     span class="mui-gallery__nav-advanced-label" { "Apache ECharts" }
                                     span class="mui-gallery__nav-advanced-sub" { "Charting library" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Maps & Scheduling" }
-                                a href="/integrations/leaflet" role="menuitem" {
+                                a href="/integrations/leaflet" {
                                     span class="mui-gallery__nav-advanced-label" { "Leaflet" }
                                     span class="mui-gallery__nav-advanced-sub" { "Interactive maps" }
                                 }
-                                a href="/integrations/fullcalendar" role="menuitem" {
+                                a href="/integrations/fullcalendar" {
                                     span class="mui-gallery__nav-advanced-label" { "FullCalendar" }
                                     span class="mui-gallery__nav-advanced-sub" { "Scheduling, drag-drop events" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Media" }
-                                a href="/integrations/wavesurfer" role="menuitem" {
+                                a href="/integrations/wavesurfer" {
                                     span class="mui-gallery__nav-advanced-label" { "Wavesurfer" }
                                     span class="mui-gallery__nav-advanced-sub" { "Audio waveform player" }
                                 }
-                                a href="/integrations/pdfjs" role="menuitem" {
+                                a href="/integrations/pdfjs" {
                                     span class="mui-gallery__nav-advanced-label" { "PDF.js" }
                                     span class="mui-gallery__nav-advanced-sub" { "Inline PDF viewer" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Drag & Drop" }
-                                a href="/integrations/sortable" role="menuitem" {
+                                a href="/integrations/sortable" {
                                     span class="mui-gallery__nav-advanced-label" { "SortableJS" }
                                     span class="mui-gallery__nav-advanced-sub" { "Reorder list, kanban, tile grid" }
                                 }
                             }
                             div class="mui-gallery__nav-advanced-group" {
                                 span class="mui-gallery__nav-advanced-group-label" { "Terminal" }
-                                a href="/integrations/xterm" role="menuitem" {
+                                a href="/integrations/xterm" {
                                     span class="mui-gallery__nav-advanced-label" { "xterm.js" }
                                     span class="mui-gallery__nav-advanced-sub" { "Terminal emulator" }
                                 }
                             }
                         }
                     }
-                    a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "Docs"
                     }
-                    a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;" {
+                    a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" {
                         "GitHub"
                     }
                 }
@@ -1056,8 +1049,8 @@ fn page_header() -> Markup {
 /// Sticky sidebar with grouped component navigation.
 fn sidebar_nav() -> Markup {
     html! {
-        aside class="mui-gallery__sidebar" {
-            nav class="mui-gallery__nav" {
+        aside class="mui-gallery__sidebar" id="mui-gallery-navigation" aria-label="Gallery navigation" {
+            nav class="mui-gallery__nav" aria-label="Components" {
                 @for tier in TIERS {
                     div class="mui-gallery__nav-group" {
                         // Tier header → `/#slug` so it always navigates to the
@@ -1101,7 +1094,10 @@ pub fn showcase_page() -> Markup {
                 div class="mui-gallery" {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
-                        p class="mui-gallery__curation-intro" { "Build an operational screen: " a href="/blocks/worklist-header" { "worklist" } " · " a href="/blocks/record-header" { "record" } " · " a href="/blocks/task-grid" { "tasks" } }
+                        header class="mui-gallery__intro" {
+                            h1 { "Component gallery" }
+                            p class="mui-gallery__curation-intro" { "Build an operational screen: " a href="/blocks/worklist-header" { "Worklist" } " · " a href="/blocks/record-header" { "Record" } " · " a href="/blocks/task-grid" { "Tasks" } }
+                        }
                         @for tier in TIERS {
                             div class="mui-gallery__tier" id=(tier.slug) {
                                 div class="mui-gallery__tier-header" {
@@ -1164,7 +1160,7 @@ pub fn theme_customizer_page() -> Markup {
                         }
 
                         section class="mui-gallery__component mui-theme__intro" id="theme" {
-                            h3 class="mui-gallery__component-name" { "Theme customiser" }
+                            h1 class="mui-gallery__component-name" { "Theme customiser" }
                             p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1rem;line-height:1.55;" {
                                 "Tweak the "
                                 code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "--mui-*" }
@@ -1185,14 +1181,14 @@ pub fn theme_customizer_page() -> Markup {
                                         h4 class="mui-theme__group-title" { "Presets" }
                                     }
                                     div class="mui-theme__presets" {
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="dark" { "Dark" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="light" { "Light" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="slate-dark" { "Slate" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="zinc-violet" { "Zinc \u{00b7} Violet" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="stone-amber" { "Stone \u{00b7} Amber" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="emerald" { "Emerald" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="rose" { "Rose" }
-                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="high-contrast" { "High contrast" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="dark" aria-pressed="true" { "Dark" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="light" aria-pressed="false" { "Light" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="slate-dark" aria-pressed="false" { "Slate" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="zinc-violet" aria-pressed="false" { "Zinc \u{00b7} Violet" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="stone-amber" aria-pressed="false" { "Stone \u{00b7} Amber" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="emerald" aria-pressed="false" { "Emerald" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="rose" aria-pressed="false" { "Rose" }
+                                        button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="high-contrast" aria-pressed="false" { "High contrast" }
                                     }
                                     div class="mui-theme__preset-actions" {
                                         button type="button" id="mui-theme-reset" class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset to defaults" }
@@ -1329,11 +1325,12 @@ pub fn theme_customizer_page() -> Markup {
                                         " block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block."
                                     }
                                     div class="mui-theme__export" {
-                                        pre id="mui-theme-export" class="mui-theme__export-pre" { "/* ready — the block updates as you tweak tokens */" }
+                                        pre id="mui-theme-export" class="mui-theme__export-pre" tabindex="0" aria-label="Theme CSS" { "/* ready — the block updates as you tweak tokens */" }
                                         div class="mui-theme__export-actions" {
                                             button type="button" id="mui-theme-copy"     class="mui-btn mui-btn--primary mui-btn--sm" { "Copy CSS" }
                                             button type="button" id="mui-theme-download" class="mui-btn mui-btn--outline mui-btn--sm" { "Download .css" }
                                         }
+                                        p id="mui-theme-export-status" class="mui-theme__export-status" role="status" {}
                                     }
                                 }
                             }
@@ -1806,15 +1803,29 @@ fn theme_customizer_js() -> &'static str {
     lines.push('}');
     return lines.join('\n');
   }
+  function matchesPreset(preset, base, values) {
+    var keys = Object.keys(preset).filter(function (key) { return key.charAt(0) !== '_'; });
+    return preset._base === base && keys.length === Object.keys(values).length &&
+      keys.every(function (key) { return preset[key] === values[key]; });
+  }
   function refreshExport() {
+    var base = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.querySelectorAll('[data-preset]').forEach(function (button) {
+      var selected = matchesPreset(PRESETS[button.getAttribute('data-preset')], base, overrides);
+      button.setAttribute('aria-pressed', String(selected));
+    });
     var pre = document.getElementById('mui-theme-export');
     if (pre) pre.textContent = buildCss();
   }
   refreshExport();
 
-  document.getElementById('mui-theme-copy')?.addEventListener('click', function () {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(buildCss());
+  document.getElementById('mui-theme-copy')?.addEventListener('click', async function () {
+    var status = document.getElementById('mui-theme-export-status');
+    try {
+      await navigator.clipboard.writeText(buildCss());
+      status.textContent = 'CSS copied.';
+    } catch {
+      status.textContent = 'Copy unavailable. Select the CSS above or download the file.';
     }
   });
   document.getElementById('mui-theme-download')?.addEventListener('click', function () {
@@ -1880,54 +1891,8 @@ cargo add axum tokio --features tokio/full
 
                         section class="mui-gallery__component" id="first-paint" {
                             h3 class="mui-gallery__component-name" { "2. First paint" }
-                            p.mui-showcase__caption { "A minimal axum server that renders a card with a button. Copy this into src/main.rs and run cargo run." }
-                            (code_example("src/main.rs", r##"use axum::{routing::get, Router};
-use maud::{html, Markup, DOCTYPE};
-use maud_ui::primitives::{button, card};
-
-async fn index() -> Markup {
-    html! {
-        (DOCTYPE)
-        html lang="en" data-theme="dark" {
-            head {
-                meta charset="utf-8";
-                link rel="stylesheet" href="/assets/maud-ui.min.css";
-                script src="/assets/maud-ui.min.js" defer {}
-            }
-            body style="padding: 2rem;" {
-                (card::render(card::Props {
-                    title: Some("Welcome".into()),
-                    description: Some("You're running maud-ui.".into()),
-                    children: html! {
-                        (button::render(button::Props {
-                            label: "Ship it".into(),
-                            variant: button::Variant::Primary,
-                            ..Default::default()
-                        }))
-                    },
-                    ..Default::default()
-                }))
-            }
-        }
-    }
-}
-
-#[tokio::main]
-async fn main() {
-    let app = Router::new()
-        .route("/", get(index))
-        .route("/assets/maud-ui.min.css", get(|| async {
-            ([("content-type", "text/css")], maud_ui::assets::CSS_MIN)
-        }))
-        .route("/assets/maud-ui.min.js", get(|| async {
-            ([("content-type", "application/javascript")], maud_ui::assets::JS_MIN)
-        }));
-
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
-    println!("Open http://127.0.0.1:3000");
-    axum::serve(listener, app).await.unwrap();
-}
-"##))
+                            p.mui-showcase__caption { "A complete Axum page with a working dialog and its CSS and JS routes. Copy this into src/main.rs and run cargo run, or run cargo run --example first_paint from this repository." }
+                            (code_example("src/main.rs", include_str!("../../examples/first_paint.rs")))
                             p.mui-showcase__caption style="margin-top:1rem;" {
                                 "These asset constants are embedded at compile time; no vendored folder or build step is required."
                             }
@@ -6996,30 +6961,34 @@ html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
 @media (max-width: 60rem) {
-    .mui-showcase__menu-btn { display: inline-flex; }
+    html[data-mui-gallery-ready] .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
-    .mui-gallery__sidebar {
+    html[data-mui-gallery-ready] .mui-gallery__sidebar {
         position: fixed !important;
         top: var(--mui-header-h) !important;
-        left: 0;
+        inset-inline-start: 0;
         width: 18rem;
         max-width: 82vw;
-        height: calc(100vh - var(--mui-header-h)) !important;
+        height: calc(100dvh - var(--mui-header-h)) !important;
         z-index: 45;
         background: var(--mui-bg);
         border-right: 1px solid var(--mui-border);
         transform: translateX(-100%);
-        transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+        visibility: hidden;
+        transition: transform var(--mui-motion-enter) var(--mui-motion-ease);
     }
-    html[data-mui-drawer="open"] .mui-gallery__sidebar {
+    html[data-mui-gallery-ready][dir="rtl"] .mui-gallery__sidebar { transform: translateX(100%); }
+    html[data-mui-gallery-ready][data-mui-drawer="open"] .mui-gallery__sidebar {
         transform: translateX(0);
+        visibility: visible;
         box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
     }
+    html:not([data-mui-gallery-ready]) .mui-gallery__sidebar { position: static; height: auto !important; }
 
     /* Give the sidebar a visible close hint */
-    .mui-gallery__sidebar::after {
-        content: "Tap anywhere outside to close \u2192";
+    html[data-mui-gallery-ready] .mui-gallery__sidebar::after {
+        content: "Tap outside or press Esc to close";
         display: block;
         padding: 0.75rem 1rem;
         font-size: 0.6875rem;
@@ -7208,6 +7177,16 @@ html[data-mui-palette="open"] .mui-palette { display: flex; }
 }
 
 /* Blocks index grid */
+.mui-gallery__intro { margin-block-end: 2rem; }
+.mui-gallery__intro h1 { margin: 0 0 0.5rem; font-size: 1.75rem; letter-spacing: -0.025em; }
+.mui-gallery__curation-intro { color: var(--mui-text-muted); line-height: 1.7; }
+.mui-gallery__curation-intro a { color: var(--mui-link); text-underline-offset: 0.2em; }
+.mui-showcase__block-category + .mui-showcase__block-category { margin-block-start: 2rem; }
+.mui-showcase__block-category-title { margin: 0 0 0.75rem; color: var(--mui-text-muted); font-size: 0.875rem; font-weight: 600; }
+.mui-showcase__block-card:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 3px; }
+.mui-theme__presets [aria-pressed="true"] { border-color: var(--mui-accent-text); background: var(--mui-bg-input); box-shadow: inset 0 -2px var(--mui-accent-text); }
+.mui-theme__export-status { margin: 0; min-height: 1.5em; color: var(--mui-text-muted); font-size: 0.8125rem; }
+.mui-theme__export-pre:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
 .mui-showcase__block-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
@@ -7229,19 +7208,6 @@ html[data-mui-palette="open"] .mui-palette { display: flex; }
 .mui-showcase__block-card:hover {
     border-color: var(--mui-border-hover);
     transform: translateY(-1px);
-}
-.mui-showcase__block-card--placeholder {
-    opacity: 0.55;
-    pointer-events: auto;
-    background: transparent;
-    border-style: dashed;
-}
-.mui-showcase__block-card-category {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--mui-text-subtle);
 }
 .mui-showcase__block-card-title {
     margin: 0.25rem 0 0;
@@ -7598,7 +7564,7 @@ html { scroll-behavior: smooth; }
  * below the sticky chrome instead. */
 .mui-gallery__sidebar {
     top: var(--mui-header-h) !important;
-    height: calc(100vh - var(--mui-header-h)) !important;
+    height: calc(100dvh - var(--mui-header-h)) !important;
 }
 
 /* When the user clicks a sidebar / in-page jump link, keep the
@@ -7610,10 +7576,31 @@ html { scroll-behavior: smooth; }
     scroll-margin-top: calc(var(--mui-header-h) + 0.75rem);
 }
 
-/* Narrow screens: let brand + count stack smaller + hide subtitle */
+/* Two short rows on phones. Site links move into the existing menu. */
 @media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
-    :root { --mui-header-h: 3rem; }
+    :root { --mui-header-h: 7rem; }
+    .mui-showcase__header { padding: 0.5rem 1rem !important; }
+    .mui-showcase__header-inner { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: 0.5rem; }
+    .mui-showcase__menu-btn { grid-column: 1; grid-row: 1; width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__brand { grid-column: 2 / -1; grid-row: 1; min-height: 2.75rem; align-items: center; }
+    .mui-showcase__search { grid-column: 1 / 3; grid-row: 2; width: 100%; max-width: none; min-width: 0; }
+    .mui-showcase__search-input { height: 2.75rem; font-size: 1rem; }
+    .mui-showcase__tools { grid-column: 3; grid-row: 2; margin: 0; padding: 0; border: 0; }
+    .mui-showcase__tool-btn { width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__palette-btn { display: none; }
+    .mui-showcase__header-inner > .mui-showcase__nav { grid-column: 1 / -1; }
+    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 0.75rem 0.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--mui-border); }
+    .mui-gallery__sidebar > .mui-showcase__nav > .mui-btn,
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-summary { min-height: 2.75rem; justify-content: flex-start; width: 100%; }
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-menu { position: static; min-width: 0; max-height: none; box-shadow: none; }
+    .mui-gallery__main { padding: 1rem; }
+    .mui-gallery__component { padding: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .mui-gallery__sidebar, .mui-showcase__drawer-backdrop { animation: none; transition: none; }
 }
 
 /* Two-column "you write / you get" comparison — stacks on narrow screens.
@@ -7858,11 +7845,15 @@ fn showcase_js() -> &'static str {
         if (current) {
             current.classList.add('mui-gallery__nav-item--active');
             current.setAttribute('aria-current', 'page');
-            // `nearest` scrolls only if it is actually out of view, so an
-            // already-visible item does not jolt the sidebar on every load.
-            // Scoped to the sidebar's own scroll container, so the main
-            // document does not move with it.
-            current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            // Wait until the responsive drawer is placed, then scroll only
+            // its own container. scrollIntoView can move the document during
+            // the initial no-JS layout and hide the page's first content.
+            requestAnimationFrame(function () {
+                var sidebar = current.closest('.mui-gallery__sidebar');
+                if (!sidebar) return;
+                var offset = current.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+                sidebar.scrollTop += offset - sidebar.clientHeight / 2;
+            });
         }
     }
 
@@ -8004,21 +7995,69 @@ fn showcase_js() -> &'static str {
 
     // ── Mobile drawer ────────────────────────────────────────────
     var htmlEl = document.documentElement;
-    function setDrawer(open) {
+    var menuButton = document.getElementById('mui-drawer-toggle');
+    var gallerySidebar = document.getElementById('mui-gallery-navigation');
+    var siteNavigation = document.getElementById('mui-site-navigation');
+    var galleryMain = document.querySelector('main.mui-gallery__main');
+    var galleryHeader = document.querySelector('.mui-showcase__header');
+    var phoneNavigation = window.matchMedia('(max-width: 40rem)');
+    var drawerNavigation = window.matchMedia('(max-width: 60rem)');
+    var siteHome = siteNavigation && siteNavigation.parentNode;
+    var siteNext = siteNavigation && siteNavigation.nextSibling;
+
+    function setDrawer(open, focusNavigation) {
+        open = open && drawerNavigation.matches && !!gallerySidebar;
         if (open) htmlEl.setAttribute('data-mui-drawer', 'open');
-        else      htmlEl.removeAttribute('data-mui-drawer');
-        var btn = document.getElementById('mui-drawer-toggle');
-        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        else htmlEl.removeAttribute('data-mui-drawer');
+        if (galleryMain) galleryMain.inert = open;
+        if (menuButton) {
+            menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+        }
+        if (open && focusNavigation) gallerySidebar.querySelector('a[href]')?.focus();
+        if (!open && gallerySidebar?.contains(document.activeElement) && drawerNavigation.matches) menuButton?.focus();
     }
-    document.getElementById('mui-drawer-toggle')?.addEventListener('click', function (e) {
-        e.stopPropagation();
-        setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open');
-    });
-    document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () { setDrawer(false); });
-    // Auto-close when a sidebar link is followed.
-    document.querySelectorAll('.mui-gallery__sidebar a').forEach(function (a) {
-        a.addEventListener('click', function () { setDrawer(false); });
-    });
+    function placeSiteNavigation() {
+        if (!siteNavigation || !gallerySidebar) return;
+        if (phoneNavigation.matches) gallerySidebar.insertBefore(siteNavigation, gallerySidebar.firstChild);
+        else siteHome.insertBefore(siteNavigation, siteNext);
+    }
+    if (menuButton && gallerySidebar) {
+        placeSiteNavigation();
+        htmlEl.setAttribute('data-mui-gallery-ready', '');
+        if (window.ResizeObserver && galleryHeader) {
+            new ResizeObserver(function () {
+                htmlEl.style.setProperty('--mui-header-h', galleryHeader.getBoundingClientRect().height + 'px');
+            }).observe(galleryHeader);
+        }
+        phoneNavigation.addEventListener('change', placeSiteNavigation);
+        drawerNavigation.addEventListener('change', function () { setDrawer(false); });
+        menuButton.addEventListener('click', function () {
+            setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open', true);
+        });
+        document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () {
+            setDrawer(false); menuButton.focus();
+        });
+        gallerySidebar.addEventListener('click', function (event) {
+            if (event.target.closest('a[href]')) setDrawer(false);
+        });
+        // Keep the quick filter usable in the header while showing its results.
+        search?.addEventListener('input', function () { if (search.value.trim()) setDrawer(true, false); });
+        document.addEventListener('keydown', function (event) {
+            if (htmlEl.getAttribute('data-mui-drawer') !== 'open') return;
+            if (event.key === 'Escape') {
+                event.preventDefault(); setDrawer(false); menuButton.focus();
+            } else if (event.key === 'Tab') {
+                var selector = 'a[href], button, input, select, summary, [tabindex="0"]';
+                var focusable = Array.from(galleryHeader.querySelectorAll(selector))
+                    .concat(Array.from(gallerySidebar.querySelectorAll(selector)))
+                    .filter(function (el) { return !el.disabled && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'; });
+                var first = focusable[0], last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+                else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+            }
+        });
+    }
 
     // ── Command palette ──────────────────────────────────────────
     (function () {
@@ -8115,6 +8154,7 @@ fn showcase_js() -> &'static str {
         }
 
         function open() {
+            setDrawer(false);
             htmlEl.setAttribute('data-mui-palette', 'open');
             paletteInput.value = '';
             filter();

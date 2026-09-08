@@ -468,10 +468,21 @@ fn included_files_are_packaged() {
             match p.rsplit_once("**/*") {
                 // "src/**/*.rs" → prefix "src/", suffix ".rs"
                 Some((prefix, suffix)) => rel.starts_with(prefix) && rel.ends_with(suffix),
-                None => p == rel || (p.ends_with("/**/*") && rel.starts_with(&p[..p.len() - 5])),
+                // "examples/*" includes a direct child, not nested directories.
+                None => match p.split_once('*') {
+                    Some((prefix, suffix)) => rel
+                        .strip_prefix(prefix)
+                        .and_then(|rest| rest.strip_suffix(suffix))
+                        .is_some_and(|middle| !middle.contains('/')),
+                    None => p == rel,
+                },
             }
         })
     }
+
+    assert!(covered("examples/first_paint.rs", &["examples/*".into()]));
+    assert!(!covered("examples/nested/main.rs", &["examples/*".into()]));
+    assert!(!covered("src/main.rs", &["examples/*".into()]));
 
     let mut missing: Vec<String> = Vec::new();
     let mut stack = vec![root.join("src")];

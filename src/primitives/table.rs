@@ -28,8 +28,7 @@ impl CellMarkup {
     }
 }
 
-#[derive(Clone, Debug)]
-#[derive(Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Props {
     pub headers: Vec<String>,
     pub rows: Vec<Vec<String>>,
@@ -39,15 +38,14 @@ pub struct Props {
     pub hoverable: bool,
     pub compact: bool,
     pub caption: Option<String>,
-    /// Column indices that should be right-aligned in headers
+    /// Numeric columns: right-aligned, tabular numerals in headers, body and footer.
     pub right_align_cols: Vec<usize>,
-    /// Column indices dropped below 45rem. A five-column row that merely
+    /// Column indices dropped at 40rem and below. A five-column row that merely
     /// squeezes on a phone becomes unreadable; naming the columns that carry
     /// the least signal lets the table shed them instead. Emits `data-hide-sm`
     /// on the matching `th`/`td`.
     pub hide_cols_sm: Vec<usize>,
 }
-
 
 pub fn render(props: Props) -> Markup {
     let mut modifiers = String::new();
@@ -88,9 +86,9 @@ pub fn render(props: Props) -> Markup {
                         @for (i, header) in props.headers.iter().enumerate() {
                             @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
                             @if props.right_align_cols.contains(&i) {
-                                th.mui-table__th style="text-align:right;" data-hide-sm=[hide_sm] { (header) }
+                                th class="mui-table__th mui-table__cell--numeric" scope="col" data-hide-sm=[hide_sm] { (header) }
                             } @else {
-                                th.mui-table__th data-hide-sm=[hide_sm] { (header) }
+                                th.mui-table__th scope="col" data-hide-sm=[hide_sm] { (header) }
                             }
                         }
                     }
@@ -101,8 +99,8 @@ pub fn render(props: Props) -> Markup {
                             tr.mui-table__row {
                                 @for (i, cell) in row.iter().enumerate() {
                                     @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
-                                    @if cell.align_right {
-                                        td.mui-table__td style="text-align:right;" data-hide-sm=[hide_sm] { (cell.content) }
+                                    @if cell.align_right || props.right_align_cols.contains(&i) {
+                                        td class="mui-table__td mui-table__cell--numeric" data-hide-sm=[hide_sm] { (cell.content) }
                                     } @else {
                                         td.mui-table__td data-hide-sm=[hide_sm] { (cell.content) }
                                     }
@@ -114,7 +112,7 @@ pub fn render(props: Props) -> Markup {
                             tr.mui-table__row {
                                 @for (i, cell) in row.iter().enumerate() {
                                     @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
-                                    td.mui-table__td data-hide-sm=[hide_sm] { (cell) }
+                                    td class=(if props.right_align_cols.contains(&i) { "mui-table__td mui-table__cell--numeric" } else { "mui-table__td" }) data-hide-sm=[hide_sm] { (cell) }
                                 }
                             }
                         }
@@ -125,10 +123,10 @@ pub fn render(props: Props) -> Markup {
                         tr.mui-table__row {
                             @for (i, cell) in props.footer_row.iter().enumerate() {
                                 @let hide_sm = props.hide_cols_sm.contains(&i).then_some("");
-                                @if cell.align_right {
-                                    td.mui-table__td style="text-align:right;font-weight:600;" data-hide-sm=[hide_sm] { (cell.content) }
+                                @if cell.align_right || props.right_align_cols.contains(&i) {
+                                    td class="mui-table__td mui-table__cell--numeric" data-hide-sm=[hide_sm] { (cell.content) }
                                 } @else {
-                                    td.mui-table__td style="font-weight:600;" data-hide-sm=[hide_sm] { (cell.content) }
+                                    td.mui-table__td data-hide-sm=[hide_sm] { (cell.content) }
                                 }
                             }
                         }
@@ -258,7 +256,8 @@ pub fn showcase() -> Markup {
                     footer_row,
                     hoverable: true,
                     right_align_cols: vec![3],
-                    caption: Some("A list of your recent invoices.".to_string()),
+                    caption: Some("Recent invoices. Amounts in USD; payment method is hidden on phones.".into()),
+                    hide_cols_sm: vec![2],
                     ..Default::default()
                 }))
             }
@@ -274,7 +273,7 @@ pub fn showcase() -> Markup {
                 }))
             }
             div {
-                p.mui-showcase__caption { "Compact" }
+                p.mui-showcase__caption { "Compact — tabular amounts align in plain rows too" }
                 (render(Props {
                     headers,
                     rows: plain_rows,

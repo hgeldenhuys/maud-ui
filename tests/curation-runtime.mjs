@@ -30,10 +30,13 @@ class Node {
     if (node.parentNode) node.parentNode.children = node.parentNode.children.filter(child => child !== node);
     this.children.push(node); node.parentNode = this;
   }
+  get firstChild() { return this.children[0] || null; }
+  get nextSibling() { return this.parentNode?.children[this.parentNode.children.indexOf(this) + 1] || null; }
   insertBefore(node, reference) {
     this.append(node);
     this.children = this.children.filter(child => child !== node);
-    this.children.splice(Math.max(0, this.children.indexOf(reference)), 0, node);
+    const index = reference ? this.children.indexOf(reference) : this.children.length;
+    this.children.splice(index, 0, node);
   }
 }
 const document = new Node();
@@ -97,4 +100,56 @@ test("built runtime initializes an outerHTML replacement through the htmx lifecy
   document.dispatchEvent(event("htmx:afterSwap", { target: replacement }));
   assert(replacement.hasAttribute("data-mui-init")); assert.equal(replacement.listeners.keydown.length, 1);
   document.dispatchEvent(event("htmx:oobAfterSwap", { target: replacement })); assert.equal(replacement.listeners.keydown.length, 1);
+});
+
+test("gallery phone menu moves one site nav, keeps search usable, and restores focus/layout state", () => {
+  const header = new Node(), siteNav = new Node(), tools = new Node(), sidebar = new Node(), componentNav = new Node();
+  const menu = new Node(), main = new Node(), backdrop = new Node(), search = new Node();
+  const first = new Node({ href: "/gallery" }), last = new Node({ href: "/table" });
+  const phone = new Node(), narrow = new Node(); phone.matches = true; narrow.matches = true;
+  header.append(menu); header.append(search); header.append(siteNav); header.append(tools);
+  siteNav.append(first); sidebar.append(componentNav); componentNav.append(last);
+  const focusables = 'a[href], button, input, select, summary, [tabindex="0"]';
+  header.nodes[focusables] = [menu, search]; sidebar.nodes[focusables] = [first, last]; sidebar.nodes['a[href]'] = [first, last];
+  document.nodes['main.mui-gallery__main'] = [main]; document.nodes['.mui-showcase__header'] = [header];
+  for (const [id, node] of Object.entries({ 'mui-drawer-toggle': menu, 'mui-gallery-navigation': sidebar, 'mui-site-navigation': siteNav, 'mui-drawer-backdrop': backdrop })) byId.set(id, node);
+  window.matchMedia = query => query.includes('40rem') ? phone : narrow;
+  const source = readFileSync('src/showcase/mod.rs', 'utf8');
+  const start = source.indexOf('    // ── Mobile drawer ─');
+  const end = source.indexOf('    // ── Command palette ─', start);
+  vm.runInNewContext(source.slice(start, end), { ...context, search });
+  assert.equal(siteNav.parentNode, sidebar);
+  menu.dispatchEvent(event('click'));
+  assert.equal(menu.getAttribute('aria-expanded'), 'true'); assert.equal(main.inert, true);
+  assert.equal(document.activeElement, first);
+  last.focus(); const tab = event('keydown', { key: 'Tab' }); document.dispatchEvent(tab);
+  assert(tab.defaultPrevented); assert.equal(document.activeElement, menu);
+  document.dispatchEvent(event('keydown', { key: 'Escape' }));
+  assert.equal(main.inert, false); assert.equal(menu.getAttribute('aria-expanded'), 'false');
+  assert.equal(document.activeElement, menu);
+  search.value = 'table'; search.focus(); search.dispatchEvent(event('input'));
+  assert.equal(main.inert, true); assert.equal(document.activeElement, search);
+  phone.matches = false; phone.dispatchEvent(event('change'));
+  assert.equal(siteNav.parentNode, header); assert.equal(siteNav.nextSibling, tools);
+  narrow.matches = false; narrow.dispatchEvent(event('change'));
+  assert.equal(main.inert, false); assert(!document.documentElement.hasAttribute('data-mui-drawer'));
+  phone.matches = true; phone.dispatchEvent(event('change'));
+  assert.equal(sidebar.children.filter(child => child === siteNav).length, 1);
+});
+
+test("theme copy reports success only after the clipboard write and offers a failure fallback", async () => {
+  const source = readFileSync('src/showcase/mod.rs', 'utf8');
+  const start = source.indexOf("  document.getElementById('mui-theme-copy')?.addEventListener");
+  const end = source.indexOf("  document.getElementById('mui-theme-download')", start);
+  const copy = new Node(), status = new Node();
+  byId.set('mui-theme-copy', copy); byId.set('mui-theme-export-status', status);
+  let complete;
+  const clipboard = { writeText: () => new Promise(resolve => { complete = resolve; }) };
+  vm.runInNewContext(source.slice(start, end), { document, navigator: { clipboard }, buildCss: () => ':root {}' });
+  const pending = copy.listeners.click[0].fn();
+  assert.equal(status.textContent, undefined);
+  complete(); await pending; assert.equal(status.textContent, 'CSS copied.');
+  clipboard.writeText = async () => { throw new Error('Permission denied'); };
+  await copy.listeners.click[0].fn();
+  assert.match(status.textContent, /Select the CSS above or download/);
 });

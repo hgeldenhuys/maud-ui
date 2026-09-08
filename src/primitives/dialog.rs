@@ -54,6 +54,7 @@ pub fn trigger(target_id: &str, label: &str) -> Markup {
             class="mui-btn mui-btn--default mui-btn--md"
             data-mui="dialog-trigger"
             data-target=(target_id)
+            aria-controls=(target_id) aria-haspopup="dialog"
         {
             (label)
         }
@@ -134,20 +135,20 @@ pub fn showcase() -> Markup {
                     description: Some("Update your personal information below.".to_string()),
                     children: html! {
                         div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;" {
-                            div style="width:3rem;height:3rem;border-radius:50%;background:var(--mui-muted);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;" {
+                            div style="width:3rem;height:3rem;border-radius:50%;background:var(--mui-bg-input);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;" {
                                 "JD"
                             }
-                            p style="font-size:0.875rem;color:var(--mui-muted-fg);" {
+                            p style="font-size:0.875rem;color:var(--mui-text-muted);" {
                                 "Upload a new avatar from your device."
                             }
                         }
                         div class="mui-field" {
-                            label class="mui-label" { "Name" }
-                            input class="mui-input" type="text" value="Jane Doe" {}
+                            label class="mui-label" for="demo-dialog-profile-name" { "Name" }
+                            input id="demo-dialog-profile-name" class="mui-input" type="text" value="Jane Doe" {}
                         }
                         div class="mui-field" {
-                            label class="mui-label" { "Email" }
-                            input class="mui-input" type="email" value="jane@example.com" {}
+                            label class="mui-label" for="demo-dialog-profile-email" { "Email" }
+                            input id="demo-dialog-profile-email" class="mui-input" type="email" value="jane@example.com" {}
                         }
                     },
                     footer: Some(html! {
@@ -169,12 +170,12 @@ pub fn showcase() -> Markup {
                     description: Some("Invite a collaborator by email address.".to_string()),
                     children: html! {
                         div class="mui-field" {
-                            label class="mui-label" { "Email address" }
-                            input class="mui-input" type="email" placeholder="collaborator@company.com" {}
+                            label class="mui-label" for="demo-dialog-share-email" { "Email address" }
+                            input id="demo-dialog-share-email" class="mui-input" type="email" placeholder="collaborator@company.com" {}
                         }
                         div class="mui-field" {
-                            label class="mui-label" { "Permission" }
-                            select class="mui-select__trigger" style="width:100%;" {
+                            label class="mui-label" for="demo-dialog-share-permission" { "Permission" }
+                            select id="demo-dialog-share-permission" class="mui-select__trigger" style="width:100%;" {
                                 option value="viewer" { "Viewer" }
                                 option value="editor" { "Editor" }
                             }
@@ -210,23 +211,40 @@ pub fn showcase() -> Markup {
                 }))
             }
 
-            // No-close-button dialog — force a footer-only decision
             {
-                (trigger("demo-dialog-forced-choice", "Forced Choice"))
+                (trigger("demo-dialog-review", "Review a long document"))
+                (render(Props {
+                    id: "demo-dialog-review".into(),
+                    title: "Review the arrival instructions before sharing with your guests".into(),
+                    description: Some("The title leaves space for Close; only the document body scrolls.".into()),
+                    children: html! {
+                        @for section in 1..=12 {
+                            h3 { "Arrival detail " (section) }
+                            p { "Confirm the guest name, arrival time and contact details. Share the access instructions with everyone on the reservation and keep a copy available at the front desk." }
+                        }
+                    },
+                    footer: Some(html! { button type="button" class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Done reviewing" } }),
+                    ..Default::default()
+                }))
+            }
+
+            // A footer-only variant still supports Escape and cancellation.
+            {
+                (trigger("demo-dialog-forced-choice", "Footer actions"))
             }
             {
                 (render(Props {
                     id: "demo-dialog-forced-choice".to_string(),
-                    title: "Confirm Deletion".to_string(),
-                    description: Some("This cannot be undone. Make a choice below.".to_string()),
+                    title: "Delete the shared document and its comments?".to_string(),
+                    description: Some("Review this action before deleting. You can cancel or press Escape.".to_string()),
                     children: html! {
                         p style="font-size:0.875rem;color:var(--mui-text-muted);" {
-                            "The top-right close button is hidden — the user must use the footer buttons."
+                            "The close icon is optional. Escape and the Cancel action still dismiss this dialog."
                         }
                     },
                     footer: Some(html! {
                         button class="mui-btn mui-btn--secondary mui-btn--md" data-mui-close { "Cancel" }
-                        button class="mui-btn mui-btn--primary mui-btn--md" data-mui-close { "Delete" }
+                        button class="mui-btn mui-btn--danger mui-btn--md" data-mui-close { "Delete document" }
                     }),
                     show_close_button: false,
                     ..Default::default()

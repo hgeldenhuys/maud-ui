@@ -9255,6 +9255,10 @@ body {
   --mui-motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 :root,
+[data-theme] {
+  --mui-link: var(--mui-accent-text);
+}
+:root,
 [data-theme=dark],
 [data-theme=light] {
   --mui-accent-hover: #1d4ed8;
@@ -9263,6 +9267,29 @@ body {
   --mui-text-muted: #61616b;
   --mui-text-subtle: #686872;
   --mui-warning-text: #854d0e;
+}
+.mui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+a.mui-btn,
+a.mui-btn:link,
+a.mui-btn:visited,
+a.mui-btn:hover,
+a.mui-btn:focus,
+a.mui-btn:focus-visible,
+a.mui-btn:active,
+a.mui-btn--link:hover:not([aria-disabled=true]),
+.mui-docs a.mui-btn,
+.mui-prose a.mui-btn {
+  text-decoration: none;
 }
 .mui-status-chip-group {
   display: flex;
@@ -9322,9 +9349,14 @@ body {
 }
 .mui-status-chip-group__count {
   color: var(--mui-chip-tone);
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  border-inline-start: 1px solid var(--mui-border);
-  padding-inline-start: var(--mui-space-sm);
+  min-width: 1.5rem;
+  padding: 0.125rem 0.4375rem;
+  text-align: center;
   flex: none;
 }
 .mui-status-chip-group__chip:focus-visible,
@@ -9364,14 +9396,33 @@ body {
   justify-content: center;
   gap: 0.25rem;
   padding: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.3;
   text-align: center;
-  overflow-wrap: anywhere;
   color: var(--mui-text-muted);
   text-decoration: none;
   border-radius: var(--mui-radius-sm);
   border-block-start: 2px solid transparent;
+}
+.mui-bottom-tab-bar[data-items="5"] .mui-bottom-tab-bar__item {
+  font-size: 0.75rem;
+}
+.mui-bottom-tab-bar__label {
+  display: block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mui-bottom-tab-bar__destinations {
+  color: var(--mui-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.mui-bottom-tab-bar__destinations a,
+.mui-navigation-dialog > a {
+  color: var(--mui-link);
+  text-underline-offset: 0.2em;
 }
 .mui-bottom-tab-bar__item[aria-current],
 .mui-bottom-tab-bar__item[aria-expanded=true] {
@@ -9724,6 +9775,90 @@ body {
     height: auto;
     white-space: normal;
   }
+}
+dialog.mui-dialog {
+  max-height: calc(100dvh - 2rem);
+  overflow: hidden;
+}
+dialog.mui-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.mui-dialog__header,
+.mui-dialog__description,
+.mui-dialog__footer,
+.mui-sheet__header,
+.mui-sheet__description {
+  flex-shrink: 0;
+}
+.mui-dialog__close ~ .mui-dialog__header {
+  padding-inline-end: 4rem;
+}
+.mui-dialog__close,
+.mui-sheet__close {
+  width: 2.75rem;
+  height: 2.75rem;
+  opacity: 1;
+}
+.mui-dialog__close {
+  top: 0.5rem;
+  inset-inline-end: 0.5rem;
+}
+.mui-dialog__close:hover {
+  background: var(--mui-bg-input);
+}
+.mui-dialog__body,
+.mui-sheet__body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.mui-dialog__title,
+.mui-sheet__title {
+  overflow-wrap: anywhere;
+}
+.mui-sheet__header {
+  align-items: flex-start;
+  gap: var(--mui-space-md);
+}
+.mui-dialog__footer {
+  padding-block-start: var(--mui-space-md);
+  border-block-start: 1px solid var(--mui-border);
+}
+.mui-sheet__footer {
+  padding-block-end: max(var(--mui-space-lg), env(safe-area-inset-bottom, 0px));
+}
+.mui-sheet__footer .mui-btn,
+.mui-dialog__footer .mui-btn {
+  min-height: 2.75rem;
+  height: auto;
+  white-space: normal;
+}
+.mui-dialog--sm .mui-dialog__description {
+  padding-inline: 0.75rem;
+}
+.mui-dialog--sm .mui-dialog__footer {
+  padding-inline: 0.75rem;
+  padding-block-end: 0.75rem;
+}
+.mui-sheet__body p {
+  line-height: 1.6;
+}
+.mui-table__cell--numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.mui-table tfoot {
+  border-block-start: 1px solid var(--mui-border-control);
+  background: var(--mui-bg-input);
+  font-weight: 600;
+}
+.mui-table--hoverable tbody tr:focus-within {
+  background: var(--mui-bg-input);
+}
+.mui-table--compact .mui-table__th {
+  box-sizing: border-box;
 }
 dialog.mui-dialog[open],
 dialog.mui-sheet[open],

@@ -217,7 +217,7 @@ mod growth_0_3_0 {
             "expected the flag on exactly the th and td of column 1: {out}"
         );
         // Column 0 must be untouched.
-        assert!(out.contains(r#"<th class="mui-table__th">A</th>"#), "got: {out}");
+        assert!(out.contains(r#"<th class="mui-table__th" scope="col">A</th>"#), "got: {out}");
     }
 
     #[test]

@@ -38,6 +38,8 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## 0.8 operational UI
 
+Use `short_label: Some("Stays".into())` on a bottom-tab `Item` or sidebar `NavItem` to keep a long mobile destination legible; use `None` for the full label.
+
 Use `status_chip_group` for counted filters, `bottom_tab_bar` for mobile destinations, and `button::Size::Row` with `Variant::Outline` for compact cell actions. Blocks at `worklist::header`, `record::header`, and `task::grid` compose them into application surfaces. The sidebar shell adds `header`, `id`, and `mobile_navigation` props; `empty_state::Variant::{Empty, Filtered, Failed}` separates zero results from a failed load.
 
 Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the 0.8 bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
@@ -108,16 +110,17 @@ cd maud-ui
 bun run gallery     # builds, picks a FREE port, waits until it really serves, prints the URL
 ```
 
-Use `bun run gallery` rather than `cargo run --example showcase` — the example hardcodes
-:3456, and a port collision answers every route with an empty 404 that reads exactly like a
-broken site. `scripts/gallery.sh` refuses a busy port and says which process holds it.
+The showcase defaults to port 3456. `bun run gallery` selects a free port, or set
+`ADDR=127.0.0.1:$(free-port) cargo run --example showcase` explicitly.
+For the compiled getting-started page, run `cargo run --example first_paint`
+(default port 3000; also accepts `ADDR`). Its source is the code shown at `/getting-started`.
 
 Routes:
 
 | Path | What it is |
 |---|---|
 | `/` | Landing page — the pitch, built out of the library's own primitives |
-| `/gallery` | The component index: all 72, grouped by tier, with a sidebar filter |
+| `/gallery` | The component index: all 81, grouped by tier, with a sidebar filter |
 | `/{component}` | One component's page — variants, code samples, API docs |
 | `/blocks`, `/blocks/{slug}` | The 13 pre-composed block templates |
 | `/theme` | Live theme customiser (edits tokens, persists to localStorage) |

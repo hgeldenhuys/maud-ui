@@ -81,3 +81,5 @@ ButtonGroup, AlertDialog, Link.
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/button
+
+Navigation actions use an `<a>` with the same `mui-btn`, variant, and size classes as a native button. Every anchor variant stays free of underlines, including hover and focus and when placed inside docs or prose. Use ordinary prose links when an underline is desired.

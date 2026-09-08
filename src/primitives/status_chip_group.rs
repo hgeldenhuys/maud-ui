@@ -62,10 +62,8 @@ pub fn render(props: Props) -> Markup {
                     aria-current=[(index == current).then_some("page")] {
                     span class="mui-status-chip-group__mark" aria-hidden="true" { "✓" }
                     span class="mui-status-chip-group__label" { (item.label) }
-                    span class="mui-status-chip-group__count" {
-                        span class="mui-sr-only" { ": " }
-                        (item.count)
-                    }
+                    span class="mui-status-chip-group__count" aria-hidden="true" { (item.count) }
+                    span class="mui-sr-only" { " " (item.count) " items" }
                 }
             }
         }

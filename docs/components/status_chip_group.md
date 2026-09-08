@@ -41,3 +41,5 @@ Native anchors and `aria-current="page"`; all links stay in the Tab order. Enhan
 
 ## Shadcn reference
 Application-specific composition; no direct upstream equivalent.
+
+Counts use a muted pill with tabular numerals and no separator. The visible number is hidden from assistive technology; the visually hidden text announces the number with “items” once (for example, “48 items”).

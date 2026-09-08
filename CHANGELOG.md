@@ -10,10 +10,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 The receptionist worklist exposed repeatable application structure: counted filters,
 search beside a title, a record's next action, task launchers and mobile wayfinding.
 Those structures now have typed APIs, full docs and showcase pages: **81 primitives
-and 13 blocks**. The pre-change canvas and verification record are in `curation-report.md`.
+and 13 blocks**. Round-two curation and verification are in `curation-report-r2.md`.
 
 ### Breaking
 
+- **`bottom_tab_bar::Item` and `sidebar::NavItem` gain `short_label: Option<String>`.**
+  Set `None` to retain the full label; short labels keep full destination context in
+  the accessible name. Sidebar labels remain full-length.
 - **`empty_state::Props` gains `variant`** (`Empty`, `Filtered`, `Failed`). Existing
   builder calls keep working; exhaustive literals must supply the new field.
 - **`blocks::shell::sidebar::Props` gains `id`, `header`, `mobile_navigation`.** Use
@@ -56,6 +59,32 @@ and 13 blocks**. The pre-change canvas and verification record are in `curation-
 
 ### Polished
 
+- **Round 2 — counted chips:** quiet, muted count pills with tabular numerals and
+  no separator; a shipped `mui-sr-only` utility announces “48 items” once and hides
+  the worklist/shell search labels visually without removing their accessible names.
+- **Round 2 — button links:** every anchor skin, variant and size suppresses underlines
+  in default, hover and focus states, including docs/prose; link/POST render parity is tested.
+- **Round 2 — mobile tabs:** single-line ellipsis, a smaller font for five destinations,
+  and short labels (“Stays”, “Home”). More's fallback and drawer links use `--mui-link`.
+- **Round 2 — gallery navigation:** at 640px the existing menu contains the site links;
+  search and theme/direction toggles share one row. One nav node moves across breakpoints.
+  Escape, focus return/containment, hidden-nav tab exclusion, no-JS navigation, dynamic
+  header offsets, RTL entry and reduced-motion behavior keep the drawer usable.
+- **Round 2 — dialogs and sheets:** long titles clear a 44px Close target, bodies scroll
+  while footer actions stay reachable, and sheets reserve the bottom safe area. Examples
+  cover four edges, long content, labelled inputs and honest Escape/cancellation copy.
+- **Round 2 — tables:** numeric alignment now reaches plain/rich/footer cells with tabular
+  numerals; headers declare column scope, totals get a divider, and keyboard row actions
+  share hover emphasis. The invoice demo sheds its optional payment-method column on phones.
+- **Round 2 — theme:** pressed preset state follows current overrides, CSS copy reports
+  success or a usable fallback, and the export is keyboard-scrollable with a focus ring.
+- **Round 2 — discovery:** blocks are grouped by use with visible keyboard focus;
+  removed the dead “Coming soon” placeholder. Gallery headings and operational links
+  establish a clearer entry point. Getting-started embeds the compiled `first_paint`
+  example with viewport metadata, a main landmark, working dialog and asset routes;
+  README port guidance and gallery counts now match the implementation.
+- **Round 2 — gates:** the package-include guard now recognizes the existing `examples/*`
+  single-directory glob; the render expectation now checks table header column scope.
 - **Themes:** retain eight presets with coherent fill/ink pairs, readable subtle text,
   control boundaries and focus colors. Light muted/subtle/warning ink and primary hover
   contrast are corrected. 264 token-pair checks cover the eight presets.

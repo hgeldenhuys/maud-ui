@@ -27,6 +27,7 @@
 //!                 items: vec![
 //!                     sidebar::NavItem {
 //!                         label: "Dashboard".into(),
+//!                         short_label: Some("Home".into()),
 //!                         href: "/dashboard".into(),
 //!                         icon: None,
 //!                         badge: None,
@@ -48,8 +49,8 @@
 //! }
 //! ```
 
-use maud::{html, Markup, PreEscaped};
 use crate::primitives::bottom_tab_bar;
+use maud::{html, Markup, PreEscaped};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum MobileNavigation {
@@ -58,7 +59,6 @@ pub enum MobileNavigation {
     /// First four destinations plus More; every destination remains in the drawer.
     Tabs,
 }
-
 
 /// Props for the sidebar shell.
 #[derive(Clone, Debug)]
@@ -132,6 +132,8 @@ pub struct NavGroup {
 #[derive(Clone, Debug)]
 pub struct NavItem {
     pub label: String,
+    /// Compact bottom-tab label; the sidebar always shows the full label.
+    pub short_label: Option<String>,
     pub href: String,
     /// Optional inline SVG icon rendered on the left. Use
     /// `stroke="currentColor"` so it matches text color and inverts
@@ -159,7 +161,11 @@ pub struct UserBlock {
 pub fn render(props: Props) -> Markup {
     let nav_id = format!("{}-navigation", props.id);
     let drawer_id = format!("{}-drawer", props.id);
-    let items: Vec<_> = props.nav_groups.iter().flat_map(|group| &group.items).collect();
+    let items: Vec<_> = props
+        .nav_groups
+        .iter()
+        .flat_map(|group| &group.items)
+        .collect();
     let current = items.iter().position(|item| item.href == props.active_path);
     let mobile_tabs = props.mobile_navigation == MobileNavigation::Tabs;
     html! {
@@ -213,7 +219,7 @@ pub fn render(props: Props) -> Markup {
             @if mobile_tabs {
                 (bottom_tab_bar::render(bottom_tab_bar::Props {
                     items: items.iter().take(4).map(|item| bottom_tab_bar::Item {
-                        label: item.label.clone(), href: item.href.clone(), icon: item.icon.clone(),
+                        label: item.label.clone(), short_label: item.short_label.clone(), href: item.href.clone(), icon: item.icon.clone(),
                     }).collect(),
                     current_href: Some(props.active_path.clone()),
                     more: Some(bottom_tab_bar::More {
@@ -307,7 +313,9 @@ pub fn preview() -> Markup {
     render(Props {
         id: "showcase-shell".into(),
         mobile_navigation: MobileNavigation::Tabs,
-        header: Some(html! { label { span class="mui-sr-only" { "Find a destination" } input class="mui-input" type="search" placeholder="Find a destination…" data-mui-nav-search; } }),
+        header: Some(
+            html! { label { span class="mui-sr-only" { "Find a destination" } input class="mui-input" type="search" placeholder="Find a destination…" data-mui-nav-search; } },
+        ),
         brand: html! {
             span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) }
             span class="mui-block--shell__brand-name" { "Acme" }
@@ -319,18 +327,21 @@ pub fn preview() -> Markup {
                 items: vec![
                     NavItem {
                         label: "Dashboard".into(),
+                        short_label: Some("Home".into()),
                         href: "/dashboard".into(),
                         icon: Some(icon_grid()),
                         badge: None,
                     },
                     NavItem {
                         label: "Projects".into(),
+                        short_label: None,
                         href: "/projects".into(),
                         icon: Some(icon_folder()),
                         badge: None,
                     },
                     NavItem {
                         label: "Inbox".into(),
+                        short_label: None,
                         href: "/inbox".into(),
                         icon: Some(icon_inbox()),
                         badge: Some("12".into()),
@@ -342,18 +353,21 @@ pub fn preview() -> Markup {
                 items: vec![
                     NavItem {
                         label: "Team".into(),
+                        short_label: None,
                         href: "/team".into(),
                         icon: Some(icon_users()),
                         badge: None,
                     },
                     NavItem {
                         label: "Billing".into(),
+                        short_label: None,
                         href: "/billing".into(),
                         icon: Some(icon_card()),
                         badge: None,
                     },
                     NavItem {
                         label: "Integrations".into(),
+                        short_label: None,
                         href: "/integrations".into(),
                         icon: Some(icon_plug()),
                         badge: Some("New".into()),
@@ -364,6 +378,7 @@ pub fn preview() -> Markup {
                 label: Some("Account".into()),
                 items: vec![NavItem {
                     label: "Settings".into(),
+                    short_label: None,
                     href: "/settings".into(),
                     icon: Some(icon_settings()),
                     badge: None,

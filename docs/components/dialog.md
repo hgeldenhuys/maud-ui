@@ -82,3 +82,7 @@ Renders a × close button with `data-mui-close` attribute. Positioned absolute i
 
 ## Shadcn reference
 <https://ui.shadcn.com/docs/components/dialog>
+
+## Small screens and long content
+
+Headers and footer actions remain visible while the body scrolls within the dynamic viewport. Close has a 44px target; long titles wrap without overlapping it. Sheet footers include bottom safe-area padding. Motion respects `prefers-reduced-motion`. The showcase includes long content and a long-title review dialog.

@@ -1,0 +1,72 @@
+<h1>ToolCall</h1>
+<p>Collapsible representation of an AI agent's tool invocation (Edit, Write, Bash, Read, Grep, etc.). Renders a compact trigger row — glyph, name, summary, status pill — with an expandable body holding the arguments and result panes.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::tool_call::{self, Kind, Status, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::tool_call;
+
+html! {
+    (tool_call::render(tool_call::Props {
+        id: "edit-1".into(),
+        kind: tool_call::Kind::Edit,
+        name: "Edit".into(),
+        summary: "src/primitives/message.rs".into(),
+        status: tool_call::Status::Success,
+        args: Some(html! { pre { "old_string: \"role: Role::Default\"\nnew_string: \"role: Role::Assistant\"" } }),
+        result: Some(html! { pre { "Applied edit — 1 replacement." } }),
+        open: true,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>""</code></td><td>Unique DOM id — used to wire the details disclosure</td></tr>
+<tr><td><code>kind</code></td><td><code>Kind</code></td><td><code>Kind::Custom</code></td><td>Tool family (drives accent colour + glyph)</td></tr>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>""</code></td><td>Tool name (e.g. "Edit", "Bash")</td></tr>
+<tr><td><code>summary</code></td><td><code>String</code></td><td><code>""</code></td><td>One-line summary shown in the trigger (e.g. file path, command)</td></tr>
+<tr><td><code>status</code></td><td><code>Status</code></td><td><code>Status::Success</code></td><td>Current execution status</td></tr>
+<tr><td><code>args</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional args panel — rendered in the expanded body</td></tr>
+<tr><td><code>result</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional result panel — rendered in the expanded body</td></tr>
+<tr><td><code>open</code></td><td><code>bool</code></td><td><code>false</code></td><td>Initial open state (default false — collapsed)</td></tr>
+</tbody></table>
+<p><code>Props</code> derives <code>Default</code>, so defaults above come from <code>#[derive(Default)]</code> on <code>Props</code>, <code>Kind</code>, and <code>Status</code> (each enum marks its default variant with <code>#[default]</code>) — there is no hand-written <code>impl Default</code> block.</p>
+<h2>Variants / Enums</h2>
+<h3>Kind</h3>
+<p>Tool families, each with its own accent colour and glyph.</p>
+<ul>
+<li><code>Custom</code> (default) — glyph <code>•</code>, class <code>mui-tool-call--custom</code></li>
+<li><code>Edit</code> — glyph <code>✎</code>, class <code>mui-tool-call--edit</code></li>
+<li><code>Write</code> — glyph <code>➕</code>, class <code>mui-tool-call--write</code></li>
+<li><code>Read</code> — glyph <code>📖</code>, class <code>mui-tool-call--read</code></li>
+<li><code>Bash</code> — glyph <code>›_</code>, class <code>mui-tool-call--bash</code></li>
+<li><code>Grep</code> — glyph <code>🔍</code>, class <code>mui-tool-call--grep</code></li>
+<li><code>Glob</code> — glyph <code>✱</code>, class <code>mui-tool-call--glob</code></li>
+<li><code>Task</code> — glyph <code>❖</code>, class <code>mui-tool-call--task</code></li>
+<li><code>Agent</code> — glyph <code>◆</code>, class <code>mui-tool-call--agent</code></li>
+<li><code>Search</code> — glyph <code>🔎</code>, class <code>mui-tool-call--search</code></li>
+</ul>
+<h3>Status</h3>
+<p>Execution state — drives the status pill colour and label.</p>
+<ul>
+<li><code>Success</code> (default) — class <code>mui-tool-call__status--success</code>, label "done"</li>
+<li><code>Running</code> — class <code>mui-tool-call__status--running</code>, label "running"</li>
+<li><code>Error</code> — class <code>mui-tool-call__status--error</code>, label "error"</li>
+<li><code>Pending</code> — class <code>mui-tool-call__status--pending</code>, label "queued"</li>
+</ul>
+<h2>Helper Functions</h2>
+<p>None. <code>Kind</code> and <code>Status</code> each carry private <code>class()</code>/<code>glyph()</code> and <code>class()</code>/<code>label()</code> methods, but neither is marked <code>pub</code>, so they are not part of the public API. The only <code>pub fn</code>s in the module are <code>render</code> and <code>showcase</code>, both excluded from this section by convention.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>The trigger is a native <code>button type="button"</code>, so it is focusable and keyboard-operable (Enter/Space) without extra script.</li>
+<li>The trigger carries <code>aria-expanded</code> (reflecting <code>props.open</code>, toggled by the inline <code>onclick</code> handler) and <code>aria-controls</code> pointing at the body's <code>id</code> — the standard disclosure-button pattern.</li>
+<li>The body <code>div</code> sets its <code>id</code> to match <code>aria-controls</code> and toggles the boolean <code>hidden</code> attribute in lockstep with <code>aria-expanded</code> (both in the initial render via <code>hidden[!props.open]</code> and in the <code>onclick</code> script at runtime).</li>
+<li>The glyph and chevron spans are both marked <code>aria-hidden="true"</code>, so decorative icons are not read out.</li>
+<li>Status is conveyed by a visible text label ("done" / "running" / "error" / "queued") inside the pill, not by colour alone — so the state is readable without colour perception.</li>
+<li>There is no <code>aria-live</code> region anywhere in the markup, so a status change (e.g. <code>Running</code> → <code>Success</code> on a re-render) is not automatically announced to a screen reader unless something else moves focus to it.</li>
+</ul>
+<h2>Related</h2>
+<p>CodeBlock (for rendering args/result as code), Message (the chat bubble a tool call typically nests inside), Diff (for edit-style results), StreamingCursor (for an in-flight response alongside a <code>Running</code> tool call)</p>
+<h2>Shadcn reference</h2>
+<p>No shadcn/ui equivalent — this is an agent/tool-invocation primitive with no upstream shadcn component to reference.</p>

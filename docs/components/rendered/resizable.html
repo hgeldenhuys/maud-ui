@@ -1,0 +1,129 @@
+<h1>Resizable</h1>
+<p>Draggable panel dividers that enable horizontal or vertical resizing of adjacent content panels. Uses flex layout with draggable handles.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::resizable::{self, Props, Panel, Direction};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::resizable;
+
+html! {
+    (resizable::render(resizable::Props {
+        id: "demo-resize".to_string(),
+        direction: resizable::Direction::Horizontal,
+        panels: vec![
+            resizable::Panel {
+                content: html! { div { "Sidebar" } },
+                default_size: 30.0,
+                min_size: Some(15.0),
+            },
+            resizable::Panel {
+                content: html! { div { "Main content" } },
+                default_size: 70.0,
+                min_size: Some(30.0),
+            },
+        ],
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"resizable"</code></td><td>Unique identifier for the resizable group.</td></tr>
+<tr><td>panels</td><td>Vec<Panel></td><td><code>[]</code></td><td>Array of panels to render (2+).</td></tr>
+<tr><td>direction</td><td>Direction</td><td><code>Horizontal</code></td><td>Layout direction: Horizontal (side-by-side) or Vertical (stacked).</td></tr>
+</tbody></table>
+<h2>Panel Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>content</td><td>Markup</td><td>Panel content markup.</td></tr>
+<tr><td>default_size</td><td>f64</td><td>Initial flex proportion (typically 0–100 for percentages).</td></tr>
+<tr><td>min_size</td><td>Option<f64></td><td>Minimum allowed size in same units (default: 10.0).</td></tr>
+</tbody></table>
+<h2>Direction Enum</h2>
+<table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>Horizontal</td><td>Panels side-by-side; handles are vertical dividers.</td></tr>
+<tr><td>Vertical</td><td>Panels stacked; handles are horizontal dividers.</td></tr>
+</tbody></table>
+<h2>Usage Patterns</h2>
+<h3>Two-panel horizontal layout (sidebar + content)</h3>
+<pre><code class="language-rust">html! {
+    (resizable::render(resizable::Props {
+        id: "sidebar-layout".to_string(),
+        direction: resizable::Direction::Horizontal,
+        panels: vec![
+            resizable::Panel {
+                content: html! { div { h3 { "Navigation" } } },
+                default_size: 30.0,
+                min_size: Some(15.0),
+            },
+            resizable::Panel {
+                content: html! { div { p { "Main dashboard" } } },
+                default_size: 70.0,
+                min_size: Some(30.0),
+            },
+        ],
+    }))
+}
+</code></pre>
+<h3>Three-panel horizontal (file explorer layout)</h3>
+<pre><code class="language-rust">html! {
+    (resizable::render(resizable::Props {
+        id: "editor-layout".to_string(),
+        direction: resizable::Direction::Horizontal,
+        panels: vec![
+            resizable::Panel {
+                content: html! { div { "Explorer" } },
+                default_size: 20.0,
+                min_size: Some(10.0),
+            },
+            resizable::Panel {
+                content: html! { div { "Editor" } },
+                default_size: 55.0,
+                min_size: Some(20.0),
+            },
+            resizable::Panel {
+                content: html! { div { "Inspector" } },
+                default_size: 25.0,
+                min_size: Some(10.0),
+            },
+        ],
+    }))
+}
+</code></pre>
+<h3>Vertical split (top + bottom)</h3>
+<pre><code class="language-rust">html! {
+    (resizable::render(resizable::Props {
+        id: "vertical-split".to_string(),
+        direction: resizable::Direction::Vertical,
+        panels: vec![
+            resizable::Panel {
+                content: html! { div { "Preview" } },
+                default_size: 60.0,
+                min_size: Some(30.0),
+            },
+            resizable::Panel {
+                content: html! { div { "Console" } },
+                default_size: 40.0,
+                min_size: Some(20.0),
+            },
+        ],
+    }))
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li>Each handle is a <code>&lt;div role="separator"&gt;</code> with <code>aria-orientation</code> (horizontal/vertical).</li>
+<li>Handles are keyboard-focusable (<code>tabindex="0"</code>).</li>
+<li><code>aria-valuenow</code> reflects the handle's current position (read by screen readers).</li>
+<li>Drag interaction is client-JS controlled (Arrow keys, mouse drag).</li>
+</ul>
+<h2>Data Attributes</h2>
+<ul>
+<li><code>data-mui="resizable"</code> — root element marker.</li>
+<li><code>data-direction</code> — "horizontal" or "vertical" for client JS routing.</li>
+<li><code>data-index</code> — handle index (separates panels N and N+1).</li>
+<li><code>data-min-size</code> — minimum size constraint (CSS unit, e.g., "15.0").</li>
+</ul>
+<h2>Related</h2>
+<p>Drawer, Card (fixed layouts), Sheet (modal overlay).</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/resizable</p>

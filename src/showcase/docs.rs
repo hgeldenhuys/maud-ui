@@ -1,11 +1,8 @@
-//! Component API-docs rendering — reads `docs/components/<slug>.md` at
-//! compile time and renders it as styled HTML alongside each primitive's
-//! showcase on the gallery page. The docs markdown ships with the crate
-//! via the Cargo.toml `include` list, so external consumers who build the
-//! showcase as a library also get the rendered docs.
+//! Pre-rendered API docs, generated with `cargo run --example build_docs`.
+//! Markdown and HTML ship in the crate; no Markdown parser is linked into
+//! consumer applications. Tables receive responsive labels at render time.
 
 use maud::{html, Markup, PreEscaped};
-use pulldown_cmark::{html::push_html, Options, Parser};
 
 /// Returns the rendered API-docs HTML for a component slug (the
 /// `src/primitives/<name>.rs` filename without extension), or `None`
@@ -15,13 +12,7 @@ use pulldown_cmark::{html::push_html, Options, Parser};
 /// markdown consistently.
 pub fn render_component_docs(slug: &str) -> Option<Markup> {
     let raw = component_docs_source(slug)?;
-    let mut opts = Options::empty();
-    opts.insert(Options::ENABLE_TABLES);
-    opts.insert(Options::ENABLE_STRIKETHROUGH);
-    let parser = Parser::new_ext(raw, opts);
-    let mut html_str = String::with_capacity(raw.len() * 2);
-    push_html(&mut html_str, parser);
-    let html_str = wrap_tables(&html_str);
+    let html_str = wrap_tables(raw);
     Some(html! {
         section class="mui-docs" {
             (PreEscaped(html_str))
@@ -45,9 +36,8 @@ pub fn render_component_docs(slug: &str) -> Option<Markup> {
 /// time with the rest as dead space — the columns pad out to fill the forced
 /// width, so most of what you scroll past is empty.
 ///
-/// Scanning the string is sound here: `push_html` emits these tags itself,
-/// and a literal `<table>` written in markdown prose or a code fence is
-/// escaped to `&lt;table&gt;`, so it can never match.
+/// These are trusted, pre-rendered repository docs. Code fences are escaped
+/// by the development-time Markdown renderer before reaching this function.
 fn wrap_tables(html_str: &str) -> String {
     if !html_str.contains("<table>") {
         return html_str.to_string();
@@ -171,92 +161,106 @@ fn escape_attr(s: &str) -> String {
 
 /// Match slug → `include_str!(...)`. Keep the match arms in lockstep
 /// with `COMPONENT_NAMES` in `src/showcase/mod.rs` and with
-/// `docs/components/*.md` on disk.
+/// `docs/components/rendered/*.md` on disk.
 fn component_docs_source(slug: &str) -> Option<&'static str> {
     // Path is relative to THIS file (src/showcase/docs.rs):
-    // ../../docs/components/<name>.md
+    // ../../docs/components/rendered/<name>.md
     match slug {
-        "accordion" => Some(include_str!("../../docs/components/accordion.md")),
-        "alert" => Some(include_str!("../../docs/components/alert.md")),
-        "alert_dialog" => Some(include_str!("../../docs/components/alert_dialog.md")),
-        "aspect_ratio" => Some(include_str!("../../docs/components/aspect_ratio.md")),
-        "attention_pill" => Some(include_str!("../../docs/components/attention_pill.md")),
-        "avatar" => Some(include_str!("../../docs/components/avatar.md")),
-        "badge" => Some(include_str!("../../docs/components/badge.md")),
-        "breadcrumb" => Some(include_str!("../../docs/components/breadcrumb.md")),
-        "button" => Some(include_str!("../../docs/components/button.md")),
-        "button_group" => Some(include_str!("../../docs/components/button_group.md")),
-        "calendar" => Some(include_str!("../../docs/components/calendar.md")),
-        "card" => Some(include_str!("../../docs/components/card.md")),
-        "carousel" => Some(include_str!("../../docs/components/carousel.md")),
-        "chart" => Some(include_str!("../../docs/components/chart.md")),
-        "checkbox" => Some(include_str!("../../docs/components/checkbox.md")),
-        "code_block" => Some(include_str!("../../docs/components/code_block.md")),
-        "collapsible" => Some(include_str!("../../docs/components/collapsible.md")),
-        "combobox" => Some(include_str!("../../docs/components/combobox.md")),
-        "command" => Some(include_str!("../../docs/components/command.md")),
-        "composer" => Some(include_str!("../../docs/components/composer.md")),
-        "context_menu" => Some(include_str!("../../docs/components/context_menu.md")),
-        "data_table" => Some(include_str!("../../docs/components/data_table.md")),
-        "date_picker" => Some(include_str!("../../docs/components/date_picker.md")),
-        "dialog" => Some(include_str!("../../docs/components/dialog.md")),
-        "diff" => Some(include_str!("../../docs/components/diff.md")),
-        "direction" => Some(include_str!("../../docs/components/direction.md")),
-        "drawer" => Some(include_str!("../../docs/components/drawer.md")),
-        "empty_state" => Some(include_str!("../../docs/components/empty_state.md")),
-        "facts_list" => Some(include_str!("../../docs/components/facts_list.md")),
-        "field" => Some(include_str!("../../docs/components/field.md")),
-        "fieldset" => Some(include_str!("../../docs/components/fieldset.md")),
-        "form" => Some(include_str!("../../docs/components/form.md")),
-        "grid" => Some(include_str!("../../docs/components/grid.md")),
-        "gutter_section" => Some(include_str!("../../docs/components/gutter_section.md")),
-        "hover_card" => Some(include_str!("../../docs/components/hover_card.md")),
-        "input" => Some(include_str!("../../docs/components/input.md")),
-        "input_group" => Some(include_str!("../../docs/components/input_group.md")),
-        "input_otp" => Some(include_str!("../../docs/components/input_otp.md")),
-        "item" => Some(include_str!("../../docs/components/item.md")),
-        "kbd" => Some(include_str!("../../docs/components/kbd.md")),
-        "label" => Some(include_str!("../../docs/components/label.md")),
-        "menu" => Some(include_str!("../../docs/components/menu.md")),
-        "menubar" => Some(include_str!("../../docs/components/menubar.md")),
-        "message" => Some(include_str!("../../docs/components/message.md")),
-        "meter" => Some(include_str!("../../docs/components/meter.md")),
-        "native_select" => Some(include_str!("../../docs/components/native_select.md")),
-        "navigation_menu" => Some(include_str!("../../docs/components/navigation_menu.md")),
-        "number_field" => Some(include_str!("../../docs/components/number_field.md")),
-        "pagination" => Some(include_str!("../../docs/components/pagination.md")),
-        "popover" => Some(include_str!("../../docs/components/popover.md")),
-        "progress" => Some(include_str!("../../docs/components/progress.md")),
-        "radio" => Some(include_str!("../../docs/components/radio.md")),
-        "radio_group" => Some(include_str!("../../docs/components/radio_group.md")),
-        "resizable" => Some(include_str!("../../docs/components/resizable.md")),
-        "scroll_area" => Some(include_str!("../../docs/components/scroll_area.md")),
-        "segmented_control" => Some(include_str!("../../docs/components/segmented_control.md")),
-        "select" => Some(include_str!("../../docs/components/select.md")),
-        "separator" => Some(include_str!("../../docs/components/separator.md")),
-        "sheet" => Some(include_str!("../../docs/components/sheet.md")),
-        "sidebar" => Some(include_str!("../../docs/components/sidebar.md")),
-        "skeleton" => Some(include_str!("../../docs/components/skeleton.md")),
-        "slider" => Some(include_str!("../../docs/components/slider.md")),
-        "sonner" => Some(include_str!("../../docs/components/sonner.md")),
-        "spinner" => Some(include_str!("../../docs/components/spinner.md")),
-        "stack" => Some(include_str!("../../docs/components/stack.md")),
-        "status_dot" => Some(include_str!("../../docs/components/status_dot.md")),
-        "streaming_cursor" => Some(include_str!("../../docs/components/streaming_cursor.md")),
-        "swatch" => Some(include_str!("../../docs/components/swatch.md")),
-        "switch" => Some(include_str!("../../docs/components/switch.md")),
-        "table" => Some(include_str!("../../docs/components/table.md")),
-        "tabs" => Some(include_str!("../../docs/components/tabs.md")),
-        "textarea" => Some(include_str!("../../docs/components/textarea.md")),
-        "toast" => Some(include_str!("../../docs/components/toast.md")),
-        "toggle" => Some(include_str!("../../docs/components/toggle.md")),
-        "toggle_group" => Some(include_str!("../../docs/components/toggle_group.md")),
-        "tool_call" => Some(include_str!("../../docs/components/tool_call.md")),
-        "tooltip" => Some(include_str!("../../docs/components/tooltip.md")),
-        "turn_progress" => Some(include_str!("../../docs/components/turn_progress.md")),
-        "typography" => Some(include_str!("../../docs/components/typography.md")),
+        "accordion" => Some(include_str!("../../docs/components/rendered/accordion.html")),
+        "alert" => Some(include_str!("../../docs/components/rendered/alert.html")),
+        "alert_dialog" => Some(include_str!("../../docs/components/rendered/alert_dialog.html")),
+        "aspect_ratio" => Some(include_str!("../../docs/components/rendered/aspect_ratio.html")),
+        "attention_pill" => Some(include_str!("../../docs/components/rendered/attention_pill.html")),
+        "avatar" => Some(include_str!("../../docs/components/rendered/avatar.html")),
+        "badge" => Some(include_str!("../../docs/components/rendered/badge.html")),
+        "bottom_tab_bar" => Some(include_str!("../../docs/components/rendered/bottom_tab_bar.html")),
+        "breadcrumb" => Some(include_str!("../../docs/components/rendered/breadcrumb.html")),
+        "button" => Some(include_str!("../../docs/components/rendered/button.html")),
+        "button_group" => Some(include_str!("../../docs/components/rendered/button_group.html")),
+        "calendar" => Some(include_str!("../../docs/components/rendered/calendar.html")),
+        "card" => Some(include_str!("../../docs/components/rendered/card.html")),
+        "carousel" => Some(include_str!("../../docs/components/rendered/carousel.html")),
+        "chart" => Some(include_str!("../../docs/components/rendered/chart.html")),
+        "checkbox" => Some(include_str!("../../docs/components/rendered/checkbox.html")),
+        "code_block" => Some(include_str!("../../docs/components/rendered/code_block.html")),
+        "collapsible" => Some(include_str!("../../docs/components/rendered/collapsible.html")),
+        "combobox" => Some(include_str!("../../docs/components/rendered/combobox.html")),
+        "command" => Some(include_str!("../../docs/components/rendered/command.html")),
+        "composer" => Some(include_str!("../../docs/components/rendered/composer.html")),
+        "context_menu" => Some(include_str!("../../docs/components/rendered/context_menu.html")),
+        "data_table" => Some(include_str!("../../docs/components/rendered/data_table.html")),
+        "date_picker" => Some(include_str!("../../docs/components/rendered/date_picker.html")),
+        "dialog" => Some(include_str!("../../docs/components/rendered/dialog.html")),
+        "diff" => Some(include_str!("../../docs/components/rendered/diff.html")),
+        "direction" => Some(include_str!("../../docs/components/rendered/direction.html")),
+        "drawer" => Some(include_str!("../../docs/components/rendered/drawer.html")),
+        "empty_state" => Some(include_str!("../../docs/components/rendered/empty_state.html")),
+        "facts_list" => Some(include_str!("../../docs/components/rendered/facts_list.html")),
+        "field" => Some(include_str!("../../docs/components/rendered/field.html")),
+        "fieldset" => Some(include_str!("../../docs/components/rendered/fieldset.html")),
+        "form" => Some(include_str!("../../docs/components/rendered/form.html")),
+        "grid" => Some(include_str!("../../docs/components/rendered/grid.html")),
+        "gutter_section" => Some(include_str!("../../docs/components/rendered/gutter_section.html")),
+        "hover_card" => Some(include_str!("../../docs/components/rendered/hover_card.html")),
+        "input" => Some(include_str!("../../docs/components/rendered/input.html")),
+        "input_group" => Some(include_str!("../../docs/components/rendered/input_group.html")),
+        "input_otp" => Some(include_str!("../../docs/components/rendered/input_otp.html")),
+        "item" => Some(include_str!("../../docs/components/rendered/item.html")),
+        "kbd" => Some(include_str!("../../docs/components/rendered/kbd.html")),
+        "label" => Some(include_str!("../../docs/components/rendered/label.html")),
+        "menu" => Some(include_str!("../../docs/components/rendered/menu.html")),
+        "menubar" => Some(include_str!("../../docs/components/rendered/menubar.html")),
+        "message" => Some(include_str!("../../docs/components/rendered/message.html")),
+        "meter" => Some(include_str!("../../docs/components/rendered/meter.html")),
+        "native_select" => Some(include_str!("../../docs/components/rendered/native_select.html")),
+        "navigation_menu" => Some(include_str!("../../docs/components/rendered/navigation_menu.html")),
+        "number_field" => Some(include_str!("../../docs/components/rendered/number_field.html")),
+        "pagination" => Some(include_str!("../../docs/components/rendered/pagination.html")),
+        "popover" => Some(include_str!("../../docs/components/rendered/popover.html")),
+        "progress" => Some(include_str!("../../docs/components/rendered/progress.html")),
+        "radio" => Some(include_str!("../../docs/components/rendered/radio.html")),
+        "radio_group" => Some(include_str!("../../docs/components/rendered/radio_group.html")),
+        "resizable" => Some(include_str!("../../docs/components/rendered/resizable.html")),
+        "scroll_area" => Some(include_str!("../../docs/components/rendered/scroll_area.html")),
+        "segmented_control" => Some(include_str!("../../docs/components/rendered/segmented_control.html")),
+        "select" => Some(include_str!("../../docs/components/rendered/select.html")),
+        "separator" => Some(include_str!("../../docs/components/rendered/separator.html")),
+        "sheet" => Some(include_str!("../../docs/components/rendered/sheet.html")),
+        "sidebar" => Some(include_str!("../../docs/components/rendered/sidebar.html")),
+        "skeleton" => Some(include_str!("../../docs/components/rendered/skeleton.html")),
+        "slider" => Some(include_str!("../../docs/components/rendered/slider.html")),
+        "sonner" => Some(include_str!("../../docs/components/rendered/sonner.html")),
+        "spinner" => Some(include_str!("../../docs/components/rendered/spinner.html")),
+        "stack" => Some(include_str!("../../docs/components/rendered/stack.html")),
+        "status_chip_group" => Some(include_str!("../../docs/components/rendered/status_chip_group.html")),
+        "status_dot" => Some(include_str!("../../docs/components/rendered/status_dot.html")),
+        "streaming_cursor" => Some(include_str!("../../docs/components/rendered/streaming_cursor.html")),
+        "swatch" => Some(include_str!("../../docs/components/rendered/swatch.html")),
+        "switch" => Some(include_str!("../../docs/components/rendered/switch.html")),
+        "table" => Some(include_str!("../../docs/components/rendered/table.html")),
+        "tabs" => Some(include_str!("../../docs/components/rendered/tabs.html")),
+        "textarea" => Some(include_str!("../../docs/components/rendered/textarea.html")),
+        "toast" => Some(include_str!("../../docs/components/rendered/toast.html")),
+        "toggle" => Some(include_str!("../../docs/components/rendered/toggle.html")),
+        "toggle_group" => Some(include_str!("../../docs/components/rendered/toggle_group.html")),
+        "tool_call" => Some(include_str!("../../docs/components/rendered/tool_call.html")),
+        "tooltip" => Some(include_str!("../../docs/components/rendered/tooltip.html")),
+        "turn_progress" => Some(include_str!("../../docs/components/rendered/turn_progress.html")),
+        "typography" => Some(include_str!("../../docs/components/rendered/typography.html")),
         _ => None,
     }
+}
+
+/// Render the API contract for operational blocks.
+pub fn render_block_docs(slug: &str) -> Option<Markup> {
+    let raw = match slug {
+        "worklist-header" => include_str!("../../docs/blocks/rendered/worklist-header.html"),
+        "record-header" => include_str!("../../docs/blocks/rendered/record-header.html"),
+        "task-grid" => include_str!("../../docs/blocks/rendered/task-grid.html"),
+        "shell-sidebar" => include_str!("../../docs/blocks/rendered/shell-sidebar.html"),
+        _ => return None,
+    };
+    Some(html! { section class="mui-docs" { (PreEscaped(wrap_tables(raw))) } })
 }
 
 #[cfg(test)]

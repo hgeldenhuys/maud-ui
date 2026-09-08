@@ -6,19 +6,19 @@
 //! on top — none of them are required for the control to function.
 //!
 //! Four states, one anchor line (the dock never moves):
-//!   * [`State::Ready`]     — the 84px resting dock.
-//!   * [`State::Growing`]   — focused; the field is ringed and grows to a max
-//!                            then scrolls internally (the max is a JS/consumer
-//!                            concern; the CSS sets the min and the cap).
-//!   * [`State::Executing`] — a turn is running. The field stays WRITABLE (not
-//!                            disabled) so a follow-up can be queued; an
-//!                            `Interrupt` hollow-destructive button appears
-//!                            beside the primary.
-//!   * [`State::Asleep`]    — a 46px dashed bar: mono state tag, a REAL
-//!                            single-row textarea ("Type to wake…" is its
-//!                            placeholder, not decoration), and a neutral
-//!                            `Wake` submit. Same plain-form contract as
-//!                            Ready — waking types and submits with JS off.
+//! - [`State::Ready`]     — the 84px resting dock.
+//! - [`State::Growing`]   — focused; the field is ringed and grows to a max
+//!   then scrolls internally (the max is a JS/consumer
+//!   concern; the CSS sets the min and the cap).
+//! - [`State::Executing`] — a turn is running. The field stays WRITABLE (not
+//!   disabled) so a follow-up can be queued; an
+//!   `Interrupt` hollow-destructive button appears
+//!   beside the primary.
+//! - [`State::Asleep`]    — a 46px dashed bar: mono state tag, a REAL
+//!   single-row textarea ("Type to wake…" is its
+//!   placeholder, not decoration), and a neutral
+//!   `Wake` submit. Same plain-form contract as
+//!   Ready — waking types and submits with JS off.
 //!
 //! The secondary action (Interrupt) is a real `<form>` too: the root is a
 //! `<div>` holding the main form plus an empty sibling form, and the

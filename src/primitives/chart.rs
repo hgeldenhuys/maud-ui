@@ -310,8 +310,8 @@ fn render_line(props: &Props, color: &str) -> String {
     }
 
     // X labels
-    for i in 0..n {
-        let x = points[i].0;
+    for (i, point) in points.iter().enumerate() {
+        let x = point.0;
         svg.push_str(&format!(
             r#"<text x="{x}" y="{}" text-anchor="middle" class="mui-chart__label">{}</text>"#,
             h as f64 - 10.0,

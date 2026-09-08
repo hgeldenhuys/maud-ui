@@ -1,0 +1,83 @@
+<h1>Item</h1>
+<p>Media + content + actions list row for notifications, search results, file listings, and other row-based layouts.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::item::{self, Props, Variant, Size, MediaVariant};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::item;
+
+html! {
+    (item::group(html! {
+        (item::render(item::Props {
+            variant: item::Variant::Default,
+            size: item::Size::Default,
+            children: html! {
+                (item::media(item::MediaVariant::Icon, html! { "📧" }))
+                (item::content(html! {
+                    (item::title(html! { "New message" }))
+                    (item::description(html! { "From Jane Doe" }))
+                }))
+                (item::actions(html! {
+                    button { "Reply" }
+                }))
+            },
+            ..Default::default()
+        }))
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional DOM id for wiring skip-links or triggers.</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Default</code></td><td>Visual frame style (Default, Outline, Muted).</td></tr>
+<tr><td><code>size</code></td><td><code>Size</code></td><td><code>Default</code></td><td>Density (Default, Sm, Xs).</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Row content (media, content, actions, header, footer).</td></tr>
+</tbody></table>
+<h2>Variant</h2>
+<pre><code class="language-rust">pub enum Variant {
+    Default,
+    Outline,
+    Muted,
+}
+</code></pre>
+<h2>Size</h2>
+<pre><code class="language-rust">pub enum Size {
+    Default,
+    Sm,
+    Xs,
+}
+</code></pre>
+<h2>MediaVariant</h2>
+<pre><code class="language-rust">pub enum MediaVariant {
+    Default,
+    Icon,
+    Image,
+}
+</code></pre>
+<h2>Helpers</h2>
+<ul>
+<li><strong><code>group(children)</code></strong> — Wrap items with consistent spacing and <code>role="list"</code>.</li>
+<li><strong><code>media(variant, children)</code></strong> — Icon/avatar/image slot. Sizing hints via MediaVariant.</li>
+<li><strong><code>content(children)</code></strong> — Primary textual stack (usually title + description).</li>
+<li><strong><code>title(children)</code></strong> — Item heading (h3).</li>
+<li><strong><code>description(children)</code></strong> — Muted supporting text (p).</li>
+<li><strong><code>actions(children)</code></strong> — Trailing action slot (buttons, timestamps, badges).</li>
+<li><strong><code>header(children)</code></strong> — Optional banner above main row (e.g., timestamp, category).</li>
+<li><strong><code>footer(children)</code></strong> — Optional strip below main row (e.g., source, author).</li>
+<li><strong><code>separator()</code></strong> — Visual <code>&lt;hr&gt;</code> divider between grouped items.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Item group has <code>role="list"</code>.</li>
+<li>Each item implicitly treated as <code>role="listitem"</code>.</li>
+<li>Content hierarchy maintained via semantic h3/p elements.</li>
+<li>Media slot size hints guide icon vs. image sizing for WCAG contrast.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="hover-card.md">Hover Card</a> — richer overlay for item details.</li>
+<li><a href="button.md">Button</a> — actions typically contain buttons.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Mirrors shadcn's Item primitive with Variant/Size/MediaVariant enums and helper-based composition for media, content, title, description, actions, header, footer, separator.</p>

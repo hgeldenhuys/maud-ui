@@ -365,29 +365,29 @@ fn static_export_js_matches_the_built_bundle() {
 /// worse failure mode: the number is wrong only in the image every share of
 /// the site renders, where nobody on the project ever looks.
 ///
-/// Guards the HTML the PNG is rendered from. Regenerate with
-/// `bun run build:og` after changing it.
+/// Guards the generated SVG the PNG is rendered from. Regenerate with
+/// `node examples/build-social-card.mjs` after changing it.
 #[test]
 fn og_card_component_count_matches_reality() {
     let n = COMPONENT_NAMES.len();
-    let source = read("assets/og-source.html");
+    let source = read("static/og.svg");
     assert!(
-        source.contains(&format!(r#"<span class="n">{n}</span>"#)),
-        "assets/og-source.html does not state {n} as a stat — there are {n} \
-         components. Update the card and run `bun run build:og` to re-render \
-         assets/og.png, then commit both."
+        source.contains(&format!(r#"data-stat="components">{n}</text>"#)),
+        "static/og.svg does not state {n} as a stat — there are {n} \
+         components. Update the card and run `node examples/build-social-card.mjs` to re-render \
+         static/og.png, then commit both."
     );
 
     // The rendered PNG must exist and be the exact size declared in
     // page_head()'s og:image:width / og:image:height. A mismatch makes some
     // crawlers fall back to a small summary card with no image at all.
-    let png = repo_root().join("assets/og.png");
+    let png = repo_root().join("static/og.png");
     assert!(
         png.exists(),
-        "assets/og.png is missing but every page's og:image points at it. \
-         Fix: bun run build:og"
+        "static/og.png is missing but every page's og:image points at it. \
+         Fix: node examples/build-social-card.mjs"
     );
-    let bytes = fs::read(&png).expect("cannot read assets/og.png");
+    let bytes = fs::read(&png).expect("cannot read static/og.png");
     // PNG IHDR: 8-byte signature, 4-byte length, 4-byte "IHDR", then width and
     // height as big-endian u32.
     let width = u32::from_be_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]);
@@ -395,9 +395,9 @@ fn og_card_component_count_matches_reality() {
     assert_eq!(
         (width, height),
         (1200, 630),
-        "assets/og.png is {width}x{height}, but page_head() declares \
+        "static/og.png is {width}x{height}, but page_head() declares \
          og:image:width=1200 og:image:height=630. Re-render with \
-         `bun run build:og`."
+         `node examples/build-social-card.mjs`."
     );
 }
 

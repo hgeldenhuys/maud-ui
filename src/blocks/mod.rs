@@ -18,12 +18,16 @@
 //! See `BLOCK_NAMES` below for the canonical registry — anything listed
 //! there has a showcase page at `/blocks/{slug}`.
 
+pub mod action;
 pub mod auth;
 pub mod dashboard;
 pub mod data;
 pub mod pricing;
 pub mod settings;
 pub mod shell;
+pub mod worklist;
+pub mod record;
+pub mod task;
 
 /// Canonical slug registry. Mirrors the showcase routes.
 ///
@@ -43,6 +47,9 @@ pub const BLOCK_NAMES: &[&str] = &[
     "settings-profile",
     "settings-team",
     "shell-sidebar",
+    "worklist-header",
+    "record-header",
+    "task-grid",
 ];
 
 /// Convert a block slug into a human-readable name.

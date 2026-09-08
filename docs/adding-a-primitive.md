@@ -36,7 +36,7 @@ Then:
 | 2 | `src/showcase/mod.rs` → `COMPONENT_NAMES` | `"spinner",` **in alphabetical order** | Invisible to nav, routing, and the `cmd+k` palette |
 | 3 | `src/showcase/mod.rs` → `TIERS` | the slug, in the right tier | Missing from the gallery's grouped navigation |
 | 4 | `src/showcase/mod.rs` → `component_content()` | `"spinner" => primitives::spinner::showcase(),` | `/spinner` silently serves the **404 page** |
-| 5 | `src/showcase/docs.rs` | `"spinner" => Some(include_str!("../../docs/components/spinner.md")),` | The component page renders with no API docs |
+| 5 | `src/showcase/docs.rs` | `"spinner" => Some(include_str!("../../docs/components/rendered/spinner.html")),` | The component page renders with no API docs |
 | 6 | `docs/components/spinner.md` | the 8-section doc — see `docs/components/README.md` | Step 5 fails to compile; and the docs **ship inside the published crate**, so a gap reaches consumers |
 | 7 | `css/components/spinner.css` + an `@import` in `css/maud-ui.css` | only if the component has styles | The component renders **unstyled**, with no error anywhere |
 | 8 | `tests/render_tests.rs` → `assert_showcase_renders!` | `spinner,` | `showcase()` is never exercised; this is the point nothing documents as part of the invariant |
@@ -52,13 +52,12 @@ public site. It now parses `COMPONENT_NAMES` from source, and a parity test keep
 
 ```bash
 cargo test                    # parity + render tests
-node js/build.mjs             # ONLY if you touched css/ or dist/behaviors/
+node examples/build-assets.mjs # rebuild static/ after CSS/behavior edits
+cargo run --example build_docs # regenerate HTML after Markdown edits
 bun run gallery               # prints the URL; picks a free port
 ```
 
-**Rebuild `dist/` whenever you touch CSS.** `dist/maud-ui.css` is committed, ships in the crate, and
-`CSS_VER` is derived from its byte length as a cache-buster — so a stale `dist/` means browsers keep
-the old stylesheet.
+**Rebuild `static/` whenever you touch CSS or behavior.** In 0.8, `static/styles/curation.css` extends the existing CSS sources, and `static/behaviors/curation.js` extends the runtime. `examples/build-assets.mjs` bundles both generations into the complete `static/maud-ui{,.min}.{css,js}` assets. Rust consumers can serve `maud_ui::assets` constants. `dist/` and `public/` remain legacy 0.7 artifacts; their parity tests only guard that snapshot. New component styles must appear in the complete assets, as checked by `tests/curation.rs`.
 
 **Bump the component count** in `Cargo.toml`'s `description` and in `README.md` (two places). The
 parity test checks these against `COMPONENT_NAMES.len()` and will tell you if you forget.

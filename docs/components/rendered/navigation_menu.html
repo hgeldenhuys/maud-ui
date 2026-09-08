@@ -1,0 +1,116 @@
+<h1>NavigationMenu</h1>
+<p>Horizontal or vertical navigation menu with dropdown content panels (mega-menu style). Supports direct links and dropdown menus with optional descriptions.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::navigation_menu::{self, Props, Orientation, NavItem, NavLink, NavMenu};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::navigation_menu;
+
+html! {
+    (navigation_menu::render(navigation_menu::Props {
+        id: "main-nav".into(),
+        items: vec![
+            navigation_menu::NavItem::Link(navigation_menu::NavLink {
+                label: "Home".into(),
+                href: "/".into(),
+                description: None,
+            }),
+            navigation_menu::NavItem::Menu(navigation_menu::NavMenu {
+                label: "Products".into(),
+                links: vec![
+                    navigation_menu::NavLink {
+                        label: "Software".into(),
+                        href: "/products/software".into(),
+                        description: Some("Development tools".into()),
+                    },
+                    navigation_menu::NavLink {
+                        label: "Hardware".into(),
+                        href: "/products/hardware".into(),
+                        description: Some("Devices and equipment".into()),
+                    },
+                ],
+            }),
+        ],
+        orientation: navigation_menu::Orientation::Horizontal,
+        viewport: true,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"nav-menu"</code></td><td>Unique identifier for the navigation menu.</td></tr>
+<tr><td>items</td><td>Vec<NavItem></td><td><code>vec![]</code></td><td>Top-level navigation items: direct links or dropdown menus.</td></tr>
+<tr><td>orientation</td><td>Orientation</td><td><code>Horizontal</code></td><td>Direction of the top-level list: <code>Horizontal</code> or <code>Vertical</code>.</td></tr>
+<tr><td>viewport</td><td>bool</td><td><code>true</code></td><td>When true, dropdown content renders in a shared viewport panel. When false, each menu has its own per-item popover.</td></tr>
+</tbody></table>
+<h2>Orientation</h2>
+<pre><code class="language-rust">pub enum Orientation {
+    Horizontal,  // Default; top-level items in a row
+    Vertical,    // Top-level items in a column
+}
+</code></pre>
+<h2>NavItem</h2>
+<p>Navigation item variant: either a direct link or a dropdown menu.</p>
+<pre><code class="language-rust">pub enum NavItem {
+    Link(NavLink),    // Direct navigation link
+    Menu(NavMenu),    // Dropdown menu
+}
+</code></pre>
+<h3>NavLink</h3>
+<pre><code class="language-rust">pub struct NavLink {
+    pub label: String,                  // Link text displayed
+    pub href: String,                   // URL or anchor
+    pub description: Option&lt;String&gt;,    // Optional subtitle/description
+}
+</code></pre>
+<h3>NavMenu</h3>
+<pre><code class="language-rust">pub struct NavMenu {
+    pub label: String,              // Menu trigger label
+    pub links: Vec&lt;NavLink&gt;,        // Dropdown links
+}
+</code></pre>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Horizontal mega-menu</td><td><code>orientation: Horizontal, viewport: true</code></td><td>Header navigation with shared content panel.</td></tr>
+<tr><td>Horizontal popovers</td><td><code>orientation: Horizontal, viewport: false</code></td><td>Compact header with per-item dropdowns.</td></tr>
+<tr><td>Vertical sidebar</td><td><code>orientation: Vertical, viewport: false</code></td><td>Sidebar navigation with nested menus.</td></tr>
+<tr><td>Mixed links &amp; menus</td><td>Combine <code>NavItem::Link</code> and <code>NavItem::Menu</code></td><td>Homepage link + product categories.</td></tr>
+<tr><td>With descriptions</td><td>Include <code>description</code> in NavLink entries</td><td>Knowledge base with category descriptions.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p><strong><code>indicator() -&gt; Markup</code></strong></p>
+<p>Renders a small decorative chevron (❯) between active triggers. Purely visual; marked <code>aria-hidden="true"</code>.</p>
+<pre><code class="language-rust">use maud_ui::primitives::navigation_menu;
+
+html! {
+    span { (navigation_menu::indicator()) }
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Navigation role:</strong> Outer container uses <code>role="navigation"</code> and <code>aria-label="Primary"</code>.</li>
+<li><strong>List structure:</strong> Top-level items are rendered in a <code>&lt;ul&gt;</code> with <code>&lt;li&gt;</code> children.</li>
+<li><strong>Menu triggers:</strong> Buttons have <code>aria-expanded="false"</code> (true when open) and <code>aria-haspopup="true"</code>.</li>
+<li><strong>Content visibility:</strong> Dropdown content is initially <code>hidden</code>; JavaScript toggles visibility and updates <code>aria-expanded</code>.</li>
+<li><strong>Keyboard navigation:</strong>
+<ul>
+<li>Horizontal: Left/Right arrows navigate between triggers; Down arrow opens dropdown.</li>
+<li>Vertical: Up/Down arrows navigate within the menu; Right arrow opens submenu.</li>
+<li>Escape closes the dropdown.</li>
+</ul>
+</li>
+<li><strong>Screen readers:</strong> Links and button labels are announced; descriptions are optional and informative.</li>
+<li><strong>Indicator:</strong> The chevron helper uses <code>aria-hidden="true"</code> and is decorative.</li>
+</ul>
+<h2>Design Notes</h2>
+<h3>Viewport Mode (shared vs per-item)</h3>
+<ul>
+<li><strong>Shared viewport (<code>viewport: true</code>):</strong> One content panel anchors to the current trigger; visually smooth transitions as the user moves between menu triggers. Better for wide viewports.</li>
+<li><strong>Per-item popover (<code>viewport: false</code>):</strong> Each menu trigger carries its own popover wrapper; independent positioning. Better for mobile or constrained widths.</li>
+</ul>
+<p>The <code>data-viewport</code> attribute on the nav element indicates which mode is active, allowing CSS to style accordingly.</p>
+<h2>Related</h2>
+<p>DropdownMenu, Menubar, Button.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/navigation-menu</p>

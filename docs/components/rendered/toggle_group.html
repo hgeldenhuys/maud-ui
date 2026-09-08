@@ -1,0 +1,157 @@
+<h1>Toggle Group</h1>
+<p>Segmented control for single-select or multi-select options with roving tabindex keyboard navigation.</p>
+<h2>Description</h2>
+<p>Toggle Group renders a set of toggle buttons that act like radio buttons (single-select) or checkboxes (multi-select). The component manages focus via roving tabindex: only the first pressed (or first) item receives <code>tabindex="0"</code>, others get <code>tabindex="-1"</code> for keyboard efficiency.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toggle_group;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toggle_group::{Props, GroupItem, Size, render};
+
+let items = vec![
+    GroupItem { value: "left".into(), label: "Left".into(), pressed: true },
+    GroupItem { value: "center".into(), label: "Center".into(), pressed: false },
+    GroupItem { value: "right".into(), label: "Right".into(), pressed: false },
+];
+
+let group = render(Props {
+    items,
+    multiple: false,
+    aria_label: "Text alignment".into(),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>items</code></td><td><code>Vec&lt;GroupItem&gt;</code></td><td><code>vec![]</code></td><td>List of toggle items</td></tr>
+<tr><td><code>multiple</code></td><td><code>bool</code></td><td><code>false</code></td><td>Allow multiple selections (checkbox mode) or single (radio mode)</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Disable the entire group</td></tr>
+<tr><td><code>aria_label</code></td><td><code>String</code></td><td><code>"Toggle group"</code></td><td>Accessible label for the group</td></tr>
+<tr><td><code>size</code></td><td><code>Size</code></td><td><code>Md</code></td><td>Button size (Sm or Md)</td></tr>
+</tbody></table>
+<h2>GroupItem</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>value</code></td><td><code>String</code></td><td>Unique identifier for the item (emitted in data-value)</td></tr>
+<tr><td><code>label</code></td><td><code>String</code></td><td>Display text</td></tr>
+<tr><td><code>pressed</code></td><td><code>bool</code></td><td>Whether the item is currently selected</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<pre><code class="language-rust">pub enum Size {
+    #[default]
+    Md,    // Medium (default)
+    Sm,    // Small (compact)
+}
+</code></pre>
+<h2>Variants</h2>
+<h3>Single-Select (Radio Mode)</h3>
+<p>Only one item can be pressed at a time.</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "left".into(), label: "Left".into(), pressed: true },
+        GroupItem { value: "center".into(), label: "Center".into(), pressed: false },
+        GroupItem { value: "right".into(), label: "Right".into(), pressed: false },
+    ],
+    multiple: false,
+    aria_label: "Text alignment".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Multi-Select (Checkbox Mode)</h3>
+<p>Multiple items can be pressed simultaneously.</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "bold".into(), label: "B".into(), pressed: true },
+        GroupItem { value: "italic".into(), label: "I".into(), pressed: false },
+        GroupItem { value: "underline".into(), label: "U".into(), pressed: true },
+    ],
+    multiple: true,
+    aria_label: "Text formatting".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Small Size</h3>
+<p>Compact buttons for dense layouts (calendars, view switchers).</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "day".into(), label: "Day".into(), pressed: false },
+        GroupItem { value: "week".into(), label: "Week".into(), pressed: true },
+        GroupItem { value: "month".into(), label: "Month".into(), pressed: false },
+    ],
+    size: Size::Sm,
+    aria_label: "Calendar view".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Medium Size (Default)</h3>
+<p>Standard button size.</p>
+<pre><code class="language-rust">render(Props {
+    items,
+    size: Size::Md,
+    ..Default::default()
+})
+</code></pre>
+<h3>Disabled Group</h3>
+<p>All items in the group are disabled.</p>
+<pre><code class="language-rust">render(Props {
+    items,
+    disabled: true,
+    ..Default::default()
+})
+</code></pre>
+<h2>Common Patterns</h2>
+<h3>Text Alignment Picker</h3>
+<p>Single-select group for paragraph alignment in an editor.</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "left".into(), label: "Left".into(), pressed: true },
+        GroupItem { value: "center".into(), label: "Center".into(), pressed: false },
+        GroupItem { value: "right".into(), label: "Right".into(), pressed: false },
+        GroupItem { value: "justify".into(), label: "Justify".into(), pressed: false },
+    ],
+    aria_label: "Text alignment".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Calendar View Switcher</h3>
+<p>Single-select for Day/Week/Month layouts.</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "day".into(), label: "Day".into(), pressed: false },
+        GroupItem { value: "week".into(), label: "Week".into(), pressed: true },
+        GroupItem { value: "month".into(), label: "Month".into(), pressed: false },
+    ],
+    aria_label: "Calendar view".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Text Formatting Controls</h3>
+<p>Multi-select for Bold/Italic/Underline/Strikethrough.</p>
+<pre><code class="language-rust">render(Props {
+    items: vec![
+        GroupItem { value: "bold".into(), label: "B".into(), pressed: true },
+        GroupItem { value: "italic".into(), label: "I".into(), pressed: false },
+        GroupItem { value: "underline".into(), label: "U".into(), pressed: false },
+        GroupItem { value: "strike".into(), label: "S".into(), pressed: false },
+    ],
+    multiple: true,
+    aria_label: "Text formatting".into(),
+    ..Default::default()
+})
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Roving Tabindex:</strong> Only the first pressed (or first) item is in the DOM tab order (<code>tabindex="0"</code>). Others have <code>tabindex="-1"</code> for efficient keyboard navigation.</li>
+<li><strong>Aria-Pressed:</strong> Each button emits <code>aria-pressed="true"</code> or <code>"false"</code>.</li>
+<li><strong>Role:</strong> The container has <code>role="group"</code> and an <code>aria-label</code>.</li>
+<li><strong>Data Attributes:</strong> Each button has <code>data-value</code> containing its value for easy selection in JavaScript.</li>
+<li><strong>Disabled:</strong> When the entire group is disabled, <code>data-disabled="true"</code> is set on the container.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/toggle.md">Toggle</a> — Single toggle button</li>
+<li><a href="/docs/components/button.md">Button</a> — Standard button</li>
+<li><a href="/docs/components/radio-group.md">Radio Group</a> — Alternative single-select pattern</li>
+<li><a href="/docs/components/checkbox-group.md">Checkbox Group</a> — Alternative multi-select pattern</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Toggle Group aligns with shadcn's <code>&lt;ToggleGroup&gt;</code> component, supporting both single-select and multi-select modes with size variants.</p>

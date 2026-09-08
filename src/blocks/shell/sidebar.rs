@@ -1,5 +1,5 @@
 //! `shell::sidebar` — full app shell: vertical nav on the left, topbar
-//! + main content slot on the right. Drop your whole app inside
+//! with a main content slot on the right. Drop your whole app inside
 //! `children`; the shell handles layout, active-state highlighting, and
 //! the user footer.
 //!
@@ -49,10 +49,25 @@
 //! ```
 
 use maud::{html, Markup, PreEscaped};
+use crate::primitives::bottom_tab_bar;
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum MobileNavigation {
+    #[default]
+    Drawer,
+    /// First four destinations plus More; every destination remains in the drawer.
+    Tabs,
+}
+
 
 /// Props for the sidebar shell.
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Unique shell ID, also used to derive navigation and drawer IDs.
+    pub id: String,
+    /// Search box, workspace switchers, or other content above the grouped navigation.
+    pub header: Option<Markup>,
+    pub mobile_navigation: MobileNavigation,
     /// Brand/logo shown at the top of the sidebar. Typically an inline
     /// SVG + product name. No default — consumers always brand their
     /// own shell.
@@ -87,6 +102,9 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            id: "mui-app".into(),
+            header: None,
+            mobile_navigation: MobileNavigation::Drawer,
             brand: html! {
                 span style="font-weight:600;font-size:1rem;" { "App" }
             },
@@ -139,41 +157,29 @@ pub struct UserBlock {
 
 /// Render the sidebar shell.
 pub fn render(props: Props) -> Markup {
+    let nav_id = format!("{}-navigation", props.id);
+    let drawer_id = format!("{}-drawer", props.id);
+    let items: Vec<_> = props.nav_groups.iter().flat_map(|group| &group.items).collect();
+    let current = items.iter().position(|item| item.href == props.active_path);
+    let mobile_tabs = props.mobile_navigation == MobileNavigation::Tabs;
     html! {
-        div class="mui-block mui-block--shell" {
-            aside class="mui-block--shell__sidebar" {
-                div class="mui-block--shell__brand" {
-                    (props.brand)
-                }
-
+        div class="mui-block mui-block--shell" id=(props.id) data-mui="shell-navigation"
+            data-mobile-navigation=(if mobile_tabs { "tabs" } else { "drawer" }) {
+            aside class="mui-block--shell__sidebar" id=(&nav_id) aria-label="Application navigation" tabindex="-1" {
+                div class="mui-block--shell__brand" { (props.brand) }
+                @if let Some(header) = props.header { div class="mui-block--shell__header" { (header) } }
                 nav class="mui-block--shell__nav" aria-label="Primary" {
                     @for group in &props.nav_groups {
-                        div class="mui-block--shell__nav-group" {
-                            @if let Some(label) = &group.label {
-                                div class="mui-block--shell__nav-group-label" {
-                                    (label)
-                                }
-                            }
+                        div class="mui-block--shell__nav-group" role="group" aria-label=[group.label.as_ref()] {
+                            @if let Some(label) = &group.label { div class="mui-block--shell__nav-group-label" { (label) } }
                             ul class="mui-block--shell__nav-list" {
                                 @for item in &group.items {
+                                    @let active = current.is_some_and(|index| std::ptr::eq(items[index], item));
                                     li {
-                                        @let active = item.href == props.active_path;
-                                        a href=(item.href)
-                                          class=(if active {
-                                              "mui-block--shell__nav-item mui-block--shell__nav-item--active"
-                                          } else {
-                                              "mui-block--shell__nav-item"
-                                          })
-                                          aria-current=[if active { Some("page") } else { None }] {
-                                            @if let Some(icon) = &item.icon {
-                                                span class="mui-block--shell__nav-icon" aria-hidden="true" {
-                                                    (icon)
-                                                }
-                                            }
+                                        a href=(item.href) class=(if active { "mui-block--shell__nav-item mui-block--shell__nav-item--active" } else { "mui-block--shell__nav-item" }) aria-current=[active.then_some("page")] {
+                                            @if let Some(icon) = &item.icon { span class="mui-block--shell__nav-icon" aria-hidden="true" { (icon) } }
                                             span class="mui-block--shell__nav-label" { (item.label) }
-                                            @if let Some(badge) = &item.badge {
-                                                span class="mui-block--shell__nav-badge" { (badge) }
-                                            }
+                                            @if let Some(badge) = &item.badge { span class="mui-block--shell__nav-badge" { (badge) } }
                                         }
                                     }
                                 }
@@ -181,38 +187,40 @@ pub fn render(props: Props) -> Markup {
                         }
                     }
                 }
-
                 @if let Some(user) = &props.user {
                     a href=(user.menu_href) class="mui-block--shell__user" {
-                        span class="mui-block--shell__user-avatar" aria-hidden="true" {
-                            (user.avatar_initials)
-                        }
+                        span class="mui-block--shell__user-avatar" aria-hidden="true" { (user.avatar_initials) }
                         span class="mui-block--shell__user-text" {
                             span class="mui-block--shell__user-name" { (user.name) }
                             span class="mui-block--shell__user-email" { (user.email) }
                         }
-                        span class="mui-block--shell__user-caret" aria-hidden="true" {
-                            (icon_chevron_right())
-                        }
+                        span class="mui-block--shell__user-caret" aria-hidden="true" { (icon_chevron_right()) }
                     }
                 }
             }
-
             div class="mui-block--shell__main" {
                 header class="mui-block--shell__topbar" {
-                    @if let Some(title) = &props.topbar_title {
-                        h1 class="mui-block--shell__topbar-title" { (title) }
-                    } @else {
-                        span {}
-                    }
-                    div class="mui-block--shell__topbar-actions" {
-                        (props.topbar_actions)
-                    }
+                    a class="mui-block--shell__trigger mui-btn mui-btn--outline mui-btn--sm" href=(format!("#{nav_id}"))
+                        data-mui="navigation-trigger" aria-controls=(&drawer_id) aria-haspopup="dialog" { "Menu" }
+                    @if let Some(title) = &props.topbar_title { h1 class="mui-block--shell__topbar-title" { (title) } }
+                    div class="mui-block--shell__topbar-actions" { (props.topbar_actions) }
                 }
-
-                main class="mui-block--shell__content" {
-                    (props.children)
-                }
+                main class="mui-block--shell__content" { (props.children) }
+            }
+            dialog class="mui-navigation-dialog" id=(&drawer_id) aria-label="Application navigation" {
+                form method="dialog" { button class="mui-btn mui-btn--outline mui-btn--sm" { "Close navigation" } }
+            }
+            @if mobile_tabs {
+                (bottom_tab_bar::render(bottom_tab_bar::Props {
+                    items: items.iter().take(4).map(|item| bottom_tab_bar::Item {
+                        label: item.label.clone(), href: item.href.clone(), icon: item.icon.clone(),
+                    }).collect(),
+                    current_href: Some(props.active_path.clone()),
+                    more: Some(bottom_tab_bar::More {
+                        label: "More".into(), target_id: drawer_id, fallback_href: format!("#{nav_id}"),
+                        current: current.is_some_and(|i| i >= 4),
+                    }), ..Default::default()
+                }))
             }
         }
     }
@@ -297,6 +305,9 @@ pub fn preview() -> Markup {
     };
 
     render(Props {
+        id: "showcase-shell".into(),
+        mobile_navigation: MobileNavigation::Tabs,
+        header: Some(html! { label { span class="mui-sr-only" { "Find a destination" } input class="mui-input" type="search" placeholder="Find a destination…" data-mui-nav-search; } }),
         brand: html! {
             span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) }
             span class="mui-block--shell__brand-name" { "Acme" }

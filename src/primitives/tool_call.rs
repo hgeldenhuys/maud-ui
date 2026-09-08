@@ -167,7 +167,6 @@ pub fn showcase() -> Markup {
                     pre { "old_string: \"role: Role::Default\"\nnew_string: \"role: Role::Assistant\"" }
                 }),
                 result: Some(html! { pre { "Applied edit — 1 replacement." } }),
-                ..Default::default()
             }))
             (render(Props {
                 id: "s-bash".into(),

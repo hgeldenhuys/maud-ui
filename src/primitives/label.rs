@@ -4,6 +4,7 @@ use maud::{html, Markup};
 
 /// Label rendering properties
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct Props {
     /// Label text
     pub text: String,
@@ -15,16 +16,6 @@ pub struct Props {
     pub disabled: bool,
 }
 
-impl Default for Props {
-    fn default() -> Self {
-        Self {
-            text: String::new(),
-            html_for: None,
-            required: false,
-            disabled: false,
-        }
-    }
-}
 
 /// Render a label element
 pub fn render(props: Props) -> Markup {

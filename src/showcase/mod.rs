@@ -18,8 +18,8 @@ pub use landing::landing_page;
 // fetch without waiting for `must-revalidate` or manual hard-reloads.
 // `.len()` on `&[u8; N]` is a const expression, so these constants
 // re-compute automatically each time the embedded files change.
-const CSS_VER: usize = include_bytes!("../../dist/maud-ui.css").len();
-const JS_VER: usize = include_bytes!("../../dist/maud-ui.js").len();
+const CSS_VER: usize = crate::assets::CSS.len();
+const JS_VER: usize = crate::assets::JS.len();
 
 // ── Tier definitions ───────────────────────────────────────────────────
 
@@ -114,6 +114,8 @@ const TIERS: &[Tier] = &[
         title: "Navigation",
         description: "Menus, breadcrumbs, and wayfinding",
         components: &[
+            "bottom_tab_bar",
+            "status_chip_group",
             "menu",
             "context_menu",
             "menubar",
@@ -215,6 +217,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "attention_pill",
     "avatar",
     "badge",
+    "bottom_tab_bar",
     "breadcrumb",
     "button",
     "button_group",
@@ -273,6 +276,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "sonner",
     "spinner",
     "stack",
+    "status_chip_group",
     "status_dot",
     "streaming_cursor",
     "swatch",
@@ -301,464 +305,6 @@ fn code_example(title: &str, code: &str) -> Markup {
     }
 }
 
-/// Return a usage code example for a component by slug name.
-fn component_docs(name: &str) -> Option<Markup> {
-    let code = match name {
-        "button" => {
-            r#"use maud_ui::primitives::button;
-
-let html = button::render(button::Props {
-    label: "Save changes".into(),
-    variant: button::Variant::Primary,
-    size: button::Size::Md,
-    disabled: false,
-    button_type: "submit",
-});"#
-        }
-        "input" => {
-            r#"use maud_ui::primitives::input;
-
-let html = input::render(input::Props {
-    name: "email".into(),
-    input_type: input::InputType::Email,
-    placeholder: "you@example.com".into(),
-    id: "email-field".into(),
-    required: true,
-    ..Default::default()
-});"#
-        }
-        "textarea" => {
-            r#"use maud_ui::primitives::textarea;
-
-let html = textarea::render(textarea::Props {
-    name: "bio".into(),
-    placeholder: "Tell us about yourself...".into(),
-    rows: 6,
-    id: "bio-field".into(),
-    resize: textarea::Resize::Vertical,
-    ..Default::default()
-});"#
-        }
-        "checkbox" => {
-            r#"use maud_ui::primitives::checkbox;
-
-let html = checkbox::render(checkbox::Props {
-    name: "terms".into(),
-    value: "accepted".into(),
-    label: "I agree to the terms".into(),
-    id: "terms-cb".into(),
-    description: Some("Required to continue.".into()),
-    ..Default::default()
-});"#
-        }
-        "radio" => {
-            r#"use maud_ui::primitives::radio;
-
-let html = radio::render(radio::Props {
-    name: "plan".into(),
-    value: "pro".into(),
-    label: "Pro plan".into(),
-    id: "plan-pro".into(),
-    checked: true,
-    description: Some("Unlimited projects".into()),
-    ..Default::default()
-});"#
-        }
-        "select" => {
-            r#"use maud_ui::primitives::select;
-
-let html = select::render(select::Props {
-    name: "country".into(),
-    id: "country-select".into(),
-    placeholder: "Choose a country".into(),
-    selected: Some("us".into()),
-    options: vec![
-        select::SelectOption { value: "us".into(), label: "United States".into(), disabled: false },
-        select::SelectOption { value: "gb".into(), label: "United Kingdom".into(), disabled: false },
-    ],
-    ..Default::default()
-});"#
-        }
-        "switch" => {
-            r#"use maud_ui::primitives::switch;
-
-let html = switch::render(switch::Props {
-    name: "dark-mode".into(),
-    id: "dark-mode-switch".into(),
-    label: "Dark mode".into(),
-    checked: true,
-    disabled: false,
-});"#
-        }
-        "dialog" => {
-            r#"use maud_ui::primitives::dialog;
-use maud::html;
-
-// Render the trigger button
-let trigger = dialog::trigger("confirm-dlg", "Open dialog");
-
-// Render the dialog itself
-let dlg = dialog::render(dialog::Props {
-    id: "confirm-dlg".into(),
-    title: "Confirm action".into(),
-    description: Some("This cannot be undone.".into()),
-    children: html! { p { "Are you sure?" } },
-    footer: Some(html! {
-        button.mui-btn.mui-btn--danger.mui-btn--md { "Confirm" }
-    }),
-    open: false,
-});"#
-        }
-        "tabs" => {
-            r#"use maud_ui::primitives::tabs;
-use maud::html;
-
-let html = tabs::render(tabs::Props {
-    tabs: vec![
-        tabs::Tab { id: "overview".into(), label: "Overview".into(), content: html! { p { "Overview content" } } },
-        tabs::Tab { id: "settings".into(), label: "Settings".into(), content: html! { p { "Settings content" } } },
-    ],
-    default_active: 0,
-    aria_label: "Account tabs".into(),
-});"#
-        }
-        "accordion" => {
-            r#"use maud_ui::primitives::accordion;
-use maud::html;
-
-let html = accordion::render(accordion::Props {
-    items: vec![
-        accordion::Item { id: "faq-1".into(), trigger: "What is maud-ui?".into(), content: html! { p { "A component library for maud + htmx." } }, open: true },
-        accordion::Item { id: "faq-2".into(), trigger: "Is it free?".into(), content: html! { p { "Yes, MIT licensed." } }, open: false },
-    ],
-    multiple: false,
-});"#
-        }
-        "card" => {
-            r#"use maud_ui::primitives::card;
-use maud::html;
-
-let html = card::render(card::Props {
-    title: Some("Project stats".into()),
-    description: Some("Overview of your project.".into()),
-    children: html! { p { "Content goes here." } },
-    footer: Some(html! {
-        button.mui-btn.mui-btn--primary.mui-btn--sm { "View details" }
-    }),
-});"#
-        }
-        "table" => {
-            r#"use maud_ui::primitives::table;
-
-let html = table::render(table::Props {
-    headers: vec!["Name".into(), "Role".into(), "Status".into()],
-    rows: vec![
-        vec!["Alice".into(), "Admin".into(), "Active".into()],
-        vec!["Bob".into(), "Editor".into(), "Inactive".into()],
-    ],
-    striped: true,
-    hoverable: true,
-    compact: false,
-    caption: Some("Team members".into()),
-});"#
-        }
-        "badge" => {
-            r#"use maud_ui::primitives::badge;
-
-let html = badge::render(badge::Props {
-    label: "New".into(),
-    variant: badge::Variant::Success,
-});"#
-        }
-        "swatch" => {
-            r##"use maud_ui::primitives::swatch;
-
-// Raw colour — any valid CSS colour string
-let chip = swatch::render(swatch::Props {
-    label: "Primary".into(),
-    sublabel: Some("#2563eb".into()),
-    mode: swatch::Mode::Raw("#2563eb".into()),
-    size: swatch::Size::Md,
-    copyable: true,
-});
-
-// Design token — reads var(--mui-accent) live, flips with data-theme
-let token = swatch::render(swatch::Props {
-    label: "Accent".into(),
-    sublabel: Some("--mui-accent".into()),
-    mode: swatch::Mode::Token("mui-accent".into()),
-    ..Default::default()
-});
-
-// Tailwind-style ramp (50..950)
-let ramp = swatch::render_scale("blue", &swatch::tailwind_ramp("blue"));"##
-        }
-        "alert" => {
-            r#"use maud_ui::primitives::alert;
-
-let html = alert::render(alert::Props {
-    title: "Deployment complete".into(),
-    description: Some("All services are running.".into()),
-    variant: alert::Variant::Success,
-    icon: true,
-    ..Default::default()
-});"#
-        }
-        "toast" => {
-            r#"use maud_ui::primitives::toast;
-
-// Add the viewport container once in your layout
-let vp = toast::viewport();
-
-// Render a toast notification
-let html = toast::render(toast::Props {
-    title: "Changes saved".into(),
-    description: Some("Your profile was updated.".into()),
-    variant: toast::Variant::Success,
-    duration_ms: 5000,
-    id: "save-toast".into(),
-});
-
-// Trigger from JS: muiToast({ title, description, variant })"#
-        }
-        "field" => {
-            r#"use maud_ui::primitives::field;
-use maud::html;
-
-let html = field::render(field::Props {
-    label: "Email".into(),
-    id: "signup-email".into(),
-    description: Some("We will never share your email.".into()),
-    error: None,
-    required: true,
-    children: html! {
-        input.mui-input type="email" id="signup-email" name="email" placeholder="you@example.com";
-    },
-});"#
-        }
-        "calendar" => {
-            r#"use maud_ui::primitives::calendar;
-
-let html = calendar::render(calendar::Props {
-    id: "booking-cal".into(),
-    year: 2026,
-    month: 4,
-    selected: Some((2026, 4, 15)),
-    min_date: Some((2026, 4, 1)),
-    max_date: Some((2026, 12, 31)),
-    show_outside_days: true,
-});"#
-        }
-        "combobox" => {
-            r#"use maud_ui::primitives::combobox;
-
-let html = combobox::render(combobox::Props {
-    id: "lang-combo".into(),
-    name: "language".into(),
-    placeholder: "Select language".into(),
-    selected: Some("rust".into()),
-    options: vec![
-        combobox::ComboboxOption { value: "rust".into(), label: "Rust".into() },
-        combobox::ComboboxOption { value: "ts".into(), label: "TypeScript".into() },
-    ],
-    ..Default::default()
-});"#
-        }
-        "menu" => {
-            r#"use maud_ui::primitives::menu;
-
-let html = menu::render(menu::Props {
-    trigger_label: "Actions".into(),
-    id: "row-menu".into(),
-    items: vec![
-        menu::MenuEntry::Label("Edit".into()),
-        menu::MenuEntry::Item(menu::MenuItem {
-            label: "Rename".into(), action: "rename".into(),
-            disabled: false, destructive: false, shortcut: Some("F2".into()),
-        }),
-        menu::MenuEntry::Separator,
-        menu::MenuEntry::Item(menu::MenuItem {
-            label: "Delete".into(), action: "delete".into(),
-            disabled: false, destructive: true, shortcut: None,
-        }),
-    ],
-});"#
-        }
-        "slider" => {
-            r#"use maud_ui::primitives::slider;
-
-let html = slider::render(slider::Props {
-    name: "volume".into(),
-    id: "volume-slider".into(),
-    value: 75.0,
-    min: 0.0,
-    max: 100.0,
-    step: 1.0,
-    label: "Volume".into(),
-    show_value: true,
-    disabled: false,
-});"#
-        }
-        "spinner" => {
-            r#"use maud_ui::primitives::spinner;
-
-let html = spinner::render(spinner::Props {
-    size: spinner::Size::Md,
-    label: Some("Loading data...".into()),
-});"#
-        }
-        "form" => {
-            r#"use maud::html;
-use maud_ui::primitives::{button, form, input};
-
-// The common shape: a POST form wrapping a vertical stack.
-let profile = form::stacked("/account/profile", html! {
-    (input::render(input::Props { name: "display_name".into(), ..Default::default() }))
-    (button::render(button::Props {
-        label: "Save".into(),
-        variant: button::Variant::Primary,
-        button_type: "submit",
-        ..Default::default()
-    }))
-});
-
-// GET for searches — the result URL should be linkable.
-let search = form::render(form::Props {
-    action: Some("/search".into()),
-    method: form::Method::Get,
-    aria_label: Some("Search the catalogue".into()),
-    ..Default::default()
-});
-
-// Multipart is REQUIRED for file inputs, or the browser
-// submits the filename and not the file.
-let upload = form::render(form::Props {
-    action: Some("/avatar".into()),
-    enctype: form::Enctype::Multipart,
-    ..Default::default()
-});
-
-// NOTE: method defaults to Post, NOT html's Get — a forgotten
-// method must not serialise a password into the URL."#
-        }
-        "grid" => {
-            r#"use maud::html;
-use maud_ui::primitives::{card, grid};
-
-// Auto-fit: as many >=18rem columns as fit. No media query, and it
-// responds to its CONTAINER, not the viewport.
-let cards = grid::render(grid::Props {
-    min_column: grid::MinColumn::Lg,
-    gap: grid::Space::Lg,
-    children: html! {
-        @for title in ["Revenue", "Subscriptions", "Active now"] {
-            (card::render(card::Props { title: Some(title.into()), ..Default::default() }))
-        }
-    },
-    ..Default::default()
-});
-
-// A fixed count, collapsing to one column below 40rem (the default).
-let three = grid::columns(grid::Columns::Three, html! { /* ... */ });
-
-// Opt out of collapsing when the cells are genuinely small.
-let palette = grid::render(grid::Props {
-    columns: grid::Columns::Six,
-    collapse_narrow: false,
-    gap: grid::Space::Sm,
-    ..Default::default()
-});"#
-        }
-        "stack" => {
-            r#"use maud::html;
-use maud_ui::primitives::{button, stack};
-
-// A row: centred, spaced apart, wrapping on narrow viewports.
-let toolbar = stack::render(stack::Props {
-    direction: stack::Direction::Horizontal,
-    gap: stack::Space::Sm,
-    align: stack::Align::Center,
-    justify: stack::Justify::Between,
-    wrap: true,
-    ..Default::default()
-});
-
-// The two common cases, without the Props ceremony:
-let column = stack::vertical(html! { p { "One" } p { "Two" } });
-let row = stack::horizontal(html! {
-    (button::render(button::Props { label: "Cancel".into(), ..Default::default() }))
-    (button::render(button::Props { label: "Save".into(), ..Default::default() }))
-});
-
-// Semantic containers keep landmarks intact. Tag::Section REQUIRES aria_label.
-let region = stack::render(stack::Props {
-    tag: stack::Tag::Section,
-    padding: stack::Space::Xl,
-    aria_label: Some("Release notes".into()),
-    children: html! { p { "…" } },
-    ..Default::default()
-});"#
-        }
-        "skeleton" => {
-            r#"use maud_ui::primitives::skeleton;
-
-let html = skeleton::render(skeleton::Props {
-    variant: skeleton::Variant::Text,
-    width: Some("200px".into()),
-    height: Some("1rem".into()),
-});"#
-        }
-        "data_table" => {
-            r#"use maud_ui::primitives::data_table;
-
-let html = data_table::render(data_table::Props {
-    id: "users-table".into(),
-    columns: vec![
-        data_table::Column { key: "name".into(), label: "Name".into(), sortable: true },
-        data_table::Column { key: "email".into(), label: "Email".into(), sortable: true },
-    ],
-    rows: vec![
-        vec!["Alice".into(), "alice@example.com".into()],
-        vec!["Bob".into(), "bob@example.com".into()],
-    ],
-    page_size: 10,
-    searchable: true,
-    ..Default::default()
-});"#
-        }
-        "date_picker" => {
-            r#"use maud_ui::primitives::date_picker;
-
-let html = date_picker::render(date_picker::Props {
-    id: "start-date".into(),
-    name: "start_date".into(),
-    selected: Some((2026, 4, 15)),
-    placeholder: "Pick a start date".into(),
-    disabled: false,
-    min_date: Some((2026, 1, 1)),
-    max_date: None,
-});"#
-        }
-        "command" => {
-            r#"use maud_ui::primitives::command;
-
-// Render the trigger button
-let trigger = command::trigger("cmd-palette", "Command palette");
-
-// Render the palette
-let html = command::render(command::Props {
-    id: "cmd-palette".into(),
-    placeholder: "Type a command...".into(),
-    items: vec![
-        command::CommandItem { label: "New file".into(), shortcut: Some("Cmd+N".into()), group: Some("File".into()), disabled: false },
-        command::CommandItem { label: "Search".into(), shortcut: Some("Cmd+K".into()), group: Some("General".into()), disabled: false },
-    ],
-});"#
-        }
-        _ => return None,
-    };
-    Some(code_example("Usage", code))
-}
 
 /// Convert a slug like "toggle_group" to a display name like "Toggle Group".
 fn display_name(slug: &str) -> String {
@@ -860,6 +406,9 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
         description: "Full app chrome — 16rem vertical nav with grouped items + badges + user footer, plus a sticky topbar and main content slot. Drop your whole app inside.",
         uses: &["button", "card", "badge"],
     },
+    BlockEntry { slug: "worklist-header", category: "Operations", title: "Worklist header", description: "Title, count sentence, inline GET search and one primary action. Stacks on phones.", uses: &["status_chip_group", "button", "input"] },
+    BlockEntry { slug: "record-header", category: "Operations", title: "Record header", description: "Identity and status with a back link, one primary action, and a native secondary disclosure.", uses: &["badge", "button"] },
+    BlockEntry { slug: "task-grid", category: "Operations", title: "Task launcher", description: "Three compact launch cards with one action each. One column on phones.", uses: &["button", "grid"] },
 ];
 
 /// Render the preview for a block by slug.
@@ -875,6 +424,9 @@ fn block_content(slug: &str) -> Option<Markup> {
         "settings-profile" => blocks::settings::profile::preview(),
         "settings-team" => blocks::settings::team::preview(),
         "shell-sidebar" => blocks::shell::sidebar::preview(),
+        "worklist-header" => blocks::worklist::header::preview(),
+        "record-header" => blocks::record::header::preview(),
+        "task-grid" => blocks::task::grid::preview(),
         _ => return None,
     };
     Some(markup)
@@ -883,6 +435,7 @@ fn block_content(slug: &str) -> Option<Markup> {
 /// Hand-written "Usage" snippet for a block. Shown below the preview
 /// on each /blocks/{slug} page.
 fn block_docs(slug: &str) -> Option<Markup> {
+    if let Some(rendered) = docs::render_block_docs(slug) { return Some(rendered); }
     let code = match slug {
         "auth-signup" => {
             r#"use maud_ui::blocks::auth::signup;
@@ -1141,6 +694,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "attention_pill" => primitives::attention_pill::showcase(),
         "avatar" => primitives::avatar::showcase(),
         "badge" => primitives::badge::showcase(),
+        "bottom_tab_bar" => primitives::bottom_tab_bar::showcase(),
         "breadcrumb" => primitives::breadcrumb::showcase(),
         "button" => primitives::button::showcase(),
         "button_group" => primitives::button_group::showcase(),
@@ -1199,6 +753,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "sonner" => primitives::sonner::showcase(),
         "spinner" => primitives::spinner::showcase(),
         "stack" => primitives::stack::showcase(),
+        "status_chip_group" => primitives::status_chip_group::showcase(),
         "status_dot" => primitives::status_dot::showcase(),
         "streaming_cursor" => primitives::streaming_cursor::showcase(),
         "swatch" => primitives::swatch::showcase(),
@@ -1546,6 +1101,7 @@ pub fn showcase_page() -> Markup {
                 div class="mui-gallery" {
                     (sidebar_nav())
                     main class="mui-gallery__main" {
+                        p class="mui-gallery__curation-intro" { "Build an operational screen: " a href="/blocks/worklist-header" { "worklist" } " · " a href="/blocks/record-header" { "record" } " · " a href="/blocks/task-grid" { "tasks" } }
                         @for tier in TIERS {
                             div class="mui-gallery__tier" id=(tier.slug) {
                                 div class="mui-gallery__tier-header" {
@@ -1659,6 +1215,12 @@ pub fn theme_customizer_page() -> Markup {
                                     ("mui-border-focus",  "Focus ring",    "color"),
                                     ("mui-accent",        "Accent",        "color"),
                                     ("mui-accent-text",   "Accent text",   "color"),
+                                    ("mui-accent-fg", "Accent ink", "color"),
+                                    ("mui-accent-hover", "Accent hover", "color"),
+                                    ("mui-danger-fg", "Danger ink", "color"),
+                                    ("mui-danger-text", "Danger text", "color"),
+                                    ("mui-info-text", "Info text", "color"),
+                                    ("mui-border-control", "Control border", "color"),
                                     ("mui-danger",        "Danger",        "color"),
                                 ]))
                                 (theme_token_group("Radii", &[
@@ -1671,15 +1233,20 @@ pub fn theme_customizer_page() -> Markup {
                                     ("mui-font-mono", "Mono family", "text"),
                                 ]))
                                 (theme_token_group("Spacing", &[
-                                    ("mui-spacing-sm",  "Small",       "length"),
-                                    ("mui-spacing-md",  "Medium",      "length"),
-                                    ("mui-spacing-lg",  "Large",       "length"),
-                                    ("mui-spacing-xxl", "Extra large", "length"),
+                                    ("mui-space-sm",  "Small",       "length"),
+                                    ("mui-space-md",  "Medium",      "length"),
+                                    ("mui-space-lg",  "Large",       "length"),
+                                    ("mui-space-xxl", "Extra large", "length"),
                                 ]))
                             }
 
                             // ── Right column: live preview ─────────
                             div class="mui-theme__preview" {
+                                div class="mui-theme__preview-section" {
+                                    h4 class="mui-theme__section-title" { "Operational states" }
+                                    (primitives::status_chip_group::showcase())
+                                    (primitives::empty_state::render(primitives::empty_state::Props::for_variant(primitives::empty_state::Variant::Failed)))
+                                }
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Swatch grid (live tokens)" }
                                     (swatch::render_tokens(&[
@@ -2048,64 +1615,77 @@ fn theme_customizer_js() -> &'static str {
     { name: 'mui-border-focus', kind: 'color' },
     { name: 'mui-accent',       kind: 'color' },
     { name: 'mui-accent-text',  kind: 'color' },
+    { name: 'mui-accent-fg', kind: 'color' },
+    { name: 'mui-accent-hover', kind: 'color' },
+    { name: 'mui-danger-fg', kind: 'color' },
+    { name: 'mui-danger-text', kind: 'color' },
+    { name: 'mui-info-text', kind: 'color' },
+    { name: 'mui-border-control', kind: 'color' },
     { name: 'mui-danger',       kind: 'color' },
     { name: 'mui-radius-sm',    kind: 'length' },
     { name: 'mui-radius-md',    kind: 'length' },
     { name: 'mui-radius-lg',    kind: 'length' },
     { name: 'mui-font-sans',    kind: 'text' },
     { name: 'mui-font-mono',    kind: 'text' },
-    { name: 'mui-spacing-sm',   kind: 'length' },
-    { name: 'mui-spacing-md',   kind: 'length' },
-    { name: 'mui-spacing-lg',   kind: 'length' },
-    { name: 'mui-spacing-xxl',  kind: 'length' },
+    { name: 'mui-space-sm',   kind: 'length' },
+    { name: 'mui-space-md',   kind: 'length' },
+    { name: 'mui-space-lg',   kind: 'length' },
+    { name: 'mui-space-xxl',  kind: 'length' },
   ];
 
   // Tailwind-family presets. Each preset maps a subset of tokens. Tokens
   // not listed inherit from the base theme (dark or light).
   var PRESETS = {
-    'dark':         { _base: 'dark', _clear: true },
-    'light':        { _base: 'light', _clear: true },
-    'slate-dark':   {
+    dark: { _base: 'dark' },
+    light: { _base: 'light' },
+    'slate-dark': {
       _base: 'dark',
       'mui-bg': '#020617', 'mui-bg-card': '#0f172a', 'mui-bg-input': '#1e293b',
-      'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#64748b',
-      'mui-border': '#1e293b', 'mui-border-hover': '#334155', 'mui-border-focus': '#3b82f6',
-      'mui-accent': '#3b82f6', 'mui-accent-text': '#ffffff', 'mui-danger': '#ef4444',
+      'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#94a3b8',
+      'mui-border': '#1e293b', 'mui-border-hover': '#334155', 'mui-border-focus': '#60a5fa',
+      'mui-border-control': '#94a3b8', 'mui-accent': '#2563eb', 'mui-accent-hover': '#1d4ed8',
+      'mui-accent-text': '#93c5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
     },
     'zinc-violet': {
       _base: 'dark',
       'mui-bg': '#09090b', 'mui-bg-card': '#18181b', 'mui-bg-input': '#27272a',
-      'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#71717a',
-      'mui-border': '#27272a', 'mui-border-hover': '#3f3f46', 'mui-border-focus': '#8b5cf6',
-      'mui-accent': '#8b5cf6', 'mui-accent-text': '#ffffff', 'mui-danger': '#f43f5e',
+      'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#a1a1aa',
+      'mui-border': '#27272a', 'mui-border-hover': '#3f3f46', 'mui-border-focus': '#c4b5fd',
+      'mui-border-control': '#a1a1aa', 'mui-accent': '#7c3aed', 'mui-accent-hover': '#6d28d9',
+      'mui-accent-text': '#c4b5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
     },
     'stone-amber': {
       _base: 'dark',
       'mui-bg': '#0c0a09', 'mui-bg-card': '#1c1917', 'mui-bg-input': '#292524',
-      'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#78716c',
-      'mui-border': '#292524', 'mui-border-hover': '#44403c', 'mui-border-focus': '#f59e0b',
-      'mui-accent': '#f59e0b', 'mui-accent-text': '#0c0a09', 'mui-danger': '#dc2626',
+      'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#a8a29e',
+      'mui-border': '#292524', 'mui-border-hover': '#44403c', 'mui-border-focus': '#fbbf24',
+      'mui-border-control': '#a8a29e', 'mui-accent': '#fbbf24', 'mui-accent-hover': '#f59e0b',
+      'mui-accent-text': '#fbbf24', 'mui-accent-fg': '#1c1917', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
     },
-    'emerald': {
+    emerald: {
       _base: 'dark',
-      'mui-bg': '#022c22', 'mui-bg-card': '#064e3b', 'mui-bg-input': '#065f46',
-      'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#34d399',
-      'mui-border': '#065f46', 'mui-border-hover': '#047857', 'mui-border-focus': '#10b981',
-      'mui-accent': '#10b981', 'mui-accent-text': '#022c22', 'mui-danger': '#f87171',
+      'mui-bg': '#022c22', 'mui-bg-card': '#03382b', 'mui-bg-input': '#064e3b',
+      'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#6ee7b7',
+      'mui-border': '#065f46', 'mui-border-hover': '#047857', 'mui-border-focus': '#6ee7b7',
+      'mui-border-control': '#6ee7b7', 'mui-accent': '#34d399', 'mui-accent-hover': '#10b981',
+      'mui-accent-text': '#6ee7b7', 'mui-accent-fg': '#022c22', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
+      'mui-danger-text': '#fca5a5', 'mui-info-text': '#93c5fd',
     },
-    'rose': {
+    rose: {
       _base: 'dark',
       'mui-bg': '#1f0a17', 'mui-bg-card': '#3a0d27', 'mui-bg-input': '#4c1032',
-      'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#f472b6',
-      'mui-border': '#4c1032', 'mui-border-hover': '#7a1d49', 'mui-border-focus': '#f43f5e',
-      'mui-accent': '#f43f5e', 'mui-accent-text': '#ffffff', 'mui-danger': '#fca5a5',
+      'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#fda4af',
+      'mui-border': '#4c1032', 'mui-border-hover': '#7a1d49', 'mui-border-focus': '#fda4af',
+      'mui-border-control': '#fda4af', 'mui-accent': '#be123c', 'mui-accent-hover': '#9f1239',
+      'mui-accent-text': '#fda4af', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
     },
     'high-contrast': {
       _base: 'dark',
       'mui-bg': '#000000', 'mui-bg-card': '#111111', 'mui-bg-input': '#1a1a1a',
       'mui-text': '#ffffff', 'mui-text-muted': '#e5e5e5', 'mui-text-subtle': '#b3b3b3',
       'mui-border': '#ffffff', 'mui-border-hover': '#ffffff', 'mui-border-focus': '#ffd700',
-      'mui-accent': '#ffd700', 'mui-accent-text': '#000000', 'mui-danger': '#ff4444',
+      'mui-border-control': '#ffffff', 'mui-accent': '#ffd700', 'mui-accent-hover': '#e5bd00',
+      'mui-accent-text': '#ffd700', 'mui-accent-fg': '#000000', 'mui-danger': '#b91c1c', 'mui-danger-fg': '#ffffff',
     },
   };
 
@@ -2166,27 +1746,24 @@ fn theme_customizer_js() -> &'static str {
   }
 
   // ── Presets ───────────────────────────────────────────────────
+  function clearOverrides() {
+    var names = new Set(TOKENS.map(function (t) { return t.name; }).concat(Object.keys(overrides)));
+    names.forEach(function (name) { document.documentElement.style.removeProperty('--' + name); });
+    overrides = {};
+  }
   function applyPreset(key) {
     var p = PRESETS[key];
     if (!p) return;
-    if (p._base === 'light') document.documentElement.setAttribute('data-theme', 'light');
-    else                      document.documentElement.setAttribute('data-theme', 'dark');
-    if (p._clear) {
-      overrides = {};
-      // Clear inline overrides so the base theme takes over.
-      for (var j = 0; j < TOKENS.length; j++) {
-        document.documentElement.style.removeProperty('--' + TOKENS[j].name);
-      }
-      // Rehydrate control inputs from base theme values.
-      setTimeout(syncControlsFromComputed, 0);
-    } else {
-      for (var k in p) {
-        if (k.charAt(0) === '_') continue;
-        applyToken(k, p[k]);
-        overrides[k] = p[k];
-      }
-      syncControlsFromComputed();
+    clearOverrides();
+    var base = p._base === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', base);
+    try { localStorage.setItem('mui-theme', base); } catch {}
+    for (var k in p) {
+      if (k.charAt(0) === '_') continue;
+      applyToken(k, p[k]);
+      overrides[k] = p[k];
     }
+    syncControlsFromComputed();
     save(overrides);
     refreshExport();
   }
@@ -2211,11 +1788,8 @@ fn theme_customizer_js() -> &'static str {
   // ── Reset ─────────────────────────────────────────────────────
   document.getElementById('mui-theme-reset')?.addEventListener('click', function () {
     if (!window.confirm('Reset all tokens to defaults?')) return;
-    overrides = {};
+    clearOverrides();
     save(overrides);
-    for (var j = 0; j < TOKENS.length; j++) {
-      document.documentElement.style.removeProperty('--' + TOKENS[j].name);
-    }
     setTimeout(syncControlsFromComputed, 0);
     refreshExport();
   });
@@ -2288,7 +1862,7 @@ pub fn getting_started_page() -> Markup {
                             div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
                                 (badge::render(badge::Props { label: format!("{} components", COMPONENT_NAMES.len()), variant: badge::Variant::Default, ..Default::default() }))
                                 (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary, ..Default::default() }))
-                                (badge::render(badge::Props { label: "11 KB gzipped".into(), variant: badge::Variant::Success, ..Default::default() }))
+                                (badge::render(badge::Props { label: "Prebuilt assets".into(), variant: badge::Variant::Success, ..Default::default() }))
                                 (badge::render(badge::Props { label: "WCAG AA".into(), variant: badge::Variant::Outline, ..Default::default() }))
                             }
                         }
@@ -2298,9 +1872,9 @@ pub fn getting_started_page() -> Markup {
                             p.mui-showcase__caption { "Add maud + maud-ui to your Cargo.toml. If you're wiring up a brand new server, grab axum + tokio too." }
                             (code_example("Cargo", r#"cargo new my-app
 cd my-app
-cargo add maud maud-ui
+cargo add maud@0.27 --features axum
+cargo add maud-ui
 cargo add axum tokio --features tokio/full
-cargo add tower-http --features tower-http/fs
 "#))
                         }
 
@@ -2340,15 +1914,14 @@ async fn index() -> Markup {
 
 #[tokio::main]
 async fn main() {
-    // Serve the bundled CSS + JS from maud-ui's dist/ folder.
-    let assets = tower_http::services::ServeDir::new(
-        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../maud-ui/dist"),  // or wherever your copy lives
-    );
-
     let app = Router::new()
         .route("/", get(index))
-        .nest_service("/assets", assets);
+        .route("/assets/maud-ui.min.css", get(|| async {
+            ([("content-type", "text/css")], maud_ui::assets::CSS_MIN)
+        }))
+        .route("/assets/maud-ui.min.js", get(|| async {
+            ([("content-type", "application/javascript")], maud_ui::assets::JS_MIN)
+        }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
     println!("Open http://127.0.0.1:3000");
@@ -2356,7 +1929,7 @@ async fn main() {
 }
 "##))
                             p.mui-showcase__caption style="margin-top:1rem;" {
-                                "For production you can embed the assets at compile time with include_str! — see the Deployment section below."
+                                "These asset constants are embedded at compile time; no vendored folder or build step is required."
                             }
                         }
 
@@ -2498,7 +2071,7 @@ async fn results() -> Markup {
                             (code_example("Embed the bundle at compile time", r##"// Instead of nest_service("/assets", ServeDir::new(...)),
 // bake the CSS + JS into your binary:
 async fn serve_css() -> impl IntoResponse {
-    let css = include_str!("../../vendor/maud-ui/dist/maud-ui.min.css");
+    let css = maud_ui::assets::CSS_MIN;
     (
         StatusCode::OK,
         [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
@@ -7172,9 +6745,6 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                         section class="mui-gallery__component" id=(name) {
                             h3 class="mui-gallery__component-name" { (display_name(name)) }
                             (content)
-                            @if let Some(usage) = component_docs(name) {
-                                (usage)
-                            }
                             @if let Some(api_docs) = docs::render_component_docs(name) {
                                 (api_docs)
                             }

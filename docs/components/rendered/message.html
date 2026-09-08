@@ -1,0 +1,53 @@
+<h1>Message</h1>
+<p>A chat-style message bubble for a single participant turn (user, assistant, or system). Conductor-flavored: compact density, a colored avatar, an optional live pulse during streaming, and a footer slot for inline tool chips or actions.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::message::{self, Role, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::message;
+
+html! {
+    (message::render(message::Props {
+        role: message::Role::Assistant,
+        author: "Claude".into(),
+        avatar_initials: Some("C".into()),
+        timestamp: Some("14:32".into()),
+        body: html! { p { "I'll add the toggle now." } },
+        is_live: true,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>role</code></td><td><code>Role</code></td><td><code>Role::Assistant</code></td><td>Who authored the message.</td></tr>
+<tr><td><code>author</code></td><td><code>String</code></td><td><code>""</code></td><td>Display name (e.g. "Claude", "Sofia").</td></tr>
+<tr><td><code>avatar_initials</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Avatar initials (e.g. "C"). Falls back to first letter of <code>author</code>.</td></tr>
+<tr><td><code>avatar_color</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional override for avatar background colour (CSS colour string).</td></tr>
+<tr><td><code>timestamp</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Human-readable timestamp ("2 min ago", "14:32").</td></tr>
+<tr><td><code>body</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>The message body — may contain markdown-rendered HTML, code blocks, etc.</td></tr>
+<tr><td><code>is_live</code></td><td><code>bool</code></td><td><code>false</code></td><td>When true, the avatar pulses to indicate an in-progress streaming response.</td></tr>
+<tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Footer slot — tool chips, action buttons, attachments.</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Role</h3>
+<p>Who the message is from — drives colour and alignment.</p>
+<ul>
+<li><code>Assistant</code> (default): renders with the <code>mui-message--assistant</code> class.</li>
+<li><code>User</code>: renders with the <code>mui-message--user</code> class.</li>
+<li><code>System</code>: renders with the <code>mui-message--system</code> class.</li>
+</ul>
+<h2>Helper Functions</h2>
+<p>This module exposes no public helper functions besides <code>render</code> and <code>showcase</code>. <code>initials_of</code> (computes avatar initials, falling back to the first letter of <code>author</code>) and <code>Role::class</code> (maps a role to its CSS modifier class) both exist in the module but are private — not part of the public API.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>The avatar element carries <code>aria-hidden="true"</code> — it's treated as decorative since the author name is already exposed as visible text alongside it.</li>
+<li>The <code>is_live</code> flag only toggles a CSS class (<code>mui-message__avatar--live</code>) for a pulsing animation; the source does not emit any <code>aria-live</code> attribute or live region. If streaming updates need to be announced to assistive tech, the consuming app must add its own live region (e.g. around the message list or body content).</li>
+<li>The root element is a plain <code>div</code> with <code>data-mui="message"</code> and role-derived modifier classes — no ARIA <code>role</code> (e.g. <code>listitem</code>, <code>log</code>) is emitted on the container or its children.</li>
+<li>Author name and timestamp render as plain <code>span</code> text with no additional ARIA labeling.</li>
+</ul>
+<h2>Related</h2>
+<p><code>code_block</code>, <code>diff</code>, <code>tool_call</code>, <code>streaming_cursor</code> — sibling primitives in the AI-chat/agent family, typically composed into <code>message</code>'s <code>body</code> or <code>footer</code> slots.</p>
+<h2>Shadcn reference</h2>
+<p>message has no shadcn equivalent — this is a Conductor-specific chat primitive.</p>

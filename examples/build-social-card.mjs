@@ -1,0 +1,24 @@
+// Vector source + PNG export, no browser or screenshot dependency.
+// Requires librsvg's rsvg-convert executable.
+import { readFileSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+function count(path, name) {
+  return [...readFileSync(path, "utf8").split(`pub const ${name}:`)[1].split("];")[0].matchAll(/"[a-z_-]+"/g)].length;
+}
+const components = count("src/showcase/mod.rs", "COMPONENT_NAMES");
+const blocks = count("src/blocks/mod.rs", "BLOCK_NAMES");
+writeFileSync("static/og.svg", `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#0a0a0b"/>
+<g transform="translate(70 57) scale(2.4)" fill="none" stroke="#60a5fa" stroke-width="3" stroke-linecap="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28 M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/><rect x="14" y="14" width="4" height="4" fill="#60a5fa" stroke="none"/></g>
+<g font-family="sans-serif" fill="#fafafa">
+<text x="160" y="113" font-size="42" font-weight="600">maud-ui</text>
+<text x="72" y="252" font-size="64" font-weight="600">Server-rendered UI</text>
+<text x="72" y="332" font-size="64" font-weight="600">for Rust applications.</text>
+<text x="72" y="463" font-size="52" font-weight="600" data-stat="components">${components}</text>
+<text x="342" y="463" font-size="52" font-weight="600" data-stat="blocks">${blocks}</text>
+<text x="608" y="463" font-size="52" font-weight="600">15</text>
+</g>
+<g font-family="sans-serif" fill="#a1a1aa" font-size="22"><text x="72" y="503">typed components</text><text x="342" y="503">composed blocks</text><text x="608" y="503">integration shells</text><text x="72" y="581">Accessible · Themeable · Progressive enhancement</text></g>
+</svg>\n`);
+execFileSync("rsvg-convert", ["static/og.svg", "-o", "static/og.png"]);
+console.log(`Rendered social card: ${components} components, ${blocks} blocks`);

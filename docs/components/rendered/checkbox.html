@@ -1,0 +1,43 @@
+<h1>Checkbox</h1>
+<p>A labeled checkbox input with optional description, indeterminate state, and validation styling. Wraps a standard HTML checkbox with custom indicator and text layout.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::checkbox::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::checkbox;
+
+html! {
+    (checkbox::render(checkbox::Props {
+        name: "agree".into(),
+        value: "yes".into(),
+        label: "I agree to the terms".into(),
+        id: "terms-checkbox".into(),
+        checked: false,
+        description: None,
+        indeterminate: false,
+        disabled: false,
+        required: false,
+        aria_invalid: false,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>"checkbox"</code></td><td>Form input name attribute</td></tr>
+<tr><td><code>value</code></td><td><code>String</code></td><td><code>"on"</code></td><td>Form input value attribute</td></tr>
+<tr><td><code>label</code></td><td><code>String</code></td><td><code>"Checkbox"</code></td><td>Displayed label text</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"checkbox"</code></td><td>HTML id attribute</td></tr>
+<tr><td><code>checked</code></td><td><code>bool</code></td><td><code>false</code></td><td>Initial checked state</td></tr>
+<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional descriptive text below label</td></tr>
+<tr><td><code>indeterminate</code></td><td><code>bool</code></td><td><code>false</code></td><td>Visual indeterminate state (mixed/partial selection)</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Disables input and applies disabled styling</td></tr>
+<tr><td><code>required</code></td><td><code>bool</code></td><td><code>false</code></td><td>Sets required attribute for form validation</td></tr>
+<tr><td><code>aria_invalid</code></td><td><code>bool</code></td><td><code>false</code></td><td>Sets aria-invalid="true" for error state styling</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Checkbox input is labeled via a <code>&lt;label&gt;</code> element wrapping the control and text. Indeterminate state is visual only (CSS class). The <code>aria-invalid</code> attribute signals form validation errors. Keyboard: Space/Enter toggles, Tab navigates.</p>
+<h2>Related</h2>
+<p>Label, RadioButton (for mutually exclusive options), Form (for grouping checkboxes)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/checkbox</p>

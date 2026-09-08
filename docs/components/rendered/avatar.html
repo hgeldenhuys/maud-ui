@@ -1,0 +1,48 @@
+<h1>Avatar</h1>
+<p>Image + fallback initials component for representing users, with optional status badge and grouping support.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::avatar::{self, Size, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::avatar;
+
+html! {
+    (avatar::render(avatar::Props {
+        src: Some("https://example.com/avatar.jpg".to_string()),
+        alt: "User name".to_string(),
+        fallback: "JD".to_string(),
+        size: avatar::Size::Md,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>src</td><td>Option<String></td><td><code>None</code></td><td>Image URL; if None, renders fallback initials instead.</td></tr>
+<tr><td>alt</td><td>String</td><td><code>"Avatar"</code></td><td>Accessible label exposed to screen readers; used as aria-label when src is None.</td></tr>
+<tr><td>fallback</td><td>String</td><td><code>"U"</code></td><td>Initials or short text displayed when src is None (automatically uppercased).</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Physical size: Sm, Md, or Lg.</td></tr>
+</tbody></table>
+<h2>Size Variants</h2>
+<table><thead><tr><th>Size</th><th>Class</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Sm</td><td><code>mui-avatar--sm</code></td><td>Compact avatars in lists or sidebars.</td></tr>
+<tr><td>Md</td><td><code>mui-avatar--md</code></td><td>Default avatar size for most contexts.</td></tr>
+<tr><td>Lg</td><td><code>mui-avatar--lg</code></td><td>Large avatars for profiles or detail views.</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<ul>
+<li><code>avatar::badge(children: Markup) -&gt; Markup</code> — Renders a status indicator (pip) at the bottom-right of an avatar; typically used with inline style for color.</li>
+<li><code>avatar::group(children: Markup) -&gt; Markup</code> — Wraps multiple rendered avatars in a horizontally overlapping group with <code>role="group"</code>.</li>
+<li><code>avatar::group_count(n: usize) -&gt; Markup</code> — Renders a <code>+{n}</code> tail marker for avatar groups showing the count of additional members.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>When <code>src</code> is present: the <code>&lt;img alt&gt;</code> carries the accessible name; outer span has no role.</li>
+<li>When <code>src</code> is None: outer span has <code>role="img"</code> and <code>aria-label</code> set to <code>alt</code> string.</li>
+<li>Fallback text is marked <code>aria-hidden="true"</code> to avoid duplication.</li>
+<li>Badge and group are marked <code>aria-hidden="true"</code> (presentational).</li>
+</ul>
+<h2>Related</h2>
+<p>Badge, Tooltip, User card components.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/avatar</p>

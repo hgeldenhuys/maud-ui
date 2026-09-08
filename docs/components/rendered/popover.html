@@ -1,0 +1,77 @@
+<h1>Popover</h1>
+<p>Non-modal floating panel anchored to a trigger element. Click trigger to toggle; click outside or press ESC to close. Focus is not trapped.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::popover::{self, Props, Side, Placement, Align};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::popover;
+
+html! {
+    (popover::render(popover::Props {
+        id: "demo-pop".to_string(),
+        trigger: html! { button.mui-btn.mui-btn--primary { "Open popover" } },
+        content: html! { p { "This is popover content." } },
+        side: Some(popover::Side::Bottom),
+        align: popover::Align::Center,
+        side_offset: Some(8),
+        open: Some(false),
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"popover"</code></td><td>Unique identifier for the popover content element.</td></tr>
+<tr><td>trigger</td><td>Markup</td><td><code>html! {}</code></td><td>The element (typically a button) that opens/closes the popover on click.</td></tr>
+<tr><td>content</td><td>Markup</td><td><code>html! {}</code></td><td>Markup content displayed inside the popover panel.</td></tr>
+<tr><td>side</td><td>Option<Side></td><td><code>None</code></td><td>Which side of the trigger the popover should render: Top, Right, Bottom, Left. Overrides <code>placement</code> when set.</td></tr>
+<tr><td>placement</td><td>Placement</td><td><code>Bottom</code></td><td>Legacy 2-way placement (Top, Bottom); prefer <code>side</code> for new code.</td></tr>
+<tr><td>align</td><td>Align</td><td><code>Center</code></td><td>Horizontal alignment: Start, Center, End.</td></tr>
+<tr><td>side_offset</td><td>Option<u32></td><td><code>None</code></td><td>Pixel offset along the side axis, emitted as <code>data-side-offset</code>.</td></tr>
+<tr><td>open</td><td>Option<bool></td><td><code>None</code></td><td>Controlled visibility. <code>Some(true)</code> = render visible; <code>Some(false)</code> = render hidden; <code>None</code> = client JS controls.</td></tr>
+</tbody></table>
+<h2>Side Enum</h2>
+<p>New 4-way side matrix (shadcn-compatible):</p>
+<table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>Top</td><td>Popover above trigger.</td></tr>
+<tr><td>Right</td><td>Popover to the right.</td></tr>
+<tr><td>Bottom</td><td>Popover below trigger (default).</td></tr>
+<tr><td>Left</td><td>Popover to the left.</td></tr>
+</tbody></table>
+<h2>Align Enum</h2>
+<p>Horizontal alignment perpendicular to side:</p>
+<table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>Start</td><td>Align to the left edge of trigger.</td></tr>
+<tr><td>Center</td><td>Center horizontally on trigger (default).</td></tr>
+<tr><td>End</td><td>Align to the right edge of trigger.</td></tr>
+</tbody></table>
+<h2>Placement Enum (Legacy)</h2>
+<p>Deprecated in favor of <code>Side</code>; retained for backward compatibility:</p>
+<table><thead><tr><th>Value</th><th>Equivalent Side</th></tr></thead><tbody>
+<tr><td>Top</td><td>Side::Top</td></tr>
+<tr><td>Bottom</td><td>Side::Bottom</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<h3>header(children: Markup)</h3>
+<p>Groups title + description with spacing; matches shadcn <code>PopoverHeader</code>.</p>
+<pre><code class="language-rust">(popover::header(html! {
+    (popover::title(html! { "Dimensions" }))
+    (popover::description(html! { "Set width and height." }))
+}))
+</code></pre>
+<h3>title(children: Markup)</h3>
+<p>Semantic <code>&lt;h3&gt;</code> styled as the popover's primary label; matches shadcn <code>PopoverTitle</code>.</p>
+<h3>description(children: Markup)</h3>
+<p>Muted supporting copy rendered as <code>&lt;p&gt;</code>; matches shadcn <code>PopoverDescription</code>.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Popover content is a <code>&lt;div role="dialog"&gt;</code> with <code>tabindex="-1"</code> and unique <code>id</code>.</li>
+<li>Trigger interaction handled by client JS (toggle visibility on click, close on ESC/outside click).</li>
+<li><code>data-state="open"</code> and <code>data-state="closed"</code> reflect current visibility state.</li>
+<li>Content is hidden via <code>hidden</code> attribute when not open (when <code>open: Some(false)</code>).</li>
+</ul>
+<h2>Related</h2>
+<p>Dialog, Hover Card, Tooltip.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/popover</p>

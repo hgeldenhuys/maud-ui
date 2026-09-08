@@ -1,0 +1,38 @@
+<h1>AspectRatio</h1>
+<p>Container that maintains a fixed aspect ratio for its children, useful for videos, images, and responsive layouts.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::aspect_ratio::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::aspect_ratio;
+
+html! {
+    (aspect_ratio::render(aspect_ratio::Props::video(
+        html! {
+            img src="https://example.com/video-thumbnail.jpg" alt="Video" style="width: 100%; height: 100%; object-fit: cover;" {}
+        }
+    )))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>ratio</td><td>f64</td><td>N/A</td><td>Aspect ratio as width/height (e.g., 16.0/9.0 for 16:9, 1.0 for square).</td></tr>
+<tr><td>children</td><td>Markup</td><td>N/A</td><td>Child markup to be contained within the aspect ratio box.</td></tr>
+</tbody></table>
+<h2>Constructor Methods</h2>
+<ul>
+<li><code>Props::new(ratio: f64, children: Markup) -&gt; Props</code> — Create with custom ratio.</li>
+<li><code>Props::video(children: Markup) -&gt; Props</code> — Create 16:9 ratio (common for video).</li>
+<li><code>Props::four_by_three(children: Markup) -&gt; Props</code> — Create 4:3 ratio.</li>
+<li><code>Props::square(children: Markup) -&gt; Props</code> — Create 1:1 square ratio.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>No special ARIA attributes; the container is transparent to assistive technology.</li>
+<li>Images or videos placed inside should have proper <code>alt</code> text.</li>
+</ul>
+<h2>Related</h2>
+<p>Image, Card, Video player components.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/aspect-ratio</p>

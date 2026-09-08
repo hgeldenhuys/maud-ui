@@ -7,9 +7,9 @@ use axum::{
 };
 use tower_http::services::ServeDir;
 
-/// Serve the bundled CSS from dist/maud-ui.css
+/// Serve the bundled CSS from static/maud-ui.css
 async fn serve_css() -> impl IntoResponse {
-    let css = include_str!("../dist/maud-ui.css");
+    let css = maud_ui::assets::CSS;
     (
         StatusCode::OK,
         [(header::CONTENT_TYPE, "text/css; charset=utf-8")],
@@ -17,9 +17,9 @@ async fn serve_css() -> impl IntoResponse {
     )
 }
 
-/// Serve the bundled JS from dist/maud-ui.js
+/// Serve the bundled JS from static/maud-ui.js
 async fn serve_js() -> impl IntoResponse {
-    let js = include_str!("../dist/maud-ui.js");
+    let js = maud_ui::assets::JS;
     (
         StatusCode::OK,
         [(
@@ -64,7 +64,7 @@ async fn serve_og() -> impl IntoResponse {
             (header::CONTENT_TYPE, "image/png"),
             (header::CACHE_CONTROL, "public, max-age=86400"),
         ],
-        include_bytes!("../assets/og.png").as_slice(),
+        include_bytes!("../static/og.png").as_slice(),
     )
 }
 

@@ -1,0 +1,175 @@
+<h1>Typography</h1>
+<p>Text utility components for consistent typographic styling across headings, body text, lists, and code.</p>
+<h2>Description</h2>
+<p>Typography provides a set of semantic and styled text components. Each function renders an appropriately semantic HTML element with maud-ui CSS classes for consistent sizing, weight, color, and spacing. Components range from headings (h1–h4) to body text (p, lead, muted, large, small), lists (ordered/unordered), code (inline and block), blockquote, and table wrapper.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::typography;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::typography;
+
+html! {
+    (typography::h1("Page Title"))
+    (typography::lead("An introductory paragraph with larger, lighter text."))
+    (typography::p("Regular paragraph text goes here."))
+    (typography::muted("This is muted secondary text."))
+    (typography::code_inline("const x = 42"))
+    (typography::list_ul(vec![
+        html! { "Item one" },
+        html! { "Item two" },
+    ]))
+}
+</code></pre>
+<h2>Functions</h2>
+<h3>Headings</h3>
+<h4>h1(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;h1 class="mui-h1"&gt;</code>. Large primary heading (2rem, bold).</p>
+<h4>h2(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;h2 class="mui-h2"&gt;</code>. Secondary heading (1.5rem, semi-bold).</p>
+<h4>h3(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;h3 class="mui-h3"&gt;</code>. Tertiary heading (1.25rem, semi-bold).</p>
+<h4>h4(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;h4 class="mui-h4"&gt;</code>. Quaternary heading (1.125rem, semi-bold).</p>
+<h3>Body Text</h3>
+<h4>p(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;p class="mui-p"&gt;</code>. Standard paragraph text (0.875rem).</p>
+<h4>lead(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;p class="mui-lead"&gt;</code>. Large intro text (1.125rem, muted color, used for opening paragraphs).</p>
+<h4>large(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;div class="mui-typography-large"&gt;</code>. Large text for emphasis (1.125rem, semibold).</p>
+<h4>small(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;small class="mui-typography-small"&gt;</code>. Small text for fine print, captions (0.75rem, medium weight).</p>
+<h4>muted(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;span class="mui-muted"&gt;</code>. Muted secondary text (0.875rem, muted color, no block).</p>
+<h3>Lists</h3>
+<h4>list_ul(items: Vec<Markup>) -&gt; Markup</h4>
+<p>Renders <code>&lt;ul class="mui-typography-list mui-typography-list--ul"&gt;</code> with <code>&lt;li&gt;</code> children. Unordered list with disc markers and 1.5rem indent.</p>
+<pre><code class="language-rust">typography::list_ul(vec![
+    html! { "First item" },
+    html! { "Second item" },
+    html! { "Third item" },
+])
+</code></pre>
+<h4>list_ol(items: Vec<Markup>) -&gt; Markup</h4>
+<p>Renders <code>&lt;ol class="mui-typography-list mui-typography-list--ol"&gt;</code> with <code>&lt;li&gt;</code> children. Ordered list with decimal markers and 1.5rem indent.</p>
+<pre><code class="language-rust">typography::list_ol(vec![
+    html! { "Step one" },
+    html! { "Step two" },
+    html! { "Step three" },
+])
+</code></pre>
+<h3>Code</h3>
+<h4>code_inline(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;code class="mui-code"&gt;</code>. Inline monospace code (small, gray background, no block). Suitable for keywords, variable names, function calls.</p>
+<pre><code class="language-rust">html! {
+    p {
+        "Install with " (typography::code_inline("bun install")) "."
+    }
+}
+</code></pre>
+<h3>Blockquote</h3>
+<h4>blockquote(text: &amp;str) -&gt; Markup</h4>
+<p>Renders <code>&lt;blockquote class="mui-blockquote"&gt;</code>. Styled quote with italic text, muted color, and left border.</p>
+<pre><code class="language-rust">typography::blockquote("Design is how it works, not just how it looks.")
+</code></pre>
+<h3>Table</h3>
+<h4>table(children: Markup) -&gt; Markup</h4>
+<p>Renders <code>&lt;div class="mui-typography-table-wrapper"&gt;</code> containing the provided markup. Enables horizontal scrolling on narrow viewports for wide <code>&lt;table&gt;</code> elements.</p>
+<pre><code class="language-rust">typography::table(html! {
+    table {
+        thead { tr { th { "Col 1" } th { "Col 2" } } }
+        tbody { tr { td { "Value 1" } td { "Value 2" } } }
+    }
+})
+</code></pre>
+<h2>Variants</h2>
+<h3>Heading Hierarchy</h3>
+<p>Complete heading levels from h1 down to h4.</p>
+<pre><code class="language-rust">(typography::h1("Main Title"))
+(typography::h2("Section Title"))
+(typography::h3("Subsection"))
+(typography::h4("Sub-subsection"))
+</code></pre>
+<h3>Lead Paragraph</h3>
+<p>Large introductory text that draws the eye.</p>
+<pre><code class="language-rust">(typography::lead("This is your opening paragraph, visually larger and lighter than body text."))
+(typography::p("The rest of the article goes here in standard paragraph text."))
+</code></pre>
+<h3>Emphasized Large Text</h3>
+<p>Large text for callouts or section intros.</p>
+<pre><code class="language-rust">(typography::large("Important update: System will be down for maintenance."))
+</code></pre>
+<h3>Muted Supporting Text</h3>
+<p>Secondary information in gray.</p>
+<pre><code class="language-rust">html! {
+    p { (typography::muted("Updated 2 hours ago")) }
+}
+</code></pre>
+<h3>Small Fine Print</h3>
+<p>Captions, metadata, legal text.</p>
+<pre><code class="language-rust">(typography::small("© 2026 Your Company. All rights reserved."))
+</code></pre>
+<h3>Inline Code</h3>
+<p>Monospace for keywords and variable names.</p>
+<pre><code class="language-rust">html! {
+    p {
+        "To start development, run " (typography::code_inline("bun dev")) "."
+    }
+}
+</code></pre>
+<h3>Blockquote</h3>
+<p>Semantic quote with visual styling.</p>
+<pre><code class="language-rust">(typography::blockquote("The best way to predict the future is to invent it."))
+</code></pre>
+<h3>Unordered List</h3>
+<p>Bullet-point list.</p>
+<pre><code class="language-rust">(typography::list_ul(vec![
+    html! { "Feature one" },
+    html! { "Feature two" },
+    html! { "Feature three" },
+]))
+</code></pre>
+<h3>Ordered List</h3>
+<p>Numbered list for steps or sequences.</p>
+<pre><code class="language-rust">(typography::list_ol(vec![
+    html! { "Register an account" },
+    html! { "Create your first project" },
+    html! { "Deploy to production" },
+]))
+</code></pre>
+<h3>Responsive Table Wrapper</h3>
+<p>Tables that scroll horizontally on mobile.</p>
+<pre><code class="language-rust">(typography::table(html! {
+    table {
+        thead {
+            tr {
+                th { "Name" }
+                th { "Role" }
+                th { "Email" }
+            }
+        }
+        tbody {
+            tr { td { "Alice" } td { "Engineer" } td { "alice@example.com" } }
+            tr { td { "Bob" } td { "Designer" } td { "bob@example.com" } }
+        }
+    }
+}))
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Semantic HTML:</strong> All components use appropriate semantic elements (<code>&lt;h1&gt;</code>–<code>&lt;h4&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;blockquote&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;code&gt;</code>).</li>
+<li><strong>Heading Hierarchy:</strong> Use h1 for page title, h2 for sections, h3/h4 for subsections. Never skip levels.</li>
+<li><strong>List Semantics:</strong> Use <code>list_ul()</code> and <code>list_ol()</code> for actual lists; don't style divs as lists.</li>
+<li><strong>Code Readability:</strong> Inline code is sufficiently contrasted from body text for readability.</li>
+<li><strong>Link Underlines:</strong> When linking inside paragraphs, ensure links are underlined or otherwise distinguished.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/button.md">Button</a> — Action elements often paired with typography</li>
+<li><a href="/docs/components/card.md">Card</a> — Typography inside card layouts</li>
+<li><a href="/docs/components/badge.md">Badge</a> — Labels and status indicators</li>
+<li><a href="/docs/components/input.md">Input</a> — Form labels and hints typically use typography</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Typography provides headings (h1–h4), body text (p, lead, large, small, muted), lists (list_ul, list_ol), code (code_inline), blockquote, and table wrapper—covering shadcn's text utility patterns.</p>

@@ -1,0 +1,38 @@
+<h1>Kbd</h1>
+<p>Keyboard shortcut display component for help cards, tooltips, and command palettes.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::kbd::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::kbd;
+
+html! {
+    (kbd::render(kbd::Props {
+        keys: vec!["⌘".to_string(), "K".to_string()],
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>keys</code></td><td><code>Vec&lt;String&gt;</code></td><td><code>vec![]</code></td><td>Sequence of key labels (e.g., ["Ctrl", "S"] or ["⌘", "K"]).</td></tr>
+</tbody></table>
+<h2>Rendering</h2>
+<ul>
+<li>Each key renders as a <code>&lt;kbd&gt;</code> element.</li>
+<li>Keys are separated by <code>+</code> (span.mui-kbd-separator).</li>
+<li>Container wraps in <code>div.mui-kbd-container</code> for flexbox layout.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Uses semantic <code>&lt;kbd&gt;</code> element for keyboard input notation.</li>
+<li>Screen readers will announce as "Ctrl plus S" etc. (based on platform-specific SR rendering).</li>
+<li>No ARIA labels needed; semantic markup is sufficient.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="tooltip.md">Tooltip</a> — can house keyboard shortcuts.</li>
+<li><a href="hover-card.md">HoverCard</a> — rich help card showing multiple shortcuts.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Minimal kbd component for keyboard notation. Typically embedded in help dialogs or command palette documentation.</p>

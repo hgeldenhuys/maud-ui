@@ -142,3 +142,11 @@ Worth knowing, so a green run is not read as more than it is:
 `cargo fmt --check` and `cargo clippy -D warnings` both fail on the tree (47 clippy findings as of
 2026-07-28). CI runs them **advisory, not gating** — a CI that is red from its first run teaches
 everyone to ignore it. Promote them to gates once the tree is clean.
+
+## 0.8 curation checks without a browser
+
+`cargo test` includes the new operational component contracts and verifies pre-rendered docs against Markdown. `cargo clippy --all-targets -- -D warnings` is clean. CSS-token and breakpoint checks scan `static/styles/` as well as existing CSS.
+
+Run `node examples/build-assets.mjs`, then `node --test tests/curation-runtime.mjs` for handler/lifecycle fixtures against the complete bundle, and `node tests/curation-contrast.mjs` for 264 palette comparisons and token-control parity. These are not browser layout, native-dialog focus or assistive-technology tests. The older Chrome harness loads the legacy dist snapshot; it does not verify the new bundle.
+
+`cargo run --example build_docs` regenerates docs; `node examples/build-social-card.mjs` generates SVG/PNG with librsvg without screenshots. The example server serves the complete static assets and the new social card. The older public export is outside this curation lane and must be migrated before a website release.

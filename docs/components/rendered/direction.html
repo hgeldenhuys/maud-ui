@@ -1,0 +1,49 @@
+<h1>Direction</h1>
+<p>Provides directional context (LTR/RTL) for descendant elements via the HTML <code>dir</code> attribute. No JS needed — <code>dir</code> cascades natively.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::direction::{self, Props, Dir};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::direction;
+
+html! {
+    (direction::render(direction::Props {
+        dir: direction::Dir::Rtl,
+        children: html! {
+            p { "مرحبا بالعالم" }
+            input type="text" placeholder="اكتب شيئا ما";
+        },
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>dir</code></td><td><code>Dir</code></td><td><code>Dir::Ltr</code></td><td>Writing direction for the wrapped subtree</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td>—</td><td>Child markup that inherits the direction</td></tr>
+</tbody></table>
+<h2>Dir Enum</h2>
+<table><thead><tr><th>Variant</th><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>Ltr</code></td><td><code>"ltr"</code></td><td>Left-to-right (default; English, most European languages)</td></tr>
+<tr><td><code>Rtl</code></td><td><code>"rtl"</code></td><td>Right-to-left (Arabic, Hebrew, Persian, Urdu)</td></tr>
+</tbody></table>
+<h3><code>Dir::as_str() → &amp;'static str</code></h3>
+<p>Returns the HTML <code>dir</code> attribute value: <code>"ltr"</code> or <code>"rtl"</code>.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>Native cascading</strong>: The <code>dir</code> attribute is inherited by all descendants automatically</li>
+<li><strong>Browser-native flipping</strong>: Scrollbars, input direction, and text alignment flip automatically without CSS</li>
+<li><strong>No JS required</strong>: Pure HTML attribute — works on any HTML element</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Assistive technologies automatically adapt text direction when <code>dir</code> is set</li>
+<li>Screen readers respect the <code>dir</code> attribute for proper speech direction</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li>Composition pattern</li>
+<li>Locale/i18n helpers</li>
+</ul>
+<h2>Shadcn reference</h2>
+<p><a href="https://ui.shadcn.com/docs/components/base/direction">https://ui.shadcn.com/docs/components/base/direction</a></p>

@@ -5,7 +5,7 @@ Placeholder for empty content (no results, empty table, first-run). Supports bot
 ## Import
 
 ```rust
-use maud_ui::primitives::empty_state::{self, Props, MediaVariant};
+use maud_ui::primitives::empty_state::{self, Props, MediaVariant, Variant};
 ```
 
 ## Example
@@ -45,13 +45,16 @@ html! {
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `icon` | `Option<String>` | `Some("📭")` | Optional icon (text or emoji) |
-| `title` | `String` | — | Main heading |
+| `variant` | `Variant` | `Empty` | Empty, Filtered or Failed reason. |
+| `icon` | `Option<String>` | `None` (reason-specific glyph) | Optional icon (text or emoji) |
+| `title` | `String` | `Nothing here yet` via Default | Main heading; new(title) supplies caller copy. |
 | `description` | `Option<String>` | `None` | Optional description text |
 | `action` | `Option<Markup>` | `None` | Optional action markup (e.g., button) |
 
 ### Props Builder Methods
 
+- `for_variant(variant) → Self` — Distinct default title and recovery description for Empty, Filtered, Failed. Failed says Could not load records and uses an error border/icon.
+- `with_variant(variant) → Self` — Change presentation while retaining caller-owned title/description.
 - `new(title) → Self` — Create with title only
 - `with_icon(icon) → Self` — Add icon
 - `with_description(text) → Self` — Add description
@@ -92,14 +95,14 @@ Slot for actions and additional body content.
 ## Features
 
 - **Dual paths**: `render()` for simple cases; `compose()` + subcomponents for custom layouts
-- **Semantic HTML**: Uses `<h2>` for title, `<p>` for description
+- **Semantic HTML**: Uses `<h3>` in render and `<h2>` in the title helper, `<p>` for description
 - **Icon variants**: Two sizes to match design rhythm
 - **Builder pattern**: Props use fluent API for readable chains
 
 ## Accessibility
 
 - Media slot has `aria-hidden="true"` (decorative)
-- Title is semantic `<h2>`
+- Title is semantic `<h3>` in render, `<h2>` in the title helper. On asynchronous replacement, announce the change from a caller-owned live region; the whole state is not an assertive alert.
 - Action content is interactive
 
 ## Related

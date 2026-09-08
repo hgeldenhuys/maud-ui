@@ -1,0 +1,35 @@
+<h1>Sidebar shell</h1>
+<p>Grouped navigation, a header slot, current-page indication and optional mobile tabs. Below 60rem the enhanced shell opens the same navigation inside a native modal drawer. Without JS, every navigation label remains visible above the page.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::blocks::shell::sidebar::{self, MobileNavigation, NavGroup, NavItem, Props};
+sidebar::render(Props {
+    id: "reservation-app".into(),
+    brand: html! { "Garden House" },
+    header: Some(html! { label { "Workspace" select { option { "Front desk" } } } }),
+    nav_groups: vec![NavGroup {
+        label: Some("Operations".into()),
+        items: vec![NavItem { label: "Reservations".into(), href: "/reservations".into(), icon: None, badge: Some("48".into()) }],
+    }],
+    active_path: "/reservations".into(),
+    mobile_navigation: MobileNavigation::Tabs,
+    children: html! { p { "Your page content" } },
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td>mui-app</td><td>Unique per shell; derives navigation/drawer IDs.</td></tr>
+<tr><td>brand</td><td>Markup</td><td>App</td><td>Branding slot.</td></tr>
+<tr><td>header</td><td>Option<Markup></td><td>None</td><td>Search, workspace switchers or other header controls.</td></tr>
+<tr><td>nav_groups</td><td>Vec<NavGroup></td><td>empty</td><td>Ordered areas; label: Option<String>, items: Vec<NavItem>.</td></tr>
+<tr><td>active_path</td><td>String</td><td>empty</td><td>First exact href match is current.</td></tr>
+<tr><td>mobile_navigation</td><td>MobileNavigation</td><td>Drawer</td><td>Drawer or Tabs; desktop sidebar remains grouped.</td></tr>
+<tr><td>user</td><td>Option<UserBlock></td><td>None</td><td>name, email, avatar_initials, menu_href: String.</td></tr>
+<tr><td>topbar_title</td><td>Option<String></td><td>None</td><td>Topbar H1; use section headings inside it.</td></tr>
+<tr><td>topbar_actions</td><td>Markup</td><td>empty</td><td>Topbar controls.</td></tr>
+<tr><td>children</td><td>Markup</td><td>empty</td><td>Route content; the shell supplies main.</td></tr>
+</tbody></table>
+<p><code>NavItem</code> fields: label/href: String, icon: Option<Markup>, badge: Option<String>. A group's label names its accessible group. <code>Tabs</code> uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with <code>data-mui-nav-search</code> for local destination filtering.</p>
+<h2>Accessibility and behavior</h2>
+<p>Native page links and <code>aria-current</code>, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique <code>id</code> for each shell. Do not nest this block inside another main landmark.</p>

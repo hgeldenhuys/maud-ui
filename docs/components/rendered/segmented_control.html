@@ -1,0 +1,35 @@
+<h1>Segmented control</h1>
+<p>A boxed switch between a small set of mutually exclusive views. Rendered as real <code>&lt;a&gt;</code> links so it works with JavaScript disabled: each stop is a URL (<code>?view=chat</code>), and the selected stop is marked <code>aria-current="page"</code>. The consumer can wire client-side switching on top to avoid the navigation.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::segmented_control::{self, Props, Stop};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::segmented_control::{self, Props, Stop};
+
+segmented_control::render(Props {
+    stops: vec![
+        Stop::new("Clean", "?view=clean"),
+        Stop::new("Chat", "?view=chat"),
+        Stop::new("Raw", "?view=raw"),
+    ],
+    selected: 1,
+    aria_label: Some("Transcript verbosity".into()),
+})
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>stops</td><td>Vec&lt;Stop&gt;</td><td><code>[]</code></td><td>The stops, left to right.</td></tr>
+<tr><td>selected</td><td>usize</td><td><code>0</code></td><td>Index of the active stop.</td></tr>
+<tr><td>aria_label</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td>Accessible label for the group.</td></tr>
+</tbody></table>
+<h2>Stop</h2>
+<p><code>Stop::new(label, href)</code> — a visible label and the URL the stop navigates to.</p>
+<h2>Accessibility</h2>
+<p>The group is <code>role="tablist"</code>; each stop is <code>role="tab"</code> with <code>aria-selected</code>, and the active stop also carries <code>aria-current="page"</code>. Because the stops are anchors, keyboard and screen-reader users get native link semantics with no JS.</p>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-segmented</code> — the container.</li>
+<li><code>mui-segmented__stop</code> — a stop; <code>mui-segmented__stop--active</code> on the selected one.</li>
+</ul>
+<h2>Related</h2>
+<p>Tabs (for full panelled views), Toggle group, Composer (uses this as its verbosity switch).</p>

@@ -102,7 +102,7 @@ fn days_in_month(year: u32, month: u32) -> u32 {
     match month {
         1 => 31,
         2 => {
-            if (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 {
+            if (year.is_multiple_of(4) && !year.is_multiple_of(100)) || year.is_multiple_of(400) {
                 29
             } else {
                 28
@@ -128,7 +128,7 @@ fn day_of_week(year: u32, month: u32, day: u32) -> u32 {
     let t: [u32; 12] = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
     let y = if month < 3 { year - 1 } else { year };
     let m = month as usize;
-    ((y + y / 4 - y / 100 + y / 400 + t[m - 1] + day) % 7) as u32
+    (y + y / 4 - y / 100 + y / 400 + t[m - 1] + day) % 7
 }
 
 /// Render the inline mini calendar grid for a given month
@@ -169,23 +169,22 @@ fn render_calendar_grid(
                 }
                 // Day cells
                 @for d in 1..=total_days {
-                    @let is_selected = selected.map_or(false, |(sy, sm, sd)| sy == year && sm == month && sd == d);
+                    @let is_selected = selected.is_some_and(|(sy, sm, sd)| sy == year && sm == month && sd == d);
                     @let is_disabled = {
-                        let before_min = min_date.map_or(false, |(my, mm, md)| {
+                        let before_min = min_date.is_some_and(|(my, mm, md)| {
                             year < my || (year == my && month < mm) || (year == my && month == mm && d < md)
                         });
-                        let after_max = max_date.map_or(false, |(xy, xm, xd)| {
+                        let after_max = max_date.is_some_and(|(xy, xm, xd)| {
                             year > xy || (year == xy && month > xm) || (year == xy && month == xm && d > xd)
                         });
                         before_min || after_max
                     };
-                    @let mut cls = String::from("mui-date-picker__day");
-                    @if is_selected {
-                        @let _ = cls.push_str(" mui-date-picker__day--selected");
-                    }
-                    @if is_disabled {
-                        @let _ = cls.push_str(" mui-date-picker__day--disabled");
-                    }
+                    @let cls = {
+                        let mut class = String::from("mui-date-picker__day");
+                        if is_selected { class.push_str(" mui-date-picker__day--selected"); }
+                        if is_disabled { class.push_str(" mui-date-picker__day--disabled"); }
+                        class
+                    };
                     button type="button" class=(cls)
                         data-day=(d) data-month=(month) data-year=(year)
                         disabled[is_disabled]

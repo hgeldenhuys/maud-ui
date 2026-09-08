@@ -4,16 +4,12 @@ use maud::{html, Markup};
 
 /// Keyboard shortcut rendering properties
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct Props {
     /// Keys to display (e.g., ["Ctrl", "S"] or ["⌘", "K"])
     pub keys: Vec<String>,
 }
 
-impl Default for Props {
-    fn default() -> Self {
-        Self { keys: Vec::new() }
-    }
-}
 
 /// Render keyboard shortcut with key separator
 pub fn render(props: Props) -> Markup {

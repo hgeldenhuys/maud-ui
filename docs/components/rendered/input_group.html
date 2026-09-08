@@ -1,0 +1,57 @@
+<h1>InputGroup</h1>
+<p>Input with configurable prefix/suffix and full-width addons (buttons, text, hints) as a visual unit.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::input_group::{self, InputGroupProps, Align};
+use maud_ui::primitives::input;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::input_group;
+
+html! {
+    div.mui-input-group {
+        (input_group::text(html! { "https://" }))
+        (input_group::input_el(input::Props {
+            placeholder: "example.com".into(),
+            ..Default::default()
+        }))
+        (input_group::button("Go", button::Size::Sm, button::Variant::Primary))
+    }
+}
+</code></pre>
+<h2>Props (InputGroupProps)</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>prefix</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Content before the input.</td></tr>
+<tr><td><code>suffix</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Content after the input.</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Main row content.</td></tr>
+</tbody></table>
+<h2>Align</h2>
+<pre><code class="language-rust">pub enum Align {
+    InlineStart,   // Leading (left in LTR), order: -1
+    InlineEnd,     // Trailing (right in LTR), order: 99
+    BlockStart,    // Above row (full-width), order: -2
+    BlockEnd,      // Below row (full-width), order: 100
+}
+</code></pre>
+<h2>Helpers</h2>
+<ul>
+<li><strong><code>addon(children, align)</code></strong> — Render markup as an addon at the specified alignment.</li>
+<li><strong><code>button(label, size, variant)</code></strong> — Sized button in InlineEnd addon (default). Common for password reveal, search submit, copy.</li>
+<li><strong><code>text(children)</code></strong> — Muted supplementary text in InlineStart addon (default). Common for currency prefix, <code>@</code>, <code>https://</code>.</li>
+<li><strong><code>input_el(props)</code></strong> — Render Input control with <code>data-slot="input-group-control"</code> for shadcn-compatible selectors.</li>
+<li><strong><code>textarea(props)</code></strong> — Render Textarea control with same slot marker.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Addons use semantic <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> wrappers; buttons render as true <code>&lt;button&gt;</code> elements.</li>
+<li>Text addons lack interactive semantics; place them outside form submission flow.</li>
+<li>Input retains all label/error linkage when wrapped in a group.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="input.md">Input</a> — single text input.</li>
+<li><a href="button.md">Button</a> — standalone button.</li>
+<li><a href="textarea.md">Textarea</a> — multi-line textarea for groups.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Mirrors shadcn Base UI's InputGroup with Align enum (InlineStart/InlineEnd/BlockStart/BlockEnd) and helper composition (addon, text, button, input_el, textarea).</p>

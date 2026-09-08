@@ -1,9 +1,9 @@
 [package]
 name = "maud-ui"
-version = "0.7.1"
+version = "0.8.0"
 edition = "2021"
 license = "MIT"
-description = "79 headless, accessible UI components for Rust web apps — shadcn Base UI API parity. Plus block templates, a live theme customiser, and shell hooks for 15 third-party widgets (Monaco, xyflow, Excalidraw, Three.js, AG Grid, Leaflet, FullCalendar, SortableJS, and more). Built on maud + htmx, styled like shadcn/ui."
+description = "81 headless, accessible UI components for Rust web apps — shadcn Base UI API parity. Plus block templates, a live theme customiser, and shell hooks for 15 third-party widgets (Monaco, xyflow, Excalidraw, Three.js, AG Grid, Leaflet, FullCalendar, SortableJS, and more). Built on maud + htmx, styled like shadcn/ui."
 repository = "https://github.com/hgeldenhuys/maud-ui"
 homepage = "https://maudui.herman.engineer"
 documentation = "https://docs.rs/maud-ui"
@@ -20,11 +20,13 @@ include = [
     "src/**/*.css",
     "css/**/*.css",
     "dist/**/*",
+    "static/**/*",
     # examples/showcase.rs include_bytes!s the brand assets, so a published
     # crate without them cannot build its own example.
     "assets/**/*",
-    "docs/components/**/*.md",
-    "examples/showcase.rs",
+    "docs/**/*.md",
+    "docs/**/*.html",
+    "examples/*",
     # Anchored with "/" — a bare "README.md" glob-matches NESTED readmes and
     # was pulling node_modules/esbuild/README.md into the published crate.
     "/README.md",
@@ -33,10 +35,11 @@ include = [
 ]
 
 [dependencies]
-maud = { version = "0.27", features = ["axum"] }
-pulldown-cmark = { version = "0.10", default-features = false, features = ["html"] }
+maud = "0.27"
 
 [dev-dependencies]
+maud = { version = "0.27", features = ["axum"] }
+pulldown-cmark = { version = "0.10", default-features = false, features = ["html"] }
 axum = "0.8"
 tokio = { version = "1", features = ["full"] }
 tower-http = { version = "0.6", features = ["fs"] }

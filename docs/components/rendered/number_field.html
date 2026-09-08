@@ -1,0 +1,77 @@
+<h1>NumberField</h1>
+<p>Composite number input with decrement (−) and increment (+) buttons flanking a numeric input. Supports min/max constraints and configurable step increments.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::number_field::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::number_field;
+
+html! {
+    div {
+        label for="cart-qty" { "Quantity" }
+        (number_field::render(number_field::Props {
+            name: "quantity".into(),
+            id: "cart-qty".into(),
+            value: 2.0,
+            min: Some(1.0),
+            max: Some(10.0),
+            step: 1.0,
+            disabled: false,
+            label: "Cart quantity".into(),
+        }))
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td><code>""</code></td><td>HTML <code>name</code> attribute for form submission.</td></tr>
+<tr><td>id</td><td>String</td><td><code>""</code></td><td>HTML <code>id</code> attribute; should match the associated label's <code>for</code> attribute.</td></tr>
+<tr><td>value</td><td>f64</td><td><code>0.0</code></td><td>Current numeric value displayed in the input.</td></tr>
+<tr><td>min</td><td>Option<f64></td><td><code>None</code></td><td>Minimum allowed value. If set, values below this are invalid.</td></tr>
+<tr><td>max</td><td>Option<f64></td><td><code>None</code></td><td>Maximum allowed value. If set, values above this are invalid.</td></tr>
+<tr><td>step</td><td>f64</td><td><code>1.0</code></td><td>Increment/decrement amount for +/− buttons and keyboard arrow keys.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Disables the entire field; user cannot interact with input or buttons.</td></tr>
+<tr><td>label</td><td>String</td><td><code>""</code></td><td>Accessibility label for the number field group. Announced by screen readers.</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Simple counter</td><td><code>min: None, max: None</code></td><td>Unbounded counter (like a quantity setter).</td></tr>
+<tr><td>Range-bounded</td><td><code>min: Some(X), max: Some(Y)</code></td><td>Constrained input (age, servings, file count).</td></tr>
+<tr><td>Fixed maximum</td><td><code>min: Some(X), max: Some(X)</code></td><td>Read-only field; user cannot change.</td></tr>
+<tr><td>Large step</td><td><code>step: 5.0</code> or <code>10.0</code></td><td>Coarse adjustments (e.g., volume in 5% increments).</td></tr>
+<tr><td>Decimal step</td><td><code>step: 0.1</code></td><td>Precise adjustments (prices, measurements).</td></tr>
+<tr><td>Disabled</td><td><code>disabled: true</code></td><td>Read-only or unavailable field.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p>None. The component renders a composite structure with an input and two buttons.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Group role:</strong> The outer container uses <code>role="group"</code> and <code>aria-label</code> for semantic grouping.</li>
+<li><strong>aria-disabled:</strong> Set on the group to communicate disabled state to screen readers.</li>
+<li><strong>Button labels:</strong> Decrement and increment buttons have explicit <code>aria-label="Decrement"</code> and <code>aria-label="Increment"</code>.</li>
+<li><strong>Input constraints:</strong> The <code>&lt;input type="number"&gt;</code> respects <code>min</code>, <code>max</code>, and <code>step</code> attributes; native browser validation applies.</li>
+<li><strong>Keyboard support:</strong>
+<ul>
+<li>Arrow keys (Up/Down) increment/decrement the value by <code>step</code>.</li>
+<li>Buttons are <code>tabindex="-1"</code> (not in tab order); focus remains on the input.</li>
+</ul>
+</li>
+<li><strong>Screen readers:</strong> Field label, current value, and min/max constraints are all announced.</li>
+</ul>
+<h2>Design Notes</h2>
+<h3>Button Behavior</h3>
+<p>The decrement (−) and increment (+) buttons are styled and positioned to flank the input field, creating a compact composite control. Buttons have <code>tabindex="-1"</code> so keyboard users interact with the input directly via arrow keys, not the buttons.</p>
+<h3>Step Precision</h3>
+<p>The <code>step</code> prop controls:</p>
+<ol>
+<li>Increment/decrement size for button clicks and arrow keys.</li>
+<li>HTML5 validation (via <code>&lt;input step&gt;</code>).</li>
+<li>Does NOT enforce decimal places; use CSS or JavaScript if rounding is needed.</li>
+</ol>
+<h3>Form Submission</h3>
+<p>The input's <code>name</code> attribute allows the field to participate in form submission as-is. The value sent is the numeric value in the input field.</p>
+<h2>Related</h2>
+<p>Input, Slider, Meter, Label.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/input</p>

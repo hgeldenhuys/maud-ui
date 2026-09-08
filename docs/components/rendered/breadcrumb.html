@@ -1,0 +1,50 @@
+<h1>Breadcrumb</h1>
+<p>Navigation component showing hierarchy from root to current location with separator between items.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::breadcrumb::{self, BreadcrumbItem, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::breadcrumb;
+
+html! {
+    (breadcrumb::render(breadcrumb::Props {
+        items: vec![
+            breadcrumb::BreadcrumbItem {
+                label: "Home".to_string(),
+                href: Some("/".to_string()),
+            },
+            breadcrumb::BreadcrumbItem {
+                label: "Docs".to_string(),
+                href: Some("/docs".to_string()),
+            },
+            breadcrumb::BreadcrumbItem {
+                label: "Components".to_string(),
+                href: None,
+            },
+        ],
+        separator: Some("&gt;".to_string()),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>items</td><td>Vec<BreadcrumbItem></td><td><code>[]</code></td><td>Array of breadcrumb items; last item's href should be None (represents current page).</td></tr>
+<tr><td>separator</td><td>Option<String></td><td><code>None</code></td><td>Custom separator character (default "/" when None).</td></tr>
+</tbody></table>
+<h2>BreadcrumbItem Struct</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td>Display text for the breadcrumb.</td></tr>
+<tr><td>href</td><td>Option<String></td><td>Navigation URL; None for the current page (last item).</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Emits <code>&lt;nav aria-label="Breadcrumb"&gt;</code> to identify navigation context.</li>
+<li>Links use standard <code>&lt;a href&gt;</code> semantics.</li>
+<li>Current item (last in list) renders as <code>&lt;span role="link" aria-disabled="true" aria-current="page"&gt;</code> for link-like semantics without clickability.</li>
+<li>Separators marked <code>aria-hidden="true"</code> to prevent double announcement.</li>
+</ul>
+<h2>Related</h2>
+<p>Navigation, Link, Pagination.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/breadcrumb</p>

@@ -4,13 +4,13 @@
 //!
 //! Three modes are supported:
 //!
-//!   * `Mode::Raw`   — a single colour chip with a literal value such as
-//!                      `#2563eb` or `hsl(210 40% 96%)`. Label + value
-//!                      are rendered beneath the chip.
-//!   * `Mode::Token` — reads `var(--mui-accent)` (or any other token)
-//!                      so the chip re-renders when `data-theme` flips
-//!                      or a `/theme` page mutates the tokens.
-//!   * `Mode::Scale` — a horizontal Tailwind-style tone ramp (50..950).
+//! - `Mode::Raw`   — a single colour chip with a literal value such as
+//!   `#2563eb` or `hsl(210 40% 96%)`. Label + value
+//!   are rendered beneath the chip.
+//! - `Mode::Token` — reads `var(--mui-accent)` (or any other token)
+//!   so the chip re-renders when `data-theme` flips
+//!   or a `/theme` page mutates the tokens.
+//! - `Mode::Scale` — a horizontal Tailwind-style tone ramp (50..950).
 //!
 //! All three use the same `mui-swatch` block for the chip, so gallery
 //! / customiser / documentation share one set of pixels.

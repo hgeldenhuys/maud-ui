@@ -1,0 +1,88 @@
+<h1>Menubar</h1>
+<p>Horizontal menu bar for application menus (File, Edit, View, etc.). Each menu uses the same <code>MenuEntry</code> enum as DropdownMenu for flexible, consistent menu construction.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::menubar::{self, Props, MenubarMenu};
+use maud_ui::primitives::menu::{MenuEntry, MenuItem, RadioItem};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::menubar;
+use maud_ui::primitives::menu::{MenuEntry, MenuItem};
+
+html! {
+    (menubar::render(menubar::Props {
+        id: "app-menubar".into(),
+        menus: vec![
+            menubar::MenubarMenu {
+                label: "File".into(),
+                items: vec![
+                    MenuEntry::Item(MenuItem {
+                        label: "New".into(),
+                        action: "new".into(),
+                        disabled: false,
+                        destructive: false,
+                        shortcut: Some("⌘N".into()),
+                    }),
+                    MenuEntry::Item(MenuItem {
+                        label: "Open".into(),
+                        action: "open".into(),
+                        disabled: false,
+                        destructive: false,
+                        shortcut: Some("⌘O".into()),
+                    }),
+                    MenuEntry::Separator,
+                    MenuEntry::Item(MenuItem {
+                        label: "Save".into(),
+                        action: "save".into(),
+                        disabled: false,
+                        destructive: false,
+                        shortcut: Some("⌘S".into()),
+                    }),
+                ],
+            },
+        ],
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>""</code></td><td>Unique identifier for the menubar.</td></tr>
+<tr><td>menus</td><td>Vec<MenubarMenu></td><td><code>vec![]</code></td><td>Top-level menus in the menubar.</td></tr>
+</tbody></table>
+<h2>MenubarMenu</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td>Text displayed on the menu trigger button (e.g., "File", "Edit").</td></tr>
+<tr><td>items</td><td>Vec<MenuEntry></td><td>Menu entries (items, separators, labels, checkboxes, radio groups, submenus, groups).</td></tr>
+</tbody></table>
+<h2>MenuEntry Variants (Shared)</h2>
+<p>Menubar uses the same <code>MenuEntry</code> enum as DropdownMenu, supporting all variants:</p>
+<ul>
+<li><strong>Item</strong> — Clickable menu action with optional destructive styling and keyboard shortcut.</li>
+<li><strong>Separator</strong> — Visual divider between menu sections.</li>
+<li><strong>Label</strong> — Non-interactive heading or grouping label.</li>
+<li><strong>CheckboxItem</strong> — Toggle option with on/off state.</li>
+<li><strong>RadioGroup</strong> — Single-selection group of radio options.</li>
+<li><strong>Sub</strong> — Nested submenu with additional entries.</li>
+<li><strong>Group</strong> — Container for related entries.</li>
+</ul>
+<p>See <a href="./dropdown-menu.md">DropdownMenu documentation</a> for detailed <code>MenuEntry</code> structure.</p>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Classic menubar</td><td>File/Edit/View/Help structure (desktop applications).</td></tr>
+<tr><td>Mixed items</td><td>Combine simple items, checkboxes, radio groups, and submenus in a single menu.</td></tr>
+<tr><td>Disabled items</td><td>Show unavailable actions (e.g., "Redo" when no undo history).</td></tr>
+<tr><td>Keyboard shortcuts</td><td>Display shortcut hints alongside menu items (e.g., "⌘S").</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p>None. The component uses <code>render_entry()</code> from the menu module internally for consistency.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Menubar role:</strong> Sets <code>role="menubar"</code> and <code>aria-orientation="horizontal"</code>.</li>
+<li><strong>Menu triggers:</strong> Each trigger button has <code>role="menuitem"</code>, <code>aria-expanded</code> (false/true), <code>aria-haspopup="menu"</code>, and <code>aria-controls</code> pointing to its dropdown content.</li>
+<li><strong>Keyboard navigation:</strong> First menu trigger has <code>tabindex="0"</code>; subsequent triggers have <code>tabindex="-1"</code>. Horizontal arrow keys navigate between menus; vertical arrows navigate within a menu. Escape closes the menu.</li>
+<li><strong>Screen readers:</strong> Menubar is announced as a menu bar; all items are properly labeled and roles are explicit.</li>
+</ul>
+<h2>Related</h2>
+<p>DropdownMenu, Context Menu, Button.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/menubar</p>

@@ -1,0 +1,94 @@
+<h1>EmptyState</h1>
+<p>Placeholder for empty content (no results, empty table, first-run). Supports both simplified render path and composable subcomponents.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::empty_state::{self, Props, MediaVariant, Variant};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::empty_state;
+
+// Simple render path
+html! {
+    (empty_state::render(
+        empty_state::Props::new("No results found")
+            .with_icon("🔍")
+            .with_description("Try adjusting your search.")
+            .with_action(html! {
+                button class="mui-btn mui-btn--outline mui-btn--md" { "Clear filters" }
+            })
+    ))
+}
+
+// Composable subcomponent path
+html! {
+    (empty_state::compose(html! {
+        (empty_state::header(html! {
+            (empty_state::media(html! { "📦" }, empty_state::MediaVariant::Default))
+            (empty_state::title("No packages installed"))
+            (empty_state::description("Install a package to start."))
+        }))
+        (empty_state::content(html! {
+            button class="mui-btn mui-btn--default mui-btn--md" { "Install" }
+        }))
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Empty</code></td><td>Empty, Filtered or Failed reason.</td></tr>
+<tr><td><code>icon</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code> (reason-specific glyph)</td><td>Optional icon (text or emoji)</td></tr>
+<tr><td><code>title</code></td><td><code>String</code></td><td><code>Nothing here yet</code> via Default</td><td>Main heading; new(title) supplies caller copy.</td></tr>
+<tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional description text</td></tr>
+<tr><td><code>action</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional action markup (e.g., button)</td></tr>
+</tbody></table>
+<h3>Props Builder Methods</h3>
+<ul>
+<li><code>for_variant(variant) → Self</code> — Distinct default title and recovery description for Empty, Filtered, Failed. Failed says Could not load records and uses an error border/icon.</li>
+<li><code>with_variant(variant) → Self</code> — Change presentation while retaining caller-owned title/description.</li>
+<li><code>new(title) → Self</code> — Create with title only</li>
+<li><code>with_icon(icon) → Self</code> — Add icon</li>
+<li><code>with_description(text) → Self</code> — Add description</li>
+<li><code>with_action(markup) → Self</code> — Add action button/content</li>
+</ul>
+<h2>MediaVariant Enum</h2>
+<table><thead><tr><th>Variant</th><th>Size</th><th>Use Case</th></tr></thead><tbody>
+<tr><td><code>Default</code></td><td>Larger (~4rem box)</td><td>Illustrations, oversized emoji</td></tr>
+<tr><td><code>Icon</code></td><td>Smaller (~2rem box)</td><td>lucide-style icon glyphs</td></tr>
+</tbody></table>
+<h3><code>MediaVariant::as_class_suffix() → &amp;'static str</code></h3>
+<p>Returns <code>"default"</code> or <code>"icon"</code> — appended to <code>mui-empty-state__icon--{suffix}</code>.</p>
+<h2>Composition API</h2>
+<p>Use when you need custom layout or non-text media (SVG/image):</p>
+<h3><code>compose(children) → Markup</code></h3>
+<p>Root wrapper. Render header/content subcomponents inside.</p>
+<h3><code>header(children) → Markup</code></h3>
+<p>Container for media + title + description.</p>
+<h3><code>media(children, variant) → Markup</code></h3>
+<p>Icon/illustration slot with variant-specific sizing. <code>aria-hidden="true"</code>.</p>
+<h3><code>title(text) → Markup</code></h3>
+<p>Renders an <code>&lt;h2&gt;</code> heading.</p>
+<h3><code>description(text) → Markup</code></h3>
+<p>Renders a <code>&lt;p&gt;</code> description paragraph.</p>
+<h3><code>content(children) → Markup</code></h3>
+<p>Slot for actions and additional body content.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>Dual paths</strong>: <code>render()</code> for simple cases; <code>compose()</code> + subcomponents for custom layouts</li>
+<li><strong>Semantic HTML</strong>: Uses <code>&lt;h3&gt;</code> in render and <code>&lt;h2&gt;</code> in the title helper, <code>&lt;p&gt;</code> for description</li>
+<li><strong>Icon variants</strong>: Two sizes to match design rhythm</li>
+<li><strong>Builder pattern</strong>: Props use fluent API for readable chains</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Media slot has <code>aria-hidden="true"</code> (decorative)</li>
+<li>Title is semantic <code>&lt;h3&gt;</code> in render, <code>&lt;h2&gt;</code> in the title helper. On asynchronous replacement, announce the change from a caller-owned live region; the whole state is not an assertive alert.</li>
+<li>Action content is interactive</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li>Dialog</li>
+<li>Card</li>
+<li>Placeholder patterns</li>
+</ul>
+<h2>Shadcn reference</h2>
+<p><a href="https://ui.shadcn.com/docs/components/empty">https://ui.shadcn.com/docs/components/empty</a></p>

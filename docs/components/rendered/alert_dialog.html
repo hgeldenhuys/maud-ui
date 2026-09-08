@@ -1,0 +1,59 @@
+<h1>AlertDialog</h1>
+<p>Modal dialog with <code>role="alertdialog"</code> that cannot be dismissed via ESC or backdrop click; user must choose an explicit action.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::alert_dialog::{self, Size, Props};
+use maud_ui::primitives::button::Variant as ButtonVariant;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::alert_dialog;
+
+html! {
+    (alert_dialog::trigger("delete-dialog", "Delete", "danger"))
+    (alert_dialog::render(alert_dialog::Props {
+        id: "delete-dialog".to_string(),
+        title: "Delete account?".to_string(),
+        description: Some("This cannot be undone.".to_string()),
+        children: html! {},
+        footer: Some(html! {
+            (alert_dialog::cancel("Cancel"))
+            (alert_dialog::action("Delete", alert_dialog::ButtonVariant::Danger))
+        }),
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"alert-dialog"</code></td><td>Unique identifier for the dialog element.</td></tr>
+<tr><td>title</td><td>String</td><td><code>"Confirm"</code></td><td>Alert dialog title text.</td></tr>
+<tr><td>description</td><td>Option<String></td><td><code>None</code></td><td>Optional description text rendered below title.</td></tr>
+<tr><td>media</td><td>Option<Markup></td><td><code>None</code></td><td>Optional media slot (icon/image) rendered above the header; wrap with <code>alert_dialog::media()</code>.</td></tr>
+<tr><td>children</td><td>Markup</td><td><code>html! {}</code></td><td>Optional body content markup displayed below the description.</td></tr>
+<tr><td>footer</td><td>Option<Markup></td><td><code>None</code></td><td>Optional footer markup for action buttons (Cancel + destructive action).</td></tr>
+<tr><td>open</td><td>bool</td><td><code>false</code></td><td>Initial open state.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Default</code></td><td>Size variant controlling max-width: Default (32rem) or Sm (24rem, compact).</td></tr>
+</tbody></table>
+<h2>Size Variants</h2>
+<table><thead><tr><th>Size</th><th>Max-Width</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>32rem</td><td>Standard alert dialogs.</td></tr>
+<tr><td>Sm</td><td>24rem</td><td>Compact confirmations.</td></tr>
+</tbody></table>
+<h2>Helper Functions</h2>
+<ul>
+<li><code>alert_dialog::trigger(target_id: &amp;str, label: &amp;str, variant: &amp;str) -&gt; Markup</code> — Renders a button that opens the dialog with the given target_id and button variant class.</li>
+<li><code>alert_dialog::media(children: Markup) -&gt; Markup</code> — Wraps an icon or image in the media slot container.</li>
+<li><code>alert_dialog::action(label: &amp;str, variant: ButtonVariant) -&gt; Markup</code> — Renders a primary action button that closes the dialog; use <code>ButtonVariant::Danger</code> for destructive actions.</li>
+<li><code>alert_dialog::cancel(label: &amp;str) -&gt; Markup</code> — Renders a secondary cancel button (always Ghost variant).</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li>Emits <code>role="alertdialog"</code> for assistive technology.</li>
+<li>Title and description IDs linked via <code>aria-labelledby</code> and <code>aria-describedby</code>.</li>
+<li>No backdrop dismiss or ESC handler — user must choose a button.</li>
+<li>Action buttons emit <code>data-mui-close</code> to signal dialog dismissal to JavaScript controller.</li>
+</ul>
+<h2>Related</h2>
+<p>Dialog, Button, Button Group.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/alert-dialog</p>

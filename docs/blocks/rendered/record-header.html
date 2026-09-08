@@ -1,0 +1,24 @@
+<h1>Record header</h1>
+<p>Identity, status, a back link, one primary action and a secondary disclosure. The primary action remains visible; More actions uses native details/summary.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::{Action, Link}, record::header::{self, Props}};
+header::render(Props {
+    title: "Sofia Davis".into(), subtitle: Some("Reservation RS-2048 · Garden suite".into()),
+    primary_action: Some(Action::link("Check in", "/reservations/2048/check-in")),
+    secondary_actions: vec![Action::link("Edit reservation", "/reservations/2048/edit")],
+    back: Some(Link { label: "Reservations".into(), href: "/reservations".into() }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td>empty</td><td>Identity heading.</td></tr>
+<tr><td>subtitle</td><td>Option<String></td><td>None</td><td>Reference, supporting identity or dates.</td></tr>
+<tr><td>status</td><td>Option<a href="badge::Props">badge::Props</a></td><td>None</td><td>Text and semantic tone.</td></tr>
+<tr><td>primary_action</td><td>Option<a href="action::Action">action::Action</a></td><td>None</td><td>One named link or native POST action.</td></tr>
+<tr><td>secondary_actions</td><td>Vec<a href="action::Action">action::Action</a></td><td>empty</td><td>Quiet actions in a native disclosure.</td></tr>
+<tr><td>back</td><td>Option<a href="action::Link">action::Link</a></td><td>None</td><td>Link has label: String and href: String. Preserve the collection's filters here.</td></tr>
+<tr><td>heading</td><td>action::Heading</td><td>H2</td><td>H1/H2/H3 for composition.</td></tr>
+</tbody></table>
+<h2>Actions and accessibility</h2>
+<p>The <a href="worklist-header.md">shared Action contract</a> supports navigation and POST with hidden fields. Empty secondary groups are omitted; no client script is needed. Status text supplies meaning beyond color. Long titles and action groups wrap. The back link comes first in reading order, and the record header never creates a page or main landmark of its own.</p>

@@ -71,6 +71,8 @@ pub enum Variant {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Size {
+    /// Fixed 2rem text action for a table cell. Pair with Variant::Outline.
+    Row,
     Sm,
     Md,
     Lg,
@@ -102,6 +104,7 @@ impl Variant {
 impl Size {
     fn class_name(self) -> &'static str {
         match self {
+            Size::Row => "mui-btn--row",
             Size::Sm => "mui-btn--sm",
             Size::Md => "mui-btn--md",
             Size::Lg => "mui-btn--lg",
@@ -147,7 +150,7 @@ pub fn render(props: Props) -> Markup {
 
     html! {
         @if let Some(label) = &props.aria_label {
-            button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) aria-label=(label) {
+            button class=(class) type=(props.button_type) disabled[props.disabled] aria-disabled=(disabled_attr) aria-label=(label) {
                 @if let Some(icon) = &props.leading_icon {
                     span.mui-btn__icon data-icon="inline-start" aria-hidden="true" { (icon) }
                 }
@@ -157,7 +160,7 @@ pub fn render(props: Props) -> Markup {
                 }
             }
         } @else {
-            button class=(class) type=(props.button_type) aria-disabled=(disabled_attr) {
+            button class=(class) type=(props.button_type) disabled[props.disabled] aria-disabled=(disabled_attr) {
                 @if let Some(icon) = &props.leading_icon {
                     span.mui-btn__icon data-icon="inline-start" aria-hidden="true" { (icon) }
                 }
@@ -173,6 +176,14 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            section {
+                h2 { "Compact row actions" }
+                p.mui-showcase__caption { "A fixed-height outline action that keeps its verb together inside a table cell." }
+                div.mui-showcase__row {
+                    (render(Props { label: "Check in".into(), variant: Variant::Outline, size: Size::Row, ..Default::default() }))
+                    (render(Props { label: "Review details".into(), variant: Variant::Outline, size: Size::Row, disabled: true, ..Default::default() }))
+                }
+            }
             section {
                 h2 { "Form actions" }
                 p.mui-showcase__caption { "Primary/secondary pairing for settings, onboarding, checkout." }

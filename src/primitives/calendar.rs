@@ -42,7 +42,7 @@ impl Default for Props {
 // ── Date math ──────────────────────────────────────────────────────────
 
 fn is_leap_year(year: u32) -> bool {
-    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+    (year.is_multiple_of(4) && !year.is_multiple_of(100)) || year.is_multiple_of(400)
 }
 
 fn days_in_month(year: u32, month: u32) -> u32 {
@@ -64,7 +64,7 @@ fn days_in_month(year: u32, month: u32) -> u32 {
 fn day_of_week(year: u32, month: u32, day: u32) -> u32 {
     let t: [u32; 12] = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
     let y = if month < 3 { year - 1 } else { year };
-    ((y + y / 4 - y / 100 + y / 400 + t[(month - 1) as usize] + day) % 7) as u32
+    (y + y / 4 - y / 100 + y / 400 + t[(month - 1) as usize] + day) % 7
 }
 
 fn month_name(month: u32) -> &'static str {
@@ -277,16 +277,13 @@ pub fn render(props: Props) -> Markup {
                             @let idx = week * 7 + dow;
                             @let cell = &cells[idx];
                             @let date_str = fmt_date(cell.year, cell.month, cell.day);
-                            @let mut cls = String::from("mui-calendar__day");
-                            @if cell.is_outside {
-                                @let _ = cls.push_str(" mui-calendar__day--outside");
-                            }
-                            @if cell.is_today {
-                                @let _ = cls.push_str(" mui-calendar__day--today");
-                            }
-                            @if cell.is_selected {
-                                @let _ = cls.push_str(" mui-calendar__day--selected");
-                            }
+                            @let cls = {
+                                let mut class = String::from("mui-calendar__day");
+                                if cell.is_outside { class.push_str(" mui-calendar__day--outside"); }
+                                if cell.is_today { class.push_str(" mui-calendar__day--today"); }
+                                if cell.is_selected { class.push_str(" mui-calendar__day--selected"); }
+                                class
+                            };
 
                             @let show = !cell.is_outside || props.show_outside_days;
                             @let aria_sel = if cell.is_selected { "true" } else { "false" };

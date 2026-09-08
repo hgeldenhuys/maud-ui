@@ -1,0 +1,65 @@
+<h1>Form</h1>
+<p>The <code>&lt;form&gt;</code> element itself. No primitive emitted one before this — every form in <code>src/blocks/**</code> hand-wrote the tag, so the submission contract (method, encoding, validation) was retyped at each site and could drift between them.</p>
+<p><code>form</code> is deliberately <strong>semantic only</strong>: it applies no layout. A form is almost always a column of fields, and <a href="stack.md">stack</a> already is that column — making <code>form</code> a second flex container would mean two ways to express one thing. Compose them: <code>form</code> carries the submission contract, <code>stack</code> carries the rhythm. <code>form::stacked</code> does exactly that pairing in one call.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::form::{self, Enctype, Method, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::{button, form, input};
+
+html! {
+    (form::stacked("/account/profile", html! {
+        (input::render(input::Props {
+            name: "display_name".into(),
+            id: "display-name".into(),
+            ..Default::default()
+        }))
+        (button::render(button::Props {
+            label: "Save".into(),
+            variant: button::Variant::Primary,
+            button_type: "submit",
+            ..Default::default()
+        }))
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>action</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Submission target; <code>None</code> omits the attribute, submitting to the current URL</td></tr>
+<tr><td><code>method</code></td><td><code>Method</code></td><td><code>Post</code></td><td>HTTP method — <strong>diverges from HTML's <code>GET</code></strong>, see Accessibility &amp; safety</td></tr>
+<tr><td><code>enctype</code></td><td><code>Enctype</code></td><td><code>UrlEncoded</code></td><td>Body encoding; the attribute is omitted for the default</td></tr>
+<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>For <code>aria-labelledby</code>, and for submit buttons placed outside the form via <code>form="&lt;id&gt;"</code></td></tr>
+<tr><td><code>aria_label</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Accessible name — required for the form to be a landmark</td></tr>
+<tr><td><code>novalidate</code></td><td><code>bool</code></td><td><code>false</code></td><td>Skip the browser's built-in constraint validation</td></tr>
+<tr><td><code>autocomplete</code></td><td><code>bool</code></td><td><code>true</code></td><td><code>false</code> emits <code>autocomplete="off"</code></td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Fields and the submit control</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Method</h3>
+<ul>
+<li><code>Get</code>: values are appended to the URL as a query string — correct for searches and filters, whose results should be linkable and bookmarkable</li>
+<li><code>Post</code>: values travel in the request body — <strong>the default here</strong></li>
+<li><code>Dialog</code>: closes the surrounding <code>&lt;dialog&gt;</code> and submits nothing over the network; only meaningful inside <a href="dialog.md">dialog</a></li>
+</ul>
+<h3>Enctype</h3>
+<p>Only meaningful for <code>Method::Post</code>.</p>
+<ul>
+<li><code>UrlEncoded</code>: <code>application/x-www-form-urlencoded</code> — the HTML default; the attribute is omitted</li>
+<li><code>Multipart</code>: <code>multipart/form-data</code> — <strong>required</strong> for any form containing a file input. Without it the browser submits the filename and not the file</li>
+<li><code>TextPlain</code>: <code>text/plain</code> — debugging only; it does not escape reliably</li>
+</ul>
+<h2>Helper Functions</h2>
+<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>stacked</code></td><td><code>fn(impl Into&lt;String&gt;, Markup) -&gt; Markup</code></td><td>A <code>POST</code> form wrapping its children in a vertical stack — the shape almost every form takes</td></tr>
+<tr><td><code>Method::as_attr</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The <code>method</code> attribute value</td></tr>
+<tr><td><code>Enctype::as_attr</code></td><td><code>fn(self) -&gt; Option&lt;&amp;'static str&gt;</code></td><td>The <code>enctype</code> attribute value, or <code>None</code> for the HTML default</td></tr>
+</tbody></table>
+<h2>Accessibility &amp; safety</h2>
+<p><strong><code>method</code> defaults to <code>Post</code>, not HTML's <code>GET</code>.</strong> This is the one place the primitive knowingly diverges from the platform. <code>GET</code> serialises every field into the URL, where it lands in browser history, server access logs, and the <code>Referer</code> header sent to third parties. A login form whose author forgot to set <code>method</code> should not leak the password that way. Set <code>Method::Get</code> explicitly for searches and filters, where a linkable result URL is the point.</p>
+<p>A <code>&lt;form&gt;</code> is exposed as a <code>form</code> landmark <strong>only</strong> when it has an accessible name, so pass <code>aria_label</code> on any page carrying more than one form. A single unnamed form is fine — it simply is not a landmark, which is the correct outcome when there is nothing to distinguish it from.</p>
+<p><code>novalidate</code> turns off the browser's constraint validation, including the focus management and error announcement that come with it. Use it only when the server owns the validation rules and reports them back into the markup; do not use it to suppress inconvenient built-in messages.</p>
+<h2>Related</h2>
+<p>Stack (the column a form's fields live in — <code>form::stacked</code> pairs them), Field (label + control + description + errors), Fieldset (grouping related controls under a legend), Button (<code>button_type: "submit"</code>), Input, Textarea, Select, Checkbox</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/form — note that shadcn's Form is a React Hook Form binding, a different concern. This primitive is the HTML element and its submission contract; validation state is <a href="field.md">field</a>'s job.</p>

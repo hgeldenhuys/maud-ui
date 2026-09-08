@@ -29,6 +29,7 @@ impl CellMarkup {
 }
 
 #[derive(Clone, Debug)]
+#[derive(Default)]
 pub struct Props {
     pub headers: Vec<String>,
     pub rows: Vec<Vec<String>>,
@@ -47,22 +48,6 @@ pub struct Props {
     pub hide_cols_sm: Vec<usize>,
 }
 
-impl Default for Props {
-    fn default() -> Self {
-        Self {
-            headers: vec![],
-            rows: vec![],
-            rich_rows: vec![],
-            footer_row: vec![],
-            striped: false,
-            hoverable: false,
-            compact: false,
-            caption: None,
-            right_align_cols: vec![],
-            hide_cols_sm: vec![],
-        }
-    }
-}
 
 pub fn render(props: Props) -> Markup {
     let mut modifiers = String::new();
@@ -255,6 +240,16 @@ pub fn showcase() -> Markup {
 
     html! {
         div.mui-showcase__grid {
+            div {
+                p.mui-showcase__caption { "Compact row actions — fixed height, verb stays together" }
+                (render(Props {
+                    headers: vec!["Guest".into(), "Status".into(), "Next action".into()],
+                    rich_rows: [("Sofia Davis", "Arriving"), ("Mateo Ortega", "Arriving")].into_iter().map(|(guest, status)| vec![
+                        CellMarkup::text(guest), CellMarkup::text(status),
+                        CellMarkup::markup(html! { a class="mui-btn mui-btn--outline mui-btn--row" href="/blocks/record-header" aria-label=(format!("Check in {guest}")) { "Check in" } }, false),
+                    ]).collect(), ..Default::default()
+                }))
+            }
             div {
                 p.mui-showcase__caption { "With badges, right-aligned amounts, and footer total" }
                 (render(Props {

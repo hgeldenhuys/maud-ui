@@ -1,0 +1,62 @@
+<h1>Composer</h1>
+<p>The multi-state prompt dock for an agent session view. Server-rendered as a plain <code>&lt;form&gt;</code> wrapping a <code>&lt;textarea rows="2"&gt;</code>, so it submits with JavaScript disabled — auto-grow, <code>⌘↵</code>-to-send and voice capture are a JS layer the consumer adds on top.</p>
+<p>Four states share one anchor line (the dock never moves): <strong>Ready</strong> (the 84px resting dock), <strong>Growing</strong> (focused, ringed, grows then scrolls), <strong>Executing</strong> (a turn is running; the field stays <em>writable</em>, and an <code>Interrupt</code> hollow-destructive appears), and <strong>Asleep</strong> (a 46px dashed bar whose "type to wake" field is a real single-row textarea, plus a <code>Wake</code> submit).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::composer::{self, Props, State, Chip};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::composer::{self, Props, State, Chip};
+
+composer::render(Props {
+    state: State::Ready,
+    action: "/session/42/turn".into(),
+    placeholder: "Message refactor-auth-middleware…".into(),
+    chips: vec![Chip::new("sonnet-4.6"), Chip::new("auto-accept: off"), Chip::new("+ attach")],
+    show_voice: true,
+    primary_label: "Send".into(),
+    primary_kbd: Some("⌘↵".into()),
+    status: Some(html! { span { "12 turns · 41.2k ctx · $1.84" } span { "⇧↵ newline" } }),
+    ..Default::default()
+})
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>state</td><td>State</td><td><code>Ready</code></td><td>Which dock state to render.</td></tr>
+<tr><td>action</td><td>String</td><td><code>""</code></td><td><code>&lt;form action&gt;</code>.</td></tr>
+<tr><td>method</td><td>String</td><td><code>"post"</code></td><td><code>&lt;form method&gt;</code>.</td></tr>
+<tr><td>field_name</td><td>String</td><td><code>"message"</code></td><td><code>&lt;textarea name&gt;</code>.</td></tr>
+<tr><td>placeholder</td><td>String</td><td><code>""</code></td><td>Empty-field placeholder (also the sleep-bar hint).</td></tr>
+<tr><td>value</td><td>String</td><td><code>""</code></td><td>Pre-filled draft content.</td></tr>
+<tr><td>chips</td><td>Vec&lt;Chip&gt;</td><td><code>[]</code></td><td>Leading mono chips (model, auto-accept, attachments).</td></tr>
+<tr><td>show_voice</td><td>bool</td><td><code>false</code></td><td>Show the voice-capture button before the primary.</td></tr>
+<tr><td>secondary_label</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td>Renders a hollow-destructive <code>Interrupt</code> button (executing state).</td></tr>
+<tr><td>secondary_action</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td><code>&lt;form action&gt;</code> for the secondary button. When set, Interrupt is a real submit targeting an empty sibling form via the HTML5 <code>form</code> attribute — it POSTs with JS disabled. Unset → <code>type="button"</code> (consumer JS wires it).</td></tr>
+<tr><td>primary_label</td><td>String</td><td><code>"Send"</code></td><td>Primary submit-button label.</td></tr>
+<tr><td>primary_kbd</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td>Kbd hint inside the primary button (<code>⌘↵</code>).</td></tr>
+<tr><td>status</td><td>Option&lt;Markup&gt;</td><td><code>None</code></td><td>Mono status line below the field — the "beside" data.</td></tr>
+</tbody></table>
+<h2>State enum</h2>
+<table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>Ready</td><td>The 84px resting dock.</td></tr>
+<tr><td>Growing</td><td>Focused; field ringed, grows to a cap then scrolls internally.</td></tr>
+<tr><td>Executing</td><td>A turn is running; field writable, <code>Interrupt</code> shown.</td></tr>
+<tr><td>Asleep</td><td>46px dashed bar: mono state tag, a real single-row textarea ("type to wake" is literal — it submits with JS off), and a <code>Wake</code> button.</td></tr>
+</tbody></table>
+<h2>Chip</h2>
+<p><code>Chip::new(label)</code> for a plain mono chip; <code>Chip::accent(label)</code> for the accent-tinted "carries a payload" treatment (attachments, e.g. <code>user.rs ×</code>).</p>
+<h2>Geometry knobs</h2>
+<ul>
+<li><code>--mui-composer-max</code> — the field's <code>max-width</code> (default <code>67.5rem</code>, the 1080px code measure).</li>
+<li><code>--mui-composer-max-h</code> — the height the field grows to before scrolling (default <code>40vh</code>).</li>
+</ul>
+<h2>Progressive enhancement</h2>
+<p>The writable states are a real form: with JS off, the textarea submits and the primary button posts. Auto-grow, <code>⌘↵</code>, <code>esc</code>-to-interrupt and voice are all additive.</p>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-composer</code> (root <code>&lt;div&gt;</code>) + one of <code>mui-composer--ready</code> / <code>--growing</code> / <code>--executing</code> / <code>--asleep</code>; the form inside is <code>mui-composer__form</code>, the secondary target <code>mui-composer__secondary</code>.</li>
+<li><code>mui-composer__field</code>, <code>__input</code>, <code>__actions</code>, <code>__chip</code> (+ <code>--accent</code>), <code>__voice</code>, <code>__send</code>, <code>__kbd</code>, <code>__interrupt</code>, <code>__status</code>.</li>
+<li>Asleep: <code>mui-composer__sleepbar</code>, <code>__state-tag</code>, <code>__input--sleep</code>, <code>__wake</code>.</li>
+</ul>
+<h2>Related</h2>
+<p>Turn progress (the strip above the executing composer), Segmented control, Textarea, Kbd.</p>

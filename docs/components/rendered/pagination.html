@@ -1,0 +1,118 @@
+<h1>Pagination</h1>
+<p>Page navigation control with previous/next buttons and numbered page links. Supports anchor-based navigation (for static sites) and button-based navigation (for interactive apps). Intelligent ellipsis collapsing for many pages.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::pagination::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::pagination;
+
+html! {
+    // Button-based navigation (interactive)
+    (pagination::render(pagination::Props {
+        current_page: 3,
+        total_pages: 10,
+        max_visible: 5,
+        href_pattern: None,
+        icons_only: false,
+    }))
+}
+
+html! {
+    // Anchor-based navigation (with href pattern)
+    (pagination::render(pagination::Props {
+        current_page: 2,
+        total_pages: 5,
+        max_visible: 5,
+        href_pattern: Some("/results?page={page}".into()),
+        icons_only: false,
+    }))
+}
+
+html! {
+    // Icons only (compact on mobile)
+    (pagination::render(pagination::Props {
+        current_page: 5,
+        total_pages: 20,
+        max_visible: 5,
+        href_pattern: None,
+        icons_only: true,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>current_page</td><td>usize</td><td><code>1</code></td><td>Currently active page (1-indexed). Page 1 is the first page.</td></tr>
+<tr><td>total_pages</td><td>usize</td><td><code>1</code></td><td>Total number of pages available.</td></tr>
+<tr><td>max_visible</td><td>usize</td><td><code>5</code></td><td>Maximum number of page buttons to display before using ellipsis. Always shows first and last page.</td></tr>
+<tr><td>href_pattern</td><td>Option<String></td><td><code>None</code></td><td>URL pattern for page links. When Some, page buttons render as <code>&lt;a&gt;</code> tags with <code>{page}</code> substituted. When None, <code>&lt;button&gt;</code> is used. Example: <code>/results?page={page}</code> or <code>#page-{page}</code>.</td></tr>
+<tr><td>icons_only</td><td>bool</td><td><code>false</code></td><td>When true, "Previous" and "Next" button text is hidden; only chevron icons remain visible. Visually-hidden text still announced to screen readers.</td></tr>
+</tbody></table>
+<h2>Page Display Logic</h2>
+<p>The component intelligently determines which page numbers to show:</p>
+<ul>
+<li><strong>Few pages (≤ max_visible):</strong> All pages displayed; no ellipsis.</li>
+<li><strong>Many pages (&gt; max_visible):</strong> First page, current page ± 1, and last page are shown; ellipsis (<code>…</code>) fills gaps.</li>
+</ul>
+<p><strong>Example:</strong> <code>current_page=6, total_pages=20, max_visible=5</code></p>
+<pre><code>1 … 5 6 7 … 20
+</code></pre>
+<p>The current page is always centered in the visible range (within bounds).</p>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Button navigation</td><td><code>href_pattern: None</code></td><td>Interactive apps with JavaScript handlers.</td></tr>
+<tr><td>Anchor navigation</td><td><code>href_pattern: Some(...)</code></td><td>Static sites, SEO-friendly, works without JavaScript.</td></tr>
+<tr><td>Icons only</td><td><code>icons_only: true</code></td><td>Mobile-optimized, compact layout.</td></tr>
+<tr><td>Full labels</td><td><code>icons_only: false</code></td><td>Desktop-friendly, explicit text.</td></tr>
+<tr><td>Few pages</td><td><code>total_pages: 3-5</code></td><td>Short result sets; all pages always visible.</td></tr>
+<tr><td>Many pages</td><td><code>total_pages: 100+</code></td><td>Large result sets; intelligent ellipsis.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p><strong><code>render_href(pattern: &amp;str, page: usize) -&gt; String</code></strong></p>
+<p>Internal helper that substitutes <code>{page}</code> placeholder in the href pattern. Can be used if building custom pagination UI.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Navigation role:</strong> The outer container uses <code>role="navigation"</code> and <code>aria-label="Pagination"</code>.</li>
+<li><strong>Previous/Next buttons:</strong>
+<ul>
+<li>Anchor variant: <code>aria-label="Go to previous page"</code> / <code>"Go to next page"</code></li>
+<li>Button variant: Same aria-labels, with <code>disabled</code> attribute when at boundary pages.</li>
+</ul>
+</li>
+<li><strong>Page links:</strong>
+<ul>
+<li>Current page: <code>aria-current="page"</code> to announce active state.</li>
+<li>Other pages: Standard link/button semantics.</li>
+</ul>
+</li>
+<li><strong>Icons-only mode:</strong> Chevron icons are placed in a <code>&lt;span class="mui-pagination__btn-icon"&gt;</code>, while text is in a <code>&lt;span class="mui-visually-hidden"&gt;</code> for screen reader announcement.</li>
+<li><strong>Ellipsis:</strong> Marked <code>aria-hidden="true"</code> (purely visual).</li>
+</ul>
+<h2>Design Notes</h2>
+<h3>Href Pattern Substitution</h3>
+<p>The <code>href_pattern</code> is a template string where <code>{page}</code> is replaced with the target page number. Examples:</p>
+<pre><code class="language-rust">// Query string
+href_pattern: Some("/search?q=cats&amp;page={page}".into())
+
+// URL path
+href_pattern: Some("/results/{page}".into())
+
+// Fragment (anchor)
+href_pattern: Some("#page-{page}".into())
+</code></pre>
+<h3>Button vs. Anchor Navigation</h3>
+<ul>
+<li><strong>Buttons (<code>href_pattern: None</code>):</strong> Use when page navigation triggers JavaScript-based rendering (e.g., fetching data, updating results). Pair with <code>data-page</code> attributes for event delegation.</li>
+<li><strong>Anchors (<code>href_pattern: Some(...)</code>):</strong> Use for static-site pagination or when each page has a unique URL. Works without JavaScript; crawlers can follow links.</li>
+</ul>
+<h3>Disabled/Active States</h3>
+<ul>
+<li>First page: "Previous" button is disabled/inactive.</li>
+<li>Last page: "Next" button is disabled/inactive.</li>
+<li>Other pages: Both buttons are enabled.</li>
+<li>Current page button: Has <code>aria-current="page"</code> (buttons) or implicit current state (anchors).</li>
+</ul>
+<h2>Related</h2>
+<p>Button, Link, Navigation Menu.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/pagination</p>

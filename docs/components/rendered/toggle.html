@@ -1,0 +1,160 @@
+<h1>Toggle</h1>
+<p>Two-state button component that tracks pressed state (on/off).</p>
+<h2>Description</h2>
+<p>Toggle renders a button that can be pressed (active) or unpressed (inactive), similar to formatting buttons in text editors (Bold, Italic). The component emits <code>aria-pressed</code> for accessibility and supports multiple size and variant options.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toggle;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toggle::{Props, Size, Variant, render};
+
+// Active toggle button
+let bold = render(Props {
+    label: "B".to_string(),
+    pressed: true,
+    id: "btn-bold".to_string(),
+    ..Default::default()
+});
+
+// Disabled toggle
+let italic = render(Props {
+    label: "I".to_string(),
+    pressed: false,
+    disabled: true,
+    id: "btn-italic".to_string(),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>label</code></td><td><code>String</code></td><td><code>"Toggle"</code></td><td>Button text or icon</td></tr>
+<tr><td><code>pressed</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the button is in pressed state</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether the button is disabled</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"toggle"</code></td><td>Unique identifier</td></tr>
+<tr><td><code>size</code></td><td><code>Size</code></td><td><code>Md</code></td><td>Button size (Sm, Md, Lg)</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Default</code></td><td>Visual style (Default or Outline)</td></tr>
+</tbody></table>
+<h2>Size Enum</h2>
+<pre><code class="language-rust">pub enum Size {
+    #[default]
+    Md,    // Medium (default)
+    Sm,    // Small
+    Lg,    // Large (new in this session)
+}
+</code></pre>
+<p>Controls button dimensions and padding.</p>
+<h2>Variant Enum</h2>
+<pre><code class="language-rust">pub enum Variant {
+    #[default]
+    Default,   // Solid background
+    Outline,   // Border-only style
+}
+</code></pre>
+<h2>Variants</h2>
+<h3>Default (Solid)</h3>
+<p>Solid background styling (high contrast).</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    pressed: true,
+    variant: Variant::Default,
+    ..Default::default()
+})
+</code></pre>
+<h3>Outline</h3>
+<p>Border-only styling for a subtler appearance.</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    pressed: true,
+    variant: Variant::Outline,
+    ..Default::default()
+})
+</code></pre>
+<h3>Small Size</h3>
+<p>Compact button for dense toolbars.</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    size: Size::Sm,
+    ..Default::default()
+})
+</code></pre>
+<h3>Medium Size (Default)</h3>
+<p>Standard button size.</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    size: Size::Md,
+    ..Default::default()
+})
+</code></pre>
+<h3>Large Size</h3>
+<p>Prominent button for primary actions or accessibility.</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    size: Size::Lg,
+    ..Default::default()
+})
+</code></pre>
+<h3>Pressed State</h3>
+<p>Button visually indicates its pressed (active) state.</p>
+<pre><code class="language-rust">render(Props {
+    label: "B".to_string(),
+    pressed: true,
+    ..Default::default()
+})
+</code></pre>
+<h3>Unpressed State</h3>
+<p>Button shows unpressed (inactive) state.</p>
+<pre><code class="language-rust">render(Props {
+    label: "I".to_string(),
+    pressed: false,
+    ..Default::default()
+})
+</code></pre>
+<h3>Disabled</h3>
+<p>Prevents user interaction and shows disabled styling.</p>
+<pre><code class="language-rust">render(Props {
+    label: "U".to_string(),
+    disabled: true,
+    ..Default::default()
+})
+</code></pre>
+<h2>Text Editor Toolbar Pattern</h2>
+<pre><code class="language-rust">use maud_ui::primitives::toggle;
+
+html! {
+    div.toolbar {
+        (toggle::render(toggle::Props {
+            label: "B".into(),
+            pressed: true,
+            id: "btn-bold".into(),
+            ..Default::default()
+        }))
+        (toggle::render(toggle::Props {
+            label: "I".into(),
+            pressed: false,
+            id: "btn-italic".into(),
+            ..Default::default()
+        }))
+        (toggle::render(toggle::Props {
+            label: "U".into(),
+            pressed: false,
+            id: "btn-underline".into(),
+            ..Default::default()
+        }))
+    }
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Aria-Pressed:</strong> Emits <code>aria-pressed="true"</code> when pressed, <code>aria-pressed="false"</code> when unpressed.</li>
+<li><strong>Toggle Semantics:</strong> Assistive tech announces the button as a toggle and reports its current state.</li>
+<li><strong>Disabled State:</strong> When disabled, the button has <code>aria-disabled="true"</code> or the <code>disabled</code> attribute.</li>
+<li><strong>Keyboard Support:</strong> Buttons respond to Space and Enter keys (native behavior).</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/button.md">Button</a> — Standard button component</li>
+<li><a href="/docs/components/toggle-group.md">Toggle Group</a> — Multiple toggles in a group (radio or checkbox behavior)</li>
+<li><a href="/docs/components/switch.md">Switch</a> — On/off switch (different affordance)</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Toggle aligns with shadcn's <code>&lt;Toggle&gt;</code> component, supporting Size (Sm, Md, Lg) and Variant (Default, Outline) options.</p>

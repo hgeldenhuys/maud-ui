@@ -60,11 +60,11 @@ pub fn showcase() -> Markup {
             }
             div {
                 p class="mui-showcase__caption" { "Thinking dots" }
-                (render(Props { variant: Variant::Dots, label: Some("thinking".into()), ..Default::default() }))
+                (render(Props { variant: Variant::Dots, label: Some("thinking".into()) }))
             }
             div {
                 p class="mui-showcase__caption" { "Pulse beacon" }
-                (render(Props { variant: Variant::Pulse, label: Some("connected".into()), ..Default::default() }))
+                (render(Props { variant: Variant::Pulse, label: Some("connected".into()) }))
             }
         }
     }

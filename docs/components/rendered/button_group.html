@@ -1,0 +1,52 @@
+<h1>ButtonGroup</h1>
+<p>Groups multiple buttons with shared borders and optional interactive toggle behavior (exclusive or multiple selection).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::button_group::{self, Orientation, Mode, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::button_group;
+
+html! {
+    (button_group::render(button_group::Props {
+        children: html! {
+            button type="button" class="mui-btn mui-btn--outline" { "Left" }
+            button type="button" class="mui-btn mui-btn--outline" { "Center" }
+            button type="button" class="mui-btn mui-btn--outline" { "Right" }
+        },
+        orientation: button_group::Orientation::Horizontal,
+        size: None,
+        mode: Some(button_group::Mode::Exclusive),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Button elements and optional separators/text cells</td></tr>
+<tr><td><code>orientation</code></td><td><code>Orientation</code></td><td><code>Horizontal</code></td><td>Horizontal or Vertical layout direction</td></tr>
+<tr><td><code>size</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional CSS size class (e.g., <code>"mui-btn--sm"</code>)</td></tr>
+<tr><td><code>mode</code></td><td><code>Option&lt;Mode&gt;</code></td><td><code>None</code></td><td><code>None</code> = static group; <code>Some(Exclusive)</code> = radio-like; <code>Some(Multiple)</code> = independent toggles</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Orientation</h3>
+<ul>
+<li><code>Horizontal</code>: buttons in a row (default)</li>
+<li><code>Vertical</code>: buttons in a column</li>
+</ul>
+<h3>Mode</h3>
+<ul>
+<li><code>Exclusive</code>: exactly one button pressed at a time (radio-button behavior)</li>
+<li><code>Multiple</code>: each button toggles independently</li>
+</ul>
+<h2>Helper Functions</h2>
+<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>separator</code></td><td><code>fn(Orientation) -&gt; Markup</code></td><td>Renders a visual rule between buttons</td></tr>
+<tr><td><code>separator_for_group</code></td><td><code>fn(Orientation) -&gt; Markup</code></td><td>Convenience: renders separator opposite to group orientation</td></tr>
+<tr><td><code>text</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Renders non-interactive text cell (e.g., page indicator)</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Emits <code>role="group"</code> on the container. For vertical groups, includes <code>aria-orientation="vertical"</code>. In interactive modes (<code>Exclusive</code>, <code>Multiple</code>), emits <code>data-mui="button-group"</code> and <code>data-mode="exclusive|multiple"</code> for JS to wire <code>aria-pressed</code> state changes. Emits custom <code>mui:button-group-change</code> event on activation with <code>{ value, pressed, target }</code> in detail.</p>
+<h2>Related</h2>
+<p>Button, Dialog (for trigger dialogs inside button groups)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/button-group</p>

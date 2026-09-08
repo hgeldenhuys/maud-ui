@@ -1,0 +1,41 @@
+<h1>Carousel</h1>
+<p>A horizontal slide viewer with optional arrow and dot controls. Supports looping and auto-play. Each slide is independently aria-labeled.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::carousel::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::carousel;
+
+html! {
+    (carousel::render(carousel::Props {
+        id: "featured".into(),
+        items: vec![
+            html! { div { "Slide 1" } },
+            html! { div { "Slide 2" } },
+            html! { div { "Slide 3" } },
+        ],
+        show_dots: true,
+        show_arrows: true,
+        loop_slides: true,
+        auto_play: false,
+        aria_label: "Featured items".into(),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"carousel"</code></td><td>Unique element id</td></tr>
+<tr><td><code>items</code></td><td><code>Vec&lt;Markup&gt;</code></td><td><code>vec![]</code></td><td>Each slide's content as Markup</td></tr>
+<tr><td><code>show_dots</code></td><td><code>bool</code></td><td><code>true</code></td><td>Show dot indicators at bottom for slide navigation</td></tr>
+<tr><td><code>show_arrows</code></td><td><code>bool</code></td><td><code>true</code></td><td>Show prev/next arrow buttons</td></tr>
+<tr><td><code>loop_slides</code></td><td><code>bool</code></td><td><code>false</code></td><td>Wrap around when reaching the end (circular)</td></tr>
+<tr><td><code>auto_play</code></td><td><code>bool</code></td><td><code>false</code></td><td>Auto-advance slides (interval controlled by JS)</td></tr>
+<tr><td><code>aria_label</code></td><td><code>String</code></td><td><code>"Carousel"</code></td><td>Accessible label for the carousel region</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>Emits <code>role="region"</code> with <code>aria-roledescription="carousel"</code> and the provided <code>aria_label</code>. Each slide has <code>role="group"</code> with <code>aria-roledescription="slide"</code> and <code>aria-label</code> showing position (e.g., "Slide 1 of 3"). Dot buttons have <code>role="tab"</code> with <code>aria-selected</code>. Container uses <code>aria-live="polite"</code> when <code>auto_play</code> is true. Keyboard: arrow keys navigate, Enter activates dot.</p>
+<h2>Related</h2>
+<p>Button (for custom slide controls), Dialog (for fullscreen carousel variants)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/carousel</p>

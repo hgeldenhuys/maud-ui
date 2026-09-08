@@ -1,0 +1,62 @@
+<h1>HoverCard</h1>
+<p>Rich hover overlay with configurable placement and alignment for user profiles, tooltips, and detailed previews.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::hover_card::{self, Props, Placement, Align};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::hover_card;
+
+html! {
+    (hover_card::render(hover_card::Props {
+        trigger: html! { a href="#" { "@jane" } },
+        content: html! {
+            div { "Jane Doe" }
+            p { "Software designer" }
+        },
+        id: "user-card-1".to_string(),
+        side: hover_card::Placement::Bottom,
+        align: hover_card::Align::Center,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>trigger</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>The interactive element that triggers the card.</td></tr>
+<tr><td><code>content</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Rich content displayed in the card.</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"hover-card"</code></td><td>Unique identifier (used for card_id).</td></tr>
+<tr><td><code>open_delay_ms</code></td><td><code>u32</code></td><td><code>300</code></td><td>Milliseconds before card shows on hover.</td></tr>
+<tr><td><code>close_delay_ms</code></td><td><code>u32</code></td><td><code>200</code></td><td>Milliseconds before card hides when mouse leaves.</td></tr>
+<tr><td><code>side</code></td><td><code>Placement</code></td><td><code>Bottom</code></td><td>Which side of trigger to anchor (Top, Right, Bottom, Left).</td></tr>
+<tr><td><code>align</code></td><td><code>Align</code></td><td><code>Center</code></td><td>Alignment along the trigger edge (Start, Center, End).</td></tr>
+</tbody></table>
+<h2>Placement</h2>
+<pre><code class="language-rust">pub enum Placement {
+    Top,
+    Right,
+    Bottom,    // default
+    Left,
+}
+</code></pre>
+<h2>Align</h2>
+<pre><code class="language-rust">pub enum Align {
+    Start,
+    Center,    // default
+    End,
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li>Trigger is a semantic link or button.</li>
+<li>Card hidden by default with <code>hidden</code> attribute.</li>
+<li>Uses <code>data-visible="false"</code> for CSS state management.</li>
+<li>No ARIA live region by default (async JavaScript handles visibility).</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="tooltip.md">Tooltip</a> — simpler text-only alternative.</li>
+<li><a href="popover.md">Popover</a> — interactive popovers with focus management.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Mirrors shadcn's HoverCard with Placement and Align variants. Positioning is CSS-driven via data attributes.</p>

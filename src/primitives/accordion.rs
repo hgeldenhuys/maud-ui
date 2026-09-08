@@ -17,6 +17,7 @@ pub struct Item {
 
 /// Accordion rendering properties
 #[derive(Clone, Debug)]
+#[derive(Default)]
 pub struct Props {
     /// Array of accordion items
     pub items: Vec<Item>,
@@ -28,15 +29,6 @@ pub struct Props {
     pub aria_label: Option<String>,
 }
 
-impl Default for Props {
-    fn default() -> Self {
-        Self {
-            items: vec![],
-            multiple: false,
-            aria_label: None,
-        }
-    }
-}
 
 /// Render an accordion with the given properties
 pub fn render(props: Props) -> Markup {

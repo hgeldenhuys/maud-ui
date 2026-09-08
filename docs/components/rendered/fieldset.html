@@ -1,0 +1,40 @@
+<h1>Fieldset</h1>
+<p>Groups related form controls with an optional legend and disabled state.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::fieldset::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::fieldset;
+
+html! {
+    (fieldset::render(fieldset::Props {
+        legend: "Personal Information".to_string(),
+        disabled: false,
+        children: html! {
+            input.mui-input type="text" placeholder="First Name";
+            input.mui-input type="text" placeholder="Last Name";
+        },
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>legend</code></td><td><code>String</code></td><td><code>"Fieldset"</code></td><td>Legend text displayed above the group.</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Disables all controls within the fieldset.</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Form controls (typically Field components).</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<ul>
+<li>Renders as semantic HTML <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code>.</li>
+<li>Legend announces the group purpose to screen readers.</li>
+<li>Disabled state propagates to child inputs.</li>
+<li>Implicit <code>role="group"</code> from <code>&lt;fieldset&gt;</code> element.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="field.md">Field</a> — individual form control with label/description/error.</li>
+<li><a href="field.md#helpers">Field Group Helper</a> — vertical stack without border.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Minimal fieldset wrapper for semantic HTML grouping. Use with Field components inside.</p>

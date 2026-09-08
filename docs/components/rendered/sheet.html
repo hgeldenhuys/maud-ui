@@ -1,0 +1,84 @@
+<h1>Sheet</h1>
+<p>Slide-out panel modal extending the Dialog primitive. Slides from a configurable edge (top, right, bottom, left) and uses the native <code>&lt;dialog&gt;</code> element for accessibility. Brand-new v0.2.1 primitive distinct from Dialog.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::sheet::{self, Side, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::sheet;
+
+html! {
+    (sheet::trigger("edit-profile", "Open sheet"))
+    (sheet::render(sheet::Props {
+        id: "edit-profile".to_string(),
+        title: "Edit Profile".to_string(),
+        description: Some("Update your personal information.".to_string()),
+        children: html! {
+            div class="mui-field" {
+                label class="mui-label" { "Name" }
+                input class="mui-input" type="text" {}
+            }
+        },
+        footer: Some(html! {
+            button class="mui-btn mui-btn--primary" { "Save" }
+        }),
+        side: sheet::Side::Right,
+        show_close_button: true,
+        open: false,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td><code>"sheet"</code></td><td>Unique identifier used by trigger to target this sheet.</td></tr>
+<tr><td>title</td><td>String</td><td><code>"Sheet"</code></td><td>Sheet title displayed in the header.</td></tr>
+<tr><td>description</td><td>Option<String></td><td><code>None</code></td><td>Optional description text below the title.</td></tr>
+<tr><td>children</td><td>Markup</td><td><code>html! {}</code></td><td>Body content markup.</td></tr>
+<tr><td>footer</td><td>Option<Markup></td><td><code>None</code></td><td>Optional footer markup pinned to the bottom (e.g., action buttons).</td></tr>
+<tr><td>side</td><td>Side</td><td><code>Right</code></td><td>Which edge the sheet slides from: Top, Right, Bottom, Left.</td></tr>
+<tr><td>show_close_button</td><td>bool</td><td><code>true</code></td><td>Whether to render a close button in the header.</td></tr>
+<tr><td>open</td><td>bool</td><td><code>false</code></td><td>Initial open state (for SSR; client behaviour via <code>data-mui="sheet"</code>).</td></tr>
+</tbody></table>
+<h2>Side Enum</h2>
+<table><thead><tr><th>Variant</th><th>Data Attr</th><th>Behavior</th></tr></thead><tbody>
+<tr><td>Top</td><td><code>top</code></td><td>Slides down from the top.</td></tr>
+<tr><td>Right</td><td><code>right</code></td><td>Slides in from the right (default).</td></tr>
+<tr><td>Bottom</td><td><code>bottom</code></td><td>Slides up from the bottom.</td></tr>
+<tr><td>Left</td><td><code>left</code></td><td>Slides in from the left.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<h3>trigger</h3>
+<pre><code class="language-rust">sheet::trigger(target_id: &amp;str, label: &amp;str) -&gt; Markup
+</code></pre>
+<p>Renders a button that opens the sheet with the given <code>target_id</code>. Emits <code>data-mui="dialog-trigger"</code> (reuses dialog behaviour).</p>
+<h3>close_button</h3>
+<pre><code class="language-rust">sheet::close_button(label: &amp;str) -&gt; Markup
+</code></pre>
+<p>Renders a close button for use inside the sheet body. Typically rendered by <code>render()</code> automatically if <code>show_close_button: true</code>, but available for custom layouts.</p>
+<h3>render</h3>
+<pre><code class="language-rust">sheet::render(props: Props) -&gt; Markup
+</code></pre>
+<p>Renders the sheet dialog element with all accessibility attributes wired up.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Sheet uses native <code>&lt;dialog&gt;</code> element with <code>role="dialog"</code>.</li>
+<li><code>aria-labelledby</code> points to the sheet title; <code>aria-describedby</code> points to the description (if present).</li>
+<li>Close button labeled "Close" by default.</li>
+<li>Focus is managed by the browser's native <code>&lt;dialog&gt;</code> behaviour; CSS animates the slide transition.</li>
+<li>Tab order is trapped within the open sheet.</li>
+</ul>
+<h2>CSS Classes</h2>
+<table><thead><tr><th>Class</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>mui-sheet</code></td><td>Root sheet container.</td></tr>
+<tr><td><code>mui-sheet--top</code></td><td>Side variant class (also <code>--right</code>, <code>--bottom</code>, <code>--left</code>).</td></tr>
+<tr><td><code>mui-sheet__header</code></td><td>Header region holding title and close button.</td></tr>
+<tr><td><code>mui-sheet__title</code></td><td>Sheet title (<code>&lt;h2&gt;</code>).</td></tr>
+<tr><td><code>mui-sheet__description</code></td><td>Optional description paragraph.</td></tr>
+<tr><td><code>mui-sheet__body</code></td><td>Main content area (scrollable).</td></tr>
+<tr><td><code>mui-sheet__footer</code></td><td>Footer region (sticky to bottom).</td></tr>
+<tr><td><code>mui-sheet__close</code></td><td>Close button styling.</td></tr>
+</tbody></table>
+<h2>Related</h2>
+<p>Dialog, Drawer, AlertDialog.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/sheet</p>

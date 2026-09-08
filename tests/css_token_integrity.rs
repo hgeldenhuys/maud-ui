@@ -9,16 +9,16 @@
 //!
 //! Found by dogfooding maud-ui inside the Conductor daemon UI (2026-07-27),
 //! which surfaced five of them at once:
-//!   * `--mui-radius`     (4 sites) → sidebar active-item and docs corners
-//!                        rendered SQUARE in an otherwise rounded library
-//!   * `--mui-bg-hover`   (2 sites) → sheet + drawer close buttons had no
-//!                        hover feedback at all (background resolved to
-//!                        transparent)
-//!   * `--mui-mono`       (1 site)  → wrong name for `--mui-font-mono`
-//!   * `--mui-spacing-xxl`(1 site)  → wrong name for `--mui-space-xxl`; only
-//!                        worked via its fallback, so it was immune to theming
-//!   * `--mui-sidebar-w`            → a real consumer knob that existed only
-//!                        as an inline fallback, undiscoverable in the token list
+//! - `--mui-radius`     (4 sites) → sidebar active-item and docs corners
+//!   rendered SQUARE in an otherwise rounded library
+//! - `--mui-bg-hover`   (2 sites) → sheet + drawer close buttons had no
+//!   hover feedback at all (background resolved to
+//!   transparent)
+//! - `--mui-mono`       (1 site)  → wrong name for `--mui-font-mono`
+//! - `--mui-spacing-xxl`(1 site)  → wrong name for `--mui-space-xxl`; only
+//!   worked via its fallback, so it was immune to theming
+//! - `--mui-sidebar-w`            → a real consumer knob that existed only
+//!   as an inline fallback, undiscoverable in the token list
 //!
 //! A reference WITH a fallback — `var(--mui-x, 1rem)` — is allowed: that is the
 //! documented way to expose a consumer-set knob. Only bare references are
@@ -83,6 +83,7 @@ fn every_bare_mui_token_reference_is_defined() {
     let css_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("css");
     let mut files = Vec::new();
     css_files(&css_root, &mut files);
+    css_files(&Path::new(env!("CARGO_MANIFEST_DIR")).join("static/styles"), &mut files);
     assert!(!files.is_empty(), "no CSS files found under {}", css_root.display());
 
     let mut defined = BTreeSet::new();

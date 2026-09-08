@@ -5,6 +5,80 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.8.0] — 2026-09-08 — operational UI belongs in the library
+
+The receptionist worklist exposed repeatable application structure: counted filters,
+search beside a title, a record's next action, task launchers and mobile wayfinding.
+Those structures now have typed APIs, full docs and showcase pages: **81 primitives
+and 13 blocks**. The pre-change canvas and verification record are in `curation-report.md`.
+
+### Breaking
+
+- **`empty_state::Props` gains `variant`** (`Empty`, `Filtered`, `Failed`). Existing
+  builder calls keep working; exhaustive literals must supply the new field.
+- **`blocks::shell::sidebar::Props` gains `id`, `header`, `mobile_navigation`.** Use
+  `..Default::default()` when constructing it. Mobile navigation now uses a labelled
+  drawer or bottom tabs below 60rem; without JS, the complete grouped nav stays visible.
+- **`button::Size::Row`** expands the size enum. Exhaustive matches must handle it.
+  Disabled buttons now use native `disabled` as well as `aria-disabled`, so they cannot
+  submit without JS and no longer remain in the Tab order.
+- **Serve the complete 0.8 assets from `static/` or `maud_ui::assets`.** The previous
+  `dist/` and `public/` snapshots are retained as legacy build inputs/site artifacts;
+  they do not contain these components. This keeps changes inside the curation lane's
+  permitted paths. `examples/build-assets.mjs` builds the complete versioned bundles.
+- **Maud is the sole normal Rust dependency, with no forced Axum feature.** Markdown
+  rendering and Axum move to development dependencies. Apps returning Markup directly
+  from Axum handlers must enable Maud's `axum` feature themselves.
+
+### Added
+
+- **`status_chip_group`** — label, count and semantic tone per link; one current filter,
+  wrapping layout, visible selection mark, RTL-aware arrows and Home/End focus movement.
+- **`bottom_tab_bar`** — up to five labelled destinations, exact current-link matching,
+  safe-area padding, inline/fixed placement and a More link with dialog/fallback targets.
+- **`blocks::worklist::header`** — title, localized count sentence, labelled native GET
+  search with retained filters and one primary action; stacks on phones.
+- **`blocks::record::header`** — identity, subtitle, status badge, back link, one primary
+  action and secondary actions inside native details/summary.
+- **`blocks::task::grid`** — three compact launch cards per row, complete description
+  text and one named action each; collapses to one column on phones.
+- **Shared `blocks::action::{Action, Target, Link, Heading}`** — native links or POST
+  forms with caller-owned hidden fields, and H1/H2/H3 composition.
+- **Sidebar shell** header slot, stable per-instance IDs and Drawer/Tabs mobile choice.
+  More retains every destination; a single sidebar node moves into the modal, preserving
+  controls and IDs. Close, Escape and desktop resizing restore navigation and focus.
+- **Empty-state reasons** with distinct default copy and optional recovery actions.
+  Failed loads get an error border and symbol instead of appearing as zero results.
+- **`button::Size::Row`** — quiet outline treatment, fixed 2rem height and nowrap text;
+  demonstrated inside actual guest-table rows and task launchers.
+- **`assets::{CSS, CSS_MIN, JS, JS_MIN}`**, development-only Markdown rendering with
+  freshness tests, block API docs, and a browser-free SVG/PNG social-card generator.
+
+### Polished
+
+- **Themes:** retain eight presets with coherent fill/ink pairs, readable subtle text,
+  control boundaries and focus colors. Light muted/subtle/warning ink and primary hover
+  contrast are corrected. 264 token-pair checks cover the eight presets.
+- **Theme customizer:** spacing controls now edit real `--mui-space-*` tokens; foreground
+  and control-border tokens are exposed, preset switching clears prior overrides and
+  persists its base theme, and the preview includes filter and failed-load states.
+- **Dialog/sheet motion:** shared entrance duration, direction-aware sheet movement,
+  dynamic viewport heights, token-based backdrops and explicit reduced-motion behavior.
+- **Gallery:** operational entry links and block cards improve discovery. The social
+  card derives the component/block counts and rasterizes through librsvg, without Chrome.
+
+### Removed / internal
+
+- Removed duplicate primitive usage snippets that had drifted from the full API docs.
+  The Markdown-derived reference is now the single page-level source of API examples.
+- Resolved the existing strict-Clippy backlog: derived defaults, iterator/option idioms,
+  redundant struct updates, documentation indentation and Maud-safe class construction.
+- Extended token/breakpoint guards to the new style source and moved social-card parity
+  to the new generated SVG/PNG. Existing legacy dist/public parity checks are retained.
+- Added render, escaping, native form, navigation, docs-freshness and bundle checks;
+  Node handler fixtures cover arrows/RTL, More, drawer restore and htmx replacement.
+  Browser layout, native focus and assistive-technology review remain supervisor checks.
+
 ## [0.7.1] — 2026-07-30 — badges go machined, danger ink becomes a token
 
 **Badges take `--mui-radius-sm` instead of `--mui-radius-full`.** The corner is now the

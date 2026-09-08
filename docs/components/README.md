@@ -24,7 +24,7 @@ Each doc follows the same structure:
 
 **Overlay** · [dialog](dialog.md) · [alert_dialog](alert_dialog.md) · [sheet](sheet.md) · [drawer](drawer.md) · [popover](popover.md) · [hover_card](hover_card.md) · [tooltip](tooltip.md) · [toast](toast.md) · [sonner](sonner.md)
 
-**Navigation** · [breadcrumb](breadcrumb.md) · [menu](menu.md) · [menubar](menubar.md) · [context_menu](context_menu.md) · [navigation_menu](navigation_menu.md) · [pagination](pagination.md) · [command](command.md)
+**Navigation** · [bottom tab bar](bottom_tab_bar.md) · [status chip group](status_chip_group.md) · [breadcrumb](breadcrumb.md) · [menu](menu.md) · [menubar](menubar.md) · [context_menu](context_menu.md) · [navigation_menu](navigation_menu.md) · [pagination](pagination.md) · [command](command.md)
 
 **Interaction** · [toggle](toggle.md) · [toggle_group](toggle_group.md) · [button_group](button_group.md) · [carousel](carousel.md) · [calendar](calendar.md) · [date_picker](date_picker.md)
 

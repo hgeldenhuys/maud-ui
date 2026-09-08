@@ -95,6 +95,7 @@ fn media_widths(src: &str) -> Vec<(usize, String)> {
 fn every_media_width_is_a_declared_breakpoint() {
     let mut files = Vec::new();
     collect(Path::new("css"), &["css"], &mut files);
+    collect(Path::new("static/styles"), &["css"], &mut files);
     collect(Path::new("src/showcase"), &["css", "rs"], &mut files);
     assert!(!files.is_empty(), "found no files to scan");
 

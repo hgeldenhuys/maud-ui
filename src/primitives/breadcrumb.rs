@@ -12,6 +12,7 @@ pub struct BreadcrumbItem {
 
 /// Breadcrumb rendering properties
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct Props {
     /// List of breadcrumb items (last item has no href)
     pub items: Vec<BreadcrumbItem>,
@@ -19,14 +20,6 @@ pub struct Props {
     pub separator: Option<String>,
 }
 
-impl Default for Props {
-    fn default() -> Self {
-        Self {
-            items: Vec::new(),
-            separator: None,
-        }
-    }
-}
 
 /// Render breadcrumb navigation
 pub fn render(props: Props) -> Markup {

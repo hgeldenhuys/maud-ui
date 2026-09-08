@@ -62,7 +62,7 @@ impl Default for Props {
 
 /// Render a single code block.
 pub fn render(props: Props) -> Markup {
-    let show_copy = props.show_copy || matches!(props.show_copy, true);
+    let show_copy = props.show_copy;
     let has_header = props.language.is_some() || props.filename.is_some() || show_copy;
     let body_style = props
         .max_height
@@ -979,11 +979,10 @@ fn tokenize_css(src: &str) -> Vec<(Tok, &str)> {
                 in_value = false;
                 pending_at_rule = false;
             }
-            b':' => {
-                if in_decl(&blocks) {
+            b':'
+                if in_decl(&blocks) => {
                     in_value = true;
                 }
-            }
             _ => {}
         }
 
@@ -1111,7 +1110,7 @@ mod tests {
     }
 
     /// Finds the token kind a given piece of source text was tagged with.
-    fn kind_of<'a>(spans: &'a [(Tok, &str)], needle: &str) -> Option<&'static str> {
+    fn kind_of(spans: &[(Tok, &str)], needle: &str) -> Option<&'static str> {
         spans
             .iter()
             .find(|(_, text)| *text == needle)

@@ -1,0 +1,47 @@
+<h1>Label</h1>
+<p>Standalone form label element for associating text with form controls. Supports required field indicators with built-in accessibility.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::label::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::label;
+
+html! {
+    div class="mui-field" {
+        (label::render(label::Props {
+            text: "Email address".into(),
+            html_for: Some("email-input".into()),
+            required: false,
+            disabled: false,
+        }))
+        input class="mui-input" id="email-input" type="email" placeholder="you@example.com" {}
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>text</td><td>String</td><td><code>""</code></td><td>Label text displayed to the user.</td></tr>
+<tr><td>html_for</td><td>Option<String></td><td><code>None</code></td><td>HTML ID of the associated form control. Links the label semantically to its input via <code>for</code> attribute.</td></tr>
+<tr><td>required</td><td>bool</td><td><code>false</code></td><td>When true, displays a red asterisk <code>*</code> with <code>aria-label="required"</code> for accessibility.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>When true, applies <code>mui-label--disabled</code> class for visual feedback.</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>All false</td><td>Standard label for optional fields.</td></tr>
+<tr><td>Required</td><td><code>required: true</code></td><td>Label for mandatory form fields; displays required indicator.</td></tr>
+<tr><td>Disabled</td><td><code>disabled: true</code></td><td>Label associated with disabled input (e.g., read-only fields).</td></tr>
+<tr><td>Required Disabled</td><td>Both true</td><td>Combination of required and disabled states.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p>None. The component is a minimal wrapper around the HTML <code>&lt;label&gt;</code> element.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong><code>html_for</code> attribute:</strong> Creates semantic association with the form control, improving usability for all users and assistive technology.</li>
+<li><strong>Required indicator:</strong> Uses <code>aria-label="required"</code> on the <code>&lt;span&gt;</code> containing the asterisk, ensuring screen readers announce the required status without redundant text.</li>
+<li><strong>Disabled state:</strong> Applies visual class but does NOT add <code>disabled</code> attribute (only the input should be disabled). Visual styling communicates disabled state.</li>
+</ul>
+<h2>Related</h2>
+<p>Input, Checkbox, Radio Button, Textarea, Native Select, Number Field.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/label</p>

@@ -1,0 +1,33 @@
+<h1>Status dot</h1>
+<p>A 6px semantic dot for run state, presence, and health. Filled by default; an outline (hollow) variant reads as "observing / not yet settled" without spending a second hue.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::status_dot::{self, Props, Tone};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::status_dot::{self, Props, Tone};
+
+status_dot::render(Props { tone: Tone::Success, label: Some("passing".into()), ..Default::default() })
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>tone</td><td>Tone</td><td><code>Accent</code></td><td>Semantic colour.</td></tr>
+<tr><td>outline</td><td>bool</td><td><code>false</code></td><td>Hollow (observing) instead of filled.</td></tr>
+<tr><td>label</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td>When set, the dot is <code>role="img"</code> with this label; otherwise it is <code>aria-hidden</code>.</td></tr>
+</tbody></table>
+<h2>Tone enum</h2>
+<table><thead><tr><th>Value</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Success</td><td>Healthy, passing, live.</td></tr>
+<tr><td>Accent</td><td>Active, selected, running.</td></tr>
+<tr><td>Warning</td><td>Attention, degraded.</td></tr>
+<tr><td>Neutral</td><td>Idle, unknown, off.</td></tr>
+<tr><td>Destructive</td><td>Failed, blocked.</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>A bare dot is decorative and hidden from assistive tech. Pass <code>label</code> when the dot is the <em>only</em> carrier of a state, so it is announced rather than silently invisible.</p>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-status-dot</code> + one of <code>mui-status-dot--success</code> / <code>--accent</code> / <code>--warning</code> / <code>--neutral</code> / <code>--destructive</code>.</li>
+<li><code>mui-status-dot--outline</code> for the hollow form (composes with the tone class).</li>
+</ul>
+<h2>Related</h2>
+<p>Badge, Attention pill, Spinner.</p>

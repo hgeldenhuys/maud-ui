@@ -1,0 +1,21 @@
+<h1>Task grid</h1>
+<p>Compact launcher for common tasks: three equal columns on larger screens, one below 40rem. Each card carries a title, one-line description and one action.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::Action, task::grid::{self, Props, Task}};
+grid::render(Props {
+    tasks: vec![Task {
+        title: "Check in a guest".into(),
+        description: "Confirm a reservation and assign a room.".into(),
+        action: Action::link("Start check-in", "/check-in"),
+    }],
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>tasks</td><td>Vec<Task></td><td>empty</td><td>Task has title: String, description: String, action: Action.</td></tr>
+<tr><td>aria_label</td><td>String</td><td>Available tasks</td><td>Names the list.</td></tr>
+<tr><td>heading</td><td>action::Heading</td><td>H3</td><td>Heading level of each card.</td></tr>
+</tbody></table>
+<h2>Composition and accessibility</h2>
+<p>Use action labels that make sense on their own, such as Start check-in. Actions support the shared <a href="worklist-header.md">link/POST contract</a>. Titles wrap; descriptions visually ellipsize but remain complete in the DOM and title attribute. Footers align after varying title lengths. An empty task vector renders an empty list; compose <code>empty_state</code> when you need recovery guidance. No JavaScript is required.</p>

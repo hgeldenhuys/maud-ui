@@ -1,0 +1,51 @@
+<h1>Chart</h1>
+<p>A lightweight inline SVG bar or line chart renderer. No JS required for static rendering; supports optional accessibility layer and custom colors. Data points are simple (label, value) tuples.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::chart::{self, ChartType, DataPoint, ChartConfig, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::chart;
+
+html! {
+    (chart::render(chart::Props {
+        id: "sales-chart".into(),
+        chart_type: chart::ChartType::Bar,
+        data: vec![
+            chart::DataPoint { label: "Jan".into(), value: 186.0 },
+            chart::DataPoint { label: "Feb".into(), value: 305.0 },
+            chart::DataPoint { label: "Mar".into(), value: 237.0 },
+        ],
+        title: Some("Monthly Revenue".into()),
+        width: 400,
+        height: 200,
+        color: None,
+        config: None,
+        accessibility_layer: false,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"chart"</code></td><td>Unique ID for the chart container</td></tr>
+<tr><td><code>chart_type</code></td><td><code>ChartType</code></td><td><code>Bar</code></td><td>Bar or Line chart type</td></tr>
+<tr><td><code>data</code></td><td><code>Vec&lt;DataPoint&gt;</code></td><td><code>vec![]</code></td><td>Data points with label and numeric value</td></tr>
+<tr><td><code>title</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional title above the chart</td></tr>
+<tr><td><code>width</code></td><td><code>u32</code></td><td><code>400</code></td><td>SVG width in pixels</td></tr>
+<tr><td><code>height</code></td><td><code>u32</code></td><td><code>200</code></td><td>SVG height in pixels</td></tr>
+<tr><td><code>color</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>CSS color for bars/line/dots (defaults to var(--mui-accent))</td></tr>
+<tr><td><code>config</code></td><td><code>Option&lt;ChartConfig&gt;</code></td><td><code>None</code></td><td>Series configuration (shadcn-parity stub — currently unused by renderer)</td></tr>
+<tr><td><code>accessibility_layer</code></td><td><code>bool</code></td><td><code>false</code></td><td>Emits data-accessibility-layer="true" for AT hooks to enlarge hit targets, add focus rings</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>ChartType</h3>
+<ul>
+<li><code>Bar</code>: vertical bar chart</li>
+<li><code>Line</code>: line chart with area fill gradient</li>
+</ul>
+<h2>Accessibility</h2>
+<p>Line and bar charts render grid lines and axis labels for reference. When <code>accessibility_layer</code> is true, emits <code>data-accessibility-layer="true"</code> on the container so CSS or AT hooks can adapt (enlarged circles, visible focus rings, etc.). Grid lines are low-opacity for visual context; axis labels use <code>.mui-chart__value</code> and <code>.mui-chart__label</code> classes.</p>
+<h2>Related</h2>
+<p>Card (for chart containers), Button (for chart controls/legends)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/chart</p>

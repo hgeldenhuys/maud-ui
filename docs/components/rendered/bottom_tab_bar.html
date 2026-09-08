@@ -1,0 +1,35 @@
+<h1>Bottom tab bar</h1>
+<p>Up to five mobile destinations, including an optional More link. These are page links, not tab panels.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::bottom_tab_bar::{self, Item, More, Position, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::bottom_tab_bar::{self, Item, More, Props};
+bottom_tab_bar::render(Props {
+    items: vec![Item { label: "Reservations".into(), href: "/reservations".into(), icon: None }],
+    current_href: Some("/reservations".into()),
+    more: Some(More {
+        label: "More".into(), target_id: "navigation-drawer".into(),
+        fallback_href: "/navigation".into(), current: false,
+    }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>items</td><td>Vec<Item></td><td>empty</td><td>Item fields: label: String, href: String, icon: Option<Markup>.</td></tr>
+<tr><td>current_href</td><td>Option<String></td><td>None</td><td>First exact href match gets aria-current.</td></tr>
+<tr><td>more</td><td>Option<More></td><td>None</td><td>More fields: label, target_id and fallback_href: String; current: bool. Current More takes precedence.</td></tr>
+<tr><td>aria_label</td><td>String</td><td>Primary navigation</td><td>Accessible navigation name.</td></tr>
+<tr><td>position</td><td>Position</td><td>Fixed</td><td>Fixed viewport bar or Inline contained layout.</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<p><code>Position::{Fixed, Inline}</code>. More than five items, counting More, panics rather than silently discarding destinations. The primitive renders at all widths; the consumer controls its breakpoint. The sidebar block handles that automatically at 60rem.</p>
+<h2>Helper Functions</h2>
+<p><code>render(Props)</code> and <code>showcase()</code> only.</p>
+<h2>Accessibility</h2>
+<p>Visible text labels, native links, <code>aria-current="page"</code>, optional decorative icons. More's <code>target_id</code> identifies a native dialog/sheet/drawer; JS opens it modally and updates aria-expanded. Escape closes it and focus returns to the trigger. <code>fallback_href</code> must lead to reachable navigation without JS. The shell supplies that fallback for you. The bar includes safe-area padding; reserve <code>padding-bottom: var(--mui-bottom-tab-bar-height)</code> in your content so it cannot cover the last control. The current state also has an underline, including forced-colors mode.</p>
+<h2>Related</h2>
+<p><a href="../blocks/shell-sidebar.md">Sidebar shell</a>, <a href="drawer.md">drawer</a>, <a href="sheet.md">sheet</a>.</p>
+<h2>Shadcn reference</h2>
+<p>Application-specific navigation; no direct upstream equivalent.</p>

@@ -1,0 +1,31 @@
+<h1>Collapsible</h1>
+<p>A minimal expandable section with a trigger button and animated content. Unlike accordion, this is a standalone toggle with no card wrapping.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::collapsible::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::collapsible;
+
+html! {
+    (collapsible::render(collapsible::Props {
+        trigger_label: "Show details".into(),
+        content: html! { p { "Hidden content here" } },
+        open: false,
+        id: "details".into(),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>trigger_label</code></td><td><code>String</code></td><td><code>"Toggle"</code></td><td>Label text displayed in the trigger button</td></tr>
+<tr><td><code>content</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Markup content displayed when expanded</td></tr>
+<tr><td><code>open</code></td><td><code>bool</code></td><td><code>false</code></td><td>Initial open/expanded state</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"collapsible"</code></td><td>Unique identifier for aria-controls and linking</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>The trigger button has <code>aria-expanded</code> reflecting the open state and <code>aria-controls</code> pointing to the content region. Content is hidden via the <code>hidden</code> attribute when closed. A chevron icon (▾) is included as a visual indicator. Keyboard: Space/Enter toggles, Tab navigates.</p>
+<h2>Related</h2>
+<p>Accordion (for grouped collapsibles), Dialog (for modal collapsibles)</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/collapsible</p>

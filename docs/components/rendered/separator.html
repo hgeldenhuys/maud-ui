@@ -1,0 +1,137 @@
+<h1>Separator</h1>
+<p>Visual and semantic divider for organizing content into sections. Renders as a simple horizontal or vertical line with optional accessibility semantics.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::separator::{self, Props, Orientation};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::separator;
+
+html! {
+    div { "Bio section" }
+    (separator::render(separator::Props {
+        orientation: separator::Orientation::Horizontal,
+        decorative: false,
+    }))
+    div { "Settings section" }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>orientation</td><td>Orientation</td><td><code>Horizontal</code></td><td>Direction: Horizontal (thin line) or Vertical (tall line).</td></tr>
+<tr><td>decorative</td><td>bool</td><td><code>false</code></td><td>If true, <code>aria-hidden="true"</code> (pure decoration). If false, <code>role="separator"</code>.</td></tr>
+</tbody></table>
+<h2>Orientation Enum</h2>
+<table><thead><tr><th>Value</th><th>Description</th></tr></thead><tbody>
+<tr><td>Horizontal</td><td>Thin horizontal line (default).</td></tr>
+<tr><td>Vertical</td><td>Tall vertical line.</td></tr>
+</tbody></table>
+<h2>Decorative vs. Semantic</h2>
+<h3>Semantic (default: decorative: false)</h3>
+<p>Renders with <code>role="separator"</code> and <code>aria-orientation</code> so assistive technology recognizes it as a content boundary.</p>
+<pre><code class="language-rust">(separator::render(separator::Props {
+    orientation: separator::Orientation::Horizontal,
+    decorative: false,
+}))
+</code></pre>
+<p>Use this when the separator conveys meaning (e.g., "profile section ends, settings section begins").</p>
+<h3>Decorative (decorative: true)</h3>
+<p>Renders with <code>aria-hidden="true"</code> so screen readers skip it. Pure visual divider.</p>
+<pre><code class="language-rust">(separator::render(separator::Props {
+    orientation: separator::Orientation::Horizontal,
+    decorative: true,
+}))
+</code></pre>
+<p>Use this when the separator is purely visual and the content structure is clear without it.</p>
+<h2>Usage Patterns</h2>
+<h3>Profile card — horizontal divider between sections</h3>
+<pre><code class="language-rust">html! {
+    section {
+        h2 { "Bio" }
+        p { "Staff engineer at Kapable. Building Claude Conductor." }
+    }
+    (separator::render(separator::Props {
+        orientation: separator::Orientation::Horizontal,
+        decorative: false,
+    }))
+    section {
+        h2 { "Settings" }
+        ul {
+            li { "Email: invoice@geldentech.ca" }
+            li { "Two-factor: Enabled" }
+        }
+    }
+}
+</code></pre>
+<h3>Auth divider — "OR" between Google sign-in and email form</h3>
+<pre><code class="language-rust">html! {
+    button { "Sign in with Google" }
+    div style="display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0;" {
+        div style="flex: 1;" {
+            (separator::render(separator::Props {
+                orientation: separator::Orientation::Horizontal,
+                decorative: true,
+            }))
+        }
+        span style="font-weight: 500; color: var(--mui-text-muted);" { "OR" }
+        div style="flex: 1;" {
+            (separator::render(separator::Props {
+                orientation: separator::Orientation::Horizontal,
+                decorative: true,
+            }))
+        }
+    }
+    input type="email" placeholder="you@company.com" {}
+}
+</code></pre>
+<h3>Navigation bar — vertical divider between nav and user menu</h3>
+<pre><code class="language-rust">html! {
+    nav style="display: flex; align-items: center; gap: 1rem;" {
+        a { "Dashboard" }
+        a { "Projects" }
+        a { "Settings" }
+        div style="flex: 1;" {}  // Spacer
+        (separator::render(separator::Props {
+            orientation: separator::Orientation::Vertical,
+            decorative: false,
+        }))
+        a { "Docs" }
+        button { "HG" }  // User menu
+    }
+}
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Semantic</strong> (default): <code>role="separator"</code> with <code>aria-orientation="horizontal"</code> or <code>aria-orientation="vertical"</code>.
+<ul>
+<li>Screen readers announce it as a divider and read the orientation.</li>
+<li>Useful when the separator marks a logical boundary (new section, topic change).</li>
+</ul>
+</li>
+<li><strong>Decorative</strong>: <code>aria-hidden="true"</code> — screen readers skip it entirely.
+<ul>
+<li>Use when content structure is already clear from headings/elements.</li>
+</ul>
+</li>
+</ul>
+<h2>Labelled separator</h2>
+<p><code>render_labelled(label)</code> draws a mono, letter-spaced, muted label followed by a 1px hairline rule that fills the remaining width — a transcript turn divider. It is decorative (the label already conveys the structure), so no extra ARIA is needed.</p>
+<pre><code class="language-rust">use maud_ui::primitives::separator;
+
+html! {
+    (separator::render_labelled("TURN 12 · 41s"))
+    // …turn content…
+    (separator::render_labelled("REASONING"))
+}
+</code></pre>
+<h2>CSS Classes</h2>
+<ul>
+<li><code>mui-separator</code> — base class.</li>
+<li><code>mui-separator--horizontal</code> — added when <code>orientation: Horizontal</code>.</li>
+<li><code>mui-separator--vertical</code> — added when <code>orientation: Vertical</code>.</li>
+<li><code>mui-separator-labelled</code> / <code>__label</code> / <code>__rule</code> — the labelled turn-divider variant.</li>
+</ul>
+<h2>Related</h2>
+<p>Card (section container), Divider (similar concept, depends on context), Menu (item separators).</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/separator</p>

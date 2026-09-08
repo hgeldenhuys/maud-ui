@@ -1,0 +1,83 @@
+<h1>Meter</h1>
+<p>Visual progress indicator with configurable zones (optimal, suboptimal, danger). Displays numeric measurements with color-coded regions based on thresholds and optimum value.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::meter::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::meter;
+
+html! {
+    // Battery level (higher is better)
+    (meter::render(meter::Props {
+        value: 85.0,
+        min: 0.0,
+        max: 100.0,
+        low: Some(20.0),
+        high: Some(80.0),
+        optimum: Some(100.0),  // Ideal is max (right side)
+        label: "Battery level".into(),
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>value</td><td>f64</td><td><code>0.0</code></td><td>Current numeric value of the meter.</td></tr>
+<tr><td>min</td><td>f64</td><td><code>0.0</code></td><td>Minimum value of the scale.</td></tr>
+<tr><td>max</td><td>f64</td><td><code>100.0</code></td><td>Maximum value of the scale.</td></tr>
+<tr><td>low</td><td>Option<f64></td><td><code>None</code></td><td>Lower threshold; values below this (when optimum is high) or above this (when optimum is low) enter suboptimal/danger zones.</td></tr>
+<tr><td>high</td><td>Option<f64></td><td><code>None</code></td><td>Upper threshold; values above this (when optimum is high) or below this (when optimum is low) move towards optimal/danger zones.</td></tr>
+<tr><td>optimum</td><td>Option<f64></td><td><code>None</code></td><td>Ideal value; determines which side of the scale is "good." If None, all values are optimum.</td></tr>
+<tr><td>label</td><td>String</td><td><code>""</code></td><td>Accessibility label for the meter. Announced by screen readers.</td></tr>
+</tbody></table>
+<h2>Zone Logic</h2>
+<p>The meter automatically determines which visual zone (optimum, suboptimum, danger) to display based on the relationship between <code>value</code>, <code>low</code>, <code>high</code>, and <code>optimum</code>:</p>
+<h3>Higher Is Better (optimum &gt;= midpoint)</h3>
+<p>Used for battery level, signal strength, or other metrics where higher values are desirable.</p>
+<table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
+<tr><td>&lt; low</td><td>Danger</td><td>Red indicator</td></tr>
+<tr><td>&gt;= low &amp;&amp; &lt; high</td><td>Suboptimal</td><td>Yellow indicator</td></tr>
+<tr><td>&gt;= high</td><td>Optimum</td><td>Green indicator</td></tr>
+</tbody></table>
+<p><strong>Example:</strong> Battery with <code>min=0, max=100, low=20, high=80, optimum=100</code></p>
+<ul>
+<li>15% → Danger (red)</li>
+<li>60% → Suboptimal (yellow)</li>
+<li>90% → Optimum (green)</li>
+</ul>
+<h3>Lower Is Better (optimum &lt; midpoint)</h3>
+<p>Used for disk usage, temperature, latency, or other metrics where lower values are desirable.</p>
+<table><thead><tr><th>Value</th><th>Zone</th><th>Styling</th></tr></thead><tbody>
+<tr><td>&lt;= optimum_threshold</td><td>Optimum</td><td>Green indicator</td></tr>
+<tr><td>&gt; optimum_threshold &amp;&amp; &lt;= high</td><td>Suboptimal</td><td>Yellow indicator</td></tr>
+<tr><td>&gt; high</td><td>Danger</td><td>Red indicator</td></tr>
+</tbody></table>
+<p><strong>Example:</strong> Disk usage with <code>min=0, max=100, low=20, high=80, optimum=0</code></p>
+<ul>
+<li>25% → Optimum (green)</li>
+<li>70% → Suboptimal (yellow)</li>
+<li>95% → Danger (red)</li>
+</ul>
+<h3>No Optimum</h3>
+<p>When <code>optimum</code> is <code>None</code>, the meter is always rendered in the optimum zone (green).</p>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Battery level</td><td>Higher is better (optimum = max)</td><td>Device power, charge level.</td></tr>
+<tr><td>Disk usage</td><td>Lower is better (optimum = min)</td><td>Storage capacity, free space.</td></tr>
+<tr><td>Signal strength</td><td>Higher is better (optimum = max)</td><td>Network signal, WiFi strength.</td></tr>
+<tr><td>Temperature</td><td>Lower is better (optimum = min)</td><td>CPU temp, water cooling.</td></tr>
+<tr><td>Memory usage</td><td>Lower is better (optimum = min)</td><td>RAM, heap size.</td></tr>
+<tr><td>Upload progress</td><td>Higher is better (optimum = max)</td><td>File transfer, data sync.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p>None. The component uses internal <code>zone_class()</code> to determine the visual state.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Role:</strong> The outer container uses <code>role="meter"</code>.</li>
+<li><strong>ARIA attributes:</strong> Sets <code>aria-valuenow</code> (current value), <code>aria-valuemin</code> (minimum), <code>aria-valuemax</code> (maximum), and <code>aria-label</code> (descriptive text).</li>
+<li><strong>Screen readers:</strong> All numeric and descriptive information is announced; visual zone colors are supplemented by semantic ARIA.</li>
+</ul>
+<h2>Related</h2>
+<p>Progress, Slider, Input, Number Field.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/progress</p>

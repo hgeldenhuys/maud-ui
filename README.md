@@ -1,6 +1,6 @@
 # maud-ui
 
-**79 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 10 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**81 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 13 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,10 +22,10 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **79 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **81 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
 - **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
 - **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
-- **10 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell. Drop-in page templates.
+- **13 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, and a task launcher. Drop-in compositions.
 - **Live theme customiser** at `/theme` — tweak every `--mui-*` token in the browser, persists to `localStorage`, exports a paste-ready `:root { … }` block. 8 Tailwind-based presets.
 - **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.
 - **Global `cmd+k` command palette** — fuzzy jump to any component, block, integration, or page. Indexed from the same Rust constants the sidebar uses.
@@ -34,14 +34,21 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 - **Progressive enhancement** — every component renders correctly without JavaScript. JS adds drag, dropdowns, keyboard shortcuts on top.
 - **Tailwind-compatible** — all classes prefixed `mui-`, no collisions. [Pairing guide →](docs/TAILWIND.md)
 - **One Rust dependency** — just `maud`. No serde, no framework lock-in. Works with axum, actix, rocket, or whatever you use.
-- **Ship pre-built** — 46 KB JS + 78 KB CSS minified (11 KB + 11 KB gzipped). No build step required for consumers.
+- **Ship pre-built** — Complete minified CSS and JavaScript bundles. No build step required for consumers.
+
+## 0.8 operational UI
+
+Use `status_chip_group` for counted filters, `bottom_tab_bar` for mobile destinations, and `button::Size::Row` with `Variant::Outline` for compact cell actions. Blocks at `worklist::header`, `record::header`, and `task::grid` compose them into application surfaces. The sidebar shell adds `header`, `id`, and `mobile_navigation` props; `empty_state::Variant::{Empty, Filtered, Failed}` separates zero results from a failed load.
+
+Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the 0.8 bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
 
 ## 30-second tour
 
 ```bash
 cargo new my-app
 cd my-app
-cargo add maud maud-ui
+cargo add maud@0.27 --features axum
+cargo add maud-ui
 cargo add axum tokio --features tokio/full
 ```
 
@@ -82,10 +89,10 @@ async fn main() {
     let app = Router::new()
         .route("/", get(index))
         .route("/css/maud-ui.min.css", get(|| async {
-            ([("content-type", "text/css")], include_str!("../../path/to/maud-ui/dist/maud-ui.min.css"))
+            ([("content-type", "text/css")], maud_ui::assets::CSS_MIN)
         }))
         .route("/js/maud-ui.min.js", get(|| async {
-            ([("content-type", "application/javascript")], include_str!("../../path/to/maud-ui/dist/maud-ui.min.js"))
+            ([("content-type", "application/javascript")], maud_ui::assets::JS_MIN)
         }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
@@ -112,7 +119,7 @@ Routes:
 | `/` | Landing page — the pitch, built out of the library's own primitives |
 | `/gallery` | The component index: all 72, grouped by tier, with a sidebar filter |
 | `/{component}` | One component's page — variants, code samples, API docs |
-| `/blocks`, `/blocks/{slug}` | The 10 pre-composed block templates |
+| `/blocks`, `/blocks/{slug}` | The 13 pre-composed block templates |
 | `/theme` | Live theme customiser (edits tokens, persists to localStorage) |
 | `/getting-started` | Install, first paint, theming, runtime |
 | `/integrations/{slug}` | The 15 third-party widget integrations |
@@ -199,7 +206,7 @@ The full token list is in [css/maud-ui.css](css/maud-ui.css).
 ## Component reference
 
 <details>
-<summary><strong>79 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
+<summary><strong>81 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
 
 ### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
@@ -207,7 +214,7 @@ Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button
 
 ### Tier 2 — JS-enhanced (renders without JS; full interactivity with it)
 
-Accordion • Code Block • Collapsible • Direction • Hover Card • Input Group • Input OTP • Swatch • Switch • Tabs • Toast • Toggle • Toggle Group • Tool Call • Tooltip
+Bottom Tab Bar • Status Chip Group • Accordion • Code Block • Collapsible • Direction • Hover Card • Input Group • Input OTP • Swatch • Switch • Tabs • Toast • Toggle • Toggle Group • Tool Call • Tooltip
 
 ### Tier 3 — Requires JS for core functionality
 
@@ -228,13 +235,14 @@ Each component's props and variants are also documented in its module — run `c
 src/primitives/     # 72 component modules (Props, Variant, render(), showcase())
 src/tokens.rs       # Rust constants mirroring CSS custom properties
 css/                # Source styles (one file per component + maud-ui.css tokens)
-dist/               # Pre-built bundles — serve these to the browser
+static/             # 0.8 pre-built bundles — serve these to the browser
+dist/               # Legacy 0.7 bundles; retained as build inputs
   ├─ maud-ui.min.css
   ├─ maud-ui.min.js
   └─ behaviors/*.js
 assets/             # Brand — favicon.svg, og.png, apple-touch-icon.png (see docs/brand.md)
-js/build.mjs        # esbuild pipeline that concatenates + minifies dist/
-js/build-og.mjs     # Rasterises assets/og-source.html → og.png + apple-touch-icon.png
+examples/build-assets.mjs # Builds the complete 0.8 assets in static/
+examples/build-social-card.mjs # SVG → static/og.png through librsvg (no browser)
 examples/showcase.rs  # axum server that renders the landing page + gallery
 ```
 
@@ -264,16 +272,16 @@ the reason a breakpoint cannot be a CSS custom property.
 
 ```bash
 cargo check                     # Type-check the crate
-cargo test                      # Render tests for all 79 components + registration parity
-bun run gallery                 # Site on the first FREE port (see scripts/gallery.sh)
+cargo test                      # Render tests for all 81 components + registration parity
+ADDR=127.0.0.1:$(free-port) cargo run --example showcase # Local live showcase
 
-# Rebuild artifacts. These are THREE different outputs from three commands —
-# running one does not refresh the others, and cargo test guards the mismatch.
+# Rebuild the 0.8 artifacts. The legacy public/ export is a separate website release.
 bun install
-bun run build                   # → dist/    the bundle the CRATE ships
-bun run build:static            # → public/  the pre-rendered site the WEBSITE serves
-bun run build:og                # → assets/  og.png + apple-touch-icon.png (only when the
-                                #            card's source or the mark changes)
+node examples/build-assets.mjs  # → static/  the 0.8 bundle the crate ships
+cargo run --example build_docs # → docs/{components,blocks}/rendered/
+node examples/build-social-card.mjs # → static/og.{svg,png}; requires rsvg-convert
+node --test tests/curation-runtime.mjs # Handler fixtures, no browser
+node tests/curation-contrast.mjs # Theme token contrast and registration
 ```
 
 ## Tailwind

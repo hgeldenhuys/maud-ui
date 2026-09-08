@@ -1,0 +1,195 @@
+<h1>Tooltip</h1>
+<p>Non-modal overlay that displays contextual information on hover or focus.</p>
+<h2>Description</h2>
+<p>Tooltip renders a trigger element (button, link, icon) paired with a hidden content element that displays on hover/focus. The component supports four placements (Top, Bottom, Left, Right), alignment control (Start, Center, End), and optional side offset for fine-grained positioning. Content is shown/hidden via client-side JavaScript (not CSS-only).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::tooltip;
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::tooltip::{Props, Placement, Align, render};
+use maud::html;
+
+let tooltip = render(Props {
+    content: "Copy to clipboard".into(),
+    placement: Placement::Top,
+    align: Align::Center,
+    trigger: html! {
+        button.mui-btn.mui-btn--ghost.mui-btn--icon type="button" aria-label="Copy" {
+            "📋"
+        }
+    },
+    id: "tooltip-copy".into(),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>content</code></td><td><code>String</code></td><td><code>""</code></td><td>Tooltip text</td></tr>
+<tr><td><code>placement</code></td><td><code>Placement</code></td><td><code>Top</code></td><td>Position relative to trigger (Top, Bottom, Left, Right)</td></tr>
+<tr><td><code>align</code></td><td><code>Align</code></td><td><code>Center</code></td><td>Alignment along perpendicular axis (Start, Center, End)</td></tr>
+<tr><td><code>side_offset</code></td><td><code>Option&lt;u32&gt;</code></td><td><code>None</code></td><td>Pixel offset between trigger and tooltip (emitted as data-side-offset)</td></tr>
+<tr><td><code>delay_ms</code></td><td><code>u32</code></td><td><code>500</code></td><td>Milliseconds before tooltip appears</td></tr>
+<tr><td><code>trigger</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>The element that triggers the tooltip (button, link, icon)</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"tooltip"</code></td><td>Unique identifier (used in aria-describedby)</td></tr>
+</tbody></table>
+<h2>Placement Enum</h2>
+<pre><code class="language-rust">pub enum Placement {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+</code></pre>
+<p>Controls the tooltip's position relative to the trigger.</p>
+<h2>Align Enum</h2>
+<pre><code class="language-rust">pub enum Align {
+    Start,              // Aligned to start (left for Top/Bottom, top for Left/Right)
+    #[default]
+    Center,             // Centered
+    End,                // Aligned to end (right for Top/Bottom, bottom for Left/Right)
+}
+</code></pre>
+<p>Controls alignment along the perpendicular axis of placement.</p>
+<h2>Variants</h2>
+<h3>Top Placement</h3>
+<p>Tooltip appears above the trigger, centered by default.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Copy to clipboard".into(),
+    placement: Placement::Top,
+    align: Align::Center,
+    ..Default::default()
+})
+</code></pre>
+<h3>Bottom Placement</h3>
+<p>Tooltip appears below the trigger.</p>
+<pre><code class="language-rust">render(Props {
+    content: "View full list".into(),
+    placement: Placement::Bottom,
+    ..Default::default()
+})
+</code></pre>
+<h3>Left Placement</h3>
+<p>Tooltip appears to the left of the trigger.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Keyboard shortcut: ⌘K".into(),
+    placement: Placement::Left,
+    ..Default::default()
+})
+</code></pre>
+<h3>Right Placement</h3>
+<p>Tooltip appears to the right of the trigger.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Delete permanently".into(),
+    placement: Placement::Right,
+    ..Default::default()
+})
+</code></pre>
+<h3>Align Start</h3>
+<p>Tooltip aligned to the start of the perpendicular axis.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Aligned to start".into(),
+    placement: Placement::Bottom,
+    align: Align::Start,
+    ..Default::default()
+})
+</code></pre>
+<h3>Align Center (Default)</h3>
+<p>Tooltip centered on the perpendicular axis.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Centered tooltip".into(),
+    align: Align::Center,
+    ..Default::default()
+})
+</code></pre>
+<h3>Align End</h3>
+<p>Tooltip aligned to the end of the perpendicular axis.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Aligned to end".into(),
+    placement: Placement::Bottom,
+    align: Align::End,
+    ..Default::default()
+})
+</code></pre>
+<h3>Custom Side Offset</h3>
+<p>Emit <code>data-side-offset</code> for client-side positioning code to use.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Offset 12px".into(),
+    side_offset: Some(12),
+    ..Default::default()
+})
+</code></pre>
+<h3>Custom Delay</h3>
+<p>Control how long before the tooltip appears.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Appear quickly".into(),
+    delay_ms: 200,
+    ..Default::default()
+})
+</code></pre>
+<h3>Icon Button Trigger</h3>
+<p>Common pattern for copy-to-clipboard or action hints.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Copy to clipboard".into(),
+    placement: Placement::Top,
+    trigger: html! {
+        button.mui-btn.mui-btn--ghost.mui-btn--icon type="button" aria-label="Copy" {
+            span aria-hidden="true" { "📋" }
+        }
+    },
+    id: "tooltip-copy".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Avatar Stack Tooltip</h3>
+<p>Show count of hidden members.</p>
+<pre><code class="language-rust">render(Props {
+    content: "View full list (12 members)".into(),
+    placement: Placement::Bottom,
+    trigger: html! {
+        button.mui-btn.mui-btn--outline.mui-btn--sm type="button" aria-label="+3 more members" {
+            "+3"
+        }
+    },
+    id: "tooltip-avatars".into(),
+    ..Default::default()
+})
+</code></pre>
+<h3>Keyboard Shortcut Hint</h3>
+<p>Hint users about available shortcuts.</p>
+<pre><code class="language-rust">render(Props {
+    content: "Keyboard shortcut: ⌘K".into(),
+    placement: Placement::Left,
+    delay_ms: 400,
+    trigger: html! {
+        button.mui-btn.mui-btn--outline type="button" aria-label="Open search" {
+            "🔍 Search"
+        }
+    },
+    id: "tooltip-search".into(),
+    ..Default::default()
+})
+</code></pre>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Aria-Describedby:</strong> The trigger has <code>aria-describedby</code> pointing to the tooltip's <code>id</code>.</li>
+<li><strong>Role Tooltip:</strong> The content element has <code>role="tooltip"</code>.</li>
+<li><strong>Hidden/Visible:</strong> The tooltip is <code>hidden</code> and <code>data-visible="false"</code> until shown by client-side script.</li>
+<li><strong>Trigger Label:</strong> Always provide a descriptive label on the trigger button or link.</li>
+<li><strong>Delay:</strong> Default 500ms delay reduces tooltip spam on fast hovers.</li>
+<li><strong>Dismiss:</strong> Tooltips hide on blur or pointer leave (not user-controlled dismiss).</li>
+</ul>
+<h2>Data Attributes</h2>
+<ul>
+<li><code>data-side-offset</code>: When set, contains the offset value in pixels for positioning code to consume.</li>
+<li><code>data-delay</code>: Contains the delay duration in milliseconds.</li>
+<li><code>data-visible</code>: Client-side script sets to "true" when tooltip is shown, "false" when hidden.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="/docs/components/popover.md">Popover</a> — Dismissible overlay with more interaction options</li>
+<li><a href="/docs/components/dialog.md">Dialog</a> — Modal overlay with richer content</li>
+<li><a href="/docs/components/hover-card.md">Hover Card</a> — Rich content on hover</li>
+<li><a href="/docs/components/button.md">Button</a> — Typical trigger element</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Maud-ui Tooltip aligns with shadcn's <code>&lt;Tooltip&gt;</code> component, supporting Placement (Top/Bottom/Left/Right) and Align (Start/Center/End) options plus optional side offset for custom positioning.</p>

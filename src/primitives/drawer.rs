@@ -5,8 +5,10 @@ use super::{field, native_select, separator, switch};
 
 /// Side where the drawer slides in from
 #[derive(Clone, Debug)]
+#[derive(Default)]
 pub enum Side {
     Left,
+    #[default]
     Right,
     Top,
     Bottom,
@@ -23,11 +25,6 @@ impl Side {
     }
 }
 
-impl Default for Side {
-    fn default() -> Self {
-        Side::Right
-    }
-}
 
 /// Drawer rendering properties
 #[derive(Clone, Debug)]

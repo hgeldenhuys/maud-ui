@@ -3,7 +3,14 @@
 Publishing is **irreversible**. crates.io versions can be yanked but never replaced, so every
 mistake below ships forever. Each rule here exists because it was nearly (or actually) shipped.
 
-## The order that matters
+## 0.8 asset contract
+
+0.8 consumers serve `maud_ui::assets::{CSS_MIN, JS_MIN}` or vendor **static/**. Rebuild with `node examples/build-assets.mjs`, `cargo run --example build_docs`, and `node examples/build-social-card.mjs` (librsvg). The example server serves those complete assets. The legacy **dist/** and **public/** snapshots stay at 0.7; the older website export command below does not constitute a 0.8 website build. Migrate the exporter to the new bundles and all 13 block routes before publishing the website. No publication or git write was performed by the 0.8 curation task.
+
+Require both `cargo test` and `cargo clippy --all-targets -- -D warnings`, plus the Node curation handler and contrast checks documented in testing.md. Every new Markdown page has committed generated HTML checked for freshness.
+
+## Historical release workflow (through 0.7)
+
 
 ```bash
 # 1. Regenerate the artifacts. They are built by DIFFERENT commands.

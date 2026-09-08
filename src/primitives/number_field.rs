@@ -138,7 +138,6 @@ pub fn showcase() -> Markup {
                         disabled: true,
                         id: "backorder-qty".into(),
                         label: "Backordered quantity".into(),
-                        ..Default::default()
                     }))
                     p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
                         "Ships when restocked on April 28."

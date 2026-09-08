@@ -1,0 +1,75 @@
+<h1>Grid</h1>
+<p>The two-dimensional layout container. Where <a href="stack.md">stack</a> lays children along one axis, <code>grid</code> lays them into columns.</p>
+<p>The two share one spacing scale and one alignment vocabulary — <code>gap</code> is <code>Space</code> and <code>align</code> is <code>Align</code>, both re-exported from <code>stack</code> — so there is one set of values to learn, and one for tooling to describe.</p>
+<p>The default is <code>Columns::AutoFit</code>: <code>repeat(auto-fit, minmax(…, 1fr))</code>, which fills the available width with as many columns as fit and needs no media query. It also responds to its <strong>container</strong>, not the viewport, so a grid inside a sidebar behaves correctly without knowing it is in a sidebar.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::grid::{self, Align, Columns, MinColumn, Props, Space};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::{card, grid};
+
+// A dashboard card grid: as many ≥18rem columns as fit.
+html! {
+    (grid::render(grid::Props {
+        min_column: grid::MinColumn::Lg,
+        gap: grid::Space::Lg,
+        children: html! {
+            @for title in ["Revenue", "Subscriptions", "Active now"] {
+                (card::render(card::Props {
+                    title: Some(title.into()),
+                    ..Default::default()
+                }))
+            }
+        },
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>columns</code></td><td><code>Columns</code></td><td><code>AutoFit</code></td><td>Column track definition</td></tr>
+<tr><td><code>min_column</code></td><td><code>MinColumn</code></td><td><code>Md</code> (<code>14rem</code>)</td><td>Minimum column width for <code>AutoFit</code>; no effect on fixed counts</td></tr>
+<tr><td><code>gap</code></td><td><code>Space</code></td><td><code>Md</code> (<code>0.75rem</code>)</td><td>Space between both rows and columns</td></tr>
+<tr><td><code>padding</code></td><td><code>Space</code></td><td><code>None</code></td><td>Inset applied by the container itself</td></tr>
+<tr><td><code>align</code></td><td><code>Align</code></td><td><code>Stretch</code></td><td>Block-axis alignment of items within their track (<code>align-items</code>)</td></tr>
+<tr><td><code>collapse_narrow</code></td><td><code>bool</code></td><td><code>true</code></td><td>Collapse fixed column counts to one column below <code>40rem</code></td></tr>
+<tr><td><code>id</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references</td></tr>
+<tr><td><code>children</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>Grid children — each becomes one grid item</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Columns</h3>
+<ul>
+<li><code>AutoFit</code>: as many equal columns as fit, each at least <code>min_column</code> wide — the default, and the only option that adapts to its container rather than the viewport</li>
+<li><code>One</code> · <code>Two</code> · <code>Three</code> · <code>Four</code> · <code>Five</code> · <code>Six</code>: that many equal columns</li>
+<li><code>Twelve</code>: the classic layout grid, for children that span several tracks</li>
+</ul>
+<h3>MinColumn</h3>
+<p>Decides how many columns <code>AutoFit</code> produces. Ignored by fixed counts.</p>
+<ul>
+<li><code>Sm</code>: <code>10rem</code> — dense: chips, swatches, small tiles</li>
+<li><code>Md</code>: <code>14rem</code> — the default: stat cards, thumbnails</li>
+<li><code>Lg</code>: <code>18rem</code> — content cards</li>
+<li><code>Xl</code>: <code>24rem</code> — wide panels, forms</li>
+</ul>
+<h3>Space</h3>
+<p>Re-exported from <a href="stack.md">stack</a> — <code>None</code> · <code>Xs</code> · <code>Sm</code> · <code>Md</code> · <code>Lg</code> · <code>Xl</code> · <code>Xxl</code>, resolving to <code>0</code> · <code>0.25rem</code> · <code>0.5rem</code> · <code>0.75rem</code> · <code>1rem</code> · <code>1.5rem</code> · <code>2rem</code> through the <code>--mui-space-*</code> custom properties.</p>
+<h3>Align</h3>
+<p>Re-exported from <a href="stack.md">stack</a> — <code>Stretch</code> · <code>Start</code> · <code>Center</code> · <code>End</code> · <code>Baseline</code>.</p>
+<h2>Helper Functions</h2>
+<table><thead><tr><th>Function</th><th>Signature</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>auto</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Auto-fitting grid with the default gap and minimum column width</td></tr>
+<tr><td><code>columns</code></td><td><code>fn(Columns, Markup) -&gt; Markup</code></td><td>Fixed-column grid with the default gap, collapsing on narrow viewports</td></tr>
+<tr><td><code>Columns::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a track definition, empty for the default</td></tr>
+<tr><td><code>Columns::count</code></td><td><code>fn(self) -&gt; Option&lt;u8&gt;</code></td><td>The number of columns, or <code>None</code> for <code>AutoFit</code></td></tr>
+<tr><td><code>MinColumn::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class, empty for the default</td></tr>
+<tr><td><code>MinColumn::as_length</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The CSS length a step resolves to</td></tr>
+</tbody></table>
+<h2>Accessibility</h2>
+<p>A grid is presentational: it changes visual position without changing DOM order, so keyboard focus and screen-reader order continue to follow source order. Keep the children in the order they should be read.</p>
+<p><code>collapse_narrow</code> defaults to <code>true</code> because a four-column grid on a phone is four unreadable slivers, and this crate offers no class escape hatch a consumer could use to fix that themselves — so the responsive behaviour has to live in the primitive. Set it to <code>false</code> only when the cells are genuinely small (a colour palette, a keypad) and should stay side by side at every width.</p>
+<p>Note that <code>grid</code> does not set <code>role="grid"</code>. That ARIA role describes an interactive tabular widget with its own keyboard model, not a layout — applying it here would promise navigation behaviour that does not exist. For tabular data use <a href="table.md">table</a> or <a href="data_table.md">data_table</a>.</p>
+<h2>Related</h2>
+<p>Stack (one-axis container; the two compose — grid for columns, stack for each cell's rows), Card (the usual grid child), AspectRatio (fixed-ratio media cells), Table (tabular <em>data</em>, not layout)</p>
+<h2>Shadcn reference</h2>
+<p>No direct shadcn/Base UI equivalent — shadcn leans on Tailwind utility classes (<code>grid grid-cols-3 gap-4</code>) for this role. <code>grid</code> fills the same need in a utility-free, enumerable form.</p>

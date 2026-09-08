@@ -1,0 +1,85 @@
+<h1>NativeSelect</h1>
+<p>Thin wrapper around the native HTML <code>&lt;select&gt;</code> element with consistent styling. Provides a chevron icon overlay and integrates with the Input component's visual design.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::native_select::{self, NativeSelectProps, NativeOption};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::native_select;
+
+html! {
+    div class="mui-field" {
+        label class="mui-label" for="country" { "Country" }
+        (native_select::render(native_select::NativeSelectProps {
+            name: "country".to_string(),
+            id: "country".to_string(),
+            options: vec![
+                native_select::NativeOption {
+                    value: "us".to_string(),
+                    label: "United States".to_string(),
+                    disabled: false,
+                },
+                native_select::NativeOption {
+                    value: "ca".to_string(),
+                    label: "Canada".to_string(),
+                    disabled: false,
+                },
+                native_select::NativeOption {
+                    value: "mx".to_string(),
+                    label: "Mexico".to_string(),
+                    disabled: false,
+                },
+            ],
+            selected: Some("us".to_string()),
+            disabled: false,
+            placeholder: None,
+        }))
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td><code>""</code></td><td>HTML <code>name</code> attribute for form submission.</td></tr>
+<tr><td>id</td><td>String</td><td><code>""</code></td><td>HTML <code>id</code> attribute; should match the associated label's <code>for</code> attribute.</td></tr>
+<tr><td>options</td><td>Vec<NativeOption></td><td><code>vec![]</code></td><td>List of selectable options.</td></tr>
+<tr><td>selected</td><td>Option<String></td><td><code>None</code></td><td>Value of the currently selected option. When Some, the matching option is marked selected.</td></tr>
+<tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Disables the select; user cannot interact with it.</td></tr>
+<tr><td>placeholder</td><td>Option<String></td><td><code>None</code></td><td>When Some, a hidden placeholder option is prepended with empty value and disabled/selected attributes.</td></tr>
+</tbody></table>
+<h2>NativeOption</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>value</td><td>String</td><td>Value submitted when this option is selected.</td></tr>
+<tr><td>label</td><td>String</td><td>Text displayed to the user.</td></tr>
+<tr><td>disabled</td><td>bool</td><td>When true, this option cannot be selected.</td></tr>
+</tbody></table>
+<h2>Variants</h2>
+<table><thead><tr><th>Variant</th><th>Configuration</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Default</td><td>Single selected option, no placeholder</td><td>Pre-selected choice (currency, timezone).</td></tr>
+<tr><td>With placeholder</td><td><code>placeholder: Some("Select...")</code></td><td>Force user to make an explicit choice.</td></tr>
+<tr><td>Disabled</td><td><code>disabled: true</code></td><td>Read-only field; user cannot change the value.</td></tr>
+<tr><td>Disabled options</td><td>Some options have <code>disabled: true</code></td><td>Certain choices are unavailable.</td></tr>
+<tr><td>Multiple options</td><td>Large option list</td><td>Extensive choices (country, state, category).</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<p>None. The component is a minimal semantic wrapper around the native <code>&lt;select&gt;</code> element.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Label association:</strong> Use a <code>&lt;label&gt;</code> element with <code>for</code> matching the select's <code>id</code>.</li>
+<li><strong>Chevron icon:</strong> Marked with <code>aria-hidden="true"</code> so screen readers ignore the decorative SVG.</li>
+<li><strong>Native control:</strong> Leverages native browser <code>&lt;select&gt;</code> behavior; keyboard navigation (arrow keys) is handled by the browser.</li>
+<li><strong>Disabled state:</strong> Sets <code>disabled</code> attribute; screen readers announce "disabled" state.</li>
+<li><strong>Placeholder:</strong> When present, the placeholder option is marked <code>disabled</code> and <code>hidden</code>, ensuring it cannot be selected after the user chooses another option.</li>
+</ul>
+<h2>Design Notes</h2>
+<p>NativeSelect uses the native <code>&lt;select&gt;</code> element intentionally, <strong>not</strong> a custom dropdown component. This approach ensures:</p>
+<ol>
+<li><strong>Browser consistency:</strong> Users experience familiar platform-specific select behavior.</li>
+<li><strong>Mobile optimization:</strong> Touch devices open native picker UI.</li>
+<li><strong>Accessibility:</strong> Native semantics are stronger than custom components.</li>
+<li><strong>Keyboard support:</strong> Built-in keyboard navigation is instant, no JavaScript required.</li>
+</ol>
+<p>The chevron icon is purely decorative and does not indicate open/closed state (browser handles that).</p>
+<h2>Related</h2>
+<p>Input, Native Textarea, Label, Dropdown Menu.</p>
+<h2>Shadcn reference</h2>
+<p>https://ui.shadcn.com/docs/components/base/select</p>

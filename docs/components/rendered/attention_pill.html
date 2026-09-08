@@ -1,0 +1,28 @@
+<h1>Attention pill</h1>
+<p>A small accent-tinted pill that says "this wants a look". Two states, one component: the accent form (accent-12% fill, accent dot, accent text) draws the eye; the muted zero-state form spends no accent at all, so an empty count does not sit there glowing.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::attention_pill::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::attention_pill::{self, Props};
+
+// Wants attention
+attention_pill::render(Props { label: "2 waiting on you".into(), ..Default::default() });
+
+// Zero state — recedes
+attention_pill::render(Props { label: "all caught up".into(), muted: true });
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>label</td><td>String</td><td><code>""</code></td><td>Caller-supplied label text.</td></tr>
+<tr><td>muted</td><td>bool</td><td><code>false</code></td><td>Render the no-accent zero-state instead of the accent form.</td></tr>
+</tbody></table>
+<h2>When to use each</h2>
+<p>Reach for the accent form for a <em>non-zero</em> actionable count — the one thing on a row the eye should land on. Switch to <code>muted: true</code> at zero so the surface reads as calm rather than lit up at nothing.</p>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-attention-pill</code> (+ <code>mui-attention-pill--muted</code>).</li>
+<li><code>mui-attention-pill__dot</code>, <code>mui-attention-pill__label</code>.</li>
+</ul>
+<h2>Related</h2>
+<p>Badge, Status dot.</p>

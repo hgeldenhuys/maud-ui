@@ -1,0 +1,39 @@
+<h1>StreamingCursor</h1>
+<p>The blinking caret shown while an AI response is still streaming — a tiny animated indicator appended to in-progress text (also ships two sibling animations, a thinking-dots pulse and a status-beacon ring pulse, behind the same <code>render</code>/<code>Props</code>).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::streaming_cursor::{self, Variant, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::streaming_cursor::{self, Variant, Props};
+
+html! {
+    p {
+        "The answer is 42"
+        (streaming_cursor::render(Props { variant: Variant::Cursor, ..Default::default() }))
+    }
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Variant::Cursor</code></td><td>Which animation to render</td></tr>
+<tr><td><code>label</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional label rendered next to the animation (e.g. "thinking", "writing…")</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>Variant</h3>
+<ul>
+<li><code>Cursor</code> (default): blinking block cursor, appended to streaming text</li>
+<li><code>Dots</code>: three-dot pulse ("Claude is thinking…")</li>
+<li><code>Pulse</code>: ring pulse (status beacon)</li>
+</ul>
+<h2>Helper Functions</h2>
+<p>None. The module exposes only <code>render</code> and <code>showcase</code> — no other <code>pub fn</code>.</p>
+<h2>Accessibility</h2>
+<ul>
+<li><strong><code>aria-hidden</code> on the decorative indicator: yes.</strong> Each variant's animated element is explicitly marked <code>aria-hidden="true"</code> in the source — <code>span.mui-streaming__cursor aria-hidden="true"</code>, <code>span.mui-streaming__dots aria-hidden="true"</code>, and <code>span.mui-streaming__pulse aria-hidden="true"</code>. The outer wrapper (<code>span.mui-streaming</code>) instead carries <code>role="status" aria-live="polite"</code>, so a screen reader is not told about the blinking caret itself but will politely announce the optional <code>label</code> text when it changes.</li>
+<li><strong><code>prefers-reduced-motion</code> support: yes.</strong> <code>css/components/streaming_cursor.css</code> ends with a <code>@media (prefers-reduced-motion: reduce)</code> block setting <code>animation: none</code> on <code>.mui-streaming__cursor</code>, <code>.mui-streaming__dots span</code>, and <code>.mui-streaming__pulse</code>. Each one degrades to its <strong>static but still visible</strong> state — a solid caret, three solid dots, a solid status dot — rather than disappearing: none of the base rules set <code>opacity</code> or <code>transform</code>, so removing the animation leaves the indicator on screen. The indicator keeps indicating; it just stops moving. Added in 0.4.0; before that all three animated unconditionally.</li>
+</ul>
+<h2>Related</h2>
+<p>code_block, message, diff, tool_call (AI-chat/agent family), spinner (for non-streaming waits)</p>
+<h2>Shadcn reference</h2>
+<p>No shadcn equivalent — this is a streaming/AI-chat-specific primitive with no upstream shadcn/ui component.</p>

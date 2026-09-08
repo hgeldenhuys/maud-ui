@@ -1,0 +1,34 @@
+<h1>Facts list</h1>
+<p>Mono subtle labels paired with foreground values, on a 4px rhythm. The key/value register used by the empty-session card and the inspector's SESSION section. Renders as a semantic <code>&lt;dl&gt;</code>.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::facts_list::{self, Props, Fact};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::facts_list::{self, Props, Fact};
+
+facts_list::render(Props {
+    facts: vec![
+        Fact::new("model", "sonnet-4.6"),
+        Fact::mono("context", "18.4k / 200k"),
+        Fact::mono("spend", "$1.84"),
+        Fact::new("started", "41m ago"),
+    ],
+})
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>facts</td><td>Vec&lt;Fact&gt;</td><td><code>[]</code></td><td>The rows, top to bottom.</td></tr>
+</tbody></table>
+<h2>Fact</h2>
+<table><thead><tr><th>Constructor</th><th>Value face</th></tr></thead><tbody>
+<tr><td><code>Fact::new(label, value)</code></td><td>Sans value.</td></tr>
+<tr><td><code>Fact::mono(label, value)</code></td><td>Mono value — for shas, counts, paths.</td></tr>
+</tbody></table>
+<p>Labels are always mono and subtle; the <code>mono</code> flag governs only the value.</p>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-facts</code> — the <code>&lt;dl&gt;</code>.</li>
+<li><code>mui-facts__row</code>, <code>mui-facts__label</code>, <code>mui-facts__value</code> (+ <code>mui-facts__value--mono</code>).</li>
+</ul>
+<h2>Related</h2>
+<p>Gutter section (wraps this under a header), Table, Item.</p>

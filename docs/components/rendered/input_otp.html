@@ -1,0 +1,64 @@
+<h1>InputOTP</h1>
+<p>One-time password input with grouped, individually focusable slots supporting digits, alphanumeric, and custom regex patterns.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::input_otp::{self, Props, OtpPattern};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::input_otp;
+
+html! {
+    (input_otp::render(input_otp::Props {
+        length: 6,
+        group_size: 3,
+        name: "verification-code".to_string(),
+        id: "otp".to_string(),
+        pattern: input_otp::OtpPattern::Digits,
+        aria_invalid: false,
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>length</code></td><td><code>usize</code></td><td><code>6</code></td><td>Total number of input slots.</td></tr>
+<tr><td><code>group_size</code></td><td><code>usize</code></td><td><code>3</code></td><td>Slots per group before visual separator (0 = no separator).</td></tr>
+<tr><td><code>name</code></td><td><code>String</code></td><td><code>"otp"</code></td><td>HTML name attribute for the hidden value input.</td></tr>
+<tr><td><code>id</code></td><td><code>String</code></td><td><code>"otp"</code></td><td>HTML id prefix for each slot (id-0, id-1, etc.).</td></tr>
+<tr><td><code>disabled</code></td><td><code>bool</code></td><td><code>false</code></td><td>Disables all slots.</td></tr>
+<tr><td><code>pattern</code></td><td><code>OtpPattern</code></td><td><code>Digits</code></td><td>Accepted character set per slot.</td></tr>
+<tr><td><code>aria_invalid</code></td><td><code>bool</code></td><td><code>false</code></td><td>Sets <code>aria-invalid="true"</code> on each slot for error announcement.</td></tr>
+</tbody></table>
+<h2>OtpPattern</h2>
+<pre><code class="language-rust">pub enum OtpPattern {
+    Digits,                    // [0-9], inputmode="numeric"
+    DigitsAndChars,           // [0-9A-Za-z], inputmode="text"
+    Custom(String),           // Custom regex, inputmode="text"
+}
+</code></pre>
+<h2>Slots</h2>
+<p>Each slot renders as a single-character <code>&lt;input&gt;</code> with:</p>
+<ul>
+<li><code>maxlength="1"</code> — prevents multi-char entry.</li>
+<li><code>pattern=".."</code> — HTML5 validation.</li>
+<li><code>autocomplete="one-time-code"</code> — browser password manager integration.</li>
+<li><code>aria-label="Digit N"</code> — ordinal labeling.</li>
+<li><code>aria-invalid=[Some("true")]</code> — when <code>aria_invalid: true</code>.</li>
+</ul>
+<p>A hidden input with <code>name="otp"</code> collects the final value.</p>
+<h2>Grouping</h2>
+<p>Visual separator (<code>&lt;div class="mui-input-otp__separator"&gt;</code>) inserted before every <code>group_size</code>-th slot. Set <code>group_size=0</code> to disable grouping.</p>
+<h2>Accessibility</h2>
+<ul>
+<li>Container has <code>role="group"</code> + <code>aria-label="One-time password"</code>.</li>
+<li>Each slot labeled with <code>aria-label="Digit N"</code> for screen readers.</li>
+<li>Separator has <code>role="separator"</code>.</li>
+<li><code>aria_invalid: true</code> announces validation failure without native form submission.</li>
+</ul>
+<h2>Related</h2>
+<ul>
+<li><a href="input.md">Input</a> — single text input.</li>
+<li><a href="field.md">Field</a> — wrapper with label/description/error.</li>
+</ul>
+<h2>Shadcn Reference</h2>
+<p>Mirrors shadcn's InputOTP with OtpPattern enum (Digits, DigitsAndChars, Custom) and slot-based rendering.</p>

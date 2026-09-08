@@ -1,0 +1,62 @@
+<h1>Diff</h1>
+<p>A unified diff viewer that renders line-level changes with line numbers, ± counts, and hunk headers. It has no syntax highlighting — the renderer focuses on accurate layout, not language-aware styling.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::diff::{self, LineKind, Line, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::diff;
+
+html! {
+    (diff::render(diff::Props {
+        file_path: Some("src/primitives/message.rs".into()),
+        show_line_numbers: true,
+        lines: vec![
+            diff::Line { kind: diff::LineKind::Hunk, old_line_no: None, new_line_no: None, text: "@@ -17,5 +17,6 @@".into() },
+            diff::Line { kind: diff::LineKind::Context, old_line_no: Some(17), new_line_no: Some(17), text: "pub struct Props {".into() },
+            diff::Line { kind: diff::LineKind::Remove, old_line_no: Some(18), new_line_no: None, text: "    pub role: String,".into() },
+            diff::Line { kind: diff::LineKind::Add, old_line_no: None, new_line_no: Some(18), text: "    pub role: Role,".into() },
+        ],
+        ..Default::default()
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>file_path</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>File path shown in the header (e.g. "src/main.rs").</td></tr>
+<tr><td><code>lines</code></td><td><code>Vec&lt;Line&gt;</code></td><td><code>vec![]</code> (empty)</td><td>Lines in display order (usually: hunk, then context+add+remove per hunk).</td></tr>
+<tr><td><code>show_line_numbers</code></td><td><code>bool</code></td><td><code>false</code></td><td>Whether to show line-number columns.</td></tr>
+<tr><td><code>added</code></td><td><code>Option&lt;u32&gt;</code></td><td><code>None</code></td><td>Optional <code>added</code> count override — when <code>None</code>, counted from <code>lines</code>.</td></tr>
+<tr><td><code>removed</code></td><td><code>Option&lt;u32&gt;</code></td><td><code>None</code></td><td>Optional <code>removed</code> count override.</td></tr>
+</tbody></table>
+<p><code>Props</code> derives <code>Default</code>, so the values above come straight from <code>#[derive(Default)]</code> (<code>Option</code> → <code>None</code>, <code>Vec</code> → empty, <code>bool</code> → <code>false</code>) — every field above can be omitted via <code>..Default::default()</code>, as in the example.</p>
+<h3>Line</h3>
+<p><code>Line</code> derives only <code>Debug, Clone</code> (no <code>Default</code>), so every field below is required — there is no <code>..Default::default()</code> shortcut when constructing one.</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>kind</code></td><td><code>LineKind</code></td><td><em>(required — no default)</em></td><td>Kind of line in the diff; drives row colouring.</td></tr>
+<tr><td><code>old_line_no</code></td><td><code>Option&lt;u32&gt;</code></td><td><em>(required — no default)</em></td><td>Line number in the original file (<code>None</code> for added lines).</td></tr>
+<tr><td><code>new_line_no</code></td><td><code>Option&lt;u32&gt;</code></td><td><em>(required — no default)</em></td><td>Line number in the new file (<code>None</code> for removed lines).</td></tr>
+<tr><td><code>text</code></td><td><code>String</code></td><td><em>(required — no default)</em></td><td>The line's text content, rendered verbatim into <code>.mui-diff__text</code>.</td></tr>
+</tbody></table>
+<h2>Variants / Enums</h2>
+<h3>LineKind</h3>
+<ul>
+<li><code>Context</code> — an unchanged line. Row class <code>mui-diff__line--context</code>; sigil <code>" "</code> (a single space).</li>
+<li><code>Add</code> — an added line. Row class <code>mui-diff__line--add</code>; sigil <code>"+"</code>.</li>
+<li><code>Remove</code> — a removed line. Row class <code>mui-diff__line--remove</code>; sigil <code>"-"</code> (a plain hyphen-minus — note this differs from the <code>\u{2212}</code> true minus sign used for the header's removed count).</li>
+<li><code>Hunk</code> — a hunk header line (e.g. <code>@@ -17,5 +17,6 @@</code>). Row class <code>mui-diff__line--hunk</code>; <code>render()</code> special-cases this kind — it skips the line-number columns and the sigil span entirely and shows only the raw <code>text</code>, so the hunk marker must already be present in that text.</li>
+</ul>
+<p><code>class()</code> and <code>sigil()</code> are methods on <code>LineKind</code> but are <strong>not</strong> <code>pub</code> — they're private helpers <code>render()</code> uses internally, not part of the public API (see Helper Functions).</p>
+<h2>Helper Functions</h2>
+<p>None. Besides <code>render</code> and <code>showcase</code>, <code>diff.rs</code> exports no other <code>pub fn</code>. The module's only other functions — the free function <code>count(lines: &amp;[Line]) -&gt; (u32, u32)</code> and <code>LineKind</code>'s <code>class</code>/<code>sigil</code> methods — are all private (no <code>pub</code> keyword) and exist purely to support <code>render()</code>.</p>
+<h2>Accessibility</h2>
+<p>The diff body is <code>role="table"</code> with <code>aria-label="diff"</code>; each line is <code>role="row"</code> and its spans are <code>role="cell"</code> — so screen readers get generic table/row/cell semantics, but nothing that names an individual row as "added" or "removed."</p>
+<p>Add/Remove state reaches every user through three channels. Sighted users get colour (the background tint <code>css/components/diff.css</code> applies to <code>.mui-diff__line--add</code>/<code>--remove</code>) and shape (a literal <code>"+"</code>/<code>"-"</code> sigil in <code>.mui-diff__sigil</code>). That sigil is marked <code>aria-hidden="true"</code>, so assistive tech instead receives a visually-hidden <code>"Added: "</code> / <code>"Removed: "</code> prefix emitted <strong>inside</strong> the row's <code>role="cell"</code> text span — placement matters, because content sitting in a <code>role="row"</code> but outside a cell is not reliably announced.</p>
+<p>Context lines carry no announcement by design: they are the baseline, and prefixing every unchanged line with "Unchanged" would bury the two states that actually matter.</p>
+<p>Until 0.4.0 the sigil was the only non-colour channel and it was <code>aria-hidden</code>, so screen-reader users got the line text with no way to tell an addition from a deletion — the one thing a diff exists to convey. <code>tests/render_tests.rs::conversation_0_4_0</code> guards the fix.</p>
+<p>One gap remains: line-number cells (<code>old_line_no</code>/<code>new_line_no</code>) are plain, unlabelled cells, with nothing but visual position and CSS class to say which column is "old" and which is "new".</p>
+<p>Hunk rows are the one exception where content stays fully accessible regardless of colour or ARIA: they render only their <code>text</code> (typically the <code>@@ ... @@</code> header itself), so a screen reader reads the same boundary marker a sighted user sees.</p>
+<h2>Related</h2>
+<p><code>code_block</code> (renders literal source in a monospace panel diff often sits alongside), <code>message</code> (chat-turn container a diff is commonly nested inside), <code>tool_call</code> (adjacent panel for an agent's tool invocation, often paired with a diff of the file it edited), <code>streaming_cursor</code> (appended while a diff is still being generated line-by-line)</p>
+<h2>Shadcn reference</h2>
+<p>No shadcn/ui equivalent — shadcn ships no diff-view primitive, so there's nothing to link here.</p>

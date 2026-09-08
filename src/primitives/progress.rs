@@ -44,11 +44,7 @@ pub fn value(val: u32) -> Markup {
 
 /// Render a progress bar with the given properties
 pub fn render(props: Props) -> Markup {
-    let pct = if props.max == 0 {
-        0
-    } else {
-        (props.value * 100) / props.max
-    };
+    let pct = (u64::from(props.value) * 100).checked_div(u64::from(props.max)).unwrap_or(0);
 
     html! {
         @if props.indeterminate {

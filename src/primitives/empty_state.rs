@@ -34,10 +34,20 @@ impl MediaVariant {
     }
 }
 
+/// The reason content is unavailable; errors must never masquerade as zero results.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Variant {
+    #[default]
+    Empty,
+    Filtered,
+    Failed,
+}
+
 /// EmptyState rendering properties
 #[derive(Debug, Clone)]
 pub struct Props {
-    /// Optional icon (text or emoji), defaults to 📭
+    pub variant: Variant,
+    /// Optional icon (text or emoji); None uses the reason-specific glyph.
     pub icon: Option<String>,
     /// Main title/heading
     pub title: String,
@@ -47,14 +57,36 @@ pub struct Props {
     pub action: Option<Markup>,
 }
 
+impl Default for Props {
+    fn default() -> Self {
+        Self::for_variant(Variant::Empty)
+    }
+}
+
 impl Props {
     pub fn new(title: impl Into<String>) -> Self {
         Self {
+            variant: Variant::Empty,
             icon: None,
             title: title.into(),
             description: None,
             action: None,
         }
+    }
+
+    pub fn with_variant(mut self, variant: Variant) -> Self {
+        self.variant = variant;
+        self
+    }
+
+    /// Clear, distinct default copy; override title/description for domain vocabulary.
+    pub fn for_variant(variant: Variant) -> Self {
+        let (title, description) = match variant {
+            Variant::Empty => ("Nothing here yet", "New records will appear here when they are available."),
+            Variant::Filtered => ("No matching results", "Try a different search or clear the filters."),
+            Variant::Failed => ("Could not load records", "The request failed. Try again to load your records."),
+        };
+        Self::new(title).with_variant(variant).with_description(description)
     }
 
     pub fn with_icon(mut self, icon: impl Into<String>) -> Self {
@@ -79,10 +111,15 @@ impl Props {
 /// [`compose`] / [`header`] / [`media`] / [`title`] / [`description`] / [`content`]
 /// subcomponent helpers.
 pub fn render(props: Props) -> Markup {
-    let icon = props.icon.unwrap_or_else(|| "📭".to_string());
+    let (state, default_icon) = match props.variant {
+        Variant::Empty => ("empty", "◇"),
+        Variant::Filtered => ("filtered", "⌕"),
+        Variant::Failed => ("failed", "!"),
+    };
+    let icon = props.icon.unwrap_or_else(|| default_icon.to_string());
 
     html! {
-        div.mui-empty-state {
+        div.mui-empty-state data-state=(state) {
             div.mui-empty-state__icon.mui-empty-state__icon--default aria-hidden="true" { (icon) }
             h3.mui-empty-state__title { (props.title) }
             @if let Some(desc) = props.description {
@@ -158,12 +195,17 @@ pub fn content(children: Markup) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            @for (variant, label) in [(Variant::Empty, "Create a record"), (Variant::Filtered, "Clear filters"), (Variant::Failed, "Try again")] {
+                (render(Props::for_variant(variant).with_action(html! {
+                    a class="mui-btn mui-btn--outline mui-btn--md" href="/empty_state" { (label) }
+                })))
+            }
             // No results
             div {
                 p.mui-showcase__caption { "No results" }
                 div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (render(
-                        Props::new("No results found")
+                        Props::new("No results found").with_variant(Variant::Filtered)
                             .with_icon("\u{1F50D}")
                             .with_description("Try adjusting your search query or removing some filters to find what you're looking for.")
                             .with_action(html! {

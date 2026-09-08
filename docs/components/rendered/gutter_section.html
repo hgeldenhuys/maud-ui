@@ -1,0 +1,29 @@
+<h1>Gutter section</h1>
+<p>A mono uppercase section header over a content slot — the unit the inspector gutter is built from (SESSION, LINEAGE, LINKED DOCS).</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::gutter_section::{self, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::gutter_section::{self, Props};
+
+gutter_section::render(Props {
+    title: "Linked docs".into(),
+    content: html! {
+        div { a href="#" { "auth-middleware RFC" } }
+        div { a href="#" { "tower Layer contract" } }
+    },
+})
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td><code>""</code></td><td>Section title — rendered mono, uppercased by CSS, 10px, subtle.</td></tr>
+<tr><td>content</td><td>Markup</td><td>empty</td><td>The section body (any markup).</td></tr>
+</tbody></table>
+<h2>CSS classes</h2>
+<ul>
+<li><code>mui-gutter-section</code> — the <code>&lt;section&gt;</code>.</li>
+<li><code>mui-gutter-section__title</code>, <code>mui-gutter-section__body</code>.</li>
+</ul>
+<h2>Related</h2>
+<p>Facts list (a common body), Sidebar, Item.</p>

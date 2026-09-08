@@ -34,8 +34,8 @@ html! {
 |-------|------|---------|-------------|
 | label | String | `"Button"` | Button text content. |
 | variant | Variant | `Default` | Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link. |
-| size | Size | `Md` | Button size: Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg. |
-| disabled | bool | `false` | Whether the button is disabled (aria-disabled set). |
+| size | Size | `Md` | Button size: Row, Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg. |
+| disabled | bool | `false` | Whether the button is disabled (native disabled and aria-disabled set). |
 | button_type | &'static str | `"button"` | HTML button type attribute: "button", "submit", "reset". |
 | leading_icon | Option<Markup> | `None` | Optional icon markup (SVG) rendered before the label with `data-icon="inline-start"`; use `stroke="currentColor"`. |
 | trailing_icon | Option<Markup> | `None` | Optional icon markup rendered after the label with `data-icon="inline-end"`; use `stroke="currentColor"`. |
@@ -57,6 +57,7 @@ html! {
 
 | Size | Class | Notes |
 |------|-------|-------|
+| Row | `mui-btn--row` | Fixed 2rem height, nowrap; pair with Outline for quiet table-cell actions. |
 | Xs | `mui-btn--xs` | Extra-small text button. |
 | Sm | `mui-btn--sm` | Small text button. |
 | Md | `mui-btn--md` | Default text button. |

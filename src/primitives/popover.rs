@@ -8,8 +8,10 @@ use maud::{html, Markup};
 /// Deprecated in favor of [`Side`], which supports all four directions.
 /// Retained for backward compatibility with existing callers.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum Placement {
     Top,
+    #[default]
     Bottom,
 }
 
@@ -31,19 +33,16 @@ impl Placement {
     }
 }
 
-impl Default for Placement {
-    fn default() -> Self {
-        Self::Bottom
-    }
-}
 
 /// Side of the trigger the popover should render on (shadcn-compatible).
 ///
 /// Mirrors Radix/shadcn `side` prop: top | right | bottom | left.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum Side {
     Top,
     Right,
+    #[default]
     Bottom,
     Left,
 }
@@ -59,16 +58,13 @@ impl Side {
     }
 }
 
-impl Default for Side {
-    fn default() -> Self {
-        Self::Bottom
-    }
-}
 
 /// Horizontal alignment of the popover
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Default)]
 pub enum Align {
     Start,
+    #[default]
     Center,
     End,
 }
@@ -83,11 +79,6 @@ impl Align {
     }
 }
 
-impl Default for Align {
-    fn default() -> Self {
-        Self::Center
-    }
-}
 
 /// Popover rendering properties
 #[derive(Clone, Debug)]

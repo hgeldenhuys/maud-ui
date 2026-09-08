@@ -1,0 +1,25 @@
+<h1>Worklist header</h1>
+<p>A reusable block with a title, localized count sentence, GET search and one primary action. At phone widths it stacks in reading order.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::Action, worklist::header::{self, Props, Search}};
+header::render(Props {
+    title: "Reservations".into(),
+    count_sentence: "48 reservations · 12 arriving today".into(),
+    search: Some(Search { action: "/reservations".into(), ..Default::default() }),
+    primary_action: Some(Action::link("New reservation", "/reservations/new")),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td>empty</td><td>Visible heading.</td></tr>
+<tr><td>count_sentence</td><td>String</td><td>empty</td><td>Caller formats counts/plurals/localization; omitted when empty.</td></tr>
+<tr><td>search</td><td>Option<Search></td><td>None</td><td>Inline native GET search.</td></tr>
+<tr><td>primary_action</td><td>Option<Action></td><td>None</td><td>Exactly one link or POST form.</td></tr>
+<tr><td>heading</td><td>action::Heading</td><td>H2</td><td>H1, H2 or H3 for the surrounding page.</td></tr>
+</tbody></table>
+<p>Search fields: <code>action: String</code> (empty/current route), <code>name: String</code> (q), <code>value: String</code> (empty), <code>label: String</code> (Search records), <code>placeholder: String</code> (Search by name or reference), <code>hidden_fields: Vec&lt;(String,String)&gt;</code> (empty). Hidden fields retain filters; remove pagination offsets. The search has a label and submit button and works without JS.</p>
+<h2>Actions</h2>
+<p><code>action::Action { label: String, target: Target }</code> accepts <code>Target::Link(String)</code> or <code>Target::Post { action: String, hidden_fields: Vec&lt;(String,String)&gt; }</code>. <code>Action::link(label, href)</code> is the navigation shortcut. POST forms accept caller-owned CSRF hidden fields. Never nest this block inside another form.</p>
+<h2>Composition and accessibility</h2>
+<p>Place <code>status_chip_group</code> and a table after this block. Counts describe the server's actual result scope. Use <code>Heading::H1</code> for a page title, H2 for a section. All strings and hidden values are escaped by Maud. Search URLs and actions are supplied by the application.</p>

@@ -24,3 +24,7 @@ sidebar::render(sidebar::Props {
 | children | Markup | empty | Arbitrary caller-rendered content after the links. |
 
 Default props render nothing. An empty line and empty child markup also emit no footer. Secondary columns use a responsive grid; links wrap as whole items. There is no script requirement. See the sidebar showcase for the full header/footer composition in light and dark.
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

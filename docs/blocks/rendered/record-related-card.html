@@ -1,5 +1,5 @@
 <h1>Related entity card</h1>
-<p>Small context beside a record: a guest, room, account or asset with two to four facts and one action. Cards stack naturally on phones.</p>
+<p>Small context beside a record: a guest, room, account or asset with two to four facts and one action. Auto uses a compact inline row when effective facts are empty; cards with facts stack naturally on phones.</p>
 <h2>Import and example</h2>
 <pre><code class="language-rust">use maud_ui::{blocks::{action::Action, record::related_card::{self, Props}}, primitives::facts_list::Fact};
 related_card::render(Props {
@@ -11,6 +11,7 @@ related_card::render(Props {
 </code></pre>
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>variant</td><td>Variant</td><td>Auto</td><td>Auto selects Inline without facts and Card with facts; Card/Inline force either layout.</td></tr>
 <tr><td>title</td><td>String</td><td>empty</td><td>Escaped entity title.</td></tr>
 <tr><td>title_markup</td><td>Option<Markup></td><td>None</td><td>Overrides title, including an explicitly empty fragment.</td></tr>
 <tr><td>subtitle</td><td>Option<String></td><td>None</td><td>Supporting identity/state.</td></tr>
@@ -22,6 +23,8 @@ related_card::render(Props {
 </tbody></table>
 <p><code>Fact { label: String, value: String, mono: bool }</code> has empty labels/values and false mono by default; <code>Fact::new(label, value)</code> escapes both. <code>Fact::mono(label, value)</code> opts into monospace. The markup overrides preserve caller-owned field and action contracts; an empty override suppresses the typed value. No data lookup or readiness inference occurs here.</p>
 <h2>Accessibility and layout</h2>
-<p>The plain title uses the requested heading level. <code>title_markup</code> is wrapped in a div so a supplied heading is never nested in another heading; choose its level in the caller. Facts use a definition list. The sole action follows the facts in reading order, with a full-width target and a coarse-pointer height of at least 44px. Long values wrap in both themes. No JavaScript is required.</p>
+<p>The plain title uses the requested heading level. <code>title_markup</code> is wrapped in a div so a supplied heading is never nested in another heading; choose its level in the caller. Facts use a definition list. The sole action follows the facts in reading order, with a full-width target in Card and a content-width action in Inline; coarse pointers keep a height of at least 44px. Long values wrap in both themes. No JavaScript is required.</p>
 <h2>Related</h2>
 <p><a href="../components/facts_list.md">Facts list</a>, <a href="record-timeline.md">record timeline</a>, <a href="../components/choice_card.md">choice cards</a>.</p>
+<h2>Presentation states (0.10.1)</h2>
+<p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>

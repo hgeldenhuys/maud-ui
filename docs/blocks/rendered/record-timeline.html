@@ -1,5 +1,5 @@
 <h1>Record timeline</h1>
-<p>Three to five dated milestones for a stay, case or delivery. The caller supplies the order and the distinction between actual events, the current step and scheduled events. The layout changes from horizontal to vertical when its container is 40rem or narrower.</p>
+<p>Three to five dated milestones for a stay, case or delivery. The caller supplies the order and the distinction between actual events, the current step and scheduled events. The layout is horizontal at viewport widths of at least 48rem, including narrow desktop columns, and vertical below 48rem. The frame sizes to its content.</p>
 <h2>Import and example</h2>
 <pre><code class="language-rust">use maud_ui::blocks::record::timeline::{self, Milestone, Props, State};
 timeline::render(Props {
@@ -23,6 +23,8 @@ timeline::render(Props {
 <h2>States and helpers</h2>
 <p><code>State::{Done, Current, Scheduled}</code>; <code>State::as_str()</code> supplies the lowercase data attribute and <code>State::label()</code> supplies the English text. A timeline may have no current step; passing multiple Current milestones panics to reject ambiguous progress. Dates do not determine states or reorder events.</p>
 <h2>Accessibility</h2>
-<p>An ordered list, visible state text and a check for Done accompany color. The current step alone has <code>aria-current="step"</code>. Markers are decorative. No JavaScript or interactive step navigation; actions belong in the record header. At 40rem the same list becomes vertical, retaining reading order in light and dark themes.</p>
+<p>An ordered list, visible state text and a check for Done accompany color. The current step alone has <code>aria-current="step"</code>. Markers are decorative. No JavaScript or interactive step navigation; actions belong in the record header. Below a 48rem viewport the same list becomes vertical, retaining reading order in light and dark themes.</p>
 <h2>Related</h2>
 <p><a href="record-header.md">Record header</a>, <a href="record-money.md">money</a>, <a href="record-related-card.md">related entity</a>.</p>
+<h2>Presentation states (0.10.1)</h2>
+<p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>

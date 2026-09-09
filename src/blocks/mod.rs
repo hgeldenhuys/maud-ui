@@ -18,6 +18,7 @@
 //! See `BLOCK_NAMES` below for the canonical registry — anything listed
 //! there has a showcase page at `/blocks/{slug}`.
 
+pub mod state;
 pub mod action;
 pub mod action_row;
 pub mod attention_banner;

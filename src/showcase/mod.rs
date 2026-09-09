@@ -9,6 +9,8 @@ use maud::{html, Markup, DOCTYPE};
 use crate::{blocks, primitives};
 
 pub mod docs;
+mod generated_props;
+mod catalog;
 pub mod landing;
 
 pub use landing::landing_page;
@@ -625,7 +627,7 @@ pub fn blocks_index_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="blocks" {
                             h1 class="mui-gallery__component-name" { "Blocks" }
-                            p style="color:var(--mui-text-muted);font-size: var(--mui-text-body-size);max-width:42rem;margin: 0 0 var(--mui-space-xl);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:42rem;margin: 0 0 var(--mui-space-xl);" {
                                 "Reusable page sections built from primitives. Compose records, worklists and forms with typed props, live examples and API documentation. Each block renders to plain HTML; customize the source when your application needs a different structure."
                             }
                             (blocks_index_grid())
@@ -667,9 +669,8 @@ pub fn block_page_by_name(slug: &str) -> Markup {
                                 span { (display) }
                             }
                             section class="mui-gallery__component" id=(slug) {
-                                h3 class="mui-gallery__component-name" { (display) }
-                                (preview)
-                                @if let Some(docs) = block_docs(slug) { (docs) }
+                                h1 class="mui-gallery__component-name" { (display) }
+                                (catalog::article(slug, preview, true, if docs::block_docs_source(slug).is_none() { block_docs(slug) } else { None }))
                             }
                             div class="mui-gallery__back" {
                                 a href="/blocks" class="mui-btn mui-btn--outline mui-btn--sm" {
@@ -802,6 +803,15 @@ const SITE_ORIGIN: &str = "https://maudui.herman.engineer";
 fn page_head(title: &str) -> Markup {
     html! {
         meta charset="utf-8";
+        script { (maud::PreEscaped(r#"window.muiTypePixels = function(token) {
+  var probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;font-size:var(' + token + ')';
+  document.documentElement.appendChild(probe);
+  var size = parseFloat(getComputedStyle(probe).fontSize);
+  probe.remove();
+  return size;
+};"#)) }
+
         meta name="viewport" content="width=device-width, initial-scale=1";
         title { (title) }
 
@@ -1187,14 +1197,14 @@ pub fn theme_customizer_page() -> Markup {
 
                         section class="mui-gallery__component mui-theme__intro" id="theme" {
                             h1 class="mui-gallery__component-name" { "Theme customiser" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-lg);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-lg);line-height: var(--mui-leading-body);" {
                                 "Tweak the "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "--mui-*" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "--mui-*" }
                                 " tokens on the left and watch the preview on the right re-render instantly. "
                                 "Changes are saved to "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "localStorage" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "localStorage" }
                                 " so they survive reloads. Export a "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { ":root" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { ":root" }
                                 " block when you're happy, paste into your app."
                             }
                         }
@@ -1364,7 +1374,7 @@ pub fn theme_customizer_page() -> Markup {
                                             title: Some("Deployment status".into()),
                                             description: None,
                                             children: html! {
-                                                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                                                div data-mui-type="small" style="display:flex;flex-direction:column;gap: var(--mui-space-sm);color:var(--mui-text-muted);" {
                                                     div style="display:flex;justify-content:space-between;" { span { "Build" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
                                                     div style="display:flex;justify-content:space-between;" { span { "Tests" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
                                                     div style="display:flex;justify-content:space-between;" { span { "Deploy queue" } (badge::render(badge::Props { label: "busy".into(),   variant: badge::Variant::Warning, ..Default::default() })) }
@@ -1386,9 +1396,9 @@ pub fn theme_customizer_page() -> Markup {
 
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Export" }
-                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-md);" {
+                                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-md);" {
                                         "Paste this "
-                                        code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { ":root" }
+                                        code data-mui-type="small" style="font-family:var(--mui-font-mono);" { ":root" }
                                         " block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block."
                                     }
                                     div class="mui-theme__export" {
@@ -1746,7 +1756,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-bg': '#020617', 'mui-bg-card': '#0f172a', 'mui-bg-input': '#1e293b',
       'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#94a3b8',
       'mui-border': '#1e293b', 'mui-border-hover': '#1e293b', 'mui-border-focus': '#60a5fa',
-      'mui-border-control': '#94a3b8', 'mui-accent': '#2563eb', 'mui-accent-hover': '#1d4ed8',
+      'mui-border-control': '#7c8da5', 'mui-accent': '#2563eb', 'mui-accent-hover': '#1d4ed8',
       'mui-accent-text': '#93c5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-accent-soft': '#172c4a',
     },
@@ -1755,7 +1765,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-bg': '#09090b', 'mui-bg-card': '#18181b', 'mui-bg-input': '#27272a',
       'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#a1a1aa',
       'mui-border': '#27272a', 'mui-border-hover': '#27272a', 'mui-border-focus': '#c4b5fd',
-      'mui-border-control': '#a1a1aa', 'mui-accent': '#7c3aed', 'mui-accent-hover': '#6d28d9',
+      'mui-border-control': '#85858f', 'mui-accent': '#7c3aed', 'mui-accent-hover': '#6d28d9',
       'mui-accent-text': '#c4b5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-accent-soft': '#302543',
     },
@@ -1764,7 +1774,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-bg': '#0c0a09', 'mui-bg-card': '#1c1917', 'mui-bg-input': '#292524',
       'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#a8a29e',
       'mui-border': '#292524', 'mui-border-hover': '#292524', 'mui-border-focus': '#fbbf24',
-      'mui-border-control': '#a8a29e', 'mui-accent': '#fbbf24', 'mui-accent-hover': '#f59e0b',
+      'mui-border-control': '#89807b', 'mui-accent': '#fbbf24', 'mui-accent-hover': '#f59e0b',
       'mui-accent-text': '#fbbf24', 'mui-accent-fg': '#1c1917', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-accent-soft': '#332b1d',
     },
@@ -1773,7 +1783,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-bg': '#022c22', 'mui-bg-card': '#03382b', 'mui-bg-input': '#064e3b',
       'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#6ee7b7',
       'mui-border': '#065f46', 'mui-border-hover': '#065f46', 'mui-border-focus': '#6ee7b7',
-      'mui-border-control': '#6ee7b7', 'mui-accent': '#34d399', 'mui-accent-hover': '#10b981',
+      'mui-border-control': '#40b98b', 'mui-accent': '#34d399', 'mui-accent-hover': '#10b981',
       'mui-accent-text': '#6ee7b7', 'mui-accent-fg': '#022c22', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-danger-text': '#fca5a5', 'mui-info-text': '#93c5fd',
       'mui-accent-soft': '#084535',
@@ -1783,7 +1793,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-bg': '#1f0a17', 'mui-bg-card': '#3a0d27', 'mui-bg-input': '#4c1032',
       'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#fda4af',
       'mui-border': '#4c1032', 'mui-border-hover': '#4c1032', 'mui-border-focus': '#fda4af',
-      'mui-border-control': '#fda4af', 'mui-accent': '#be123c', 'mui-accent-hover': '#9f1239',
+      'mui-border-control': '#d47987', 'mui-accent': '#be123c', 'mui-accent-hover': '#9f1239',
       'mui-accent-text': '#fda4af', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-accent-soft': '#4c1733',
     },
@@ -1791,8 +1801,8 @@ fn theme_customizer_js() -> &'static str {
       _base: 'dark',
       'mui-bg': '#000000', 'mui-bg-card': '#111111', 'mui-bg-input': '#1a1a1a',
       'mui-text': '#ffffff', 'mui-text-muted': '#e5e5e5', 'mui-text-subtle': '#b3b3b3',
-      'mui-border': '#ffffff', 'mui-border-hover': '#ffffff', 'mui-border-focus': '#ffd700',
-      'mui-border-control': '#ffffff', 'mui-accent': '#ffd700', 'mui-accent-hover': '#e5bd00',
+      'mui-border': '#888888', 'mui-border-hover': '#888888', 'mui-border-focus': '#ffd700',
+      'mui-border-control': '#a3a3a3', 'mui-accent': '#ffd700', 'mui-accent-hover': '#e5bd00',
       'mui-accent-text': '#ffd700', 'mui-accent-fg': '#000000', 'mui-danger': '#b91c1c', 'mui-danger-fg': '#ffffff',
       'mui-accent-soft': '#34300a',
     },
@@ -1975,7 +1985,7 @@ pub fn getting_started_page() -> Markup {
 
                         section class="mui-gallery__component" id="hero" {
                             h3 class="mui-gallery__component-name" { "Welcome to maud-ui" }
-                            p style="font-size: var(--mui-text-body-size);line-height: var(--mui-leading-body);color:var(--mui-text-muted);max-width:42rem;" {
+                            p data-mui-type="body" style="line-height: var(--mui-leading-body);color:var(--mui-text-muted);max-width:42rem;" {
                                 // Derived, not typed: this claim drifted to a stale
                                 // "64" while the header count next to it was already
                                 // computed. One source of truth for both.
@@ -2087,7 +2097,7 @@ cargo add axum tokio --features tokio/full
                                     aria_label: Some("Toggle theme demo".into()),
                                     ..Default::default()
                                 }))
-                                span.mui-text-muted style="font-size: var(--mui-text-small-size);" {
+                                span.mui-text-muted data-mui-type="small" {
                                     "Use the toggle at the top-right, or add "
                                     (kbd::render(kbd::Props { keys: vec!["button".into(), "data-mui=\"theme-toggle\"".into()] }))
                                     " anywhere in your app."
@@ -2265,9 +2275,9 @@ pub fn routes() -> Router {
 
                         section class="mui-gallery__component" id="integration-monaco" {
                             h3 class="mui-gallery__component-name" { "Monaco editor \u{2014} Integration" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "The editor behind VS Code, embedded inside a maud-ui shell. File header, toolbar, language dropdown, and status bar are all plain maud-ui primitives wrapping the Monaco instance. The editor theme auto-syncs with "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "<html data-theme>" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "<html data-theme>" }
                                 " so toggling the gallery theme flips Monaco too."
                             }
 
@@ -2670,7 +2680,7 @@ fn monaco_bootstrap() -> &'static str {
       value: (window.__MUI_MONACO_SAMPLE__ || '// empty\n'),
       language: 'rust',
       theme: pickTheme(),
-      fontSize: 13,
+      fontSize: window.muiTypePixels('--mui-text-small-size'),
       fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--mui-font-mono').trim() || 'ui-monospace, monospace',
       fontLigatures: true,
       minimap: { enabled: false },
@@ -2799,14 +2809,14 @@ pub fn integrations_xyflow_page() -> Markup {
 
                         section class="mui-gallery__component" id="integration-xyflow" {
                             h3 class="mui-gallery__component-name" { "xyflow \u{2014} Node editor" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A React Flow / xyflow graph editor embedded in a maud-ui shell. "
                                 "Nodes are draggable, edges are connectable, the minimap and controls "
                                 "are wired, and the React Flow colour mode flips automatically with "
                                 "the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "data-theme" }
                                 " attribute. Loaded from "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "esm.sh" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "esm.sh" }
                                 " at runtime \u{2014} no bundler."
                             }
 
@@ -3287,13 +3297,13 @@ pub fn integrations_excalidraw_page() -> Markup {
 
                         section class="mui-gallery__component" id="integration-excalidraw" {
                             h3 class="mui-gallery__component-name" { "Excalidraw \u{2014} Whiteboard" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "An Excalidraw canvas embedded inside a maud-ui shell. The maud-ui "
                                 "toolbar wraps Excalidraw's imperative API \u{2014} the "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "excalidrawAPI" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "excalidrawAPI" }
                                 " ref drives export, reset, and shape-insertion. Canvas theme follows "
                                 "the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "data-theme" }
                                 " attribute."
                             }
 
@@ -3497,7 +3507,7 @@ const INITIAL_ELEMENTS = [
     roughness: 1, opacity: 100, angle: 0, x: 150, y: 120, width: 160, height: 25,
     strokeColor: '#2563eb', backgroundColor: 'transparent', seed: 2, groupIds: [],
     frameId: null, roundness: null, boundElements: null, updated: 1, link: null, locked: false,
-    fontSize: 20, fontFamily: 1, text: 'maud-ui + Excalidraw',
+    fontSize: window.muiTypePixels('--mui-text-h3-size'), fontFamily: 1, text: 'maud-ui + Excalidraw',
     baseline: 18, textAlign: 'left', verticalAlign: 'top',
     containerId: null, originalText: 'maud-ui + Excalidraw', lineHeight: 1.25 },
   { type: 'arrow', version: 1, versionNonce: 3, isDeleted: false,
@@ -3590,7 +3600,7 @@ if (host) {
         strokeColor: '#2563eb', backgroundColor: 'transparent',
         seed: Math.random() * 1e9 | 0, groupIds: [], frameId: null,
         roundness: null, boundElements: null, updated: 1, link: null, locked: false,
-        fontSize: 22, fontFamily: 1, text: 'Click to edit',
+        fontSize: window.muiTypePixels('--mui-text-h2-size'), fontFamily: 1, text: 'Click to edit',
         baseline: 20, textAlign: 'left', verticalAlign: 'top',
         containerId: null, originalText: 'Click to edit', lineHeight: 1.25,
       };
@@ -3705,12 +3715,12 @@ pub fn integrations_xterm_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-xterm" {
                             h3 class="mui-gallery__component-name" { "xterm.js \u{2014} Terminal emulator" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A full-fidelity terminal inside a maud-ui shell. Type commands, "
                                 "resize with the "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "FitAddon" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "FitAddon" }
                                 ", and watch the background track the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "data-theme" }
                                 ". Pair with a WebSocket for a live shell or agent transcript viewer."
                             }
                             div class="mui-integration mui-integration--xterm" {
@@ -3812,7 +3822,7 @@ if (host) {
   const term = new Terminal({
     theme: buildTheme(),
     fontFamily: readVar('--mui-font-mono', 'ui-monospace, monospace'),
-    fontSize: 13,
+    fontSize: window.muiTypePixels('--mui-text-small-size'),
     cursorBlink: true,
     convertEol: true,
     scrollback: 1000,
@@ -3946,7 +3956,7 @@ pub fn integrations_fullcalendar_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-fullcalendar" {
                             h3 class="mui-gallery__component-name" { "FullCalendar \u{2014} Scheduling" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A FullCalendar 6 calendar inside a maud-ui shell \u{2014} month / week / day "
                                 "views, drag-to-move events, click-to-create. The maud-ui toolbar proxies "
                                 "FullCalendar's imperative API so navigation and view switches flow through "
@@ -4138,7 +4148,7 @@ pub fn integrations_leaflet_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-leaflet" {
                             h3 class="mui-gallery__component-name" { "Leaflet \u{2014} Interactive map" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A Leaflet map with an OpenStreetMap tile layer and a set of markers, "
                                 "all inside a maud-ui shell. The toolbar exposes Leaflet's imperative "
                                 "API \u{2014} add markers, switch tile providers, fit bounds \u{2014} without "
@@ -4324,7 +4334,7 @@ pub fn integrations_tiptap_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-tiptap" {
                             h3 class="mui-gallery__component-name" { "TipTap \u{2014} Rich text editor" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A TipTap (ProseMirror) editor with a maud-ui toolbar. Bold, italic, "
                                 "headings, lists, blockquote, code block, undo / redo \u{2014} all driven "
                                 "through TipTap's chainable command API. Active-format state on each "
@@ -4436,7 +4446,7 @@ fn tiptap_css() -> &'static str {
 }
 .mui-integration--tiptap code {
     font-family: var(--mui-font-mono);
-    font-size: 0.875em;
+    font-size: var(--mui-text-small-size);
     padding: 0.05rem var(--mui-space-xs);
     background: var(--mui-bg);
     border-radius: var(--mui-radius-sm);
@@ -4576,7 +4586,7 @@ pub fn integrations_threejs_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-threejs" {
                             h3 class="mui-gallery__component-name" { "Three.js \u{2014} WebGL 3D" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A Three.js scene \u{2014} camera, lights, meshes, orbit controls, grid, "
                                 "axes helper \u{2014} mounted into a maud-ui shell. The toolbar swaps the "
                                 "displayed geometry and toggles wireframe, and the status bar tracks FPS, "
@@ -4806,7 +4816,7 @@ pub fn integrations_aggrid_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-aggrid" {
                             h3 class="mui-gallery__component-name" { "AG Grid \u{2014} Enterprise data grid" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "AG Grid Community inside a maud-ui shell. 50 seed rows, sortable / "
                                 "filterable columns, row selection, CSV export \u{2014} the data-heavy "
                                 "story. Theme flips between quartz and quartz-dark with the gallery's "
@@ -5031,7 +5041,7 @@ pub fn integrations_mermaid_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-mermaid" {
                             h3 class="mui-gallery__component-name" { "Mermaid \u{2014} Text to diagram" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Mermaid's text-to-diagram renderer in a maud-ui split pane \u{2014} source on "
                                 "the left, rendered SVG on the right. Tabs switch between flowchart, "
                                 "sequence, class, and Gantt diagrams."
@@ -5224,7 +5234,7 @@ async function render() {
     const pre = document.createElement('pre');
     pre.style.color = '#f87171';
     pre.style.fontFamily = 'var(--mui-font-mono)';
-    pre.style.fontSize = '0.8125rem';
+    pre.setAttribute('data-mui-type', 'caption');
     pre.style.whiteSpace = 'pre-wrap';
     pre.textContent = String(err.message || err);
     output.appendChild(pre);
@@ -5279,7 +5289,7 @@ pub fn integrations_echarts_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-echarts" {
                             h3 class="mui-gallery__component-name" { "Apache ECharts \u{2014} Charting library" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Apache ECharts inside a maud-ui shell. Switch chart type, randomise "
                                 "data, and download as PNG without leaving the host chrome. ECharts "
                                 "picks up theme from the gallery's data-theme."
@@ -5465,7 +5475,7 @@ pub fn integrations_wavesurfer_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-wavesurfer" {
                             h3 class="mui-gallery__component-name" { "Wavesurfer.js \u{2014} Audio waveform" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Wavesurfer.js inside a maud-ui shell, playing a waveform of an "
                                 "in-browser-synthesised sample \u{2014} no external audio, no CORS. Click "
                                 "the waveform to scrub. The maud-ui toolbar drives the imperative "
@@ -5794,7 +5804,7 @@ pub fn integrations_pdfjs_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-pdfjs" {
                             h3 class="mui-gallery__component-name" { "PDF.js \u{2014} Inline PDF viewer" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Mozilla's PDF.js renders a sample document directly onto a canvas inside "
                                 "a maud-ui shell. The maud-ui toolbar drives the imperative API \u{2014} "
                                 "page navigation, zoom, fit-to-width. The seed PDF is a small in-browser "
@@ -6025,7 +6035,7 @@ pub fn integrations_cytoscape_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-cytoscape" {
                             h3 class="mui-gallery__component-name" { "Cytoscape.js \u{2014} Network graph" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Cytoscape.js is the sibling-by-different-mission of xyflow \u{2014} where "
                                 "xyflow is an "
                                 em { "editor" }
@@ -6153,7 +6163,7 @@ if (host) {
           'color':            v('--mui-text',     '#fafafa'),
           'label':            'data(label)',
           'font-family':      v('--mui-font-sans', 'system-ui'),
-          'font-size':        12,
+          'font-size':        window.muiTypePixels('--mui-text-caption-size'),
           'text-valign':      'bottom',
           'text-margin-y':    6,
           'width':            36,
@@ -6256,12 +6266,12 @@ pub fn integrations_sortable_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-sortable" {
                             h3 class="mui-gallery__component-name" { "SortableJS \u{2014} Drag & drop" }
-                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
+                            p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "SortableJS inside maud-ui shells \u{2014} three flavours of drag-and-drop: "
                                 "a reorderable list with a drag handle, a three-column kanban board with "
                                 "cross-column drag, and a loose tile grid. Vanilla JS (no framework, no "
                                 "bundler), touch-friendly, works with a keyboard via the "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "Sortable" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "Sortable" }
                                 " API."
                             }
 
@@ -6298,7 +6308,7 @@ pub fn integrations_sortable_page() -> Markup {
                                     span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
                                     span id="mui-sort-list-last"   { "No moves yet" }
                                     span class="mui-integration__statusbar-spacer" {}
-                                    span class="mui-integration__statusbar-theme" { "Drag handle: " span style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "\u{2630}" } }
+                                    span class="mui-integration__statusbar-theme" { "Drag handle: " span data-mui-type="small" style="font-family:var(--mui-font-mono);" { "\u{2630}" } }
                                 }
                             }
 
@@ -6314,10 +6324,10 @@ pub fn integrations_sortable_page() -> Markup {
                             }
 
                             // ── Demo 2: Kanban board ─────────────────────────────
-                            h4 style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Kanban board" }
-                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
+                            h4 data-mui-type="body" style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Kanban board" }
+                            p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                                 "Three columns sharing a "
-                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "group: 'kanban'" }
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "group: 'kanban'" }
                                 " — drag cards within a column or across columns. Counts update live."
                             }
                             div class="mui-integration mui-integration--sortable" {
@@ -6364,8 +6374,8 @@ pub fn integrations_sortable_page() -> Markup {
                             }
 
                             // ── Demo 3: Tile grid ────────────────────────────────
-                            h4 style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Tile grid" }
-                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
+                            h4 data-mui-type="body" style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Tile grid" }
+                            p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                                 "Free-form tile rearrangement \u{2014} useful for dashboard widget grids "
                                 "or a photo mosaic. Same SortableJS engine, different layout container."
                             }
@@ -6579,7 +6589,7 @@ fn sortable_css() -> &'static str {
     cursor: grab;
     min-height: 5rem;
     transition: border-color var(--mui-transition),
-                transform 120ms ease;
+                transform var(--mui-motion-fast) var(--mui-motion-ease);
 }
 .mui-sort__tile:hover { border-color: var(--mui-border-hover); transform: translateY(-1px); }
 .mui-sort__tile:active { cursor: grabbing; }
@@ -6820,11 +6830,8 @@ pub fn component_page(name: &str, content: Markup) -> Markup {
                             }
                         }
                         section class="mui-gallery__component" id=(name) {
-                            h3 class="mui-gallery__component-name" { (display_name(name)) }
-                            (content)
-                            @if let Some(api_docs) = docs::render_component_docs(name) {
-                                (api_docs)
-                            }
+                            h1 class="mui-gallery__component-name" { (display_name(name)) }
+                            (catalog::article(name, content, false, None))
                         }
                         div class="mui-gallery__back" {
                             a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
@@ -7147,7 +7154,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 .mui-palette__footer { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-start: 1px solid var(--mui-border); font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); }
 .mui-palette__footer kbd { font: inherit; font-family: var(--mui-font-mono); color: var(--mui-text-secondary); margin-inline-end: var(--mui-space-xs); }
 @media (pointer: coarse) { .mui-palette__item { min-height: var(--mui-touch-target); } .mui-palette__hint { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } }
-@media (max-width: 40rem) { .mui-palette { margin-block-start: var(--mui-space-lg); } .mui-palette__item-path { display: none; } .mui-palette__input { font-size: 1rem; } }
+@media (max-width: 40rem) { .mui-palette { margin-block-start: var(--mui-space-lg); } .mui-palette__item-path { display: none; } .mui-palette__input { font-size: var(--mui-text-input-touch-size); } }
 @media (prefers-reduced-motion: reduce) { .mui-palette[open] { animation: none; } }
 
 /* Blocks index grid */
@@ -7324,7 +7331,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* Toast-ish "copied" hint that fades after click */
-.mui-swatch--copied { animation: muiSwatchCopied 900ms ease forwards; }
+.mui-swatch--copied { animation: muiSwatchCopied calc(var(--mui-motion-enter) * 5) var(--mui-motion-ease) forwards; }
 @keyframes muiSwatchCopied {
     0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 45%, transparent); }
     40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--mui-accent) 25%, transparent); }

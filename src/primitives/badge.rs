@@ -154,20 +154,20 @@ pub fn showcase() -> Markup {
                     (render(Props {
                         label: "Live".into(),
                         variant: Variant::Default,
-                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "●" } }),
+                        leading_icon: Some(html! { span data-mui-type="caption" style="line-height: var(--mui-leading-tight);" { "●" } }),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "Paused".into(),
                         variant: Variant::Secondary,
-                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "◼" } }),
+                        leading_icon: Some(html! { span data-mui-type="caption" style="line-height: var(--mui-leading-tight);" { "◼" } }),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "Docs".into(),
                         variant: Variant::Link,
                         href: Some("#".into()),
-                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "→" } }),
+                        leading_icon: Some(html! { span data-mui-type="caption" style="line-height: var(--mui-leading-tight);" { "→" } }),
                         ..Default::default()
                     }))
                 }
@@ -208,15 +208,15 @@ pub fn showcase() -> Markup {
                 // Navigation-style items with counter badges
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:20rem;" {
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Inbox" }
+                        span data-mui-type="small" style="color:var(--mui-text);" { "Inbox" }
                         (render(Props { label: "3".into(), variant: Variant::Default, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Drafts" }
+                        span data-mui-type="small" style="color:var(--mui-text);" { "Drafts" }
                         (render(Props { label: "12".into(), variant: Variant::Secondary, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Errors" }
+                        span data-mui-type="small" style="color:var(--mui-text);" { "Errors" }
                         (render(Props { label: "2".into(), variant: Variant::Danger, ..Default::default() }))
                     }
                 }
@@ -227,17 +227,17 @@ pub fn showcase() -> Markup {
                 h2 { "Labels" }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);" {
                     div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Authentication API" }
+                        span data-mui-type="small" style="color:var(--mui-text);min-width:8rem;" { "Authentication API" }
                         (render(Props { label: "Stable".into(), variant: Variant::Success, ..Default::default() }))
                         (render(Props { label: "v2.1".into(), variant: Variant::Outline, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Streaming SDK" }
+                        span data-mui-type="small" style="color:var(--mui-text);min-width:8rem;" { "Streaming SDK" }
                         (render(Props { label: "Beta".into(), variant: Variant::Warning, ..Default::default() }))
                         (render(Props { label: "v0.9".into(), variant: Variant::Outline, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Legacy Client" }
+                        span data-mui-type="small" style="color:var(--mui-text);min-width:8rem;" { "Legacy Client" }
                         (render(Props { label: "Deprecated".into(), variant: Variant::Danger, ..Default::default() }))
                         (render(Props { label: "v1.0".into(), variant: Variant::Outline, ..Default::default() }))
                     }

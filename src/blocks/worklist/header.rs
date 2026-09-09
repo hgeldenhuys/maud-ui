@@ -28,6 +28,8 @@ impl Default for Search {
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub title: String,
     /// Caller-owned localized sentence, e.g. "48 reservations · 12 arriving today".
     pub count_sentence: String,
@@ -36,7 +38,12 @@ pub struct Props {
     pub heading: Heading,
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         header class="mui-worklist-header" {
             div class="mui-worklist-header__identity" {

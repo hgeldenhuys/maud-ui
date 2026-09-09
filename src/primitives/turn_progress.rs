@@ -37,7 +37,7 @@ pub fn showcase() -> Markup {
                     @for pct in [8u8, 34, 62, 100] {
                         div {
                             (render(Props { percent: pct }))
-                            div style="margin-top:var(--mui-inset-tight);font-family:var(--mui-font-mono);font-size: var(--mui-text-caption-size);color:var(--mui-text-subtle);" { (format!("{pct}%")) }
+                            div data-mui-type="caption" style="margin-top:var(--mui-inset-tight);font-family:var(--mui-font-mono);color:var(--mui-text-subtle);" { (format!("{pct}%")) }
                         }
                     }
                 }

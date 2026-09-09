@@ -387,7 +387,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Search and select from a list of frontend frameworks." }
                 div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Pre-selected" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Pre-selected" }
                         (render(Props {
                             id: "fw-1".to_string(),
                             name: "framework-1".to_string(),
@@ -401,7 +401,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Placeholder" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Placeholder" }
                         (render(Props {
                             id: "fw-2".to_string(),
                             name: "framework-2".to_string(),
@@ -415,7 +415,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Disabled" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Disabled" }
                         (render(Props {
                             id: "fw-3".to_string(),
                             name: "framework-3".to_string(),
@@ -429,7 +429,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Auto-highlight" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Auto-highlight" }
                         (render(Props {
                             id: "fw-4".to_string(),
                             name: "framework-4".to_string(),
@@ -443,7 +443,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "With clear button" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "With clear button" }
                         (render(Props {
                             id: "fw-5".to_string(),
                             name: "framework-5".to_string(),
@@ -457,7 +457,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Invalid state" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Invalid state" }
                         (render(Props {
                             id: "fw-6".to_string(),
                             name: "framework-6".to_string(),

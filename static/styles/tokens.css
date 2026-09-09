@@ -30,7 +30,7 @@
   --mui-motion-fast: 120ms;
   --mui-motion-enter: 180ms;
   --mui-motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --mui-motion-loading: 1200ms;
+  --mui-motion-loading: calc(var(--mui-motion-enter) * 6);
   --mui-transition: var(--mui-motion-fast) var(--mui-motion-ease);
   --mui-shadow-md: var(--mui-shadow-sm);
   --mui-ring: 0 0 0 2px var(--mui-border-focus);
@@ -49,6 +49,7 @@
   --mui-badge-height: 1.375rem;
   --mui-touch-target: 2.75rem;
   --mui-icon-size: 1rem;
+  --mui-text-input-touch-size: 1rem;
   --mui-page-gutter: 1.5rem;
   --mui-layer-sticky: 30;
   --mui-layer-navigation: 40;

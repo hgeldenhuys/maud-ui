@@ -30,7 +30,6 @@
   min-width: min(20rem, 100%);
   max-width: 24rem;
   position: relative;
-  animation: mui-toast-enter var(--mui-motion-enter) var(--mui-motion-ease);
 }
 
 /* --- Variant indicator dot -------------------------------------------- */
@@ -146,41 +145,10 @@
 
 /* --- Exit animation --------------------------------------------------- */
 .mui-toast--exit {
-  animation: mui-toast-exit var(--mui-motion-enter) var(--mui-motion-ease) forwards;
+
 }
 
 /* --- Keyframes -------------------------------------------------------- */
-@keyframes mui-toast-enter {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes mui-toast-exit {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-}
 
 /* RTL: toast sits on the inline-end corner, which is physical LEFT
    in RTL — so the slide must come from / exit to physical left. */
-@keyframes mui-toast-enter-rtl {
-  from { opacity: 0; transform: translateX(-100%); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes mui-toast-exit-rtl {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-100%); }
-}
-:dir(rtl) .mui-toast { animation-name: mui-toast-enter-rtl; }
-:dir(rtl) .mui-toast[data-state="exit"] { animation-name: mui-toast-exit-rtl; }

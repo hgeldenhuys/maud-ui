@@ -1,9 +1,13 @@
-.mui-page-header { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-lg); min-height: var(--mui-header-height); box-sizing: border-box; padding: 0 var(--mui-page-gutter); position: sticky; top: 0; z-index: var(--mui-layer-sticky); background: var(--mui-bg-card); border-block-end: 1px solid var(--mui-border); }
+.mui-page-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--mui-space-lg); min-height: var(--mui-header-height); box-sizing: border-box; padding: 0 var(--mui-page-gutter); position: sticky; top: 0; z-index: var(--mui-layer-sticky); background: var(--mui-bg-card); border-block-end: 1px solid var(--mui-border); }
 .mui-page-header__context, .mui-page-header__controls, .mui-page-header__switchers { display: flex; align-items: center; gap: var(--mui-space-sm); min-width: 0; }
-.mui-page-header__context { flex: 1; }
+.mui-page-header__context { flex: 2 1 24rem; }
 .mui-page-header__context .mui-breadcrumb { min-width: 0; }
-.mui-page-header__context .mui-breadcrumb__list { flex-wrap: nowrap; overflow: hidden; }
-.mui-page-header__context .mui-breadcrumb__item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mui-page-header__context .mui-breadcrumb__list { flex-wrap: nowrap; min-width: 0; }
+.mui-page-header__context .mui-breadcrumb__item { min-width: 0; }
+.mui-page-header__context .mui-breadcrumb__item[data-position="middle"] { flex: 0 1 auto; overflow: hidden; }
+.mui-page-header__context .mui-breadcrumb__item[data-position="middle"] a { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mui-page-header__context .mui-breadcrumb__item:is([data-position="root"], [data-position="current"]) { flex: 0 1 auto; overflow: visible; white-space: normal; overflow-wrap: anywhere; }
+.mui-page-header__context .mui-breadcrumb__separator { flex-shrink: 0; }
 .mui-page-header__search { flex: 0 1 18rem; min-width: 0; }
 .mui-page-header__search:empty, .mui-page-header__controls:empty { display: none; }
 .mui-page-header__search form { position: relative; display: flex; min-width: 0; }
@@ -21,5 +25,6 @@
   .mui-page-header__search { flex: 1 1 100%; }
   .mui-page-header__controls { flex-wrap: wrap; }
   .mui-page-header__search kbd { display: none; }
-  .mui-page-header__context .mui-breadcrumb__list > :not(:last-child) { display: none; }
+  .mui-page-header__context .mui-breadcrumb__list { flex-wrap: wrap; }
+  .mui-page-header__context .mui-breadcrumb__item[data-position="current"] { flex-shrink: 1; overflow-wrap: anywhere; }
 }

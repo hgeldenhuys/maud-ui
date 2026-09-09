@@ -33,6 +33,18 @@ const failures = [];
 for (const [name, preset] of Object.entries(presets)) {
   const raw = { ...(preset._base === "light" ? light : dark), ...preset };
   const tokens = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, resolve(value, raw)]));
+  if (preset._base !== 'light') {
+    const surfaces = ['mui-bg', 'mui-bg-card', 'mui-bg-input'].map(key => luminance(tokens[key]));
+    checks++; if (!(surfaces[0] < surfaces[1] && surfaces[1] < surfaces[2])) failures.push(`${name}: dark surface tones must step upward`);
+    for (const edge of ['mui-border', 'mui-border-control', ...['info', 'success', 'warning', 'danger', 'violet', 'rose'].map(tone => `mui-${tone}-border`)]) {
+      const ink = edge.includes('-border-') || edge === 'mui-border' ? 'mui-text-muted' : edge.replace('-border', '-text');
+      checks++; if (luminance(tokens[edge]) >= luminance(tokens[ink])) failures.push(`${name}: ${edge} is brighter than ${ink}`);
+    }
+  }
+  for (const surface of ['mui-accent-soft', ...['info', 'success', 'warning', 'danger', 'violet', 'rose'].map(tone => `mui-${tone}-bg`)]) {
+    const ratio = contrast(tokens['mui-border-focus'], tokens[surface]);
+    checks++; if (ratio < 3) failures.push(`${name}: focus / ${surface} = ${ratio.toFixed(2)}`);
+  }
   for (const surface of ["mui-bg", "mui-bg-card", "mui-bg-input"]) {
     for (const ink of ["mui-text", "mui-text-secondary", "mui-text-muted", "mui-text-subtle", "mui-accent-text", "mui-info-text", "mui-success-text", "mui-warning-text", "mui-danger-text"]) {
       const ratio = contrast(tokens[ink], tokens[surface]);

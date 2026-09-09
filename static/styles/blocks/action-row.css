@@ -7,7 +7,7 @@
 .mui-action-row__more { position: relative; min-width: 0; max-width: 100%; }
 .mui-action-row__more > summary { list-style: none; cursor: pointer; }
 .mui-action-row__more > summary::-webkit-details-marker { display: none; }
-.mui-action-row__more > summary::after { content: "⌄"; margin-inline-start: var(--mui-space-sm); }
+
 .mui-action-row__overflow { position: absolute; z-index: var(--mui-layer-overlay); inset-inline-end: 0; top: calc(100% + var(--mui-space-xs)); width: max-content; max-width: min(20rem, calc(100vw - var(--mui-space-xxl))); display: grid; gap: var(--mui-space-xs); padding: var(--mui-space-sm); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md); background: var(--mui-bg-card); box-shadow: var(--mui-shadow-lg); }
 .mui-action-row__overflow .mui-btn { width: 100%; justify-content: flex-start; }
 @media (pointer: coarse) {
@@ -16,3 +16,6 @@
 @media (max-width: 40rem) {
   .mui-action-row__overflow { inset-inline-end: auto; inset-inline-start: 0; }
 }
+
+.mui-action-row[data-density] .mui-action-row__trigger { width: auto; min-width: 0; min-height: var(--mui-space-xxl); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); gap: var(--mui-space-xs); }
+@media (pointer: coarse) { .mui-action-row[data-density] .mui-action-row__trigger { min-height: var(--mui-touch-target); } }

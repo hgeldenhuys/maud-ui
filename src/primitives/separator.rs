@@ -84,9 +84,9 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Separator divides the Bio block from account Settings in a user profile." }
                 div style="border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); padding: var(--mui-space-20); max-width: 24rem; background: var(--mui-bg-card));" {
                     div {
-                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Bio" }
-                        div style="font-weight: var(--mui-weight-heading); font-size: var(--mui-text-body-size);" { "Henry Geldenhuys" }
-                        div style="font-size: var(--mui-text-small-size); color: var(--mui-text-muted); margin-top: var(--mui-space-xs);" {
+                        div data-mui-type="caption" style=" text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Bio" }
+                        div data-mui-type="body" style="font-weight: var(--mui-weight-heading); " { "Henry Geldenhuys" }
+                        div data-mui-type="small" style=" color: var(--mui-text-muted); margin-top: var(--mui-space-xs);" {
                             "Staff engineer at Kapable. Building Claude Conductor. Cape Town \u{2192} Remote."
                         }
                     }
@@ -94,12 +94,12 @@ pub fn showcase() -> Markup {
                         (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                     }
                     div {
-                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Settings" }
-                        div style="display: flex; justify-content: space-between; font-size: var(--mui-text-small-size); padding: var(--mui-space-xs) 0;" {
+                        div data-mui-type="caption" style=" text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Settings" }
+                        div data-mui-type="small" style="display: flex; justify-content: space-between;  padding: var(--mui-space-xs) 0;" {
                             span { "Email" }
                             span style="color: var(--mui-text-muted);" { "invoice@geldentech.ca" }
                         }
-                        div style="display: flex; justify-content: space-between; font-size: var(--mui-text-small-size); padding: var(--mui-space-xs) 0;" {
+                        div data-mui-type="small" style="display: flex; justify-content: space-between;  padding: var(--mui-space-xs) 0;" {
                             span { "Two-factor" }
                             span style="color: var(--mui-text-muted);" { "Enabled" }
                         }
@@ -120,7 +120,7 @@ pub fn showcase() -> Markup {
                         div style="flex: 1;" {
                             (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                         }
-                        span style="font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label);" { "OR" }
+                        span data-mui-type="caption" style=" font-weight: var(--mui-weight-medium); text-transform: uppercase; color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label);" { "OR" }
                         div style="flex: 1;" {
                             (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                         }
@@ -165,7 +165,7 @@ pub fn showcase() -> Markup {
                         orientation: Orientation::Vertical,
                         ..Default::default()
                     }))
-                    a href="#" style="color: var(--mui-text-muted); text-decoration: none; font-size: var(--mui-text-small-size);" { "Docs" }
+                    a href="#" data-mui-type="small" style="color: var(--mui-text-muted); text-decoration: none; " { "Docs" }
                     a href="#" style="font-weight: var(--mui-weight-medium); text-decoration: none; color: inherit;" { "HG" }
                 }
             }

@@ -41,7 +41,6 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-status-chip-group__chip:focus-visible,
 .mui-bottom-tab-bar__item:focus-visible,
 .mui-record-header__back:focus-visible,
-.mui-record-header__more > summary:focus-visible,
 .mui-block--shell__nav-item:focus-visible,
 .mui-navigation-dialog a:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 3px; }
 
@@ -89,7 +88,6 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-record-header__identity { flex: 1 1 18rem; min-width: 0; }
 .mui-record-header__title-line, .mui-record-header__actions { display: flex; align-items: center; gap: var(--mui-space-md); flex-wrap: wrap; }
 .mui-record-header__actions { align-items: flex-start; }
-.mui-record-header__more > summary { box-sizing: border-box; min-height: 2.5rem; padding: var(--mui-space-sm) var(--mui-space-md); cursor: pointer; border: 1px solid var(--mui-border-control); border-radius: var(--mui-radius-sm); font-size: var(--mui-text-small-size); color: var(--mui-text-muted); }
 .mui-record-header__secondary { display: flex; flex-direction: column; align-items: stretch; gap: var(--mui-space-sm); margin-block-start: var(--mui-space-sm); }
 .mui-record-header__secondary .mui-btn { width: 100%; }
 .mui-task-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--mui-space-md); padding: 0; margin: 0; list-style: none; }
@@ -143,22 +141,9 @@ dialog.mui-dialog[open] { display: flex; flex-direction: column; }
 .mui-table tfoot { border-block-start: 1px solid var(--mui-border-control); background: var(--mui-bg-input); font-weight: var(--mui-weight-heading); }
 .mui-table--hoverable tbody tr:focus-within { background: var(--mui-bg-input); }
 .mui-table--compact .mui-table__th { box-sizing: border-box; }
-dialog.mui-dialog[open], dialog.mui-sheet[open], .mui-navigation-dialog[open] { animation-duration: var(--mui-motion-enter); animation-timing-function: var(--mui-motion-ease); }
-dialog.mui-sheet[open], .mui-navigation-dialog[open] { animation-name: mui-panel-enter; }
-dialog.mui-sheet { --mui-enter-x: 1rem; --mui-enter-y: 0; height: 100dvh; max-height: 100dvh; }
-dialog.mui-sheet--left, .mui-navigation-dialog { --mui-enter-x: -1rem; --mui-enter-y: 0; }
-[dir="rtl"] dialog.mui-sheet--left, [dir="rtl"] .mui-navigation-dialog { --mui-enter-x: 1rem; }
-[dir="rtl"] dialog.mui-sheet--right { --mui-enter-x: -1rem; }
-dialog.mui-sheet--top { --mui-enter-x: 0; --mui-enter-y: -1rem; height: auto; max-height: 50dvh; }
-dialog.mui-sheet--bottom { --mui-enter-x: 0; --mui-enter-y: 1rem; height: auto; max-height: 85dvh; }
-dialog.mui-dialog::backdrop, dialog.mui-sheet::backdrop { background: var(--mui-bg-overlay); }
-@keyframes mui-panel-enter { from { opacity: 0; transform: translate(var(--mui-enter-x, 0), var(--mui-enter-y, 0)); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) {
-  dialog.mui-dialog, dialog.mui-sheet, .mui-navigation-dialog,
-  dialog.mui-dialog::backdrop, dialog.mui-sheet::backdrop, .mui-navigation-dialog::backdrop {
-    animation: none !important; transition: none !important;
-  }
-}
+dialog.mui-sheet { height: 100dvh; max-height: 100dvh; }
+dialog.mui-sheet--top { height: auto; max-height: 50dvh; }
+dialog.mui-sheet--bottom { height: auto; max-height: 85dvh; }
 @media (forced-colors: active) {
   .mui-status-chip-group__chip[aria-current], .mui-bottom-tab-bar__item[aria-current] { outline: 2px solid Highlight; outline-offset: -3px; }
 }

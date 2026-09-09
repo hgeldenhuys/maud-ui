@@ -86,7 +86,7 @@ pub fn showcase() -> Markup {
     let tag_list = html! {
         div style="display:flex;flex-direction:column;" {
             @for tag in tags.iter() {
-                div style="padding: var(--mui-space-sm) var(--mui-space-md);font-size: var(--mui-text-small-size);font-family:var(--mui-font-mono);border-bottom:1px solid var(--mui-border);" {
+                div data-mui-type="small" style="padding: var(--mui-space-sm) var(--mui-space-md);font-family:var(--mui-font-mono);border-bottom:1px solid var(--mui-border);" {
                     (tag)
                 }
             }
@@ -94,7 +94,7 @@ pub fn showcase() -> Markup {
     };
 
     let changelog = html! {
-        div style="padding: var(--mui-space-md);font-size: var(--mui-text-small-size);font-family:var(--mui-font-mono);line-height: var(--mui-leading-body);white-space:pre;" {
+        div data-mui-type="small" style="padding: var(--mui-space-md);font-family:var(--mui-font-mono);line-height: var(--mui-leading-body);white-space:pre;" {
             "commit a1b2c3d\n"
             "Author: Jane Smith\n"
             "Date:   Mon Apr 13 09:14:22 2026 +0000\n\n"

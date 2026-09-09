@@ -11,7 +11,6 @@ dialog.mui-alert-dialog {
   box-shadow: var(--mui-shadow-lg);
   max-width: 32rem;
   width: 90vw;
-  animation: mui-alert-dialog-enter var(--mui-motion-enter) var(--mui-motion-ease);
 }
 
 /* Compact size — matches shadcn's `sm` alert-dialog width. */
@@ -29,23 +28,6 @@ dialog.mui-alert-dialog.mui-alert-dialog--sm {
 dialog.mui-alert-dialog::backdrop {
   background: var(--mui-bg-overlay);
   backdrop-filter: blur(4px);
-  animation: mui-alert-dialog-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-alert-dialog-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes mui-alert-dialog-backdrop-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .mui-alert-dialog__header {

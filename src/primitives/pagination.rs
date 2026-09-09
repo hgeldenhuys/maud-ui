@@ -202,7 +202,7 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Search results" }
                 div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);padding: var(--mui-space-lg);background:var(--mui-bg-card);" {
-                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin-bottom:var(--mui-space-md);" {
+                    p data-mui-type="small" style="color:var(--mui-text-muted);margin-bottom:var(--mui-space-md);" {
                         "Showing " strong { "21\u{2013}30" } " of " strong { "97" } " results"
                     }
                     (render(Props {

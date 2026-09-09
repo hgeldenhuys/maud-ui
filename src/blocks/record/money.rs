@@ -21,6 +21,8 @@ impl Figure {
 }
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub title: String,
     pub heading: Heading,
     /// Currency label supplied from the Money value, never inferred from the theme.
@@ -37,6 +39,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             title: "Payment".into(),
             heading: Heading::H2,
             currency: String::new(),
@@ -59,7 +62,12 @@ impl Default for Props {
         }
     }
 }
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         section class="mui-record-money" aria-label=(&props.title) {
             header class="mui-record-money__header" {

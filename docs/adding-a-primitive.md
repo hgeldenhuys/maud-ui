@@ -50,6 +50,7 @@ public site. It now parses `COMPONENT_NAMES` from source, and a parity test keep
 ## Then
 
 ```bash
+python3 examples/generate-props.py # refresh generated gallery Props metadata
 cargo test                    # parity + render tests
 node examples/build-assets.mjs # rebuild static/ after CSS/behavior edits
 cargo run --example build_docs # regenerate HTML after Markdown edits

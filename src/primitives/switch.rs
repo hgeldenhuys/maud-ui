@@ -105,10 +105,10 @@ pub fn showcase() -> Markup {
                     // Marketing emails — off
                     div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                         div {
-                            label for="sw-marketing" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
+                            label for="sw-marketing" data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Marketing emails"
                             }
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" {
                                 "Receive emails about new products, features, and more."
                             }
                         }
@@ -125,10 +125,10 @@ pub fn showcase() -> Markup {
                     // Push notifications — on
                     div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                         div {
-                            label for="sw-push" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
+                            label for="sw-push" data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Push notifications"
                             }
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" {
                                 "Receive notifications directly on your device."
                             }
                         }
@@ -145,10 +145,10 @@ pub fn showcase() -> Markup {
                     // Airplane mode — disabled
                     div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);opacity:0.6;" {
                         div {
-                            label for="sw-airplane" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
+                            label for="sw-airplane" data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Airplane mode"
                             }
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" {
                                 "Managed by your organization."
                             }
                         }

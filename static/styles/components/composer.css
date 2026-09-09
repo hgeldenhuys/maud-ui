@@ -260,4 +260,4 @@
   background: var(--mui-bg-input);
 }
 
-@media (pointer: coarse) { .mui-composer :is(button, select) { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } .mui-composer__input { font-size: 1rem; } }
+@media (pointer: coarse) { .mui-composer :is(button, select) { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } .mui-composer__input { font-size: var(--mui-text-input-touch-size); } }

@@ -1,18 +1,8 @@
 /* Skeleton component — shadcn-quality loading placeholder */
 
-@keyframes mui-skeleton-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-
 .mui-skeleton {
   display: block;
   background-color: var(--mui-border);
-  animation: mui-skeleton-pulse var(--mui-motion-loading) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Text skeleton — resembles a line of text */

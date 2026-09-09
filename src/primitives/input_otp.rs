@@ -112,7 +112,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         ..Default::default()
                     }))
-                    div style="display:flex;justify-content:space-between;align-items:center;font-size: var(--mui-text-small-size);" {
+                    div data-mui-type="small" style="display:flex;justify-content:space-between;align-items:center;" {
                         span style="color:var(--mui-text-muted);" { "Code expires in 9:42" }
                         button type="button" class="mui-btn mui-btn--link" {
                             "Resend"
@@ -134,7 +134,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         ..Default::default()
                     }))
-                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
+                    p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" {
                         "Confirms payments over $100. Never share this PIN."
                     }
                 }

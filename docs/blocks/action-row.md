@@ -28,12 +28,12 @@ html! {
 | primary_markup / secondary_markup / overflow_markup | Option<Markup> | None | Override the corresponding typed actions, including an explicitly empty fragment. |
 | density | Density | Compact | Row, Compact or Comfortable. |
 | aria_label | String | Actions | Accessible group name. |
-| overflow_label | String | More actions | Native summary text. |
+| overflow_label | String | More | Native summary text; a decorative ▾ follows. |
 
 All effective slots empty renders nothing; empty overflow renders no summary. Canonical fragments keep their original form, CSRF, confirmation, pending/result and data attributes. Give their controls the `mui-btn` class to share density. Density rules override child size classes inside this row; keep business behavior in the caller.
 
 ## Density and shared Action contract
-`Density::Row`: 32px minimum, 12px text and zero block padding. `Compact`: 32px minimum with 14px text. `Comfortable`: 36px minimum. Every density has a 44px coarse-pointer floor, wrapping labels and visible keyboard focus. `Density::as_str()` returns row/compact/comfortable. These values use the existing theme tokens.
+`Density::Row`: 32px minimum, 12px text and zero block padding. `Compact`: 32px minimum with 14px text. `Comfortable`: 36px minimum. Overflow stays a small 32px outline More disclosure at every density. Record headers use the same action row. Every density has a 44px coarse-pointer floor, wrapping labels and visible keyboard focus. `Density::as_str()` returns row/compact/comfortable. These values use the existing theme tokens.
 
 `Action { label: String, target: Target }` supports:
 
@@ -49,3 +49,7 @@ Native buttons, anchors and details need no JavaScript. Tab traverses controls, 
 
 ## Related
 [Form](../components/form.md), [record money](record-money.md), [button](../components/button.md).
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

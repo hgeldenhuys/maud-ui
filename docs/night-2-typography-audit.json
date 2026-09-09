@@ -1,0 +1,897 @@
+{
+  "inline_sizes_replaced": 223,
+  "changes": [
+    {
+      "file": "src/primitives/status_dot.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/turn_progress.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/switch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/avatar.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/avatar.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/badge.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input_otp.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input_otp.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/skeleton.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/number_field.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/command.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/dialog.rs",
+      "role": "h3"
+    },
+    {
+      "file": "src/primitives/dialog.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/dialog.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/dialog.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/aspect_ratio.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/aspect_ratio.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/aspect_ratio.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/textarea.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/grid.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/grid.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/grid.rs",
+      "role": "h2"
+    },
+    {
+      "file": "src/primitives/gutter_section.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/pagination.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "h3"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/swatch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/swatch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/swatch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/swatch.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/slider.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/input_group.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/scroll_area.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/scroll_area.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "h1"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "display"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "role": "caption"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "body"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "role": "small"
+    }
+  ]
+}

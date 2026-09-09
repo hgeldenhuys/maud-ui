@@ -57,7 +57,8 @@ function active(context, env) {
       if (rule.includes('pointer')) return /pointer:\s*coarse/.test(rule) && env.coarse;
       if (rule.includes('prefers-') || rule.includes('forced-colors')) return false;
       const max = rule.match(/max-width:\s*([\d.]+)(rem|px)/), min = rule.match(/min-width:\s*([\d.]+)(rem|px)/);
-      return (!max || env.width <= Number(max[1]) * (max[2] === 'rem' ? 16 : 1)) && (!min || env.width >= Number(min[1]) * (min[2] === 'rem' ? 16 : 1));
+      const viewport = env.viewportWidth ?? env.width;
+      return (!max || viewport <= Number(max[1]) * (max[2] === 'rem' ? 16 : 1)) && (!min || viewport >= Number(min[1]) * (min[2] === 'rem' ? 16 : 1));
     }
     if (rule.startsWith('@container')) {
       const max = rule.match(/max-width:\s*([\d.]+)rem/);
@@ -84,7 +85,7 @@ function computed(rules, node, env) {
       for (const declaration of rule.body.split(';')) {
         const colon = declaration.indexOf(':'); if (colon < 0) continue;
         const name = declaration.slice(0, colon).trim(), raw = declaration.slice(colon + 1).trim();
-        if (!/^(?:padding(?:-(?:block|inline|top|right|bottom|left))?|height|min-height|font-size|line-height|border|box-sizing|grid-auto-flow|grid-template-columns|flex-wrap|display|white-space)$/.test(name)) continue;
+        if (!/^(?:padding(?:-(?:block|inline|top|right|bottom|left))?|height|min-height|align-self|font-size|line-height|border|box-sizing|grid-auto-flow|grid-template-columns|flex-wrap|display|white-space)$/.test(name)) continue;
         const value = resolve(raw);
         assign(name, value, specificity, order);
         if (name === 'padding') {
@@ -114,18 +115,18 @@ for (const file of ['static/maud-ui.css', 'static/maud-ui.min.css']) {
       assert.equal(height(computed(rules, node, { width: 390, coarse: true })), 44);
     }
   });
-  test(`${file}: Save, Cancel and overflow share 32/32/36px desktop geometry and a 44px touch floor`, () => {
+  test(`${file}: Save/Cancel use 32/32/36px, More stays 32px, and touch targets stay 44px`, () => {
     for (const theme of ['light', 'dark']) for (const density of ['row', 'compact', 'comfortable']) {
       const root = el('div', '', { 'data-theme': theme }), row = el('div', 'mui-action-row', { 'data-density': density }, root);
-      const controls = [el('button', 'mui-btn mui-btn--primary', {}, row), el('a', 'mui-btn mui-btn--outline mui-btn--row', {}, row), el('summary', 'mui-btn mui-btn--outline', {}, el('details', 'mui-action-row__more', {}, row)), el('button', 'mui-btn mui-btn--primary mui-btn--md', {}, el('form', 'mui-block-action', {}, row))];
+      const controls = [el('button', 'mui-btn mui-btn--primary', {}, row), el('a', 'mui-btn mui-btn--outline mui-btn--row', {}, row), el('summary', 'mui-btn mui-btn--outline mui-action-row__trigger', {}, el('details', 'mui-action-row__more', {}, row)), el('button', 'mui-btn mui-btn--primary mui-btn--md', {}, el('form', 'mui-block-action', {}, row))];
       for (const control of controls) {
-        const desktop = computed(rules, control, { width: 1280 }); assert.equal(height(desktop), density === 'comfortable' ? 36 : 32, `${density} ${control.tag}`);
+        const desktop = computed(rules, control, { width: 1280 }); assert.equal(height(desktop), density === 'comfortable' && control.tag !== 'summary' ? 36 : 32, `${density} ${control.tag}`);
         assert.equal(desktop['white-space'], 'normal');
         assert.equal(height(computed(rules, control, { width: 390, coarse: true })), 44);
       }
     }
   });
-  test(`${file}: timeline, grouped rows and date fields change at narrow container widths`, () => {
+  test(`${file}: timeline, grouped rows and date fields adapt on phones`, () => {
     const cases = [
       [el('ol', 'mui-record-timeline__items'), 'grid-auto-flow', 'column', 'row'],
       [el('li', 'mui-grouped-worklist__row'), 'grid-template-columns', 'minmax(10rem, 2fr) minmax(10rem, 2fr) minmax(0, 1fr) auto', 'minmax(0, 1fr) auto'],
@@ -137,5 +138,12 @@ for (const file of ['static/maud-ui.css', 'static/maud-ui.min.css']) {
       assert.equal(normalize(computed(rules, node, { width: 290 })[prop]), normalize(phone));
     }
     assert.equal(computed(rules, el('div', 'mui-action-row'), { width: 290 })['flex-wrap'], 'wrap');
+  });
+  test(`${file}: a narrow desktop timeline stays horizontal and cannot stretch to its grid sibling`, () => {
+    const items = el('ol', 'mui-record-timeline__items');
+    for (const viewportWidth of [768, 1280]) assert.equal(computed(rules, items, { width: 290, viewportWidth })['grid-auto-flow'], 'column');
+    assert.equal(computed(rules, items, { width: 290, viewportWidth: 767 })['grid-auto-flow'], 'row');
+    const frame = computed(rules, el('section', 'mui-record-timeline'), { width: 290, viewportWidth: 1280 });
+    assert.equal(frame.height, 'fit-content'); assert.equal(frame['min-height'], '0'); assert.equal(frame['align-self'], 'start');
   });
 }

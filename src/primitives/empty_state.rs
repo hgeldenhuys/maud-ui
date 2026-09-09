@@ -41,6 +41,8 @@ pub enum Variant {
     Empty,
     Filtered,
     Failed,
+    /// One quiet line and optional action for an empty related collection.
+    Inline,
 }
 
 /// EmptyState rendering properties
@@ -82,6 +84,7 @@ impl Props {
     /// Clear, distinct default copy; override title/description for domain vocabulary.
     pub fn for_variant(variant: Variant) -> Self {
         let (title, description) = match variant {
+            Variant::Inline => ("No related items yet", ""),
             Variant::Empty => ("Nothing here yet", "New records will appear here when they are available."),
             Variant::Filtered => ("No matching results", "Try a different search or clear the filters."),
             Variant::Failed => ("Could not load records", "The request failed. Try again to load your records."),
@@ -111,7 +114,14 @@ impl Props {
 /// [`compose`] / [`header`] / [`media`] / [`title`] / [`description`] / [`content`]
 /// subcomponent helpers.
 pub fn render(props: Props) -> Markup {
+    if props.variant == Variant::Inline {
+        return html! { div class="mui-empty-state mui-empty-state--inline" data-state="inline" {
+            p class="mui-empty-state__line" { (props.title) }
+            @if let Some(action) = props.action { div class="mui-empty-state__action" { (action) } }
+        } };
+    }
     let (state, default_icon) = match props.variant {
+        Variant::Inline => unreachable!(),
         Variant::Empty => ("empty", "◇"),
         Variant::Filtered => ("filtered", "⌕"),
         Variant::Failed => ("failed", "!"),
@@ -195,6 +205,7 @@ pub fn content(children: Markup) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            (render(Props::for_variant(Variant::Inline).with_action(html! { a class="mui-btn mui-btn--outline mui-btn--row" href="/blocks/action-row" { "Add payment" } })))
             @for (variant, label) in [(Variant::Empty, "Create a record"), (Variant::Filtered, "Clear filters"), (Variant::Failed, "Try again")] {
                 (render(Props::for_variant(variant).with_action(html! {
                     a class="mui-btn mui-btn--outline mui-btn--md" href="/empty_state" { (label) }

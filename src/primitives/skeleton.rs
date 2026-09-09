@@ -133,7 +133,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Loading table row" }
                 div style="display:flex;flex-direction:column;gap: 0;max-width:32rem;border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);overflow:hidden;" {
                     // Header row (real, so the skeleton has context)
-                    div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap: var(--mui-space-lg);padding: var(--mui-inset-cell) var(--mui-inset-control);background:var(--mui-bg-input);font-size: var(--mui-text-caption-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);text-transform:uppercase;letter-spacing: var(--mui-tracking-label);" {
+                    div data-mui-type="caption" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap: var(--mui-space-lg);padding: var(--mui-inset-cell) var(--mui-inset-control);background:var(--mui-bg-input);font-weight: var(--mui-weight-heading);color:var(--mui-text);text-transform:uppercase;letter-spacing: var(--mui-tracking-label);" {
                         span { "Customer" }
                         span { "Plan" }
                         span { "Status" }

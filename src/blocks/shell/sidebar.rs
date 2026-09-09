@@ -14,6 +14,8 @@ pub enum MobileNavigation {
 
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     /// Stable, unique ID: navigation, drawer and local preferences are scoped to it.
     pub id: String,
     pub brand: Markup,
@@ -38,6 +40,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             id: "mui-app".into(),
             brand: html! { span class="mui-block--shell__brand-name" { "App" } },
             header: None,
@@ -111,7 +114,12 @@ fn nav_items(items: &[NavItem], current: Option<&NavItem>) -> Markup {
     }
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     let nav_id = format!("{}-navigation", props.id);
     let drawer_id = format!("{}-drawer", props.id);
     let mut items = Vec::new();

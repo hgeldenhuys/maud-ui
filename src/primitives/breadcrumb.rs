@@ -35,13 +35,13 @@ pub fn render(props: Props) -> Markup {
                         }
                     }
                     @if item.href.is_some() {
-                        li class="mui-breadcrumb__item" {
-                            a href=(item.href.as_ref().unwrap()) {
+                        li class="mui-breadcrumb__item" data-position=(if idx == 0 { "root" } else { "middle" }) {
+                            a href=(item.href.as_ref().unwrap()) title=(&item.label) {
                                 (item.label)
                             }
                         }
                     } @else {
-                        li class="mui-breadcrumb__item mui-breadcrumb__item--current" {
+                        li class="mui-breadcrumb__item mui-breadcrumb__item--current" data-position="current" {
                             // role="link" + aria-disabled="true" + aria-current="page":
                             // gives SR users link-like semantics on the current page
                             // without making the element activatable. Matches shadcn/Radix.

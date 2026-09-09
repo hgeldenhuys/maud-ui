@@ -24,6 +24,8 @@ impl Density {
 
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub primary: Option<Action>,
     pub secondary: Vec<Action>,
     pub overflow: Vec<Action>,
@@ -38,6 +40,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             primary: None,
             secondary: vec![],
             overflow: vec![],
@@ -46,12 +49,17 @@ impl Default for Props {
             overflow_markup: None,
             density: Density::Compact,
             aria_label: "Actions".into(),
-            overflow_label: "More actions".into(),
+            overflow_label: "More".into(),
         }
     }
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     let primary = props
         .primary_markup
         .unwrap_or_else(|| props.primary.map(|a| a.render(true)).unwrap_or_default());
@@ -69,7 +77,7 @@ pub fn render(props: Props) -> Markup {
             (primary) (secondary)
             @if !overflow.0.is_empty() {
                 details class="mui-action-row__more" {
-                    summary class="mui-btn mui-btn--outline" { (props.overflow_label) }
+                    summary class="mui-btn mui-btn--outline mui-action-row__trigger" { (props.overflow_label) span aria-hidden="true" { " ▾" } }
                     div class="mui-action-row__overflow" { (overflow) }
                 }
             }

@@ -236,12 +236,12 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Price range" }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Price" }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$80 \u{2014} $320" }
+                        label data-mui-type="small" style="color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Price" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$80 \u{2014} $320" }
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
                         div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
-                            span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);min-width:2.25rem;" { "Min" }
+                            span data-mui-type="caption" style="color:var(--mui-text-muted);min-width:2.25rem;" { "Min" }
                             div style="flex:1;" {
                                 (render(Props {
                                     name: "price-min".into(),
@@ -257,7 +257,7 @@ pub fn showcase() -> Markup {
                             }
                         }
                         div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
-                            span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);min-width:2.25rem;" { "Max" }
+                            span data-mui-type="caption" style="color:var(--mui-text-muted);min-width:2.25rem;" { "Max" }
                             div style="flex:1;" {
                                 (render(Props {
                                     name: "price-max".into(),
@@ -273,7 +273,7 @@ pub fn showcase() -> Markup {
                             }
                         }
                     }
-                    div style="display:flex;justify-content:space-between;font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
+                    div data-mui-type="caption" style="display:flex;justify-content:space-between;color:var(--mui-text-muted);" {
                         span { "$0" }
                         span { "$500" }
                     }
@@ -285,8 +285,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Range slider (two thumbs)" }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Budget range" }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$120 \u{2014} $360" }
+                        label data-mui-type="small" style="color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Budget range" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$120 \u{2014} $360" }
                     }
                     (render(Props {
                         name: "budget-range".into(),
@@ -299,7 +299,7 @@ pub fn showcase() -> Markup {
                         show_value: true,
                         ..Default::default()
                     }))
-                    div style="display:flex;justify-content:space-between;font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
+                    div data-mui-type="caption" style="display:flex;justify-content:space-between;color:var(--mui-text-muted);" {
                         span { "$0" }
                         span { "$500" }
                     }
@@ -311,8 +311,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Volume" }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label for="slider-volume" style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Volume" }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "72" }
+                        label for="slider-volume" data-mui-type="small" style="color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Volume" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "72" }
                     }
                     div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
                         // Speaker muted icon
@@ -349,8 +349,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Brightness" }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label for="slider-brightness" style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Brightness" }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "40%" }
+                        label for="slider-brightness" data-mui-type="small" style="color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Brightness" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "40%" }
                     }
                     div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
                         // Sun dim icon
@@ -410,7 +410,7 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Low" }
+                        span data-mui-type="caption" style="color:var(--mui-text-muted);" { "Low" }
                     }
                     div style="display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-sm);" {
                         (render(Props {
@@ -424,7 +424,7 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Mid" }
+                        span data-mui-type="caption" style="color:var(--mui-text-muted);" { "Mid" }
                     }
                     div style="display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-sm);" {
                         (render(Props {
@@ -438,7 +438,7 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "High" }
+                        span data-mui-type="caption" style="color:var(--mui-text-muted);" { "High" }
                     }
                 }
             }

@@ -60,9 +60,7 @@ constants exist for whoever writes the first such pair:
 @media (min-width: 60rem)    { /* lg and up */ }
 ```
 
-Every responsive rule here is currently single-direction — it overrides a base
-that already holds for the other side — so no rule needs a `BELOW_*` today.
-Check before reaching for one.
+A strict lower boundary also uses BELOW: the record timeline becomes vertical at `max-width: 47.99rem` so exactly 48rem stays horizontal. Its viewport rule is a deliberate product requirement, including narrow desktop columns; other component layouts continue to prefer container queries.
 
 ## Folding is not free
 

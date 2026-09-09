@@ -32,6 +32,8 @@ pub struct Group {
 }
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub aria_label: String,
     pub group_heading: Heading,
     pub groups: Vec<Group>,
@@ -42,6 +44,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             aria_label: "Grouped worklist".into(),
             group_heading: Heading::H3,
             groups: vec![],
@@ -50,7 +53,12 @@ impl Default for Props {
         }
     }
 }
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     let empty = props.groups.iter().all(|g| g.rows.is_empty());
     html! {
         div class="mui-grouped-worklist" role="region" aria-label=(props.aria_label) {

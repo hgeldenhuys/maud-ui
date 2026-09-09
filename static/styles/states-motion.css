@@ -1,0 +1,77 @@
+/* Shared presentation states and motion. Every duration derives from fast/enter. */
+.mui-block-state { display: grid; align-content: start; gap: var(--mui-space-md); min-width: 0; padding: var(--mui-space-lg); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md); background: var(--mui-bg-card); color: var(--mui-text); }
+.mui-block-state__message { margin: 0; font-size: var(--mui-text-small-size); line-height: var(--mui-text-small-leading); color: var(--mui-text-muted); overflow-wrap: anywhere; }
+.mui-block-state[data-state="error"] { background: var(--mui-danger-bg); border-color: var(--mui-danger-border); }
+.mui-block-state[data-state="error"] .mui-block-state__message { color: var(--mui-danger-text); }
+.mui-block-state__skeleton { display: grid; gap: var(--mui-space-md); }
+.mui-block-state__skeleton .mui-skeleton:last-child { width: 60%; }
+.mui-block-state__disabled { min-width: 0; cursor: not-allowed; }
+.mui-block-state__disabled :where(a, button, input, select, textarea, summary) { cursor: not-allowed; }
+.mui-state-examples { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--mui-space-md); align-items: start; }
+.mui-state-example { min-width: 0; }
+.mui-state-example > .mui-eyebrow { margin: 0 0 var(--mui-space-sm); }
+.mui-state-example .mui-block--shell { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+.mui-state-example .mui-block--shell__sidebar { position: static; width: auto; height: auto; }
+.mui-state-example .mui-block--shell__main { min-width: 0; }
+.mui-state-example .mui-block--shell__content { padding: var(--mui-space-md); }
+.mui-state-example .mui-grouped-worklist__row { grid-template-columns: minmax(0, 1fr); }
+.mui-state-example .mui-grouped-worklist__action { grid-column: 1; }
+.mui-state-example .mui-record-money__figures { grid-template-columns: minmax(0, 1fr); }
+.mui-state-example .mui-related-card__action { margin-inline-start: 0; }
+@media (max-width: 63.99rem) { .mui-state-examples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 40rem) { .mui-state-examples { grid-template-columns: minmax(0, 1fr); } }
+
+/* Dark surfaces are separated by tone; edges use structural rather than control ink. */
+dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog) { border: 1px solid var(--mui-border); color: var(--mui-text); background: var(--mui-bg-card); }
+dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] { animation: mui-surface-enter var(--mui-motion-enter) var(--mui-motion-ease); }
+dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)::backdrop { background: var(--mui-bg-overlay); animation: mui-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease); }
+:is(.mui-sheet--right, .mui-drawer--right) { --mui-enter-x: var(--mui-space-xl); --mui-enter-y: 0px; }
+:is(.mui-sheet--left, .mui-drawer--left) { --mui-enter-x: calc(-1 * var(--mui-space-xl)); --mui-enter-y: 0px; }
+:dir(rtl):is(.mui-sheet--right, .mui-drawer--right) { --mui-enter-x: calc(-1 * var(--mui-space-xl)); }
+:dir(rtl):is(.mui-sheet--left, .mui-drawer--left) { --mui-enter-x: var(--mui-space-xl); }
+:is(.mui-sheet--top, .mui-drawer--top) { --mui-enter-y: calc(-1 * var(--mui-space-xl)); }
+:is(.mui-sheet--bottom, .mui-drawer--bottom, .mui-navigation-dialog) { --mui-enter-y: var(--mui-space-xl); }
+@keyframes mui-surface-enter { from { opacity: 0; transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md))); } to { opacity: 1; transform: translate(0, 0); } }
+@keyframes mui-backdrop-enter { from { opacity: 0; } to { opacity: 1; } }
+.mui-toast { animation: mui-notice-enter var(--mui-motion-enter) var(--mui-motion-ease); }
+.mui-toast--exit, .mui-toast[data-state="exit"] { animation: mui-notice-exit var(--mui-motion-fast) var(--mui-motion-ease) forwards; }
+@keyframes mui-notice-enter { from { opacity: 0; transform: translateY(var(--mui-space-md)); } to { opacity: 1; transform: translateY(0); } }
+@keyframes mui-notice-exit { to { opacity: 0; transform: translateY(var(--mui-space-sm)); } }
+.mui-skeleton { position: relative; overflow: hidden; background: var(--mui-bg-input); border: 1px solid var(--mui-border); animation: none; }
+.mui-skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mui-text-muted) 18%, transparent), transparent); transform: translateX(-100%); animation: mui-shimmer calc(var(--mui-motion-enter) * 6) linear infinite; }
+@keyframes mui-shimmer { to { transform: translateX(100%); } }
+
+:where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]) { transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease), border-color var(--mui-motion-fast) var(--mui-motion-ease), filter var(--mui-motion-fast) var(--mui-motion-ease); }
+:where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]):hover:not(:disabled):not([aria-disabled="true"]) { filter: brightness(1.06); }
+:where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
+:is(a[href], button, input, select, textarea, summary, [tabindex], [contenteditable="true"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+.mui-toast__close { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .mui-skeleton::after { display: none; }
+}
+.mui-api-nav { display: flex; flex-wrap: wrap; gap: var(--mui-space-xs) var(--mui-space-md); margin-block-end: var(--mui-space-xl); border-block-end: 1px solid var(--mui-border); }
+.mui-api-nav a { display: inline-flex; align-items: center; min-height: var(--mui-control-height); color: var(--mui-text-secondary); font-size: var(--mui-text-small-size); border-block-end: 2px solid transparent; }
+.mui-api-nav a:hover { color: var(--mui-accent-text); border-color: var(--mui-accent-text); }
+.mui-api-section { padding-block: var(--mui-space-xl); min-width: 0; scroll-margin-top: var(--mui-space-xl); }
+.mui-api-section.mui-docs { margin: 0; max-width: none; border-top: 0; }
+.mui-api-section + .mui-api-section { border-block-start: 1px solid var(--mui-border); }
+.mui-api-section.mui-docs > h2, .mui-api-section > h2 { margin: 0 0 var(--mui-space-lg); padding: 0; border: 0; font-size: var(--mui-text-h2-size); line-height: var(--mui-text-h2-leading); letter-spacing: var(--mui-text-h2-tracking); }
+.mui-api-module { margin: var(--mui-space-md) 0 0; overflow-wrap: anywhere; }
+.mui-api-preview { min-width: 0; }
+.mui-api-reference { margin-block-start: var(--mui-space-xl); }
+.mui-api-reference > summary { cursor: pointer; padding-block: var(--mui-space-md); color: var(--mui-text-secondary); font-size: var(--mui-text-small-size); }
+.mui-api-subheading { margin-block: var(--mui-space-xl) var(--mui-space-sm); font-size: var(--mui-text-h3-size); }
+.mui-props-table td code { white-space: normal; overflow-wrap: anywhere; }
+.mui-api-section .mui-props-table td { vertical-align: top; }
+@media (pointer: coarse) { .mui-api-nav a, .mui-api-reference > summary { min-height: var(--mui-touch-target); } }
+/* One label/heading scale, including markup that formerly carried local font-size. */
+[data-mui-type="display"] { font-size: var(--mui-text-display-size); line-height: var(--mui-text-display-leading); letter-spacing: var(--mui-text-display-tracking); }
+[data-mui-type="h1"] { font-size: var(--mui-text-h1-size); line-height: var(--mui-text-h1-leading); letter-spacing: var(--mui-text-h1-tracking); }
+[data-mui-type="h2"] { font-size: var(--mui-text-h2-size); line-height: var(--mui-text-h2-leading); letter-spacing: var(--mui-text-h2-tracking); }
+[data-mui-type="h3"] { font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading); letter-spacing: var(--mui-text-h3-tracking); }
+[data-mui-type="body"] { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); letter-spacing: var(--mui-text-body-tracking); }
+[data-mui-type="small"] { font-size: var(--mui-text-small-size); line-height: var(--mui-text-small-leading); letter-spacing: var(--mui-text-small-tracking); }
+[data-mui-type="caption"] { font-size: var(--mui-text-caption-size); line-height: var(--mui-text-caption-leading); letter-spacing: var(--mui-text-caption-tracking); }
+:where(h5, h6) { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); font-weight: var(--mui-weight-heading); }
+.mui-gallery__component > h1.mui-gallery__component-name { font-size: var(--mui-text-h1-size); line-height: var(--mui-text-h1-leading); letter-spacing: var(--mui-text-h1-tracking); }

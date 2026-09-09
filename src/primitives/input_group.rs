@@ -168,7 +168,7 @@ pub fn showcase() -> Markup {
                 (button("Go", button::Size::Sm, button::Variant::Primary))
                 (addon(
                     html! {
-                        span id="ig-site-hint" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
+                        span id="ig-site-hint" data-mui-type="caption" style="color:var(--mui-text-muted);" {
                             "We'll prepend https:// and check the domain resolves."
                         }
                     },

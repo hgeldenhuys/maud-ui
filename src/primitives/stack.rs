@@ -347,7 +347,7 @@ pub fn showcase() -> Markup {
     // A visible box so the layout itself is legible in the gallery.
     let cell = |text: &str| -> Markup {
         html! {
-            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-sm) var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+            div data-mui-type="small" style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-sm) var(--mui-space-md);color:var(--mui-text-muted);" {
                 (text)
             }
         }
@@ -413,7 +413,7 @@ pub fn showcase() -> Markup {
                             padding: Space::Sm,
                             children: html! {
                                 (cell("Short"))
-                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-20) var(--mui-space-md);font-size: var(--mui-text-h3-size);color:var(--mui-text-muted);" { "Tall" }
+                                div data-mui-type="h3" style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-20) var(--mui-space-md);color:var(--mui-text-muted);" { "Tall" }
                                 (cell("Short"))
                             },
                             ..Default::default()
@@ -507,7 +507,7 @@ pub fn showcase() -> Markup {
                             justify: Justify::Between,
                             align: Align::Center,
                             children: html! {
-                                span style="font-size: var(--mui-text-small-size);" { "Region" }
+                                span data-mui-type="small" { "Region" }
                                 (badge::render(badge::Props { label: "eu-central".into(), ..Default::default() }))
                             },
                             ..Default::default()
@@ -517,7 +517,7 @@ pub fn showcase() -> Markup {
                             justify: Justify::Between,
                             align: Align::Center,
                             children: html! {
-                                span style="font-size: var(--mui-text-small-size);" { "Status" }
+                                span data-mui-type="small" { "Status" }
                                 (badge::render(badge::Props {
                                     label: "Healthy".into(),
                                     variant: badge::Variant::Success,
@@ -541,9 +541,9 @@ pub fn showcase() -> Markup {
                     gap: Space::Lg,
                     aria_label: Some("Stack example navigation".into()),
                     children: html! {
-                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Overview" }
-                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Deployments" }
-                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Settings" }
+                        a href="#" data-mui-type="small" style="color:var(--mui-accent-text);" { "Overview" }
+                        a href="#" data-mui-type="small" style="color:var(--mui-accent-text);" { "Deployments" }
+                        a href="#" data-mui-type="small" style="color:var(--mui-accent-text);" { "Settings" }
                     },
                     ..Default::default()
                 }))

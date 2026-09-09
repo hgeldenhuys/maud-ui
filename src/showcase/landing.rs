@@ -27,10 +27,21 @@ pub fn landing_page() -> Markup {
                     section class="lp__hero" aria-label="Live application example" {
                         div class="lp__example-caption" {
                             span { "A workspace, composed." }
-                            span { "Filter guests, open a record, or add a stay. Try the theme toggle above." }
+                            span { "Filter guests and add a stay, then explore the record tab. Try both themes." }
                         }
-                        div class="lp__screen" { (blocks::shell::sidebar::example("landing-workspace")) }
-                        noscript { p class="lp__noscript" { "This is a server-rendered example. Enable JavaScript to try its filters, drawer and local form." } }
+                        div class="lp__workspace-pages" data-mui="workspace-pages" {
+                            nav class="lp__workspace-tabs" aria-label="Workspace pages" {
+                                a id="lp-worklist-tab" href="#lp-worklist-panel" data-workspace-tab { "Worklist" }
+                                a id="lp-record-tab" href="#lp-record-panel" data-workspace-tab { "Record" }
+                            }
+                            section class="lp__screen" id="lp-worklist-panel" aria-labelledby="lp-worklist-tab" data-workspace-panel {
+                                (blocks::shell::sidebar::example("landing-workspace"))
+                            }
+                            section class="lp__screen" id="lp-record-panel" aria-labelledby="lp-record-tab" data-workspace-panel {
+                                (blocks::shell::record_example::render("landing-record"))
+                            }
+                        }
+                        noscript { p class="lp__noscript" { "Both workspace pages are available below. JavaScript adds tabs, filters, the drawer and the local form." } }
                     }
                     section class="lp__claims" aria-label="Why maud-ui" {
                         article { h2 { "Start with a whole screen." } p { "A shell, a worklist, a record. " (blocks::BLOCK_NAMES.len()) " composed blocks give your first route a clear structure." } a href="/blocks" { "Explore blocks →" } }

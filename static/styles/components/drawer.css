@@ -34,12 +34,6 @@ dialog.mui-drawer[open] {
 dialog.mui-drawer::backdrop {
   background: var(--mui-bg-overlay);
   backdrop-filter: blur(4px);
-  animation: mui-drawer-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-drawer-backdrop-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* Right drawer — anchored to the right edge, rounded left corners */
@@ -53,20 +47,6 @@ dialog.mui-drawer--right {
   top: 0;
   bottom: 0;
   border-radius: var(--mui-radius-lg) 0 0 var(--mui-radius-lg);
-  animation: mui-drawer-slide-right var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-drawer-slide-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-/* Flip slide-in direction in RTL so "right" drawer still enters from
-   the physical end of the viewport. `mui-drawer--right` is anchored
-   with `inset-inline-end: 0` so in RTL it sits on the physical left —
-   meaning the slide-in must come from the physical left too. */
-:dir(rtl) dialog.mui-drawer--right {
-  animation-name: mui-drawer-slide-left;
 }
 
 /* Left drawer — anchored to the left edge, rounded right corners */
@@ -80,16 +60,6 @@ dialog.mui-drawer--left {
   top: 0;
   bottom: 0;
   border-radius: 0 var(--mui-radius-lg) var(--mui-radius-lg) 0;
-  animation: mui-drawer-slide-left var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-drawer-slide-left {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
-}
-
-:dir(rtl) dialog.mui-drawer--left {
-  animation-name: mui-drawer-slide-right;
 }
 
 /* Top drawer — anchored to the top edge, rounded bottom corners */
@@ -107,12 +77,6 @@ dialog.mui-drawer--top {
   inset-inline-start: 0;
   inset-inline-end: 0;
   border-radius: 0 0 var(--mui-radius-lg) var(--mui-radius-lg);
-  animation: mui-drawer-slide-top var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-drawer-slide-top {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
 }
 
 /* Bottom drawer — anchored to the bottom edge, rounded top corners */
@@ -130,12 +94,6 @@ dialog.mui-drawer--bottom {
   inset-inline-start: 0;
   inset-inline-end: 0;
   border-radius: var(--mui-radius-lg) var(--mui-radius-lg) 0 0;
-  animation: mui-drawer-slide-bottom var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-drawer-slide-bottom {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }
 
 /* Grab handle — centered bar at top of bottom/top drawers */

@@ -62,7 +62,7 @@ th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; fo
 :where([class*="mui-"]) { accent-color: var(--mui-accent); }
 @media (pointer: coarse) {
   .mui-btn:not(.mui-btn--link), .mui-input, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger { min-height: var(--mui-touch-target); }
-  .mui-input, .mui-textarea, .mui-native-select { font-size: 1rem; }
+  .mui-input, .mui-textarea, .mui-native-select { font-size: var(--mui-text-input-touch-size); }
 }
 @media (max-width: 40rem) {
   .mui-block__frame { padding: var(--mui-space-sm); }
@@ -93,8 +93,6 @@ th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; fo
 .mui-badge--link:hover { color: var(--mui-text); }
 .mui-record-header__title > :is(h1, h2, h3) { margin: 0; font-size: inherit; line-height: inherit; letter-spacing: inherit; }
 .mui-task-grid__card { border-radius: var(--mui-radius-lg); }
-.mui-record-header__more > summary { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); }
-.mui-record-header__more > summary:hover { color: var(--mui-text); background: var(--mui-bg-input); }
 .mui-btn--danger:hover:not([aria-disabled="true"]) { background: var(--mui-danger-hover); border-color: var(--mui-danger-hover); }
 
 

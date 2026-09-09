@@ -30,3 +30,7 @@ Search fields: `action: String` (empty/current route), `name: String` (q), `valu
 
 ## Composition and accessibility
 Place `status_chip_group` and a table after this block. Counts describe the server's actual result scope. Use `Heading::H1` for a page title, H2 for a section. All strings and hidden values are escaped by Maud. Search URLs and actions are supplied by the application.
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

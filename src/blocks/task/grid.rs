@@ -11,6 +11,8 @@ pub struct Task {
 
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub tasks: Vec<Task>,
     pub aria_label: String,
     pub heading: Heading,
@@ -19,6 +21,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             tasks: vec![],
             aria_label: "Available tasks".into(),
             heading: Heading::H3,
@@ -26,7 +29,12 @@ impl Default for Props {
     }
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         ul class="mui-task-grid" aria-label=(props.aria_label) {
             @for task in props.tasks {

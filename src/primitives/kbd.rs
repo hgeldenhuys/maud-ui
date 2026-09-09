@@ -34,23 +34,23 @@ pub fn showcase() -> Markup {
                 div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);padding: var(--mui-space-lg);background:var(--mui-bg-card);max-width:20rem;" {
                     div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { "Save" }
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" { "Save" }
                             (render(Props { keys: vec!["\u{2318}".into(), "S".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { "Undo" }
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" { "Undo" }
                             (render(Props { keys: vec!["\u{2318}".into(), "Z".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { "Redo" }
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" { "Redo" }
                             (render(Props { keys: vec!["\u{21E7}".into(), "\u{2318}".into(), "Z".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { "Command palette" }
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" { "Command palette" }
                             (render(Props { keys: vec!["\u{2318}".into(), "K".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { "Toggle comment" }
+                            span data-mui-type="small" style="color:var(--mui-text-muted);" { "Toggle comment" }
                             (render(Props { keys: vec!["\u{2318}".into(), "/".into()] }))
                         }
                     }

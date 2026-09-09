@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/",
+    "errors": []
+  },
+  {
+    "path": "/blocks/worklist-header",
+    "errors": []
+  },
+  {
+    "path": "/blocks/worklist-grouped",
+    "errors": []
+  },
+  {
+    "path": "/blocks/record-header",
+    "errors": []
+  },
+  {
+    "path": "/blocks/record-timeline",
+    "errors": []
+  },
+  {
+    "path": "/blocks/record-money",
+    "errors": []
+  },
+  {
+    "path": "/blocks/record-related-card",
+    "errors": []
+  },
+  {
+    "path": "/blocks/task-grid",
+    "errors": []
+  },
+  {
+    "path": "/blocks/attention-banner",
+    "errors": []
+  },
+  {
+    "path": "/blocks/action-row",
+    "errors": []
+  },
+  {
+    "path": "/blocks/shell-sidebar",
+    "errors": []
+  },
+  {
+    "path": "/blocks/shell-page-header",
+    "errors": []
+  },
+  {
+    "path": "/blocks/shell-app-header",
+    "errors": []
+  },
+  {
+    "path": "/blocks/shell-app-footer",
+    "errors": []
+  }
+]

@@ -68,8 +68,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "File upload" }
                 div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text)" { "Uploading file..." }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "65%" }
+                        span data-mui-type="small" style="color:var(--mui-text)" { "Uploading file..." }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "65%" }
                     }
                     (render(Props {
                         value: 65,
@@ -77,7 +77,7 @@ pub fn showcase() -> Markup {
                         label: "Uploading file, 65 percent".into(),
                         indeterminate: false,
                     }))
-                    span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted)" { "report-2026.pdf — 3.2 MB of 4.9 MB" }
+                    span data-mui-type="caption" style="color:var(--mui-text-muted)" { "report-2026.pdf — 3.2 MB of 4.9 MB" }
                 }
             }
 
@@ -86,8 +86,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Stepped progress" }
                 div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "Step 2 of 4" }
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted)" { "Account details" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "Step 2 of 4" }
+                        span data-mui-type="caption" style="color:var(--mui-text-muted)" { "Account details" }
                     }
                     (render(Props {
                         value: 50,
@@ -102,7 +102,7 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Indeterminate" }
                 div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
-                    span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" { "Processing your request..." }
+                    span data-mui-type="small" style="color:var(--mui-text-muted)" { "Processing your request..." }
                     (render(Props {
                         value: 0,
                         max: 100,
@@ -134,8 +134,8 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Download complete" }
                 div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
-                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text)" { "Download complete" }
-                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-accent,var(--mui-text))" { "100%" }
+                        span data-mui-type="small" style="color:var(--mui-text)" { "Download complete" }
+                        span data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-accent,var(--mui-text))" { "100%" }
                     }
                     (render(Props {
                         value: 100,
@@ -143,7 +143,7 @@ pub fn showcase() -> Markup {
                         label: "Download complete".into(),
                         indeterminate: false,
                     }))
-                    span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted)" { "dataset.csv — 12.7 MB" }
+                    span data-mui-type="caption" style="color:var(--mui-text-muted)" { "dataset.csv — 12.7 MB" }
                 }
             }
         }

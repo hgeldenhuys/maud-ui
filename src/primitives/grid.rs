@@ -255,7 +255,7 @@ pub fn showcase() -> Markup {
 
     let cell = |text: &str| -> Markup {
         html! {
-            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);text-align:center;" {
+            div data-mui-type="small" style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-md);color:var(--mui-text-muted);text-align:center;" {
                 (text)
             }
         }
@@ -381,7 +381,7 @@ pub fn showcase() -> Markup {
                             padding: Space::Sm,
                             children: html! {
                                 (cell("Short"))
-                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-xxl) var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);text-align:center;" { "Tall" }
+                                div data-mui-type="small" style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-xxl) var(--mui-space-md);color:var(--mui-text-muted);text-align:center;" { "Tall" }
                                 (cell("Short"))
                             },
                             ..Default::default()
@@ -413,7 +413,7 @@ pub fn showcase() -> Markup {
                                     // full-width bar instead of a chip.
                                     align: Align::Start,
                                     children: html! {
-                                        p style="font-size: var(--mui-text-h2-size);font-weight: var(--mui-weight-heading);margin: 0;" { (value) }
+                                        p data-mui-type="h2" style="font-weight: var(--mui-weight-heading);margin: 0;" { (value) }
                                         (badge::render(badge::Props {
                                             label: format!("{delta} from last month"),
                                             variant: tone,

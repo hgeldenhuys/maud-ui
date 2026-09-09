@@ -57,7 +57,7 @@
 
 .mui-code {
   font-family: var(--mui-font-mono);
-  font-size: 0.875em;
+  font-size: var(--mui-text-small-size);
   background-color: var(--mui-bg-input);
   border: 1px solid var(--mui-border);
   padding: var(--mui-space-2xs) var(--mui-inset-tight);
@@ -192,7 +192,7 @@
 
 .mui-prose code {
   font-family: var(--mui-font-mono);
-  font-size: 0.8125em;
+  font-size: var(--mui-text-caption-size);
   background: var(--mui-bg-input);
   border-radius: var(--mui-radius-sm);
   padding: 0.1em 0.35em;

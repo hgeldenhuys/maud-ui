@@ -22,7 +22,7 @@ pub fn render_component_docs(slug: &str) -> Option<Markup> {
 
 /// Resolve repository Markdown references to known gallery routes, leaving external
 /// URLs and escaped code examples untouched. Markdown files retain their GitHub links.
-fn link_docs(raw: &str, block: bool) -> String {
+pub(crate) fn link_docs(raw: &str, block: bool) -> String {
     let mut output = String::with_capacity(raw.len());
     let mut rest = raw;
     while let Some(start) = rest.find("href=\"") {
@@ -72,7 +72,7 @@ fn link_docs(raw: &str, block: bool) -> String {
 ///
 /// These are trusted, pre-rendered repository docs. Code fences are escaped
 /// by the development-time Markdown renderer before reaching this function.
-fn wrap_tables(html_str: &str) -> String {
+pub(crate) fn wrap_tables(html_str: &str) -> String {
     if !html_str.contains("<table>") {
         return html_str.to_string();
     }
@@ -196,7 +196,7 @@ fn escape_attr(s: &str) -> String {
 /// Match slug → `include_str!(...)`. Keep the match arms in lockstep
 /// with `COMPONENT_NAMES` in `src/showcase/mod.rs` and with
 /// `docs/components/rendered/*.md` on disk.
-fn component_docs_source(slug: &str) -> Option<&'static str> {
+pub(crate) fn component_docs_source(slug: &str) -> Option<&'static str> {
     // Path is relative to THIS file (src/showcase/docs.rs):
     // ../../docs/components/rendered/<name>.md
     match slug {
@@ -288,7 +288,7 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
 }
 
 /// Render the API contract for operational blocks.
-pub fn render_block_docs(slug: &str) -> Option<Markup> {
+pub(crate) fn block_docs_source(slug: &str) -> Option<&'static str> {
     let raw = match slug {
         "worklist-header" => include_str!("../../docs/blocks/rendered/worklist-header.html"),
         "record-timeline" => include_str!("../../docs/blocks/rendered/record-timeline.html"),
@@ -306,6 +306,10 @@ pub fn render_block_docs(slug: &str) -> Option<Markup> {
 
         _ => return None,
     };
+    Some(raw)
+}
+pub fn render_block_docs(slug: &str) -> Option<Markup> {
+    let raw = block_docs_source(slug)?;
     Some(html! { section class="mui-docs" { (PreEscaped(wrap_tables(&link_docs(raw, true)))) } })
 }
 

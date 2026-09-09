@@ -31,3 +31,7 @@ header::render(Props {
 For a bound field heading, pass `title_markup: Some(html! { h1 { (record.name) } })` and choose its heading level in the caller. Plain `title` is escaped and uses `heading`; the markup slot takes precedence. The same precedence applies to a field-emitted status in `status_markup`.
 
 The [shared Action contract](worklist-header.md) supports navigation and POST with hidden fields. Empty secondary groups are omitted; no client script is needed. Status text supplies meaning beyond color. Long titles and action groups wrap. The back link comes first in reading order, and the record header never creates a page or main landmark of its own.
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

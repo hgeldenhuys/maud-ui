@@ -94,14 +94,14 @@ fn product_slide(name: &str, price: &str, glyph: &str) -> Markup {
         div style="display:flex;flex-direction:column;gap: var(--mui-space-md);padding: var(--mui-space-md);" {
             // Neutral product placeholder follows the active palette.
             div style="background: var(--mui-bg-input); color: var(--mui-text-secondary); border-radius: var(--mui-radius-lg); height: 10rem; display: flex; align-items: center; justify-content: center;" {
-                span style="font-size: var(--mui-text-display-size);" { (glyph) }
+                span data-mui-type="display" { (glyph) }
             }
             div style="display:flex;justify-content:space-between;align-items:flex-start;gap: var(--mui-space-sm);" {
                 div style="min-width:0;" {
-                    p style="font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);margin: 0;" { (name) }
-                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { "Free shipping over $50" }
+                    p data-mui-type="body" style="font-weight: var(--mui-weight-heading);margin: 0;" { (name) }
+                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { "Free shipping over $50" }
                 }
-                span style="font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);" { (price) }
+                span data-mui-type="body" style="font-weight: var(--mui-weight-heading);" { (price) }
             }
             a href="/card" class="mui-btn mui-btn--outline mui-btn--sm" style="align-self:flex-start;" {
                 "View card pattern →"
@@ -141,42 +141,42 @@ pub fn showcase() -> Markup {
                     items: vec![
                         html! {
                             div style="padding: var(--mui-space-20);display:flex;flex-direction:column;gap: var(--mui-space-md);min-height:10rem;" {
-                                p style="font-size: var(--mui-text-body-size);line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
+                                p data-mui-type="body" style="line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
                                     "\u{201C}Charging speed is absurd. Went from 0 to 80% during my morning coffee.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "SM" }
+                                    div data-mui-type="small" style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-weight: var(--mui-weight-heading);" { "SM" }
                                     div {
-                                        p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Sofia Martinez" }
-                                        p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
+                                        p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { "Sofia Martinez" }
+                                        p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
                                     }
                                 }
                             }
                         },
                         html! {
                             div style="padding: var(--mui-space-20);display:flex;flex-direction:column;gap: var(--mui-space-md);min-height:10rem;" {
-                                p style="font-size: var(--mui-text-body-size);line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
+                                p data-mui-type="body" style="line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
                                     "\u{201C}Sound isolation is the best I've tried under $200. Worth every penny.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "DK" }
+                                    div data-mui-type="small" style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-weight: var(--mui-weight-heading);" { "DK" }
                                     div {
-                                        p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Daniel Kim" }
-                                        p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
+                                        p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { "Daniel Kim" }
+                                        p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
                                     }
                                 }
                             }
                         },
                         html! {
                             div style="padding: var(--mui-space-20);display:flex;flex-direction:column;gap: var(--mui-space-md);min-height:10rem;" {
-                                p style="font-size: var(--mui-text-body-size);line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
+                                p data-mui-type="body" style="line-height: var(--mui-leading-small);margin: 0;font-style:italic;color:var(--mui-text);" {
                                     "\u{201C}Returned two other pairs before this one. Comfortable for full workdays.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "AP" }
+                                    div data-mui-type="small" style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-weight: var(--mui-weight-heading);" { "AP" }
                                     div {
-                                        p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Amelia Park" }
-                                        p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 4 stars" }
+                                        p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { "Amelia Park" }
+                                        p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 4 stars" }
                                     }
                                 }
                             }

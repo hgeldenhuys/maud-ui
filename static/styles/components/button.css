@@ -219,5 +219,5 @@
    slows it rather than stopping it — under the 5s threshold that would make it
    'moving content' users must be able to pause. */
 @media (prefers-reduced-motion: reduce) {
-  .mui-spin { animation-duration: 2.4s; }
+  .mui-spin { animation: none; }
 }

@@ -56,15 +56,15 @@ pub fn showcase() -> Markup {
                 div.mui-showcase__row {
                     div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Sm, label: None }))
-                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "sm" }
+                        span.mui-muted data-mui-type="caption" { "sm" }
                     }
                     div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Md, label: None }))
-                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "md" }
+                        span.mui-muted data-mui-type="caption" { "md" }
                     }
                     div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Lg, label: None }))
-                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "lg" }
+                        span.mui-muted data-mui-type="caption" { "lg" }
                     }
                 }
             }
@@ -89,7 +89,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Page loading" }
                 div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap: var(--mui-space-md);padding: var(--mui-space-xxl);border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md)" {
                     (render(Props { size: Size::Lg, label: Some("Loading page".into()) }))
-                    span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" { "Loading page..." }
+                    span data-mui-type="small" style="color:var(--mui-text-muted)" { "Loading page..." }
                 }
             }
 
@@ -97,11 +97,11 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Inline status" }
                 div style="display:flex;flex-direction:column;gap:var(--mui-space-md)" {
-                    span style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" {
+                    span data-mui-type="small" style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);color:var(--mui-text-muted)" {
                         (render(Props { size: Size::Sm, label: Some("Checking".into()) }))
                         "Checking for updates..."
                     }
-                    span style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" {
+                    span data-mui-type="small" style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);color:var(--mui-text-muted)" {
                         (render(Props { size: Size::Sm, label: Some("Connecting".into()) }))
                         "Connecting to server..."
                     }

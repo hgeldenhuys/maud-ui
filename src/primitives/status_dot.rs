@@ -64,7 +64,7 @@ fn row(label: &str, props: Props) -> Markup {
     html! {
         div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
             (render(props))
-            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { (label) }
+            span data-mui-type="small" style="color:var(--mui-text-muted);" { (label) }
         }
     }
 }

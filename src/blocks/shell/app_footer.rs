@@ -10,13 +10,20 @@ pub struct Column {
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub links: Vec<Link>,
     pub line: Option<String>,
     pub columns: Vec<Column>,
     pub children: Markup,
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     if props.links.is_empty()
         && props.line.as_ref().is_none_or(|s| s.is_empty())
         && props.columns.is_empty()

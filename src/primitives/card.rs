@@ -140,8 +140,8 @@ pub fn showcase() -> Markup {
                         div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);" {
                             div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                                 div {
-                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Push Notifications" }
-                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
+                                    p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { "Push Notifications" }
+                                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
                                         "Send notifications to device."
                                     }
                                 }
@@ -157,8 +157,8 @@ pub fn showcase() -> Markup {
                             }
                             div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                                 div {
-                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Email Notifications" }
-                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
+                                    p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { "Email Notifications" }
+                                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
                                         "Receive emails for activity updates."
                                     }
                                 }
@@ -196,8 +196,8 @@ pub fn showcase() -> Markup {
                     description: None,
                     children: html! {
                         div {
-                            p style="font-size: var(--mui-text-h1-size);font-weight: var(--mui-weight-heading);margin: 0;" { "$45,231.89" }
-                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-xs) 0 0;" {
+                            p data-mui-type="h1" style="font-weight: var(--mui-weight-heading);margin: 0;" { "$45,231.89" }
+                            p data-mui-type="small" style="color:var(--mui-text-muted);margin: var(--mui-space-xs) 0 0;" {
                                 "+20.1% from last month"
                             }
                         }
@@ -304,9 +304,9 @@ pub fn showcase() -> Markup {
                     }),
                     children: html! {
                         ul style="list-style:none;padding: 0;margin: 0;display:flex;flex-direction:column;gap: var(--mui-space-sm);" {
-                            li style="font-size: var(--mui-text-small-size);" { "Alice Johnson — Owner" }
-                            li style="font-size: var(--mui-text-small-size);" { "Bob Smith — Editor" }
-                            li style="font-size: var(--mui-text-small-size);" { "Carol Davis — Viewer" }
+                            li data-mui-type="small" { "Alice Johnson — Owner" }
+                            li data-mui-type="small" { "Bob Smith — Editor" }
+                            li data-mui-type="small" { "Carol Davis — Viewer" }
                         }
                     },
                     ..Default::default()

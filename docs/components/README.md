@@ -32,4 +32,6 @@ Each doc follows the same structure:
 
 ## Contributing
 
-If you change a primitive's `Props`, update the matching `docs/components/<name>.md` in the same commit. The docs are cross-checked against source during every release audit.
+The gallery presents Anatomy / Props / Examples / Accessibility on every component and block page. Main Props tables are generated from Rust fields, doc comments and actual Default implementations, with explicit treatment of APIs without Default.
+
+After changing Props, run `python3 examples/generate-props.py` and update explanatory examples and contracts in the matching Markdown. Verify with `python3 examples/generate-props.py --check`. Regenerate Markdown HTML with `cargo run --example build_docs`. Do not edit `src/showcase/generated_props.rs` by hand. See [States and motion](../states-and-motion.md).

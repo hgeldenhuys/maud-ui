@@ -118,7 +118,7 @@ pub fn showcase() -> Markup {
                 h2 { "Share your feedback" }
                 p.mui-showcase__caption { "Tell us what worked and what didn't. We read every response." }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:28rem;" {
-                    label for="feedback-message" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);" { "Your feedback" }
+                    label for="feedback-message" data-mui-type="small" style="font-weight: var(--mui-weight-medium);" { "Your feedback" }
                     (render(Props {
                         name: "feedback".into(),
                         id: "feedback-message".into(),
@@ -126,7 +126,7 @@ pub fn showcase() -> Markup {
                         rows: 5,
                         ..Default::default()
                     }))
-                    div style="display:flex;justify-content:space-between;font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
+                    div data-mui-type="caption" style="display:flex;justify-content:space-between;color:var(--mui-text-muted);" {
                         span { "Min 20 characters" }
                         span { "0 / 500" }
                     }
@@ -138,7 +138,7 @@ pub fn showcase() -> Markup {
                 h2 { "Profile" }
                 p.mui-showcase__caption { "Shown on your public profile and attribution lines." }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:28rem;" {
-                    label for="profile-bio" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);" { "Bio" }
+                    label for="profile-bio" data-mui-type="small" style="font-weight: var(--mui-weight-medium);" { "Bio" }
                     (render(Props {
                         name: "bio".into(),
                         id: "profile-bio".into(),
@@ -146,7 +146,7 @@ pub fn showcase() -> Markup {
                         rows: 4,
                         ..Default::default()
                     }))
-                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
+                    p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" {
                         "Tip: mention where you work, what you build, and where folks can find you."
                     }
                 }
@@ -157,7 +157,7 @@ pub fn showcase() -> Markup {
                 h2 { "Invalid (aria)" }
                 p.mui-showcase__caption { "Form framework set aria_invalid without styling as hard error." }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:28rem;" {
-                    label for="invalid-notes" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);" { "Release notes" }
+                    label for="invalid-notes" data-mui-type="small" style="font-weight: var(--mui-weight-medium);" { "Release notes" }
                     (render(Props {
                         name: "release-notes".into(),
                         id: "invalid-notes".into(),
@@ -165,7 +165,7 @@ pub fn showcase() -> Markup {
                         aria_invalid: true,
                         ..Default::default()
                     }))
-                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
+                    p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" {
                         "Screen readers will announce this field as invalid."
                     }
                 }
@@ -176,7 +176,7 @@ pub fn showcase() -> Markup {
                 h2 { "Admin notes" }
                 p.mui-showcase__caption { "Read-only. Changes require a support ticket." }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:28rem;" {
-                    label for="admin-notes" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text-muted);" {
+                    label for="admin-notes" data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text-muted);" {
                         "Admin notes \u{2014} read only"
                     }
                     (render(Props {
@@ -187,7 +187,7 @@ pub fn showcase() -> Markup {
                         rows: 4,
                         ..Default::default()
                     }))
-                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
+                    p data-mui-type="caption" style="color:var(--mui-text-muted);margin: 0;" {
                         "Last updated by Sofia M. \u{00B7} 6 days ago"
                     }
                 }

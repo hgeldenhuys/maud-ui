@@ -45,7 +45,7 @@ html! {
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `variant` | `Variant` | `Empty` | Empty, Filtered or Failed reason. |
+| `variant` | `Variant` | `Empty` | Empty, Filtered, Failed or compact Inline presentation. |
 | `icon` | `Option<String>` | `None` (reason-specific glyph) | Optional icon (text or emoji) |
 | `title` | `String` | `Nothing here yet` via Default | Main heading; new(title) supplies caller copy. |
 | `description` | `Option<String>` | `None` | Optional description text |
@@ -59,6 +59,18 @@ html! {
 - `with_icon(icon) → Self` — Add icon
 - `with_description(text) → Self` — Add description
 - `with_action(markup) → Self` — Add action button/content
+
+## Inline related collection
+
+```rust
+use maud::html;
+use maud_ui::primitives::empty_state::{self, Props, Variant};
+empty_state::render(Props::new("No payments yet")
+    .with_variant(Variant::Inline)
+    .with_action(html! { a href="/payments/new" { "Add payment" } }));
+```
+
+Inline renders one quiet paragraph plus its action; it omits icon, description and heading even when supplied. Put the collection heading in the parent section. `Props::for_variant(Variant::Inline)` defaults to “No related items yet”. Add an Inline arm to exhaustive Variant matches.
 
 ## MediaVariant Enum
 

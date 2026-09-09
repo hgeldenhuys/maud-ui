@@ -6,3 +6,4 @@ pub mod app_header;
 pub mod app_footer;
 
 mod example;
+pub mod record_example;

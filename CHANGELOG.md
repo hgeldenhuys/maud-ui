@@ -5,6 +5,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.10.1] — 2026-09-09 — States and motion
+
+All 13 operational blocks now render loading, empty, error and disabled states from props, with four adjacent examples per API page. Loading/empty/error omit ready content; disabled keeps admitted fragments in an inert subtree with a visible reason. The landing workspace adds a record tab using the complete kit, an arrival-only banner and explicit fictional manager amounts.
+
+- Timeline is horizontal at viewport widths ≥48rem even in narrow desktop columns, and sizes to content. Related cards automatically use Inline without facts; empty related collections gain a quiet Inline variant. Breadcrumbs retain root/current labels and ellipsize only the middle. Record-header overflow shares action-row's 32px outline More ▾ control, with a 44px touch target.
+- All 105 component/block references have Anatomy / Props / Examples / Accessibility. Generated metadata covers 661 public rendering fields; defaults come from actual Rust implementations. Non-Default and helper-only APIs are identified explicitly.
+- Dark surface, semantic ink and focus checks cover all eight presets. Six preset control borders become quieter than labels, and high-contrast structural borders soften; code labels use accent text. Default light/dark palette colors remain unchanged.
+- Dialogs/sheets/drawers share one entrance, toasts have one entrance/exit, and skeletons shimmer. Interactive controls share hover/pressed feedback. Reduced motion disables animation and transitions. Toast removal follows computed CSS timing. Removed 15 superseded keyframes.
+- Replaced 223 local font-size declarations with scale roles; widget sizes read computed tokens. Added the named 16px touch-input floor. The loading-duration alias now derives from enter ×6, leaving two independent duration tokens.
+
+**Source migration:** add `state: Default::default()` to exhaustive operational Props literals; related-card Props also gains `variant` (Auto). Add Inline to exhaustive empty-state Variant matches. Timeline milestone State remains separate from `blocks::state::State`. See [States and motion](docs/states-and-motion.md) for every changed token and preset value, inert semantics and the consuming app's missing balance admission.
+
 ## [0.10.0] — 2026-09-08 — The record kit
 
 Eight additions complete the record and worklist kit: `record::timeline` (also `stay_timeline`), `record::money`, `record::related_card`, `worklist::grouped`, `choice_card`, `date_range`, `attention_banner` and `action_row`. Each has typed props, an API page, paired light/dark examples and responsive styles. The catalog now contains 83 primitives and 22 blocks.

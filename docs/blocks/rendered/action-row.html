@@ -23,11 +23,11 @@ html! {
 <tr><td>primary_markup / secondary_markup / overflow_markup</td><td>Option<Markup></td><td>None</td><td>Override the corresponding typed actions, including an explicitly empty fragment.</td></tr>
 <tr><td>density</td><td>Density</td><td>Compact</td><td>Row, Compact or Comfortable.</td></tr>
 <tr><td>aria_label</td><td>String</td><td>Actions</td><td>Accessible group name.</td></tr>
-<tr><td>overflow_label</td><td>String</td><td>More actions</td><td>Native summary text.</td></tr>
+<tr><td>overflow_label</td><td>String</td><td>More</td><td>Native summary text; a decorative ▾ follows.</td></tr>
 </tbody></table>
 <p>All effective slots empty renders nothing; empty overflow renders no summary. Canonical fragments keep their original form, CSRF, confirmation, pending/result and data attributes. Give their controls the <code>mui-btn</code> class to share density. Density rules override child size classes inside this row; keep business behavior in the caller.</p>
 <h2>Density and shared Action contract</h2>
-<p><code>Density::Row</code>: 32px minimum, 12px text and zero block padding. <code>Compact</code>: 32px minimum with 14px text. <code>Comfortable</code>: 36px minimum. Every density has a 44px coarse-pointer floor, wrapping labels and visible keyboard focus. <code>Density::as_str()</code> returns row/compact/comfortable. These values use the existing theme tokens.</p>
+<p><code>Density::Row</code>: 32px minimum, 12px text and zero block padding. <code>Compact</code>: 32px minimum with 14px text. <code>Comfortable</code>: 36px minimum. Overflow stays a small 32px outline More disclosure at every density. Record headers use the same action row. Every density has a 44px coarse-pointer floor, wrapping labels and visible keyboard focus. <code>Density::as_str()</code> returns row/compact/comfortable. These values use the existing theme tokens.</p>
 <p><code>Action { label: String, target: Target }</code> supports:</p>
 <ul>
 <li><code>Action::link(label, href)</code> → a native anchor.</li>
@@ -40,3 +40,5 @@ html! {
 <p>Native buttons, anchors and details need no JavaScript. Tab traverses controls, Enter activates the focused action, Space toggles the summary. The overflow has disclosure semantics, not an ARIA menu. Native form validation and submission stay intact. Both themes share the same geometry; long actions wrap and coarse pointers retain the larger target.</p>
 <h2>Related</h2>
 <p><a href="../components/form.md">Form</a>, <a href="record-money.md">record money</a>, <a href="../components/button.md">button</a>.</p>
+<h2>Presentation states (0.10.1)</h2>
+<p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>

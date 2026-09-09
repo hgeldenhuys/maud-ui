@@ -38,6 +38,8 @@ pub struct Milestone {
 }
 #[derive(Clone, Debug)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub title: String,
     pub heading: Heading,
     pub milestones: Vec<Milestone>,
@@ -45,6 +47,7 @@ pub struct Props {
 impl Default for Props {
     fn default() -> Self {
         Self {
+            state: Default::default(),
             title: "Timeline".into(),
             heading: Heading::H2,
             milestones: vec![],
@@ -52,7 +55,12 @@ impl Default for Props {
     }
 }
 /// Designed for 3–5 milestones. Empty input renders nothing; multiple current steps are invalid.
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     if props.milestones.is_empty() {
         return html! {};
     }

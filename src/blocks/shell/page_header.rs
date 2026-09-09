@@ -23,6 +23,8 @@ impl Default for Search {
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     /// Mobile menu trigger or other leading control, before the breadcrumb.
     pub leading: Markup,
     pub breadcrumbs: Vec<BreadcrumbItem>,
@@ -34,7 +36,12 @@ pub struct Props {
     pub switchers: Markup,
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         header class="mui-page-header" {
             div class="mui-page-header__context" {

@@ -112,10 +112,10 @@ pub fn showcase() -> Markup {
                         size: Size::Lg,
                     }))
                     div {
-                        div style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" {
+                        div data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" {
                             "Sofia Davis"
                         }
-                        div style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                        div data-mui-type="small" style="color:var(--mui-text-muted);" {
                             "sofia@example.com"
                         }
                     }

@@ -23,3 +23,5 @@ sidebar::render(sidebar::Props {
 <tr><td>children</td><td>Markup</td><td>empty</td><td>Additional caller-rendered content.</td></tr>
 </tbody></table>
 <p><code>render(Default::default())</code> returns empty markup. Empty brand/actions fragments also count as empty. The 56px minimum row wraps its navigation beneath the brand on phones. No JS is required. The sidebar showcase demonstrates this masthead and the footer together in both themes.</p>
+<h2>Presentation states (0.10.1)</h2>
+<p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>

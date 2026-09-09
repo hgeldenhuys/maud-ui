@@ -67,3 +67,7 @@
 .mui-empty-state__action {
   margin-top: var(--mui-space-xl);
 }
+
+.mui-empty-state--inline { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: var(--mui-space-sm) var(--mui-space-md); padding: var(--mui-space-sm) 0; min-height: 0; text-align: start; border: 0; background: transparent; }
+.mui-empty-state--inline .mui-empty-state__line { margin: 0; font-size: var(--mui-text-small-size); color: var(--mui-text-muted); }
+.mui-empty-state--inline .mui-empty-state__action { margin: 0; }

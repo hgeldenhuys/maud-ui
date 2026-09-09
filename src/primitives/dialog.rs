@@ -135,10 +135,10 @@ pub fn showcase() -> Markup {
                     description: Some("Update your personal information below.".to_string()),
                     children: html! {
                         div style="display:flex;align-items:center;gap: var(--mui-space-lg);margin-bottom:var(--mui-space-lg);" {
-                            div style="width:3rem;height:3rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-h3-size);flex-shrink:0;" {
+                            div data-mui-type="h3" style="width:3rem;height:3rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);display:flex;align-items:center;justify-content:center;flex-shrink:0;" {
                                 "JD"
                             }
-                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                            p data-mui-type="small" style="color:var(--mui-text-muted);" {
                                 "Upload a new avatar from your device."
                             }
                         }
@@ -199,7 +199,7 @@ pub fn showcase() -> Markup {
                     title: "Quick Action".to_string(),
                     description: Some("A compact dialog for short interactions.".to_string()),
                     children: html! {
-                        p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                        p data-mui-type="small" style="color:var(--mui-text-muted);" {
                             "This dialog uses the Sm size variant with reduced padding."
                         }
                     },
@@ -238,7 +238,7 @@ pub fn showcase() -> Markup {
                     title: "Delete the shared document and its comments?".to_string(),
                     description: Some("Review this action before deleting. You can cancel or press Escape.".to_string()),
                     children: html! {
-                        p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
+                        p data-mui-type="small" style="color:var(--mui-text-muted);" {
                             "The close icon is optional. Escape and the Cancel action still dismiss this dialog."
                         }
                     },

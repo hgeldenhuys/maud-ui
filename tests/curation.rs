@@ -147,6 +147,8 @@ fn mobile_short_labels_preserve_full_names_and_fall_back_when_empty() {
 #[test]
 fn link_and_post_actions_share_button_skin_classes() {
     fn classes(markup: &str) -> &str {
+        let action = markup.find("<a class=\"mui-btn ").or_else(|| markup.find("<button class=\"mui-btn ")).expect("native action");
+        let markup = &markup[action..];
         let start = markup
             .find("class=\"mui-btn ")
             .expect("action has button classes")
@@ -213,6 +215,7 @@ fn numeric_columns_align_across_plain_rich_and_footer_rows() {
 #[test]
 fn worklist_search_is_a_labelled_get_form_and_preserves_filters() {
     let output = worklist::header::render(worklist::header::Props {
+        state: Default::default(),
         title: "Reservations".into(),
         count_sentence: "12 reservations · 2 arriving".into(),
         heading: Heading::H1,
@@ -260,7 +263,7 @@ fn record_keeps_one_primary_post_and_native_secondary_disclosure() {
     assert_eq!(output.matches("mui-btn--primary").count(), 1);
     assert!(output.contains("method=\"post\" action=\"/records/2048/check-in\""));
     assert!(output.contains("value=\"&quot;token&lt;&amp;\""));
-    assert!(output.contains("<details ") && output.contains("<summary>More actions</summary>"));
+    assert!(output.contains("<details ") && output.contains("mui-action-row__trigger\">More<span aria-hidden=\"true\"> ▾</span></summary>"));
     assert!(output.find("Reservations</a>").unwrap() < output.find("Sofia</h2>").unwrap());
     let minimal = record::header::render(Default::default()).into_string();
     assert!(!minimal.contains("<details") && !minimal.contains("mui-record-header__actions"));

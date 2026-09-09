@@ -1,6 +1,6 @@
 # Record timeline
 
-Three to five dated milestones for a stay, case or delivery. The caller supplies the order and the distinction between actual events, the current step and scheduled events. The layout changes from horizontal to vertical when its container is 40rem or narrower.
+Three to five dated milestones for a stay, case or delivery. The caller supplies the order and the distinction between actual events, the current step and scheduled events. The layout is horizontal at viewport widths of at least 48rem, including narrow desktop columns, and vertical below 48rem. The frame sizes to its content.
 
 ## Import and example
 ```rust
@@ -30,7 +30,11 @@ timeline::render(Props {
 `State::{Done, Current, Scheduled}`; `State::as_str()` supplies the lowercase data attribute and `State::label()` supplies the English text. A timeline may have no current step; passing multiple Current milestones panics to reject ambiguous progress. Dates do not determine states or reorder events.
 
 ## Accessibility
-An ordered list, visible state text and a check for Done accompany color. The current step alone has `aria-current="step"`. Markers are decorative. No JavaScript or interactive step navigation; actions belong in the record header. At 40rem the same list becomes vertical, retaining reading order in light and dark themes.
+An ordered list, visible state text and a check for Done accompany color. The current step alone has `aria-current="step"`. Markers are decorative. No JavaScript or interactive step navigation; actions belong in the record header. Below a 48rem viewport the same list becomes vertical, retaining reading order in light and dark themes.
 
 ## Related
 [Record header](record-header.md), [money](record-money.md), [related entity](record-related-card.md).
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

@@ -7,6 +7,8 @@ use maud::{html, Markup};
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub title: String,
     /// Overrides `title`. May contain a field-emitter heading; no heading is wrapped around it.
     pub title_markup: Option<Markup>,
@@ -20,7 +22,12 @@ pub struct Props {
     pub heading: Heading,
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         header class="mui-record-header" {
             @if let Some(back) = props.back {
@@ -39,19 +46,10 @@ pub fn render(props: Props) -> Markup {
                     }
                     @if let Some(subtitle) = props.subtitle { p class="mui-record-header__subtitle" { (subtitle) } }
                 }
-                @if props.primary_action.is_some() || !props.secondary_actions.is_empty() {
-                    div class="mui-record-header__actions" {
-                        @if let Some(action) = props.primary_action { (action.render(true)) }
-                        @if !props.secondary_actions.is_empty() {
-                            details class="mui-record-header__more" {
-                                summary { "More actions" }
-                                div class="mui-record-header__secondary" role="group" aria-label="Secondary actions" {
-                                    @for action in props.secondary_actions { (action.render(false)) }
-                                }
-                            }
-                        }
-                    }
-                }
+                (crate::blocks::action_row::render(crate::blocks::action_row::Props {
+                    primary: props.primary_action, overflow: props.secondary_actions,
+                    density: crate::blocks::action_row::Density::Compact, ..Default::default()
+                }))
             }
         }
     }

@@ -42,7 +42,7 @@ pub fn showcase() -> Markup {
                     (render(Props {
                         title: "Linked docs".into(),
                         content: html! {
-                            div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);font-size: var(--mui-text-small-size);" {
+                            div data-mui-type="small" style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
                                 a href="#" style="color:var(--mui-accent-text);text-decoration:none;" { "auth-middleware RFC" }
                                 a href="#" style="color:var(--mui-accent-text);text-decoration:none;" { "tower Layer contract" }
                             }

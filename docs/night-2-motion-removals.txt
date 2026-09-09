@@ -1,0 +1,1 @@
+Removed 15 superseded keyframe definitions; surface, backdrop, notice and shimmer motion now lives in static/styles/states-motion.css.

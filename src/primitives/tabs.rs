@@ -131,7 +131,7 @@ pub fn showcase() -> Markup {
             label: "Account".to_string(),
             content: html! {
                 div style="padding: var(--mui-space-lg) 0;" {
-                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
+                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Make changes to your account here. Click save when you\u{2019}re done."
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:24rem;" {
@@ -181,7 +181,7 @@ pub fn showcase() -> Markup {
             label: "Password".to_string(),
             content: html! {
                 div style="padding: var(--mui-space-lg) 0;" {
-                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
+                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Change your password here. After saving, you\u{2019}ll be logged out."
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:24rem;" {
@@ -231,7 +231,7 @@ pub fn showcase() -> Markup {
             label: "Team".to_string(),
             content: html! {
                 div style="padding: var(--mui-space-lg) 0;" {
-                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
+                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Invite your team members to collaborate."
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:28rem;" {
@@ -242,10 +242,10 @@ pub fn showcase() -> Markup {
                         ] {
                             div style="display:flex;align-items:center;justify-content:space-between;padding: var(--mui-space-sm) 0;border-bottom:1px solid var(--mui-border);" {
                                 div {
-                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { (name) }
-                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { (email) }
+                                    p data-mui-type="small" style="font-weight: var(--mui-weight-medium);margin: 0;" { (name) }
+                                    p data-mui-type="small" style="color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { (email) }
                                 }
-                                span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);padding: var(--mui-space-xs) var(--mui-space-sm);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);" {
+                                span data-mui-type="caption" style="color:var(--mui-text-muted);padding: var(--mui-space-xs) var(--mui-space-sm);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);" {
                                     (role)
                                 }
                             }
@@ -283,7 +283,7 @@ pub fn showcase() -> Markup {
     html! {
         div style="display:flex;flex-direction:column;gap: var(--mui-space-xxl);" {
             section {
-                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
+                h4 data-mui-type="small" style="font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Default (horizontal, segmented)"
                 }
                 (render(Props {
@@ -295,7 +295,7 @@ pub fn showcase() -> Markup {
             }
 
             section {
-                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
+                h4 data-mui-type="small" style="font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Line variant (underline)"
                 }
                 (render(Props {
@@ -308,7 +308,7 @@ pub fn showcase() -> Markup {
             }
 
             section {
-                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
+                h4 data-mui-type="small" style="font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Vertical orientation + disabled tab + manual activation"
                 }
                 (render(Props {

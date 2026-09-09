@@ -308,7 +308,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Each feature of the Field component shown in isolation." }
                 div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Basic" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Basic" }
                         (render(Props {
                             label: "Username".to_string(),
                             id: "demo-a-basic".to_string(),
@@ -322,7 +322,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Required" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Required" }
                         (render(Props {
                             label: "Email Address".to_string(),
                             id: "demo-a-required".to_string(),
@@ -336,7 +336,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "With Description" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "With Description" }
                         (render(Props {
                             label: "Phone".to_string(),
                             id: "demo-a-desc".to_string(),
@@ -350,7 +350,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "With Error" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "With Error" }
                         (render(Props {
                             label: "Website".to_string(),
                             id: "demo-a-error".to_string(),
@@ -364,7 +364,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Description + Error" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Description + Error" }
                         (render(Props {
                             label: "Invite Code".to_string(),
                             id: "demo-a-both".to_string(),
@@ -378,7 +378,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Textarea Field" }
+                        h3 data-mui-type="small" style="margin-bottom:var(--mui-space-sm);" { "Textarea Field" }
                         (render(Props {
                             label: "Notes".to_string(),
                             id: "demo-a-textarea".to_string(),

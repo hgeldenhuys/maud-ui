@@ -46,12 +46,12 @@
 
 .mui-docs code {
   font-family: var(--mui-font-mono);
-  font-size: 0.875em;
+  font-size: var(--mui-text-small-size);
   background: var(--mui-bg-input);
   padding: var(--mui-space-2xs) var(--mui-inset-tight);
   border-radius: var(--mui-radius-sm);
   border: 1px solid var(--mui-border);
-  color: var(--mui-accent);
+  color: var(--mui-accent-text);
 }
 
 .mui-docs pre {
@@ -106,7 +106,7 @@
   border-top: 1px solid var(--mui-border);
 }
 .mui-docs td code,
-.mui-docs th code { font-size: 0.8125em; }
+.mui-docs th code { font-size: var(--mui-text-caption-size); }
 
 .mui-docs ul,
 .mui-docs ol {

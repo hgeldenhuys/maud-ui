@@ -35,7 +35,7 @@ html! {
 </code></pre>
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Empty</code></td><td>Empty, Filtered or Failed reason.</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Empty</code></td><td>Empty, Filtered, Failed or compact Inline presentation.</td></tr>
 <tr><td><code>icon</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code> (reason-specific glyph)</td><td>Optional icon (text or emoji)</td></tr>
 <tr><td><code>title</code></td><td><code>String</code></td><td><code>Nothing here yet</code> via Default</td><td>Main heading; new(title) supplies caller copy.</td></tr>
 <tr><td><code>description</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Optional description text</td></tr>
@@ -50,6 +50,14 @@ html! {
 <li><code>with_description(text) → Self</code> — Add description</li>
 <li><code>with_action(markup) → Self</code> — Add action button/content</li>
 </ul>
+<h2>Inline related collection</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::empty_state::{self, Props, Variant};
+empty_state::render(Props::new("No payments yet")
+    .with_variant(Variant::Inline)
+    .with_action(html! { a href="/payments/new" { "Add payment" } }));
+</code></pre>
+<p>Inline renders one quiet paragraph plus its action; it omits icon, description and heading even when supplied. Put the collection heading in the parent section. <code>Props::for_variant(Variant::Inline)</code> defaults to “No related items yet”. Add an Inline arm to exhaustive Variant matches.</p>
 <h2>MediaVariant Enum</h2>
 <table><thead><tr><th>Variant</th><th>Size</th><th>Use Case</th></tr></thead><tbody>
 <tr><td><code>Default</code></td><td>Larger (~4rem box)</td><td>Illustrations, oversized emoji</td></tr>

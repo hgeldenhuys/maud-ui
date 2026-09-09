@@ -25,3 +25,5 @@ attention_banner::render(Props {
 <p>The body and action wrap on phones; light/dark semantic tokens provide surfaces, text and borders. Touch dismissal and actions have a 44px minimum target. The application supplies all balances, readiness and arrival claims; the component derives none of them.</p>
 <h2>Related</h2>
 <p><a href="record-money.md">Money</a>, <a href="worklist-grouped.md">grouped worklist</a>, <a href="../components/alert.md">alert</a>.</p>
+<h2>Presentation states (0.10.1)</h2>
+<p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>

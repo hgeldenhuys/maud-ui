@@ -9,7 +9,6 @@ dialog.mui-dialog {
   box-shadow: var(--mui-shadow-lg);
   max-width: 32rem;
   width: 90vw;
-  animation: mui-dialog-enter var(--mui-motion-enter) var(--mui-motion-ease);
 }
 
 /* Size: Sm — reduced max-width and padding for compact dialogs */
@@ -28,23 +27,6 @@ dialog.mui-dialog.mui-dialog--sm {
 dialog.mui-dialog::backdrop {
   background: var(--mui-bg-overlay);
   backdrop-filter: blur(4px);
-  animation: mui-dialog-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease);
-}
-
-@keyframes mui-dialog-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes mui-dialog-backdrop-enter {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* Header — no close button in flow; title + description only */

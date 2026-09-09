@@ -34,6 +34,8 @@ impl Default for Dismiss {
 }
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub title: String,
     pub subline: Option<String>,
     pub action: Option<Action>,
@@ -41,7 +43,12 @@ pub struct Props {
     pub tone: Tone,
     pub dismiss: Option<Dismiss>,
 }
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     html! {
         aside class="mui-attention-banner" data-tone=(props.tone.as_str()) aria-label=(&props.title) data-mui="attention-banner" {
             div class="mui-attention-banner__body" {

@@ -4,6 +4,8 @@ use maud::{html, Markup};
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
+    /// Explicit presentation state; Ready preserves the ordinary content.
+    pub state: crate::blocks::state::State,
     pub brand: Option<Markup>,
     pub links: Vec<Link>,
     pub current_href: Option<String>,
@@ -11,7 +13,12 @@ pub struct Props {
     pub children: Markup,
 }
 
-pub fn render(props: Props) -> Markup {
+pub fn render(mut props: Props) -> Markup {
+    let state = std::mem::take(&mut props.state);
+    crate::blocks::state::render(state, || render_ready(props))
+}
+
+fn render_ready(props: Props) -> Markup {
     if props.brand.as_ref().is_none_or(|m| m.0.is_empty())
         && props.links.is_empty()
         && props.actions.as_ref().is_none_or(|m| m.0.is_empty())

@@ -33,3 +33,7 @@ The body and action wrap on phones; light/dark semantic tokens provide surfaces,
 
 ## Related
 [Money](record-money.md), [grouped worklist](worklist-grouped.md), [alert](../components/alert.md).
+
+## Presentation states (0.10.1)
+
+`Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.

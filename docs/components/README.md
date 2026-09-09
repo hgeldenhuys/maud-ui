@@ -16,7 +16,7 @@ Each doc follows the same structure:
 
 ## Alphabetical index
 
-**Form controls** · [form](form.md) · [button](button.md) · [input](input.md) · [textarea](textarea.md) · [checkbox](checkbox.md) · [radio](radio.md) · [radio_group](radio_group.md) · [select](select.md) · [switch](switch.md) · [slider](slider.md) · [number_field](number_field.md) · [field](field.md) · [fieldset](fieldset.md) · [label](label.md) · [native_select](native_select.md) · [input_group](input_group.md) · [input_otp](input_otp.md) · [combobox](combobox.md)
+**Form controls** · [form](form.md) · [button](button.md) · [input](input.md) · [textarea](textarea.md) · [checkbox](checkbox.md) · [radio](radio.md) · [choice_card](choice_card.md) · [date_range](date_range.md) · [radio_group](radio_group.md) · [select](select.md) · [switch](switch.md) · [slider](slider.md) · [number_field](number_field.md) · [field](field.md) · [fieldset](fieldset.md) · [label](label.md) · [native_select](native_select.md) · [input_group](input_group.md) · [input_otp](input_otp.md) · [combobox](combobox.md)
 
 **Display** · [badge](badge.md) · [swatch](swatch.md) · [avatar](avatar.md) · [separator](separator.md) · [progress](progress.md) · [meter](meter.md) · [kbd](kbd.md) · [skeleton](skeleton.md) · [spinner](spinner.md) · [typography](typography.md) · [empty_state](empty_state.md) · [item](item.md)
 

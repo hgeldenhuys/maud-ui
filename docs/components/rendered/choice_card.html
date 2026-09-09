@@ -1,0 +1,40 @@
+<h1>Choice card</h1>
+<p>Native radio cards for choosing one room, plan or delivery option. The entire card labels its radio. No JavaScript is required for keyboard selection or form submission.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::choice_card::{self, Choice, Props};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud_ui::primitives::choice_card::{self, Choice, Props};
+choice_card::render(Props {
+    id: "booking-room".into(), name: "room_id".into(), legend: "Choose a room".into(),
+    selected: Some("4".into()), required: true,
+    choices: vec![
+        Choice { value: "4".into(), title: "Juniper 04".into(), facts: vec!["Queen bed · Garden terrace".into()], price: Some("CAD $240 / night".into()), ..Default::default() },
+        Choice { value: "12".into(), title: "Cedar 12".into(), disabled_reason: Some("Booked for these dates".into()), ..Default::default() },
+    ],
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>id</td><td>String</td><td>mui-choice-card</td><td>Unique fieldset ID; prefixes radio and reason IDs.</td></tr>
+<tr><td>name</td><td>String</td><td>choice</td><td>Shared native radio field name; must be unique to this group within its form.</td></tr>
+<tr><td>legend</td><td>String</td><td>Choose an option</td><td>Visible, accessible group name.</td></tr>
+<tr><td>choices</td><td>Vec<Choice></td><td>empty</td><td>Ordered caller-supplied choices.</td></tr>
+<tr><td>selected</td><td>Option<String></td><td>None</td><td>Value to check; first matching enabled choice wins. Unknown/disabled selection checks none.</td></tr>
+<tr><td>required</td><td>bool</td><td>false</td><td>Native required radio group.</td></tr>
+<tr><td>disabled</td><td>bool</td><td>false</td><td>Disables the whole fieldset and its inputs.</td></tr>
+<tr><td>form</td><td>Option<String></td><td>None</td><td>Form owner ID when rendered outside the form.</td></tr>
+</tbody></table>
+<p><code>Choice</code> fields: <code>value: String</code> and <code>title: String</code> default empty; <code>facts: Vec&lt;String&gt;</code> defaults empty; <code>price: Option&lt;String&gt;</code> and <code>disabled_reason: Option&lt;String&gt;</code> default None. Price includes its currency and unit, supplied by the caller. A disabled reason both disables the radio and displays its explanation; use a meaningful nonempty reason. Values, labels, facts and prices are escaped. Supply stable, unique values; duplicate values never produce multiple checked radios in server markup.</p>
+<h2>Variants / Enums</h2>
+<p>None. Native checked, required and disabled states govern the cards. The caller supplies availability; choosing a card does not reserve inventory or calculate a quote.</p>
+<h2>Helper Functions</h2>
+<p>None beyond <code>render(Props)</code> and <code>showcase()</code>.</p>
+<h2>Accessibility</h2>
+<p>Fieldset/legend name the group; visible native radio controls provide semantics and state even without CSS. Tab enters the group, arrow keys change the checked radio and skip disabled options, Space selects the focused option. The native browser owns keyboard behavior. The disabled explanation is associated with <code>aria-describedby</code> and remains readable in document flow. Full-card labels provide large targets; focus outlines and checked borders supplement color, including forced-colors mode. Cards reflow into one column at a container width of 30rem. Both themes use the same structure.</p>
+<p>Give each rendered picker a distinct id and each independent group a distinct name or form owner. Revalidate the submitted value and availability on the server.</p>
+<h2>Related</h2>
+<p><a href="radio_group.md">Radio group</a>, <a href="date_range.md">date range</a>, <a href="../blocks/action-row.md">action row</a>.</p>
+<h2>Shadcn reference</h2>
+<p>Application-specific native-radio composition; no direct upstream equivalent.</p>

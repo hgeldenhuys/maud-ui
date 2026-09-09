@@ -5,6 +5,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.10.0] — 2026-09-08 — The record kit
+
+Eight additions complete the record and worklist kit: `record::timeline` (also `stay_timeline`), `record::money`, `record::related_card`, `worklist::grouped`, `choice_card`, `date_range`, `attention_banner` and `action_row`. Each has typed props, an API page, paired light/dark examples and responsive styles. The catalog now contains 83 primitives and 22 blocks.
+
+- Timelines show caller-supplied done/current/scheduled milestones horizontally on desktop and vertically in narrow containers. Grouped worklists become cards using one semantic row per record.
+- Money values and currency stay caller supplied; unavailable values are never fabricated as zero. Related cards and action slots preserve canonical field/action fragments.
+- Room choices use native radios with visible disabled reasons. Date ranges use native inputs and server-rendered calendar-night counts; optional enhancement updates/validates the interval and handles form reset. No-JS edits submit normally, with server validation and count refresh.
+- Attention banners offer warning/danger/info tones, one action and optional local dismissal with focus restoration. Dismiss controls appear only after enhancement.
+- Action rows own row/compact/comfortable Save/Cancel geometry and native overflow. Standalone row buttons retain zero block padding in the shipped CSS; coarse pointers retain a 44px floor. Form and profile examples now use the shared row. Related API links resolve to live gallery routes instead of Markdown paths.
+
+**Source migration:** `action::Target` gains `Submit { form, name, value }`; add a Submit arm to exhaustive matches. `Action::submit(label)` submits an existing form, avoiding nested POST forms. Existing Link/Post output and Size::Row/Sm APIs remain valid. No global palette, type or spacing token values change.
+
 ## [0.9.1] — 2026-09-08 — Design defaults refinements
 
 Status filters now sit at 30px in both desktop and phone layouts: 13px labels, 18px count bubbles and 11px tabular digits. The group wraps without adding its own outer margins; table status badges stay 22px. Semantic badges and syntax highlighting use the shared palette.

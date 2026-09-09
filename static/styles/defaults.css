@@ -28,7 +28,7 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 /* Comfortable compact defaults; sizes still serve their explicit purposes. */
 .mui-btn { min-height: var(--mui-control-height); height: auto; padding: var(--mui-space-sm) var(--mui-inset-control); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); font-weight: var(--mui-weight-medium); border-radius: var(--mui-radius-md); box-shadow: none; transition: background-color var(--mui-transition), color var(--mui-transition); }
 .mui-btn--sm, .mui-btn--row { min-height: var(--mui-space-xxl); padding: var(--mui-space-xs) var(--mui-space-md); font-size: var(--mui-text-caption-size); }
-.mui-btn--row { height: var(--mui-space-xxl); }
+.mui-btn--row { height: var(--mui-space-xxl); padding-block: 0; }
 .mui-btn--lg { min-height: var(--mui-touch-target); padding-inline: var(--mui-space-20); }
 .mui-btn--xs { min-height: var(--mui-space-xl); padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
 .mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs { padding: 0; min-width: var(--mui-control-height); width: var(--mui-control-height); height: var(--mui-control-height); }

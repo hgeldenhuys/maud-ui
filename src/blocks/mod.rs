@@ -19,6 +19,8 @@
 //! there has a showcase page at `/blocks/{slug}`.
 
 pub mod action;
+pub mod action_row;
+pub mod attention_banner;
 pub mod auth;
 pub mod dashboard;
 pub mod data;
@@ -53,6 +55,12 @@ pub const BLOCK_NAMES: &[&str] = &[
     "worklist-header",
     "record-header",
     "task-grid",
+    "record-timeline",
+    "record-money",
+    "record-related-card",
+    "worklist-grouped",
+    "attention-banner",
+    "action-row",
 ];
 
 /// Convert a block slug into a human-readable name.
@@ -78,4 +86,18 @@ fn title_case(s: &str) -> String {
         })
         .collect::<Vec<_>>()
         .join(" ")
+}
+
+/// Shared gallery framing only: each example gets its own theme scope and unique ID prefix.
+pub(crate) fn kit_preview(mut example: impl FnMut(&str) -> maud::Markup) -> maud::Markup {
+    maud::html! {
+        div class="mui-kit-previews" {
+            @for theme in ["light", "dark"] {
+                section class="mui-kit-preview" data-theme=(theme) aria-label=(format!("{theme} example")) {
+                    p class="mui-eyebrow" { (theme) " · fictional example" }
+                    (example(theme))
+                }
+            }
+        }
+    }
 }

@@ -185,15 +185,11 @@ pub fn render(props: Props) -> Markup {
                             }))
                         }
 
-                        div class="mui-block--settings__actions" {
-                            (button::render(button::Props {
-                                label: "Save changes".into(),
-                                variant: button::Variant::Primary,
-                                size: button::Size::Md,
-                                button_type: "submit",
-                                ..Default::default()
-                            }))
-                        }
+                        (crate::blocks::action_row::render(crate::blocks::action_row::Props {
+                            primary: Some(crate::blocks::action::Action::submit("Save changes")),
+                            density: crate::blocks::action_row::Density::Comfortable,
+                            ..Default::default()
+                        }))
                     }
                 },
                 ..Default::default()

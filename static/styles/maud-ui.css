@@ -94,3 +94,9 @@
 @import "./blocks/app-header.css";
 @import "./blocks/app-footer.css";
 @import "./navigation.css";
+@import "components/choice_card.css";
+@import "components/date_range.css";
+@import "blocks/record-kit.css";
+@import "blocks/worklist-grouped.css";
+@import "blocks/attention-banner.css";
+@import "blocks/action-row.css";

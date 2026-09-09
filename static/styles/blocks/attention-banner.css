@@ -1,0 +1,14 @@
+.mui-attention-banner { display: flex; align-items: center; flex-wrap: wrap; gap: var(--mui-space-md); padding: var(--mui-space-lg) var(--mui-space-20); border: 1px solid var(--mui-warning-border); border-radius: var(--mui-radius-md); background: var(--mui-warning-bg); color: var(--mui-warning-text); }
+.mui-attention-banner[data-tone="danger"] { background: var(--mui-danger-bg); border-color: var(--mui-danger-border); color: var(--mui-danger-text); }
+.mui-attention-banner[data-tone="info"] { background: var(--mui-info-bg); border-color: var(--mui-info-border); color: var(--mui-info-text); }
+.mui-attention-banner[hidden], .mui-attention-banner [hidden] { display: none; }
+.mui-attention-banner__body { flex: 1 1 16rem; min-width: 0; overflow-wrap: anywhere; }
+.mui-attention-banner__title { font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-heading); }
+.mui-attention-banner__body p { margin: var(--mui-space-xs) 0 0; font-size: var(--mui-text-caption-size); color: inherit; }
+.mui-attention-banner__action { min-width: 0; max-width: 100%; }
+.mui-attention-banner__action .mui-btn { height: auto; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.mui-attention-banner__dismiss { display: inline-grid; place-items: center; min-width: var(--mui-space-xxl); min-height: var(--mui-space-xxl); padding: 0; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: var(--mui-radius-md); font-size: var(--mui-text-h3-size); cursor: pointer; }
+.mui-attention-banner__dismiss:hover { background: var(--mui-bg-card); }
+@media (pointer: coarse) {
+  .mui-attention-banner__dismiss { min-width: var(--mui-touch-target); min-height: var(--mui-touch-target); }
+}

@@ -12,12 +12,46 @@ use maud::{html, Markup, PreEscaped};
 /// markdown consistently.
 pub fn render_component_docs(slug: &str) -> Option<Markup> {
     let raw = component_docs_source(slug)?;
-    let html_str = wrap_tables(raw);
+    let html_str = wrap_tables(&link_docs(raw, false));
     Some(html! {
         section class="mui-docs" {
             (PreEscaped(html_str))
         }
     })
+}
+
+/// Resolve repository Markdown references to known gallery routes, leaving external
+/// URLs and escaped code examples untouched. Markdown files retain their GitHub links.
+fn link_docs(raw: &str, block: bool) -> String {
+    let mut output = String::with_capacity(raw.len());
+    let mut rest = raw;
+    while let Some(start) = rest.find("href=\"") {
+        let value_start = start + "href=\"".len();
+        output.push_str(&rest[..value_start]);
+        rest = &rest[value_start..];
+        let Some(end) = rest.find('"') else { break; };
+        let href = &rest[..end];
+        let (path, fragment) = href.split_once('#').unwrap_or((href, ""));
+        let (name, is_block) = if let Some(name) = path.strip_prefix("../blocks/") {
+            (name, true)
+        } else if let Some(name) = path.strip_prefix("../components/") {
+            (name, false)
+        } else { (path, block) };
+        let route = name.strip_suffix(".md").and_then(|slug| {
+            if is_block && crate::blocks::BLOCK_NAMES.contains(&slug) {
+                Some(format!("/blocks/{slug}"))
+            } else if !is_block && super::COMPONENT_NAMES.contains(&slug) {
+                Some(format!("/{slug}"))
+            } else { None }
+        });
+        if let Some(route) = route {
+            output.push_str(&route);
+            if !fragment.is_empty() { output.push('#'); output.push_str(fragment); }
+        } else { output.push_str(href); }
+        rest = &rest[end..];
+    }
+    output.push_str(rest);
+    output
 }
 
 /// Prepare every rendered markdown table for narrow screens.
@@ -182,6 +216,7 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
         "carousel" => Some(include_str!("../../docs/components/rendered/carousel.html")),
         "chart" => Some(include_str!("../../docs/components/rendered/chart.html")),
         "checkbox" => Some(include_str!("../../docs/components/rendered/checkbox.html")),
+        "choice_card" => Some(include_str!("../../docs/components/rendered/choice_card.html")),
         "code_block" => Some(include_str!("../../docs/components/rendered/code_block.html")),
         "collapsible" => Some(include_str!("../../docs/components/rendered/collapsible.html")),
         "combobox" => Some(include_str!("../../docs/components/rendered/combobox.html")),
@@ -190,6 +225,7 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
         "context_menu" => Some(include_str!("../../docs/components/rendered/context_menu.html")),
         "data_table" => Some(include_str!("../../docs/components/rendered/data_table.html")),
         "date_picker" => Some(include_str!("../../docs/components/rendered/date_picker.html")),
+        "date_range" => Some(include_str!("../../docs/components/rendered/date_range.html")),
         "dialog" => Some(include_str!("../../docs/components/rendered/dialog.html")),
         "diff" => Some(include_str!("../../docs/components/rendered/diff.html")),
         "direction" => Some(include_str!("../../docs/components/rendered/direction.html")),
@@ -255,6 +291,12 @@ fn component_docs_source(slug: &str) -> Option<&'static str> {
 pub fn render_block_docs(slug: &str) -> Option<Markup> {
     let raw = match slug {
         "worklist-header" => include_str!("../../docs/blocks/rendered/worklist-header.html"),
+        "record-timeline" => include_str!("../../docs/blocks/rendered/record-timeline.html"),
+        "record-money" => include_str!("../../docs/blocks/rendered/record-money.html"),
+        "record-related-card" => include_str!("../../docs/blocks/rendered/record-related-card.html"),
+        "worklist-grouped" => include_str!("../../docs/blocks/rendered/worklist-grouped.html"),
+        "attention-banner" => include_str!("../../docs/blocks/rendered/attention-banner.html"),
+        "action-row" => include_str!("../../docs/blocks/rendered/action-row.html"),
         "record-header" => include_str!("../../docs/blocks/rendered/record-header.html"),
         "task-grid" => include_str!("../../docs/blocks/rendered/task-grid.html"),
         "shell-sidebar" => include_str!("../../docs/blocks/rendered/shell-sidebar.html"),
@@ -264,7 +306,7 @@ pub fn render_block_docs(slug: &str) -> Option<Markup> {
 
         _ => return None,
     };
-    Some(html! { section class="mui-docs" { (PreEscaped(wrap_tables(raw))) } })
+    Some(html! { section class="mui-docs" { (PreEscaped(wrap_tables(&link_docs(raw, true)))) } })
 }
 
 #[cfg(test)]

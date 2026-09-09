@@ -42,6 +42,8 @@ const TIERS: &[Tier] = &[
             "textarea",
             "checkbox",
             "radio",
+            "choice_card",
+            "date_range",
             "select",
             "switch",
             "slider",
@@ -226,6 +228,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "carousel",
     "chart",
     "checkbox",
+    "choice_card",
     "code_block",
     "collapsible",
     "combobox",
@@ -234,6 +237,7 @@ pub const COMPONENT_NAMES: &[&str] = &[
     "context_menu",
     "data_table",
     "date_picker",
+    "date_range",
     "dialog",
     "diff",
     "direction",
@@ -412,6 +416,12 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
     BlockEntry { slug: "worklist-header", category: "Operations", title: "Worklist header", description: "Title, count sentence, inline GET search and one primary action. Stacks on phones.", uses: &["status_chip_group", "button", "input"] },
     BlockEntry { slug: "record-header", category: "Operations", title: "Record header", description: "Identity and status with a back link, one primary action, and a native secondary disclosure.", uses: &["badge", "button"] },
     BlockEntry { slug: "task-grid", category: "Operations", title: "Task launcher", description: "Three compact launch cards with one action each. One column on phones.", uses: &["button", "grid"] },
+    BlockEntry { slug: "record-timeline", category: "Operations", title: "Record timeline", description: "Dated milestones with explicit done, current and scheduled states; vertical on phones.", uses: &["badge"] },
+    BlockEntry { slug: "record-money", category: "Operations", title: "Record money", description: "Total, paid and due with an explicit currency, unavailable values and payment actions.", uses: &["button"] },
+    BlockEntry { slug: "record-related-card", category: "Operations", title: "Related entity", description: "A compact guest or room card with two to four facts and one action.", uses: &["facts_list", "button"] },
+    BlockEntry { slug: "worklist-grouped", category: "Operations", title: "Grouped worklist", description: "Caller-defined time or state groups, two facts per row, and compact actions; cards on phones.", uses: &["badge", "facts_list", "button"] },
+    BlockEntry { slug: "attention-banner", category: "Operations", title: "Attention banner", description: "A supplied warning, danger or information message with one action and optional local dismissal.", uses: &["button"] },
+    BlockEntry { slug: "action-row", category: "Operations", title: "Action row", description: "One Save and Cancel geometry: row, compact or comfortable, plus native overflow.", uses: &["button"] },
 ];
 
 /// Render the preview for a block by slug.
@@ -433,6 +443,13 @@ fn block_content(slug: &str) -> Option<Markup> {
         "worklist-header" => blocks::worklist::header::preview(),
         "record-header" => blocks::record::header::preview(),
         "task-grid" => blocks::task::grid::preview(),
+        "record-timeline" => blocks::record::timeline::preview(),
+        "record-money" => blocks::record::money::preview(),
+        "record-related-card" => blocks::record::related_card::preview(),
+        "worklist-grouped" => blocks::worklist::grouped::preview(),
+        "attention-banner" => blocks::attention_banner::preview(),
+        "action-row" => blocks::action_row::preview(),
+
         _ => return None,
     };
     Some(markup)
@@ -609,7 +626,7 @@ pub fn blocks_index_page() -> Markup {
                         section class="mui-gallery__component" id="blocks" {
                             h1 class="mui-gallery__component-name" { "Blocks" }
                             p style="color:var(--mui-text-muted);font-size: var(--mui-text-body-size);max-width:42rem;margin: 0 0 var(--mui-space-xl);" {
-                                "Pre-composed templates built from primitives. Drop into real apps — customize by reading the source and paste-editing into your own module. Each block renders to plain HTML; no framework needed on the client side."
+                                "Reusable page sections built from primitives. Compose records, worklists and forms with typed props, live examples and API documentation. Each block renders to plain HTML; customize the source when your application needs a different structure."
                             }
                             (blocks_index_grid())
                         }
@@ -703,6 +720,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "carousel" => primitives::carousel::showcase(),
         "chart" => primitives::chart::showcase(),
         "checkbox" => primitives::checkbox::showcase(),
+        "choice_card" => primitives::choice_card::showcase(),
         "code_block" => primitives::code_block::showcase(),
         "collapsible" => primitives::collapsible::showcase(),
         "combobox" => primitives::combobox::showcase(),
@@ -711,6 +729,7 @@ fn component_content(name: &str) -> Option<Markup> {
         "context_menu" => primitives::context_menu::showcase(),
         "data_table" => primitives::data_table::showcase(),
         "date_picker" => primitives::date_picker::showcase(),
+        "date_range" => primitives::date_range::showcase(),
         "dialog" => primitives::dialog::showcase(),
         "diff" => primitives::diff::showcase(),
         "direction" => primitives::direction::showcase(),
@@ -1103,7 +1122,7 @@ pub fn showcase_page() -> Markup {
                     main class="mui-gallery__main" {
                         header class="mui-gallery__intro" {
                             h1 { "Component gallery" }
-                            p class="mui-gallery__curation-intro" { "Build an operational screen: " a href="/blocks/worklist-header" { "Worklist" } " · " a href="/blocks/record-header" { "Record" } " · " a href="/blocks/task-grid" { "Tasks" } }
+                            p class="mui-gallery__curation-intro" { "Build an operational screen: " a href="/blocks/worklist-grouped" { "Grouped arrivals" } " · " a href="/blocks/record-timeline" { "Record timeline" } " · " a href="/choice_card" { "Room choices" } " · " a href="/blocks/action-row" { "Form actions" } }
                         }
                         @for tier in TIERS {
                             div class="mui-gallery__tier" id=(tier.slug) {

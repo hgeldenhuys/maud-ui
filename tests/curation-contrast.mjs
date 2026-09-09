@@ -57,6 +57,14 @@ for (const [name, preset] of Object.entries(presets)) {
     const ratio = contrast(tokens[`mui-${tone}-text`], tokens[`mui-${tone}-bg`]);
     if (ratio < 4.5) failures.push(`${name}: ${tone} text / background = ${ratio.toFixed(2)}`); checks++;
   }
+  // New banners use quiet row actions on semantic tints; choice-card facts use the selected tint.
+  for (const surface of ["mui-warning-bg", "mui-danger-bg", "mui-info-bg", "mui-accent-soft"]) {
+    for (const [ink, minimum] of [["mui-text-muted", 4.5], ["mui-border-control", 3]]) {
+      const ratio = contrast(tokens[ink], tokens[surface]);
+      if (ratio < minimum) failures.push(`${name}: ${ink} / ${surface} = ${ratio.toFixed(2)}`);
+      checks++;
+    }
+  }
   for (const [fill, ink] of [["mui-accent", "mui-accent-fg"], ["mui-accent-hover", "mui-accent-fg"], ["mui-danger-hover", "mui-danger-fg"]]) {
     const ratio = contrast(tokens[fill], tokens[ink]);
     if (ratio < 4.5) failures.push(`${name}: ${ink} / ${fill} = ${ratio.toFixed(2)}`); checks++;

@@ -1,0 +1,15 @@
+.mui-choice-card { container: choice-card / inline-size; margin: 0; padding: 0; border: 0; min-width: 0; }
+.mui-choice-card__legend { padding: 0; margin-block-end: var(--mui-space-md); font-size: var(--mui-text-body-size); font-weight: var(--mui-weight-heading); }
+.mui-choice-card__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mui-space-md); }
+.mui-choice-card__option { display: flex; align-items: flex-start; gap: var(--mui-space-md); padding: var(--mui-space-lg); min-width: 0; border: 1px solid var(--mui-border-control); border-radius: var(--mui-radius-md); background: var(--mui-bg-card); cursor: pointer; transition: background-color var(--mui-transition), border-color var(--mui-transition); }
+.mui-choice-card__option:hover { background: var(--mui-bg-input); }
+.mui-choice-card__option:has(:checked) { border-color: var(--mui-accent-text); background: var(--mui-accent-soft); box-shadow: inset 0 0 0 1px var(--mui-accent-text); }
+.mui-choice-card__option:has(:focus-visible) { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+.mui-choice-card__option:has(:disabled) { cursor: not-allowed; background: var(--mui-bg); }
+.mui-choice-card__input { appearance: auto; flex: 0 0 auto; width: var(--mui-icon-size); height: var(--mui-icon-size); margin: var(--mui-space-xs) 0 0; accent-color: var(--mui-accent); }
+.mui-choice-card__content { display: flex; flex-direction: column; gap: var(--mui-space-sm); min-width: 0; }
+.mui-choice-card__title { color: var(--mui-text); font-size: var(--mui-text-body-size); font-weight: var(--mui-weight-heading); overflow-wrap: anywhere; }
+.mui-choice-card__fact, .mui-choice-card__reason { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); overflow-wrap: anywhere; }
+.mui-choice-card__price { overflow-wrap: anywhere; font: var(--mui-text-small-size)/var(--mui-text-small-leading) var(--mui-font-mono); color: var(--mui-text); font-variant-numeric: tabular-nums; }
+@container choice-card (max-width: 30rem) { .mui-choice-card__options { grid-template-columns: minmax(0, 1fr); } }
+@media (forced-colors: active) { .mui-choice-card__option:has(:checked) { outline: 2px solid Highlight; outline-offset: -3px; } }

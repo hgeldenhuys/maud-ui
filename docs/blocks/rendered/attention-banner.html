@@ -1,0 +1,27 @@
+<h1>Attention banner</h1>
+<p>A supplied operational message with one contextual action. Warning, danger and information tones share the same compact geometry.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::Action, attention_banner::{self, Props, Tone}};
+attention_banner::render(Props {
+    title: "Maya Chen arrives at 11:30 with CAD $560 due".into(),
+    subline: Some("Review payment before completing check-in.".into()),
+    action: Some(Action::link("Review payment", "/bookings/14/payment")),
+    tone: Tone::Warning,
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td>empty</td><td>Visible title and accessible name; caller supplies the reason.</td></tr>
+<tr><td>subline</td><td>Option<String></td><td>None</td><td>Supporting context.</td></tr>
+<tr><td>action</td><td>Option<a href="action::Action">action::Action</a></td><td>None</td><td>One contextual link, submit or POST action.</td></tr>
+<tr><td>action_markup</td><td>Option<Markup></td><td>None</td><td>Overrides action, including empty; supply one canonical action.</td></tr>
+<tr><td>tone</td><td>Tone</td><td>Warning</td><td>Warning, Danger or Info.</td></tr>
+<tr><td>dismiss</td><td>Option<Dismiss></td><td>None</td><td>Opt into local dismissal; omit for a required notice.</td></tr>
+</tbody></table>
+<p><code>Dismiss { label: String, focus_target: Option&lt;String&gt; }</code> defaults to "Dismiss notice" and None. <code>focus_target</code> is the ID of a visible focusable element outside the banner. Without it, focus moves to the next available control, then the previous one, then the parent region. <code>Tone::as_str()</code> returns warning/danger/info.</p>
+<h2>Behavior and accessibility</h2>
+<p>The message is a named aside, with plain text conveying meaning alongside tone. Static notices are not assertive alerts. The action remains usable without JavaScript. A dismiss button is hidden until enhancement is initialized; without JS the notice stays visible. Dismissal hides only this DOM instance, does not write storage or acknowledge business state, and moves focus out of the hidden notice. HTMX-inserted instances use the shared initializer. Required disclosures should never opt into dismissal.</p>
+<p>The body and action wrap on phones; light/dark semantic tokens provide surfaces, text and borders. Touch dismissal and actions have a 44px minimum target. The application supplies all balances, readiness and arrival claims; the component derives none of them.</p>
+<h2>Related</h2>
+<p><a href="record-money.md">Money</a>, <a href="worklist-grouped.md">grouped worklist</a>, <a href="../components/alert.md">alert</a>.</p>

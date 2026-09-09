@@ -1,6 +1,6 @@
 # maud-ui
 
-**81 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 16 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**83 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 22 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,10 +22,10 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **81 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **83 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
 - **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
 - **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
-- **16 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, a task launcher, and optional app masthead, page header and footer. Drop-in compositions.
+- **22 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, a task launcher, grouped worklists, record timeline/money/related cards, attention banners, shared action rows, and optional app masthead, page header and footer. Drop-in compositions.
 - **Live theme customiser** at `/theme` — tweak every `--mui-*` token in the browser, persists to `localStorage`, exports a paste-ready `:root { … }` block. 8 Tailwind-based presets.
 - **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.
 - **Global `cmd+k` command palette** — fuzzy jump to any component, block, integration, or page. Indexed from the same Rust constants the sidebar uses.
@@ -42,7 +42,7 @@ Use `short_label: Some("Stays".into())` on a bottom-tab `Item` or sidebar `NavIt
 
 Use `status_chip_group` for counted filters, `bottom_tab_bar` for mobile destinations, and `button::Size::Row` with `Variant::Outline` for compact cell actions. Blocks at `worklist::header`, `record::header`, and `task::grid` compose them into application surfaces. The sidebar shell adds `header`, `id`, and `mobile_navigation` props; `empty_state::Variant::{Empty, Filtered, Failed}` separates zero results from a failed load.
 
-Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the 0.9 bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
+Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the current bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
 
 ## 30-second tour
 
@@ -120,9 +120,9 @@ Routes:
 | Path | What it is |
 |---|---|
 | `/` | Landing page — the pitch, built out of the library's own primitives |
-| `/gallery` | The component index: all 81, grouped by tier, with a sidebar filter |
+| `/gallery` | The component index: all 83, grouped by tier, with a sidebar filter |
 | `/{component}` | One component's page — variants, code samples, API docs |
-| `/blocks`, `/blocks/{slug}` | The 16 pre-composed block templates |
+| `/blocks`, `/blocks/{slug}` | The 22 pre-composed block templates |
 | `/theme` | Live theme customiser (edits tokens, persists to localStorage) |
 | `/getting-started` | Install, first paint, theming, runtime |
 | `/integrations/{slug}` | The 15 third-party widget integrations |
@@ -209,11 +209,11 @@ The full token list is in [static/styles/tokens.css](static/styles/tokens.css).
 ## Component reference
 
 <details>
-<summary><strong>81 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
+<summary><strong>83 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
 
 ### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
-Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button Group • Card • Chart • Checkbox • Diff • Empty State • Field • Fieldset • Form • Grid • Input • Item • Kbd • Label • Message • Meter • Native Select • Number Field • Pagination • Progress • Radio • Radio Group • Separator • Skeleton • Spinner • Stack • Streaming Cursor • Table • Textarea • Typography
+Alert • Aspect Ratio • Avatar • Badge • Breadcrumb • Button • Button Group • Card • Chart • Checkbox • Choice Card • Date Range • Diff • Empty State • Field • Fieldset • Form • Grid • Input • Item • Kbd • Label • Message • Meter • Native Select • Number Field • Pagination • Progress • Radio • Radio Group • Separator • Skeleton • Spinner • Stack • Streaming Cursor • Table • Textarea • Typography
 
 ### Tier 2 — JS-enhanced (renders without JS; full interactivity with it)
 
@@ -235,16 +235,16 @@ Each component's props and variants are also documented in its module — run `c
 ## Architecture
 
 ```
-src/primitives/     # 72 component modules (Props, Variant, render(), showcase())
+src/primitives/     # 83 component modules (Props, Variant, render(), showcase())
 src/tokens.rs       # Rust constants mirroring CSS custom properties
-css/                # Legacy source snapshot; edit static/styles/ for 0.9
-static/             # 0.9 bundles, editable styles/ and behavior overrides
+css/                # Legacy source snapshot; edit static/styles/ for current releases
+static/             # Current bundles, editable styles/ and behavior overrides
 dist/               # Legacy 0.7 bundles; retained as build inputs
   ├─ maud-ui.min.css
   ├─ maud-ui.min.js
   └─ behaviors/*.js
 assets/             # Brand — favicon.svg, og.png, apple-touch-icon.png (see docs/brand.md)
-examples/build-assets.mjs # Builds the complete 0.9 assets in static/
+examples/build-assets.mjs # Builds the complete assets in static/
 examples/build-social-card.mjs # SVG → static/og.png through librsvg (no browser)
 examples/showcase.rs  # axum server that renders the landing page + gallery
 ```
@@ -275,15 +275,16 @@ the reason a breakpoint cannot be a CSS custom property.
 
 ```bash
 cargo check                     # Type-check the crate
-cargo test                      # Render tests for all 81 components + registration parity
+cargo test                      # Render tests for all 83 components + registration parity
 ADDR=127.0.0.1:$(free-port) cargo run --example showcase # Local live showcase
 
-# Rebuild the 0.9 artifacts. The legacy public/ export is a separate website release.
+# Rebuild the current artifacts. The legacy public/ export is a separate website release.
 bun install
-node examples/build-assets.mjs  # → static/  the 0.9 bundle the crate ships
+node examples/build-assets.mjs  # → static/  the bundle the crate ships
 cargo run --example build_docs # → docs/{components,blocks}/rendered/
 node examples/build-social-card.mjs # → static/og.{svg,png}; requires rsvg-convert
-node --test tests/curation-runtime.mjs # Handler fixtures, no browser
+node --test tests/curation-runtime.mjs tests/record-kit-runtime.mjs # Handler fixtures, no browser
+node --test tests/record-kit-css.mjs # Shipped-bundle cascade and responsive contracts
 node tests/curation-contrast.mjs # Theme token contrast and registration
 ```
 
@@ -309,3 +310,8 @@ The editable CSS source is `static/styles/maud-ui.css` and its imports. Build wi
 
 ### 0.9.1 compact filters
 `status_chip_group::Chip::count` now accepts `Option<u64>`: migrate a known `count: n` to `count: Some(n)`. `None` renders no count bubble. Omit the group for an empty collection; retain `Some(0)` only for a zero-result filter in a populated collection. Chips default to 30px in both viewport modes, and table status badges remain 22px. At 40rem and below the sidebar shell moves page-header search and switchers into its existing drawer. See [status filters](docs/components/status_chip_group.md) and [page header](docs/blocks/shell-page-header.md).
+
+### 0.10 record kit
+The gallery now includes [record timeline](docs/blocks/record-timeline.md) (also `stay_timeline`), [money](docs/blocks/record-money.md), [related entity cards](docs/blocks/record-related-card.md), [grouped worklists](docs/blocks/worklist-grouped.md), [attention banners](docs/blocks/attention-banner.md), [choice cards](docs/components/choice_card.md), [date ranges](docs/components/date_range.md) and [action rows](docs/blocks/action-row.md). Each has paired light/dark previews and a responsive layout. Values, currency, availability, group labels and milestone states remain caller supplied.
+
+Action rows own Save/Cancel density (row/compact/comfortable); coarse pointers keep a 44px floor. `Action::submit` uses the surrounding or named form without creating a nested form; exhaustive matches on `action::Target` need a new `Submit` arm. Existing Row/Sm button APIs remain valid, with standalone row padding corrected in the emitted bundle. Native radio cards and date inputs submit without JS; live night counts and dismissible banners are optional enhancements. The initial no-JS night count is refreshed by the server on submission.

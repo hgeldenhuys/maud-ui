@@ -83,3 +83,6 @@ Stack (the column a form's fields live in — `form::stacked` pairs them), Field
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/form — note that shadcn's Form is a React Hook Form binding, a different concern. This primitive is the HTML element and its submission contract; validation state is [field](field.md)'s job.
+
+## Shared form actions
+Use [action_row](../blocks/action-row.md) for one Save/Cancel density. `Action::submit("Save")` submits the surrounding form without nesting a form; `Action::link("Cancel", href)` preserves native navigation. The form primitive remains semantic-only.

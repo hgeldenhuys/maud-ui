@@ -1,0 +1,57 @@
+/* The record kit shares the 0.9 palette and rhythm; no new global tokens. */
+.mui-kit-previews { display: grid; gap: var(--mui-space-xxl); width: 100%; min-width: 0; }
+.mui-kit-preview { display: grid; gap: var(--mui-space-xl); min-width: 0; padding: var(--mui-space-xl); background: var(--mui-bg); color: var(--mui-text); border-radius: var(--mui-radius-lg); }
+.mui-kit-preview > .mui-eyebrow { margin: 0; }
+.mui-kit-preview > form { display: grid; gap: var(--mui-space-lg); min-width: 0; }
+.mui-kit-title { overflow-wrap: anywhere; margin: 0; font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading); letter-spacing: var(--mui-text-h3-tracking); font-weight: var(--mui-weight-heading); }
+.mui-kit-title > :is(h1, h2, h3) { font: inherit; letter-spacing: inherit; margin: 0; }
+.mui-record-timeline, .mui-record-money, .mui-related-card { min-width: 0; padding: var(--mui-space-20) var(--mui-space-xl); background: var(--mui-bg-card); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); }
+.mui-record-timeline { container: record-timeline / inline-size; }
+.mui-record-timeline__items { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); margin: var(--mui-space-xl) 0 0; padding: 0; list-style: none; }
+.mui-record-timeline__item { position: relative; min-width: 0; padding: var(--mui-space-lg) var(--mui-space-md) 0 0; border-block-start: 2px solid var(--mui-border); }
+.mui-record-timeline__marker { position: absolute; display: grid; place-items: center; top: calc(-1 * var(--mui-space-sm)); inset-inline-start: 0; width: var(--mui-icon-size); height: var(--mui-icon-size); border: 2px solid var(--mui-border-control); border-radius: var(--mui-radius-full); background: var(--mui-bg-card); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); line-height: 1; }
+.mui-record-timeline__item[data-state="done"] { border-color: var(--mui-success-border); }
+.mui-record-timeline__item[data-state="done"] .mui-record-timeline__marker { color: var(--mui-success-text); background: var(--mui-success-bg); }
+.mui-record-timeline__item[data-state="current"] { border-color: var(--mui-accent-text); }
+.mui-record-timeline__item[data-state="current"] .mui-record-timeline__marker { border-color: var(--mui-accent-text); background: var(--mui-accent-soft); }
+.mui-record-timeline__date, .mui-record-timeline__subline, .mui-record-timeline__state { display: block; color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); line-height: var(--mui-text-caption-leading); overflow-wrap: anywhere; }
+.mui-record-timeline__date { font-variant-numeric: tabular-nums; }
+.mui-record-timeline__label { display: block; margin-block: var(--mui-space-sm); font-size: var(--mui-text-small-size); line-height: var(--mui-text-small-leading); font-weight: var(--mui-weight-heading); overflow-wrap: anywhere; }
+.mui-record-timeline__subline { margin: 0; }
+.mui-record-timeline__state { margin-block-start: var(--mui-space-sm); }
+.mui-record-timeline__item[data-state="current"] .mui-record-timeline__state { color: var(--mui-accent-text); font-weight: var(--mui-weight-medium); }
+@container record-timeline (max-width: 40rem) {
+  .mui-record-timeline__items { grid-auto-flow: row; }
+  .mui-record-timeline__item { padding: 0 0 var(--mui-space-xl) var(--mui-space-xl); border-block-start: 0; border-inline-start: 2px solid var(--mui-border); }
+  .mui-record-timeline__marker { top: 0; inset-inline-start: calc(-1 * var(--mui-space-sm) - 1px); }
+  .mui-record-timeline__item:last-child { border-color: transparent; padding-block-end: 0; }
+}
+.mui-record-money { container: record-money / inline-size; }
+.mui-record-money__header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--mui-space-md); }
+.mui-record-money__currency { color: var(--mui-text-muted); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); }
+.mui-record-money__figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--mui-space-lg); margin: var(--mui-space-xl) 0 0; }
+.mui-record-money__figure { min-width: 0; }
+.mui-record-money__figure dt { overflow-wrap: anywhere; font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); }
+.mui-record-money__figure dd { margin: var(--mui-space-sm) 0 0; font: var(--mui-text-h2-size)/var(--mui-text-h2-leading) var(--mui-font-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.mui-record-money__figure[data-emphasis="warning"] { padding-inline-start: var(--mui-space-lg); border-inline-start: 1px solid var(--mui-border); }
+.mui-record-money__figure[data-emphasis="warning"] :is(dt, dd) { color: var(--mui-warning-text); }
+.mui-record-money__unavailable { display: block; color: var(--mui-text-muted); font: var(--mui-text-small-size)/var(--mui-text-small-leading) var(--mui-font-sans); }
+.mui-record-money__breakdown { margin: var(--mui-space-lg) 0 0; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-record-money__actions { margin-block-start: var(--mui-space-xl); }
+@container record-money (max-width: 30rem) {
+  .mui-record-money__figures { gap: var(--mui-space-sm); }
+  .mui-record-money__figure dd { font-size: var(--mui-text-h3-size); }
+  .mui-record-money__figure[data-emphasis="warning"] { padding-inline-start: var(--mui-space-sm); }
+}
+.mui-related-card { display: flex; flex-direction: column; gap: var(--mui-space-lg); }
+.mui-related-card__subtitle { margin: calc(-1 * var(--mui-space-sm)) 0 0; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-related-card .mui-facts { margin: 0; }
+.mui-related-card .mui-facts__row { flex-wrap: wrap; }
+.mui-related-card .mui-facts__value { min-width: 0; overflow-wrap: anywhere; }
+.mui-related-card__action { padding-block-start: var(--mui-space-xs); margin-block-start: auto; }
+.mui-related-card__action .mui-btn { width: 100%; }
+.mui-kit-related-examples { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--mui-space-xl); }
+@media (max-width: 40rem) {
+  .mui-kit-preview { padding: var(--mui-space-md); }
+  .mui-record-timeline, .mui-record-money, .mui-related-card { padding: var(--mui-space-lg); }
+}

@@ -1,0 +1,46 @@
+<h1>Grouped worklist</h1>
+<p>Time or state headings over compact operational rows. At 40rem or narrower each row becomes a card using the same DOM, order, identity and actions.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::{blocks::{action::Action, worklist::grouped::{self, Group, Props, Row}}, primitives::{badge, facts_list::Fact}};
+grouped::render(Props {
+    aria_label: "Today's arrivals".into(),
+    groups: vec![Group {
+        label: "11:30 · 1 arriving".into(),
+        rows: vec![Row {
+            identity: "Maya Chen".into(), subline: "CL-260908-014 · Juniper 04".into(),
+            facts: [Fact::new("Guests", "2 adults"), Fact::new("Payment", "CAD $560 due")],
+            status: badge::Props { label: "Room ready".into(), variant: badge::Variant::Success, ..Default::default() },
+            action: Some(Action::link("Review check-in", "/bookings/14/check-in")),
+            ..Default::default()
+        }],
+        ..Default::default()
+    }],
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>aria_label</td><td>String</td><td>Grouped worklist</td><td>Region name.</td></tr>
+<tr><td>group_heading</td><td>action::Heading</td><td>H3</td><td>H1/H2/H3 for each group heading.</td></tr>
+<tr><td>groups</td><td>Vec<Group></td><td>empty</td><td>Caller-defined and caller-ordered. Empty groups are omitted.</td></tr>
+<tr><td>empty_message</td><td>String</td><td>No items to show.</td><td>Shown when no group has rows.</td></tr>
+<tr><td>footer</td><td>Option<String></td><td>None</td><td>Optional timezone, freshness or partial-result explanation; also retained when empty.</td></tr>
+</tbody></table>
+<p><code>Group</code> fields: <code>label: String</code> defaults empty, <code>subline: Option&lt;String&gt;</code> defaults None, <code>rows: Vec&lt;Row&gt;</code> defaults empty. Supply the correctly scoped count as part of the label. The block does not count a page of rows and call it a total.</p>
+<p><code>Row</code> fields:</p>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>identity / subline</td><td>String</td><td>empty</td><td>Primary identity and supporting record reference.</td></tr>
+<tr><td>href</td><td>Option<String></td><td>None</td><td>Optional native identity link.</td></tr>
+<tr><td>identity_markup</td><td>Option<Markup></td><td>None</td><td>Overrides identity and href, preserving a canonical entity link.</td></tr>
+<tr><td>facts</td><td>[facts_list::Fact; 2]</td><td>two empty facts</td><td>Exactly two named facts; format unknown values explicitly.</td></tr>
+<tr><td>facts_markup</td><td>Option<Markup></td><td>None</td><td>Overrides the facts region, including empty. Supply two canonical fields in a <code>mui-facts</code> definition list to retain the layout.</td></tr>
+<tr><td>status</td><td>badge::Props</td><td>badge default</td><td>Named state and tone.</td></tr>
+<tr><td>status_markup</td><td>Option<Markup></td><td>None</td><td>Overrides badge, including empty.</td></tr>
+<tr><td>action</td><td>Option<a href="action::Action">action::Action</a></td><td>None</td><td>One compact action.</td></tr>
+<tr><td>action_markup</td><td>Option<Markup></td><td>None</td><td>Overrides action, including empty; retain required action attributes.</td></tr>
+<tr><td>note</td><td>Option<String></td><td>None</td><td>A supporting note below the row's main facts.</td></tr>
+</tbody></table>
+<h2>Accessibility and data</h2>
+<p>Semantic sections and lists preserve identity → facts → status → action → note order on desktop and phone. Status meaning is textual. Native links and forms work without JavaScript; no duplicate mobile controls or click-anywhere rows. Strings are escaped, markup slots are trusted caller fragments. Use only admitted data; the component never derives ETA, readiness, balances or business state. Colors follow the active light/dark theme.</p>
+<h2>Related</h2>
+<p><a href="worklist-header.md">Worklist header</a>, <a href="attention-banner.md">attention banner</a>, <a href="record-header.md">record header</a>.</p>

@@ -11,6 +11,8 @@ pub struct Link {
 #[derive(Clone, Debug)]
 pub enum Target {
     Link(String),
+    /// Submit the surrounding form, or an explicit form owner, without nesting a form.
+    Submit { form: Option<String>, name: Option<String>, value: Option<String> },
     /// Include CSRF tokens and other server-owned values in hidden_fields.
     Post {
         action: String,
@@ -32,10 +34,18 @@ impl Action {
         }
     }
 
+    pub fn submit(label: impl Into<String>) -> Self {
+        Self { label: label.into(), target: Target::Submit { form: None, name: None, value: None } }
+    }
+
     pub(crate) fn render(&self, primary: bool) -> Markup {
         match &self.target {
             Target::Link(href) => html! {
                 a class=(if primary { "mui-btn mui-btn--primary mui-btn--md" } else { "mui-btn mui-btn--outline mui-btn--row" }) href=(href) { (&self.label) }
+            },
+            Target::Submit { form, name, value } => html! {
+                button class=(if primary { "mui-btn mui-btn--primary" } else { "mui-btn mui-btn--outline" }) type="submit"
+                    form=[form.as_deref()] name=[name.as_deref()] value=[value.as_deref()] { (&self.label) }
             },
             Target::Post {
                 action,

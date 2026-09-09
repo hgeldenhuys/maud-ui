@@ -159,7 +159,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Stacked POST form" }
                 p.mui-showcase__caption {
-                    "form::stacked(\u{2026}) \u{2014} the submission contract from form, the rhythm from stack."
+                    "form::stacked(\u{2026}) \u{2014} the submission contract from form, the rhythm from stack, and shared Save/Cancel geometry from action_row."
                 }
                 // .mui-field self-caps at 24rem (a readable field measure), so the
                 // form is capped to match — otherwise the button row runs to the
@@ -192,23 +192,10 @@ pub fn showcase() -> Markup {
                             ..Default::default()
                         }))
                     }
-                    (stack::render(stack::Props {
-                        direction: stack::Direction::Horizontal,
-                        justify: stack::Justify::End,
-                        gap: stack::Space::Sm,
-                        children: html! {
-                            (button::render(button::Props {
-                                label: "Cancel".into(),
-                                variant: button::Variant::Outline,
-                                ..Default::default()
-                            }))
-                            (button::render(button::Props {
-                                label: "Save profile".into(),
-                                variant: button::Variant::Primary,
-                                button_type: "submit",
-                                ..Default::default()
-                            }))
-                        },
+                    (crate::blocks::action_row::render(crate::blocks::action_row::Props {
+                        primary: Some(crate::blocks::action::Action::submit("Save profile")),
+                        secondary: vec![crate::blocks::action::Action::link("Cancel", "/form")],
+                        density: crate::blocks::action_row::Density::Comfortable,
                         ..Default::default()
                     }))
                 }))

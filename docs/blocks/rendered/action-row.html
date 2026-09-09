@@ -1,0 +1,42 @@
+<h1>Action row</h1>
+<p>One density choice for Save, Cancel and optional overflow. Use it within a form or alongside a record. Primary comes first; secondary actions follow; native details/summary contains the rest.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::blocks::{action::Action, action_row::{self, Density, Props}};
+html! {
+    form method="post" action="/bookings/14" {
+        input type="hidden" name="csrf" value="server-issued-token";
+        // Render the application's fields here.
+        (action_row::render(Props {
+            primary: Some(Action::submit("Save changes")),
+            secondary: vec![Action::link("Cancel", "/bookings/14")],
+            density: Density::Compact,
+            ..Default::default()
+        }))
+    }
+};
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>primary</td><td>Option<a href="action::Action">action::Action</a></td><td>None</td><td>One primary action.</td></tr>
+<tr><td>secondary / overflow</td><td>Vec<a href="action::Action">action::Action</a></td><td>empty</td><td>Ordered secondary actions and native disclosure contents.</td></tr>
+<tr><td>primary_markup / secondary_markup / overflow_markup</td><td>Option<Markup></td><td>None</td><td>Override the corresponding typed actions, including an explicitly empty fragment.</td></tr>
+<tr><td>density</td><td>Density</td><td>Compact</td><td>Row, Compact or Comfortable.</td></tr>
+<tr><td>aria_label</td><td>String</td><td>Actions</td><td>Accessible group name.</td></tr>
+<tr><td>overflow_label</td><td>String</td><td>More actions</td><td>Native summary text.</td></tr>
+</tbody></table>
+<p>All effective slots empty renders nothing; empty overflow renders no summary. Canonical fragments keep their original form, CSRF, confirmation, pending/result and data attributes. Give their controls the <code>mui-btn</code> class to share density. Density rules override child size classes inside this row; keep business behavior in the caller.</p>
+<h2>Density and shared Action contract</h2>
+<p><code>Density::Row</code>: 32px minimum, 12px text and zero block padding. <code>Compact</code>: 32px minimum with 14px text. <code>Comfortable</code>: 36px minimum. Every density has a 44px coarse-pointer floor, wrapping labels and visible keyboard focus. <code>Density::as_str()</code> returns row/compact/comfortable. These values use the existing theme tokens.</p>
+<p><code>Action { label: String, target: Target }</code> supports:</p>
+<ul>
+<li><code>Action::link(label, href)</code> → a native anchor.</li>
+<li><code>Action::submit(label)</code> → a button submitting its surrounding form, without creating a nested form.</li>
+<li><code>Target::Submit { form: Option&lt;String&gt;, name: Option&lt;String&gt;, value: Option&lt;String&gt; }</code> → an explicit form owner and/or submitter name/value. All optional values default None in the helper.</li>
+<li><code>Target::Post { action: String, hidden_fields: Vec&lt;(String, String)&gt; }</code> → a separate POST form. Supply CSRF and other server-owned values. Use outside an existing form; use Submit or a canonical submit fragment inside one.</li>
+</ul>
+<p>Adding Submit extends the shared public Target enum in 0.10.0. Consumers with exhaustive matches must add a Submit arm. Existing Link/Post output and button Size::Row/Sm APIs remain valid. The shipped bundle now preserves standalone row buttons' zero block padding.</p>
+<h2>Accessibility</h2>
+<p>Native buttons, anchors and details need no JavaScript. Tab traverses controls, Enter activates the focused action, Space toggles the summary. The overflow has disclosure semantics, not an ARIA menu. Native form validation and submission stay intact. Both themes share the same geometry; long actions wrap and coarse pointers retain the larger target.</p>
+<h2>Related</h2>
+<p><a href="../components/form.md">Form</a>, <a href="record-money.md">record money</a>, <a href="../components/button.md">button</a>.</p>

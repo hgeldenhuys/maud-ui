@@ -1,0 +1,33 @@
+<h1>Record money</h1>
+<p>A currency label, three figures and one line of explanation. Values are already formatted by the caller; this block never subtracts balances, adds taxes, chooses a currency or substitutes zero for unavailable data.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::Action, action_row, record::money::{self, Figure, Props}};
+money::render(Props {
+    currency: "CAD".into(),
+    total: Figure::new("Total stay", "$840"),
+    paid: Figure::new("Paid", "$280"),
+    due: Figure::new("Due at check-in", "$560"),
+    breakdown: Some("3 × $240 room nights + $120 taxes &amp; fees".into()),
+    actions: action_row::render(action_row::Props {
+        primary: Some(Action::link("Review payment", "/bookings/14/payment")),
+        ..Default::default()
+    }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>title</td><td>String</td><td>Payment</td><td>Heading and accessible name.</td></tr>
+<tr><td>heading</td><td>action::Heading</td><td>H2</td><td>H1/H2/H3.</td></tr>
+<tr><td>currency</td><td>String</td><td>empty</td><td>Explicit currency from the supplied money value; empty omits the label.</td></tr>
+<tr><td>total / paid / due</td><td>Figure</td><td>labels Total / Paid / Due; value None</td><td>Three named values; no calculation.</td></tr>
+<tr><td>emphasize_due</td><td>bool</td><td>true</td><td>Warning emphasis when the due value exists. Pass false for a settled/refunded balance.</td></tr>
+<tr><td>unavailable_label</td><td>String</td><td>Unavailable</td><td>Text for a None value; localizable.</td></tr>
+<tr><td>breakdown</td><td>Option<String></td><td>None</td><td>Caller-supplied one-line explanation; wraps on small screens.</td></tr>
+<tr><td>actions</td><td>Markup</td><td>empty</td><td>An action_row or the caller's canonical actions. Empty omits the footer.</td></tr>
+</tbody></table>
+<p><code>Figure { label: String, value: Option&lt;Markup&gt; }</code> defaults to an empty label and None value. <code>Figure::new(label, value)</code> escapes a formatted string. For a canonical field fragment, pass <code>value: Some(field_markup)</code> directly; preserve its classification, masking and annotations. <code>Some(html! {})</code> deliberately remains empty and is not replaced. None is unavailable, while a supplied <code>$0</code> is a known zero. Only include fields and actions already admitted for this viewer.</p>
+<h2>Accessibility and layout</h2>
+<p>A definition list gives each figure its label; Due remains explicit in text as well as warning color. The three figures stay together on phones, with smaller type and wrapping for long localized amounts. The same semantic tokens support light and dark themes. No JavaScript is required.</p>
+<h2>Related</h2>
+<p><a href="action-row.md">Action row</a>, <a href="record-timeline.md">record timeline</a>, <a href="attention-banner.md">attention banner</a>.</p>

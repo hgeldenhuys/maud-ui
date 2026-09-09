@@ -4,7 +4,7 @@
   background-color: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
-  box-shadow: var(--mui-shadow-sm);
+  box-shadow: none;
   color: var(--mui-text);
   overflow: hidden;
 }

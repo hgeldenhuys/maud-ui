@@ -109,12 +109,13 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-navigation-dialog {
   box-sizing: border-box; position: fixed; inset-block: 0; inset-inline-start: 0; inset-inline-end: auto;
   margin: 0; width: min(24rem, 90vw); max-width: 90vw; height: 100dvh; max-height: 100dvh;
-  padding: var(--mui-space-lg); border: 0; background: var(--mui-bg-card); color: var(--mui-text); overflow: auto;
+  padding: 0; border: 0; background: var(--mui-bg-card); color: var(--mui-text); overflow: auto;
 }
-.mui-navigation-dialog[open] { display: flex; flex-direction: column; gap: var(--mui-space-lg); }
+.mui-navigation-dialog[open] { display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; }
 .mui-navigation-dialog::backdrop { background: var(--mui-bg-overlay); }
 .mui-navigation-dialog > form { display: flex; justify-content: flex-end; margin: 0; }
-.mui-navigation-dialog .mui-block--shell__sidebar { flex: 1; border: 0; }
+.mui-navigation-dialog .mui-block--shell__sidebar { flex: 1 0 auto; min-height: 100%; border: 0; }
+.mui-navigation-dialog .mui-block--shell__sidebar > * { flex-shrink: 0; }
 
 @media (max-width: 39.99rem) {
   .mui-worklist-header { flex-direction: column; align-items: stretch; }

@@ -74,6 +74,8 @@ pub mod breakpoints {
     /// 1024px — tablet landscape and up; embedded editors and map/calendar
     /// demos get their full height here.
     pub const XL: &str = "64rem";
+    /// Expanded operating toolbar; below this, Settings contains the controls.
+    pub const XXL: &str = "80rem";
 
     /// Upper bound for a "below this breakpoint" query.
     ///
@@ -95,6 +97,8 @@ pub mod breakpoints {
     pub const BELOW_MD: &str = "47.99rem";
     pub const BELOW_LG: &str = "59.99rem";
     pub const BELOW_XL: &str = "63.99rem";
+    /// Immediately below the expanded operating toolbar.
+    pub const BELOW_XXL: &str = "79.99rem";
 }
 
 /// Compact status filters and table pills, shared by both palettes.

@@ -1,6 +1,6 @@
 //! Breakpoint-scale integrity.
 //!
-//! Every width in a `@media` condition must be one of the five declared
+//! Every width in a `@media` condition must be one of the declared
 //! breakpoints in `tokens::breakpoints` (or its `BELOW_*` twin). Nothing
 //! enforces this in CSS itself: an off-scale width is perfectly valid CSS,
 //! renders fine, and reviews cleanly — it just quietly adds one more place the
@@ -40,11 +40,13 @@ fn allowed() -> Vec<&'static str> {
         bp::MD,
         bp::LG,
         bp::XL,
+        bp::XXL,
         bp::BELOW_XS,
         bp::BELOW_SM,
         bp::BELOW_MD,
         bp::BELOW_LG,
         bp::BELOW_XL,
+        bp::BELOW_XXL,
     ]
 }
 
@@ -143,6 +145,7 @@ fn below_twins_sit_just_under_their_breakpoint() {
         (bp::BELOW_MD, bp::MD),
         (bp::BELOW_LG, bp::LG),
         (bp::BELOW_XL, bp::XL),
+        (bp::BELOW_XXL, bp::XXL),
     ] {
         let parse = |s: &str| {
             s.trim_end_matches("rem")
@@ -161,7 +164,7 @@ fn below_twins_sit_just_under_their_breakpoint() {
 
 #[test]
 fn the_scale_is_ordered_and_distinct() {
-    let scale = [bp::XS, bp::SM, bp::MD, bp::LG, bp::XL];
+    let scale = [bp::XS, bp::SM, bp::MD, bp::LG, bp::XL, bp::XXL];
     let mut prev = 0.0_f64;
     for value in scale {
         let v: f64 = value.trim_end_matches("rem").parse().expect("rem value");

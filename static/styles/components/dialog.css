@@ -6,7 +6,7 @@ dialog.mui-dialog {
   background: var(--mui-bg-card);
   color: var(--mui-text);
   padding: 0;
-  box-shadow: var(--mui-shadow-lg);
+  box-shadow: none;
   max-width: 32rem;
   width: 90vw;
 }

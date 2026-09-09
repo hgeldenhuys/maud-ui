@@ -54,16 +54,28 @@
     const main = shell.querySelector(".mui-block--shell__main");
     if (!sidebar || !dialog || typeof dialog.showModal !== "function") return;
     shell.setAttribute("data-mui-navigation-ready", "");
+    const fallback = shell.querySelector('.mui-navigation-fallback');
+    if (fallback) { fallback.open = false; fallback.hidden = true; }
     // A history snapshot may contain the open drawer; restore one canonical sidebar.
     dialog.removeAttribute("open");
     shell.insertBefore(sidebar, main);
-    const restore = () => shell.insertBefore(sidebar, main);
-    dialog.addEventListener("mui:navigation-open", () => dialog.append(sidebar));
+    const headerBrand = shell.querySelector('.mui-app-header .mui-brand-mark');
+    const brandHome = headerBrand?.parentNode;
+    const brandNext = headerBrand?.nextSibling;
+    const drawerBrand = sidebar.querySelector('.mui-block--shell__brand');
+    const restore = () => {
+      shell.insertBefore(sidebar, main);
+      if (headerBrand && brandHome) brandHome.insertBefore(headerBrand, brandNext);
+    };
+    dialog.addEventListener("mui:navigation-open", () => {
+      if (headerBrand && drawerBrand) drawerBrand.insertBefore(headerBrand, drawerBrand.firstChild);
+      dialog.append(sidebar);
+    });
     dialog.addEventListener("close", restore);
     dialog.addEventListener("click", function (event) {
       if (event.target === dialog || event.target.closest("a[href]")) dialog.close();
     });
-    const media = window.matchMedia("(max-width: 59.99rem)");
+    const media = window.matchMedia("(max-width: 63.99rem)");
     const resize = () => {
       if (!shell.isConnected) { media.removeEventListener("change", resize); return; }
       if (!media.matches && dialog.open) {
@@ -74,32 +86,34 @@
       }
     };
     media.addEventListener("change", resize);
-    // Move the original controls, preserving values, IDs and bound listeners.
-    // The server layout keeps them visible below the title when JS is absent.
-    const header = main?.querySelector('.mui-page-header');
+    // One copy of each control and breadcrumb survives every breakpoint.
+    const header = main.querySelector('.mui-page-header');
     const mobileControls = sidebar.querySelector('.mui-block--shell__mobile-controls');
-    const headerSearch = shell.querySelector('.mui-page-header__search');
+    const where = sidebar.querySelector('.mui-block--shell__where');
+    const context = header?.querySelector('.mui-page-header__context');
+    const breadcrumb = context?.querySelector('.mui-breadcrumb');
+    const settings = header?.querySelector('.mui-page-header__settings');
     const headerControls = shell.querySelector('.mui-page-header__controls');
-    const compactMedia = window.matchMedia('(max-width: 40rem)');
+    const wide = window.matchMedia('(min-width: 80rem)');
     function syncHeader() {
-      if (!shell.isConnected) { compactMedia.removeEventListener('change', syncHeader); return; }
-      if (!header || !mobileControls) return;
-      const parts = [headerSearch, headerControls].filter(part => part && (part.children.length || part.textContent?.trim()));
-      const destination = compactMedia.matches ? mobileControls : header;
-      if (parts.every(part => part.parentNode === destination)) return;
-      const focused = parts.some(part => part.contains(document.activeElement)) ? document.activeElement : null;
-      const closing = !compactMedia.matches && dialog.open;
-      if (closing) {
-        if (focused) dialog.addEventListener('close', () => { if (focused.isConnected) focused.focus(); }, { once: true });
-        dialog.close();
+      if (!shell.isConnected) { media.removeEventListener('change', syncHeader); wide.removeEventListener('change', syncHeader); return; }
+      if (!header) return;
+      const focused = document.activeElement;
+      if (headerControls && mobileControls) {
+        const target = media.matches ? mobileControls : (settings || header);
+        if (headerControls.parentNode !== target) target.append(headerControls);
       }
-      parts.forEach(part => destination.append(part));
-      if (focused && !closing) {
-        if (compactMedia.matches && !dialog.open) shell.querySelector('.mui-block--shell__trigger')?.focus();
-        else focused.focus();
+      if (breadcrumb && where && context) {
+        const target = media.matches ? where : context;
+        if (breadcrumb.parentNode !== target) target.append(breadcrumb);
+      }
+      if (settings) settings.open = wide.matches;
+      if (focused && sidebar.contains(focused) && media.matches && !dialog.open) {
+        shell.querySelector('[data-mui="navigation-trigger"]')?.focus();
       }
     }
-    compactMedia.addEventListener('change', syncHeader);
+    media.addEventListener('change', syncHeader);
+    wide.addEventListener('change', syncHeader);
     syncHeader();
     const prefs = ui.navigation;
     const railMedia = window.matchMedia("(min-width: 64rem)");

@@ -5,6 +5,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.11.1] — 2026-09-09 — Audit fixes
+
+### Navigation
+- One sidebar moves into a full-height native drawer; a 44px hamburger, schema tab override and native details fallback share the navigation.
+- Phone title/search bar, desktop input and remembered rail/groups; controls move to the drawer and collapse into Settings below the new documented XXL (80rem) toolbar breakpoint.
+- Built-in entity/workflow/reference/report glyphs, tree lines and rail tooltips.
+
+### Audit fixes
+- Closed search panels explicitly leave layout and hit testing; open search reserves independent input and submit tracks. SVG shapes close correctly at the source.
+- Operational cards and search panels use a single hairline without broad shadows. Fact labels inherit the brand body font.
+- Range, progress and carousel updates no longer interpolate layout properties. Reduced-motion indeterminate progress retains a static loading treatment and its label.
+- Rendered geometry checks cover hidden/open search, focus, touch targets and an injected overlap regression.
+
 ## [0.11.0] — 2026-09-09 — Brand and density
 
 A nine-token brand contract connects accent/ink, heading/body fonts, radius, density and logo treatment. The customiser switches Lodge, Bank and Clinic live and exports exactly that set as brand.css. One registry generates Rust metadata, CSS presets and runtime data. `shell::brand_mark` provides the logo, wordmark and tagline slot used by app-header and sidebar typed identity props. The catalog now contains 83 primitives and 23 blocks.

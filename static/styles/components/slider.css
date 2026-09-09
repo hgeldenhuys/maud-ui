@@ -24,7 +24,7 @@
   position: absolute;
   inset-inline-start: 0;
   top: 0;
-  transition: width var(--mui-transition);
+  transition: background-color var(--mui-transition);
 }
 
 .mui-slider__thumb {
@@ -37,7 +37,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   cursor: grab;
-  transition: left var(--mui-transition), box-shadow var(--mui-transition);
+  transition: box-shadow var(--mui-transition);
   box-shadow: var(--mui-shadow-sm);
 }
 
@@ -91,7 +91,7 @@
   opacity: 0.5;
 }
 
-/* Disable transitions during drag — the `transition: left/width` on thumb
+/* Disable decoration transitions during drag — state follows the pointer
    and fill animates every mousemove, which causes visible lag at drag
    speed. The JS sets data-dragging on the root while the pointer is held. */
 .mui-slider[data-dragging] .mui-slider__thumb,
@@ -119,14 +119,14 @@
   inset-inline-start: 0;
   bottom: 0;
   top: auto;
-  transition: height var(--mui-transition);
+  transition: background-color var(--mui-transition);
 }
 
 .mui-slider--vertical .mui-slider__thumb {
   top: auto;
   inset-inline-start: 50%;
   transform: translate(-50%, 50%);
-  transition: bottom var(--mui-transition), box-shadow var(--mui-transition);
+  transition: box-shadow var(--mui-transition);
 }
 
 .mui-slider--vertical .mui-slider__thumb:active {

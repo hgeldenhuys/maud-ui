@@ -118,7 +118,7 @@
   height: 0.5rem;
   border-radius: var(--mui-radius-full);
   background: var(--mui-border);
-  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), width var(--mui-motion-fast) var(--mui-motion-ease);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease);
 }
 
 .mui-carousel__dot:hover::before {

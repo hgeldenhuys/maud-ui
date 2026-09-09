@@ -195,7 +195,7 @@ for (const file of ['static/maud-ui.css', 'static/maud-ui.min.css']) {
       const header = computed(rules, el('header', 'mui-page-header'), { width });
       assert.equal(header.display, 'grid'); assert.equal(header['flex-wrap'], 'nowrap'); assert.equal(px(header.height), 56);
     }
-    assert.equal(computed(rules, el('header', 'mui-page-header'), { width: 1023 }).display, 'flex');
+    assert.equal(computed(rules, el('header', 'mui-page-header'), { width: 1023 }).display, 'grid');
     const grid = el('ul', 'mui-task-grid', { 'data-count': '1' });
     assert.equal(computed(rules, grid, { width: 1280 })['grid-template-columns'].replaceAll(' ', '').replaceAll('0px','0'), 'minmax(0,1fr)');
   });

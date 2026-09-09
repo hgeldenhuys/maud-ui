@@ -20,7 +20,7 @@ summary.mui-sidebar__group-label:hover, summary.mui-block--shell__nav-group-labe
 .mui-tabs__list--line .mui-tabs__trigger[aria-selected="true"] { color: var(--mui-accent-text); background: var(--mui-accent-soft); border-color: var(--mui-accent-text); }
 .mui-menu__item--danger:hover:not(:disabled), .mui-menu__item--danger:focus-visible { color: var(--mui-danger-text); background: var(--mui-danger-bg); }
 .mui-bottom-tab-bar { padding-block: var(--mui-space-xs) max(var(--mui-space-xs), env(safe-area-inset-bottom, 0px)); min-height: var(--mui-bottom-tab-bar-height); background: var(--mui-bg-card); }
-.mui-bottom-tab-bar__item { min-height: var(--mui-space-3xl); padding: var(--mui-space-xs) var(--mui-space-sm); gap: var(--mui-space-xs); color: var(--mui-text-muted); font-weight: var(--mui-weight-medium); }
+.mui-bottom-tab-bar__item { appearance: none; border: 0; border-block-start: 2px solid transparent; background: transparent; cursor: pointer; font-family: inherit; min-height: var(--mui-space-3xl); padding: var(--mui-space-xs) var(--mui-space-sm); gap: var(--mui-space-xs); color: var(--mui-text-muted); font-weight: var(--mui-weight-medium); }
 .mui-bottom-tab-bar__item:hover { background: var(--mui-bg-input); color: var(--mui-text); }
 .mui-bottom-tab-bar__item[aria-current], .mui-bottom-tab-bar__item[aria-expanded="true"] { color: var(--mui-accent-text); background: var(--mui-accent-soft); border-radius: var(--mui-radius-md); font-weight: var(--mui-weight-heading); text-decoration: none; }
 .mui-bottom-tab-bar__icon, .mui-bottom-tab-bar__icon svg { width: var(--mui-icon-size); height: var(--mui-icon-size); }

@@ -48,7 +48,8 @@ pub fn render(props: Props) -> Markup {
 
     html! {
         @if props.indeterminate {
-            div.mui-progress.mui-progress--indeterminate role="progressbar" aria-valuemin="0" aria-valuemax=(props.max) aria-label=(props.label) {
+            div.mui-progress.mui-progress--indeterminate role="progressbar" aria-valuemin="0" aria-valuemax=(props.max) aria-label=(if props.label.is_empty() { "Loading" } else { &props.label })
+                data-indeterminate-label=(if props.label.is_empty() { "Loading" } else { &props.label }) {
                 div.mui-progress__bar {}
             }
         } @else {

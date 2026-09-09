@@ -28,6 +28,10 @@ pub struct Props {
     /// Mobile menu trigger or other leading control, before the breadcrumb.
     pub leading: Markup,
     pub breadcrumbs: Vec<BreadcrumbItem>,
+    /// Current route title; remains visible while breadcrumbs move into the phone drawer.
+    pub title: Option<String>,
+    /// Show the title instead of duplicating a single root breadcrumb.
+    pub single_crumb: bool,
     pub search: Option<Search>,
     /// Replaces the native search form, e.g. with a command palette trigger.
     pub search_markup: Option<Markup>,
@@ -42,18 +46,21 @@ pub fn render(mut props: Props) -> Markup {
 }
 
 fn render_ready(props: Props) -> Markup {
+    let title = props.title.or_else(|| props.breadcrumbs.last().map(|item| item.label.clone()));
+    let single_crumb = props.single_crumb || props.breadcrumbs.len() == 1;
     html! {
-        header class="mui-page-header" {
+        header class="mui-page-header" data-single-crumb=(single_crumb.to_string()) {
             div class="mui-page-header__context" {
                 (props.leading)
+                @if let Some(title) = title { span class="mui-page-header__title" { (title) } }
                 (breadcrumb::render(breadcrumb::Props { items: props.breadcrumbs, ..Default::default() }))
             }
             div class="mui-page-header__search" {
                 @if let Some(search) = props.search_markup { (search) }
                 @else if let Some(search) = props.search {
-                    details class="mui-page-header__search-disclosure" data-mui="header-search" {
+                    details class="mui-page-header__search-disclosure" data-mui="header-search" open {
                         summary class="mui-btn mui-btn--outline mui-page-header__search-toggle" aria-label="Search workspace" title="Search workspace" {
-                            svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" { circle cx="10" cy="10" r="6"; path d="m15 15 5 5"; }
+                            svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" { circle cx="10" cy="10" r="6" {} path d="m15 15 5 5" {} }
                             span class="mui-page-header__search-label" { "Search" }
                         }
                         div class="mui-page-header__search-panel" {
@@ -69,9 +76,12 @@ fn render_ready(props: Props) -> Markup {
                     }
                 }
             }
+            details class="mui-page-header__settings" open {
+                summary class="mui-page-header__settings-toggle mui-btn mui-btn--outline" { "Settings" span aria-hidden="true" { " ▾" } }
             div class="mui-page-header__controls" {
                 (props.actions)
                 @if !props.switchers.0.is_empty() { div class="mui-page-header__switchers" { (props.switchers) } }
+            }
             }
         }
     }

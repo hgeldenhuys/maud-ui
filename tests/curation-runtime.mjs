@@ -165,6 +165,7 @@ test("theme copy reports success only after the clipboard write and offers a fai
 test("group preferences survive rail expansion, restore on exit, and degrade when storage is unavailable", () => {
   const group = new Node({ 'data-mui': 'nav-group', 'data-nav-key': 'work' }); group.open = true;
   storage.set('mui-nav-group:work', 'closed');
+  group.nodes['[aria-current="page"]'] = [new Node()];
   ui.init(group); assert.equal(group.open, false);
   const root = new Node(); root.nodes['[data-mui="nav-group"]'] = [group];
   ui.navigation.forceGroups(root, true); assert.equal(group.open, true);
@@ -298,41 +299,29 @@ test("data table sorting and pagination preserve original rich cells, numeric al
   search.value = 'beta'; search.dispatchEvent(event('input')); assert.equal(beta.hidden, false); assert.equal(next.disabled, true); assert.equal(info.textContent, 'Showing 1-1 of 1');
 });
 
-test("phone header moves original controls to the drawer and restores state, order and focus", () => {
+test("phone header keeps search and moves original breadcrumb/toolbar without copying", () => {
   const previous = window.matchMedia;
-  const phone = new Node(), narrow = new Node(), rail = new Node();
-  phone.matches = false; narrow.matches = true; rail.matches = false;
-  window.matchMedia = query => query.includes('40rem') ? phone : query.includes('64rem') ? rail : narrow;
+  const phone = new Node(), wide = new Node(), rail = new Node();
+  phone.matches = false; wide.matches = true; rail.matches = true;
+  window.matchMedia = query => query.includes('63.99rem') ? phone : query.includes('80rem') ? wide : rail;
   const shell = new Node({ 'data-mui': 'shell-navigation' }), sidebar = new Node(), main = new Node(), panel = dialog();
-  const header = new Node(), title = new Node(), search = new Node(), controls = new Node(), mobile = new Node(), trigger = new Node();
-  const input = new Node({ id: 'unique-search' }), language = new Node({ id: 'unique-language' });
-  input.value = 'Amira'; language.value = 'fr'; search.append(input); controls.append(language);
-  header.append(title); header.append(search); header.append(controls); main.append(header); sidebar.append(mobile);
-  shell.append(sidebar); shell.append(main); shell.append(panel);
-  shell.nodes['.mui-block--shell__sidebar'] = [sidebar]; shell.nodes['.mui-navigation-dialog'] = [panel]; shell.nodes['.mui-block--shell__main'] = [main];
-  main.nodes['.mui-page-header'] = [header]; sidebar.nodes['.mui-block--shell__mobile-controls'] = [mobile];
-  shell.nodes['.mui-page-header__search'] = [search]; shell.nodes['.mui-page-header__controls'] = [controls]; shell.nodes['.mui-block--shell__trigger'] = [trigger];
-  let calls = 0; input.addEventListener('input', () => calls++);
-  ui.init(shell); input.focus(); phone.matches = true; phone.dispatchEvent(event('change'));
-  assert.deepEqual(header.children, [title]); assert.deepEqual(mobile.children, [search, controls]);
-  assert.equal(document.activeElement, trigger);
-  panel.dispatchEvent(event('mui:navigation-open')); panel.showModal();
-  assert.equal(sidebar.parentNode, panel); input.focus(); input.dispatchEvent(event('input'));
-  assert.equal(calls, 1); assert.equal(input.value, 'Amira'); assert.equal(language.value, 'fr');
-  // Native close events are queued; navigation restores trigger focus first.
-  const immediateClose = panel.close, closeEvents = [];
-  panel.addEventListener('close', () => trigger.focus());
-  panel.close = () => { panel.open = false; closeEvents.push(() => panel.dispatchEvent(event('close'))); };
-  phone.matches = false; phone.dispatchEvent(event('change'));
-  closeEvents.forEach(deliver => deliver()); panel.close = immediateClose;
-  assert(!panel.open); assert.deepEqual(header.children, [title, search, controls]);
-  assert.equal(mobile.children.length, 0); assert.equal(document.activeElement, input);
-  phone.matches = true; phone.dispatchEvent(event('change'));
-  panel.dispatchEvent(event('mui:navigation-open')); panel.showModal(); panel.close();
-  assert.equal(search.parentNode, mobile); assert.equal(sidebar.parentNode, shell);
-  shell.isConnected = false; phone.dispatchEvent(event('change')); narrow.dispatchEvent(event('change')); rail.dispatchEvent(event('change'));
-  assert.equal(phone.listeners.change.length, 0);
-  window.matchMedia = previous;
+  const header = new Node(), context = new Node(), breadcrumb = new Node(), search = new Node(), settings = new Node(), controls = new Node(), mobile = new Node(), where = new Node(), trigger = new Node();
+  const input = new Node(), language = new Node(); input.value='Amira';language.value='fr';
+  search.append(input);controls.append(language);context.append(breadcrumb);settings.append(controls);
+  header.append(context);header.append(search);header.append(settings);main.append(header);sidebar.append(where);sidebar.append(mobile);
+  shell.append(sidebar);shell.append(main);shell.append(panel);
+  shell.nodes['.mui-block--shell__sidebar']=[sidebar];shell.nodes['.mui-navigation-dialog']=[panel];shell.nodes['.mui-block--shell__main']=[main];
+  main.nodes['.mui-page-header']=[header];header.nodes['.mui-page-header__context']=[context];header.nodes['.mui-page-header__settings']=[settings];
+  context.nodes['.mui-breadcrumb']=[breadcrumb];sidebar.nodes['.mui-block--shell__mobile-controls']=[mobile];sidebar.nodes['.mui-block--shell__where']=[where];
+  shell.nodes['.mui-page-header__controls']=[controls];shell.nodes['[data-mui="navigation-trigger"]']=[trigger];
+  ui.init(shell);input.focus();phone.matches=true;phone.dispatchEvent(event('change'));
+  assert.equal(search.parentNode,header);assert.equal(breadcrumb.parentNode,where);assert.equal(controls.parentNode,mobile);assert.equal(document.activeElement,input);
+  panel.dispatchEvent(event('mui:navigation-open'));panel.showModal();assert.equal(sidebar.parentNode,panel);
+  phone.matches=false;phone.dispatchEvent(event('change'));
+  assert(!panel.open);assert.equal(sidebar.parentNode,shell);assert.equal(breadcrumb.parentNode,context);assert.equal(controls.parentNode,settings);
+  assert.equal(input.value,'Amira');assert.equal(language.value,'fr');
+  shell.isConnected=false;phone.dispatchEvent(event('change'));wide.dispatchEvent(event('change'));rail.dispatchEvent(event('change'));
+  assert.equal(phone.listeners.change.length,0);window.matchMedia=previous;
 });
 
 test("workspace search closes the modal before focusing the only guest search", () => {

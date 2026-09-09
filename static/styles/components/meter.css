@@ -15,7 +15,7 @@
 .mui-meter__bar {
   height: 100%;
   border-radius: var(--mui-radius-full);
-  transition: width var(--mui-motion-fast) var(--mui-motion-ease);
+  transition: opacity var(--mui-motion-fast) var(--mui-motion-ease);
 }
 
 .mui-meter__bar--optimum {

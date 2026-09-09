@@ -27,6 +27,8 @@ pub struct Props {
     pub active_path: String,
     pub user: Option<UserBlock>,
     pub mobile_navigation: MobileNavigation,
+    /// Caller-owned schema tabs, using this shell's drawer ID.
+    pub mobile_tab_bar: Option<Markup>,
     pub collapsible: bool,
     pub default_collapsed: bool,
     pub topbar_title: Option<String>,
@@ -52,6 +54,7 @@ impl Default for Props {
             active_path: String::new(),
             user: None,
             mobile_navigation: MobileNavigation::Drawer,
+            mobile_tab_bar: None,
             collapsible: true,
             default_collapsed: false,
             topbar_title: None,
@@ -105,7 +108,7 @@ fn nav_items(items: &[NavItem], current: Option<&NavItem>) -> Markup {
                         aria-current=[active.then_some("page")] title=(item.label)
                         aria-label=(if let Some(badge) = &item.badge { format!("{} — {}", item.label, badge) } else { item.label.clone() }) {
                         span class="mui-block--shell__nav-icon" aria-hidden="true" {
-                            @if let Some(icon) = &item.icon { (icon) } @else { (item.label.chars().next().unwrap_or('·')) }
+                            @if let Some(icon) = &item.icon { (icon) } @else { (item_icon(ItemKind::Entity)) }
                         }
                         span class="mui-block--shell__nav-label" { (item.label) }
                         @if let Some(badge) = &item.badge { span class="mui-block--shell__nav-badge" { (badge) } }
@@ -132,30 +135,41 @@ fn render_ready(props: Props) -> Markup {
     let current = items.iter().position(|item| item.href == props.active_path);
     let selected = current.map(|i| items[i]);
     let mobile_tabs = props.mobile_navigation == MobileNavigation::Tabs;
-    let trigger = html! {
-        a class="mui-block--shell__trigger mui-btn mui-btn--outline mui-btn--sm" href=(format!("#{nav_id}"))
-            data-mui="navigation-trigger" aria-controls=(&drawer_id) aria-haspopup="dialog" { "Menu" }
+    let collapse = html! {
         @if props.collapsible {
             button class="mui-block--shell__collapse mui-btn mui-btn--ghost mui-btn--icon" type="button"
                 data-mui="shell-rail" aria-controls=(&nav_id) aria-expanded=((!props.default_collapsed).to_string()) aria-label="Toggle sidebar" title="Toggle sidebar" {
                 svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" {
-                    rect x="3" y="4" width="18" height="16" rx="2"; path d="M9 4v16";
+                    rect x="3" y="4" width="18" height="16" rx="2" {} path d="M9 4v16" {}
                 }
             }
         }
+    };
+    let trigger = html! {
+        @if !mobile_tabs {
+            button class="mui-block--shell__trigger mui-btn mui-btn--ghost" type="button"
+                data-mui="navigation-trigger" aria-controls=(&drawer_id) aria-haspopup="dialog"
+                aria-expanded="false" aria-label="Open navigation" title="Open navigation" { (menu_icon()) }
+        }
+
     };
     html! {
         div class="mui-block mui-block--shell" id=(props.id) data-mui="shell-navigation"
             data-collapsed=(props.default_collapsed.to_string()) data-embedded=(props.embedded.to_string())
             data-mobile-navigation=(if mobile_tabs { "tabs" } else { "drawer" }) {
             (props.app_header)
+            details class="mui-navigation-fallback" open {
+                summary class="mui-navigation-fallback__toggle" aria-label="Toggle navigation" {
+                    (menu_icon()) span class="mui-sr-only" { "Navigation" }
+                }
             aside class="mui-block--shell__sidebar" id=(&nav_id) aria-label="Application navigation" tabindex="-1" {
                 div class="mui-block--shell__brand" {
                     @if let Some(brand) = props.brand_mark { (super::brand_mark::render(brand)) }
                     @else { (props.brand) }
+                    (collapse)
                 }
                 @if let Some(header) = props.header { div class="mui-block--shell__header" { (header) } }
-                div class="mui-block--shell__mobile-controls" {}
+                div class="mui-block--shell__where" { span class="mui-block--shell__where-label" { "Where you are" } }
                 nav class="mui-block--shell__nav" aria-label="Primary" {
                     @for (index, group) in props.nav_groups.iter().enumerate() {
                         @if let Some(label) = &group.label {
@@ -167,6 +181,7 @@ fn render_ready(props: Props) -> Markup {
                         } @else { div class="mui-block--shell__nav-group" { (nav_items(&group.items, selected)) } }
                     }
                 }
+                div class="mui-block--shell__mobile-controls" {}
                 @if let Some(footer) = props.sidebar_footer { div class="mui-block--shell__footer" { (footer) } }
                 @else if let Some(user) = &props.user {
                     a href=(user.menu_href) class="mui-block--shell__user" title=(user.name) aria-label=(user.name) {
@@ -178,6 +193,7 @@ fn render_ready(props: Props) -> Markup {
                         span class="mui-block--shell__user-caret" aria-hidden="true" { (icon_chevron_right()) }
                     }
                 }
+            }
             }
             div class="mui-block--shell__main" {
                 @if let Some(mut page) = props.page_header {
@@ -196,19 +212,53 @@ fn render_ready(props: Props) -> Markup {
             }
             (props.app_footer)
             dialog class="mui-navigation-dialog" id=(&drawer_id) aria-label="Application navigation" {
-                form method="dialog" { button class="mui-btn mui-btn--outline mui-btn--sm" { "Close navigation" } }
+                form method="dialog" { button class="mui-navigation-dialog__close mui-btn mui-btn--ghost" aria-label="Close navigation" { (menu_icon()) span class="mui-sr-only" { "Close navigation" } } }
             }
             @if mobile_tabs {
-                (bottom_tab_bar::render(bottom_tab_bar::Props {
+                @if let Some(tabs) = props.mobile_tab_bar { (tabs) }
+                @else { (bottom_tab_bar::render(bottom_tab_bar::Props {
                     items: items.iter().take(4).map(|item| bottom_tab_bar::Item { label: item.label.clone(), short_label: item.short_label.clone(), href: item.href.clone(), icon: item.icon.clone() }).collect(),
                     current_href: Some(props.active_path.clone()),
                     more: Some(bottom_tab_bar::More { label: "More".into(), target_id: drawer_id, fallback_href: format!("#{nav_id}"), current: current.is_some_and(|i| i >= 4) }),
                     position: if props.embedded { bottom_tab_bar::Position::Inline } else { bottom_tab_bar::Position::Fixed },
                     ..Default::default()
-                }))
+                })) }
             }
         }
     }
+}
+
+/// Three strokes morph into a close mark without layout interpolation.
+pub fn menu_icon() -> Markup {
+    html! { svg class="mui-menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" {
+        path d="M4 6h16" {} path d="M4 12h16" {} path d="M4 18h16" {}
+    } }
+}
+
+/// A small, consistent set of semantic navigation glyphs.
+#[derive(Clone, Copy, Debug, Default)]
+pub enum ItemKind { Workflow, #[default] Entity, Reference, Report }
+pub fn item_icon(kind: ItemKind) -> Markup {
+    html! { svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" {
+        @match kind {
+            ItemKind::Workflow => { circle cx="6" cy="6" r="3" {} circle cx="18" cy="18" r="3" {} path d="M9 6h6a3 3 0 0 1 3 3v6M6 9v9h9" {} }
+            ItemKind::Reference => { path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v15h-6a3 3 0 0 0-2 1 3 3 0 0 0-2-1H4zM12 5v15" {} }
+            ItemKind::Report => { path d="M4 3v17h17M8 16v-5M13 16V7M18 16V4" {} }
+            ItemKind::Entity => { rect x="4" y="4" width="16" height="16" rx="2" {} path d="M4 10h16M10 10v10" {} }
+        }
+    } }
+}
+
+/// Declared area icons supported by the shell's small built-in set.
+pub fn named_icon(name: &str) -> Option<Markup> {
+    let path = match name {
+        "calendar" => "M4 5h16v16H4zM8 3v4M16 3v4M4 10h16",
+        "building" => "M5 21V3h14v18M3 21h18M9 7h1M14 7h1M9 11h1M14 11h1M10 21v-5h4v5",
+        "wallet" => "M4 5h15v15H4zM4 5V3h12M15 11h6v5h-6z",
+        "trending_up" | "trending-up" => "m3 17 6-6 4 4 8-10M15 5h6v6",
+        _ => return None,
+    };
+    Some(html! { svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" { path d=(path) {} } })
 }
 
 /// Same application in both palettes, with the optional masthead and footer.

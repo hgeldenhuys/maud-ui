@@ -11,7 +11,7 @@
     const saved = read(key);
     const state = { desired: saved === "closed" ? false : saved === "open" ? true : group.open, forced: false };
     // Keep a selected destination discoverable on first load of a route.
-    if (group.querySelector('[aria-current="page"]')) state.desired = true;
+    if (saved === null && group.querySelector('[aria-current="page"]')) state.desired = true;
     groups.set(group, state);
     group.open = state.desired;
     group.addEventListener("toggle", () => {

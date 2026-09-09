@@ -40,7 +40,7 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-control);
   background: transparent;
   color: var(--mui-text);
   font-size: var(--mui-text-h3-size);

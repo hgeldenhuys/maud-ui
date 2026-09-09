@@ -6,7 +6,7 @@ pub(super) fn stylesheet(key: &str) -> String {
         .find(|b| b.key == key)
         .unwrap_or(&crate::brand::BRANDS[0]);
     format!(
-        ":root {{\n{}}}\n",
+        "/* Radius: sm = brand * 0.5; md = brand; lg = min(brand * 1.5, 12px). Controls = min(sm, 8px). */\n:root {{\n{}}}\n",
         crate::brand::TOKENS
             .iter()
             .zip(brand.values)
@@ -40,6 +40,15 @@ pub(super) fn controls() -> Markup {
                     }
                 }
             }
+            dl class="mui-brand-radius" aria-label="Resolved radius scale" {
+                @for (key, label, formula) in [("sm", "Small", "Brand × 0.5"), ("md", "Medium", "Brand"), ("lg", "Large", "Brand × 1.5, at most 12px")] {
+                    div {
+                        dt { span class="mui-brand-radius__sample" data-brand-radius-sample=(key) aria-hidden="true" {} (label) }
+                        dd { output data-brand-radius-value=(key) { (formula) } }
+                    }
+                }
+            }
+            p class="mui-caption" { "Cards, tables and banners share Large. Controls use Small, capped at 8px; compact indicators cap at 4px. Density changes content spacing while the shell frame stays still." }
             div class="mui-brand-controls__preview" data-brand-live {
                 (crate::blocks::shell::brand_mark::render(crate::blocks::shell::brand_mark::preset("lodge").unwrap()))
                 button type="button" class="mui-btn mui-btn--primary" data-brand-example-action { "Try an action" }

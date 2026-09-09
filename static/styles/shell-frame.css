@@ -1,0 +1,54 @@
+/* Density never moves the frame. Only content inherits the density scale. */
+:root { scrollbar-gutter: stable; }
+.mui-app-header, .mui-app-footer, .mui-page-header, .mui-block--shell__topbar, .mui-block--shell__sidebar, .mui-sidebar {
+  --mui-control-height: var(--mui-shell-control-height);
+  --mui-row-height: var(--mui-shell-row-height);
+  --mui-nav-row-height: var(--mui-shell-nav-row-height);
+  --mui-text-body-size: var(--mui-shell-text-body-size);
+  --mui-text-small-size: var(--mui-shell-text-small-size);
+  --mui-text-caption-size: var(--mui-shell-text-caption-size);
+  --mui-text-h3-size: var(--mui-shell-text-brand-size);
+  --mui-text-h2-size: var(--mui-shell-text-h2-size);
+  --mui-text-h1-size: var(--mui-shell-text-h1-size);
+  --mui-text-display-size: var(--mui-shell-text-display-size);
+  --mui-card-inset-block: var(--mui-space-20);
+  --mui-card-inset-inline: var(--mui-shell-gutter);
+  --mui-inset-cell: var(--mui-space-sm);
+  font-size: var(--mui-shell-text-body-size);
+}
+.mui-app-header { min-height: var(--mui-shell-masthead-height); padding: var(--mui-space-sm) var(--mui-shell-gutter); }
+.mui-app-footer { min-height: var(--mui-shell-footer-min-height); box-sizing: border-box; padding: var(--mui-shell-inset) var(--mui-shell-gutter) max(var(--mui-shell-inset), env(safe-area-inset-bottom, 0px)); font-size: var(--mui-shell-text-caption-size); }
+.mui-page-header, .mui-block--shell__topbar { height: var(--mui-shell-header-height); min-height: var(--mui-shell-header-height); box-sizing: border-box; }
+.mui-block--shell__topbar { padding-inline: var(--mui-shell-gutter); }
+.mui-block--shell > .mui-app-header { grid-row: 1; }
+.mui-block--shell > .mui-app-footer { grid-row: 3; }
+.mui-block--shell > .mui-bottom-tab-bar { grid-row: 4; }
+.mui-block--shell__body { grid-row: 2; display: grid; grid-template-columns: var(--mui-shell-sidebar-width) minmax(0, 1fr); min-width: 0; min-height: 0; align-items: stretch; }
+.mui-block--shell__sidebar-column { min-width: 0; min-height: 0; background: var(--mui-bg-card); border-inline-end: 1px solid var(--mui-border); }
+.mui-block--shell__sidebar { border: 0; box-sizing: border-box; width: 100%; }
+.mui-block--shell__content { padding: var(--mui-shell-gutter); }
+.mui-block--shell__content, .mui-page-stack { display: flex; flex-direction: column; gap: var(--mui-stack-gap); }
+.mui-block--shell__content > *, .mui-page-stack > *, .mui-record-example > *, .mui-bank-example > *, .mui-workspace-example > * { margin-block: 0; }
+.mui-block--shell__content > .mui-status-chip-group, .mui-page-stack > .mui-status-chip-group { margin-block: 0; }
+.mui-block--shell__content, .mui-page-stack, [data-density]:not(.mui-action-row) { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); }
+.mui-workspace-example, .mui-record-example, .mui-bank-example { gap: var(--mui-stack-gap); }
+.mui-block--shell[data-embedded="true"] { min-height: 32rem; }
+.mui-block--shell__brand { min-height: var(--mui-shell-header-height); padding-inline: var(--mui-shell-inset); }
+.mui-block--shell__nav { padding-inline: 0; }
+.mui-sidebar__content, .mui-sidebar__menu-sub { padding-inline: 0; }
+.mui-sidebar__menu-sub .mui-sidebar__menu-button { padding-inline-start: var(--mui-space-xl); }
+.mui-block--shell__nav-list .mui-block--shell__nav-list { border: 0; padding-inline-start: 0; margin-inline-start: 0; }
+.mui-block--shell__nav-item { padding-inline-start: calc(var(--mui-shell-inset) + var(--mui-nav-depth, 0) * var(--mui-shell-inset)); padding-inline-end: var(--mui-shell-inset); }
+@media (min-width: 64rem) {
+  .mui-app-header { height: var(--mui-shell-masthead-height); }
+  /* Size containment keeps a long menu from setting the page's minimum height. */
+  .mui-block--shell__sidebar-column { contain: size; align-self: stretch; display: grid; grid-template-rows: minmax(0, 1fr); }
+  .mui-block--shell__sidebar-column > .mui-navigation-fallback, .mui-block--shell__sidebar-column > .mui-navigation-fallback::details-content { display: contents; }
+  .mui-block--shell__sidebar-column .mui-block--shell__sidebar { position: sticky; top: 0; align-self: stretch; min-height: 0; max-height: 100dvh; overflow-y: auto; overscroll-behavior: contain; }
+  .mui-block--shell__sidebar > * { flex-shrink: 0; }
+  .mui-block--shell[data-collapsed="true"] .mui-block--shell__nav-item { padding-inline: 0; }
+}
+@media (max-width: 63.99rem) {
+  .mui-block--shell__body { grid-template-columns: minmax(0, 1fr); }
+  .mui-block--shell[data-mui-navigation-ready] .mui-block--shell__sidebar-column { display: none; }
+}

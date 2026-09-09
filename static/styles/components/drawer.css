@@ -106,7 +106,7 @@ dialog.mui-drawer--bottom {
 .mui-drawer__handle-bar {
   width: 2.5rem;
   height: 0.25rem;
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   background: var(--mui-text-muted);
   opacity: 0.4;
 }

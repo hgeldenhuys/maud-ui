@@ -1,7 +1,7 @@
 /* Density belongs to the action row, including native forms and canonical fragments. */
 .mui-action-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--mui-space-sm); min-width: 0; }
 .mui-action-row form { margin: 0; min-width: 0; max-width: 100%; }
-.mui-action-row .mui-btn { box-sizing: border-box; height: auto; width: auto; min-height: var(--mui-space-xxl); padding: var(--mui-space-xs) var(--mui-space-md); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); white-space: normal; overflow-wrap: anywhere; max-width: 100%; text-align: center; }
+.mui-action-row .mui-btn { box-sizing: border-box; height: auto; width: auto; min-height: var(--mui-space-xxl); padding: var(--mui-space-xs) var(--mui-space-md); border-radius: var(--mui-radius-control); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); white-space: normal; overflow-wrap: anywhere; max-width: 100%; text-align: center; }
 .mui-action-row[data-density="row"] .mui-btn { min-height: var(--mui-space-xxl); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); }
 .mui-action-row[data-density="comfortable"] .mui-btn { min-height: var(--mui-control-height); padding: var(--mui-space-sm) var(--mui-inset-control); }
 .mui-action-row__more { position: relative; min-width: 0; max-width: 100%; }

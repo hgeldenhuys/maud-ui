@@ -150,7 +150,8 @@ pub fn group(children: Markup) -> Markup {
 
 /// Native collapsible group with local state keyed by a stable, page-unique ID.
 pub fn collapsible_group(id: &str, label: &str, children: Markup, default_open: bool) -> Markup {
-    html! { details class="mui-sidebar__group" id=(id) data-mui="nav-group" data-nav-key=(id) open[default_open] {
+    let contains_current = children.0.contains("aria-current=\"page\"");
+    html! { details class="mui-sidebar__group" id=(id) data-mui="nav-group" data-nav-key=(id) data-contains-current=[contains_current.then_some("true")] open[default_open] {
         summary class="mui-sidebar__group-label" { (label) }
         (children)
     } }

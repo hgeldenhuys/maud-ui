@@ -172,7 +172,7 @@
   content: "";
   width: 0.375rem;
   height: 0.375rem;
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
   background: currentColor;
 }
 

@@ -11,7 +11,7 @@
   align-items: center;
   gap: var(--mui-inset-tight);
   padding: 0 var(--mui-inset-cell);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   background-color: var(--mui-accent-soft);
   color: var(--mui-accent-text);
   font-family: var(--mui-font-sans);

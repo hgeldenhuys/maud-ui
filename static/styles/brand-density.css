@@ -31,9 +31,7 @@
 .mui-related-card--compact { padding: var(--mui-inset-cell) var(--mui-card-inset-block); }
 .mui-related-card--inline { padding-block: var(--mui-inset-cell); }
 .mui-grouped-worklist__row { padding-block: var(--mui-inset-cell); }
-.mui-app-header, .mui-app-footer { padding-block: var(--mui-inset-cell); }
 .mui-status-chip-group__chip { min-height: var(--mui-row-height); }
-.mui-block--shell__content { padding: var(--mui-card-inset-inline); }
 th.mui-table__th, td.mui-table__td, .mui-data-table th, .mui-data-table td { padding-block: var(--mui-inset-cell); }
 .mui-table--compact :is(th.mui-table__th, td.mui-table__td) { padding-block: var(--mui-inset-cell); }
 .mui-bank-example { display: grid; gap: var(--mui-space-xl); min-width: 0; }

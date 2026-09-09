@@ -1,0 +1,221 @@
+{
+  "method": "CSS cascade and grid contract arithmetic; no browser measurements",
+  "cases": [
+    {
+      "file": "static/maud-ui.css",
+      "density": "compact",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.css",
+      "density": "compact",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    },
+    {
+      "file": "static/maud-ui.css",
+      "density": "comfortable",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.css",
+      "density": "comfortable",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    },
+    {
+      "file": "static/maud-ui.css",
+      "density": "spacious",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.css",
+      "density": "spacious",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "compact",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "compact",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "comfortable",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "comfortable",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "spacious",
+      "length": "short",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 550,
+      "body_height": 772,
+      "sidebar_column_height": 772,
+      "footer_bottom": 900
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "density": "spacious",
+      "length": "long",
+      "frame": [
+        64,
+        0,
+        64,
+        240,
+        264,
+        144,
+        64
+      ],
+      "intrinsic_body_input": 2200,
+      "body_height": 2200,
+      "sidebar_column_height": 2200,
+      "footer_bottom": 2328
+    }
+  ]
+}

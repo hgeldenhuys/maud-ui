@@ -15,7 +15,7 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
   --mui-chip-tone: var(--mui-text-muted);
   box-sizing: border-box; display: inline-flex; align-items: center; gap: var(--mui-inset-tight);
   min-height: var(--mui-status-chip-height); max-width: 100%; padding: var(--mui-space-xs) var(--mui-inset-cell);
-  border: 1px solid var(--mui-border-control); border-radius: var(--mui-radius-full);
+  border: 1px solid var(--mui-border-control); border-radius: var(--mui-radius-control);
   background: var(--mui-bg-card); color: var(--mui-text); font-size: var(--mui-status-chip-label-size);
   line-height: var(--mui-leading-small); text-decoration: none; transition: background var(--mui-transition);
 }
@@ -32,7 +32,7 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-status-chip-group__mark { color: var(--mui-chip-tone); visibility: hidden; flex: none; }
 .mui-status-chip-group__chip[aria-current] .mui-status-chip-group__mark { visibility: visible; }
 .mui-status-chip-group__count {
-  color: var(--mui-chip-tone); background: var(--mui-bg-input); border-radius: var(--mui-radius-full);
+  color: var(--mui-chip-tone); background: var(--mui-bg-input); border-radius: var(--mui-radius-tight);
   box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center;
   font-size: var(--mui-status-chip-count-size); font-weight: var(--mui-weight-medium); font-variant-numeric: tabular-nums;
   height: var(--mui-status-chip-count-height); min-width: var(--mui-status-chip-count-height);

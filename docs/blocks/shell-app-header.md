@@ -37,3 +37,6 @@ sidebar::render(sidebar::Props {
 `brand_mark: Option<shell::brand_mark::Props>` defaults to None and overrides the raw brand slot when supplied. The mark contains a logo, wordmark and optional tagline. Add the new field to exhaustive Props literals. See [brand mark](shell-brand-mark.md).
 
 `State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.
+
+## Frame contract (0.12.0)
+Density never moves the frame. Shell spacing, type and control heights use independent `--mui-shell-*` tokens. See [shell frame](../shell-frame.md) for layout, current navigation and source migration details.

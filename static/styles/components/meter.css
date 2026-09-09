@@ -8,13 +8,13 @@
   width: 100%;
   height: 0.625rem;
   background: var(--mui-bg-input);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   overflow: hidden;
 }
 
 .mui-meter__bar {
   height: 100%;
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   transition: opacity var(--mui-motion-fast) var(--mui-motion-ease);
 }
 

@@ -17,12 +17,12 @@
 }
 
 .mui-button-group--horizontal > .mui-btn:first-child {
-  border-radius: var(--mui-radius-md) 0 0 var(--mui-radius-md);
+  border-radius: var(--mui-radius-control) 0 0 var(--mui-radius-control);
   margin-inline-start: 0;
 }
 
 .mui-button-group--horizontal > .mui-btn:last-child {
-  border-radius: 0 var(--mui-radius-md) var(--mui-radius-md) 0;
+  border-radius: 0 var(--mui-radius-control) var(--mui-radius-control) 0;
 }
 
 /* Vertical orientation */
@@ -37,12 +37,12 @@
 }
 
 .mui-button-group--vertical > .mui-btn:first-child {
-  border-radius: var(--mui-radius-md) var(--mui-radius-md) 0 0;
+  border-radius: var(--mui-radius-control) var(--mui-radius-control) 0 0;
   margin-top: 0;
 }
 
 .mui-button-group--vertical > .mui-btn:last-child {
-  border-radius: 0 0 var(--mui-radius-md) var(--mui-radius-md);
+  border-radius: 0 0 var(--mui-radius-control) var(--mui-radius-control);
 }
 
 /* Hover and focus state: raise z-index so border shows */
@@ -67,11 +67,11 @@
 
 /* Only child: restore full radius */
 .mui-button-group--horizontal > .mui-btn:only-child {
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
 }
 
 .mui-button-group--vertical > .mui-btn:only-child {
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
 }
 
 /* Separator cell — visual rule between buttons.

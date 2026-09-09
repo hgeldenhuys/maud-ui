@@ -11,7 +11,7 @@
 
 .mui-spinner {
   display: inline-block;
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
   border: 2px solid transparent;
   border-top-color: var(--mui-text);
   animation: mui-spin var(--mui-motion-loading) linear infinite;

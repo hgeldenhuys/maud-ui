@@ -55,16 +55,18 @@
     if (!sidebar || !dialog || typeof dialog.showModal !== "function") return;
     shell.setAttribute("data-mui-navigation-ready", "");
     const fallback = shell.querySelector('.mui-navigation-fallback');
+    const column = shell.querySelector('.mui-block--shell__sidebar-column');
+    const home = column || shell;
     if (fallback) { fallback.open = false; fallback.hidden = true; }
     // A history snapshot may contain the open drawer; restore one canonical sidebar.
     dialog.removeAttribute("open");
-    shell.insertBefore(sidebar, main);
+    home.insertBefore(sidebar, column ? null : main);
     const headerBrand = shell.querySelector('.mui-app-header .mui-brand-mark');
     const brandHome = headerBrand?.parentNode;
     const brandNext = headerBrand?.nextSibling;
     const drawerBrand = sidebar.querySelector('.mui-block--shell__brand');
     const restore = () => {
-      shell.insertBefore(sidebar, main);
+      home.insertBefore(sidebar, column ? null : main);
       if (headerBrand && brandHome) brandHome.insertBefore(headerBrand, brandNext);
     };
     dialog.addEventListener("mui:navigation-open", () => {

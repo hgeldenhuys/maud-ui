@@ -57,7 +57,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0 var(--mui-space-sm);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-control);
   background-color: var(--mui-bg-input);
   font-family: var(--mui-font-mono);
   font-size: var(--mui-text-caption-size);

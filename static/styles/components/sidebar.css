@@ -19,7 +19,7 @@
 .mui-sidebar__menu-sub { padding-inline-start: var(--mui-space-lg); margin-block-start: var(--mui-space-2xs); border: 0; }
 .mui-sidebar__menu-icon { display: inline-flex; justify-content: center; align-items: center; width: var(--mui-icon-size); height: var(--mui-icon-size); flex: 0 0 var(--mui-icon-size); }
 .mui-sidebar__menu-icon svg { width: 100%; height: 100%; }
-.mui-sidebar__menu-badge { margin-inline-start: auto; padding: 0 var(--mui-inset-tight); border-radius: var(--mui-radius-full); color: var(--mui-text-muted); background: var(--mui-bg-input); font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
+.mui-sidebar__menu-badge { margin-inline-start: auto; padding: 0 var(--mui-inset-tight); border-radius: var(--mui-radius-tight); color: var(--mui-text-muted); background: var(--mui-bg-input); font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
 .mui-sidebar__menu-action { position: absolute; inset-inline-end: var(--mui-space-xs); top: var(--mui-space-xs); }
 .mui-sidebar__menu-item:has(.mui-sidebar__menu-action) > .mui-sidebar__menu-button { padding-inline-end: var(--mui-space-xxl); }
 .mui-sidebar__menu-skeleton { display: flex; align-items: center; gap: var(--mui-space-sm); height: var(--mui-nav-row-height); padding: var(--mui-space-sm); }

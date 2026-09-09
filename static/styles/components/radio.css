@@ -27,7 +27,7 @@
   height: 1rem;
   flex-shrink: 0;
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
   background: transparent;
   display: flex;
   align-items: center;
@@ -50,7 +50,7 @@
   display: block;
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
   background: var(--mui-accent);
 }
 

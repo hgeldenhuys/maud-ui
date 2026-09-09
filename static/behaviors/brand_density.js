@@ -20,12 +20,23 @@
     document.querySelectorAll('[data-brand-select]').forEach(select => { select.value = current; });
   }
   function buildCss() {
-    return ':root {\n' + data.tokens.map((token, index) => '  ' + token.name + ': ' + values[index] + ';').join('\n') + '\n}\n';
+    const radii = [];
+    document.querySelectorAll('[data-brand-radius-sample]').forEach(sample => {
+      const key = sample.getAttribute('data-brand-radius-sample');
+      const value = getComputedStyle(sample).borderTopLeftRadius;
+      if (!value) return;
+      radii.push(key + ' = ' + value);
+      const label = document.querySelector('[data-brand-radius-value="' + key + '"]');
+      if (label) label.textContent = value;
+    });
+    const formula = 'Radius: sm = brand * 0.5; md = brand; lg = min(brand * 1.5, 12px). Controls = min(sm, 8px).';
+    return '/* ' + formula + (radii.length ? ' Resolved: ' + radii.join('; ') + '.' : '') + ' */\n:root {\n' + data.tokens.map((token, index) => '  ' + token.name + ': ' + values[index] + ';').join('\n') + '\n}\n';
   }
   function valid(token, value) {
     if (typeof value !== 'string' || !value.trim()) return false;
     if (token.kind === 'density') return ['0', '1', '2'].includes(value);
     if (token.kind === 'color') return /^#[0-9a-f]{6}$/i.test(value);
+    if (token.name === '--mui-brand-radius') return value === '0' || (window.CSS?.supports('width', value) && window.CSS.supports('width', 'calc(' + value + ' * 0.5)'));
     const property = token.name.includes('font-') ? 'font-family' : token.name.endsWith('mask') ? 'mask-image' : token.name.includes('radius') ? 'border-radius' : 'width';
     return window.CSS?.supports(property, value) ?? false;
   }

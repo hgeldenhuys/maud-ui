@@ -160,6 +160,7 @@ async fn main() {
             .route("/favicon.svg", get(serve_favicon))
             .route("/apple-touch-icon.png", get(serve_touch_icon))
             .route("/og.png", get(serve_og))
+            .nest_service("/fixtures", ServeDir::new("docs/fixtures"))
             .route(
                 "/{component}",
                 get(|Path(name): Path<String>| async move {

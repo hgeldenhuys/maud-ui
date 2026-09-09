@@ -1,0 +1,20 @@
+/* The brand owns one radius. Controls and surfaces use restrained derived roles. */
+.mui-btn, .mui-input, .mui-textarea, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input, .mui-input-otp__slot, .mui-data-table__search, .mui-status-chip-group__chip, .mui-toggle, .mui-segmented__stop, .mui-attention-banner__dismiss { border-radius: var(--mui-radius-control); }
+.mui-checkbox__indicator { border-radius: var(--mui-radius-tight); }
+.mui-badge, .mui-badge--link, .mui-status-chip-group__count, .mui-block--shell__nav-badge, .mui-sidebar__menu-badge { border-radius: var(--mui-radius-tight); }
+.mui-card, .mui-table-wrapper, .mui-data-table__wrapper, .mui-attention-banner, .mui-record-timeline, .mui-record-money, .mui-related-card:not(.mui-related-card--inline), .mui-task-grid__card, .mui-block-state { border-radius: var(--mui-radius-lg); }
+.mui-sidebar__menu-button, .mui-block--shell__nav-item, summary.mui-sidebar__group-label, summary.mui-block--shell__nav-group-label { border-radius: 0; }
+.mui-sidebar__menu-button:focus-visible, .mui-block--shell__nav-item:focus-visible { outline-offset: -2px; }
+.mui-sidebar__menu-button[aria-current]::before, .mui-sidebar__menu-button[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { border-radius: 0; }
+.mui-sidebar__group[data-contains-current="true"] > .mui-sidebar__group-label,
+.mui-block--shell__nav-group[data-contains-current="true"] > .mui-block--shell__nav-group-label { color: var(--mui-text-primary); font-weight: 600; background: transparent; box-shadow: none; }
+.mui-sidebar__group[data-contains-current="true"] > .mui-sidebar__group-label::after,
+.mui-block--shell__nav-group[data-contains-current="true"] > .mui-block--shell__nav-group-label::after { color: var(--mui-accent-text); }
+.mui-brand-radius { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); margin: 0; }
+.mui-brand-radius > div { display: grid; grid-template-columns: auto 1fr; gap: var(--mui-space-xs) var(--mui-space-sm); align-items: center; }
+.mui-brand-radius dt { color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-brand-radius dd { margin: 0; font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
+.mui-brand-radius__sample { display: inline-block; vertical-align: middle; margin-inline-end: var(--mui-space-sm); width: var(--mui-touch-target); height: var(--mui-touch-target); background: var(--mui-accent-soft); border: 1px solid var(--mui-border-control); }
+[data-brand-radius-sample="sm"] { border-radius: var(--mui-radius-sm); }
+[data-brand-radius-sample="md"] { border-radius: var(--mui-radius-md); }
+[data-brand-radius-sample="lg"] { border-radius: var(--mui-radius-lg); }

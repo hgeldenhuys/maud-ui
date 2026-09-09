@@ -4,7 +4,7 @@
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   overflow: hidden;
   background: var(--mui-bg-input);
   padding: var(--mui-space-2xs);
@@ -37,7 +37,7 @@
   background: transparent;
   color: var(--mui-text-muted);
   border: none;
-  border-radius: calc(var(--mui-radius-md) - 2px);
+  border-radius: max(0px, calc(var(--mui-radius-control) - 2px));
   font-family: inherit;
   font-weight: var(--mui-weight-medium);
   cursor: pointer;

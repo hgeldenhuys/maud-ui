@@ -12,7 +12,7 @@
   flex: 1;
   height: 0.5rem;
   background: var(--mui-bg-input);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   position: relative;
   cursor: pointer;
 }
@@ -20,7 +20,7 @@
 .mui-slider__fill {
   height: 100%;
   background: var(--mui-accent);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   position: absolute;
   inset-inline-start: 0;
   top: 0;
@@ -30,7 +30,7 @@
 .mui-slider__thumb {
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   background: var(--mui-text);
   border: 2px solid var(--mui-accent);
   position: absolute;

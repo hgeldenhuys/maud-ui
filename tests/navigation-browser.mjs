@@ -39,12 +39,12 @@ try{
    assert.equal(await page.$eval(trigger,n=>n.getAttribute('aria-expanded')),'true');
    for(let i=0;i<5;i++){await page.keyboard.press('Tab');assert(await page.evaluate(()=>document.querySelector('.mui-navigation-dialog').contains(document.activeElement)),'modal focus containment');}
    if(args.includes('--screenshots'))await page.screenshot({path:`${value('--screenshots')}/nav-${role||'kit'}-${width}-${scheme}-drawer.png`});
-   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell'));
+   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell__sidebar-column'));
    assert(await page.$eval(trigger,n=>document.activeElement===n),'Escape restores focus');
-   assert(await page.evaluate(()=>window.__originalSidebar.parentElement.matches('.mui-block--shell')));
-   await show();await page.mouse.click(width-2,450);await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell'));
+   assert(await page.evaluate(()=>window.__originalSidebar.parentElement.matches('.mui-block--shell__sidebar-column')));
+   await show();await page.mouse.click(width-2,450);await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell__sidebar-column'));
    await show();await page.$eval(sidebar,n=>n.addEventListener('click',e=>e.preventDefault(),{once:true}));
-   await page.click(sidebar+' a[href]');await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell'));
+   await page.click(sidebar+' a[href]');await page.waitForFunction(()=>!document.querySelector('.mui-navigation-dialog').open && document.querySelector('.mui-block--shell__sidebar').parentElement.matches('.mui-block--shell__sidebar-column'));
    assert.deepEqual(await links(page),original);
   }else{
    assert(await page.$eval('[data-mui="header-search"] input',n=>n.checkVisibility()),'desktop real search');

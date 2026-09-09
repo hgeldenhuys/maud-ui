@@ -30,3 +30,6 @@ Default props render nothing. An empty line and empty child markup also emit no 
 `Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.
 
 `State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.
+
+## Frame contract (0.12.0)
+Density never moves the frame. Shell spacing, type and control heights use independent `--mui-shell-*` tokens. See [shell frame](../shell-frame.md) for layout, current navigation and source migration details.

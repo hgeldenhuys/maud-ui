@@ -98,12 +98,15 @@ fn flatten<'a>(items: &'a [NavItem], output: &mut Vec<&'a NavItem>) {
         flatten(&item.children, output);
     }
 }
-fn nav_items(items: &[NavItem], current: Option<&NavItem>) -> Markup {
+fn contains_current(items: &[NavItem], current: Option<&NavItem>) -> bool {
+    items.iter().any(|item| current.is_some_and(|selected| std::ptr::eq(selected, item)) || contains_current(&item.children, current))
+}
+fn nav_items(items: &[NavItem], current: Option<&NavItem>, depth: usize) -> Markup {
     html! {
         ul class="mui-block--shell__nav-list" {
             @for item in items {
                 @let active = current.is_some_and(|selected| std::ptr::eq(selected, item));
-                li {
+                li style=(format!("--mui-nav-depth:{depth}")) {
                     a href=(item.href) class=(if active { "mui-block--shell__nav-item mui-block--shell__nav-item--active" } else { "mui-block--shell__nav-item" })
                         aria-current=[active.then_some("page")] title=(item.label)
                         aria-label=(if let Some(badge) = &item.badge { format!("{} — {}", item.label, badge) } else { item.label.clone() }) {
@@ -113,7 +116,7 @@ fn nav_items(items: &[NavItem], current: Option<&NavItem>) -> Markup {
                         span class="mui-block--shell__nav-label" { (item.label) }
                         @if let Some(badge) = &item.badge { span class="mui-block--shell__nav-badge" { (badge) } }
                     }
-                    @if !item.children.is_empty() { (nav_items(&item.children, current)) }
+                    @if !item.children.is_empty() { (nav_items(&item.children, current, depth + 1)) }
                 }
             }
         }
@@ -158,6 +161,8 @@ fn render_ready(props: Props) -> Markup {
             data-collapsed=(props.default_collapsed.to_string()) data-embedded=(props.embedded.to_string())
             data-mobile-navigation=(if mobile_tabs { "tabs" } else { "drawer" }) {
             (props.app_header)
+            div class="mui-block--shell__body" {
+            div class="mui-block--shell__sidebar-column" {
             details class="mui-navigation-fallback" open {
                 summary class="mui-navigation-fallback__toggle" aria-label="Toggle navigation" {
                     (menu_icon()) span class="mui-sr-only" { "Navigation" }
@@ -174,11 +179,12 @@ fn render_ready(props: Props) -> Markup {
                     @for (index, group) in props.nav_groups.iter().enumerate() {
                         @if let Some(label) = &group.label {
                             details class="mui-block--shell__nav-group" role="group" aria-label=(label) open
+                                data-contains-current=[contains_current(&group.items, selected).then_some("true")]
                                 data-mui="nav-group" data-nav-key=(format!("{}:{}:{}", nav_id, index, label)) {
                                 summary class="mui-block--shell__nav-group-label" { (label) }
-                                (nav_items(&group.items, selected))
+                                (nav_items(&group.items, selected, 0))
                             }
-                        } @else { div class="mui-block--shell__nav-group" { (nav_items(&group.items, selected)) } }
+                        } @else { div class="mui-block--shell__nav-group" data-contains-current=[contains_current(&group.items, selected).then_some("true")] { (nav_items(&group.items, selected, 0)) } }
                     }
                 }
                 div class="mui-block--shell__mobile-controls" {}
@@ -195,6 +201,7 @@ fn render_ready(props: Props) -> Markup {
                 }
             }
             }
+            }
             div class="mui-block--shell__main" {
                 @if let Some(mut page) = props.page_header {
                     @let custom_leading = page.leading;
@@ -209,6 +216,7 @@ fn render_ready(props: Props) -> Markup {
                 }
                 @if props.embedded { section class="mui-block--shell__content" aria-label="Workspace content" { (props.children) } }
                 @else { main class="mui-block--shell__content" { (props.children) } }
+            }
             }
             (props.app_footer)
             dialog class="mui-navigation-dialog" id=(&drawer_id) aria-label="Application navigation" {

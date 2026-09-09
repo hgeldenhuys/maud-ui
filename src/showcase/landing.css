@@ -54,7 +54,7 @@
 .lp__workspace-pages .lp__screen[hidden] { display: none; }
 .lp__screen + .lp__screen { margin-block-start: var(--mui-space-xl); }
 .lp__screen[hidden] + .lp__screen { margin-block-start: 0; }
-.mui-record-example, .mui-record-example__related { display: grid; gap: var(--mui-space-xl); align-items: start; min-width: 0; }
+.mui-record-example, .mui-record-example__related { display: grid; gap: var(--mui-stack-gap); align-items: start; min-width: 0; }
 .mui-record-example__columns { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--mui-space-xl); align-items: start; }
 .mui-record-example__payment { min-width: 0; scroll-margin-top: var(--mui-header-height); }
 @media (max-width: 47.99rem) { .mui-record-example__columns { grid-template-columns: minmax(0, 1fr); } }

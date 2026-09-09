@@ -72,7 +72,7 @@
   height: 1rem;
   flex-shrink: 0;
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
   background: transparent;
   display: flex;
   align-items: center;
@@ -93,7 +93,7 @@
   width: 0.5rem;
   height: 0.5rem;
   background: var(--mui-accent);
-  border-radius: var(--mui-radius-full);
+  border-radius: 50%;
 }
 
 /* Focus-visible ring */

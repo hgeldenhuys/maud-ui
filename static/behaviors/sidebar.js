@@ -6,6 +6,8 @@
   const read = key => { try { return localStorage.getItem(key); } catch { return null; } };
   const write = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
   function initGroup(group) {
+    if (group.querySelector('[aria-current="page"]')) group.setAttribute('data-contains-current', 'true');
+    else group.removeAttribute('data-contains-current');
     if (groups.has(group)) return groups.get(group);
     const key = "mui-nav-group:" + (group.getAttribute("data-nav-key") || group.id);
     const saved = read(key);

@@ -6,7 +6,7 @@
   flex-wrap: wrap; /* block-start / block-end addons wrap to their own row */
   width: 100%;
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   overflow: hidden;
   background: transparent;
   transition: border-color var(--mui-motion-fast) var(--mui-motion-ease),

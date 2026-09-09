@@ -1,5 +1,5 @@
 /* A single layout and a single navigation node at every viewport width. */
-.mui-block--shell { display: grid; grid-template-columns: var(--mui-sidebar-w) minmax(0,1fr); align-items: stretch; width: 100%; min-height: 32rem; background: var(--mui-bg); color: var(--mui-text); text-align: start; }
+.mui-block--shell { display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: auto 1fr auto; align-items: stretch; width: 100%; min-height: 100dvh; box-sizing: border-box; background: var(--mui-bg); color: var(--mui-text); text-align: start; }
 .mui-block--shell > .mui-app-header, .mui-block--shell > .mui-app-footer, .mui-block--shell > .mui-bottom-tab-bar { grid-column: 1 / -1; }
 .mui-block--shell__sidebar { display: flex; flex-direction: column; min-width: 0; background: var(--mui-bg-card); }
 .mui-block--shell__brand { display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-header-height); padding: var(--mui-space-md) var(--mui-space-lg); color: var(--mui-text); }
@@ -18,7 +18,7 @@
 .mui-block--shell__nav-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 .mui-block--shell__nav-icon { display: inline-flex; width: var(--mui-icon-size); height: var(--mui-icon-size); flex: 0 0 var(--mui-icon-size); align-items: center; justify-content: center; color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); }
 .mui-block--shell__nav-icon svg { width: 100%; height: 100%; }
-.mui-block--shell__nav-badge { flex: none; border-radius: var(--mui-radius-full); background: var(--mui-bg-input); padding-inline: var(--mui-inset-tight); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
+.mui-block--shell__nav-badge { flex: none; border-radius: var(--mui-radius-tight); background: var(--mui-bg-input); padding-inline: var(--mui-inset-tight); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
 .mui-block--shell__user { display: flex; align-items: center; gap: var(--mui-space-sm); color: var(--mui-text); padding: var(--mui-space-lg); margin-block-start: var(--mui-space-xl); font-size: var(--mui-text-small-size); }
 .mui-block--shell__user:hover { background: var(--mui-bg-input); }
 .mui-block--shell__user-avatar { display: grid; place-items: center; flex: 0 0 var(--mui-space-xxl); height: var(--mui-space-xxl); border-radius: var(--mui-radius-full); background: var(--mui-bg-input); font-size: var(--mui-text-caption-size); }
@@ -56,7 +56,7 @@
 .mui-workspace-example__form :is(input, select) { width: 100%; box-sizing: border-box; }
 @media (min-width: 64rem) {
   .mui-block--shell[data-mui-navigation-ready] .mui-block--shell__collapse { display: inline-flex; }
-  .mui-block--shell[data-collapsed="true"][data-mui-navigation-ready] { grid-template-columns: var(--mui-sidebar-rail-w) minmax(0,1fr); }
+  .mui-block--shell[data-collapsed="true"][data-mui-navigation-ready] > .mui-block--shell__body { grid-template-columns: var(--mui-shell-rail-width) minmax(0,1fr); }
   .mui-block--shell[data-collapsed="true"] .mui-block--shell__sidebar :is(.mui-block--shell__brand-name, .mui-block--shell__header, .mui-block--shell__nav-label, .mui-block--shell__nav-badge, .mui-block--shell__user-text, .mui-block--shell__user-caret, .mui-block--shell__footer) { display: none; }
   .mui-block--shell[data-collapsed="true"] .mui-block--shell__nav-item { justify-content: center; }
   .mui-block--shell[data-collapsed="true"] .mui-block--shell__brand { justify-content: center; }

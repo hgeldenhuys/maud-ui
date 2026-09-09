@@ -1,0 +1,906 @@
+{
+  "origin": "http://127.0.0.1:23449",
+  "pages": 126,
+  "assets": [
+    {
+      "path": "/css/maud-ui.css",
+      "bytes": 327548,
+      "matches": "static/maud-ui.css"
+    },
+    {
+      "path": "/js/maud-ui.js",
+      "bytes": 136917,
+      "matches": "static/maud-ui.js"
+    },
+    {
+      "path": "/og.png",
+      "bytes": 58373,
+      "matches": "static/og.png"
+    }
+  ],
+  "unique_inline_scripts": 22,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 151928,
+      "ids": 46,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/gallery",
+      "status": 200,
+      "bytes": 583475,
+      "ids": 556,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/getting-started",
+      "status": 200,
+      "bytes": 95324,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks",
+      "status": 200,
+      "bytes": 95376,
+      "ids": 13,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/theme",
+      "status": 200,
+      "bytes": 155127,
+      "ids": 127,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/accordion",
+      "status": 200,
+      "bytes": 90690,
+      "ids": 29,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/alert",
+      "status": 200,
+      "bytes": 90071,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/alert_dialog",
+      "status": 200,
+      "bytes": 92093,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/aspect_ratio",
+      "status": 200,
+      "bytes": 87961,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/attention_pill",
+      "status": 200,
+      "bytes": 87619,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/avatar",
+      "status": 200,
+      "bytes": 91377,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/badge",
+      "status": 200,
+      "bytes": 93870,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/bottom_tab_bar",
+      "status": 200,
+      "bytes": 89915,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/breadcrumb",
+      "status": 200,
+      "bytes": 88916,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/button",
+      "status": 200,
+      "bytes": 98544,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/button_group",
+      "status": 200,
+      "bytes": 91448,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/calendar",
+      "status": 200,
+      "bytes": 110854,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/card",
+      "status": 200,
+      "bytes": 94142,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/carousel",
+      "status": 200,
+      "bytes": 97005,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/chart",
+      "status": 200,
+      "bytes": 101891,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/checkbox",
+      "status": 200,
+      "bytes": 90033,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/choice_card",
+      "status": 200,
+      "bytes": 93318,
+      "ids": 27,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/code_block",
+      "status": 200,
+      "bytes": 94831,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/collapsible",
+      "status": 200,
+      "bytes": 88685,
+      "ids": 22,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/combobox",
+      "status": 200,
+      "bytes": 120696,
+      "ids": 37,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/command",
+      "status": 200,
+      "bytes": 91665,
+      "ids": 18,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/composer",
+      "status": 200,
+      "bytes": 96427,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/context_menu",
+      "status": 200,
+      "bytes": 89406,
+      "ids": 18,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/data_table",
+      "status": 200,
+      "bytes": 100540,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/date_picker",
+      "status": 200,
+      "bytes": 110133,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/date_range",
+      "status": 200,
+      "bytes": 94446,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/dialog",
+      "status": 200,
+      "bytes": 98234,
+      "ids": 36,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/diff",
+      "status": 200,
+      "bytes": 94063,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/direction",
+      "status": 200,
+      "bytes": 87927,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/drawer",
+      "status": 200,
+      "bytes": 97386,
+      "ids": 37,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/empty_state",
+      "status": 200,
+      "bytes": 95499,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/facts_list",
+      "status": 200,
+      "bytes": 87267,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/field",
+      "status": 200,
+      "bytes": 96952,
+      "ids": 47,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/fieldset",
+      "status": 200,
+      "bytes": 87335,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/form",
+      "status": 200,
+      "bytes": 96886,
+      "ids": 28,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/grid",
+      "status": 200,
+      "bytes": 112678,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/gutter_section",
+      "status": 200,
+      "bytes": 86983,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/hover_card",
+      "status": 200,
+      "bytes": 90704,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/input",
+      "status": 200,
+      "bytes": 94712,
+      "ids": 28,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/input_group",
+      "status": 200,
+      "bytes": 90407,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/input_otp",
+      "status": 200,
+      "bytes": 96796,
+      "ids": 47,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/item",
+      "status": 200,
+      "bytes": 92845,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/kbd",
+      "status": 200,
+      "bytes": 87746,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/label",
+      "status": 200,
+      "bytes": 88584,
+      "ids": 18,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/menu",
+      "status": 200,
+      "bytes": 96520,
+      "ids": 23,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/menubar",
+      "status": 200,
+      "bytes": 94795,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/message",
+      "status": 200,
+      "bytes": 90646,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/meter",
+      "status": 200,
+      "bytes": 92765,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/native_select",
+      "status": 200,
+      "bytes": 93167,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/navigation_menu",
+      "status": 200,
+      "bytes": 95129,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/number_field",
+      "status": 200,
+      "bytes": 94444,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/pagination",
+      "status": 200,
+      "bytes": 98859,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/popover",
+      "status": 200,
+      "bytes": 92629,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/progress",
+      "status": 200,
+      "bytes": 91173,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/radio",
+      "status": 200,
+      "bytes": 92957,
+      "ids": 27,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/radio_group",
+      "status": 200,
+      "bytes": 97548,
+      "ids": 32,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/resizable",
+      "status": 200,
+      "bytes": 92421,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/scroll_area",
+      "status": 200,
+      "bytes": 94578,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/segmented_control",
+      "status": 200,
+      "bytes": 87748,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/select",
+      "status": 200,
+      "bytes": 111166,
+      "ids": 79,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/separator",
+      "status": 200,
+      "bytes": 95080,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/sheet",
+      "status": 200,
+      "bytes": 98315,
+      "ids": 35,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/sidebar",
+      "status": 200,
+      "bytes": 104766,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/skeleton",
+      "status": 200,
+      "bytes": 95740,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/slider",
+      "status": 200,
+      "bytes": 102411,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/sonner",
+      "status": 200,
+      "bytes": 93818,
+      "ids": 18,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/spinner",
+      "status": 200,
+      "bytes": 90583,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/stack",
+      "status": 200,
+      "bytes": 116716,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/status_chip_group",
+      "status": 200,
+      "bytes": 91563,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/status_dot",
+      "status": 200,
+      "bytes": 89136,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/streaming_cursor",
+      "status": 200,
+      "bytes": 88686,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/swatch",
+      "status": 200,
+      "bytes": 118759,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/switch",
+      "status": 200,
+      "bytes": 98816,
+      "ids": 28,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/table",
+      "status": 200,
+      "bytes": 97720,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/tabs",
+      "status": 200,
+      "bytes": 107158,
+      "ids": 47,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/textarea",
+      "status": 200,
+      "bytes": 94427,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/toast",
+      "status": 200,
+      "bytes": 96324,
+      "ids": 22,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/toggle",
+      "status": 200,
+      "bytes": 92775,
+      "ids": 31,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/toggle_group",
+      "status": 200,
+      "bytes": 95104,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/tool_call",
+      "status": 200,
+      "bytes": 94273,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/tooltip",
+      "status": 200,
+      "bytes": 97636,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/turn_progress",
+      "status": 200,
+      "bytes": 87452,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/typography",
+      "status": 200,
+      "bytes": 96222,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/auth-login",
+      "status": 200,
+      "bytes": 91875,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/auth-signup",
+      "status": 200,
+      "bytes": 92563,
+      "ids": 22,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/auth-two-factor",
+      "status": 200,
+      "bytes": 89451,
+      "ids": 23,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/dashboard-stats",
+      "status": 200,
+      "bytes": 90355,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/data-table-full",
+      "status": 200,
+      "bytes": 93314,
+      "ids": 21,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/pricing-tiers",
+      "status": 200,
+      "bytes": 92779,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/settings-billing",
+      "status": 200,
+      "bytes": 90332,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/settings-profile",
+      "status": 200,
+      "bytes": 89883,
+      "ids": 20,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/settings-team",
+      "status": 200,
+      "bytes": 91033,
+      "ids": 22,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/shell-sidebar",
+      "status": 200,
+      "bytes": 142516,
+      "ids": 46,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/shell-page-header",
+      "status": 200,
+      "bytes": 94614,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/shell-app-header",
+      "status": 200,
+      "bytes": 90957,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/shell-app-footer",
+      "status": 200,
+      "bytes": 89586,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/shell-brand-mark",
+      "status": 200,
+      "bytes": 89784,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/worklist-header",
+      "status": 200,
+      "bytes": 93509,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/record-header",
+      "status": 200,
+      "bytes": 91886,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/task-grid",
+      "status": 200,
+      "bytes": 90968,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/record-timeline",
+      "status": 200,
+      "bytes": 94073,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/record-money",
+      "status": 200,
+      "bytes": 95152,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/record-related-card",
+      "status": 200,
+      "bytes": 96264,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/worklist-grouped",
+      "status": 200,
+      "bytes": 97209,
+      "ids": 17,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/attention-banner",
+      "status": 200,
+      "bytes": 93955,
+      "ids": 19,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/blocks/action-row",
+      "status": 200,
+      "bytes": 97234,
+      "ids": 23,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/monaco-editor",
+      "status": 200,
+      "bytes": 100538,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/xyflow",
+      "status": 200,
+      "bytes": 104388,
+      "ids": 28,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/excalidraw",
+      "status": 200,
+      "bytes": 103705,
+      "ids": 29,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/tiptap",
+      "status": 200,
+      "bytes": 97984,
+      "ids": 23,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/mermaid",
+      "status": 200,
+      "bytes": 95319,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/cytoscape",
+      "status": 200,
+      "bytes": 95874,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/threejs",
+      "status": 200,
+      "bytes": 94979,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/ag-grid",
+      "status": 200,
+      "bytes": 95924,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/echarts",
+      "status": 200,
+      "bytes": 94543,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/leaflet",
+      "status": 200,
+      "bytes": 94466,
+      "ids": 25,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/fullcalendar",
+      "status": 200,
+      "bytes": 95046,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/wavesurfer",
+      "status": 200,
+      "bytes": 98540,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/pdfjs",
+      "status": 200,
+      "bytes": 96223,
+      "ids": 26,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/xterm",
+      "status": 200,
+      "bytes": 96446,
+      "ids": 24,
+      "duplicate_ids": []
+    },
+    {
+      "path": "/integrations/sortable",
+      "status": 200,
+      "bytes": 109447,
+      "ids": 34,
+      "duplicate_ids": []
+    }
+  ]
+}

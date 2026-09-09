@@ -32,7 +32,7 @@
   background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   font-family: inherit;
   font-size: var(--mui-text-small-size);
   line-height: var(--mui-leading-tight);
@@ -146,7 +146,7 @@
   height: 1.75rem;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   color: var(--mui-text-muted);
   font-size: var(--mui-text-body-size);
   cursor: pointer;
@@ -207,7 +207,7 @@
   height: 2rem;
   background: transparent;
   border: none;
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   color: var(--mui-text);
   font-size: var(--mui-text-small-size);
   cursor: pointer;

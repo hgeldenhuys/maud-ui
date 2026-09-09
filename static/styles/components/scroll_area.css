@@ -46,7 +46,7 @@
   position: absolute;
   width: 100%;
   background: var(--mui-text-subtle);
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   min-height: 1rem;
   cursor: grab;
   transition: background var(--mui-transition);

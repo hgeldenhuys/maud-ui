@@ -5,6 +5,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.12.0] — 2026-09-09 — Round 4 — shell frame, footer, radius scale, nav current state
+
+Density never moves the frame. Independent `--mui-shell-*` tokens fix chrome geometry and type while root or container density continues to scale content. The shell uses a viewport minimum and `auto 1fr auto` rows; a full-height sidebar column contains the original sticky, scrolling navigation node. Short pages keep the footer at the viewport bottom. Phone navigation retains the same native drawer and no-JS fallback.
+
+- Content stacks use one `--mui-stack-gap` (16px), without additive block margins. Cards, tables and banners share Large corners.
+- Current navigation is a flat row with an edge-aligned 2px bar. Its parent receives `data-contains-current="true"`, primary ink at weight 600 and an accent chevron, without a fill.
+- Radius now derives Small = brand ×0.5, Medium = brand, Large = min(brand ×1.5, 12px). Controls cap at 8px and compact indicators at 4px. The neutral brand radius stays 0.375rem. The nine-token export includes formula and resolved-radius guidance.
+- Nine rendered shell fixture pages cover three densities, short/long content and container scopes. Bundle fixtures reject regressions to old frame padding, the short shell, doubled corners and filled group headings.
+
+**Migration:** Rust Props are unchanged. Custom direct-child sidebar selectors must target the new body/column; ship the new CSS and JS together. Embedded previews retain a 32rem minimum. [Shell frame](docs/shell-frame.md) lists every token, layout contract and verification limit.
+
 ## [0.11.1] — 2026-09-09 — Audit fixes
 
 ### Navigation

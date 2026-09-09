@@ -26,7 +26,7 @@ function fixture(file, initial = {}) {
   const ids = new Map(); document.getElementById = id => ids.get(id) || null;
   const storage = new Map(Object.entries(initial));
   const window = new Node(); window.matchMedia = () => new Node(); window.CSS = { supports: (_, v) => !/[{}]/.test(v) && v !== 'invalid' };
-  vm.runInNewContext(readFileSync(file, 'utf8'), { window, document, Element: Node, console, setTimeout, clearTimeout, getComputedStyle: () => ({ direction: 'ltr' }), localStorage: { getItem: k => storage.get(k) ?? null, setItem: (k,v) => storage.set(k,v) }, CustomEvent: class { constructor(type) { this.type = type; } } });
+  vm.runInNewContext(readFileSync(file, 'utf8'), { window, document, Element: Node, console, setTimeout, clearTimeout, getComputedStyle: node => ({ direction: 'ltr', borderTopLeftRadius: node.radius }), localStorage: { getItem: k => storage.get(k) ?? null, setItem: (k,v) => storage.set(k,v) }, CustomEvent: class { constructor(type) { this.type = type; } } });
   function editor() {
     const root = new Node({ 'data-mui': 'brand-customizer' }), select = new Node(), action = new Node(), status = new Node(), preview = new Node(), wordmark = new Node(), tagline = new Node(), output = new Node();
     const fields = window.MaudUI.brandData.tokens.map(token => new Node({ 'data-brand-token': token.name }));
@@ -39,6 +39,17 @@ function fixture(file, initial = {}) {
   return { Node, document, window, ui: window.MaudUI, storage, ids, editor };
 }
 for (const file of ['static/maud-ui.js','static/maud-ui.min.js']) {
+  test(`${file}: export includes resolved radius guidance while keeping nine declarations`, () => {
+    const f = fixture(file), samples = ['sm', 'md', 'lg'].map((key,i) => {
+      const sample = new f.Node({ 'data-brand-radius-sample': key }); sample.radius = ['6px','12px','12px'][i];
+      f.document.nodes['[data-brand-radius-value="' + key + '"]'] = [new f.Node()]; return sample;
+    });
+    f.document.nodes['[data-brand-radius-sample]'] = samples;
+    const e = f.editor(); e.choose('clinic');
+    assert(e.output.textContent.includes('Resolved: sm = 6px; md = 12px; lg = 12px.'));
+    assert.equal((e.output.textContent.match(/^  --mui-/gm) || []).length, 9);
+    assert.equal(f.document.querySelector('[data-brand-radius-value="lg"]').textContent, '12px');
+  });
   test(`${file}: all three brands change live and export exactly nine names`, () => {
     const f = fixture(file), e = f.editor();
     for (const brand of f.ui.brandData.presets) {

@@ -334,3 +334,14 @@ The theme customiser switches Lodge, Bank and Clinic live, with exactly nine tok
 The landing now has a Banking tab with full-precision account balances, sortable transactions and a KYC queue. It defaults to compact density. Numeric sorting compares decimals exactly, including cent differences beyond JavaScript's safe integer range.
 
 Desktop page headers stay one 56px row with a native search disclosure. Task grids fit their item count, Compact related cards retain facts, and `State::Absent` omits undeclared inputs entirely. See [Brand and density](docs/brand-and-density.md) for all nine tokens, density values, changed defaults, source migrations and consuming-app follow-ups.
+
+### 0.12 shell frame and radius scale
+
+Density never moves the frame. The shell fills the viewport, stretches the sidebar column behind a sticky scrolling nav, and keeps the footer at or below the viewport bottom. Masthead, page bar, gutters and chrome type use independent `--mui-shell-*` tokens. Set `data-density` on content or the document; use `.mui-page-stack` for one shared vertical gap inside custom wrappers.
+
+Navigation uses a flat current row and an unfilled parent label with an accent chevron. One brand radius now derives Small ×0.5, Medium ×1 and Large min(×1.5, 12px); controls cap at 8px. The theme export explains and displays resolved radii. See [Shell frame](docs/shell-frame.md) for tokens, fixture pages, browser review and migration from the old direct-child sidebar layout.
+
+```sh
+cargo run --example frame_fixture # Generate nine short/long/scoped fixture pages
+node --test tests/shell-frame-css.mjs # Both bundles; frame, stack, nav and clamp contracts
+```

@@ -49,6 +49,25 @@
   --mui-sidebar-rail-w: 4rem;
   --mui-nav-row-height: 2.25rem;
   --mui-header-height: 3.5rem;
+  /* Frame geometry never follows content density. */
+  --mui-shell-masthead-height: 4rem;
+  --mui-shell-header-height: 3.5rem;
+  --mui-shell-footer-min-height: 4rem;
+  --mui-shell-sidebar-width: var(--mui-sidebar-w);
+  --mui-shell-rail-width: var(--mui-sidebar-rail-w);
+  --mui-shell-gutter: 1.5rem;
+  --mui-shell-inset: 1rem;
+  --mui-shell-control-height: 2.25rem;
+  --mui-shell-row-height: 2rem;
+  --mui-shell-nav-row-height: 2.25rem;
+  --mui-shell-text-body-size: 0.9375rem;
+  --mui-shell-text-small-size: 0.875rem;
+  --mui-shell-text-caption-size: 0.75rem;
+  --mui-shell-text-brand-size: 1.125rem;
+  --mui-shell-text-display-size: 2.75rem;
+  --mui-shell-text-h1-size: 2rem;
+  --mui-shell-text-h2-size: 1.5rem;
+  --mui-stack-gap: var(--mui-space-lg);
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   --mui-control-height: 2.25rem;
   --mui-status-chip-height: 1.875rem;
@@ -202,17 +221,20 @@
   --mui-rose-text: #96385c;
 }
 @media (max-width: 40rem) {
-  :root { --mui-page-gutter: 1rem; }
+  :root { --mui-page-gutter: 1rem; --mui-shell-gutter: 1rem; }
 }
 
 /* Rebind aliases at theme/brand scopes so inherited brand tokens stay live. */
-:root, [data-theme], [data-brand], [data-mui-density-scope] {
+:root, [data-theme], [data-brand], [data-mui-density-scope], [data-density]:not(.mui-action-row) {
   --mui-density-level: var(--mui-density-choice, var(--mui-brand-density));
   --mui-font-sans: var(--mui-brand-font-body);
   --mui-font-heading: var(--mui-brand-font-heading);
-  --mui-radius-sm: calc(var(--mui-brand-radius) * 2 / 3);
+  --mui-text-primary: var(--mui-text);
+  --mui-radius-sm: calc(var(--mui-brand-radius) * 0.5);
   --mui-radius-md: var(--mui-brand-radius);
-  --mui-radius-lg: calc(var(--mui-brand-radius) * 2);
+  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 1.5), 12px);
+  --mui-radius-control: min(var(--mui-radius-sm), 8px);
+  --mui-radius-tight: min(var(--mui-radius-sm), 4px);
   --mui-control-height: calc(2rem + 0.25rem * var(--mui-density-level));
   --mui-row-height: max(2rem, calc(1.75rem + 0.25rem * var(--mui-density-level)));
   --mui-nav-row-height: var(--mui-control-height);
@@ -235,6 +257,6 @@
   --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
   --mui-border-focus: var(--mui-accent-text);
 }
-:root[data-density="compact"], [data-mui-density-scope="compact"] { --mui-density-choice: 0; }
-:root[data-density="comfortable"], [data-mui-density-scope="comfortable"] { --mui-density-choice: 1; }
-:root[data-density="spacious"], [data-mui-density-scope="spacious"] { --mui-density-choice: 2; }
+[data-density="compact"]:not(.mui-action-row), [data-mui-density-scope="compact"] { --mui-density-choice: 0; }
+[data-density="comfortable"]:not(.mui-action-row), [data-mui-density-scope="comfortable"] { --mui-density-choice: 1; }
+[data-density="spacious"]:not(.mui-action-row), [data-mui-density-scope="spacious"] { --mui-density-choice: 2; }

@@ -110,6 +110,31 @@ test("built runtime initializes an outerHTML replacement through the htmx lifecy
   document.dispatchEvent(event("htmx:oobAfterSwap", { target: replacement })); assert.equal(replacement.listeners.keydown.length, 1);
 });
 
+for (const bundle of ['static/maud-ui.js', 'static/maud-ui.min.js']) {
+  test(`${bundle}: the same sidebar returns to its stretching column after every drawer cycle`, () => {
+    const localWindow = new Node(), localMedia = new Node(), localDocument = new Node();
+    localMedia.matches = true; localWindow.matchMedia = () => localMedia;
+    localDocument.documentElement = new Node(); localDocument.body = new Node(); localDocument.getElementById = () => null;
+    vm.runInNewContext(readFileSync(bundle, 'utf8'), { ...context, window: localWindow, document: localDocument });
+    const shell = new Node({'data-mui':'shell-navigation'}), body = new Node(), column = new Node(), sidebar = new Node(), main = new Node(), panel = dialog();
+    const input = new Node(), link = new Node({href:'/booking','aria-current':'page'}); input.value = 'Original value';
+    sidebar.append(input); sidebar.append(link); column.append(sidebar); body.append(column); body.append(main); shell.append(body); shell.append(panel);
+    shell.nodes['.mui-block--shell__sidebar'] = [sidebar]; shell.nodes['.mui-block--shell__sidebar-column'] = [column];
+    shell.nodes['.mui-block--shell__main'] = [main]; shell.nodes['.mui-navigation-dialog'] = [panel];
+    localWindow.MaudUI.init(shell); localWindow.MaudUI.init(shell);
+    for (let i = 0; i < 3; i++) {
+      panel.dispatchEvent(event('mui:navigation-open')); panel.showModal(); assert.equal(sidebar.parentNode, panel);
+      panel.close(); assert.equal(sidebar.parentNode, column); assert.equal(column.children.length, 1);
+    }
+    panel.dispatchEvent(event('mui:navigation-open')); panel.showModal();
+    localMedia.matches = false; localMedia.dispatchEvent(event('change'));
+    assert(!panel.open); assert.equal(sidebar.parentNode, column); assert.equal(input.value, 'Original value');
+    assert.equal(sidebar.children[1], link); assert.equal(body.children[1], main);
+    shell.isConnected = false; localMedia.dispatchEvent(event('change'));
+    assert.equal(localMedia.listeners.change.length, 0);
+  });
+}
+
 test("gallery phone menu moves one site nav, keeps search usable, and restores focus/layout state", () => {
   const header = new Node(), siteNav = new Node(), tools = new Node(), sidebar = new Node(), componentNav = new Node();
   const menu = new Node(), main = new Node(), backdrop = new Node(), search = new Node();

@@ -1,6 +1,6 @@
 # Sidebar shell
 
-Grouped navigation, a header slot, current-page indication and optional mobile tabs. Below 60rem the enhanced shell opens the same navigation inside a native modal drawer. Without JS, every navigation label remains visible above the page.
+Grouped navigation, a header slot, current-page indication and optional mobile tabs. Below 64rem the enhanced shell opens the same navigation inside a native modal drawer. Without JS, every navigation label remains visible above the page.
 
 ## Import and example
 ```rust
@@ -30,6 +30,7 @@ sidebar::render(Props {
 | nav_groups | Vec<NavGroup> | empty | Ordered areas; label: Option<String>, items: Vec<NavItem>. |
 | active_path | String | empty | First exact href match is current. |
 | mobile_navigation | MobileNavigation | Drawer | Drawer or Tabs; desktop sidebar remains grouped. |
+| mobile_tab_bar | Option<Markup> | None | Caller-owned schema tabs using this shell's drawer ID. |
 | user | Option<UserBlock> | None | name, email, avatar_initials, menu_href: String. |
 | topbar_title | Option<String> | None | Quiet context label; put a heading in your content. |
 | topbar_actions | Markup | empty | Topbar controls. |
@@ -50,12 +51,12 @@ Native page links and `aria-current`, labelled groups, visible mobile labels, sa
 Use `short_label: Some("Stays".into())` to fit a long label such as Reservations in a bottom tab. Use `None` to display the full label. Empty or whitespace-only short labels fall back to the full label. Labels stay on one line and ellipsize; five destinations use a smaller type size. The accessible name includes both the visible short label and the full label, so voice control and screen readers retain context. Sidebar labels ellipsize on desktop with their full text available in a title hint and accessible name; count badges never shrink. The drawer wraps labels.
 
 ## Navigation preferences
-Labeled groups use native details/summary and remember their state under `mui-nav-group:{navigation-id}:{index}:{label}`. A current destination opens its group on route entry. Sidebar collapse uses `mui-shell-rail:{id}`; storage failures fall back to rendered defaults. Keep IDs stable and unique, and keep group ordering stable to retain preferences. The desktop icon rail appears at 64rem, with full accessible labels and title hints. It temporarily opens groups to retain every icon and restores their remembered state when expanded or moved into the phone drawer. Inputs in the header and arbitrary footer controls are hidden while collapsed; place essentials in the page bar as well.
+Labeled groups use native details/summary and remember their state under `mui-nav-group:{navigation-id}:{index}:{label}`. A current destination opens its group on route entry unless the user has explicitly saved it closed. Sidebar collapse uses `mui-shell-rail:{id}`; storage failures fall back to rendered defaults. Keep IDs stable and unique, and keep group ordering stable to retain preferences. The desktop icon rail appears at 64rem, with full accessible labels and title hints. It temporarily opens groups to retain every icon and restores their remembered state when expanded or moved into the phone drawer. Inputs in the header and arbitrary footer controls are hidden while collapsed; place essentials in the page bar as well.
 
 ## Header and footer composition
 Pass `app_header::render(...)` and `app_footer::render(...)` into the corresponding shell slots. Their empty defaults emit no wrappers. Pass `page_header::Props` for breadcrumbs, native search or a custom command trigger, actions and switchers. The shell page renders this full composition in both themes. The landing example supports client-side guest filtering, row selection and adding a local example reservation; its data is fictional and never persisted or sent to a booking system.
 
-At 40rem and below, a supplied page header moves its original search, actions and switchers into the drawer, leaving Menu and the current breadcrumb above the page. At wider sizes they return to the header. Without enhancement they remain visible on wrapped header rows. The shared example uses “Reservations” and one guest-search field; the header shortcut focuses that field, and the sidebar contains no duplicate search.
+Below 64rem, a supplied page header moves its original breadcrumb and actions/switchers into the drawer. The page bar keeps the menu, current title and search icon. At wider sizes controls return to the header; the native search input is visible. Without enhancement, the native navigation details and Settings disclosure retain access to every destination and control. The shared example uses “Reservations” and one guest-search field; the header shortcut focuses that field, and the sidebar contains no duplicate search.
 
 ## Presentation states (0.10.1)
 
@@ -65,3 +66,13 @@ At 40rem and below, a supplied page header moves its original search, actions an
 `brand_mark: Option<shell::brand_mark::Props>` defaults to None and overrides the raw brand slot when supplied. The mark contains a logo, wordmark and optional tagline. Add the new field to exhaustive Props literals. See [brand mark](shell-brand-mark.md).
 
 `State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.
+
+## Still frame and current navigation (0.12.0)
+
+Density never moves the frame. The root shell uses `min-height: 100dvh` and rows `auto 1fr auto`. Its `.mui-block--shell__body` contains a stretching `.mui-block--shell__sidebar-column` and the existing main region. Background and hairline belong to the column; the original sidebar is the sticky, independently scrolling inner node. Drawer close restores that node into its column. Embedded previews deliberately keep a 32rem minimum. See [shell frame](../shell-frame.md) for all `--mui-shell-*` tokens and short/long fixtures.
+
+The current item has a flat tint, zero corner radius and a 2px accent bar at the column edge. Nested labels indent inside the row so the bar stays aligned. Exactly one item retains `aria-current="page"`. Its group gets `data-contains-current="true"`; the parent label uses `--mui-text-primary`, weight 600, and an accent chevron, with no fill. Group collapse does not erase this state. The primitive sidebar uses the same presentation.
+
+Content is a stack with one `--mui-stack-gap` (16px) and no added child block margins. Use `.mui-page-stack` inside caller-owned wrappers. Put per-page density on that content container, or retain the document setting; shell spacing and type stay fixed. Existing Rust Props remain compatible. Custom direct-child CSS for the old sidebar position must target the new body/column; update CSS and JS together.
+
+Review [short](../fixtures/shell-frame-compact-short.html) and [long](../fixtures/shell-frame-compact-long.html) fixtures after running `cargo run --example frame_fixture`.

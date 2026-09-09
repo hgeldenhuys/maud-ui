@@ -4,7 +4,7 @@
 .mui-turn-progress {
   width: 100%;
   height: 2px;
-  border-radius: var(--mui-radius-full);
+  border-radius: var(--mui-radius-tight);
   background: linear-gradient(
     90deg,
     var(--mui-accent) 0 var(--mui-turn-pct, 0%),

@@ -16,7 +16,7 @@
   background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   font-family: inherit;
   font-size: var(--mui-text-small-size);
   line-height: var(--mui-leading-tight);
@@ -65,7 +65,7 @@
   min-width: 100%;
   background: var(--mui-bg-card);
   border: 1px solid var(--mui-border);
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-radius-control);
   box-shadow: var(--mui-shadow-md);
   overflow-y: auto;
   max-height: 15rem;
@@ -83,7 +83,7 @@
   gap: var(--mui-space-sm);
   padding: var(--mui-inset-tight) var(--mui-space-sm) var(--mui-inset-tight) var(--mui-space-sm);
   cursor: pointer;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-control);
   font-size: var(--mui-text-small-size);
   transition: var(--mui-transition);
   position: relative;

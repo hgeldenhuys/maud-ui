@@ -281,7 +281,7 @@
 .mui-block--billing__meta-bar {
     height: 4px;
     background: var(--mui-bg-input);
-    border-radius: var(--mui-radius-full);
+    border-radius: var(--mui-radius-tight);
     overflow: hidden;
     margin-top: var(--mui-space-xs);
 }

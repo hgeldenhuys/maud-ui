@@ -876,164 +876,86 @@
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
-  window.MaudUI.behaviors["data-table"] = function(root) {
-    var pageSize = parseInt(root.getAttribute("data-page-size") || "5", 10);
-    var tbody = root.querySelector(".mui-data-table__body");
-    var info = root.querySelector(".mui-data-table__info");
-    var prevBtn = root.querySelector('[data-action="prev"]');
-    var nextBtn = root.querySelector('[data-action="next"]');
-    var searchInput = root.querySelector(".mui-data-table__search");
-    var headers = root.querySelectorAll(".mui-data-table__th");
-    if (!tbody) return;
-    var allRowEls = tbody.querySelectorAll("tr[data-row-data]");
-    var allRows = [];
-    for (var i = 0; i < allRowEls.length; i++) {
-      var raw = allRowEls[i].getAttribute("data-row-data");
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  ui.behaviors["data-table"] = (root) => {
+    const pageSize = Math.max(1, parseInt(root.getAttribute("data-page-size") || "5", 10) || 5);
+    const body = root.querySelector(".mui-data-table__body");
+    if (!body) return;
+    const info = root.querySelector(".mui-data-table__info");
+    const previous = root.querySelector('[data-action="prev"]');
+    const next = root.querySelector('[data-action="next"]');
+    const search = root.querySelector(".mui-data-table__search");
+    const headers = Array.from(root.querySelectorAll(".mui-data-table__th[data-key]"));
+    const rows = Array.from(body.querySelectorAll("tr")).map((node) => {
+      let values;
       try {
-        allRows.push(JSON.parse(raw));
-      } catch (e) {
-        allRows.push([]);
+        values = JSON.parse(node.getAttribute("data-row-data"));
+      } catch {
       }
-    }
-    var filteredRows = allRows.slice();
-    var currentPage = 0;
-    var sortKey = -1;
-    var sortDir = "";
-    function renderPage() {
-      var total = filteredRows.length;
-      var totalPages = Math.max(1, Math.ceil(total / pageSize));
-      if (currentPage >= totalPages) currentPage = totalPages - 1;
-      if (currentPage < 0) currentPage = 0;
-      var start = currentPage * pageSize;
-      var end = Math.min(start + pageSize, total);
-      var pageRows = filteredRows.slice(start, end);
-      var html = "";
-      for (var i2 = 0; i2 < pageRows.length; i2++) {
-        var row = pageRows[i2];
-        var rowJson = JSON.stringify(row).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        html += '<tr class="mui-table__row" data-row-data="' + rowJson + '">';
-        for (var j = 0; j < row.length; j++) {
-          html += '<td class="mui-table__td">' + escapeHtml(row[j]) + "</td>";
-        }
-        html += "</tr>";
-      }
-      tbody.innerHTML = html;
-      if (info) {
-        if (total === 0) {
-          info.textContent = "No results";
-        } else {
-          info.textContent = "Showing " + (start + 1) + "-" + end + " of " + total;
-        }
-      }
-      if (prevBtn) prevBtn.disabled = currentPage === 0;
-      if (nextBtn) nextBtn.disabled = end >= total;
-    }
-    function escapeHtml(str) {
-      var div = document.createElement("div");
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
-    }
-    function applyFilter(query) {
-      var q = query.toLowerCase().trim();
-      if (q === "") {
-        filteredRows = sortRows(allRows.slice());
-      } else {
-        var matched = [];
-        for (var i2 = 0; i2 < allRows.length; i2++) {
-          var row = allRows[i2];
-          var found = false;
-          for (var j = 0; j < row.length; j++) {
-            if (row[j].toLowerCase().indexOf(q) !== -1) {
-              found = true;
-              break;
-            }
-          }
-          if (found) matched.push(row);
-        }
-        filteredRows = sortRows(matched);
-      }
-      currentPage = 0;
-      renderPage();
-    }
-    function sortRows(rows) {
-      if (sortKey < 0 || sortDir === "") return rows;
-      var col = sortKey;
-      var dir = sortDir === "asc" ? 1 : -1;
-      rows.sort(function(a, b) {
-        var va = a[col] || "";
-        var vb = b[col] || "";
-        var na = parseFloat(va.replace(/[^0-9.\-]/g, ""));
-        var nb = parseFloat(vb.replace(/[^0-9.\-]/g, ""));
-        if (!isNaN(na) && !isNaN(nb)) {
-          return (na - nb) * dir;
-        }
-        return va.localeCompare(vb) * dir;
+      if (!Array.isArray(values)) values = Array.from(node.children).filter((cell) => !cell.classList.contains("mui-data-table__td--select")).map((cell) => cell.textContent.trim());
+      return { node, values: values.map(String) };
+    });
+    let page = 0, column = -1, direction = 0;
+    function render() {
+      const query = (search?.value || "").trim().toLocaleLowerCase();
+      const filtered = rows.filter((row) => row.values.some((value) => value.toLocaleLowerCase().includes(query)) || !query);
+      if (direction && column >= 0) filtered.sort((a, b) => {
+        const left = a.values[column] || "", right = b.values[column] || "";
+        const numeric = (value) => Number(value.replace(/[$€£,\s]/g, ""));
+        const l = numeric(left), r = numeric(right);
+        return direction * (left.trim() && right.trim() && Number.isFinite(l) && Number.isFinite(r) ? l - r : left.localeCompare(right));
       });
-      return rows;
-    }
-    function handleSort(colIndex) {
-      if (sortKey === colIndex) {
-        if (sortDir === "asc") {
-          sortDir = "desc";
-        } else if (sortDir === "desc") {
-          sortDir = "";
-          sortKey = -1;
-        }
-      } else {
-        sortKey = colIndex;
-        sortDir = "asc";
-      }
-      for (var i2 = 0; i2 < headers.length; i2++) {
-        headers[i2].removeAttribute("data-sort-dir");
-        var icon = headers[i2].querySelector(".mui-data-table__sort-icon");
-        if (icon) icon.innerHTML = "&#8693;";
-      }
-      if (sortDir !== "" && colIndex >= 0 && colIndex < headers.length) {
-        headers[colIndex].setAttribute("data-sort-dir", sortDir);
-        var activeIcon = headers[colIndex].querySelector(".mui-data-table__sort-icon");
-        if (activeIcon) {
-          activeIcon.innerHTML = sortDir === "asc" ? "&#9650;" : "&#9660;";
-        }
-      }
-      var query = searchInput ? searchInput.value : "";
-      applyFilter(query);
-    }
-    for (var h = 0; h < headers.length; h++) {
-      if (headers[h].getAttribute("data-sortable") === "true") {
-        (function(idx) {
-          headers[idx].addEventListener("click", function() {
-            handleSort(idx);
-          });
-        })(h);
-      }
-    }
-    if (searchInput) {
-      searchInput.addEventListener("input", function() {
-        applyFilter(searchInput.value);
+      page = Math.max(0, Math.min(page, Math.ceil(filtered.length / pageSize) - 1));
+      rows.forEach((row) => {
+        row.node.hidden = true;
+      });
+      filtered.forEach((row, index) => {
+        body.append(row.node);
+        row.node.hidden = index < page * pageSize || index >= (page + 1) * pageSize;
+      });
+      if (info) info.textContent = filtered.length ? `Showing ${page * pageSize + 1}-${Math.min((page + 1) * pageSize, filtered.length)} of ${filtered.length}` : "No results";
+      if (previous) previous.disabled = page === 0;
+      if (next) next.disabled = (page + 1) * pageSize >= filtered.length;
+      headers.forEach((header, index) => {
+        if (header.getAttribute("data-sortable") !== "true") return;
+        header.setAttribute("aria-sort", index === column && direction ? direction === 1 ? "ascending" : "descending" : "none");
+        if (index === column && direction) header.setAttribute("data-sort-dir", direction === 1 ? "asc" : "desc");
+        else header.removeAttribute("data-sort-dir");
       });
     }
-    if (prevBtn) {
-      prevBtn.addEventListener("click", function() {
-        if (currentPage > 0) {
-          currentPage--;
-          renderPage();
+    headers.forEach((header, index) => {
+      if (header.getAttribute("data-sortable") !== "true") return;
+      const sort = () => {
+        direction = column === index ? direction === 1 ? -1 : direction === -1 ? 0 : 1 : 1;
+        column = index;
+        page = 0;
+        render();
+      };
+      header.addEventListener("click", sort);
+      header.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          sort();
         }
       });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener("click", function() {
-        var total = filteredRows.length;
-        var totalPages = Math.ceil(total / pageSize);
-        if (currentPage < totalPages - 1) {
-          currentPage++;
-          renderPage();
-        }
-      });
-    }
-    renderPage();
+    });
+    search?.addEventListener("input", () => {
+      page = 0;
+      render();
+    });
+    previous?.addEventListener("click", () => {
+      page--;
+      render();
+    });
+    next?.addEventListener("click", () => {
+      page++;
+      render();
+    });
+    render();
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  ui.init();
 })();
 (function() {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
@@ -2311,55 +2233,142 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (window.MaudUI.init) window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
-  function toggleSidebar(sidebar) {
-    if (!sidebar) return;
-    var next = sidebar.getAttribute("data-state") === "expanded" ? "collapsed" : "expanded";
-    sidebar.setAttribute("data-state", next);
-  }
-  function isTypingTarget(el) {
-    if (!el) return false;
-    var tag = el.tagName;
-    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return true;
-    if (el.isContentEditable) return true;
-    return false;
-  }
-  window.MaudUI.behaviors["sidebar"] = function(el) {
-    if (el.__muiSidebarBound) return;
-    el.__muiSidebarBound = true;
-    var rail = el.querySelector('[data-mui="sidebar-rail"]');
-    if (rail) {
-      rail.addEventListener("click", function() {
-        toggleSidebar(el);
-      });
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  const groups = /* @__PURE__ */ new WeakMap();
+  const read = (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
     }
   };
-  window.MaudUI.behaviors["sidebar-trigger"] = function(el) {
-    el.addEventListener("click", function() {
-      var target_id = el.getAttribute("data-target");
-      var sidebar = target_id ? document.getElementById(target_id) : null;
-      toggleSidebar(sidebar);
-    });
+  const write = (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+    }
   };
-  window.MaudUI.behaviors["sidebar-rail"] = function(el) {
-    el.addEventListener("click", function() {
-      var sidebar = el.closest('[data-mui="sidebar"]');
-      toggleSidebar(sidebar);
+  function initGroup(group) {
+    if (groups.has(group)) return groups.get(group);
+    const key = "mui-nav-group:" + (group.getAttribute("data-nav-key") || group.id);
+    const saved = read(key);
+    const state = { desired: saved === "closed" ? false : saved === "open" ? true : group.open, forced: false };
+    if (group.querySelector('[aria-current="page"]')) state.desired = true;
+    groups.set(group, state);
+    group.open = state.desired;
+    group.addEventListener("toggle", () => {
+      if (state.forced) return;
+      state.desired = group.open;
+      write(key, group.open ? "open" : "closed");
     });
-  };
-  if (!window.__muiSidebarShortcutBound) {
-    window.__muiSidebarShortcutBound = true;
-    document.addEventListener("keydown", function(e) {
-      var isToggle = (e.metaKey || e.ctrlKey) && (e.key === "b" || e.key === "B");
-      if (!isToggle) return;
-      if (isTypingTarget(e.target)) return;
-      var sidebar = document.querySelector('[data-mui="sidebar"]');
-      if (!sidebar) return;
-      e.preventDefault();
-      toggleSidebar(sidebar);
+    return state;
+  }
+  function forceGroups(root, forced) {
+    root.querySelectorAll('[data-mui="nav-group"]').forEach((group) => {
+      const state = initGroup(group);
+      state.forced = forced;
+      group.open = forced || state.desired;
     });
   }
-  if (window.MaudUI.init) window.MaudUI.init();
+  ui.navigation = { read, write, forceGroups };
+  ui.behaviors["nav-group"] = initGroup;
+  function updateSidebar(sidebar, collapsed) {
+    const desktop = window.matchMedia("(min-width: 64rem)").matches;
+    const mode = sidebar.getAttribute("data-collapsible");
+    if (mode === "none") collapsed = false;
+    sidebar.setAttribute("data-state", collapsed ? "collapsed" : "expanded");
+    write("mui-sidebar:" + sidebar.id, collapsed ? "collapsed" : "expanded");
+    forceGroups(sidebar, desktop && mode === "icon" && collapsed);
+    document.querySelectorAll('[data-mui="sidebar-trigger"]').forEach((trigger) => {
+      if (trigger.getAttribute("data-target") === sidebar.id) {
+        trigger.setAttribute("aria-controls", sidebar.id);
+        trigger.setAttribute("aria-expanded", String(!window.matchMedia("(max-width: 59.99rem)").matches && (!collapsed || !desktop && mode === "icon")));
+      }
+    });
+  }
+  function toggle(sidebar, trigger) {
+    if (!sidebar) return;
+    const phone = window.matchMedia("(max-width: 59.99rem)").matches;
+    if (phone) {
+      const panel = document.getElementById(sidebar.id + "-drawer");
+      if (!panel || typeof panel.showModal !== "function" || panel.open) return;
+      panel.dispatchEvent(new CustomEvent("mui:navigation-open"));
+      panel.showModal();
+      if (trigger) {
+        trigger.setAttribute("aria-expanded", "true");
+        panel.addEventListener("close", () => {
+          trigger.setAttribute("aria-expanded", "false");
+          if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
+        }, { once: true });
+      }
+    } else updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
+  }
+  ui.behaviors["sidebar"] = (sidebar) => {
+    const panel = document.getElementById(sidebar.id + "-drawer");
+    const provider = sidebar.closest(".mui-sidebar-provider");
+    if (!panel || !provider || typeof panel.showModal !== "function") return;
+    const home = panel.parentNode;
+    sidebar.setAttribute("data-navigation-ready", "");
+    provider.setAttribute("data-navigation-ready", "");
+    panel.removeAttribute("open");
+    const restore = () => home.insertBefore(sidebar, panel);
+    restore();
+    sidebar.querySelectorAll(".mui-sidebar__menu-button").forEach((row) => {
+      if (!row.hasAttribute("aria-label")) row.setAttribute("aria-label", row.textContent.trim());
+      if (!row.hasAttribute("title")) row.setAttribute("title", row.getAttribute("aria-label"));
+    });
+    const saved = read("mui-sidebar:" + sidebar.id);
+    if (saved === "collapsed" || saved === "expanded") sidebar.setAttribute("data-state", saved);
+    const sync = () => {
+      const phone = window.matchMedia("(max-width: 59.99rem)").matches;
+      if (!phone && panel.open) {
+        panel.close();
+        restore();
+      }
+      updateSidebar(sidebar, sidebar.getAttribute("data-state") === "collapsed");
+    };
+    panel.addEventListener("mui:navigation-open", () => {
+      forceGroups(sidebar, false);
+      panel.append(sidebar);
+    });
+    panel.addEventListener("close", restore);
+    panel.addEventListener("click", (event) => {
+      if (event.target === panel || event.target.closest("a[href]")) panel.close();
+    });
+    const media = [window.matchMedia("(max-width: 59.99rem)"), window.matchMedia("(min-width: 64rem)")];
+    const resize = () => {
+      if (!provider.isConnected) {
+        media.forEach((m) => m.removeEventListener("change", resize));
+        return;
+      }
+      sync();
+    };
+    media.forEach((m) => m.addEventListener("change", resize));
+    sync();
+  };
+  ui.behaviors["sidebar-trigger"] = (trigger) => {
+    const sidebar = document.getElementById(trigger.getAttribute("data-target"));
+    trigger.setAttribute("aria-controls", trigger.getAttribute("data-target"));
+    trigger.setAttribute("aria-expanded", String(!!sidebar && sidebar.getAttribute("data-state") !== "collapsed" && !window.matchMedia("(max-width: 59.99rem)").matches));
+    trigger.addEventListener("click", () => toggle(sidebar, trigger));
+  };
+  ui.behaviors["sidebar-rail"] = (rail) => rail.addEventListener("click", () => toggle(rail.closest('[data-mui="sidebar"]')));
+  if (!window.__muiSidebarShortcutBound) {
+    window.__muiSidebarShortcutBound = true;
+    document.addEventListener("keydown", (event) => {
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "b" || event.defaultPrevented) return;
+      if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      const provider = event.target.closest(".mui-sidebar-provider");
+      const sidebar = provider ? provider.querySelector('[data-mui="sidebar"]') : document.querySelector('[data-mui="sidebar"]');
+      if (sidebar) {
+        event.preventDefault();
+        toggle(sidebar, document.querySelector('[data-mui="sidebar-trigger"]'));
+      }
+    });
+  }
+  ui.init();
 })();
 (function() {
   if (!window.MaudUI || !window.MaudUI.behaviors) return;
@@ -2896,9 +2905,47 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     };
     media.addEventListener("change", resize);
+    const prefs = ui.navigation;
+    const railMedia = window.matchMedia("(min-width: 64rem)");
+    const rail = shell.querySelector('[data-mui="shell-rail"]');
+    const key = "mui-shell-rail:" + shell.id;
+    const saved = prefs && prefs.read(key);
+    if (saved === "true" || saved === "false") shell.setAttribute("data-collapsed", saved);
+    function syncRail() {
+      const collapsed = !!rail && railMedia.matches && shell.getAttribute("data-collapsed") === "true";
+      if (rail) rail.setAttribute("aria-expanded", String(!collapsed));
+      if (prefs) prefs.forceGroups(sidebar, collapsed);
+    }
+    if (rail) rail.addEventListener("click", function() {
+      const next = shell.getAttribute("data-collapsed") !== "true";
+      if (next) {
+        const input = sidebar.querySelector("[data-mui-nav-search]");
+        if (input) input.value = "";
+        sidebar.querySelectorAll("li, .mui-block--shell__nav-group").forEach((row) => {
+          row.hidden = false;
+        });
+      }
+      shell.setAttribute("data-collapsed", String(next));
+      if (prefs) prefs.write(key, String(next));
+      syncRail();
+    });
+    const resizeRail = () => {
+      if (!shell.isConnected) {
+        railMedia.removeEventListener("change", resizeRail);
+        return;
+      }
+      syncRail();
+    };
+    railMedia.addEventListener("change", resizeRail);
+    dialog.addEventListener("mui:navigation-open", () => {
+      if (prefs) prefs.forceGroups(sidebar, false);
+    });
+    dialog.addEventListener("close", syncRail);
+    syncRail();
     const search = sidebar.querySelector("[data-mui-nav-search]");
     if (search) search.addEventListener("input", function() {
       const query = search.value.trim().toLocaleLowerCase();
+      if (prefs) prefs.forceGroups(sidebar, !!query);
       sidebar.querySelectorAll(".mui-block--shell__nav-group").forEach((group) => {
         const rows = Array.from(group.querySelectorAll("li"));
         rows.forEach((row) => {
@@ -2906,6 +2953,141 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         });
         group.hidden = rows.every((row) => row.hidden);
       });
+    });
+  };
+  ui.init();
+})();
+(function() {
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  ui.behaviors["workspace-search"] = (trigger) => {
+    trigger.addEventListener("click", () => trigger.closest(".mui-block--shell")?.querySelector('.mui-worklist-header input[type="search"]')?.focus());
+  };
+  ui.behaviors["page-search"] = (input) => {
+    input.setAttribute("aria-keyshortcuts", "Meta+K Control+K");
+  };
+  if (!window.__muiPageSearchBound) {
+    window.__muiPageSearchBound = true;
+    document.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
+      const scope = event.target.closest(".mui-block--shell") || document;
+      const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
+      if (target && target.getClientRects().length) {
+        event.preventDefault();
+        target.focus();
+      }
+    });
+  }
+  ui.behaviors["workspace-demo"] = (demo) => {
+    const shell = demo.closest(".mui-block--shell");
+    const search = demo.querySelector('.mui-worklist-header input[type="search"]');
+    const chips = Array.from(demo.querySelectorAll(".mui-status-chip-group__chip"));
+    const table = demo.querySelector("tbody");
+    const panel = demo.querySelector(".mui-workspace-example__record");
+    const create = demo.querySelector("[data-demo-create]");
+    const dialog = create?.closest("dialog");
+    const feedback = demo.querySelector('[role="status"]');
+    const title = demo.querySelector("[data-demo-title]");
+    const subtitle = demo.querySelector(".mui-record-header__subtitle");
+    const status = demo.querySelector("[data-demo-status]");
+    if (!shell || !search || !table || !panel || !create || !dialog) return;
+    let selectedFilter = 0;
+    let serial = 2051;
+    const filterNames = ["", "Arriving", "Checked in", "Needs review"];
+    function rows() {
+      return Array.from(table.querySelectorAll("tr"));
+    }
+    function applyFilter(announce = true) {
+      const query = search.value.trim().toLocaleLowerCase();
+      let visible = 0;
+      rows().forEach((row) => {
+        const guest = row.querySelector("[data-guest]");
+        const matches = (!selectedFilter || guest.getAttribute("data-status") === filterNames[selectedFilter]) && row.textContent.toLocaleLowerCase().includes(query);
+        row.hidden = !matches;
+        if (matches) visible++;
+      });
+      chips.forEach((chip, i) => {
+        if (i === selectedFilter) chip.setAttribute("aria-current", "page");
+        else chip.removeAttribute("aria-current");
+      });
+      demo.querySelector(".mui-workspace-example__empty").hidden = visible > 0;
+      if (announce) feedback.textContent = visible + (visible === 1 ? " reservation shown." : " reservations shown.");
+    }
+    function selectRow(row) {
+      const guest = row.querySelector("[data-guest]");
+      title.textContent = guest.getAttribute("data-guest");
+      subtitle.textContent = guest.getAttribute("data-reference") + " \xB7 " + guest.getAttribute("data-room") + " \xB7 " + row.children[3].textContent + " nights";
+      status.replaceChildren(row.children[2].firstElementChild.cloneNode(true));
+      panel.focus({ preventScroll: true });
+      panel.scrollIntoView({ block: "nearest", behavior: "auto" });
+      feedback.textContent = "Viewing " + guest.getAttribute("data-guest") + "\u2019s reservation.";
+    }
+    function updateCounts() {
+      chips.forEach((chip, i) => {
+        const count = rows().filter((row) => !i || row.querySelector("[data-guest]").getAttribute("data-status") === filterNames[i]).length;
+        chip.querySelector(".mui-status-chip-group__count").textContent = String(count);
+        chip.querySelector(".mui-sr-only").textContent = " " + count + " items";
+      });
+      demo.querySelector(".mui-worklist-header__count").textContent = rows().length + " reservations \xB7 Tuesday, 8 September";
+    }
+    search.addEventListener("input", () => applyFilter());
+    search.closest("form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      applyFilter();
+    });
+    demo.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      const link = event.target.closest("a[href]");
+      if (!link) return;
+      const href = link.getAttribute("href");
+      const filter = chips.findIndex((chip) => chip.getAttribute("href") === href);
+      if (filter >= 0) {
+        event.preventDefault();
+        selectedFilter = filter;
+        applyFilter();
+        if (!link.closest(".mui-status-chip-group")) search.focus();
+      } else if (link.hasAttribute("data-demo-view")) {
+        event.preventDefault();
+        selectRow(link.closest("tr"));
+      } else if (href === "#" + dialog.id && typeof dialog.showModal === "function") {
+        event.preventDefault();
+        dialog.showModal();
+        dialog.addEventListener("close", () => {
+          if (link.isConnected) link.focus();
+        }, { once: true });
+      }
+    });
+    create.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!create.reportValidity()) return;
+      const fields = new FormData(create);
+      const name = String(fields.get("guest") || "").trim();
+      if (!name) {
+        create.elements.guest.focus();
+        return;
+      }
+      const room = String(fields.get("room"));
+      const row = table.querySelector("tr").cloneNode(true);
+      const guest = row.querySelector("[data-guest]");
+      const reference = "RS-" + serial++;
+      row.hidden = false;
+      guest.textContent = name;
+      for (const [key, value] of Object.entries({ guest: name, reference, status: "Arriving", room })) guest.setAttribute("data-" + key, value);
+      row.querySelector(".mui-workspace-example__reference").textContent = reference;
+      row.children[1].textContent = room;
+      row.children[2].firstElementChild.textContent = "Arriving";
+      row.children[2].firstElementChild.className = "mui-badge mui-badge--info";
+      row.children[3].textContent = String(fields.get("nights"));
+      row.querySelector("[data-demo-view]").setAttribute("aria-label", "View " + name + "\u2019s reservation");
+      table.append(row);
+      selectedFilter = 0;
+      search.value = "";
+      updateCounts();
+      applyFilter(false);
+      create.reset();
+      dialog.close();
+      feedback.textContent = name + " added to this example. Changes stay on this page.";
     });
   };
   ui.init();

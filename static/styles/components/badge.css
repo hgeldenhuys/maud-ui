@@ -1,0 +1,151 @@
+/* Badge component — shadcn-quality solid-color status chips */
+
+/* Corner rides --mui-radius-sm, never a literal and never radius-full: a
+   consumer's brand decides how machined a badge reads, and some (Kapable)
+   reserve the full round for the logo mark, avatars and the concierge FAB
+   alone. Anything genuinely circular — a status dot, a spinner, a radio
+   indicator — keeps --mui-radius-full, because that is a circle and not a
+   chip. */
+.mui-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.375rem;
+  padding: 0 var(--mui-inset-cell);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+/* Default — accent solid */
+.mui-badge--default {
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+/* Secondary — muted bg, normal text */
+.mui-badge--secondary {
+  background-color: var(--mui-bg-input);
+  border-color: var(--mui-border);
+  color: var(--mui-text-muted);
+}
+
+/* Success — solid green fill; ink is a token, not a literal, so a consumer
+   whose palette puts a LIGHT green here can flip it (see --mui-*-fg). */
+.mui-badge--success {
+  background-color: var(--mui-success);
+  color: var(--mui-success-fg);
+}
+
+/* Warning — solid amber fill */
+.mui-badge--warning {
+  background-color: var(--mui-warning);
+  color: var(--mui-warning-fg);
+}
+
+/* Danger / destructive — solid red fill */
+.mui-badge--danger {
+  background-color: var(--mui-danger);
+  color: var(--mui-danger-fg);
+}
+
+/* Info — solid blue fill */
+.mui-badge--info {
+  background-color: var(--mui-info);
+  color: var(--mui-info-fg);
+}
+
+/* Accent — brand accent solid */
+.mui-badge--accent {
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+
+/* Violet — taxonomy hue */
+.mui-badge--violet {
+  background-color: var(--mui-violet);
+  color: var(--mui-violet-fg);
+}
+
+/* Rose — taxonomy hue */
+.mui-badge--rose {
+  background-color: var(--mui-rose);
+  color: var(--mui-rose-fg);
+}
+
+/* Outline — transparent bg, border, text inherits */
+.mui-badge--outline {
+  background-color: transparent;
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+/* Ghost — transparent bg, subtle hover, no border */
+.mui-badge--ghost {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--mui-text);
+}
+.mui-badge--ghost:hover {
+  background-color: var(--mui-bg-input);
+}
+
+/* Link — inline anchor style, no chrome */
+.mui-badge--link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--mui-accent);
+  padding: 0;
+  height: auto;
+  text-decoration: underline;
+}
+
+/* Inline-start icon — ensure gap between icon and label */
+.mui-badge[data-icon="inline-start"] {
+  gap: var(--mui-space-xs);
+}
+
+/* Monospace face — shas, ids, counts. Tightened tracking keeps the pill
+   from bloating, since mono glyphs are wider than the sans stack. */
+.mui-badge--mono {
+  font-family: var(--mui-font-mono);
+  letter-spacing: var(--mui-tracking-heading);
+}
+
+/* Hollow chip — the taller bordered-transparent counterpart to the solid
+   badge, sized to sit inline with 24-28px controls. Last in the file, so it
+   wins the border/height declarations over the base and variant rules above.
+   Its radius now agrees with the base rather than overriding it; the
+   declaration stays so the chip keeps its corner if the base ever moves. */
+.mui-badge--chip {
+  height: 1.625rem;                 /* 26px */
+  padding: 0 var(--mui-space-sm);
+  gap: var(--mui-inset-tight);
+  border-radius: var(--mui-radius-sm);
+  border-color: var(--mui-border);
+  background-color: transparent;
+}
+
+/* Trailing count — the `2` in `mail 2`, set slightly apart in the mono face. */
+.mui-badge__count {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  letter-spacing: var(--mui-tracking-heading);
+  color: var(--mui-text-muted);
+}
+
+/* Trailing kbd hint — the `⌘K` in a command chip, in a subtle key cap. */
+.mui-badge__kbd {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  padding: var(--mui-space-2xs) var(--mui-space-xs);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  color: var(--mui-text-muted);
+}

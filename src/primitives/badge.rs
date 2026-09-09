@@ -154,20 +154,20 @@ pub fn showcase() -> Markup {
                     (render(Props {
                         label: "Live".into(),
                         variant: Variant::Default,
-                        leading_icon: Some(html! { span style="font-size:0.625rem;line-height:1;" { "●" } }),
+                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "●" } }),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "Paused".into(),
                         variant: Variant::Secondary,
-                        leading_icon: Some(html! { span style="font-size:0.625rem;line-height:1;" { "◼" } }),
+                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "◼" } }),
                         ..Default::default()
                     }))
                     (render(Props {
                         label: "Docs".into(),
                         variant: Variant::Link,
                         href: Some("#".into()),
-                        leading_icon: Some(html! { span style="font-size:0.625rem;line-height:1;" { "→" } }),
+                        leading_icon: Some(html! { span style="font-size: var(--mui-text-caption-size);line-height: var(--mui-leading-tight);" { "→" } }),
                         ..Default::default()
                     }))
                 }
@@ -206,17 +206,17 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "In Context" }
                 // Navigation-style items with counter badges
-                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:20rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:20rem;" {
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);" { "Inbox" }
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Inbox" }
                         (render(Props { label: "3".into(), variant: Variant::Default, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);" { "Drafts" }
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Drafts" }
                         (render(Props { label: "12".into(), variant: Variant::Secondary, ..Default::default() }))
                     }
                     div style="display:flex;align-items:center;justify-content:space-between;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);" { "Errors" }
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);" { "Errors" }
                         (render(Props { label: "2".into(), variant: Variant::Danger, ..Default::default() }))
                     }
                 }
@@ -225,19 +225,19 @@ pub fn showcase() -> Markup {
             // Labels in a list
             section {
                 h2 { "Labels" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;" {
-                    div style="display:flex;align-items:center;gap:0.5rem;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);min-width:8rem;" { "Authentication API" }
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);" {
+                    div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Authentication API" }
                         (render(Props { label: "Stable".into(), variant: Variant::Success, ..Default::default() }))
                         (render(Props { label: "v2.1".into(), variant: Variant::Outline, ..Default::default() }))
                     }
-                    div style="display:flex;align-items:center;gap:0.5rem;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);min-width:8rem;" { "Streaming SDK" }
+                    div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Streaming SDK" }
                         (render(Props { label: "Beta".into(), variant: Variant::Warning, ..Default::default() }))
                         (render(Props { label: "v0.9".into(), variant: Variant::Outline, ..Default::default() }))
                     }
-                    div style="display:flex;align-items:center;gap:0.5rem;" {
-                        span style="font-size:0.875rem;color:var(--mui-text);min-width:8rem;" { "Legacy Client" }
+                    div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
+                        span style="font-size: var(--mui-text-small-size);color:var(--mui-text);min-width:8rem;" { "Legacy Client" }
                         (render(Props { label: "Deprecated".into(), variant: Variant::Danger, ..Default::default() }))
                         (render(Props { label: "v1.0".into(), variant: Variant::Outline, ..Default::default() }))
                     }

@@ -37,7 +37,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Wants attention" }
                 p.mui-showcase__caption { "Accent-12% fill, accent dot, accent text — the one thing on the row the eye should land on." }
-                div style="display:flex;gap:0.75rem;flex-wrap:wrap;" {
+                div style="display:flex;gap: var(--mui-space-md);flex-wrap:wrap;" {
                     (render(Props { label: "2 waiting on you".into(), ..Default::default() }))
                     (render(Props { label: "review requested".into(), ..Default::default() }))
                 }
@@ -45,7 +45,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Zero state — muted" }
                 p.mui-showcase__caption { "Nothing waiting: the same pill spends no accent, so it recedes instead of glowing at an empty count." }
-                div style="display:flex;gap:0.75rem;flex-wrap:wrap;" {
+                div style="display:flex;gap: var(--mui-space-md);flex-wrap:wrap;" {
                     (render(Props { label: "all caught up".into(), muted: true }))
                     (render(Props { label: "0 waiting".into(), muted: true }))
                 }

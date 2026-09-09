@@ -11,7 +11,7 @@ let columns = vec![
     data_table::Column {
         key: "name".to_string(),
         label: "Name".to_string(),
-        sortable: true,
+        sortable: true, ..Default::default()
     },
 ];
 
@@ -46,7 +46,8 @@ html! {
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>key</code></td><td><code>String</code></td><td>—</td><td>Unique column identifier</td></tr>
 <tr><td><code>label</code></td><td><code>String</code></td><td>—</td><td>Column header text</td></tr>
-<tr><td><code>sortable</code></td><td><code>bool</code></td><td>—</td><td>Whether column can be sorted (shows icon if true)</td></tr>
+<tr><td><code>sortable</code></td><td><code>bool</code></td><td>false</td><td>Whether column can be sorted (shows icon if true)</td></tr>
+<tr><td><code>align</code></td><td><code>Align</code></td><td>Left</td><td>Left, Center or Right. Applied to headers and body; rich cell align_right overrides to Right.</td></tr>
 </tbody></table>
 <h2>Helper Functions</h2>
 <h3><code>column_header(label, sortable) → Markup</code></h3>
@@ -74,3 +75,5 @@ html! {
 </ul>
 <h2>Shadcn reference</h2>
 <p><a href="https://ui.shadcn.com/docs/components/data-table">https://ui.shadcn.com/docs/components/data-table</a></p>
+<h3><code>column_header_aligned(label, sortable, Align::Right) → Markup</code></h3>
+<p>The original two-argument helper keeps left alignment; the aligned helper supports Left, Center and Right. Use Right for numeric columns. <code>Column</code> now has <code>align: Align</code> and implements Default; add <code>..Default::default()</code> when migrating existing literals. Header cells remain muted and medium weight. Sortable headers respond to Enter/Space as well as clicks and announce their sort state. Runtime sorting/pagination moves existing rows, preserving alignment, rich content, checkbox state and attached controls. Rich rows sort/filter by their visible cell text; server-side rich filtering remains an application choice.</p>

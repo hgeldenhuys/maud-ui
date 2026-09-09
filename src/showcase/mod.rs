@@ -403,9 +403,12 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
         slug: "shell-sidebar",
         category: "Application shell",
         title: "Sidebar app shell",
-        description: "Full app chrome — 16rem vertical nav with grouped items + badges + user footer, plus a sticky topbar and main content slot. Drop your whole app inside.",
+        description: "One sidebar from desktop rail to phone drawer, with persistent groups, a sticky page bar and optional masthead and footer.",
         uses: &["button", "card", "badge"],
     },
+    BlockEntry { slug: "shell-page-header", category: "Application shell", title: "Page header", description: "Sticky page context: breadcrumbs, global search, actions and switchers on one calm row.", uses: &["breadcrumb", "input", "button"] },
+    BlockEntry { slug: "shell-app-header", category: "Application shell", title: "App masthead", description: "Optional product identity, primary links and an account slot. Empty props render nothing.", uses: &["button"] },
+    BlockEntry { slug: "shell-app-footer", category: "Application shell", title: "App footer", description: "Optional links, a version line and secondary columns below your whole workspace.", uses: &["separator"] },
     BlockEntry { slug: "worklist-header", category: "Operations", title: "Worklist header", description: "Title, count sentence, inline GET search and one primary action. Stacks on phones.", uses: &["status_chip_group", "button", "input"] },
     BlockEntry { slug: "record-header", category: "Operations", title: "Record header", description: "Identity and status with a back link, one primary action, and a native secondary disclosure.", uses: &["badge", "button"] },
     BlockEntry { slug: "task-grid", category: "Operations", title: "Task launcher", description: "Three compact launch cards with one action each. One column on phones.", uses: &["button", "grid"] },
@@ -424,6 +427,9 @@ fn block_content(slug: &str) -> Option<Markup> {
         "settings-profile" => blocks::settings::profile::preview(),
         "settings-team" => blocks::settings::team::preview(),
         "shell-sidebar" => blocks::shell::sidebar::preview(),
+        "shell-page-header" => blocks::shell::page_header::preview(),
+        "shell-app-header" => blocks::shell::app_header::preview(),
+        "shell-app-footer" => blocks::shell::app_footer::preview(),
         "worklist-header" => blocks::worklist::header::preview(),
         "record-header" => blocks::record::header::preview(),
         "task-grid" => blocks::task::grid::preview(),
@@ -497,6 +503,7 @@ sidebar::render(sidebar::Props {
                     href: "/dashboard".into(),
                     icon: None,
                     badge: None,
+                    children: vec![],
                 },
                 sidebar::NavItem {
                     label: "Inbox".into(),
@@ -601,7 +608,7 @@ pub fn blocks_index_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="blocks" {
                             h1 class="mui-gallery__component-name" { "Blocks" }
-                            p style="color:var(--mui-text-muted);font-size:0.9375rem;max-width:42rem;margin:0 0 1.5rem;" {
+                            p style="color:var(--mui-text-muted);font-size: var(--mui-text-body-size);max-width:42rem;margin: 0 0 var(--mui-space-xl);" {
                                 "Pre-composed templates built from primitives. Drop into real apps — customize by reading the source and paste-editing into your own module. Each block renders to plain HTML; no framework needed on the client side."
                             }
                             (blocks_index_grid())
@@ -665,7 +672,7 @@ pub fn block_page_by_name(slug: &str) -> Markup {
                 head { (page_head("Block not found \u{2014} maud-ui")) }
                 body {
                     (page_header())
-                    main class="mui-gallery__main" style="padding:4rem 2rem;" {
+                    main class="mui-gallery__main" style="padding: var(--mui-space-4xl) var(--mui-space-xxl);" {
                         h2 { "Block not found: " (slug) }
                         p { a href="/blocks" { "\u{2190} Back to Blocks" } }
                     }
@@ -795,6 +802,7 @@ fn page_head(title: &str) -> Markup {
         meta name="twitter:card" content="summary_large_image";
         meta name="twitter:image" content=(format!("{SITE_ORIGIN}/og.png"));
 
+        script { (maud::PreEscaped(r#"try { const theme = localStorage.getItem('mui-theme'); if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme; const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}"#)) }
         link rel="stylesheet" href=(format!("/css/maud-ui.css?v={}", CSS_VER));
         style { (maud::PreEscaped(showcase_css())) }
     }
@@ -1020,20 +1028,19 @@ fn page_header() -> Markup {
         // Command palette — hidden until cmd+k or the header chip is
         // clicked. Results are built client-side from the inlined
         // index below; the selected item's href drives navigation.
-        div class="mui-palette" id="mui-palette" role="dialog" aria-modal="true"
-            aria-label="Command palette" aria-hidden="true" {
-            div class="mui-palette__scrim" id="mui-palette-scrim" {}
-            div class="mui-palette__panel" role="combobox" aria-expanded="true" aria-haspopup="listbox" {
+        dialog class="mui-palette" id="mui-palette" aria-label="Command palette" {
+            div class="mui-palette__panel" {
                 div class="mui-palette__search" {
                     span class="mui-palette__icon" aria-hidden="true" {
                         (maud::PreEscaped(r##"<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>"##.to_string()))
                     }
                     input type="search" id="mui-palette-input"
                           class="mui-palette__input"
-                          placeholder="Jump to anything\u{2026} components, blocks, integrations, presets"
-                          aria-label="Search" aria-controls="mui-palette-list"
+                          placeholder="Search components, blocks and guides…"
+                          aria-label="Search destinations" aria-controls="mui-palette-list"
+                          role="combobox" aria-expanded="false" aria-autocomplete="list"
                           spellcheck="false" autocomplete="off";
-                    span class="mui-palette__hint" aria-hidden="true" { "Esc" }
+                    button class="mui-palette__hint" id="mui-palette-close" type="button" aria-label="Close command palette" { "Esc" }
                 }
                 ul class="mui-palette__list" id="mui-palette-list" role="listbox" {}
                 div class="mui-palette__footer" {
@@ -1052,11 +1059,11 @@ fn sidebar_nav() -> Markup {
         aside class="mui-gallery__sidebar" id="mui-gallery-navigation" aria-label="Gallery navigation" {
             nav class="mui-gallery__nav" aria-label="Components" {
                 @for tier in TIERS {
-                    div class="mui-gallery__nav-group" {
+                    details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key=(format!("gallery:{}", tier.slug)) {
                         // Tier header → `/#slug` so it always navigates to the
                         // index gallery first and then scrolls to the tier
                         // section, no matter which page the user is on.
-                        a class="mui-gallery__nav-tier" href=(format!("/gallery#{}", tier.slug)) {
+                        summary class="mui-gallery__nav-tier" {
                             (tier.title)
                         }
                         div class="mui-gallery__nav-items" {
@@ -1161,14 +1168,14 @@ pub fn theme_customizer_page() -> Markup {
 
                         section class="mui-gallery__component mui-theme__intro" id="theme" {
                             h1 class="mui-gallery__component-name" { "Theme customiser" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-lg);line-height: var(--mui-leading-body);" {
                                 "Tweak the "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "--mui-*" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "--mui-*" }
                                 " tokens on the left and watch the preview on the right re-render instantly. "
                                 "Changes are saved to "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "localStorage" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "localStorage" }
                                 " so they survive reloads. Export a "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { ":root" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { ":root" }
                                 " block when you're happy, paste into your app."
                             }
                         }
@@ -1219,6 +1226,47 @@ pub fn theme_customizer_page() -> Markup {
                                     ("mui-border-control", "Control border", "color"),
                                     ("mui-danger",        "Danger",        "color"),
                                 ]))
+                                (theme_token_group("Design defaults", &[
+                                    ("mui-text-secondary", "Secondary text", "color"),
+                                    ("mui-accent-soft", "Active surface", "color"),
+                                    ("mui-info-bg", "Info bg", "color"),
+                                    ("mui-info-border", "Info border", "color"),
+                                    ("mui-success-bg", "Success bg", "color"),
+                                    ("mui-success-border", "Success border", "color"),
+                                    ("mui-success-text", "Success text", "color"),
+                                    ("mui-warning-bg", "Warning bg", "color"),
+                                    ("mui-warning-border", "Warning border", "color"),
+                                    ("mui-warning-text", "Warning text", "color"),
+                                    ("mui-danger-bg", "Danger bg", "color"),
+                                    ("mui-danger-border", "Danger border", "color"),
+                                    ("mui-violet-bg", "Violet bg", "color"),
+                                    ("mui-violet-border", "Violet border", "color"),
+                                    ("mui-violet-text", "Violet text", "color"),
+                                    ("mui-rose-bg", "Rose bg", "color"),
+                                    ("mui-rose-border", "Rose border", "color"),
+                                    ("mui-rose-text", "Rose text", "color"),
+                                    ("mui-text-display-size", "Display size", "length"),
+                                    ("mui-text-display-leading", "Display leading", "text"),
+                                    ("mui-text-display-tracking", "Display tracking", "length"),
+                                    ("mui-text-h1-size", "H1 size", "length"),
+                                    ("mui-text-h1-leading", "H1 leading", "text"),
+                                    ("mui-text-h1-tracking", "H1 tracking", "length"),
+                                    ("mui-text-h2-size", "H2 size", "length"),
+                                    ("mui-text-h2-leading", "H2 leading", "text"),
+                                    ("mui-text-h2-tracking", "H2 tracking", "length"),
+                                    ("mui-text-h3-size", "H3 size", "length"),
+                                    ("mui-text-h3-leading", "H3 leading", "text"),
+                                    ("mui-text-h3-tracking", "H3 tracking", "length"),
+                                    ("mui-text-body-size", "Body size", "length"),
+                                    ("mui-text-body-leading", "Body leading", "text"),
+                                    ("mui-text-body-tracking", "Body tracking", "length"),
+                                    ("mui-text-small-size", "Small size", "length"),
+                                    ("mui-text-small-leading", "Small leading", "text"),
+                                    ("mui-text-small-tracking", "Small tracking", "length"),
+                                    ("mui-text-caption-size", "Caption size", "length"),
+                                    ("mui-text-caption-leading", "Caption leading", "text"),
+                                    ("mui-text-caption-tracking", "Caption tracking", "length"),
+                                ]))
                                 (theme_token_group("Radii", &[
                                     ("mui-radius-sm", "Small",  "length"),
                                     ("mui-radius-md", "Medium", "length"),
@@ -1263,7 +1311,7 @@ pub fn theme_customizer_page() -> Markup {
 
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Buttons" }
-                                    div style="display:flex;flex-wrap:wrap;gap:0.5rem;" {
+                                    div style="display:flex;flex-wrap:wrap;gap: var(--mui-space-sm);" {
                                         (button::render(button::Props { label: "Primary".into(),   variant: button::Variant::Primary,   ..Default::default() }))
                                         (button::render(button::Props { label: "Secondary".into(), variant: button::Variant::Secondary, ..Default::default() }))
                                         (button::render(button::Props { label: "Outline".into(),   variant: button::Variant::Outline,   ..Default::default() }))
@@ -1274,7 +1322,7 @@ pub fn theme_customizer_page() -> Markup {
 
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Form controls" }
-                                    div style="display:grid;grid-template-columns:1fr 1fr;gap:0.875rem;max-width:36rem;" {
+                                    div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--mui-inset-control);max-width:36rem;" {
                                         (field::render(field::Props {
                                             id: "tp-email".into(), label: "Email".into(),
                                             description: Some("We never share this.".into()),
@@ -1292,12 +1340,12 @@ pub fn theme_customizer_page() -> Markup {
 
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Card + badges + alert" }
-                                    div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;" {
+                                    div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--mui-space-lg);" {
                                         (card::render(card::Props {
                                             title: Some("Deployment status".into()),
                                             description: None,
                                             children: html! {
-                                                div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted);" {
+                                                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                                                     div style="display:flex;justify-content:space-between;" { span { "Build" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
                                                     div style="display:flex;justify-content:space-between;" { span { "Tests" }        (badge::render(badge::Props { label: "green".into(),  variant: badge::Variant::Success, ..Default::default() })) }
                                                     div style="display:flex;justify-content:space-between;" { span { "Deploy queue" } (badge::render(badge::Props { label: "busy".into(),   variant: badge::Variant::Warning, ..Default::default() })) }
@@ -1319,9 +1367,9 @@ pub fn theme_customizer_page() -> Markup {
 
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Export" }
-                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0 0 0.75rem;" {
+                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-md);" {
                                         "Paste this "
-                                        code style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { ":root" }
+                                        code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { ":root" }
                                         " block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block."
                                     }
                                     div class="mui-theme__export" {
@@ -1401,7 +1449,7 @@ fn theme_customizer_css() -> &'static str {
        its content, so the preview column pushed the page ~10px wide on desktop.
        Same fix, and same reason, as `.mui-grid` in css/components/grid.css. */
     grid-template-columns: minmax(20rem, 22rem) minmax(0, 1fr);
-    gap: 1.25rem;
+    gap: var(--mui-space-20);
     align-items: start;
     margin-top: 1rem;
 }
@@ -1418,10 +1466,10 @@ fn theme_customizer_css() -> &'static str {
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
     background: var(--mui-bg-card);
-    padding: 0.5rem 0.75rem;
+    padding: var(--mui-space-sm) var(--mui-space-md);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     scrollbar-width: thin;
     scrollbar-color: var(--mui-border) transparent;
 }
@@ -1438,7 +1486,7 @@ fn theme_customizer_css() -> &'static str {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.125rem;
+    padding: var(--mui-space-sm) var(--mui-space-2xs);
     cursor: pointer;
     user-select: none;
 }
@@ -1446,35 +1494,35 @@ fn theme_customizer_css() -> &'static str {
 
 .mui-theme__group-title {
     margin: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-muted);
 }
 .mui-theme__group-caret {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-subtle);
-    transition: transform 150ms ease;
+    transition: transform var(--mui-motion-fast) ease;
 }
 
 .mui-theme__group-body {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.25rem 0.125rem 0.5rem;
+    gap: var(--mui-space-sm);
+    padding: var(--mui-space-xs) var(--mui-space-2xs) var(--mui-space-sm);
 }
 
 .mui-theme__row {
     display: grid;
     grid-template-columns: 5.5rem 1fr;
     grid-template-rows: auto auto;
-    column-gap: 0.5rem;
-    row-gap: 0.125rem;
+    column-gap: var(--mui-space-sm);
+    row-gap: var(--mui-space-2xs);
     align-items: center;
 }
 .mui-theme__row-label {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text);
     grid-column: 1;
     grid-row: 1;
@@ -1483,7 +1531,7 @@ fn theme_customizer_css() -> &'static str {
     grid-column: 2;
     grid-row: 1;
     display: inline-flex;
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
     align-items: center;
     min-width: 0;
 }
@@ -1491,7 +1539,7 @@ fn theme_customizer_css() -> &'static str {
     grid-column: 2;
     grid-row: 2;
     font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-subtle);
 }
 
@@ -1513,8 +1561,8 @@ fn theme_customizer_css() -> &'static str {
     flex: 1;
     min-width: 0;
     height: 1.75rem;
-    padding: 0 0.5rem;
-    font-size: 0.75rem;
+    padding: 0 var(--mui-space-sm);
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text);
     background: var(--mui-bg);
@@ -1531,36 +1579,36 @@ fn theme_customizer_css() -> &'static str {
 .mui-theme__presets {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.25rem;
-    padding: 0.25rem 0.125rem;
+    gap: var(--mui-space-xs);
+    padding: var(--mui-space-xs) var(--mui-space-2xs);
 }
 .mui-theme__presets .mui-btn { justify-content: center; }
 .mui-theme__preset-actions {
     display: flex;
     justify-content: flex-end;
-    padding: 0.25rem 0.125rem 0;
+    padding: var(--mui-space-xs) var(--mui-space-2xs) 0;
 }
 
 /* ── Preview column ─────────────────────────────────────────────── */
 .mui-theme__preview {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--mui-space-20);
 }
 
 .mui-theme__preview-section {
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
     background: var(--mui-bg-card);
-    padding: 1rem;
+    padding: var(--mui-space-lg);
 }
 
 .mui-theme__section-title {
-    margin: 0 0 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    margin: 0 0 var(--mui-space-md);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-muted);
 }
 
@@ -1568,13 +1616,13 @@ fn theme_customizer_css() -> &'static str {
 .mui-theme__export {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
 }
 .mui-theme__export-pre {
     margin: 0;
-    padding: 0.75rem 0.875rem;
+    padding: var(--mui-space-md) var(--mui-inset-control);
     font-family: var(--mui-font-mono);
-    font-size: 0.8125rem;
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text);
     background: var(--mui-bg);
     border: 1px solid var(--mui-border);
@@ -1586,7 +1634,7 @@ fn theme_customizer_css() -> &'static str {
 }
 .mui-theme__export-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     justify-content: flex-end;
 }
 "#
@@ -1628,6 +1676,45 @@ fn theme_customizer_js() -> &'static str {
     { name: 'mui-space-md',   kind: 'length' },
     { name: 'mui-space-lg',   kind: 'length' },
     { name: 'mui-space-xxl',  kind: 'length' },
+    { name: 'mui-text-secondary', kind: 'color' },
+    { name: 'mui-accent-soft', kind: 'color' },
+    { name: 'mui-info-bg', kind: 'color' },
+    { name: 'mui-info-border', kind: 'color' },
+    { name: 'mui-success-bg', kind: 'color' },
+    { name: 'mui-success-border', kind: 'color' },
+    { name: 'mui-success-text', kind: 'color' },
+    { name: 'mui-warning-bg', kind: 'color' },
+    { name: 'mui-warning-border', kind: 'color' },
+    { name: 'mui-warning-text', kind: 'color' },
+    { name: 'mui-danger-bg', kind: 'color' },
+    { name: 'mui-danger-border', kind: 'color' },
+    { name: 'mui-violet-bg', kind: 'color' },
+    { name: 'mui-violet-border', kind: 'color' },
+    { name: 'mui-violet-text', kind: 'color' },
+    { name: 'mui-rose-bg', kind: 'color' },
+    { name: 'mui-rose-border', kind: 'color' },
+    { name: 'mui-rose-text', kind: 'color' },
+    { name: 'mui-text-display-size', kind: 'length' },
+    { name: 'mui-text-display-leading', kind: 'text' },
+    { name: 'mui-text-display-tracking', kind: 'length' },
+    { name: 'mui-text-h1-size', kind: 'length' },
+    { name: 'mui-text-h1-leading', kind: 'text' },
+    { name: 'mui-text-h1-tracking', kind: 'length' },
+    { name: 'mui-text-h2-size', kind: 'length' },
+    { name: 'mui-text-h2-leading', kind: 'text' },
+    { name: 'mui-text-h2-tracking', kind: 'length' },
+    { name: 'mui-text-h3-size', kind: 'length' },
+    { name: 'mui-text-h3-leading', kind: 'text' },
+    { name: 'mui-text-h3-tracking', kind: 'length' },
+    { name: 'mui-text-body-size', kind: 'length' },
+    { name: 'mui-text-body-leading', kind: 'text' },
+    { name: 'mui-text-body-tracking', kind: 'length' },
+    { name: 'mui-text-small-size', kind: 'length' },
+    { name: 'mui-text-small-leading', kind: 'text' },
+    { name: 'mui-text-small-tracking', kind: 'length' },
+    { name: 'mui-text-caption-size', kind: 'length' },
+    { name: 'mui-text-caption-leading', kind: 'text' },
+    { name: 'mui-text-caption-tracking', kind: 'length' },
   ];
 
   // Tailwind-family presets. Each preset maps a subset of tokens. Tokens
@@ -1639,42 +1726,47 @@ fn theme_customizer_js() -> &'static str {
       _base: 'dark',
       'mui-bg': '#020617', 'mui-bg-card': '#0f172a', 'mui-bg-input': '#1e293b',
       'mui-text': '#f1f5f9', 'mui-text-muted': '#94a3b8', 'mui-text-subtle': '#94a3b8',
-      'mui-border': '#1e293b', 'mui-border-hover': '#334155', 'mui-border-focus': '#60a5fa',
+      'mui-border': '#1e293b', 'mui-border-hover': '#1e293b', 'mui-border-focus': '#60a5fa',
       'mui-border-control': '#94a3b8', 'mui-accent': '#2563eb', 'mui-accent-hover': '#1d4ed8',
       'mui-accent-text': '#93c5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
+      'mui-accent-soft': '#172c4a',
     },
     'zinc-violet': {
       _base: 'dark',
       'mui-bg': '#09090b', 'mui-bg-card': '#18181b', 'mui-bg-input': '#27272a',
       'mui-text': '#fafafa', 'mui-text-muted': '#a1a1aa', 'mui-text-subtle': '#a1a1aa',
-      'mui-border': '#27272a', 'mui-border-hover': '#3f3f46', 'mui-border-focus': '#c4b5fd',
+      'mui-border': '#27272a', 'mui-border-hover': '#27272a', 'mui-border-focus': '#c4b5fd',
       'mui-border-control': '#a1a1aa', 'mui-accent': '#7c3aed', 'mui-accent-hover': '#6d28d9',
       'mui-accent-text': '#c4b5fd', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
+      'mui-accent-soft': '#302543',
     },
     'stone-amber': {
       _base: 'dark',
       'mui-bg': '#0c0a09', 'mui-bg-card': '#1c1917', 'mui-bg-input': '#292524',
       'mui-text': '#fafaf9', 'mui-text-muted': '#a8a29e', 'mui-text-subtle': '#a8a29e',
-      'mui-border': '#292524', 'mui-border-hover': '#44403c', 'mui-border-focus': '#fbbf24',
+      'mui-border': '#292524', 'mui-border-hover': '#292524', 'mui-border-focus': '#fbbf24',
       'mui-border-control': '#a8a29e', 'mui-accent': '#fbbf24', 'mui-accent-hover': '#f59e0b',
       'mui-accent-text': '#fbbf24', 'mui-accent-fg': '#1c1917', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
+      'mui-accent-soft': '#332b1d',
     },
     emerald: {
       _base: 'dark',
       'mui-bg': '#022c22', 'mui-bg-card': '#03382b', 'mui-bg-input': '#064e3b',
       'mui-text': '#ecfdf5', 'mui-text-muted': '#6ee7b7', 'mui-text-subtle': '#6ee7b7',
-      'mui-border': '#065f46', 'mui-border-hover': '#047857', 'mui-border-focus': '#6ee7b7',
+      'mui-border': '#065f46', 'mui-border-hover': '#065f46', 'mui-border-focus': '#6ee7b7',
       'mui-border-control': '#6ee7b7', 'mui-accent': '#34d399', 'mui-accent-hover': '#10b981',
       'mui-accent-text': '#6ee7b7', 'mui-accent-fg': '#022c22', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
       'mui-danger-text': '#fca5a5', 'mui-info-text': '#93c5fd',
+      'mui-accent-soft': '#084535',
     },
     rose: {
       _base: 'dark',
       'mui-bg': '#1f0a17', 'mui-bg-card': '#3a0d27', 'mui-bg-input': '#4c1032',
       'mui-text': '#fff1f2', 'mui-text-muted': '#fda4af', 'mui-text-subtle': '#fda4af',
-      'mui-border': '#4c1032', 'mui-border-hover': '#7a1d49', 'mui-border-focus': '#fda4af',
+      'mui-border': '#4c1032', 'mui-border-hover': '#4c1032', 'mui-border-focus': '#fda4af',
       'mui-border-control': '#fda4af', 'mui-accent': '#be123c', 'mui-accent-hover': '#9f1239',
       'mui-accent-text': '#fda4af', 'mui-accent-fg': '#ffffff', 'mui-danger': '#dc2626', 'mui-danger-fg': '#ffffff',
+      'mui-accent-soft': '#4c1733',
     },
     'high-contrast': {
       _base: 'dark',
@@ -1683,6 +1775,7 @@ fn theme_customizer_js() -> &'static str {
       'mui-border': '#ffffff', 'mui-border-hover': '#ffffff', 'mui-border-focus': '#ffd700',
       'mui-border-control': '#ffffff', 'mui-accent': '#ffd700', 'mui-accent-hover': '#e5bd00',
       'mui-accent-text': '#ffd700', 'mui-accent-fg': '#000000', 'mui-danger': '#b91c1c', 'mui-danger-fg': '#ffffff',
+      'mui-accent-soft': '#34300a',
     },
   };
 
@@ -1863,14 +1956,14 @@ pub fn getting_started_page() -> Markup {
 
                         section class="mui-gallery__component" id="hero" {
                             h3 class="mui-gallery__component-name" { "Welcome to maud-ui" }
-                            p style="font-size:1rem;line-height:1.6;color:var(--mui-text-muted);max-width:42rem;" {
+                            p style="font-size: var(--mui-text-body-size);line-height: var(--mui-leading-body);color:var(--mui-text-muted);max-width:42rem;" {
                                 // Derived, not typed: this claim drifted to a stale
                                 // "64" while the header count next to it was already
                                 // computed. One source of truth for both.
                                 (format!("{} headless, accessible components for Rust web apps.", COMPONENT_NAMES.len()))
                                 " Drop them into any axum/actix/rocket handler — they render to HTML, ship with pre-built CSS and JS, and work without a JavaScript framework."
                             }
-                            div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;" {
+                            div style="display:flex;gap: var(--mui-space-sm);flex-wrap:wrap;margin-top:0.75rem;" {
                                 (badge::render(badge::Props { label: format!("{} components", COMPONENT_NAMES.len()), variant: badge::Variant::Default, ..Default::default() }))
                                 (badge::render(badge::Props { label: "MIT".into(), variant: badge::Variant::Secondary, ..Default::default() }))
                                 (badge::render(badge::Props { label: "Prebuilt assets".into(), variant: badge::Variant::Success, ..Default::default() }))
@@ -1913,7 +2006,7 @@ cargo add axum tokio --features tokio/full
                                 }
                                 div {
                                     p.mui-showcase__caption { "You get:" }
-                                    div style="padding:1rem;background:var(--mui-bg-input);border-radius:var(--mui-radius-md);border:1px solid var(--mui-border);" {
+                                    div style="padding: var(--mui-space-lg);background:var(--mui-bg-input);border-radius: var(--mui-radius-md);border:1px solid var(--mui-border);" {
                                         (button::render(button::Props {
                                             label: "Invite teammate".into(),
                                             variant: button::Variant::Primary,
@@ -1928,7 +2021,7 @@ cargo add axum tokio --features tokio/full
                         section class="mui-gallery__component" id="forms" {
                             h3 class="mui-gallery__component-name" { "4. Forms + validation" }
                             p.mui-showcase__caption { "Field wraps label + input + error message with ARIA wiring handled for you." }
-                            div style="max-width:28rem;padding:1.25rem;background:var(--mui-bg-input);border-radius:var(--mui-radius-md);border:1px solid var(--mui-border);margin-bottom:1rem;" {
+                            div style="max-width:28rem;padding: var(--mui-space-20);background:var(--mui-bg-input);border-radius: var(--mui-radius-md);border:1px solid var(--mui-border);margin-bottom:1rem;" {
                                 (field::render(field::Props {
                                     label: "Work email".into(),
                                     id: "gs-email".into(),
@@ -1967,7 +2060,7 @@ cargo add axum tokio --features tokio/full
                         section class="mui-gallery__component" id="theming" {
                             h3 class="mui-gallery__component-name" { "5. Theming" }
                             p.mui-showcase__caption { "Set data-theme on <html> and every component recolors via CSS variables." }
-                            div style="display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;" {
+                            div style="display:flex;gap: var(--mui-space-lg);align-items:center;margin-bottom:1rem;flex-wrap:wrap;" {
                                 (button::render(button::Props {
                                     label: "Try the theme toggle".into(),
                                     variant: button::Variant::Outline,
@@ -1975,7 +2068,7 @@ cargo add axum tokio --features tokio/full
                                     aria_label: Some("Toggle theme demo".into()),
                                     ..Default::default()
                                 }))
-                                span.mui-text-muted style="font-size:0.875rem;" {
+                                span.mui-text-muted style="font-size: var(--mui-text-small-size);" {
                                     "Use the toggle at the top-right, or add "
                                     (kbd::render(kbd::Props { keys: vec!["button".into(), "data-mui=\"theme-toggle\"".into()] }))
                                     " anywhere in your app."
@@ -2053,7 +2146,7 @@ let app = Router::new()
 
                         section class="mui-gallery__component" id="next-steps" {
                             h3 class="mui-gallery__component-name" { "Where to next" }
-                            div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem;" {
+                            div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap: var(--mui-space-lg);" {
                                 (card::render(card::Props {
                                     title: Some("Browse the gallery".into()),
                                     description: Some("Every component with code snippets.".into()),
@@ -2153,9 +2246,9 @@ pub fn routes() -> Router {
 
                         section class="mui-gallery__component" id="integration-monaco" {
                             h3 class="mui-gallery__component-name" { "Monaco editor \u{2014} Integration" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "The editor behind VS Code, embedded inside a maud-ui shell. File header, toolbar, language dropdown, and status bar are all plain maud-ui primitives wrapping the Monaco instance. The editor theme auto-syncs with "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "<html data-theme>" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "<html data-theme>" }
                                 " so toggling the gallery theme flips Monaco too."
                             }
 
@@ -2317,8 +2410,8 @@ fn integration_shell_css() -> &'static str {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0.5rem 0.75rem;
+    gap: var(--mui-space-lg);
+    padding: var(--mui-space-sm) var(--mui-space-md);
     border-bottom: 1px solid var(--mui-border);
     background: var(--mui-bg);
     min-height: 2.75rem;
@@ -2328,10 +2421,10 @@ fn integration_shell_css() -> &'static str {
 .mui-integration__filepath {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     color: var(--mui-text);
     font-family: var(--mui-font-mono);
-    font-size: 0.8125rem;
+    font-size: var(--mui-text-small-size);
 }
 
 .mui-integration__filepath-icon {
@@ -2341,7 +2434,7 @@ fn integration_shell_css() -> &'static str {
 
 .mui-integration__dirty {
     color: var(--mui-text-subtle);
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     transition: color var(--mui-transition);
 }
 
@@ -2352,13 +2445,13 @@ fn integration_shell_css() -> &'static str {
 .mui-integration__toolbar {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
 }
 
 .mui-integration__select {
     height: 2rem;
-    padding: 0 2rem 0 0.75rem;
-    font-size: 0.8125rem;
+    padding: 0 var(--mui-space-xxl) 0 var(--mui-space-md);
+    font-size: var(--mui-text-small-size);
     background: var(--mui-bg-card);
     color: var(--mui-text);
     border: 1px solid var(--mui-border);
@@ -2397,9 +2490,9 @@ fn integration_shell_css() -> &'static str {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     color: var(--mui-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
     z-index: 1;
 }
 
@@ -2407,24 +2500,24 @@ fn integration_shell_css() -> &'static str {
 .mui-integration__editor[data-ready="true"] .mui-integration__loading {
     opacity: 0;
     pointer-events: none;
-    transition: opacity 200ms;
+    transition: opacity var(--mui-motion-fast);
 }
 
 .mui-integration__statusbar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
+    gap: var(--mui-space-sm);
+    padding: var(--mui-inset-tight) var(--mui-space-md);
     border-top: 1px solid var(--mui-border);
     background: var(--mui-bg);
     font-family: var(--mui-font-mono);
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
 }
 
 .mui-integration__statusbar-sep {
     color: var(--mui-text-subtle);
-    font-size: 0.625rem;
+    font-size: var(--mui-text-caption-size);
 }
 
 .mui-integration__statusbar-spacer {
@@ -2433,7 +2526,7 @@ fn integration_shell_css() -> &'static str {
 
 .mui-integration__statusbar-theme {
     color: var(--mui-accent-text);
-    font-weight: 500;
+    font-weight: var(--mui-weight-medium);
 }
 
 /* Output panel */
@@ -2449,26 +2542,26 @@ fn integration_shell_css() -> &'static str {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.75rem;
+    padding: var(--mui-space-sm) var(--mui-space-md);
     border-bottom: 1px solid var(--mui-border);
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 600;
+    letter-spacing: var(--mui-tracking-label);
+    font-weight: var(--mui-weight-heading);
     color: var(--mui-text-muted);
     background: var(--mui-bg);
 }
 
 .mui-integration__output-body {
     margin: 0;
-    padding: 0.875rem 0.75rem;
+    padding: var(--mui-inset-control) var(--mui-space-md);
     font-family: var(--mui-font-mono);
-    font-size: 0.8125rem;
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text);
     white-space: pre-wrap;
     max-height: 12rem;
     overflow-y: auto;
-    line-height: 1.5;
+    line-height: var(--mui-leading-small);
 }
 "#
 }
@@ -2687,14 +2780,14 @@ pub fn integrations_xyflow_page() -> Markup {
 
                         section class="mui-gallery__component" id="integration-xyflow" {
                             h3 class="mui-gallery__component-name" { "xyflow \u{2014} Node editor" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A React Flow / xyflow graph editor embedded in a maud-ui shell. "
                                 "Nodes are draggable, edges are connectable, the minimap and controls "
                                 "are wired, and the React Flow colour mode flips automatically with "
                                 "the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
                                 " attribute. Loaded from "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "esm.sh" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "esm.sh" }
                                 " at runtime \u{2014} no bundler."
                             }
 
@@ -2847,9 +2940,9 @@ fn xyflow_css() -> &'static str {
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
     font-family: var(--mui-font-sans);
-    font-size: 0.8125rem;
-    padding: 0.5rem 0.875rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: var(--mui-text-small-size);
+    padding: var(--mui-space-sm) var(--mui-inset-control);
+    box-shadow: var(--mui-shadow-sm);
     transition: border-color var(--mui-transition),
                 box-shadow var(--mui-transition);
 }
@@ -2912,7 +3005,7 @@ fn xyflow_css() -> &'static str {
 .mui-integration--xyflow .react-flow__attribution {
     background: transparent;
     color: var(--mui-text-subtle);
-    font-size: 0.625rem;
+    font-size: var(--mui-text-caption-size);
     opacity: 0.6;
 }
 .mui-integration--xyflow .react-flow__attribution a { color: var(--mui-text-subtle); }
@@ -3175,13 +3268,13 @@ pub fn integrations_excalidraw_page() -> Markup {
 
                         section class="mui-gallery__component" id="integration-excalidraw" {
                             h3 class="mui-gallery__component-name" { "Excalidraw \u{2014} Whiteboard" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "An Excalidraw canvas embedded inside a maud-ui shell. The maud-ui "
                                 "toolbar wraps Excalidraw's imperative API \u{2014} the "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "excalidrawAPI" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "excalidrawAPI" }
                                 " ref drives export, reset, and shape-insertion. Canvas theme follows "
                                 "the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
                                 " attribute."
                             }
 
@@ -3593,12 +3686,12 @@ pub fn integrations_xterm_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-xterm" {
                             h3 class="mui-gallery__component-name" { "xterm.js \u{2014} Terminal emulator" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A full-fidelity terminal inside a maud-ui shell. Type commands, "
                                 "resize with the "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "FitAddon" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "FitAddon" }
                                 ", and watch the background track the gallery's "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "data-theme" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "data-theme" }
                                 ". Pair with a WebSocket for a live shell or agent transcript viewer."
                             }
                             div class="mui-integration mui-integration--xterm" {
@@ -3658,7 +3751,7 @@ pub fn integrations_xterm_page() -> Markup {
 fn xterm_css() -> &'static str {
     r#"
 .mui-integration--xterm .mui-integration__editor {
-    padding: 0.5rem;
+    padding: var(--mui-space-sm);
     background: var(--mui-bg);
 }
 .mui-integration--xterm .xterm,
@@ -3834,7 +3927,7 @@ pub fn integrations_fullcalendar_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-fullcalendar" {
                             h3 class="mui-gallery__component-name" { "FullCalendar \u{2014} Scheduling" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A FullCalendar 6 calendar inside a maud-ui shell \u{2014} month / week / day "
                                 "views, drag-to-move events, click-to-create. The maud-ui toolbar proxies "
                                 "FullCalendar's imperative API so navigation and view switches flow through "
@@ -3897,7 +3990,7 @@ fn fullcalendar_css() -> &'static str {
     r#"
 .mui-integration--fullcalendar .mui-integration__editor {
     height: 32rem;
-    padding: 0.75rem;
+    padding: var(--mui-space-md);
     overflow: auto;
 }
 @media (min-width: 64rem) {
@@ -3907,22 +4000,22 @@ fn fullcalendar_css() -> &'static str {
     --fc-border-color: var(--mui-border);
     --fc-page-bg-color: var(--mui-bg-card);
     --fc-neutral-bg-color: var(--mui-bg);
-    --fc-today-bg-color: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+    --fc-today-bg-color: var(--mui-accent-soft);
     --fc-event-bg-color: var(--mui-accent);
     --fc-event-border-color: var(--mui-accent);
-    --fc-event-text-color: #fff;
+    --fc-event-text-color: var(--mui-accent-fg);
     --fc-list-event-hover-bg-color: var(--mui-bg);
     color: var(--mui-text);
     font-family: var(--mui-font-sans);
 }
-.mui-integration--fullcalendar .fc-toolbar-title { color: var(--mui-text); font-size: 1rem !important; }
+.mui-integration--fullcalendar .fc-toolbar-title { color: var(--mui-text); font-size: var(--mui-text-body-size) !important; }
 .mui-integration--fullcalendar .fc-col-header-cell-cushion,
 .mui-integration--fullcalendar .fc-daygrid-day-number,
 .mui-integration--fullcalendar .fc-timegrid-slot-label-cushion {
     color: var(--mui-text-muted);
     text-decoration: none;
 }
-.mui-integration--fullcalendar .fc-day-today .fc-daygrid-day-number { color: var(--mui-accent-text); font-weight: 600; }
+.mui-integration--fullcalendar .fc-day-today .fc-daygrid-day-number { color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); }
 "#
 }
 
@@ -4026,7 +4119,7 @@ pub fn integrations_leaflet_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-leaflet" {
                             h3 class="mui-gallery__component-name" { "Leaflet \u{2014} Interactive map" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A Leaflet map with an OpenStreetMap tile layer and a set of markers, "
                                 "all inside a maud-ui shell. The toolbar exposes Leaflet's imperative "
                                 "API \u{2014} add markers, switch tile providers, fit bounds \u{2014} without "
@@ -4097,7 +4190,7 @@ fn leaflet_css() -> &'static str {
 .mui-integration--leaflet .leaflet-control-attribution {
     background: var(--mui-bg-card);
     color: var(--mui-text-subtle);
-    font-size: 0.625rem;
+    font-size: var(--mui-text-caption-size);
 }
 .mui-integration--leaflet .leaflet-control-attribution a { color: var(--mui-text-muted); }
 "#
@@ -4212,7 +4305,7 @@ pub fn integrations_tiptap_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-tiptap" {
                             h3 class="mui-gallery__component-name" { "TipTap \u{2014} Rich text editor" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A TipTap (ProseMirror) editor with a maud-ui toolbar. Bold, italic, "
                                 "headings, lists, blockquote, code block, undo / redo \u{2014} all driven "
                                 "through TipTap's chainable command API. Active-format state on each "
@@ -4292,10 +4385,10 @@ fn tiptap_css() -> &'static str {
 .mui-integration--tiptap .mui-integration__editor {
     height: 24rem;
     overflow-y: auto;
-    padding: 1rem 1.25rem;
+    padding: var(--mui-space-lg) var(--mui-space-20);
     font-family: var(--mui-font-sans);
-    font-size: 0.9375rem;
-    line-height: 1.65;
+    font-size: var(--mui-text-body-size);
+    line-height: var(--mui-leading-body);
     color: var(--mui-text);
 }
 @media (min-width: 64rem) {
@@ -4303,33 +4396,33 @@ fn tiptap_css() -> &'static str {
 }
 .mui-integration--tiptap .ProseMirror { outline: none; min-height: 100%; }
 .mui-integration--tiptap .ProseMirror > *:first-child { margin-top: 0; }
-.mui-integration--tiptap h1 { font-size: 1.5rem;   margin: 1.25rem 0 0.5rem; font-weight: 700; }
-.mui-integration--tiptap h2 { font-size: 1.25rem;  margin: 1.1rem  0 0.5rem; font-weight: 700; }
-.mui-integration--tiptap h3 { font-size: 1.0625rem;margin: 1rem    0 0.5rem; font-weight: 600; }
-.mui-integration--tiptap ul, .mui-integration--tiptap ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+.mui-integration--tiptap h1 { font-size: var(--mui-text-h2-size);   margin: var(--mui-space-20) 0 var(--mui-space-sm); font-weight: var(--mui-weight-heading);  line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
+.mui-integration--tiptap h2 { font-size: var(--mui-text-h3-size);  margin: 1.1rem  0 var(--mui-space-sm); font-weight: var(--mui-weight-heading);  line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-integration--tiptap h3 { font-size: var(--mui-text-h3-size);margin: var(--mui-space-lg)    0 var(--mui-space-sm); font-weight: var(--mui-weight-heading);  line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-integration--tiptap ul, .mui-integration--tiptap ol { padding-left: 1.5rem; margin: var(--mui-space-sm) 0; }
 .mui-integration--tiptap blockquote {
     border-left: 3px solid var(--mui-border-hover);
     padding-left: 0.875rem;
     color: var(--mui-text-muted);
-    margin: 0.75rem 0;
+    margin: var(--mui-space-md) 0;
 }
 .mui-integration--tiptap pre {
     background: var(--mui-bg);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
-    padding: 0.75rem 0.875rem;
+    padding: var(--mui-space-md) var(--mui-inset-control);
     font-family: var(--mui-font-mono);
-    font-size: 0.8125rem;
+    font-size: var(--mui-text-small-size);
     overflow-x: auto;
 }
 .mui-integration--tiptap code {
     font-family: var(--mui-font-mono);
     font-size: 0.875em;
-    padding: 0.05rem 0.25rem;
+    padding: 0.05rem var(--mui-space-xs);
     background: var(--mui-bg);
     border-radius: var(--mui-radius-sm);
 }
-.mui-tt__toolbar { flex-wrap: wrap; row-gap: 0.25rem; }
+.mui-tt__toolbar { flex-wrap: wrap; row-gap: var(--mui-space-xs); }
 .mui-tt__toolbar .mui-btn.is-active {
     background: color-mix(in srgb, var(--mui-accent) 18%, transparent);
     border-color: var(--mui-accent);
@@ -4464,7 +4557,7 @@ pub fn integrations_threejs_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-threejs" {
                             h3 class="mui-gallery__component-name" { "Three.js \u{2014} WebGL 3D" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "A Three.js scene \u{2014} camera, lights, meshes, orbit controls, grid, "
                                 "axes helper \u{2014} mounted into a maud-ui shell. The toolbar swaps the "
                                 "displayed geometry and toggles wireframe, and the status bar tracks FPS, "
@@ -4694,7 +4787,7 @@ pub fn integrations_aggrid_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-aggrid" {
                             h3 class="mui-gallery__component-name" { "AG Grid \u{2014} Enterprise data grid" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "AG Grid Community inside a maud-ui shell. 50 seed rows, sortable / "
                                 "filterable columns, row selection, CSV export \u{2014} the data-heavy "
                                 "story. Theme flips between quartz and quartz-dark with the gallery's "
@@ -4759,7 +4852,7 @@ fn aggrid_css() -> &'static str {
 .mui-integration--aggrid .ag-theme-quartz,
 .mui-integration--aggrid .ag-theme-quartz-dark {
     --ag-font-family: var(--mui-font-sans);
-    --ag-font-size: 13px;
+    --ag-font-size: var(--mui-text-small-size);
     height: 100%;
     width: 100%;
     display: flex;
@@ -4919,7 +5012,7 @@ pub fn integrations_mermaid_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-mermaid" {
                             h3 class="mui-gallery__component-name" { "Mermaid \u{2014} Text to diagram" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Mermaid's text-to-diagram renderer in a maud-ui split pane \u{2014} source on "
                                 "the left, rendered SVG on the right. Tabs switch between flowchart, "
                                 "sequence, class, and Gantt diagrams."
@@ -4994,16 +5087,16 @@ fn mermaid_css() -> &'static str {
     border: 0;
     border-right: 1px solid var(--mui-border);
     font-family: var(--mui-font-mono);
-    font-size: 0.8125rem;
-    line-height: 1.55;
-    padding: 0.875rem 1rem;
+    font-size: var(--mui-text-small-size);
+    line-height: var(--mui-leading-body);
+    padding: var(--mui-inset-control) var(--mui-space-lg);
     resize: none;
     outline: none;
 }
 .mui-mer__output {
     background: var(--mui-bg-card);
     overflow: auto;
-    padding: 1rem;
+    padding: var(--mui-space-lg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5167,7 +5260,7 @@ pub fn integrations_echarts_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-echarts" {
                             h3 class="mui-gallery__component-name" { "Apache ECharts \u{2014} Charting library" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Apache ECharts inside a maud-ui shell. Switch chart type, randomise "
                                 "data, and download as PNG without leaving the host chrome. ECharts "
                                 "picks up theme from the gallery's data-theme."
@@ -5353,7 +5446,7 @@ pub fn integrations_wavesurfer_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-wavesurfer" {
                             h3 class="mui-gallery__component-name" { "Wavesurfer.js \u{2014} Audio waveform" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Wavesurfer.js inside a maud-ui shell, playing a waveform of an "
                                 "in-browser-synthesised sample \u{2014} no external audio, no CORS. Click "
                                 "the waveform to scrub. The maud-ui toolbar drives the imperative "
@@ -5418,7 +5511,7 @@ fn wavesurfer_css() -> &'static str {
     r#"
 .mui-integration--wavesurfer .mui-integration__editor {
     height: 14rem;
-    padding: 1.5rem 1.5rem;
+    padding: var(--mui-space-xl) var(--mui-space-xl);
     background: var(--mui-bg);
     display: flex;
     align-items: center;
@@ -5682,7 +5775,7 @@ pub fn integrations_pdfjs_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-pdfjs" {
                             h3 class="mui-gallery__component-name" { "PDF.js \u{2014} Inline PDF viewer" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Mozilla's PDF.js renders a sample document directly onto a canvas inside "
                                 "a maud-ui shell. The maud-ui toolbar drives the imperative API \u{2014} "
                                 "page navigation, zoom, fit-to-width. The seed PDF is a small in-browser "
@@ -5747,19 +5840,19 @@ fn pdfjs_css() -> &'static str {
     r#"
 .mui-integration--pdfjs .mui-integration__editor {
     height: 34rem;
-    padding: 1rem;
+    padding: var(--mui-space-lg);
     overflow: auto;
     background: var(--mui-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: var(--mui-space-lg);
 }
 @media (min-width: 64rem) {
     .mui-integration--pdfjs .mui-integration__editor { height: 42rem; }
 }
 .mui-integration--pdfjs canvas {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--mui-shadow-lg);
     border-radius: var(--mui-radius-sm);
     background: #fff;
 }
@@ -5829,7 +5922,7 @@ if (host) {
     const doc = await pdfjsLib.getDocument({ data: bytes }).promise;
     host.replaceChildren();
     const scroll = document.createElement('div');
-    scroll.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;';
+    scroll.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-lg);width:100%;';
     host.appendChild(scroll);
 
     let scale = 1.1;
@@ -5882,7 +5975,7 @@ if (host) {
     console.error('[maud-ui] PDF.js failed:', err);
     host.replaceChildren();
     const pre = document.createElement('pre');
-    pre.style.cssText = 'color:#f87171;padding:1rem;font-family:var(--mui-font-mono);font-size:0.8125rem;';
+    pre.style.cssText = 'color:#f87171;padding: var(--mui-space-lg);font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);';
     pre.textContent = '[PDF.js error] ' + String(err.message || err);
     host.appendChild(pre);
   });
@@ -5913,7 +6006,7 @@ pub fn integrations_cytoscape_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-cytoscape" {
                             h3 class="mui-gallery__component-name" { "Cytoscape.js \u{2014} Network graph" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "Cytoscape.js is the sibling-by-different-mission of xyflow \u{2014} where "
                                 "xyflow is an "
                                 em { "editor" }
@@ -6144,12 +6237,12 @@ pub fn integrations_sortable_page() -> Markup {
                         }
                         section class="mui-gallery__component" id="integration-sortable" {
                             h3 class="mui-gallery__component-name" { "SortableJS \u{2014} Drag & drop" }
-                            p style="font-size:0.9375rem;color:var(--mui-text-muted);max-width:48rem;margin:0 0 1.5rem;line-height:1.55;" {
+                            p style="font-size: var(--mui-text-body-size);color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-xl);line-height: var(--mui-leading-body);" {
                                 "SortableJS inside maud-ui shells \u{2014} three flavours of drag-and-drop: "
                                 "a reorderable list with a drag handle, a three-column kanban board with "
                                 "cross-column drag, and a loose tile grid. Vanilla JS (no framework, no "
                                 "bundler), touch-friendly, works with a keyboard via the "
-                                code style="font-family:var(--mui-font-mono);font-size:0.875rem;" { "Sortable" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "Sortable" }
                                 " API."
                             }
 
@@ -6186,7 +6279,7 @@ pub fn integrations_sortable_page() -> Markup {
                                     span class="mui-integration__statusbar-sep" aria-hidden="true" { "\u{2022}" }
                                     span id="mui-sort-list-last"   { "No moves yet" }
                                     span class="mui-integration__statusbar-spacer" {}
-                                    span class="mui-integration__statusbar-theme" { "Drag handle: " span style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { "\u{2630}" } }
+                                    span class="mui-integration__statusbar-theme" { "Drag handle: " span style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "\u{2630}" } }
                                 }
                             }
 
@@ -6202,10 +6295,10 @@ pub fn integrations_sortable_page() -> Markup {
                             }
 
                             // ── Demo 2: Kanban board ─────────────────────────────
-                            h4 style="margin:2rem 0 0.5rem;font-size:1rem;font-weight:600;color:var(--mui-text);" { "Kanban board" }
-                            p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                            h4 style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Kanban board" }
+                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                                 "Three columns sharing a "
-                                code style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { "group: 'kanban'" }
+                                code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "group: 'kanban'" }
                                 " — drag cards within a column or across columns. Counts update live."
                             }
                             div class="mui-integration mui-integration--sortable" {
@@ -6252,8 +6345,8 @@ pub fn integrations_sortable_page() -> Markup {
                             }
 
                             // ── Demo 3: Tile grid ────────────────────────────────
-                            h4 style="margin:2rem 0 0.5rem;font-size:1rem;font-weight:600;color:var(--mui-text);" { "Tile grid" }
-                            p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                            h4 style="margin: var(--mui-space-xxl) 0 var(--mui-space-sm);font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);" { "Tile grid" }
+                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                                 "Free-form tile rearrangement \u{2014} useful for dashboard widget grids "
                                 "or a photo mosaic. Same SortableJS engine, different layout container."
                             }
@@ -6329,9 +6422,9 @@ fn sortable_tile(kind: &str, label: &str, value: &str, accent: &str) -> Markup {
 
 fn sortable_css() -> &'static str {
     r#"
-.mui-integration--sortable .mui-integration__editor { padding: 1rem; background: var(--mui-bg); }
-.mui-sort__list-editor  { padding: 0.75rem !important; }
-.mui-sort__kanban-editor, .mui-sort__grid-editor { padding: 1rem !important; overflow-x: auto; }
+.mui-integration--sortable .mui-integration__editor { padding: var(--mui-space-lg); background: var(--mui-bg); }
+.mui-sort__list-editor  { padding: var(--mui-space-md) !important; }
+.mui-sort__kanban-editor, .mui-sort__grid-editor { padding: var(--mui-space-lg) !important; overflow-x: auto; }
 
 /* ── Sortable list ──────────────────────────────────────────── */
 .mui-sort__list {
@@ -6340,18 +6433,18 @@ fn sortable_css() -> &'static str {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
 }
 .mui-sort__item {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 0.625rem 0.875rem;
+    gap: var(--mui-inset-cell);
+    padding: var(--mui-inset-cell) var(--mui-inset-control);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
     color: var(--mui-text);
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
     cursor: default;
     transition: border-color var(--mui-transition);
 }
@@ -6361,7 +6454,7 @@ fn sortable_css() -> &'static str {
     color: var(--mui-text-subtle);
     font-family: var(--mui-font-mono);
     user-select: none;
-    padding: 0 0.25rem;
+    padding: 0 var(--mui-space-xs);
 }
 .mui-sort__handle:active { cursor: grabbing; }
 
@@ -6374,7 +6467,7 @@ fn sortable_css() -> &'static str {
 }
 .mui-sort--chosen { border-color: var(--mui-accent); }
 .mui-sort--drag   {
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--mui-shadow-lg);
     transform: rotate(0.5deg);
 }
 
@@ -6382,7 +6475,7 @@ fn sortable_css() -> &'static str {
 .mui-sort__kanban {
     display: grid;
     grid-template-columns: repeat(3, minmax(14rem, 1fr));
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
     min-width: 0;
 }
 @media (max-width: 48rem) {
@@ -6391,50 +6484,50 @@ fn sortable_css() -> &'static str {
 .mui-sort__kanban-col {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
-    padding: 0.625rem;
+    padding: var(--mui-inset-cell);
     min-height: 12rem;
 }
 .mui-sort__kanban-col-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.125rem 0.25rem 0.375rem;
+    padding: var(--mui-space-2xs) var(--mui-space-xs) var(--mui-inset-tight);
     border-bottom: 1px solid var(--mui-border);
 }
 .mui-sort__kanban-col-title {
-    font-size: 0.6875rem;
-    font-weight: 600;
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-muted);
 }
 .mui-sort__kanban-col-count {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text-subtle);
-    padding: 0.0625rem 0.375rem;
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
     background: var(--mui-bg);
     border-radius: var(--mui-radius-sm);
 }
 .mui-sort__kanban-cards {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
     min-height: 4rem;
-    padding: 0.125rem;
+    padding: var(--mui-space-2xs);
 }
 .mui-sort__kanban-card {
-    padding: 0.5rem 0.75rem;
+    padding: var(--mui-space-sm) var(--mui-space-md);
     background: var(--mui-bg);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text);
-    font-size: 0.8125rem;
-    line-height: 1.4;
+    font-size: var(--mui-text-small-size);
+    line-height: var(--mui-leading-small);
     cursor: grab;
     transition: border-color var(--mui-transition),
                 transform var(--mui-transition);
@@ -6447,7 +6540,7 @@ fn sortable_css() -> &'static str {
 
 /* Highlight the drop target column during drag */
 .mui-sort__kanban-cards.mui-sort--over {
-    background: color-mix(in srgb, var(--mui-accent) 12%, transparent);
+    background: var(--mui-accent-soft);
     border-radius: var(--mui-radius-sm);
 }
 
@@ -6455,7 +6548,7 @@ fn sortable_css() -> &'static str {
 .mui-sort__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
 }
 .mui-sort__tile {
     position: relative;
@@ -6472,9 +6565,9 @@ fn sortable_css() -> &'static str {
 .mui-sort__tile:hover { border-color: var(--mui-border-hover); transform: translateY(-1px); }
 .mui-sort__tile:active { cursor: grabbing; }
 .mui-sort__tile-accent { width: 4px; flex-shrink: 0; }
-.mui-sort__tile-body   { padding: 0.75rem 0.875rem; display: flex; flex-direction: column; justify-content: center; gap: 0.25rem; }
-.mui-sort__tile-label  { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mui-text-muted); font-weight: 600; }
-.mui-sort__tile-value  { font-size: 1.125rem; font-weight: 700; color: var(--mui-text); font-family: var(--mui-font-sans); }
+.mui-sort__tile-body   { padding: var(--mui-space-md) var(--mui-inset-control); display: flex; flex-direction: column; justify-content: center; gap: var(--mui-space-xs); }
+.mui-sort__tile-label  { font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); font-weight: var(--mui-weight-heading); }
+.mui-sort__tile-value  { font-size: var(--mui-text-h3-size); font-weight: var(--mui-weight-heading); color: var(--mui-text); font-family: var(--mui-font-sans);  line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 "#
 }
 
@@ -6742,7 +6835,7 @@ pub fn component_page_by_name(name: &str) -> Markup {
                     }
                     body {
                         (page_header())
-                        main class="mui-gallery__main" style="padding:2rem;" {
+                        main class="mui-gallery__main" style="padding: var(--mui-space-xxl);" {
                             section class="mui-gallery__component" {
                                 h3 { "Component not found" }
                                 p { "No component named \"" (name) "\" exists." }
@@ -6777,7 +6870,7 @@ fn showcase_css() -> &'static str {
     height: 100vh;
     overflow-y: auto;
     border-right: 1px solid var(--mui-border);
-    padding: 1rem 0;
+    padding: var(--mui-space-lg) 0;
     scrollbar-width: thin;
     scrollbar-color: var(--mui-border) transparent;
 }
@@ -6785,54 +6878,27 @@ fn showcase_css() -> &'static str {
 .mui-gallery__nav {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
 }
 
 .mui-gallery__nav-group {
-    padding: 0 0 0.25rem;
+    padding: 0 0 var(--mui-space-xs);
 }
 
-.mui-gallery__nav-tier {
-    display: block;
-    padding: 0.5rem 1rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--mui-text-muted);
-    text-decoration: none;
-    transition: color var(--mui-transition);
-}
-.mui-gallery__nav-tier:hover { color: var(--mui-text); }
-
-.mui-gallery__nav-items {
-    display: flex;
-    flex-direction: column;
-}
-
-.mui-gallery__nav-item {
-    display: block;
-    padding: 0.25rem 1rem 0.25rem 1.5rem;
-    font-size: 0.8125rem;
-    color: var(--mui-text-subtle);
-    text-decoration: none;
-    border-left: 2px solid transparent;
-    transition: all var(--mui-transition);
-}
-.mui-gallery__nav-item:hover {
-    color: var(--mui-text);
-    background: var(--mui-bg-input);
-    border-left-color: var(--mui-border-hover);
-}
-.mui-gallery__nav-item--active {
-    color: var(--mui-text);
-    border-left-color: var(--mui-accent);
-    background: var(--mui-bg-input);
-}
+.mui-gallery__nav-tier { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; padding: var(--mui-space-sm) var(--mui-space-lg); min-height: var(--mui-nav-row-height); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); cursor: pointer; }
+.mui-gallery__nav-tier::-webkit-details-marker { display: none; }
+.mui-gallery__nav-tier::after { content: "›"; font-size: var(--mui-text-small-size); transition: transform var(--mui-transition); }
+details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
+.mui-gallery__nav-tier:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-items { display: flex; flex-direction: column; gap: var(--mui-space-2xs); padding: 0 var(--mui-space-sm); }
+.mui-gallery__nav-item { display: flex; align-items: center; min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); font-size: var(--mui-text-small-size); color: var(--mui-text-secondary); text-decoration: none; border-inline-start: 2px solid transparent; border-radius: var(--mui-radius-md); transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-gallery__nav-item:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-item--active { color: var(--mui-accent-text); border-inline-start-color: var(--mui-accent-text); background: var(--mui-accent-soft); font-weight: var(--mui-weight-heading); }
+@media (pointer: coarse) { .mui-gallery__nav-item, .mui-gallery__nav-tier { min-height: var(--mui-touch-target); } }
 
 /* Main content */
 .mui-gallery__main {
-    padding: 2rem;
+    padding: var(--mui-space-xxl) var(--mui-page-gutter);
     /* The cap is a readable measure, but without the auto margins it jammed
        against the sidebar and left the entire right half of a wide window
        empty — it read as a broken layout rather than a deliberate column.
@@ -6862,19 +6928,19 @@ fn showcase_css() -> &'static str {
 }
 
 .mui-gallery__tier-title {
-    margin: 0 0 0.25rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
+    margin: 0 0 var(--mui-space-xs);
+    font-size: var(--mui-text-h2-size);
+    font-weight: var(--mui-weight-heading);
+ line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
 
 .mui-gallery__tier-desc {
     margin: 0;
     color: var(--mui-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
 }
 
 .mui-gallery__component {
-    padding: 1.5rem;
+    padding: var(--mui-space-xl);
     margin-bottom: 1rem;
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
@@ -6882,18 +6948,18 @@ fn showcase_css() -> &'static str {
 }
 
 .mui-gallery__component-name {
-    margin: 0 0 1rem;
-    font-size: 1.125rem;
-    font-weight: 600;
+    margin: 0 0 var(--mui-space-lg);
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-}
+    gap: var(--mui-space-sm);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 
 .mui-gallery__anchor {
     color: var(--mui-text-subtle);
     text-decoration: none;
-    font-weight: 400;
+    font-weight: var(--mui-weight-normal);
     opacity: 0;
     transition: opacity var(--mui-transition);
 }
@@ -6905,8 +6971,8 @@ fn showcase_css() -> &'static str {
 .mui-gallery__breadcrumb {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 0.875rem;
+    gap: var(--mui-space-xs);
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text-muted);
     margin-bottom: 1rem;
 }
@@ -6916,7 +6982,7 @@ fn showcase_css() -> &'static str {
 }
 .mui-gallery__breadcrumb a:hover {
     color: var(--mui-text);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .mui-gallery__back { padding-top: 1rem; }
@@ -6943,17 +7009,17 @@ fn showcase_css() -> &'static str {
     flex-shrink: 0;
 }
 .mui-showcase__menu-btn:hover { border-color: var(--mui-border-hover); }
-.mui-showcase__menu-icon { font-size: 1rem; line-height: 1; }
+.mui-showcase__menu-icon { font-size: var(--mui-text-body-size); line-height: var(--mui-leading-tight); }
 
 .mui-showcase__drawer-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 40;
-    background: rgba(0, 0, 0, 0.55);
+    z-index: var(--mui-layer-navigation);
+    background: var(--mui-bg-overlay);
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
-    animation: muiFadeIn 180ms ease;
+    animation: muiFadeIn var(--mui-motion-enter) ease;
 }
 @keyframes muiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -6971,7 +7037,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
         width: 18rem;
         max-width: 82vw;
         height: calc(100dvh - var(--mui-header-h)) !important;
-        z-index: 45;
+        z-index: var(--mui-layer-navigation);
         background: var(--mui-bg);
         border-right: 1px solid var(--mui-border);
         transform: translateX(-100%);
@@ -6982,7 +7048,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
     html[data-mui-gallery-ready][data-mui-drawer="open"] .mui-gallery__sidebar {
         transform: translateX(0);
         visibility: visible;
-        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
+        box-shadow: var(--mui-shadow-lg);
     }
     html:not([data-mui-gallery-ready]) .mui-gallery__sidebar { position: static; height: auto !important; }
 
@@ -6990,14 +7056,14 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
     html[data-mui-gallery-ready] .mui-gallery__sidebar::after {
         content: "Tap outside or press Esc to close";
         display: block;
-        padding: 0.75rem 1rem;
-        font-size: 0.6875rem;
+        padding: var(--mui-space-md) var(--mui-space-lg);
+        font-size: var(--mui-text-caption-size);
         color: var(--mui-text-subtle);
         text-align: center;
     }
 
     /* Tighten header spacing on narrow viewports */
-    .mui-showcase__header-inner { gap: 0.5rem; row-gap: 0.375rem; }
+    .mui-showcase__header-inner { gap: var(--mui-space-sm); row-gap: var(--mui-inset-tight); }
     .mui-showcase__nav { order: 10; flex-basis: 100%; }
     .mui-showcase__search { min-width: 0; flex: 1 1 auto; }
     .mui-showcase__palette-btn { display: none; }
@@ -7016,188 +7082,77 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 .mui-showcase__palette-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.125rem;
-    padding: 0.25rem 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) var(--mui-inset-tight);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text-muted);
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     cursor: pointer;
     transition: border-color var(--mui-transition);
 }
 .mui-showcase__palette-btn:hover { border-color: var(--mui-border-hover); color: var(--mui-text); }
 .mui-showcase__palette-btn kbd {
     font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    line-height: 1;
-    padding: 0.0625rem 0.25rem;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-space-xs);
     background: var(--mui-bg);
     color: var(--mui-text-muted);
     border: 1px solid var(--mui-border);
-    border-radius: 2px;
+    border-radius: var(--mui-radius-sm);
 }
 
-.mui-palette {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    display: none;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 6rem 1rem 1rem;
-}
-html[data-mui-palette="open"] .mui-palette { display: flex; }
-
-.mui-palette__scrim {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-    animation: muiFadeIn 140ms ease;
-}
-
-.mui-palette__panel {
-    position: relative;
-    width: min(42rem, 100%);
-    max-height: calc(100vh - 8rem);
-    display: flex;
-    flex-direction: column;
-    background: var(--mui-bg-card);
-    border: 1px solid var(--mui-border);
-    border-radius: var(--mui-radius-lg);
-    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.55),
-                0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    animation: muiPaletteIn 160ms cubic-bezier(0.2, 0, 0, 1);
-}
-@keyframes muiPaletteIn {
-    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-    to   { opacity: 1; transform: none; }
-}
-
-.mui-palette__search {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.875rem 1rem;
-    border-bottom: 1px solid var(--mui-border);
-}
-.mui-palette__icon { color: var(--mui-text-muted); display: inline-flex; }
-.mui-palette__input {
-    flex: 1;
-    min-width: 0;
-    height: 1.75rem;
-    padding: 0;
-    background: transparent;
-    color: var(--mui-text);
-    border: 0;
-    outline: none;
-    font-size: 1rem;
-    font-family: inherit;
-}
+.mui-palette { width: min(42rem, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); padding: 0; margin: 12vh auto auto; border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); background: var(--mui-bg-card); color: var(--mui-text); box-shadow: var(--mui-shadow-lg); overflow: hidden; }
+.mui-palette::backdrop { background: var(--mui-bg-overlay); }
+.mui-palette[open] { display: block; animation: muiPaletteIn var(--mui-motion-enter) var(--mui-motion-ease); }
+@keyframes muiPaletteIn { from { opacity: 0; transform: translateY(-0.5rem); } to { opacity: 1; transform: none; } }
+.mui-palette__panel { display: flex; flex-direction: column; max-height: calc(80dvh - 2rem); }
+.mui-palette__search { display: flex; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-header-height); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-end: 1px solid var(--mui-border); }
+.mui-palette__icon { display: inline-flex; color: var(--mui-text-muted); }
+.mui-palette__input { flex: 1; min-width: 0; border: 0; outline: none; min-height: var(--mui-control-height); background: transparent; color: var(--mui-text); font: inherit; }
 .mui-palette__input::placeholder { color: var(--mui-text-subtle); }
-.mui-palette__hint {
-    font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    padding: 0.125rem 0.375rem;
-    background: var(--mui-bg);
-    color: var(--mui-text-muted);
-    border: 1px solid var(--mui-border);
-    border-radius: var(--mui-radius-sm);
-}
-
-.mui-palette__list {
-    list-style: none;
-    margin: 0;
-    padding: 0.375rem 0.375rem;
-    overflow-y: auto;
-    max-height: 26rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--mui-border) transparent;
-}
-.mui-palette__item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.75rem;
-    align-items: center;
-    padding: 0.5rem 0.625rem;
-    border-radius: var(--mui-radius-sm);
-    cursor: pointer;
-    color: var(--mui-text);
-}
-.mui-palette__item--active {
-    background: color-mix(in srgb, var(--mui-accent) 20%, transparent);
-}
-.mui-palette__item-kind {
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-family: var(--mui-font-mono);
-    color: var(--mui-text-subtle);
-    padding: 0.125rem 0.375rem;
-    background: var(--mui-bg);
-    border-radius: 3px;
-    min-width: 5rem;
-    text-align: center;
-}
-.mui-palette__item-label { font-size: 0.875rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mui-palette__item-label mark { background: color-mix(in srgb, var(--mui-accent) 40%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
-.mui-palette__item-path {
-    font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    color: var(--mui-text-subtle);
-}
-.mui-palette__empty {
-    padding: 1.5rem 1rem;
-    text-align: center;
-    color: var(--mui-text-muted);
-    font-size: 0.875rem;
-}
-
-.mui-palette__footer {
-    display: flex;
-    gap: 1rem;
-    padding: 0.5rem 0.875rem;
-    border-top: 1px solid var(--mui-border);
-    background: var(--mui-bg);
-    font-size: 0.6875rem;
-    color: var(--mui-text-subtle);
-}
-.mui-palette__footer kbd {
-    font-family: var(--mui-font-mono);
-    font-size: 0.625rem;
-    padding: 0.0625rem 0.25rem;
-    background: var(--mui-bg-card);
-    color: var(--mui-text-muted);
-    border: 1px solid var(--mui-border);
-    border-radius: 2px;
-    margin-right: 0.25rem;
-}
+.mui-palette__hint { border: 1px solid var(--mui-border); background: var(--mui-bg); color: var(--mui-text-muted); padding: var(--mui-space-xs) var(--mui-space-sm); border-radius: var(--mui-radius-sm); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); cursor: pointer; }
+.mui-palette__hint:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-palette__list { list-style: none; overflow: auto; padding: var(--mui-space-sm); margin: 0; min-height: 0; }
+.mui-palette__section { padding: var(--mui-space-md) var(--mui-space-sm) var(--mui-space-xs); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; }
+.mui-palette__item { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); border-radius: var(--mui-radius-md); cursor: pointer; }
+.mui-palette__item:hover { background: var(--mui-bg-input); }
+.mui-palette__item--active { background: var(--mui-accent-soft); color: var(--mui-accent-text); }
+.mui-palette__item-label { font-size: var(--mui-text-small-size); }
+.mui-palette__item-path { font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); color: var(--mui-text-muted); }
+.mui-palette__item-key { color: var(--mui-text-subtle); visibility: hidden; font-size: var(--mui-text-caption-size); }
+.mui-palette__item--active .mui-palette__item-key { visibility: visible; }
+.mui-palette__empty { padding: var(--mui-space-xxl) var(--mui-space-lg); font-size: var(--mui-text-small-size); color: var(--mui-text-muted); }
+.mui-palette__footer { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-start: 1px solid var(--mui-border); font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); }
+.mui-palette__footer kbd { font: inherit; font-family: var(--mui-font-mono); color: var(--mui-text-secondary); margin-inline-end: var(--mui-space-xs); }
+@media (pointer: coarse) { .mui-palette__item { min-height: var(--mui-touch-target); } .mui-palette__hint { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } }
+@media (max-width: 40rem) { .mui-palette { margin-block-start: var(--mui-space-lg); } .mui-palette__item-path { display: none; } .mui-palette__input { font-size: 1rem; } }
+@media (prefers-reduced-motion: reduce) { .mui-palette[open] { animation: none; } }
 
 /* Blocks index grid */
-.mui-gallery__intro { margin-block-end: 2rem; }
-.mui-gallery__intro h1 { margin: 0 0 0.5rem; font-size: 1.75rem; letter-spacing: -0.025em; }
-.mui-gallery__curation-intro { color: var(--mui-text-muted); line-height: 1.7; }
+.mui-gallery__intro { margin-block-end: var(--mui-space-xxl); }
+.mui-gallery__intro h1 { margin: 0 0 var(--mui-space-sm); font-size: var(--mui-text-h1-size); letter-spacing: var(--mui-text-h1-tracking);  line-height: var(--mui-text-h1-leading); }
+.mui-gallery__curation-intro { color: var(--mui-text-muted); line-height: var(--mui-leading-body); }
 .mui-gallery__curation-intro a { color: var(--mui-link); text-underline-offset: 0.2em; }
-.mui-showcase__block-category + .mui-showcase__block-category { margin-block-start: 2rem; }
-.mui-showcase__block-category-title { margin: 0 0 0.75rem; color: var(--mui-text-muted); font-size: 0.875rem; font-weight: 600; }
+.mui-showcase__block-category + .mui-showcase__block-category { margin-block-start: var(--mui-space-xxl); }
+.mui-showcase__block-category-title { margin: 0 0 var(--mui-space-md); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-heading); }
 .mui-showcase__block-card:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 3px; }
 .mui-theme__presets [aria-pressed="true"] { border-color: var(--mui-accent-text); background: var(--mui-bg-input); box-shadow: inset 0 -2px var(--mui-accent-text); }
-.mui-theme__export-status { margin: 0; min-height: 1.5em; color: var(--mui-text-muted); font-size: 0.8125rem; }
+.mui-theme__export-status { margin: 0; min-height: 1.5em; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
 .mui-theme__export-pre:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
 .mui-showcase__block-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: 1rem;
+    gap: var(--mui-space-lg);
     margin-top: 0.5rem;
 }
 .mui-showcase__block-card {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.25rem;
+    gap: var(--mui-space-md);
+    padding: var(--mui-space-20);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
@@ -7210,27 +7165,27 @@ html[data-mui-palette="open"] .mui-palette { display: flex; }
     transform: translateY(-1px);
 }
 .mui-showcase__block-card-title {
-    margin: 0.25rem 0 0;
-    font-size: 1.0625rem;
-    font-weight: 600;
+    margin: var(--mui-space-xs) 0 0;
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
     color: var(--mui-text);
-}
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 .mui-showcase__block-card-desc {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text-muted);
-    line-height: 1.5;
+    line-height: var(--mui-leading-small);
     flex: 1;
 }
 .mui-showcase__block-card-uses {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
 }
 .mui-showcase__block-card-use {
-    font-size: 0.6875rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
-    padding: 0.125rem 0.4375rem;
+    padding: var(--mui-space-2xs) 0.4375rem;
     background: var(--mui-bg-input);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-sm);
@@ -7245,9 +7200,9 @@ html { scroll-behavior: smooth; }
     display: inline-flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     min-width: 5rem;
-    padding: 0.25rem;
+    padding: var(--mui-space-xs);
     border-radius: var(--mui-radius-md);
     transition: transform var(--mui-transition),
                 box-shadow var(--mui-transition);
@@ -7263,7 +7218,7 @@ html { scroll-behavior: smooth; }
     height: 3.5rem;
     border-radius: var(--mui-radius-md);
     border: 1px solid color-mix(in srgb, var(--mui-border) 70%, transparent);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    box-shadow: var(--mui-shadow-sm);
     /* chequered base so translucent swatches are visible */
     background-image:
         linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
@@ -7289,16 +7244,16 @@ html { scroll-behavior: smooth; }
 .mui-swatch__body {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
+    gap: var(--mui-space-2xs);
     min-width: 0;
 }
 .mui-swatch__label {
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-medium);
     color: var(--mui-text);
 }
 .mui-swatch__sub {
-    font-size: 0.6875rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text-muted);
     white-space: nowrap;
@@ -7309,32 +7264,32 @@ html { scroll-behavior: smooth; }
 .mui-swatch__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
 }
 
 /* Horizontal tone ramp */
 .mui-swatch__scale {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     margin-bottom: 0.75rem;
 }
 .mui-swatch__scale-label {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: lowercase;
     color: var(--mui-text-muted);
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mui-tracking-label);
 }
 .mui-swatch__scale-row {
     display: grid;
     grid-template-columns: repeat(11, minmax(2.25rem, 1fr));
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
 }
 .mui-swatch--scale {
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.125rem;
+    gap: var(--mui-space-xs);
+    padding: var(--mui-space-2xs);
     min-width: 0;
 }
 .mui-swatch--scale .mui-swatch__chip {
@@ -7343,7 +7298,7 @@ html { scroll-behavior: smooth; }
     border-radius: var(--mui-radius-sm);
 }
 .mui-swatch__scale-key {
-    font-size: 0.625rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text-subtle);
     text-align: center;
@@ -7368,8 +7323,8 @@ html { scroll-behavior: smooth; }
 .mui-showcase__header {
     position: sticky;
     top: 0;
-    z-index: 50;
-    padding: 0.5rem 1.25rem !important;
+    z-index: var(--mui-layer-overlay);
+    padding: var(--mui-space-sm) var(--mui-space-20) !important;
     background: color-mix(in srgb, var(--mui-bg) 82%, transparent);
     -webkit-backdrop-filter: saturate(150%) blur(14px);
     backdrop-filter: saturate(150%) blur(14px);
@@ -7378,14 +7333,14 @@ html { scroll-behavior: smooth; }
     /* the old dist rule styled an <h1> inside the header; we no
      * longer render one, but keep this reset in case something else
      * hits it. */
-    font-size: 1rem;
+    font-size: var(--mui-text-body-size);
     margin: 0;
 }
 
 .mui-showcase__header-inner {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
     flex-wrap: wrap;
     min-height: 2.25rem;
 }
@@ -7393,10 +7348,10 @@ html { scroll-behavior: smooth; }
 .mui-showcase__brand {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.625rem;
+    gap: var(--mui-inset-cell);
     color: inherit;
     text-decoration: none;
-    padding-inline: 0.25rem;
+    padding-inline: var(--mui-space-xs);
     flex-shrink: 0;
 }
 
@@ -7420,8 +7375,8 @@ html { scroll-behavior: smooth; }
 .mui-showcase__search-input {
     width: 100%;
     height: 2rem;
-    padding: 0 2rem 0 1.875rem;
-    font-size: 0.8125rem;
+    padding: 0 var(--mui-space-xxl) 0 1.875rem;
+    font-size: var(--mui-text-small-size);
     font-family: inherit;
     color: var(--mui-text);
     background: var(--mui-bg-card);
@@ -7442,9 +7397,9 @@ html { scroll-behavior: smooth; }
     position: absolute;
     right: 0.5rem;
     font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    line-height: 1;
-    padding: 0.125rem 0.375rem;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
     background: var(--mui-bg);
     color: var(--mui-text-muted);
     border: 1px solid var(--mui-border);
@@ -7460,13 +7415,13 @@ html { scroll-behavior: smooth; }
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.8125rem;
+    gap: var(--mui-space-md);
+    font-size: var(--mui-text-small-size);
 }
 .mui-gallery__seq-link {
     color: var(--mui-text-muted);
     text-decoration: none;
-    padding: 0.125rem 0.375rem;
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
     border-radius: var(--mui-radius-sm);
     white-space: nowrap;
     max-width: 14rem;
@@ -7489,14 +7444,14 @@ html { scroll-behavior: smooth; }
 .mui-gallery__nav-item mark {
     background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
     color: var(--mui-text);
-    border-radius: 2px;
+    border-radius: var(--mui-radius-sm);
     padding: 0 1px;
 }
 
 /* No-results state inside the sidebar */
 .mui-gallery__nav-empty {
-    padding: 0.75rem 1rem;
-    font-size: 0.75rem;
+    padding: var(--mui-space-md) var(--mui-space-lg);
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
     display: none;
 }
@@ -7508,19 +7463,19 @@ html { scroll-behavior: smooth; }
     .mui-showcase__search { min-width: 7rem; }
 }
 .mui-showcase__brand-name {
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: var(--mui-text-body-size);
+    font-weight: var(--mui-weight-heading);
+    letter-spacing: var(--mui-tracking-heading);
     color: var(--mui-text);
 }
 .mui-showcase__brand-count {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
 }
 
 .mui-showcase__nav {
     display: inline-flex;
-    gap: 0.125rem;
+    gap: var(--mui-space-2xs);
     align-items: center;
     flex-wrap: wrap;
     /* Reset the dist CSS default that paints <nav> elements with a
@@ -7546,7 +7501,7 @@ html { scroll-behavior: smooth; }
 
 .mui-showcase__tools {
     display: inline-flex;
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
     align-items: center;
     margin-left: 0.25rem;
     padding-left: 0.5rem;
@@ -7555,9 +7510,9 @@ html { scroll-behavior: smooth; }
 
 .mui-showcase__tool-btn {
     min-width: 2rem;
-    padding-inline: 0.5rem;
-    font-size: 1rem;
-    line-height: 1;
+    padding-inline: var(--mui-space-sm);
+    font-size: var(--mui-text-body-size);
+    line-height: var(--mui-leading-tight);
 }
 
 /* The sidebar stuck to top:0 hid behind the new header; pin it
@@ -7580,22 +7535,22 @@ html { scroll-behavior: smooth; }
 @media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
     :root { --mui-header-h: 7rem; }
-    .mui-showcase__header { padding: 0.5rem 1rem !important; }
-    .mui-showcase__header-inner { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: 0.5rem; }
+    .mui-showcase__header { padding: var(--mui-space-sm) var(--mui-space-lg) !important; }
+    .mui-showcase__header-inner { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: var(--mui-space-sm); }
     .mui-showcase__menu-btn { grid-column: 1; grid-row: 1; width: 2.75rem; height: 2.75rem; }
     .mui-showcase__brand { grid-column: 2 / -1; grid-row: 1; min-height: 2.75rem; align-items: center; }
     .mui-showcase__search { grid-column: 1 / 3; grid-row: 2; width: 100%; max-width: none; min-width: 0; }
-    .mui-showcase__search-input { height: 2.75rem; font-size: 1rem; }
+    .mui-showcase__search-input { height: 2.75rem; font-size: var(--mui-text-body-size); }
     .mui-showcase__tools { grid-column: 3; grid-row: 2; margin: 0; padding: 0; border: 0; }
     .mui-showcase__tool-btn { width: 2.75rem; height: 2.75rem; }
     .mui-showcase__palette-btn { display: none; }
     .mui-showcase__header-inner > .mui-showcase__nav { grid-column: 1 / -1; }
-    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 0.75rem 0.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--mui-border); }
+    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 var(--mui-space-md) var(--mui-space-md); margin-bottom: 0.75rem; border-bottom: 1px solid var(--mui-border); }
     .mui-gallery__sidebar > .mui-showcase__nav > .mui-btn,
     .mui-gallery__sidebar .mui-gallery__nav-advanced-summary { min-height: 2.75rem; justify-content: flex-start; width: 100%; }
     .mui-gallery__sidebar .mui-gallery__nav-advanced-menu { position: static; min-width: 0; max-height: none; box-shadow: none; }
-    .mui-gallery__main { padding: 1rem; }
-    .mui-gallery__component { padding: 1rem; }
+    .mui-gallery__main { padding: var(--mui-space-lg); }
+    .mui-gallery__component { padding: var(--mui-space-lg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -7608,7 +7563,7 @@ html { scroll-behavior: smooth; }
 .mui-two-up {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: var(--mui-space-xl);
     margin-bottom: 1rem;
 }
 
@@ -7664,7 +7619,7 @@ html { scroll-behavior: smooth; }
     list-style: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
     cursor: pointer;
     user-select: none;
 }
@@ -7673,9 +7628,9 @@ html { scroll-behavior: smooth; }
 
 .mui-gallery__nav-advanced-caret {
     display: inline-block;
-    font-size: 0.75rem;
-    line-height: 1;
-    transition: transform 150ms ease;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    transition: transform var(--mui-motion-fast) ease;
     color: var(--mui-text-muted);
 }
 .mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
@@ -7686,14 +7641,14 @@ html { scroll-behavior: smooth; }
     position: absolute;
     top: calc(100% + 0.375rem);
     right: 0;
-    z-index: 60;
+    z-index: var(--mui-layer-toast);
     min-width: 18rem;
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-inset-tight);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
@@ -7704,27 +7659,27 @@ html { scroll-behavior: smooth; }
 .mui-gallery__nav-advanced-group {
     display: flex;
     flex-direction: column;
-    gap: 0.0625rem;
-    padding: 0.25rem 0 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) 0 var(--mui-inset-tight);
     border-bottom: 1px solid var(--mui-border);
 }
 .mui-gallery__nav-advanced-group:last-child { border-bottom: 0; }
 
 .mui-gallery__nav-advanced-group-label {
     display: block;
-    padding: 0.375rem 0.75rem 0.25rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
+    padding: var(--mui-inset-tight) var(--mui-space-md) var(--mui-space-xs);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-subtle);
 }
 
 .mui-gallery__nav-advanced-menu a {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.4375rem 0.75rem;
+    gap: var(--mui-space-2xs);
+    padding: 0.4375rem var(--mui-space-md);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text);
     text-decoration: none;
@@ -7738,13 +7693,13 @@ html { scroll-behavior: smooth; }
 }
 
 .mui-gallery__nav-advanced-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-heading);
 }
 .mui-gallery__nav-advanced-sub {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
-    font-weight: 400;
+    font-weight: var(--mui-weight-normal);
 }
 "#
 }
@@ -7845,6 +7800,7 @@ fn showcase_js() -> &'static str {
         if (current) {
             current.classList.add('mui-gallery__nav-item--active');
             current.setAttribute('aria-current', 'page');
+            var currentGroup = current.closest('details'); if (currentGroup) currentGroup.open = true;
             // Wait until the responsive drawer is placed, then scroll only
             // its own container. scrollIntoView can move the document during
             // the initial no-JS layout and hide the page's first content.
@@ -7931,6 +7887,7 @@ fn showcase_js() -> &'static str {
             var q = search.value.trim().toLowerCase();
             var dirty = q.length > 0;
             wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+            if (window.MaudUI?.navigation && nav) window.MaudUI.navigation.forceGroups(nav, dirty);
 
             var visibleCount = 0;
             var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
@@ -8061,154 +8018,97 @@ fn showcase_js() -> &'static str {
 
     // ── Command palette ──────────────────────────────────────────
     (function () {
-        var palette       = document.getElementById('mui-palette');
-        var paletteInput  = document.getElementById('mui-palette-input');
-        var paletteList   = document.getElementById('mui-palette-list');
-        var paletteScrim  = document.getElementById('mui-palette-scrim');
-        var paletteBtn    = document.getElementById('mui-palette-open');
-        var data          = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
-        if (!palette || !paletteInput || !paletteList) return;
-
-        var filtered = data.slice();
-        var activeIndex = 0;
-
-        function escapeHtml(s) {
-            return String(s || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+        var palette = document.getElementById('mui-palette');
+        var paletteInput = document.getElementById('mui-palette-input');
+        var paletteList = document.getElementById('mui-palette-list');
+        var paletteBtn = document.getElementById('mui-palette-open');
+        var closeBtn = document.getElementById('mui-palette-close');
+        var data = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
+        if (!palette || !paletteInput || !paletteList || typeof palette.showModal !== 'function') return;
+        var recent = [];
+        try { recent = JSON.parse(localStorage.getItem('mui-palette-recent') || '[]'); } catch {}
+        // Storage is untrusted: recents may reference only known routes in this build.
+        if (!Array.isArray(recent)) recent = [];
+        recent = Array.from(new Set(recent.filter(function (url) { return data.some(function (item) { return item.u === url; }); }))).slice(0, 5);
+        var filtered = [], activeIndex = 0, previousFocus = null;
+        var names = { page: 'Start here', block: 'Application blocks', component: 'Components', integration: 'Integrations' };
+        function active() {
+            paletteList.querySelectorAll('[role="option"]').forEach(function (row, i) {
+                row.classList.toggle('mui-palette__item--active', i === activeIndex);
+                row.setAttribute('aria-selected', String(i === activeIndex));
+            });
+            var row = paletteList.querySelector('[aria-selected="true"]');
+            if (row) { paletteInput.setAttribute('aria-activedescendant', row.id); row.scrollIntoView({ block: 'nearest' }); }
+            else paletteInput.removeAttribute('aria-activedescendant');
         }
-        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-        function kindLabel(k) {
-            return k === 'component'   ? 'component'
-                 : k === 'block'       ? 'block'
-                 : k === 'integration' ? 'integration'
-                 : k === 'page'        ? 'page'
-                 : k;
-        }
-
-        function highlight(label, q) {
-            if (!q) return escapeHtml(label);
-            try {
-                var re = new RegExp('(' + escapeRegex(q) + ')', 'ig');
-                return escapeHtml(label).replace(re, '<mark>$1</mark>');
-            } catch { return escapeHtml(label); }
-        }
-
         function render() {
-            if (filtered.length === 0) {
-                paletteList.replaceChildren();
-                var empty = document.createElement('li');
-                empty.className = 'mui-palette__empty';
-                empty.textContent = 'No matches.';
-                paletteList.appendChild(empty);
-                return;
-            }
-            // Build rows using DOM API — we only use innerHTML for the
-            // highlighted label, where the source is our own palette
-            // data (not user input).
             paletteList.replaceChildren();
-            for (var i = 0; i < filtered.length; i++) {
-                var e = filtered[i];
-                var li = document.createElement('li');
-                li.className = 'mui-palette__item' + (i === activeIndex ? ' mui-palette__item--active' : '');
-                li.setAttribute('role', 'option');
-                li.setAttribute('data-index', String(i));
-                li.setAttribute('data-url', e.u);
-                var kind = document.createElement('span');
-                kind.className = 'mui-palette__item-kind';
-                kind.textContent = kindLabel(e.k);
-                var label = document.createElement('span');
-                label.className = 'mui-palette__item-label';
-                label.innerHTML = highlight(e.l, paletteInput.value.trim());
-                var path = document.createElement('span');
-                path.className = 'mui-palette__item-path';
-                path.textContent = e.u;
-                li.appendChild(kind);
-                li.appendChild(label);
-                li.appendChild(path);
-                paletteList.appendChild(li);
+            var lastGroup = '';
+            filtered.forEach(function (entry, index) {
+                var section = entry.section || names[entry.k] || entry.k;
+                if (section !== lastGroup) {
+                    var heading = document.createElement('li');
+                    heading.className = 'mui-palette__section'; heading.setAttribute('role', 'presentation'); heading.textContent = section;
+                    paletteList.appendChild(heading); lastGroup = section;
+                }
+                var row = document.createElement('li'); row.className = 'mui-palette__item'; row.id = 'mui-palette-option-' + index;
+                row.setAttribute('role', 'option'); row.setAttribute('data-index', String(index));
+                var label = document.createElement('span'); label.className = 'mui-palette__item-label'; label.textContent = entry.l;
+                var path = document.createElement('span'); path.className = 'mui-palette__item-path'; path.textContent = entry.u;
+                var hint = document.createElement('kbd'); hint.className = 'mui-palette__item-key'; hint.textContent = '↵'; hint.setAttribute('aria-hidden', 'true');
+                row.appendChild(label); row.appendChild(path); row.appendChild(hint); paletteList.appendChild(row);
+            });
+            if (!filtered.length) {
+                var empty = document.createElement('li'); empty.className = 'mui-palette__empty'; empty.setAttribute('role', 'presentation'); empty.textContent = 'No destinations found. Try a component or block name.'; paletteList.appendChild(empty);
             }
+            active();
         }
-
         function filter() {
-            var q = paletteInput.value.trim().toLowerCase();
-            if (!q) {
-                filtered = data.slice();
-            } else {
-                filtered = data
-                    .map(function (e) {
-                        var l = (e.l || '').toLowerCase();
-                        var u = (e.u || '').toLowerCase();
-                        var idx = l.indexOf(q);
-                        var score = idx < 0 ? (u.indexOf(q) < 0 ? -1 : 100 + u.indexOf(q)) : idx;
-                        return score < 0 ? null : { e: e, score: score };
-                    })
-                    .filter(function (x) { return x !== null; })
-                    .sort(function (a, b) { return a.score - b.score; })
-                    .map(function (x) { return x.e; });
-            }
-            activeIndex = 0;
-            render();
+            var query = paletteInput.value.trim().toLocaleLowerCase();
+            var matches = data.filter(function (entry) { return !query || (entry.l + ' ' + entry.u).toLocaleLowerCase().includes(query); });
+            filtered = [];
+            if (!query) recent.forEach(function (url) { var entry = data.find(function (item) { return item.u === url; }); if (entry) filtered.push(Object.assign({}, entry, { section: 'Recent' })); });
+            ['page', 'block', 'component', 'integration'].forEach(function (kind) {
+                matches.filter(function (entry) { return entry.k === kind && (query || !recent.includes(entry.u)); }).forEach(function (entry) { filtered.push(entry); });
+            });
+            activeIndex = 0; render(); paletteList.scrollTop = 0;
         }
-
         function open() {
-            setDrawer(false);
-            htmlEl.setAttribute('data-mui-palette', 'open');
-            paletteInput.value = '';
-            filter();
-            // Focus on the next frame so the modal is painted first.
-            requestAnimationFrame(function () { paletteInput.focus(); });
+            if (palette.open) return;
+            previousFocus = document.activeElement; setDrawer(false);
+            paletteInput.value = ''; filter(); palette.showModal();
+            paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
         }
-        function close() {
-            htmlEl.removeAttribute('data-mui-palette');
-        }
-        function isOpen() { return htmlEl.getAttribute('data-mui-palette') === 'open'; }
-
-        function moveActive(delta) {
-            if (filtered.length === 0) return;
-            activeIndex = (activeIndex + delta + filtered.length) % filtered.length;
-            render();
-            var active = paletteList.querySelector('.mui-palette__item--active');
-            if (active) active.scrollIntoView({ block: 'nearest' });
-        }
+        function close() { if (palette.open) palette.close(); }
         function activate() {
-            var e = filtered[activeIndex];
-            if (!e) return;
-            close();
-            window.location.href = e.u;
+            var entry = filtered[activeIndex]; if (!entry) return;
+            recent = [entry.u].concat(recent.filter(function (url) { return url !== entry.u; })).slice(0, 5);
+            try { localStorage.setItem('mui-palette-recent', JSON.stringify(recent)); } catch {}
+            close(); window.location.href = entry.u;
         }
-
-        paletteBtn?.addEventListener('click', open);
-        paletteScrim?.addEventListener('click', close);
+        palette.addEventListener('close', function () {
+            htmlEl.removeAttribute('data-mui-palette'); paletteInput.setAttribute('aria-expanded', 'false');
+            if (previousFocus && previousFocus.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
+        });
+        palette.addEventListener('click', function (event) { if (event.target === palette) close(); });
+        paletteBtn?.addEventListener('click', open); closeBtn?.addEventListener('click', close);
         paletteInput.addEventListener('input', filter);
-        paletteInput.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
-            else if (e.key === 'ArrowUp')   { e.preventDefault(); moveActive(-1); }
-            else if (e.key === 'Enter')     { e.preventDefault(); activate(); }
-            else if (e.key === 'Escape')    { e.preventDefault(); close(); }
+        paletteInput.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault(); if (filtered.length) activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + filtered.length) % filtered.length; active();
+            } else if (event.key === 'Enter') { event.preventDefault(); activate(); }
+            else if (event.key === 'Home' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = 0; active(); }
+            else if (event.key === 'End' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = Math.max(0, filtered.length - 1); active(); }
         });
-        paletteList.addEventListener('click', function (ev) {
-            var li = ev.target.closest('[data-index]');
-            if (!li) return;
-            activeIndex = parseInt(li.getAttribute('data-index'), 10) || 0;
-            activate();
+        paletteList.addEventListener('click', function (event) {
+            var row = event.target.closest('[data-index]'); if (!row) return;
+            activeIndex = Number(row.getAttribute('data-index')); activate();
         });
-
-        // Global hotkey: cmd+k / ctrl+k. Registered in the capture
-        // phase so we fire before any component-level handlers (the
-        // `command` primitive on the gallery page also binds cmd+k)
-        // and stop the event from propagating further.
-        document.addEventListener('keydown', function (e) {
-            if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                if (isOpen()) close(); else open();
-            } else if (e.key === 'Escape' && isOpen()) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                close();
+        document.addEventListener('keydown', function (event) {
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+                // Inside an embedded app, its own search owns the same shortcut.
+                if (!palette.open && event.target.closest('.mui-block--shell')) return;
+                event.preventDefault(); event.stopImmediatePropagation(); if (palette.open) close(); else open();
             }
         }, true);
     })();

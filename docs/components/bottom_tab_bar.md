@@ -11,7 +11,7 @@ use maud_ui::primitives::bottom_tab_bar::{self, Item, More, Position, Props};
 ```rust
 use maud_ui::primitives::bottom_tab_bar::{self, Item, More, Props};
 bottom_tab_bar::render(Props {
-    items: vec![Item { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None }],
+    items: vec![Item { label: "Reservations and guest arrivals".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None }],
     current_href: Some("/reservations".into()),
     more: Some(More {
         label: "More".into(), target_id: "navigation-drawer".into(),

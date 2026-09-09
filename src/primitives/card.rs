@@ -137,11 +137,11 @@ pub fn showcase() -> Markup {
                     title: Some("Notifications".into()),
                     description: Some("Choose what you want to be notified about.".into()),
                     children: html! {
-                        div style="display:flex;flex-direction:column;gap:1rem;" {
-                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                        div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);" {
+                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                                 div {
-                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { "Push Notifications" }
-                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" {
+                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Push Notifications" }
+                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
                                         "Send notifications to device."
                                     }
                                 }
@@ -155,10 +155,10 @@ pub fn showcase() -> Markup {
                                     ..Default::default()
                                 }))
                             }
-                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                            div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                                 div {
-                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { "Email Notifications" }
-                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" {
+                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Email Notifications" }
+                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" {
                                         "Receive emails for activity updates."
                                     }
                                 }
@@ -175,7 +175,7 @@ pub fn showcase() -> Markup {
                         }
                     },
                     footer: Some(html! {
-                        div style="display:flex;gap:0.5rem;margin-left:auto;" {
+                        div style="display:flex;gap: var(--mui-space-sm);margin-left:auto;" {
                             (button::render(button::Props {
                                 label: "Save preferences".into(),
                                 variant: button::Variant::Primary,
@@ -196,8 +196,8 @@ pub fn showcase() -> Markup {
                     description: None,
                     children: html! {
                         div {
-                            p style="font-size:1.75rem;font-weight:700;margin:0;" { "$45,231.89" }
-                            p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.25rem 0 0;" {
+                            p style="font-size: var(--mui-text-h1-size);font-weight: var(--mui-weight-heading);margin: 0;" { "$45,231.89" }
+                            p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-xs) 0 0;" {
                                 "+20.1% from last month"
                             }
                         }
@@ -214,7 +214,7 @@ pub fn showcase() -> Markup {
                     title: Some("Create project".into()),
                     description: Some("Deploy your new project in one click.".into()),
                     children: html! {
-                        div style="display:flex;flex-direction:column;gap:0.75rem;" {
+                        div style="display:flex;flex-direction:column;gap: var(--mui-space-md);" {
                             div class="mui-field" {
                                 (label::render(label::Props {
                                     text: "Name".into(),
@@ -253,7 +253,7 @@ pub fn showcase() -> Markup {
                         }
                     },
                     footer: Some(html! {
-                        div style="display:flex;gap:0.5rem;justify-content:space-between;width:100%;" {
+                        div style="display:flex;gap: var(--mui-space-sm);justify-content:space-between;width:100%;" {
                             (button::render(button::Props {
                                 label: "Cancel".into(),
                                 variant: button::Variant::Outline,
@@ -280,7 +280,7 @@ pub fn showcase() -> Markup {
                     description: Some("6.2 GB of 15 GB used.".into()),
                     size: Size::Sm,
                     children: html! {
-                        div style="height:0.5rem;background:var(--mui-border);border-radius:9999px;overflow:hidden;" {
+                        div style="height:0.5rem;background:var(--mui-border);border-radius: var(--mui-radius-full);overflow:hidden;" {
                             div style="width:41%;height:100%;background:var(--mui-primary, #2563eb);" {}
                         }
                     },
@@ -303,10 +303,10 @@ pub fn showcase() -> Markup {
                         }))
                     }),
                     children: html! {
-                        ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.5rem;" {
-                            li style="font-size:0.875rem;" { "Alice Johnson — Owner" }
-                            li style="font-size:0.875rem;" { "Bob Smith — Editor" }
-                            li style="font-size:0.875rem;" { "Carol Davis — Viewer" }
+                        ul style="list-style:none;padding: 0;margin: 0;display:flex;flex-direction:column;gap: var(--mui-space-sm);" {
+                            li style="font-size: var(--mui-text-small-size);" { "Alice Johnson — Owner" }
+                            li style="font-size: var(--mui-text-small-size);" { "Bob Smith — Editor" }
+                            li style="font-size: var(--mui-text-small-size);" { "Carol Davis — Viewer" }
                         }
                     },
                     ..Default::default()

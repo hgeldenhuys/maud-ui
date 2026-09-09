@@ -1,0 +1,165 @@
+/* ── Resizable ────────────────────────────────────────────────────────── */
+
+.mui-resizable {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+}
+
+.mui-resizable--horizontal {
+  flex-direction: row;
+  min-height: 12rem;
+}
+
+.mui-resizable--vertical {
+  flex-direction: column;
+  min-height: 20rem;
+}
+
+/* ── Panels ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ── Handle ──────────────────────────────────────────────────────────── */
+
+.mui-resizable__handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-resizable--horizontal > .mui-resizable__handle {
+  width: 8px;
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical > .mui-resizable__handle {
+  height: 8px;
+  cursor: row-resize;
+}
+
+.mui-resizable__handle:hover,
+.mui-resizable__handle:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-resizable__handle:active {
+  background: var(--mui-border-focus);
+}
+
+/* ── Handle bar (grab indicator — dotted pattern) ──────────────────── */
+
+.mui-resizable__handle-bar {
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-border);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease);
+  position: relative;
+}
+
+.mui-resizable--horizontal .mui-resizable__handle-bar {
+  width: 4px;
+  height: 2rem;
+  background: transparent;
+  background-image: radial-gradient(circle, var(--mui-text-muted) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
+}
+
+.mui-resizable--vertical .mui-resizable__handle-bar {
+  height: 4px;
+  width: 2rem;
+  background: transparent;
+  background-image: radial-gradient(circle, var(--mui-text-muted) 1px, transparent 1px);
+  background-size: 4px 4px;
+  background-position: center;
+}
+
+.mui-resizable--horizontal > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--horizontal > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image: radial-gradient(circle, var(--mui-text) 1px, transparent 1px);
+}
+
+.mui-resizable--vertical > .mui-resizable__handle:hover .mui-resizable__handle-bar,
+.mui-resizable--vertical > .mui-resizable__handle:focus-visible .mui-resizable__handle-bar {
+  background-image: radial-gradient(circle, var(--mui-text) 1px, transparent 1px);
+}
+
+.mui-resizable__handle:active .mui-resizable__handle-bar {
+  background-image: radial-gradient(circle, var(--mui-accent) 1px, transparent 1px);
+}
+
+/* ── Dragging state (applied by JS) ──────────────────────────────────── */
+
+.mui-resizable[data-dragging] {
+  cursor: col-resize;
+}
+
+.mui-resizable--vertical[data-dragging] {
+  cursor: row-resize;
+}
+
+.mui-resizable[data-dragging] .mui-resizable__panel {
+  pointer-events: none;
+}
+
+/* ── Demo content (showcase only) ────────────────────────────────────── */
+
+.mui-resizable__demo-content {
+  padding: var(--mui-space-lg);
+}
+
+.mui-resizable__demo-content h4 {
+  margin: 0 0 var(--mui-space-sm);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-heading);
+  color: var(--mui-text);
+}
+
+.mui-resizable__demo-content p {
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  line-height: var(--mui-leading-small);
+}
+
+.mui-resizable__demo-nav {
+  list-style: none;
+  margin: var(--mui-space-md) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-2xs);
+}
+
+.mui-resizable__demo-nav li a {
+  display: block;
+  padding: var(--mui-inset-tight) var(--mui-inset-cell);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-resizable__demo-nav li a:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-resizable__demo-nav li a.active {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}

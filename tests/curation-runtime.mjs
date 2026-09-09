@@ -30,7 +30,13 @@ class Node {
     if (node.parentNode) node.parentNode.children = node.parentNode.children.filter(child => child !== node);
     this.children.push(node); node.parentNode = this;
   }
+  get id() { return this.getAttribute('id') || ''; }
+  set id(value) { this.setAttribute('id', value); }
+  get firstElementChild() { return this.children[0] || null; }
   get firstChild() { return this.children[0] || null; }
+  appendChild(node) { this.append(node); return node; }
+  replaceChildren(...nodes) { this.children = []; nodes.forEach(node => this.append(node)); }
+  scrollIntoView() { this.scrolled = true; }
   get nextSibling() { return this.parentNode?.children[this.parentNode.children.indexOf(this) + 1] || null; }
   insertBefore(node, reference) {
     this.append(node);
@@ -46,7 +52,9 @@ const byId = new Map();
 document.getElementById = id => byId.get(id) || null;
 const media = new Node(); media.matches = true;
 const window = new Node(); window.matchMedia = () => media;
-const context = { window, document, Element: Node, CustomEvent: class { constructor(type) { this.type = type; } }, getComputedStyle: node => ({ direction: node.direction || "ltr" }), setTimeout, clearTimeout, console };
+const storage = new Map();
+const localStorage = { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) };
+const context = { window, document, localStorage, FormData: class { constructor(form) { return form.values; } }, Element: Node, CustomEvent: class { constructor(type) { this.type = type; } }, getComputedStyle: node => ({ direction: node.direction || "ltr" }), setTimeout, clearTimeout, console };
 vm.runInNewContext(readFileSync("static/maud-ui.js", "utf8"), context);
 const ui = window.MaudUI;
 const event = (type, values = {}) => ({ type, button: 0, ...values, preventDefault() { this.defaultPrevented = true; } });
@@ -152,4 +160,140 @@ test("theme copy reports success only after the clipboard write and offers a fai
   clipboard.writeText = async () => { throw new Error('Permission denied'); };
   await copy.listeners.click[0].fn();
   assert.match(status.textContent, /Select the CSS above or download/);
+});
+
+test("group preferences survive rail expansion, restore on exit, and degrade when storage is unavailable", () => {
+  const group = new Node({ 'data-mui': 'nav-group', 'data-nav-key': 'work' }); group.open = true;
+  storage.set('mui-nav-group:work', 'closed');
+  ui.init(group); assert.equal(group.open, false);
+  const root = new Node(); root.nodes['[data-mui="nav-group"]'] = [group];
+  ui.navigation.forceGroups(root, true); assert.equal(group.open, true);
+  group.dispatchEvent(event('toggle')); assert.equal(storage.get('mui-nav-group:work'), 'closed');
+  ui.navigation.forceGroups(root, false); assert.equal(group.open, false);
+  group.open = true; group.dispatchEvent(event('toggle')); assert.equal(storage.get('mui-nav-group:work'), 'open');
+  const replacement = new Node({ 'data-mui': 'nav-group', 'data-nav-key': 'work' }); replacement.open = false;
+  ui.init(replacement); assert.equal(replacement.open, true);
+  const originalGet = localStorage.getItem; localStorage.getItem = () => { throw Error('blocked'); };
+  const denied = new Node({ 'data-mui': 'nav-group', 'data-nav-key': 'denied' }); denied.open = true;
+  assert.doesNotThrow(() => ui.init(denied)); assert.equal(denied.open, true);
+  localStorage.getItem = originalGet;
+});
+
+test("shell rail persists once, clears a hidden filter, and restores a single navigation node", () => {
+  const oldMatchMedia = window.matchMedia;
+  const phone = new Node(), desktop = new Node(); phone.matches = false; desktop.matches = true;
+  window.matchMedia = query => query.includes('64rem') ? desktop : phone;
+  const shell = new Node({ id: 'rail-test', 'data-mui': 'shell-navigation', 'data-collapsed': 'false' });
+  const sidebar = new Node(), main = new Node(), panel = dialog(), rail = new Node(), input = new Node(); input.value = 'billing';
+  const hiddenRow = new Node(); hiddenRow.hidden = true;
+  shell.append(sidebar); shell.append(main); shell.append(panel);
+  shell.nodes['.mui-block--shell__sidebar'] = [sidebar]; shell.nodes['.mui-navigation-dialog'] = [panel]; shell.nodes['.mui-block--shell__main'] = [main];
+  shell.nodes['[data-mui="shell-rail"]'] = [rail]; sidebar.nodes['[data-mui-nav-search]'] = [input]; sidebar.nodes['li, .mui-block--shell__nav-group'] = [hiddenRow];
+  ui.init(shell); ui.init(shell);
+  rail.dispatchEvent(event('click'));
+  assert.equal(rail.listeners.click.length, 1);
+  assert.equal(shell.getAttribute('data-collapsed'), 'true'); assert.equal(rail.getAttribute('aria-expanded'), 'false');
+  assert.equal(storage.get('mui-shell-rail:rail-test'), 'true'); assert.equal(input.value, ''); assert.equal(hiddenRow.hidden, false);
+  desktop.matches = false; desktop.dispatchEvent(event('change')); assert.equal(rail.getAttribute('aria-expanded'), 'true');
+  shell.isConnected = false; desktop.dispatchEvent(event('change')); phone.dispatchEvent(event('change'));
+  window.matchMedia = oldMatchMedia;
+});
+
+test("workspace filters, record selection and local create agree on counts and retain text safety", () => {
+  const shell = new Node({ id: 'example' }), demo = new Node({ 'data-mui': 'workspace-demo' });
+  const search = new Node(), searchForm = new Node(), table = new Node(), record = new Node(), form = new Node(), panel = dialog();
+  const feedback = new Node(), title = new Node(), subtitle = new Node(), status = new Node(), empty = new Node(), countSentence = new Node();
+  panel.id = 'example-new'; search.value = ''; search.closest = () => searchForm; form.closest = () => panel; demo.closest = () => shell;
+  form.reportValidity = () => true; form.reset = () => { form.resetCalled = true; };
+  const labels = ['All', 'Arriving', 'Checked in', 'Needs review'];
+  const chips = labels.map((label, i) => { const chip = new Node({ href: '#example-filter-' + i }); chip.nodes['.mui-status-chip-group__count'] = [new Node()]; chip.nodes['.mui-sr-only'] = [new Node()]; return chip; });
+  function row(name, state, room = 'Garden suite', nights = '2', reference = 'RS-2048') {
+    const row = new Node(); row.textContent = name + ' ' + room + ' ' + state;
+    const guest = new Node({ 'data-guest': name, 'data-status': state, 'data-room': room, 'data-reference': reference });
+    const ref = new Node(), badge = new Node(), view = new Node({ href: '#example-record', 'data-demo-view': '' }); badge.textContent = state;
+    const cells = [new Node(), new Node(), new Node(), new Node(), new Node()]; cells[2].append(badge); cells[3].textContent = nights; cells.forEach(cell => row.append(cell));
+    view.closest = selector => selector === 'tr' ? row : selector === 'a[href]' ? view : null;
+    row.nodes['[data-guest]'] = [guest]; row.nodes['.mui-workspace-example__reference'] = [ref]; row.nodes['[data-demo-view]'] = [view];
+    badge.cloneNode = () => { const cloned = new Node(); cloned.textContent = badge.textContent; return cloned; };
+    row.cloneNode = () => rowFactory();
+    function rowFactory() { return makeRow(name, state, room, nights, reference); }
+    return row;
+  }
+  const makeRow = row;
+  const first = row('Amira Khan', 'Arriving'), second = row('Lina Chen', 'Checked in'); table.append(first); table.append(second);
+  table.querySelectorAll = selector => selector === 'tr' ? table.children : [];
+  for (const [selector, node] of Object.entries({
+    '.mui-worklist-header input[type="search"]': search, 'tbody': table, '.mui-workspace-example__record': record, '[data-demo-create]': form,
+    '[role="status"]': feedback, '[data-demo-title]': title, '.mui-record-header__subtitle': subtitle, '[data-demo-status]': status,
+    '.mui-workspace-example__empty': empty, '.mui-worklist-header__count': countSentence,
+  })) demo.nodes[selector] = [node];
+  demo.nodes['.mui-status-chip-group__chip'] = chips;
+  ui.init(demo);
+  search.value = 'lina'; search.dispatchEvent(event('input')); assert.equal(first.hidden, true); assert.equal(second.hidden, false); assert.equal(feedback.textContent, '1 reservation shown.');
+  search.value = ''; demo.dispatchEvent(event('click', { target: chips[1] })); assert.equal(first.hidden, false); assert.equal(second.hidden, true); assert.equal(chips[1].getAttribute('aria-current'), 'page');
+  demo.dispatchEvent(event('click', { target: first.querySelector('[data-demo-view]') })); assert.equal(title.textContent, 'Amira Khan'); assert.equal(document.activeElement, record); assert.equal(record.scrolled, true);
+  form.values = new Map([['guest', '<img src=x onerror=alert(1)>'], ['room', 'Terrace suite'], ['nights', '3']]);
+  form.dispatchEvent(event('submit'));
+  assert.equal(table.children.length, 3); assert.equal(chips[0].querySelector('.mui-status-chip-group__count').textContent, '3');
+  assert.equal(chips[1].querySelector('.mui-status-chip-group__count').textContent, '2');
+  assert.equal(table.children[2].querySelector('[data-guest]').textContent, '<img src=x onerror=alert(1)>');
+  assert.equal(table.children[2].children[3].textContent, '3'); assert.equal(form.resetCalled, true);
+  assert(feedback.textContent.includes('Changes stay on this page.')); assert.equal(search.value, '');
+});
+
+test("gallery palette groups recents, rejects unknown stored routes, keeps keyboard selection and restores focus", () => {
+  const panel = dialog(), input = new Node(), list = new Node(), opener = new Node(), closer = new Node(), origin = new Node();
+  class PaletteNode extends Node {
+    constructor() { super(); this.classes = new Set(); this.classList = { toggle: (name, enabled) => enabled ? this.classes.add(name) : this.classes.delete(name) }; }
+    closest(selector) { return selector === '[data-index]' && this.hasAttribute('data-index') ? this : super.closest(selector); }
+  }
+  list.querySelectorAll = selector => selector === '[role="option"]' ? list.children.filter(node => node.getAttribute('role') === 'option') : [];
+  list.querySelector = selector => selector === '[aria-selected="true"]' ? list.children.find(node => node.getAttribute('aria-selected') === 'true') : null;
+  document.createElement = () => new PaletteNode();
+  for (const [id, node] of Object.entries({ 'mui-palette': panel, 'mui-palette-input': input, 'mui-palette-list': list, 'mui-palette-open': opener, 'mui-palette-close': closer })) byId.set(id, node);
+  const data = [{ l: 'Home', u: '/', k: 'page' }, { l: 'Table', u: '/table', k: 'component' }, { l: 'Page header', u: '/blocks/shell-page-header', k: 'block' }];
+  window.__MUI_PALETTE__ = data; window.location = { href: '/' };
+  storage.set('mui-palette-recent', JSON.stringify(['/table', 'javascript:alert(1)', '/table', null, { u: '/table' }]));
+  const source = readFileSync('src/showcase/mod.rs', 'utf8');
+  const start = source.indexOf('    // ── Command palette ─', source.indexOf('fn showcase_js'));
+  const end = source.indexOf('    // ── Theme + direction', start);
+  let drawerClosed = false;
+  vm.runInNewContext(source.slice(start, end), { ...context, htmlEl: document.documentElement, setDrawer: () => { drawerClosed = true; } });
+  origin.focus(); opener.dispatchEvent(event('click'));
+  assert(panel.open && drawerClosed); assert.equal(document.activeElement, input); assert.equal(input.getAttribute('aria-expanded'), 'true');
+  assert.equal(list.children[0].textContent, 'Recent'); assert.equal(list.querySelectorAll('[role="option"]').length, 3);
+  assert.equal(list.querySelector('[aria-selected="true"]').getAttribute('data-index'), '0');
+  input.dispatchEvent(event('keydown', { key: 'ArrowDown' })); assert.equal(input.getAttribute('aria-activedescendant'), 'mui-palette-option-1');
+  input.value = 'not a destination'; input.dispatchEvent(event('input')); assert.equal(list.querySelectorAll('[role="option"]').length, 0); assert.equal(input.getAttribute('aria-activedescendant'), null);
+  input.dispatchEvent(event('keydown', { key: 'Enter' })); assert.equal(window.location.href, '/');
+  input.value = 'table'; input.dispatchEvent(event('input')); input.dispatchEvent(event('keydown', { key: 'Enter' }));
+  assert.equal(window.location.href, '/table'); assert.equal(panel.open, false); assert.equal(document.activeElement, origin);
+  assert.deepEqual(JSON.parse(storage.get('mui-palette-recent')), ['/table']);
+  assert.equal(input.getAttribute('aria-expanded'), 'false');
+});
+
+test("data table sorting and pagination preserve original rich cells, numeric alignment and selected controls", () => {
+  const root = new Node({ 'data-mui': 'data-table', 'data-page-size': '1' });
+  const body = new Node(), info = new Node(), previous = new Node(), next = new Node(), search = new Node(); search.value = '';
+  const nameHeader = new Node({ 'data-key': 'name', 'data-sortable': 'true' });
+  const amountHeader = new Node({ 'data-key': 'amount', 'data-sortable': 'true', 'data-align': 'right' });
+  function richRow(name, value) {
+    const row = new Node(), selectCell = new Node(), nameCell = new Node(), amount = new Node({ 'data-align': 'right' });
+    selectCell.classList = { contains: () => true }; selectCell.checked = true;
+    nameCell.textContent = name; amount.textContent = value;
+    nameCell.classList = amount.classList = { contains: () => false };
+    row.append(selectCell); row.append(nameCell); row.append(amount); return row;
+  }
+  const alpha = richRow('Alpha', '$250.00'), beta = richRow('Beta', '$100.00'); body.append(alpha); body.append(beta);
+  Object.defineProperty(body, 'innerHTML', { set() { throw Error('original row nodes must survive'); } });
+  body.querySelectorAll = selector => selector === 'tr' ? body.children : [];
+  for (const [selector, node] of Object.entries({ '.mui-data-table__body': body, '.mui-data-table__info': info, '[data-action="prev"]': previous, '[data-action="next"]': next, '.mui-data-table__search': search })) root.nodes[selector] = [node];
+  root.nodes['.mui-data-table__th[data-key]'] = [nameHeader, amountHeader];
+  ui.init(root);
+  assert.equal(alpha.hidden, false); assert.equal(beta.hidden, true);
+  amountHeader.dispatchEvent(event('keydown', { key: 'Enter' }));
+  assert.equal(amountHeader.getAttribute('aria-sort'), 'ascending'); assert.equal(beta.hidden, false); assert.equal(alpha.hidden, true);
+  assert.equal(body.children[0], beta); assert.equal(beta.children[2].getAttribute('data-align'), 'right'); assert.equal(beta.children[0].checked, true);
+  next.dispatchEvent(event('click')); assert.equal(alpha.hidden, false); assert.equal(info.textContent, 'Showing 2-2 of 2');
+  search.value = 'beta'; search.dispatchEvent(event('input')); assert.equal(beta.hidden, false); assert.equal(next.disabled, true); assert.equal(info.textContent, 'Showing 1-1 of 1');
 });

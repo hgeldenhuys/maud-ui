@@ -1,54 +1,6 @@
-//! `shell::sidebar` — full app shell: vertical nav on the left, topbar
-//! with a main content slot on the right. Drop your whole app inside
-//! `children`; the shell handles layout, active-state highlighting, and
-//! the user footer.
-//!
-//! Visual reference: Linear, Vercel, Stripe dashboards. Fixed 16rem
-//! sidebar with a branded header, grouped nav items (optional section
-//! headings), and a user footer at the bottom. Sticky topbar spans the
-//! content column with an optional title, custom right-side actions
-//! slot, and `data-mui-drawer-trigger` on mobile.
-//!
-//! ## Example
-//!
-//! ```no_run
-//! use maud::{html, Markup};
-//! use maud_ui::blocks::shell::sidebar;
-//!
-//! fn dashboard_page() -> Markup {
-//!     sidebar::render(sidebar::Props {
-//!         brand: html! {
-//!             span style="font-weight:600;" { "Acme" }
-//!         },
-//!         active_path: "/dashboard".into(),
-//!         nav_groups: vec![
-//!             sidebar::NavGroup {
-//!                 label: None,
-//!                 items: vec![
-//!                     sidebar::NavItem {
-//!                         label: "Dashboard".into(),
-//!                         short_label: Some("Home".into()),
-//!                         href: "/dashboard".into(),
-//!                         icon: None,
-//!                         badge: None,
-//!                     },
-//!                 ],
-//!             },
-//!         ],
-//!         user: Some(sidebar::UserBlock {
-//!             name: "Sofia Davis".into(),
-//!             email: "sofia@acme.com".into(),
-//!             avatar_initials: "SD".into(),
-//!             menu_href: "/settings".into(),
-//!         }),
-//!         topbar_title: Some("Overview".into()),
-//!         topbar_actions: html! {},
-//!         children: html! { p { "Your app here." } },
-//!         ..Default::default()
-//!     })
-//! }
-//! ```
-
+//! Application shell with one sidebar node, a persistent desktop rail and a native phone drawer.
+//! Masthead and footer are optional; the page header carries route context.
+use super::page_header;
 use crate::primitives::bottom_tab_bar;
 use maud::{html, Markup, PreEscaped};
 
@@ -56,145 +8,153 @@ use maud::{html, Markup, PreEscaped};
 pub enum MobileNavigation {
     #[default]
     Drawer,
-    /// First four destinations plus More; every destination remains in the drawer.
+    /// First four destinations plus More; nested destinations also remain reachable.
     Tabs,
 }
 
-/// Props for the sidebar shell.
 #[derive(Clone, Debug)]
 pub struct Props {
-    /// Unique shell ID, also used to derive navigation and drawer IDs.
+    /// Stable, unique ID: navigation, drawer and local preferences are scoped to it.
     pub id: String,
-    /// Search box, workspace switchers, or other content above the grouped navigation.
-    pub header: Option<Markup>,
-    pub mobile_navigation: MobileNavigation,
-    /// Brand/logo shown at the top of the sidebar. Typically an inline
-    /// SVG + product name. No default — consumers always brand their
-    /// own shell.
     pub brand: Markup,
-
-    /// Grouped nav items rendered in the sidebar body, in order.
+    pub header: Option<Markup>,
+    pub sidebar_footer: Option<Markup>,
     pub nav_groups: Vec<NavGroup>,
-
-    /// Current page path. A nav item whose `href` matches this value
-    /// gets the `--active` styling. Use exact match.
     pub active_path: String,
-
-    /// Optional user footer at the bottom of the sidebar. `None` hides
-    /// the footer entirely — useful for marketing shells or when the
-    /// user isn't signed in yet.
     pub user: Option<UserBlock>,
-
-    /// Topbar title shown in the main column's header. `None` shows
-    /// just the actions row.
+    pub mobile_navigation: MobileNavigation,
+    pub collapsible: bool,
+    pub default_collapsed: bool,
     pub topbar_title: Option<String>,
-
-    /// Topbar right-side slot. Typical content: a primary action
-    /// button, search input, notifications bell, command-palette
-    /// trigger. Empty `html!` = no actions.
     pub topbar_actions: Markup,
-
-    /// The page's main content. This is where your route-specific
-    /// markup goes.
+    /// Overrides the title/actions topbar; the shell supplies its own menu trigger.
+    pub page_header: Option<page_header::Props>,
+    pub app_header: Markup,
+    pub app_footer: Markup,
+    /// Use a section for the content when composing inside an existing main landmark.
+    pub embedded: bool,
     pub children: Markup,
 }
-
 impl Default for Props {
     fn default() -> Self {
         Self {
             id: "mui-app".into(),
+            brand: html! { span class="mui-block--shell__brand-name" { "App" } },
             header: None,
-            mobile_navigation: MobileNavigation::Drawer,
-            brand: html! {
-                span style="font-weight:600;font-size:1rem;" { "App" }
-            },
-            nav_groups: Vec::new(),
+            sidebar_footer: None,
+            nav_groups: vec![],
             active_path: String::new(),
             user: None,
+            mobile_navigation: MobileNavigation::Drawer,
+            collapsible: true,
+            default_collapsed: false,
             topbar_title: None,
             topbar_actions: html! {},
+            page_header: None,
+            app_header: html! {},
+            app_footer: html! {},
+            embedded: false,
             children: html! {},
         }
     }
 }
 
-/// A group of nav items under an optional section heading.
-#[derive(Clone, Debug)]
+/// Labeled groups use native details/summary and remember their open state locally.
+#[derive(Clone, Debug, Default)]
 pub struct NavGroup {
-    /// Optional section label (e.g. "Workspace", "Analytics"). `None`
-    /// renders the items directly with no heading.
     pub label: Option<String>,
     pub items: Vec<NavItem>,
 }
-
-/// A single nav link. Compare `href` to `Props.active_path` for
-/// active-state styling.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct NavItem {
     pub label: String,
-    /// Compact bottom-tab label; the sidebar always shows the full label.
     pub short_label: Option<String>,
     pub href: String,
-    /// Optional inline SVG icon rendered on the left. Use
-    /// `stroke="currentColor"` so it matches text color and inverts
-    /// in the active state.
+    /// Decorative SVG in a consistent 16px slot. A letter fallback survives rail collapse.
     pub icon: Option<Markup>,
-    /// Optional badge/count rendered on the right (e.g. "12" for
-    /// unread notifications, "New" for a feature flag).
     pub badge: Option<String>,
+    pub children: Vec<NavItem>,
 }
-
-/// User information shown in the sidebar footer.
 #[derive(Clone, Debug)]
 pub struct UserBlock {
     pub name: String,
     pub email: String,
-    /// Two-letter fallback shown when there's no avatar image.
-    /// Typically first letters of given + family name.
     pub avatar_initials: String,
-    /// Click target for the user footer — usually a settings or
-    /// account page.
     pub menu_href: String,
 }
 
-/// Render the sidebar shell.
+fn flatten<'a>(items: &'a [NavItem], output: &mut Vec<&'a NavItem>) {
+    for item in items {
+        output.push(item);
+        flatten(&item.children, output);
+    }
+}
+fn nav_items(items: &[NavItem], current: Option<&NavItem>) -> Markup {
+    html! {
+        ul class="mui-block--shell__nav-list" {
+            @for item in items {
+                @let active = current.is_some_and(|selected| std::ptr::eq(selected, item));
+                li {
+                    a href=(item.href) class=(if active { "mui-block--shell__nav-item mui-block--shell__nav-item--active" } else { "mui-block--shell__nav-item" })
+                        aria-current=[active.then_some("page")] title=(item.label)
+                        aria-label=(if let Some(badge) = &item.badge { format!("{} — {}", item.label, badge) } else { item.label.clone() }) {
+                        span class="mui-block--shell__nav-icon" aria-hidden="true" {
+                            @if let Some(icon) = &item.icon { (icon) } @else { (item.label.chars().next().unwrap_or('·')) }
+                        }
+                        span class="mui-block--shell__nav-label" { (item.label) }
+                        @if let Some(badge) = &item.badge { span class="mui-block--shell__nav-badge" { (badge) } }
+                    }
+                    @if !item.children.is_empty() { (nav_items(&item.children, current)) }
+                }
+            }
+        }
+    }
+}
+
 pub fn render(props: Props) -> Markup {
     let nav_id = format!("{}-navigation", props.id);
     let drawer_id = format!("{}-drawer", props.id);
-    let items: Vec<_> = props
-        .nav_groups
-        .iter()
-        .flat_map(|group| &group.items)
-        .collect();
+    let mut items = Vec::new();
+    for group in &props.nav_groups {
+        flatten(&group.items, &mut items);
+    }
     let current = items.iter().position(|item| item.href == props.active_path);
+    let selected = current.map(|i| items[i]);
     let mobile_tabs = props.mobile_navigation == MobileNavigation::Tabs;
+    let trigger = html! {
+        a class="mui-block--shell__trigger mui-btn mui-btn--outline mui-btn--sm" href=(format!("#{nav_id}"))
+            data-mui="navigation-trigger" aria-controls=(&drawer_id) aria-haspopup="dialog" { "Menu" }
+        @if props.collapsible {
+            button class="mui-block--shell__collapse mui-btn mui-btn--ghost mui-btn--icon" type="button"
+                data-mui="shell-rail" aria-controls=(&nav_id) aria-expanded=((!props.default_collapsed).to_string()) aria-label="Toggle sidebar" title="Toggle sidebar" {
+                svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" {
+                    rect x="3" y="4" width="18" height="16" rx="2"; path d="M9 4v16";
+                }
+            }
+        }
+    };
     html! {
         div class="mui-block mui-block--shell" id=(props.id) data-mui="shell-navigation"
+            data-collapsed=(props.default_collapsed.to_string()) data-embedded=(props.embedded.to_string())
             data-mobile-navigation=(if mobile_tabs { "tabs" } else { "drawer" }) {
+            (props.app_header)
             aside class="mui-block--shell__sidebar" id=(&nav_id) aria-label="Application navigation" tabindex="-1" {
                 div class="mui-block--shell__brand" { (props.brand) }
                 @if let Some(header) = props.header { div class="mui-block--shell__header" { (header) } }
                 nav class="mui-block--shell__nav" aria-label="Primary" {
-                    @for group in &props.nav_groups {
-                        div class="mui-block--shell__nav-group" role="group" aria-label=[group.label.as_ref()] {
-                            @if let Some(label) = &group.label { div class="mui-block--shell__nav-group-label" { (label) } }
-                            ul class="mui-block--shell__nav-list" {
-                                @for item in &group.items {
-                                    @let active = current.is_some_and(|index| std::ptr::eq(items[index], item));
-                                    li {
-                                        a href=(item.href) class=(if active { "mui-block--shell__nav-item mui-block--shell__nav-item--active" } else { "mui-block--shell__nav-item" }) aria-current=[active.then_some("page")] {
-                                            @if let Some(icon) = &item.icon { span class="mui-block--shell__nav-icon" aria-hidden="true" { (icon) } }
-                                            span class="mui-block--shell__nav-label" { (item.label) }
-                                            @if let Some(badge) = &item.badge { span class="mui-block--shell__nav-badge" { (badge) } }
-                                        }
-                                    }
-                                }
+                    @for (index, group) in props.nav_groups.iter().enumerate() {
+                        @if let Some(label) = &group.label {
+                            details class="mui-block--shell__nav-group" role="group" aria-label=(label) open
+                                data-mui="nav-group" data-nav-key=(format!("{}:{}:{}", nav_id, index, label)) {
+                                summary class="mui-block--shell__nav-group-label" { (label) }
+                                (nav_items(&group.items, selected))
                             }
-                        }
+                        } @else { div class="mui-block--shell__nav-group" { (nav_items(&group.items, selected)) } }
                     }
                 }
-                @if let Some(user) = &props.user {
-                    a href=(user.menu_href) class="mui-block--shell__user" {
+                @if let Some(footer) = props.sidebar_footer { div class="mui-block--shell__footer" { (footer) } }
+                @else if let Some(user) = &props.user {
+                    a href=(user.menu_href) class="mui-block--shell__user" title=(user.name) aria-label=(user.name) {
                         span class="mui-block--shell__user-avatar" aria-hidden="true" { (user.avatar_initials) }
                         span class="mui-block--shell__user-text" {
                             span class="mui-block--shell__user-name" { (user.name) }
@@ -205,200 +165,161 @@ pub fn render(props: Props) -> Markup {
                 }
             }
             div class="mui-block--shell__main" {
-                header class="mui-block--shell__topbar" {
-                    a class="mui-block--shell__trigger mui-btn mui-btn--outline mui-btn--sm" href=(format!("#{nav_id}"))
-                        data-mui="navigation-trigger" aria-controls=(&drawer_id) aria-haspopup="dialog" { "Menu" }
-                    @if let Some(title) = &props.topbar_title { h1 class="mui-block--shell__topbar-title" { (title) } }
-                    div class="mui-block--shell__topbar-actions" { (props.topbar_actions) }
+                @if let Some(mut page) = props.page_header {
+                    @let custom_leading = page.leading;
+                    @let () = { page.leading = html! { (trigger) (custom_leading) }; };
+                    (page_header::render(page))
+                } @else {
+                    header class="mui-block--shell__topbar" {
+                        (trigger)
+                        @if let Some(title) = &props.topbar_title { span class="mui-block--shell__topbar-title" { (title) } }
+                        div class="mui-block--shell__topbar-actions" { (props.topbar_actions) }
+                    }
                 }
-                main class="mui-block--shell__content" { (props.children) }
+                @if props.embedded { section class="mui-block--shell__content" aria-label="Workspace content" { (props.children) } }
+                @else { main class="mui-block--shell__content" { (props.children) } }
             }
+            (props.app_footer)
             dialog class="mui-navigation-dialog" id=(&drawer_id) aria-label="Application navigation" {
                 form method="dialog" { button class="mui-btn mui-btn--outline mui-btn--sm" { "Close navigation" } }
             }
             @if mobile_tabs {
                 (bottom_tab_bar::render(bottom_tab_bar::Props {
-                    items: items.iter().take(4).map(|item| bottom_tab_bar::Item {
-                        label: item.label.clone(), short_label: item.short_label.clone(), href: item.href.clone(), icon: item.icon.clone(),
-                    }).collect(),
+                    items: items.iter().take(4).map(|item| bottom_tab_bar::Item { label: item.label.clone(), short_label: item.short_label.clone(), href: item.href.clone(), icon: item.icon.clone() }).collect(),
                     current_href: Some(props.active_path.clone()),
-                    more: Some(bottom_tab_bar::More {
-                        label: "More".into(), target_id: drawer_id, fallback_href: format!("#{nav_id}"),
-                        current: current.is_some_and(|i| i >= 4),
-                    }), ..Default::default()
+                    more: Some(bottom_tab_bar::More { label: "More".into(), target_id: drawer_id, fallback_href: format!("#{nav_id}"), current: current.is_some_and(|i| i >= 4) }),
+                    position: if props.embedded { bottom_tab_bar::Position::Inline } else { bottom_tab_bar::Position::Fixed },
+                    ..Default::default()
                 }))
             }
         }
     }
 }
 
-/// Realistic filled-in preview for the showcase — a small admin
-/// dashboard with 3 nav groups, a user footer, and 4 stat cards in
-/// the content slot.
+/// Same application in both palettes, with the optional masthead and footer.
 pub fn preview() -> Markup {
-    use crate::primitives::{button, card};
-
-    let body = html! {
-        div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem;margin-bottom:1.5rem;" {
-            @for (label, value, delta) in &[
-                ("MRR",             "$42,310", "+12.4%"),
-                ("New customers",   "284",     "+8.1%"),
-                ("Active sessions", "1,429",   "-3.2%"),
-                ("Churn",           "2.1%",    "-0.4%"),
-            ] {
-                (card::render(card::Props {
-                    children: html! {
-                        p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0;text-transform:uppercase;letter-spacing:0.04em;" {
-                            (*label)
-                        }
-                        p style="font-size:1.5rem;font-weight:600;margin:0.375rem 0 0.25rem;color:var(--mui-text);" {
-                            (*value)
-                        }
-                        p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0;" {
-                            @if delta.starts_with('-') {
-                                span style="color:var(--mui-danger-text);font-weight:500;" { (*delta) }
-                            } @else {
-                                span style="color:var(--mui-success-text);font-weight:500;" { (*delta) }
-                            }
-                            " vs last month"
-                        }
-                    },
-                    ..Default::default()
-                }))
+    html! {
+        div class="mui-shell-previews" {
+            @for theme in ["light", "dark"] {
+                section data-theme=(theme) class="mui-shell-preview" {
+                    p class="mui-eyebrow" { (theme) " · optional header and footer" }
+                    (example(&format!("showcase-shell-{theme}")))
+                }
             }
         }
+    }
+}
 
-        (card::render(card::Props {
-            title: Some("Recent activity".into()),
-            children: html! {
-                ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.5rem;" {
-                    @for (who, action, when) in &[
-                        ("Sofia Davis", "upgraded to the Pro plan",      "2 min ago"),
-                        ("Mateo Ortega", "invited 3 teammates",          "14 min ago"),
-                        ("Jin-Ho Lee",   "published a new workflow",     "37 min ago"),
-                        ("Amira Khan",   "exported the Q1 revenue report","1 hour ago"),
-                    ] {
-                        li style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0;border-bottom:1px solid var(--mui-border);" {
-                            span style="width:1.75rem;height:1.75rem;border-radius:var(--mui-radius-full);background:var(--mui-bg-input);display:inline-flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;color:var(--mui-text-muted);flex-shrink:0;" {
-                                (who.chars().next().unwrap_or('?'))
-                            }
-                            span style="flex:1;font-size:0.875rem;color:var(--mui-text);" {
-                                span style="font-weight:500;" { (*who) }
-                                " " (*action)
-                            }
-                            span style="font-size:0.75rem;color:var(--mui-text-subtle);" { (*when) }
-                        }
-                    }
-                }
-            },
-            ..Default::default()
-        }))
-    };
-
-    let topbar_actions = html! {
-        (button::render(button::Props {
-            label: "Invite".into(),
-            variant: crate::primitives::button::Variant::Outline,
-            size: crate::primitives::button::Size::Sm,
-            ..Default::default()
-        }))
-        (button::render(button::Props {
-            label: "New project".into(),
-            variant: crate::primitives::button::Variant::Primary,
-            size: crate::primitives::button::Size::Sm,
-            ..Default::default()
-        }))
-    };
-
+/// The landing hero and the shell showcase share a real component composition.
+pub(crate) fn example(id: &str) -> Markup {
+    use super::{app_footer, app_header};
+    use crate::primitives::breadcrumb::BreadcrumbItem;
     render(Props {
-        id: "showcase-shell".into(),
-        mobile_navigation: MobileNavigation::Tabs,
+        id: id.into(),
+        embedded: true,
+        app_header: app_header::render(app_header::Props {
+            brand: Some(html! { a href="/blocks/shell-sidebar" { "Garden House" } }),
+            actions: Some(html! { span class="mui-app-header__note" { "Example workspace" } }),
+            ..Default::default()
+        }),
+        app_footer: app_footer::render(app_footer::Props {
+            line: Some("Garden House · Independent hospitality".into()),
+            links: vec![crate::blocks::action::Link {
+                label: "About this example".into(),
+                href: "/blocks/shell-sidebar".into(),
+            }],
+            ..Default::default()
+        }),
+        brand: html! { span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) } span class="mui-block--shell__brand-name" { "Front desk" } },
         header: Some(
             html! { label { span class="mui-sr-only" { "Find a destination" } input class="mui-input" type="search" placeholder="Find a destination…" data-mui-nav-search; } },
         ),
-        brand: html! {
-            span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) }
-            span class="mui-block--shell__brand-name" { "Acme" }
-        },
-        active_path: "/dashboard".into(),
+        active_path: "/blocks/worklist-header".into(),
         nav_groups: vec![
-            NavGroup {
-                label: None,
-                items: vec![
-                    NavItem {
-                        label: "Dashboard".into(),
-                        short_label: Some("Home".into()),
-                        href: "/dashboard".into(),
-                        icon: Some(icon_grid()),
-                        badge: None,
-                    },
-                    NavItem {
-                        label: "Projects".into(),
-                        short_label: None,
-                        href: "/projects".into(),
-                        icon: Some(icon_folder()),
-                        badge: None,
-                    },
-                    NavItem {
-                        label: "Inbox".into(),
-                        short_label: None,
-                        href: "/inbox".into(),
-                        icon: Some(icon_inbox()),
-                        badge: Some("12".into()),
-                    },
-                ],
-            },
             NavGroup {
                 label: Some("Workspace".into()),
                 items: vec![
                     NavItem {
-                        label: "Team".into(),
-                        short_label: None,
-                        href: "/team".into(),
-                        icon: Some(icon_users()),
-                        badge: None,
+                        label: "Overview".into(),
+                        href: "/blocks/dashboard-stats".into(),
+                        icon: Some(icon_grid()),
+                        ..Default::default()
                     },
                     NavItem {
-                        label: "Billing".into(),
-                        short_label: None,
-                        href: "/billing".into(),
-                        icon: Some(icon_card()),
-                        badge: None,
+                        label: "Reservations and guest arrivals".into(),
+                        short_label: Some("Stays".into()),
+                        href: "/blocks/worklist-header".into(),
+                        icon: Some(icon_folder()),
+                        badge: Some("4".into()),
+                        ..Default::default()
                     },
                     NavItem {
-                        label: "Integrations".into(),
-                        short_label: None,
-                        href: "/integrations".into(),
-                        icon: Some(icon_plug()),
-                        badge: Some("New".into()),
+                        label: "Guest inbox".into(),
+                        href: "/blocks/record-header".into(),
+                        icon: Some(icon_inbox()),
+                        ..Default::default()
                     },
                 ],
             },
             NavGroup {
-                label: Some("Account".into()),
-                items: vec![NavItem {
-                    label: "Settings".into(),
-                    short_label: None,
-                    href: "/settings".into(),
-                    icon: Some(icon_settings()),
-                    badge: None,
-                }],
+                label: Some("Manage".into()),
+                items: vec![
+                    NavItem {
+                        label: "Team".into(),
+                        href: "/blocks/settings-team".into(),
+                        icon: Some(icon_users()),
+                        ..Default::default()
+                    },
+                    NavItem {
+                        label: "Settings".into(),
+                        href: "/blocks/settings-profile".into(),
+                        icon: Some(icon_settings()),
+                        children: vec![
+                            NavItem {
+                                label: "Billing".into(),
+                                href: "/blocks/settings-billing".into(),
+                                icon: Some(icon_card()),
+                                ..Default::default()
+                            },
+                            NavItem {
+                                label: "Integrations".into(),
+                                href: "/integrations/mermaid".into(),
+                                icon: Some(icon_plug()),
+                                ..Default::default()
+                            },
+                        ],
+                        ..Default::default()
+                    },
+                ],
             },
         ],
         user: Some(UserBlock {
             name: "Sofia Davis".into(),
-            email: "sofia@acme.com".into(),
+            email: "Front desk manager".into(),
             avatar_initials: "SD".into(),
-            menu_href: "/settings".into(),
+            menu_href: "/blocks/settings-profile".into(),
         }),
-        topbar_title: Some("Overview".into()),
-        topbar_actions,
-        children: body,
+        page_header: Some(page_header::Props {
+            breadcrumbs: vec![
+                BreadcrumbItem {
+                    label: "Workspace".into(),
+                    href: Some("/blocks/shell-sidebar".into()),
+                },
+                BreadcrumbItem {
+                    label: "Reservations".into(),
+                    href: None,
+                },
+            ],
+            search_markup: Some(
+                html! { button class="mui-page-header__search-trigger" type="button" data-mui="workspace-search" aria-label="Search reservations" { span { "Search…" } kbd aria-hidden="true" { "⌘ K" } } },
+            ),
+            switchers: html! { label { span class="mui-sr-only" { "Language" } select class="mui-native-select" aria-label="Language" { option value="en" { "EN" } option value="fr" { "FR" } } } },
+            ..Default::default()
+        }),
+        children: super::example::content(id),
+        ..Default::default()
     })
 }
-
-// ── Inline SVG icons (shipped in-block so consumers copy-paste the
-//    whole module). stroke="currentColor" so they inherit text color.
 
 fn logo_mark() -> Markup {
     PreEscaped(r##"<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 18L12 4L20 18H16L12 12L8 18H4Z" fill="currentColor"/></svg>"##.to_string())

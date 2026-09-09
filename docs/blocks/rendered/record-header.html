@@ -13,12 +13,15 @@ header::render(Props {
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td>title</td><td>String</td><td>empty</td><td>Identity heading.</td></tr>
+<tr><td>title_markup</td><td>Option<Markup></td><td>None</td><td>Overrides title. Rendered in a div so a supplied field-emitter heading is never nested in another heading.</td></tr>
 <tr><td>subtitle</td><td>Option<String></td><td>None</td><td>Reference, supporting identity or dates.</td></tr>
 <tr><td>status</td><td>Option<a href="badge::Props">badge::Props</a></td><td>None</td><td>Text and semantic tone.</td></tr>
+<tr><td>status_markup</td><td>Option<Markup></td><td>None</td><td>Overrides status, including an explicitly empty fragment.</td></tr>
 <tr><td>primary_action</td><td>Option<a href="action::Action">action::Action</a></td><td>None</td><td>One named link or native POST action.</td></tr>
 <tr><td>secondary_actions</td><td>Vec<a href="action::Action">action::Action</a></td><td>empty</td><td>Quiet actions in a native disclosure.</td></tr>
 <tr><td>back</td><td>Option<a href="action::Link">action::Link</a></td><td>None</td><td>Link has label: String and href: String. Preserve the collection's filters here.</td></tr>
 <tr><td>heading</td><td>action::Heading</td><td>H2</td><td>H1/H2/H3 for composition.</td></tr>
 </tbody></table>
 <h2>Actions and accessibility</h2>
+<p>For a bound field heading, pass <code>title_markup: Some(html! { h1 { (record.name) } })</code> and choose its heading level in the caller. Plain <code>title</code> is escaped and uses <code>heading</code>; the markup slot takes precedence. The same precedence applies to a field-emitted status in <code>status_markup</code>.</p>
 <p>The <a href="worklist-header.md">shared Action contract</a> supports navigation and POST with hidden fields. Empty secondary groups are omitted; no client script is needed. Status text supplies meaning beyond color. Long titles and action groups wrap. The back link comes first in reading order, and the record header never creates a page or main landmark of its own.</p>

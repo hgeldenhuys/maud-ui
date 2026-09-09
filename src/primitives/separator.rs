@@ -82,24 +82,24 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Profile card sections" }
                 p.mui-showcase__caption { "Separator divides the Bio block from account Settings in a user profile." }
-                div style="border: 1px solid var(--mui-border); border-radius: 0.5rem; padding: 1.25rem; max-width: 24rem; background: var(--mui-card-bg, var(--mui-bg, transparent));" {
+                div style="border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); padding: var(--mui-space-20); max-width: 24rem; background: var(--mui-card-bg, var(--mui-bg, transparent));" {
                     div {
-                        div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Bio" }
-                        div style="font-weight: 600; font-size: 1rem;" { "Henry Geldenhuys" }
-                        div style="font-size: 0.8125rem; color: var(--mui-text-muted); margin-top: 0.25rem;" {
+                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Bio" }
+                        div style="font-weight: var(--mui-weight-heading); font-size: var(--mui-text-body-size);" { "Henry Geldenhuys" }
+                        div style="font-size: var(--mui-text-small-size); color: var(--mui-text-muted); margin-top: 0.25rem;" {
                             "Staff engineer at Kapable. Building Claude Conductor. Cape Town \u{2192} Remote."
                         }
                     }
-                    div style="margin: 1rem 0;" {
+                    div style="margin: var(--mui-space-lg) 0;" {
                         (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                     }
                     div {
-                        div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Settings" }
-                        div style="display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.25rem 0;" {
+                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Settings" }
+                        div style="display: flex; justify-content: space-between; font-size: var(--mui-text-small-size); padding: var(--mui-space-xs) 0;" {
                             span { "Email" }
                             span style="color: var(--mui-text-muted);" { "invoice@geldentech.ca" }
                         }
-                        div style="display: flex; justify-content: space-between; font-size: 0.875rem; padding: 0.25rem 0;" {
+                        div style="display: flex; justify-content: space-between; font-size: var(--mui-text-small-size); padding: var(--mui-space-xs) 0;" {
                             span { "Two-factor" }
                             span style="color: var(--mui-text-muted);" { "Enabled" }
                         }
@@ -111,16 +111,16 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Auth methods" }
                 p.mui-showcase__caption { "\u{201c}OR\u{201d} label separates social sign-in from email + password." }
-                div style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 22rem;" {
+                div style="display: flex; flex-direction: column; gap: var(--mui-space-md); max-width: 22rem;" {
                     button class="mui-btn mui-btn--outline mui-btn--md" style="width: 100%;" {
                         span aria-hidden="true" style="margin-right: 0.5rem;" { "G" }
                         "Sign in with Google"
                     }
-                    div style="display: flex; align-items: center; gap: 0.75rem; margin: 0.25rem 0;" {
+                    div style="display: flex; align-items: center; gap: var(--mui-space-md); margin: var(--mui-space-xs) 0;" {
                         div style="flex: 1;" {
                             (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                         }
-                        span style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; color: var(--mui-text-muted); letter-spacing: 0.08em;" { "OR" }
+                        span style="font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label);" { "OR" }
                         div style="flex: 1;" {
                             (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                         }
@@ -139,7 +139,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Labelled — turn dividers" }
                 p.mui-showcase__caption { "A mono, letter-spaced, muted label and a hairline rule that carries the eye across. Used between transcript turns." }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:34rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:34rem;" {
                     (render_labelled("TURN 12 · 41s"))
                     (render_labelled("REASONING"))
                     (render_labelled("TOOL CALLS"))
@@ -155,8 +155,8 @@ pub fn showcase() -> Markup {
                 // phone it scrolls inside its own box instead of widening
                 // the page. `overflow-y: hidden` keeps the fixed height from
                 // raising a vertical scrollbar alongside it.
-                nav style="display: flex; align-items: center; gap: 1rem; padding: 0.5rem 0.75rem; border: 1px solid var(--mui-border); border-radius: 0.5rem; height: 2.75rem; max-width: 100%; overflow-x: auto; overflow-y: hidden;" {
-                    a href="#" style="font-weight: 500; text-decoration: none; color: inherit;" { "Dashboard" }
+                nav style="display: flex; align-items: center; gap: var(--mui-space-lg); padding: var(--mui-space-sm) var(--mui-space-md); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); height: 2.75rem; max-width: 100%; overflow-x: auto; overflow-y: hidden;" {
+                    a href="#" style="font-weight: var(--mui-weight-medium); text-decoration: none; color: inherit;" { "Dashboard" }
                     a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Projects" }
                     a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Billing" }
                     a href="#" style="color: var(--mui-text-muted); text-decoration: none;" { "Settings" }
@@ -165,8 +165,8 @@ pub fn showcase() -> Markup {
                         orientation: Orientation::Vertical,
                         ..Default::default()
                     }))
-                    a href="#" style="color: var(--mui-text-muted); text-decoration: none; font-size: 0.875rem;" { "Docs" }
-                    a href="#" style="font-weight: 500; text-decoration: none; color: inherit;" { "HG" }
+                    a href="#" style="color: var(--mui-text-muted); text-decoration: none; font-size: var(--mui-text-small-size);" { "Docs" }
+                    a href="#" style="font-weight: var(--mui-weight-medium); text-decoration: none; color: inherit;" { "HG" }
                 }
             }
         }

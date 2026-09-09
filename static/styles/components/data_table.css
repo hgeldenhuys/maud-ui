@@ -1,0 +1,150 @@
+/* Data Table component — toolbar, sort indicators, footer/pagination */
+
+.mui-data-table {
+  width: 100%;
+}
+
+/* Toolbar — search input above table */
+.mui-data-table__toolbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--mui-space-lg);
+}
+
+.mui-data-table__search { max-width: 18rem; min-height: var(--mui-control-height); padding: var(--mui-space-sm) var(--mui-space-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); color: var(--mui-text); border: 1px solid var(--mui-border-control); border-radius: var(--mui-radius-md); }
+.mui-data-table__search::placeholder { color: var(--mui-text-subtle); }
+.mui-data-table__search:hover { background: var(--mui-bg-input); }
+/* Wrapper — bordered container around the table */
+.mui-data-table__wrapper {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+}
+
+/* Sortable header cells */
+.mui-data-table__th[data-sortable="true"] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-data-table__th[data-sortable="true"]:hover {
+  color: var(--mui-text);
+}
+
+/* Sort icon — subtle inline indicator */
+.mui-data-table__sort-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: var(--mui-space-xs);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-subtle);
+  vertical-align: middle;
+  opacity: 0;
+  transition: opacity var(--mui-transition), color var(--mui-transition);
+}
+
+.mui-data-table__th[data-sortable="true"]:hover .mui-data-table__sort-icon {
+  opacity: 0.6;
+  color: var(--mui-text-muted);
+}
+
+/* Active sort direction indicators (set by JS) */
+.mui-data-table__th[data-sort-dir="asc"] .mui-data-table__sort-icon,
+.mui-data-table__th[data-sort-dir="desc"] .mui-data-table__sort-icon {
+  opacity: 1;
+  color: var(--mui-text);
+}
+
+/* Footer — info text + pagination buttons */
+.mui-data-table__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mui-space-md) var(--mui-space-2xs) 0;
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-data-table__info {
+  color: var(--mui-text-muted);
+}
+
+/* Pagination buttons — outline style matching shadcn */
+.mui-data-table__pagination {
+  display: flex;
+  gap: var(--mui-space-sm);
+}
+
+.mui-data-table__page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  padding: 0 var(--mui-space-md);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+  background: transparent;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mui-data-table__page-btn:hover:not(:disabled) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-data-table__page-btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-data-table__page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Mobile: stack toolbar/footer, full-width search */
+@media (max-width: 40rem) {
+  .mui-data-table__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mui-space-sm);
+  }
+
+  .mui-data-table__search {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .mui-data-table__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mui-inset-cell);
+  }
+
+  .mui-data-table__pagination {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .mui-data-table__page-btn {
+    flex: 1;
+  }
+}
+
+.mui-data-table [data-align="left"] { text-align: left; }
+.mui-data-table [data-align="center"], th.mui-data-table__th[data-align="center"] { text-align: center; }
+.mui-data-table [data-align="right"], th.mui-data-table__th[data-align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
+.mui-data-table__th[data-sortable="true"]:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: -2px; }

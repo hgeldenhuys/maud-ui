@@ -1,0 +1,104 @@
+/* Avatar component — maud-ui Wave 1 */
+
+.mui-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-full);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+  color: var(--mui-accent-fg);
+  font-family: var(--mui-font-sans);
+  font-weight: var(--mui-weight-medium);
+  user-select: none;
+  flex-shrink: 0;
+  border: 1px solid var(--mui-border);
+}
+
+/* Status pip (shadcn AvatarBadge) — sits bottom-right of an avatar */
+.mui-avatar__badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  min-width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--mui-radius-full);
+  border: 2px solid var(--mui-bg-card);
+  background: var(--mui-success, #10b981);
+  color: var(--mui-bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  padding: 0 var(--mui-space-xs);
+  box-sizing: content-box;
+  z-index: 1;
+}
+
+/* Size: Small */
+.mui-avatar--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: var(--mui-text-caption-size);
+}
+
+/* Size: Medium */
+.mui-avatar--md {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: var(--mui-text-small-size);
+}
+
+/* Size: Large */
+.mui-avatar--lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: var(--mui-text-h3-size);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+/* Image variant */
+.mui-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Fallback variant */
+.mui-avatar__fallback {
+  text-transform: uppercase;
+  letter-spacing: var(--mui-tracking-label);
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Avatar group — overlapping avatars (shadcn AvatarGroup) */
+.mui-avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+.mui-avatar-group .mui-avatar {
+  margin-left: -0.5rem;
+  border: 2px solid var(--mui-bg-card);
+  box-sizing: content-box;
+}
+
+.mui-avatar-group .mui-avatar:first-child {
+  margin-left: 0;
+}
+
+/* Tail marker for AvatarGroup — `+N` count */
+.mui-avatar-group__count {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+}

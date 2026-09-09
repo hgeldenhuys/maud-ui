@@ -246,3 +246,6 @@ Tables that scroll horizontally on mobile.
 ## Shadcn Reference
 
 Maud-ui Typography provides headings (h1–h4), body text (p, lead, large, small, muted), lists (list_ul, list_ol), code (code_inline), blockquote, and table wrapper—covering shadcn's text utility patterns.
+
+## Design scale (0.9)
+`display(text)` renders a display H1 and `caption(text)` renders a quiet caption span. All text helpers use role tokens with size, leading and tracking: `--mui-text-{display,h1,h2,h3,body,small,caption}-{size,leading,tracking}`. The body is 15px; ordinary secondary text is 14px and captions are 12px. Heading weights are 600. Inputs use 16px with a coarse pointer to avoid mobile browser zoom; touch targets expand independently from text. Use `eyebrow` for a section label and a proper heading level for your page structure.

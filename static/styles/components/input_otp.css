@@ -1,0 +1,72 @@
+/* InputOTP component — one-time password input slots */
+
+.mui-input-otp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-inset-tight);
+}
+
+/* Individual character slot */
+.mui-input-otp__slot {
+  width: 2.5rem;
+  height: 2.75rem;
+  text-align: center;
+  font-size: var(--mui-text-h3-size);
+  font-weight: var(--mui-weight-medium);
+  font-family: var(--mui-font-mono);
+  color: var(--mui-text);
+  background: transparent;
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  caret-color: var(--mui-accent);
+  transition: border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-input-otp__slot::placeholder {
+  color: var(--mui-text-muted);
+  opacity: 0.4;
+}
+
+/* Hover */
+.mui-input-otp__slot:hover:not(:disabled):not(:focus) {
+  border-color: var(--mui-border-hover);
+}
+
+/* Focus ring — matching Input component style */
+.mui-input-otp__slot:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+/* Filled slot — slightly bolder for visual feedback */
+.mui-input-otp__slot:not(:placeholder-shown) {
+  font-weight: var(--mui-weight-heading);
+}
+
+.mui-input-otp__slot:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Group separator (dash between slot groups) */
+.mui-input-otp__separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--mui-space-2xs);
+}
+
+.mui-input-otp__separator-dash {
+  width: 0.625rem;
+  height: 2px;
+  background: var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+}
+
+/* Hidden composite value input */
+.mui-input-otp__value {
+  display: none;
+}

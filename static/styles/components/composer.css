@@ -1,0 +1,263 @@
+/* Composer — the multi-state prompt dock. Colours are tokens only; the warm
+   palette in the design sheets is a consumer theme mapped onto these. */
+
+.mui-composer {
+  display: block;
+  max-width: var(--mui-composer-max, 67.5rem); /* caps at the 1080px code measure */
+}
+
+/* The root is a <div>; the form inside carries no box of its own. The empty
+   sibling form (the secondary action's submit target — nested forms are
+   invalid HTML, so the Interrupt button reaches it via the `form`
+   attribute) must never take up space. */
+.mui-composer__form { display: block; }
+.mui-composer__secondary { display: none; }
+
+/* The field: a card-surfaced box with a foreground-10% hairline. */
+.mui-composer__field {
+  background-color: var(--mui-bg-card);
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-lg);
+  padding: var(--mui-space-md) var(--mui-inset-control) var(--mui-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-inset-cell);
+  transition: border-color var(--mui-transition), box-shadow var(--mui-transition);
+}
+
+.mui-composer__input {
+  width: 100%;
+  min-height: 48px;                              /* 2 rows at 15/24 */
+  max-height: var(--mui-composer-max-h, 40vh);   /* grows to a cap, then scrolls */
+  overflow-y: auto;
+  resize: none;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mui-text);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-body-size);
+  line-height: var(--mui-leading-body);
+}
+.mui-composer__input::placeholder { color: var(--mui-text-muted); }
+.mui-composer__input:focus { outline: none; }
+
+.mui-composer__actions { display: flex; align-items: center; gap: var(--mui-space-sm); }
+/* The action buttons are `white-space: nowrap`, so without wrapping the row
+   sets a min-content width the composer cannot go below — on a phone that
+   widens the whole page rather than the composer. */
+@media (max-width: 40rem) {
+  .mui-composer__actions { flex-wrap: wrap; }
+}
+.mui-composer__spacer { flex: 1 1 auto; }
+
+/* Leading mono chips — model, auto-accept, attachments. */
+.mui-composer__chip {
+  height: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--mui-space-sm);
+  border-radius: var(--mui-radius-full);
+  background-color: var(--mui-bg-input);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text-muted);
+  white-space: nowrap;
+}
+.mui-composer__chip--accent {
+  background-color: var(--mui-accent-soft);
+  color: var(--mui-accent-text);
+}
+
+/* Control chips — the chip box around a real form control (a <select>).
+   The select borrows the chip's type and colour entirely; the caret is a
+   ::after glyph so it inherits currentColor (no image, no literal). */
+.mui-composer__chip--control {
+  position: relative;
+  padding: 0;
+}
+.mui-composer__chip--control select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  background: transparent;
+  height: 100%;
+  padding: 0 var(--mui-space-20) 0 var(--mui-space-sm);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text-muted);
+  cursor: pointer;
+}
+.mui-composer__chip--control::after {
+  content: "\25BE"; /* ▾ */
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+}
+.mui-composer__chip--control select:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 1px;
+  border-radius: var(--mui-radius-sm);
+}
+/* Option lists render in the host chrome; keep them legible on dark themes. */
+.mui-composer__chip--control select option {
+  background-color: var(--mui-bg-card);
+  color: var(--mui-text);
+}
+
+/* Voice — a 28px square hollow icon button. */
+.mui-composer__voice {
+  height: var(--mui-control-height);
+  width: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-md);
+  border: 1px solid var(--mui-border-control);
+  background: transparent;
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  transition: border-color var(--mui-transition), color var(--mui-transition);
+}
+.mui-composer__voice:hover {
+  border-color: var(--mui-border-control);
+  color: var(--mui-text);
+}
+
+/* Primary — the accent send/queue button. */
+.mui-composer__send {
+  height: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  padding: 0 var(--mui-space-md);
+  border: 0;
+  border-radius: var(--mui-radius-md);
+  background-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__send:hover { background-color: var(--mui-accent-hover); }
+.mui-composer__kbd {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-normal);
+  color: color-mix(in srgb, var(--mui-accent-fg) 55%, transparent);
+}
+
+/* Secondary — the hollow-destructive Interrupt. */
+.mui-composer__interrupt {
+  height: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--mui-space-md);
+  border-radius: var(--mui-radius-md);
+  border: 1px solid var(--mui-danger-border);
+  background: transparent;
+  color: var(--mui-danger-text);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__interrupt:hover {
+  background-color: var(--mui-danger-bg);
+}
+
+/* The "beside" data line — mono, 11px, deeply muted. */
+.mui-composer__status {
+  margin-top: 7px;
+  display: flex;
+  gap: var(--mui-inset-control);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text-subtle);
+}
+
+/* Growing — focused: an accent ring on the field. */
+.mui-composer--growing .mui-composer__field {
+  border-color: var(--mui-border-focus);
+  box-shadow: var(--mui-ring);
+}
+
+/* Asleep — a 46px dashed bar on the same anchor line. Content-sized
+   rather than height-clamped, so a consumer enhancement that grows the
+   field on typing grows the bar with it — the field can never overflow
+   or clip against a fixed box. 8px vertical padding: the 28px Wake
+   button computes 28+16+2 = 46px exactly; the 24px text line (42px)
+   rests on the min-height. */
+.mui-composer--asleep .mui-composer__sleepbar {
+  box-sizing: border-box;
+  min-height: 46px;
+  display: flex;
+  flex-wrap: wrap; /* control chips join the row; the bar grows, never clips */
+  align-items: center;
+  gap: var(--mui-space-md);
+  padding: var(--mui-space-sm) var(--mui-inset-control);
+  border: 1px dashed var(--mui-border-control);
+  border-radius: var(--mui-radius-lg);
+}
+.mui-composer__state-tag {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  letter-spacing: var(--mui-tracking-label);
+  color: var(--mui-text-subtle);
+}
+/* The asleep bar's field is a REAL single-row textarea — "type to wake" is
+   the literal contract, so the input exists with JS off. It borrows the
+   bar's box entirely: no border, no background, one 24px line, vertically
+   centred by the bar's flex. */
+.mui-composer__input--sleep {
+  flex: 1 1 auto;
+  width: auto;
+  min-height: 24px;
+  height: 24px;
+  overflow: hidden;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-body);
+}
+.mui-composer__input--sleep::placeholder { color: var(--mui-text-muted); }
+.mui-composer__wake {
+  height: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--mui-space-md);
+  border-radius: var(--mui-radius-md);
+  border: 1px solid var(--mui-border-control);
+  background: transparent;
+  color: var(--mui-text);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--mui-transition);
+}
+.mui-composer__wake:hover { background-color: var(--mui-bg-input); }
+
+/* Control chips inside the asleep bar keep the chip box (the bar itself is
+   the field, so they need their own outline to read as controls). */
+.mui-composer--asleep .mui-composer__chip--control {
+  height: var(--mui-control-height);
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--mui-radius-sm);
+  background: var(--mui-bg-input);
+}
+
+@media (pointer: coarse) { .mui-composer :is(button, select) { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } .mui-composer__input { font-size: 1rem; } }

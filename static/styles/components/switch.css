@@ -1,0 +1,106 @@
+/* Switch component — toggle control with sliding thumb */
+
+.mui-switch-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+}
+
+.mui-switch {
+  width: 2.75rem;
+  height: 1.5rem;
+  /* The OFF track is --mui-bg-input on a card: 1.06:1. The knob keeps the
+     control locatable, but its boundary — where the track ends and the card
+     begins — was invisible, so "off" read as a floating dot rather than a
+     switch in a slot. A 1px control border restores the shape without
+     touching the on-state, which is already a solid accent fill.
+     WCAG 1.4.11 (3:1 for a component's visual boundary). */
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color var(--mui-transition);
+}
+
+/* Size variant: sm — ~73% of default scale */
+.mui-switch--sm {
+  width: 2rem;
+  height: 1.125rem;
+}
+
+.mui-switch--sm .mui-switch__thumb {
+  width: 0.875rem;
+  height: 0.875rem;
+  top: 0.125rem;
+  inset-inline-start: 0.125rem;
+}
+
+.mui-switch--sm[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(0.875rem);
+}
+
+:dir(rtl) .mui-switch--sm[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(-0.875rem);
+}
+
+.mui-switch[aria-checked="true"] {
+  border-color: var(--mui-accent);
+  background: var(--mui-accent);
+}
+
+.mui-switch__thumb {
+  position: absolute;
+  top: 0.125rem;
+  inset-inline-start: 0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: white;
+  border-radius: var(--mui-radius-full);
+  transition: transform var(--mui-transition);
+  display: block;
+  box-shadow: var(--mui-shadow-sm);
+}
+
+.mui-switch[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(1.25rem);
+}
+
+/* Flip thumb travel in RTL — the "on" state should slide toward the
+   inline-end (reading-direction end), which is physical right in LTR
+   and physical left in RTL. */
+:dir(rtl) .mui-switch[aria-checked="true"] .mui-switch__thumb {
+  transform: translateX(-1.25rem);
+}
+
+.mui-switch:disabled,
+.mui-switch[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-switch:focus-visible {
+  outline: none;
+  box-shadow: var(--mui-ring);
+}
+
+.mui-switch[aria-checked="true"]:focus-visible {
+  box-shadow: var(--mui-ring);
+}
+
+.mui-switch__label {
+  color: var(--mui-text);
+  font-size: var(--mui-text-small-size);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mui-switch__value {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}

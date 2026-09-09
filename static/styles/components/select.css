@@ -1,0 +1,176 @@
+/* Select component — custom dropdown control */
+
+.mui-select {
+  display: inline-block;
+  position: relative;
+}
+
+.mui-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mui-space-sm);
+  min-width: 10rem;
+  height: 2.25rem;
+  padding: 0 var(--mui-space-md);
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-tight);
+  cursor: pointer;
+  transition: var(--mui-transition);
+  box-sizing: border-box;
+}
+
+.mui-select__trigger:hover:not(:disabled) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-select__trigger:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+.mui-select__trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mui-select__chevron {
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  transition: transform var(--mui-transition);
+  flex-shrink: 0;
+}
+
+.mui-select__trigger[aria-expanded="true"] .mui-select__chevron {
+  transform: rotate(180deg);
+}
+
+.mui-select__dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  inset-inline-start: 0;
+  min-width: 100%;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-md);
+  overflow-y: auto;
+  max-height: 15rem;
+  z-index: var(--mui-layer-overlay);
+  padding: var(--mui-space-xs);
+}
+
+.mui-select__dropdown[hidden] {
+  display: none;
+}
+
+.mui-select__option {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  padding: var(--mui-inset-tight) var(--mui-space-sm) var(--mui-inset-tight) var(--mui-space-sm);
+  cursor: pointer;
+  border-radius: var(--mui-radius-sm);
+  font-size: var(--mui-text-small-size);
+  transition: var(--mui-transition);
+  position: relative;
+}
+
+.mui-select__option:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-select__option--selected {
+  font-weight: var(--mui-weight-medium);
+}
+
+.mui-select__check {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--mui-accent);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-tight);
+  text-align: center;
+}
+
+.mui-select__option--selected .mui-select__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-select__option-label {
+  flex: 1;
+}
+
+.mui-select__option--highlighted {
+  background: var(--mui-bg-input);
+}
+
+.mui-select__option[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-select__hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+/* Small size variant — compact trigger for dense layouts */
+.mui-select__trigger.mui-select--sm {
+  height: 1.75rem;
+  font-size: var(--mui-text-caption-size);
+  padding: 0 var(--mui-space-sm);
+}
+
+/* Invalid state — red border to indicate validation failure */
+.mui-select__trigger[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+/* Group label — section header within dropdown */
+.mui-select__group-label {
+  padding: var(--mui-space-xs) var(--mui-space-sm);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--mui-tracking-label);
+  font-weight: var(--mui-weight-medium);
+}
+
+/* Scroll affordances — up/down chevrons for overflow dropdowns */
+.mui-select__scroll-up,
+.mui-select__scroll-down {
+  display: flex;
+  justify-content: center;
+  padding: var(--mui-space-xs);
+  cursor: default;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-caption-size);
+}
+
+/* Separator — thin rule between option groups */
+.mui-select__separator {
+  height: 1px;
+  background: var(--mui-border);
+  margin: var(--mui-space-xs) 0;
+}

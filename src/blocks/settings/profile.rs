@@ -115,7 +115,7 @@ pub fn render(props: Props) -> Markup {
                             div class="mui-block--settings__avatar-actions" {
                                 @if let Some(url) = &props.avatar_upload_action {
                                     form action=(url) method="post" enctype="multipart/form-data"
-                                         style="display:inline-flex;margin:0;gap:0.5rem;" {
+                                         style="display:inline-flex;margin: 0;gap: var(--mui-space-sm);" {
                                         (button::render(button::Props {
                                             label: "Change".into(),
                                             variant: button::Variant::Outline,
@@ -127,7 +127,7 @@ pub fn render(props: Props) -> Markup {
                                 }
                                 @if let Some(url) = &props.avatar_remove_action {
                                     form action=(url) method="post"
-                                         style="display:inline-flex;margin:0;" {
+                                         style="display:inline-flex;margin: 0;" {
                                         (button::render(button::Props {
                                             label: "Remove".into(),
                                             variant: button::Variant::Ghost,

@@ -62,9 +62,9 @@ pub fn render(props: Props) -> Markup {
 
 fn row(label: &str, props: Props) -> Markup {
     html! {
-        div style="display:flex;align-items:center;gap:0.5rem;" {
+        div style="display:flex;align-items:center;gap: var(--mui-space-sm);" {
             (render(props))
-            span style="font-size:0.8125rem;color:var(--mui-text-muted);" { (label) }
+            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" { (label) }
         }
     }
 }
@@ -75,7 +75,7 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             section {
                 h2 { "Tones" }
-                div style="display:flex;flex-direction:column;gap:0.625rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
                     (row("Success — passing, live", Props { tone: Tone::Success, ..Default::default() }))
                     (row("Accent — running, selected", Props { tone: Tone::Accent, ..Default::default() }))
                     (row("Warning — degraded", Props { tone: Tone::Warning, ..Default::default() }))
@@ -86,7 +86,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Outline — observing" }
                 p.mui-showcase__caption { "Hollow reads as \u{201c}watching, not yet settled\u{201d} without spending a second hue." }
-                div style="display:flex;flex-direction:column;gap:0.625rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
                     (row("Accent, observing", Props { tone: Tone::Accent, outline: true, ..Default::default() }))
                     (row("Success, observing", Props { tone: Tone::Success, outline: true, ..Default::default() }))
                 }

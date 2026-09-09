@@ -1,0 +1,76 @@
+/* Collapsible component — minimal trigger + expandable content, no card wrapping */
+
+.mui-collapsible {
+  display: block;
+}
+
+.mui-collapsible__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: none;
+  padding: var(--mui-space-md) 0;
+  font-family: inherit;
+  font-size: var(--mui-text-body-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  text-align: start;
+  transition: var(--mui-transition);
+}
+
+.mui-collapsible__trigger:hover {
+  text-decoration: none;
+}
+
+.mui-collapsible__trigger:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-collapsible__label {
+  flex: 1;
+}
+
+.mui-collapsible__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  transition: transform var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-collapsible__trigger[aria-expanded="true"] .mui-collapsible__chevron {
+  transform: rotate(180deg);
+}
+
+.mui-collapsible__content {
+  padding: 0 0 var(--mui-space-md);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  overflow: hidden;
+}
+
+.mui-collapsible__content[hidden] {
+  display: none;
+}
+
+/* ── Native <details> variant ──
+   Same skin, browser-owned toggle. The default disclosure triangle is
+   suppressed so the shared chevron is the only affordance. */
+.mui-collapsible--native > .mui-collapsible__trigger {
+  list-style: none;
+  cursor: pointer;
+}
+
+.mui-collapsible--native > .mui-collapsible__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.mui-collapsible--native[open] > .mui-collapsible__trigger .mui-collapsible__chevron {
+  transform: rotate(180deg);
+}

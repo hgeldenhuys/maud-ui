@@ -7,11 +7,29 @@ use maud::{html, Markup, PreEscaped};
 // no duplicate struct, no conversion impls needed.
 pub use super::table::CellMarkup;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum Align {
+    #[default]
+    Left,
+    Center,
+    Right,
+}
+impl Align {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Left => "left",
+            Self::Center => "center",
+            Self::Right => "right",
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default)]
 pub struct Column {
     pub key: String,
     pub label: String,
     pub sortable: bool,
+    pub align: Align,
 }
 
 #[derive(Clone, Debug)]
@@ -26,12 +44,8 @@ pub struct Props {
     /// Backwards-compat: when empty (the default), the plain `rows` path is
     /// used unchanged — existing consumers need no migration.
     ///
-    /// Note: the client-side sort/filter JS reads `data-row-data` attributes
-    /// built from the plain `rows` field. When `rich_rows` is in use, no
-    /// `data-row-data` is emitted and client-side sorting/filtering is a
-    /// no-op — consumers using rich cells are expected to drive sort/filter
-    /// server-side (which is typically what they want anyway, since rich
-    /// cells carry structured content that doesn't sort as strings).
+    /// Sorting/filtering use plain row values, or visible text for rich rows.
+    /// The runtime reorders original row nodes, preserving markup, controls and alignment.
     pub rich_rows: Vec<Vec<CellMarkup>>,
     pub page_size: usize,
     pub searchable: bool,
@@ -59,9 +73,15 @@ impl Default for Props {
 /// Render a single `<th>` for a column header, with sortable chevron + `aria-sort`
 /// when the column is sortable. Matches shadcn's `DataTableColumnHeader`.
 pub fn column_header(label: &str, sortable: bool) -> Markup {
+    column_header_aligned(label, sortable, Align::Left)
+}
+
+/// Explicit per-column alignment. Right aligns numeric headers and uses tabular numerals.
+pub fn column_header_aligned(label: &str, sortable: bool, align: Align) -> Markup {
     html! {
         @if sortable {
             th.mui-table__th.mui-data-table__th
+                scope="col" data-align=(align.as_str()) tabindex="0"
                 data-sortable="true"
                 aria-sort="none" {
                 (label)
@@ -71,7 +91,7 @@ pub fn column_header(label: &str, sortable: bool) -> Markup {
             }
         } @else {
             th.mui-table__th.mui-data-table__th
-                data-sortable="false" {
+                scope="col" data-align=(align.as_str()) data-sortable="false" {
                 (label)
             }
         }
@@ -126,10 +146,10 @@ pub fn render(props: Props) -> Markup {
             @if props.searchable {
                 div.mui-data-table__toolbar {
                     input type="text" class="mui-input mui-data-table__search"
-                        placeholder=(props.search_placeholder);
+                        placeholder=(props.search_placeholder) aria-label="Filter table rows";
                 }
             }
-            div.mui-data-table__wrapper {
+            div.mui-data-table__wrapper tabindex="0" role="region" aria-label="Data table" {
                 table.mui-table.mui-table--hoverable {
                     thead {
                         tr {
@@ -142,7 +162,8 @@ pub fn render(props: Props) -> Markup {
                             }
                             @for col in &props.columns {
                                 th.mui-table__th.mui-data-table__th
-                                    data-key=(col.key)
+                                    scope="col" data-key=(col.key) data-align=(col.align.as_str())
+                                    tabindex=[col.sortable.then_some("0")] aria-sort=[col.sortable.then_some("none")]
                                     data-sortable=(col.sortable) {
                                     (col.label)
                                     @if col.sortable {
@@ -165,12 +186,9 @@ pub fn render(props: Props) -> Markup {
                                                 aria-label="Select row";
                                         }
                                     }
-                                    @for cell in row {
-                                        @if cell.align_right {
-                                            td.mui-table__td style="text-align:right;" { (cell.content) }
-                                        } @else {
-                                            td.mui-table__td { (cell.content) }
-                                        }
+                                    @for (index, cell) in row.iter().enumerate() {
+                                        @let align = if cell.align_right { Align::Right } else { props.columns.get(index).map(|col| col.align).unwrap_or_default() };
+                                        td.mui-table__td data-align=(align.as_str()) { (cell.content) }
                                     }
                                 }
                             }
@@ -193,8 +211,8 @@ pub fn render(props: Props) -> Markup {
                                                 aria-label="Select row";
                                         }
                                     }
-                                    @for cell in row {
-                                        td.mui-table__td { (cell) }
+                                    @for (index, cell) in row.iter().enumerate() {
+                                        td.mui-table__td data-align=(props.columns.get(index).map(|col| col.align).unwrap_or_default().as_str()) { (cell) }
                                     }
                                 }
                             }
@@ -225,21 +243,25 @@ pub fn showcase() -> Markup {
             key: "invoice".to_string(),
             label: "Invoice".to_string(),
             sortable: true,
+            align: Align::Left,
         },
         Column {
             key: "status".to_string(),
             label: "Status".to_string(),
             sortable: true,
+            align: Align::Left,
         },
         Column {
             key: "method".to_string(),
             label: "Method".to_string(),
             sortable: true,
+            align: Align::Left,
         },
         Column {
             key: "amount".to_string(),
             label: "Amount".to_string(),
             sortable: true,
+            align: Align::Right,
         },
     ];
 
@@ -312,11 +334,13 @@ pub fn showcase() -> Markup {
             key: "name".to_string(),
             label: "Name".to_string(),
             sortable: true,
+            align: Align::Left,
         },
         Column {
             key: "role".to_string(),
             label: "Role".to_string(),
             sortable: false,
+            align: Align::Left,
         },
     ];
     let demo_rows = vec![
@@ -358,7 +382,7 @@ pub fn showcase() -> Markup {
                     thead {
                         tr {
                             (column_header("Sortable column", true))
-                            (column_header("Plain column", false))
+                            (column_header_aligned("Amount", false, Align::Right))
                         }
                     }
                 }

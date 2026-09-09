@@ -2,7 +2,17 @@
 
 use maud::{html, Markup};
 
-/// Heading 1 (2rem, bold)
+/// Display text for a page's main heading; 2.75rem with its own leading/tracking.
+pub fn display(text: &str) -> Markup {
+    html! { h1 class="mui-display" { (text) } }
+}
+
+/// Quiet caption text, 0.75rem with a readable 1.4 line height.
+pub fn caption(text: &str) -> Markup {
+    html! { span class="mui-caption" { (text) } }
+}
+
+/// Heading 1 (2rem, semibold)
 pub fn h1(text: &str) -> Markup {
     html! { h1.mui-h1 { (text) } }
 }
@@ -12,7 +22,7 @@ pub fn h2(text: &str) -> Markup {
     html! { h2.mui-h2 { (text) } }
 }
 
-/// Heading 3 (1.25rem, semi-bold)
+/// Heading 3 (1.125rem, semibold)
 pub fn h3(text: &str) -> Markup {
     html! { h3.mui-h3 { (text) } }
 }
@@ -29,7 +39,7 @@ pub fn eyebrow(text: &str) -> Markup {
     html! { h2.mui-eyebrow { (text) } }
 }
 
-/// Paragraph (0.875rem, standard)
+/// Paragraph (0.9375rem, standard)
 pub fn p(text: &str) -> Markup {
     html! { p.mui-p { (text) } }
 }
@@ -169,6 +179,12 @@ pub fn table(children: Markup) -> Markup {
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
+            section {
+                p class="mui-eyebrow" { "The 0.9 type scale" }
+                (display("A place for every detail."))
+                (caption("Display · 44px / 1.1 · tracked −0.035em"))
+            }
+
             div {
                 p.mui-showcase__caption { "Headings" }
                 div.mui-showcase__column style="gap:0.5rem" {
@@ -242,9 +258,9 @@ pub fn showcase() -> Markup {
                     table style="border-collapse:collapse;width:100%" {
                         thead {
                             tr {
-                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Name" }
-                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Role" }
-                                th style="text-align:left;padding:0.5rem;border-bottom:1px solid var(--mui-border)" { "Status" }
+                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Name" }
+                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Role" }
+                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Status" }
                             }
                         }
                         tbody {

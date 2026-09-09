@@ -54,17 +54,17 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Sizes" }
                 div.mui-showcase__row {
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Sm, label: None }))
-                        span.mui-muted style="font-size:0.75rem" { "sm" }
+                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "sm" }
                     }
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Md, label: None }))
-                        span.mui-muted style="font-size:0.75rem" { "md" }
+                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "md" }
                     }
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap:var(--mui-space-xs)" {
                         (render(Props { size: Size::Lg, label: None }))
-                        span.mui-muted style="font-size:0.75rem" { "lg" }
+                        span.mui-muted style="font-size:var(--mui-text-caption-size)" { "lg" }
                     }
                 }
             }
@@ -87,9 +87,9 @@ pub fn showcase() -> Markup {
             // Page loading — centered with label
             div {
                 p.mui-showcase__caption { "Page loading" }
-                div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;padding:2rem;border:1px dashed var(--mui-border);border-radius:var(--mui-radius,0.5rem)" {
+                div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap: var(--mui-space-md);padding: var(--mui-space-xxl);border:1px dashed var(--mui-border);border-radius:var(--mui-radius,0.5rem)" {
                     (render(Props { size: Size::Lg, label: Some("Loading page".into()) }))
-                    span style="font-size:0.875rem;color:var(--mui-text-muted)" { "Loading page..." }
+                    span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" { "Loading page..." }
                 }
             }
 
@@ -97,11 +97,11 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Inline status" }
                 div style="display:flex;flex-direction:column;gap:0.75rem" {
-                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                    span style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" {
                         (render(Props { size: Size::Sm, label: Some("Checking".into()) }))
                         "Checking for updates..."
                     }
-                    span style="display:inline-flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--mui-text-muted)" {
+                    span style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" {
                         (render(Props { size: Size::Sm, label: Some("Connecting".into()) }))
                         "Connecting to server..."
                     }

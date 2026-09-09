@@ -203,7 +203,7 @@ pub fn showcase() -> Markup {
             // No results
             div {
                 p.mui-showcase__caption { "No results" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (render(
                         Props::new("No results found").with_variant(Variant::Filtered)
                             .with_icon("\u{1F50D}")
@@ -218,7 +218,7 @@ pub fn showcase() -> Markup {
             // Empty inbox
             div {
                 p.mui-showcase__caption { "Empty inbox" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (render(
                         Props::new("Your inbox is empty")
                             .with_icon("\u{2709}\u{FE0F}")
@@ -230,7 +230,7 @@ pub fn showcase() -> Markup {
             // First-run / onboarding
             div {
                 p.mui-showcase__caption { "First run" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (render(
                         Props::new("Create your first project")
                             .with_icon("\u{1F680}")
@@ -251,7 +251,7 @@ pub fn showcase() -> Markup {
             // Compose path — subcomponent helpers with MediaVariant::Default
             div {
                 p.mui-showcase__caption { "Composed (Default media)" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (compose(html! {
                         (header(html! {
                             (media(html! { "\u{1F4E6}" }, MediaVariant::Default))
@@ -268,7 +268,7 @@ pub fn showcase() -> Markup {
             // Compose path — subcomponent helpers with MediaVariant::Icon
             div {
                 p.mui-showcase__caption { "Composed (Icon media)" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);background:var(--mui-bg-card)" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);background:var(--mui-bg-card)" {
                     (compose(html! {
                         (header(html! {
                             (media(html! { "\u{1F50E}" }, MediaVariant::Icon))

@@ -1,0 +1,186 @@
+/* Toast component — clean card style, no left border accent */
+
+/* Viewport container — fixed position, stacks toasts bottom-right */
+.mui-toast-viewport {
+  position: fixed;
+  bottom: 1rem;
+  inset-inline-end: 1rem;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--mui-space-sm);
+  /* 90, not 100: host apps commonly park a sticky app header at z-index 100
+     (a shared app-chrome contract may mandate exactly that). A toast at
+     100 ties with the header and — being later in the DOM — paints over it.
+     90 still clears every other maud-ui overlay (menus 50/51, context menu 60). */
+  z-index: 90;
+  max-width: calc(100vw - 2rem);
+  pointer-events: none;
+}
+
+/* Toast card — uniform border, elevated shadow */
+.mui-toast {
+  pointer-events: auto;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  padding: var(--mui-inset-control) var(--mui-space-xxl) var(--mui-inset-control) var(--mui-space-lg);
+  box-shadow: var(--mui-shadow-lg);
+  /* `min-width: 20rem` is a floor the toast cannot go below, so on a 360px
+     phone it overflows its container. Clamp it to the space available. */
+  min-width: min(20rem, 100%);
+  max-width: 24rem;
+  position: relative;
+  animation: mui-toast-enter var(--mui-motion-enter) var(--mui-motion-ease);
+}
+
+/* --- Variant indicator dot -------------------------------------------- */
+/* Small colored dot before the title instead of thick left border */
+
+.mui-toast__title {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  color: var(--mui-text);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-heading);
+  line-height: var(--mui-leading-tight);
+}
+
+.mui-toast__title::before {
+  content: "";
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+}
+
+/* Variant dot colors */
+.mui-toast--info .mui-toast__title::before {
+  background: var(--mui-accent);
+}
+
+.mui-toast--success .mui-toast__title::before {
+  background: var(--mui-success);
+}
+
+.mui-toast--warning .mui-toast__title::before {
+  background: var(--mui-warning);
+}
+
+.mui-toast--danger .mui-toast__title::before {
+  background: var(--mui-danger);
+}
+
+/* Description — muted, indented to align past the dot */
+.mui-toast__description {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  margin-top: var(--mui-space-xs);
+  padding-inline-start: var(--mui-space-lg);
+}
+
+/* Close button — subtle, top-right */
+.mui-toast__close {
+  position: absolute;
+  top: 0.625rem;
+  inset-inline-end: 0.625rem;
+  background: transparent;
+  border: none;
+  color: var(--mui-text-subtle);
+  cursor: pointer;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-sm);
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-tight);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+  opacity: 0;
+}
+
+/* Show close on card hover */
+.mui-toast:hover .mui-toast__close {
+  opacity: 1;
+}
+
+.mui-toast__close:hover {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-toast__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* Action slot — inline button for "Undo" / "View" style affordances */
+.mui-toast__action {
+  margin-top: var(--mui-space-sm);
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-sm);
+  padding: var(--mui-space-xs) var(--mui-inset-cell);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              border-color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-toast__action:hover {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-toast__action:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* --- Exit animation --------------------------------------------------- */
+.mui-toast--exit {
+  animation: mui-toast-exit var(--mui-motion-enter) var(--mui-motion-ease) forwards;
+}
+
+/* --- Keyframes -------------------------------------------------------- */
+@keyframes mui-toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mui-toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* RTL: toast sits on the inline-end corner, which is physical LEFT
+   in RTL — so the slide must come from / exit to physical left. */
+@keyframes mui-toast-enter-rtl {
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes mui-toast-exit-rtl {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-100%); }
+}
+:dir(rtl) .mui-toast { animation-name: mui-toast-enter-rtl; }
+:dir(rtl) .mui-toast[data-state="exit"] { animation-name: mui-toast-exit-rtl; }

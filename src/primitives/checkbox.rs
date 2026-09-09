@@ -112,7 +112,7 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             section {
                 h2 { "Checkbox" }
-                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
+                div style="display: flex; flex-direction: column; gap: var(--mui-space-md);" {
                     (render(Props {
                         name: "cb-unchecked".to_string(),
                         value: "on".to_string(),

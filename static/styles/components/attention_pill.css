@@ -1,0 +1,39 @@
+/* Attention pill — accent form draws the eye; muted zero-state recedes.
+   "Pill" is the historical name, not the shape: this is a status chip (dot +
+   count + label, with a zero-state), so it takes the same machined corner as
+   .mui-badge. The corner was a bare 6px literal, which happened to match this
+   library's own --mui-radius-sm and therefore stayed 6px under every consumer
+   that retunes the token — the one shape in the kit immune to theming. */
+
+.mui-attention-pill {
+  height: var(--mui-space-xl);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-inset-tight);
+  padding: 0 var(--mui-inset-cell);
+  border-radius: var(--mui-radius-full);
+  background-color: var(--mui-accent-soft);
+  color: var(--mui-accent-text);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-heading);
+  white-space: nowrap;
+}
+
+.mui-attention-pill__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--mui-radius-full);
+  background-color: var(--mui-accent);
+  flex: none;
+}
+.mui-attention-pill__label { line-height: var(--mui-leading-tight); }
+
+/* Zero state — no accent at all. */
+.mui-attention-pill--muted {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+}
+.mui-attention-pill--muted .mui-attention-pill__dot {
+  background-color: var(--mui-text-subtle);
+}

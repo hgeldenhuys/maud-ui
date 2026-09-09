@@ -134,7 +134,12 @@ fn mobile_short_labels_preserve_full_names_and_fall_back_when_empty() {
     assert!(output.contains("class=\"mui-bottom-tab-bar__label\">Guest &lt;directory&gt;</span>"));
     assert_eq!(output.matches("aria-current=\"page\"").count(), 1);
     assert!(bar::showcase().into_string().contains("data-items=\"5\""));
-    let shell = sidebar::preview().into_string();
+    let shell = sidebar::render(sidebar::Props {
+        mobile_navigation: sidebar::MobileNavigation::Tabs,
+        nav_groups: vec![sidebar::NavGroup { label: None, items: vec![sidebar::NavItem {
+            label: "Dashboard".into(), short_label: Some("Home".into()), href: "/dashboard".into(), ..Default::default()
+        }] }], ..Default::default()
+    }).into_string();
     assert!(shell.contains("aria-label=\"Home — Dashboard\""));
     assert!(shell.contains("class=\"mui-block--shell__nav-label\">Dashboard</span>"));
 }
@@ -291,6 +296,7 @@ fn shell_group_header_ids_and_more_current_survive_without_javascript() {
                     href: format!("/{i}"),
                     icon: None,
                     badge: None,
+                    children: vec![],
                 })
                 .collect(),
         }],

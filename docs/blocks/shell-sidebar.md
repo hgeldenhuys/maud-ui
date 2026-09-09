@@ -12,7 +12,7 @@ sidebar::render(Props {
     header: Some(html! { label { "Workspace" select { option { "Front desk" } } } }),
     nav_groups: vec![NavGroup {
         label: Some("Operations".into()),
-        items: vec![NavItem { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None, badge: Some("48".into()) }],
+        items: vec![NavItem { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None, badge: Some("48".into()), ..Default::default() }],
     }],
     active_path: "/reservations".into(),
     mobile_navigation: MobileNavigation::Tabs,
@@ -31,13 +31,26 @@ sidebar::render(Props {
 | active_path | String | empty | First exact href match is current. |
 | mobile_navigation | MobileNavigation | Drawer | Drawer or Tabs; desktop sidebar remains grouped. |
 | user | Option<UserBlock> | None | name, email, avatar_initials, menu_href: String. |
-| topbar_title | Option<String> | None | Topbar H1; use section headings inside it. |
+| topbar_title | Option<String> | None | Quiet context label; put a heading in your content. |
 | topbar_actions | Markup | empty | Topbar controls. |
+| sidebar_footer | Option<Markup> | None | Arbitrary footer markup, overriding user. |
+| collapsible | bool | true | Offer a desktop icon rail at 64rem and above. |
+| default_collapsed | bool | false | Initial rail state; a saved local preference takes precedence. |
+| page_header | Option<page_header::Props> | None | Replaces the title/actions bar. The shell adds its own Menu and rail controls. |
+| app_header | Markup | empty | Optional masthead above sidebar and content. |
+| app_footer | Markup | empty | Optional footer below sidebar and content. |
+| embedded | bool | false | Render a section instead of main for previews/nested compositions. |
 | children | Markup | empty | Route content; the shell supplies main. |
 
-`NavItem` fields: label/href: String, short_label: Option<String>, icon: Option<Markup>, badge: Option<String>. A group's label names its accessible group. `Tabs` uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with `data-mui-nav-search` for local destination filtering.
+`NavItem` fields: label/href: String, short_label: Option<String>, icon: Option<Markup>, badge: Option<String>, children: Vec<NavItem>. Use `..Default::default()` for optional fields. Nested items indent without a rail. A group's label names its accessible group. `Tabs` uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with `data-mui-nav-search` for local destination filtering.
 
 ## Accessibility and behavior
-Native page links and `aria-current`, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique `id` for each shell. Do not nest this block inside another main landmark.
+Native page links and `aria-current`, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique `id` for each shell. Use `embedded: true` when nesting inside an existing main landmark. Embedded mobile tabs flow below the example; ordinary app tabs remain fixed.
 
 Use `short_label: Some("Stays".into())` to fit a long label such as Reservations in a bottom tab. Use `None` to display the full label. Empty or whitespace-only short labels fall back to the full label. Labels stay on one line and ellipsize; five destinations use a smaller type size. The accessible name includes both the visible short label and the full label, so voice control and screen readers retain context. Sidebar labels stay full-length.
+
+## Navigation preferences
+Labeled groups use native details/summary and remember their state under `mui-nav-group:{navigation-id}:{index}:{label}`. A current destination opens its group on route entry. Sidebar collapse uses `mui-shell-rail:{id}`; storage failures fall back to rendered defaults. Keep IDs stable and unique, and keep group ordering stable to retain preferences. The desktop icon rail appears at 64rem, with full accessible labels and title hints. It temporarily opens groups to retain every icon and restores their remembered state when expanded or moved into the phone drawer. Inputs in the header and arbitrary footer controls are hidden while collapsed; place essentials in the page bar as well.
+
+## Header and footer composition
+Pass `app_header::render(...)` and `app_footer::render(...)` into the corresponding shell slots. Their empty defaults emit no wrappers. Pass `page_header::Props` for breadcrumbs, native search or a custom command trigger, actions and switchers. The shell page renders this full composition in both themes. The landing example supports client-side guest filtering, row selection and adding a local example reservation; its data is fictional and never persisted or sent to a booking system.

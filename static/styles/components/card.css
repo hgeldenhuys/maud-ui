@@ -1,0 +1,97 @@
+/* Card component — shadcn-quality container */
+
+.mui-card {
+  background-color: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  box-shadow: var(--mui-shadow-sm);
+  color: var(--mui-text);
+  overflow: hidden;
+}
+
+.mui-card__header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--mui-space-sm);
+  align-items: start;
+  padding: var(--mui-space-xl) var(--mui-space-xl) 0;
+}
+
+/* Text column inside the header (title + description). */
+.mui-card__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-inset-tight);
+  min-width: 0;
+}
+
+.mui-card__title {
+  margin: 0;
+  font-size: var(--mui-text-h2-size);
+  font-weight: var(--mui-weight-heading);
+  line-height: var(--mui-text-h2-leading);
+  letter-spacing: var(--mui-text-h2-tracking);
+  color: var(--mui-text);
+}
+
+.mui-card__description {
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text-muted);
+}
+
+/* Top-right action slot (shadcn CardAction). */
+.mui-card__action {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: var(--mui-inset-tight);
+}
+
+.mui-card__body {
+  padding: var(--mui-space-xl);
+}
+
+/* Collapse top padding on body when header is above */
+.mui-card__header + .mui-card__body {
+  padding-top: 0;
+}
+
+.mui-card__footer {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--mui-space-xl) var(--mui-space-xl);
+}
+
+/* Collapse top padding on footer when body is above */
+.mui-card__body + .mui-card__footer {
+  padding-top: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Size: Sm — compact card with reduced padding                        */
+/* ------------------------------------------------------------------ */
+
+.mui-card--sm .mui-card__header {
+  padding: var(--mui-space-md) var(--mui-space-md) 0;
+}
+
+.mui-card--sm .mui-card__body {
+  padding: var(--mui-space-md);
+}
+
+.mui-card--sm .mui-card__footer {
+  padding: 0 var(--mui-space-md) var(--mui-space-md);
+}
+
+.mui-card--sm .mui-card__title {
+  font-size: var(--mui-text-h3-size);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-card--sm .mui-card__description {
+  font-size: var(--mui-text-small-size);
+}

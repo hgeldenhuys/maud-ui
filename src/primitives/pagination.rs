@@ -201,8 +201,8 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             div {
                 p.mui-showcase__caption { "Search results" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);padding:1rem;background:var(--mui-bg-card);" {
-                    p style="font-size:0.875rem;color:var(--mui-fg-muted);margin-bottom:0.75rem;" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);padding: var(--mui-space-lg);background:var(--mui-bg-card);" {
+                    p style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);margin-bottom:0.75rem;" {
                         "Showing " strong { "21\u{2013}30" } " of " strong { "97" } " results"
                     }
                     (render(Props {

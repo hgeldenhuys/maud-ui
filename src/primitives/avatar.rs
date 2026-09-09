@@ -104,7 +104,7 @@ pub fn showcase() -> Markup {
             // User card — avatar with name and email
             section {
                 h2 { "User Card" }
-                div style="display:flex;align-items:center;gap:0.75rem;" {
+                div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
                     (render(Props {
                         src: Some("https://i.pravatar.cc/120?img=12".to_string()),
                         alt: "Sofia Davis".to_string(),
@@ -112,10 +112,10 @@ pub fn showcase() -> Markup {
                         size: Size::Lg,
                     }))
                     div {
-                        div style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" {
+                        div style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" {
                             "Sofia Davis"
                         }
-                        div style="font-size:0.8125rem;color:var(--mui-text-muted);" {
+                        div style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                             "sofia@example.com"
                         }
                     }
@@ -134,7 +134,7 @@ pub fn showcase() -> Markup {
                             fallback: "ON".to_string(),
                             size: Size::Md,
                         }))
-                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#22c55e;border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);" {}
+                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#22c55e;border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
                     // Away
                     span style="position:relative;display:inline-block;" {
@@ -144,7 +144,7 @@ pub fn showcase() -> Markup {
                             fallback: "AW".to_string(),
                             size: Size::Md,
                         }))
-                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#eab308;border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);" {}
+                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#eab308;border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
                     // Offline (fallback)
                     span style="position:relative;display:inline-block;" {
@@ -154,7 +154,7 @@ pub fn showcase() -> Markup {
                             fallback: "JD".to_string(),
                             size: Size::Md,
                         }))
-                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-text-muted);border:2px solid var(--mui-bg);border-radius:var(--mui-radius-full);" {}
+                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-text-muted);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
                 }
             }

@@ -74,9 +74,40 @@
       }
     };
     media.addEventListener("change", resize);
+    const prefs = ui.navigation;
+    const railMedia = window.matchMedia("(min-width: 64rem)");
+    const rail = shell.querySelector('[data-mui="shell-rail"]');
+    const key = "mui-shell-rail:" + shell.id;
+    const saved = prefs && prefs.read(key);
+    if (saved === "true" || saved === "false") shell.setAttribute("data-collapsed", saved);
+    function syncRail() {
+      const collapsed = !!rail && railMedia.matches && shell.getAttribute("data-collapsed") === "true";
+      if (rail) rail.setAttribute("aria-expanded", String(!collapsed));
+      if (prefs) prefs.forceGroups(sidebar, collapsed);
+    }
+    if (rail) rail.addEventListener("click", function () {
+      const next = shell.getAttribute("data-collapsed") !== "true";
+      if (next) {
+        const input = sidebar.querySelector('[data-mui-nav-search]');
+        if (input) input.value = '';
+        sidebar.querySelectorAll('li, .mui-block--shell__nav-group').forEach(row => { row.hidden = false; });
+      }
+      shell.setAttribute("data-collapsed", String(next));
+      if (prefs) prefs.write(key, String(next));
+      syncRail();
+    });
+    const resizeRail = () => {
+      if (!shell.isConnected) { railMedia.removeEventListener("change", resizeRail); return; }
+      syncRail();
+    };
+    railMedia.addEventListener("change", resizeRail);
+    dialog.addEventListener("mui:navigation-open", () => { if (prefs) prefs.forceGroups(sidebar, false); });
+    dialog.addEventListener("close", syncRail);
+    syncRail();
     const search = sidebar.querySelector("[data-mui-nav-search]");
     if (search) search.addEventListener("input", function () {
       const query = search.value.trim().toLocaleLowerCase();
+      if (prefs) prefs.forceGroups(sidebar, !!query);
       sidebar.querySelectorAll(".mui-block--shell__nav-group").forEach(group => {
         const rows = Array.from(group.querySelectorAll("li"));
         rows.forEach(row => { row.hidden = !row.textContent.toLocaleLowerCase().includes(query); });

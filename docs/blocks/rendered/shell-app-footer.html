@@ -1,0 +1,21 @@
+<h1>App footer</h1>
+<p>Optional help/legal links, a version or copyright line, secondary columns and arbitrary content. The footer sits below the entire sidebar/content row, with quiet small text and safe-area padding.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::{action::Link, shell::{app_footer, sidebar}};
+sidebar::render(sidebar::Props {
+    app_footer: app_footer::render(app_footer::Props {
+        line: Some("Garden House · Workspace 0.9".into()),
+        links: vec![Link { label: "Help".into(), href: "/help".into() }],
+        ..Default::default()
+    }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>links</td><td>Vec<a href="action::Link">action::Link</a></td><td>empty</td><td>Footer navigation links: label/href strings.</td></tr>
+<tr><td>line</td><td>Option<String></td><td>None</td><td>Escaped copyright, product or version line.</td></tr>
+<tr><td>columns</td><td>Vec<Column></td><td>empty</td><td>Column has title: String and links: Vec<a href="action::Link">action::Link</a>.</td></tr>
+<tr><td>children</td><td>Markup</td><td>empty</td><td>Arbitrary caller-rendered content after the links.</td></tr>
+</tbody></table>
+<p>Default props render nothing. An empty line and empty child markup also emit no footer. Secondary columns use a responsive grid; links wrap as whole items. There is no script requirement. See the sidebar showcase for the full header/footer composition in light and dark.</p>

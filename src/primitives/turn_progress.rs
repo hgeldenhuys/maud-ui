@@ -33,11 +33,11 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Turn progress" }
                 p.mui-showcase__caption { "A 2px hard-gradient strip — accent to N%, accent-10% after. Rendered above the executing composer." }
-                div style="display:flex;flex-direction:column;gap:1.25rem;max-width:32rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-20);max-width:32rem;" {
                     @for pct in [8u8, 34, 62, 100] {
                         div {
                             (render(Props { percent: pct }))
-                            div style="margin-top:0.375rem;font-family:var(--mui-font-mono);font-size:0.6875rem;color:var(--mui-text-subtle);" { (format!("{pct}%")) }
+                            div style="margin-top:0.375rem;font-family:var(--mui-font-mono);font-size: var(--mui-text-caption-size);color:var(--mui-text-subtle);" { (format!("{pct}%")) }
                         }
                     }
                 }

@@ -1,0 +1,73 @@
+/* Toggle group component — segmented control with roving tabindex */
+
+.mui-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+  padding: var(--mui-space-2xs);
+  gap: 0;
+}
+
+/* --- Sizes ------------------------------------------------------------- */
+
+.mui-toggle-group--md .mui-toggle-group__item {
+  height: calc(2.25rem - 4px);
+  padding: 0 var(--mui-space-md);
+  font-size: var(--mui-text-small-size);
+  min-width: 2rem;
+}
+
+.mui-toggle-group--sm .mui-toggle-group__item {
+  height: calc(2rem - 4px);
+  padding: 0 var(--mui-inset-cell);
+  font-size: var(--mui-text-caption-size);
+  min-width: 1.75rem;
+}
+
+/* --- Items ------------------------------------------------------------- */
+
+.mui-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mui-inset-tight);
+  background: transparent;
+  color: var(--mui-text-muted);
+  border: none;
+  border-radius: calc(var(--mui-radius-md) - 2px);
+  font-family: inherit;
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-toggle-group__item:hover:not(:disabled) {
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+}
+
+.mui-toggle-group__item[aria-pressed="true"] {
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  box-shadow: var(--mui-shadow-sm);
+}
+
+.mui-toggle-group__item:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.mui-toggle-group__item:disabled,
+.mui-toggle-group[data-disabled="true"] .mui-toggle-group__item {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

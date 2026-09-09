@@ -1,0 +1,197 @@
+/* Calendar component — shadcn-quality polish */
+
+.mui-calendar {
+  width: fit-content;
+  padding: var(--mui-space-md);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  font-family: var(--mui-font-sans);
+}
+
+/* -- Header ---------------------------------------------------------------- */
+
+.mui-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--mui-space-sm);
+}
+
+.mui-calendar__title {
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+  user-select: none;
+}
+
+/* Ghost nav buttons — subtle, no border until hover */
+.mui-calendar__nav {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--mui-radius-md);
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-body-size);
+  line-height: var(--mui-leading-tight);
+  cursor: pointer;
+  transition: background-color var(--mui-transition),
+              color var(--mui-transition);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-calendar__nav:hover {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-calendar__nav:active {
+  background: var(--mui-border);
+}
+
+.mui-calendar__nav:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* -- Grid ------------------------------------------------------------------ */
+
+.mui-calendar__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mui-calendar__weekdays,
+.mui-calendar__week {
+  display: grid;
+  grid-template-columns: repeat(7, 2rem);
+  gap: var(--mui-space-2xs);
+  justify-content: center;
+}
+
+.mui-calendar__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text-muted);
+  user-select: none;
+}
+
+/* -- Day cells ------------------------------------------------------------- */
+
+.mui-calendar__day {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text);
+  cursor: pointer;
+  transition: background-color var(--mui-transition),
+              color var(--mui-transition);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-calendar__day:hover:not(:disabled):not(.mui-calendar__day--selected) {
+  background: var(--mui-bg-input);
+}
+
+.mui-calendar__day:active:not(:disabled):not(.mui-calendar__day--selected) {
+  background: var(--mui-border);
+}
+
+/* Today: subtle ring, not the same as selected */
+.mui-calendar__day--today:not(.mui-calendar__day--selected) {
+  font-weight: var(--mui-weight-heading);
+  box-shadow: inset 0 0 0 1px var(--mui-border-hover);
+  border-radius: var(--mui-radius-md);
+}
+
+/* Selected: solid accent fill, white text, no ring */
+.mui-calendar__day--selected {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-weight: var(--mui-weight-heading);
+  box-shadow: none;
+}
+
+.mui-calendar__day--selected:hover {
+  background: var(--mui-accent-hover);
+}
+
+/* Outside days (prev/next month) — very muted */
+.mui-calendar__day--outside {
+  color: var(--mui-text-subtle);
+  opacity: 0.5;
+}
+
+.mui-calendar__day--outside:empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Disabled */
+/* Dimmed ONCE, not twice. This stacked `--mui-text-subtle` (already a muted
+   token) with `opacity: 0.35`, landing the digits at 1.74:1 against the card —
+   below even the 3:1 large-text floor, so a user could not read WHICH dates
+   were unavailable. Opacity alone, at the 0.5 the rest of the library uses,
+   reads as clearly disabled at ~5:1. */
+.mui-calendar__day:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus ring */
+.mui-calendar__day:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* -- Hidden input ---------------------------------------------------------- */
+
+.mui-calendar__value {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Mobile: allow calendar to flex with container */
+@media (max-width: 40rem) {
+  .mui-calendar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-calendar__weekdays,
+  .mui-calendar__week {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .mui-calendar__weekday,
+  .mui-calendar__day {
+    width: 100%;
+  }
+}

@@ -18,7 +18,7 @@ let columns = vec![
     data_table::Column {
         key: "name".to_string(),
         label: "Name".to_string(),
-        sortable: true,
+        sortable: true, ..Default::default()
     },
 ];
 
@@ -58,7 +58,8 @@ html! {
 |-------|------|---------|-------------|
 | `key` | `String` | — | Unique column identifier |
 | `label` | `String` | — | Column header text |
-| `sortable` | `bool` | — | Whether column can be sorted (shows icon if true) |
+| `sortable` | `bool` | false | Whether column can be sorted (shows icon if true) |
+| `align` | `Align` | Left | Left, Center or Right. Applied to headers and body; rich cell align_right overrides to Right. |
 
 ## Helper Functions
 
@@ -89,3 +90,6 @@ Renders a "Columns ▾" dropdown trigger stub for toggling column visibility. Pl
 
 ## Shadcn reference
 <https://ui.shadcn.com/docs/components/data-table>
+
+### `column_header_aligned(label, sortable, Align::Right) → Markup`
+The original two-argument helper keeps left alignment; the aligned helper supports Left, Center and Right. Use Right for numeric columns. `Column` now has `align: Align` and implements Default; add `..Default::default()` when migrating existing literals. Header cells remain muted and medium weight. Sortable headers respond to Enter/Space as well as clicks and announce their sort state. Runtime sorting/pagination moves existing rows, preserving alignment, rich content, checkbox state and attached controls. Rich rows sort/filter by their visible cell text; server-side rich filtering remains an application choice.

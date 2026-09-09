@@ -1,0 +1,32 @@
+/* Segmented control — a boxed switch rendered as real links. */
+
+.mui-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-2xs);
+  padding: var(--mui-space-2xs);
+  background-color: var(--mui-bg-card);
+  border-radius: var(--mui-radius-md);
+}
+
+.mui-segmented__stop {
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--mui-space-md);
+  border-radius: var(--mui-radius-sm);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-normal);
+  color: var(--mui-text-subtle);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--mui-transition), background-color var(--mui-transition);
+}
+.mui-segmented__stop:hover { color: var(--mui-text-muted); }
+
+.mui-segmented__stop--active {
+  background-color: var(--mui-bg-input);
+  color: var(--mui-text);
+  font-weight: var(--mui-weight-medium);
+}

@@ -1,0 +1,36 @@
+/* Kbd component — shadcn-quality keyboard shortcut display */
+
+.mui-kbd-container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-2xs);
+}
+
+.mui-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  padding: 0 var(--mui-inset-tight);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  white-space: nowrap;
+  color: var(--mui-text-muted);
+  background-color: var(--mui-bg);
+  border: 1px solid var(--mui-border);
+  border-bottom-width: 2px;
+  border-radius: var(--mui-radius-sm);
+  box-shadow: var(--mui-shadow-sm);
+  user-select: none;
+  pointer-events: none;
+}
+
+.mui-kbd-separator {
+  color: var(--mui-text-subtle);
+  font-size: var(--mui-text-caption-size);
+  margin: 0 var(--mui-space-2xs);
+  user-select: none;
+}

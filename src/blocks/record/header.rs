@@ -8,8 +8,12 @@ use maud::{html, Markup};
 #[derive(Clone, Debug, Default)]
 pub struct Props {
     pub title: String,
+    /// Overrides `title`. May contain a field-emitter heading; no heading is wrapped around it.
+    pub title_markup: Option<Markup>,
     pub subtitle: Option<String>,
     pub status: Option<badge::Props>,
+    /// Overrides `status`, including when the supplied markup is empty.
+    pub status_markup: Option<Markup>,
     pub primary_action: Option<Action>,
     pub secondary_actions: Vec<Action>,
     pub back: Option<Link>,
@@ -25,8 +29,13 @@ pub fn render(props: Props) -> Markup {
             div class="mui-record-header__row" {
                 div class="mui-record-header__identity" {
                     div class="mui-record-header__title-line" {
-                        (props.heading.render(&props.title, "mui-record-header__title"))
-                        @if let Some(status) = props.status { (badge::render(status)) }
+                        @if let Some(title) = props.title_markup {
+                            div class="mui-record-header__title" { (title) }
+                        } @else {
+                            (props.heading.render(&props.title, "mui-record-header__title"))
+                        }
+                        @if let Some(status) = props.status_markup { (status) }
+                        @else if let Some(status) = props.status { (badge::render(status)) }
                     }
                     @if let Some(subtitle) = props.subtitle { p class="mui-record-header__subtitle" { (subtitle) } }
                 }

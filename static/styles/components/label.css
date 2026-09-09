@@ -1,0 +1,25 @@
+/* Label component — standalone form label element */
+
+.mui-label {
+  display: inline-block;
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text);
+  cursor: default;
+}
+
+.mui-label[for] {
+  cursor: pointer;
+}
+
+.mui-label--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mui-label__required {
+  color: var(--mui-danger-text);
+  margin-inline-start: var(--mui-space-2xs);
+  font-weight: var(--mui-weight-medium);
+}

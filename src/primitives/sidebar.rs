@@ -1,6 +1,6 @@
 //! Sidebar primitive — collapsible app-shell sidebar modelled on shadcn's Sidebar.
 //! Renders as an `<aside>` element whose state is driven by `data-state` attributes
-//! (`expanded` / `collapsed`). The companion JS behaviour (`dist/behaviors/sidebar.js`)
+//! (`expanded` / `collapsed`). The companion JS behaviour (`static/behaviors/sidebar.js`)
 //! toggles the state on `Cmd/Ctrl+B` and on `[data-mui="sidebar-trigger"]` click.
 //!
 //! Subcomponents are exposed as free functions returning `Markup`, following the
@@ -112,7 +112,7 @@ pub fn render(props: Props) -> Markup {
     html! {
         aside
             class="mui-sidebar"
-            id=(props.id)
+            id=(&props.id)
             data-mui="sidebar"
             data-state=(state)
             data-side=(props.side.as_data())
@@ -121,6 +121,9 @@ pub fn render(props: Props) -> Markup {
             aria-label="Sidebar"
         {
             (props.children)
+        }
+        dialog class="mui-navigation-dialog" id=(format!("{}-drawer", props.id)) aria-label="Sidebar navigation" {
+            form method="dialog" { button class="mui-btn mui-btn--outline mui-btn--sm" { "Close navigation" } }
         }
     }
 }
@@ -143,6 +146,22 @@ pub fn footer(children: Markup) -> Markup {
 /// Group — a labeled cluster of menu items
 pub fn group(children: Markup) -> Markup {
     html! { div class="mui-sidebar__group" { (children) } }
+}
+
+/// Native collapsible group with local state keyed by a stable, page-unique ID.
+pub fn collapsible_group(id: &str, label: &str, children: Markup, default_open: bool) -> Markup {
+    html! { details class="mui-sidebar__group" id=(id) data-mui="nav-group" data-nav-key=(id) open[default_open] {
+        summary class="mui-sidebar__group-label" { (label) }
+        (children)
+    } }
+}
+
+/// Navigation row with a full accessible name retained in an icon rail.
+pub fn menu_link(href: &str, label: &str, icon: Option<Markup>, active: bool) -> Markup {
+    html! { a class="mui-sidebar__menu-button" href=(href) aria-label=(label) title=(label) aria-current=[active.then_some("page")] {
+        span class="mui-sidebar__menu-icon" aria-hidden="true" { @if let Some(icon) = icon { (icon) } @else { (label.chars().next().unwrap_or('·')) } }
+        span { (label) }
+    } }
 }
 
 /// Group label — small-caps heading for a group
@@ -268,10 +287,17 @@ pub fn inset(children: Markup) -> Markup {
 /// so CSS `span:not([aria-hidden="true"])` hides the label in icon-collapsed
 /// mode but keeps the icon visible. Without the icon, icon-collapsed is blank.
 pub fn showcase() -> Markup {
-    // Tiny helper — a decorative glyph slot consistent with the group-label
-    // hiding selector in sidebar.css.
+    // Consistent stroke icons; menu_link supplies their decorative slot.
     let ico = |glyph: &'static str| -> Markup {
-        html! { span class="mui-sidebar__menu-icon" aria-hidden="true" { (glyph) } }
+        let path = match glyph {
+            "□" => "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+            "≡" => "M3 6h7l2 2h9v12H3z",
+            "↑" => "M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5",
+            "○" => "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3a8 8 0 0 1 16 0v3",
+            "◇" => "M3 5h18v14H3zM3 10h18M6 15h4",
+            _ => "M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2",
+        };
+        html! { svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" { path d=(path); } }
     };
     html! {
         div class="mui-showcase__grid" {
@@ -296,45 +322,19 @@ pub fn showcase() -> Markup {
                                     }
                                 }))
                                 (content(html! {
-                                    (group(html! {
-                                        (group_label(html! { "Platform" }))
-                                        (group_content(html! {
-                                            (menu(html! {
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{25a0}"))
-                                                    span { "Dashboard" }
-                                                })))
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{2630}"))
-                                                    span { "Projects" }
-                                                    (menu_badge(html! { "12" }))
-                                                })))
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{2191}"))
-                                                    span { "Deployments" }
-                                                })))
-                                            }))
+                                    (collapsible_group("demo-platform", "Platform", menu(html! {
+                                        (menu_item(menu_link("/blocks/dashboard-stats", "Dashboard", Some(ico("□")), true)))
+                                        (menu_item(html! {
+                                            (menu_link("/blocks/worklist-header", "Projects", Some(ico("≡")), false))
+                                            (menu_sub(menu_sub_item(menu_link("/blocks/record-header", "Active project", Some(ico("·")), false))))
                                         }))
-                                    }))
-                                    (group(html! {
-                                        (group_label(html! { "Workspace" }))
-                                        (group_content(html! {
-                                            (menu(html! {
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{25cb}"))
-                                                    span { "Members" }
-                                                })))
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{25c6}"))
-                                                    span { "Billing" }
-                                                })))
-                                                (menu_item(menu_button(html! {
-                                                    (ico("\u{2699}"))
-                                                    span { "Settings" }
-                                                })))
-                                            }))
-                                        }))
-                                    }))
+                                        (menu_item(menu_link("/blocks/task-grid", "Deployments", Some(ico("↑")), false)))
+                                    }), true))
+                                    (collapsible_group("demo-workspace", "Workspace", menu(html! {
+                                        (menu_item(menu_link("/blocks/settings-team", "Members", Some(ico("○")), false)))
+                                        (menu_item(menu_link("/blocks/settings-billing", "Billing", Some(ico("◇")), false)))
+                                        (menu_item(menu_link("/blocks/settings-profile", "Settings", Some(ico("⚙")), false)))
+                                    }), true))
                                 }))
                                 (footer(html! {
                                     div class="mui-sidebar__user" {
@@ -345,7 +345,7 @@ pub fn showcase() -> Markup {
                                 (rail())
                             },
                         }))
-                        (inset(html! {
+                        (html! { section class="mui-sidebar-inset" {
                             div class="mui-sidebar-inset__bar" {
                                 (trigger("demo-sidebar", "Toggle sidebar"))
                                 span class="mui-sidebar-inset__title" { "Dashboard" }
@@ -367,11 +367,11 @@ pub fn showcase() -> Markup {
                                 }
                                 p class="mui-sidebar-demo__note" {
                                     "Replace this inset with your app's content. The sidebar width animates between "
-                                    kbd { "16rem" } " and " kbd { "3rem" } " via "
+                                    kbd { "15rem" } " and " kbd { "4rem" } " via "
                                     kbd { "data-state" } "."
                                 }
                             }
-                        }))
+                        } })
                     }))
                 }
             }

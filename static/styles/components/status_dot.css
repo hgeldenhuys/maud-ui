@@ -1,0 +1,25 @@
+/* Status dot — a 6px semantic dot, filled or hollow. */
+
+.mui-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--mui-radius-full);
+  box-sizing: border-box;
+  flex: none;
+}
+
+.mui-status-dot--success { background-color: var(--mui-success); }
+.mui-status-dot--accent { background-color: var(--mui-accent); }
+.mui-status-dot--warning { background-color: var(--mui-warning); }
+.mui-status-dot--neutral { background-color: var(--mui-text-subtle); }
+.mui-status-dot--destructive { background-color: var(--mui-danger); }
+
+/* Hollow — transparent fill, the tone carried by a 1px border. Later in the
+   file than the fills above, so it wins the background declaration. */
+.mui-status-dot--outline { background-color: transparent; border: 1px solid transparent; }
+.mui-status-dot--outline.mui-status-dot--success { border-color: var(--mui-success); }
+.mui-status-dot--outline.mui-status-dot--accent { border-color: var(--mui-accent); }
+.mui-status-dot--outline.mui-status-dot--warning { border-color: var(--mui-warning); }
+.mui-status-dot--outline.mui-status-dot--neutral { border-color: var(--mui-text-subtle); }
+.mui-status-dot--outline.mui-status-dot--destructive { border-color: var(--mui-danger); }

@@ -1,0 +1,360 @@
+/* Settings blocks — shared layout across profile / team / billing.
+   Each sub-block stacks cards vertically with consistent spacing. */
+
+.mui-block--settings {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xl);
+    width: 100%;
+}
+
+/* Top-of-page success / error notice (pre-card) */
+.mui-block--settings__notice {
+    padding: var(--mui-space-md) var(--mui-space-lg);
+    border-radius: var(--mui-radius-md);
+    font-size: var(--mui-text-small-size);
+    border: 1px solid transparent;
+}
+.mui-block--settings__notice--success {
+    background: color-mix(in srgb, var(--mui-success) 12%, transparent);
+    border-color: color-mix(in srgb, var(--mui-success) 30%, transparent);
+    color: var(--mui-success-text);
+}
+.mui-block--settings__notice--danger {
+    background: var(--mui-danger-bg);
+    border-color: color-mix(in srgb, var(--mui-danger) 30%, transparent);
+    color: var(--mui-danger-text);
+}
+
+/* Form field layout — used by profile */
+.mui-block--settings__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-20);
+}
+
+.mui-block--settings__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-inset-tight);
+}
+
+.mui-block--settings__label {
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-medium);
+    color: var(--mui-text);
+}
+
+.mui-block--settings__hint {
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-muted);
+}
+
+.mui-block--settings__actions {
+    display: flex;
+    gap: var(--mui-space-sm);
+    justify-content: flex-end;
+    margin-top: var(--mui-space-xs);
+}
+
+/* Avatar row (profile) */
+.mui-block--settings__avatar-row {
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-lg);
+    padding: var(--mui-space-sm) 0 var(--mui-space-sm);
+    margin-bottom: var(--mui-space-xs);
+}
+
+.mui-block--settings__avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--mui-radius-full);
+    background: linear-gradient(135deg, var(--mui-accent), var(--mui-accent-hover));
+    color: var(--mui-accent-fg);
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: var(--mui-text-h3-tracking);
+    flex-shrink: 0;
+ line-height: var(--mui-text-h3-leading); }
+
+.mui-block--settings__avatar-actions {
+    display: flex;
+    gap: var(--mui-space-sm);
+}
+
+.mui-block--settings__avatar-actions form {
+    margin: 0;
+}
+
+/* Danger zone — red-tinted card at the bottom of settings pages */
+.mui-block--settings__danger .mui-card {
+    border-color: color-mix(in srgb, var(--mui-danger) 35%, var(--mui-border));
+    background: color-mix(in srgb, var(--mui-danger) 4%, var(--mui-bg-card));
+}
+
+/* ── Team block ──────────────────────────────────────────────── */
+
+.mui-block--team__invite {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+    gap: var(--mui-space-sm);
+    align-items: stretch;
+    margin-bottom: var(--mui-space-lg);
+}
+
+.mui-block--team__invite .mui-input,
+.mui-block--team__invite .mui-native-select__root,
+.mui-block--team__invite .mui-native-select {
+    width: 100%;
+}
+
+@media (max-width: 40rem) {
+    .mui-block--team__invite {
+        grid-template-columns: 1fr;
+    }
+}
+
+.mui-block--team__table-wrap {
+    overflow-x: auto;
+    border-top: 1px solid var(--mui-border);
+    margin: 0 -1.25rem -1.25rem;  /* bleed into card padding */
+    padding: 0 var(--mui-space-20) var(--mui-space-20);
+}
+
+.mui-block--team__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--team__table th {
+    text-align: start;
+    font-weight: var(--mui-weight-medium);
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-caption-size);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    padding: var(--mui-inset-cell) var(--mui-space-md);
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-block--team__table td {
+    padding: var(--mui-space-md) var(--mui-space-md);
+    border-bottom: 1px solid var(--mui-border);
+    vertical-align: middle;
+}
+
+.mui-block--team__table tr:last-child td {
+    border-bottom: none;
+}
+
+.mui-block--team__member {
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-md);
+}
+
+.mui-block--team__avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--mui-radius-full);
+    background: var(--mui-bg-input);
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mui-block--team__member-text {
+    display: flex;
+    flex-direction: column;
+    line-height: var(--mui-leading-tight);
+    min-width: 0;
+}
+
+.mui-block--team__member-name {
+    color: var(--mui-text);
+    font-weight: var(--mui-weight-medium);
+}
+
+.mui-block--team__member-email {
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--team__role-static {
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--team__role-form {
+    margin: 0;
+    max-width: 10rem;
+}
+
+.mui-block--team__last-active {
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-small-size);
+    white-space: nowrap;
+}
+
+.mui-block--team__actions-col,
+.mui-block--team__row-actions {
+    text-align: end;
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* ── Billing block ───────────────────────────────────────────── */
+
+.mui-block--billing__plan {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-20);
+}
+
+.mui-block--billing__plan-name {
+    display: flex;
+    align-items: baseline;
+    gap: var(--mui-space-lg);
+    flex-wrap: wrap;
+}
+
+.mui-block--billing__plan-name h3 {
+    margin: 0;
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    letter-spacing: var(--mui-text-h3-tracking);
+ line-height: var(--mui-text-h3-leading); }
+
+.mui-block--billing__plan-price {
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    font-variant-numeric: tabular-nums;
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-block--billing__plan-period {
+    color: var(--mui-text-muted);
+    font-weight: var(--mui-weight-normal);
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--billing__meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--mui-space-lg);
+    padding: var(--mui-space-lg) 0;
+    border-top: 1px solid var(--mui-border);
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-block--billing__meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xs);
+}
+
+.mui-block--billing__meta-label {
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    font-weight: var(--mui-weight-medium);
+}
+
+.mui-block--billing__meta-value {
+    font-size: var(--mui-text-body-size);
+    font-weight: var(--mui-weight-medium);
+    color: var(--mui-text);
+    font-variant-numeric: tabular-nums;
+}
+
+.mui-block--billing__meta-bar {
+    height: 4px;
+    background: var(--mui-bg-input);
+    border-radius: var(--mui-radius-full);
+    overflow: hidden;
+    margin-top: var(--mui-space-xs);
+}
+
+.mui-block--billing__meta-bar-fill {
+    height: 100%;
+    background: var(--mui-accent);
+}
+
+.mui-block--billing__actions {
+    display: flex;
+    gap: var(--mui-space-sm);
+    flex-wrap: wrap;
+}
+
+.mui-block--billing__actions form {
+    margin: 0;
+}
+
+/* Payment method row */
+.mui-block--billing__payment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mui-space-lg);
+    flex-wrap: wrap;
+}
+
+.mui-block--billing__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xs);
+}
+
+.mui-block--billing__card-brand {
+    font-size: var(--mui-text-caption-size);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    color: var(--mui-text-muted);
+    font-weight: var(--mui-weight-heading);
+}
+
+.mui-block--billing__card-number {
+    font-family: var(--mui-font-mono);
+    font-size: var(--mui-text-body-size);
+    color: var(--mui-text);
+    letter-spacing: var(--mui-tracking-label);
+}
+
+.mui-block--billing__card-expiry {
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+}
+
+.mui-block--billing__payment-update form {
+    margin: 0;
+}
+
+.mui-block--billing__download {
+    color: var(--mui-accent-text);
+    text-decoration: none;
+    font-weight: var(--mui-weight-medium);
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--billing__download:hover {
+    text-decoration: none;
+    text-underline-offset: 2px;
+}
+
+/* OTP centering for auth::two_factor */
+.mui-block--auth__otp-wrap {
+    display: flex;
+    justify-content: center;
+    padding: var(--mui-space-sm) 0;
+}

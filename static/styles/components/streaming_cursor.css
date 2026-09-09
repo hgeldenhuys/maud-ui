@@ -1,0 +1,80 @@
+/* Streaming indicators — cursor, dots, pulse. */
+.mui-streaming {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-inset-tight);
+  vertical-align: middle;
+}
+.mui-streaming__label {
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+}
+
+/* Cursor — blinking block appended to streaming text */
+.mui-streaming__cursor {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.95em;
+  background: var(--mui-accent);
+  vertical-align: text-bottom;
+  margin-left: var(--mui-space-2xs);
+  animation: mui-cursor-blink var(--mui-motion-loading) steps(2) infinite;
+}
+@keyframes mui-cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Dots — three pulsing dots (thinking indicator) */
+.mui-streaming__dots {
+  display: inline-flex;
+  gap: var(--mui-space-xs);
+}
+.mui-streaming__dots span {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+  animation: mui-dot-pulse var(--mui-motion-loading) var(--mui-motion-ease) infinite;
+}
+.mui-streaming__dots span:nth-child(1) { animation-delay: 0s; }
+.mui-streaming__dots span:nth-child(2) { animation-delay: 0.15s; }
+.mui-streaming__dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes mui-dot-pulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40%           { opacity: 1;   transform: scale(1); }
+}
+
+/* Pulse — single ring pulse (status beacon) */
+.mui-streaming__pulse {
+  position: relative;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-success) 60%, transparent);
+  animation: mui-pulse-ring var(--mui-motion-loading) var(--mui-motion-ease) infinite;
+}
+@keyframes mui-pulse-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-success) 60%, transparent); }
+  70%  { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                      */
+/* ------------------------------------------------------------------ */
+
+/* All three indicators animate infinitely, which is exactly the pattern
+   WCAG 2.2.2 and vestibular-sensitivity guidance ask you not to force on
+   people. Each one degrades to its STATIC, still-visible state rather than
+   disappearing: none of the base rules set opacity or transform, so removing
+   the animation leaves a solid caret, three solid dots, and a solid status
+   dot. The indicator keeps indicating; it just stops moving. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-streaming__cursor,
+  .mui-streaming__dots span,
+  .mui-streaming__pulse {
+    animation: none;
+  }
+}

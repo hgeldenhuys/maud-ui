@@ -1,0 +1,70 @@
+/* Grid — the two-dimensional layout container. Shares stack's spacing scale
+   and alignment vocabulary; the base class alone is "auto-fit at 14rem,
+   0.75rem gap, stretch". */
+
+.mui-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--mui-grid-min, 14rem), 1fr));
+  gap: var(--mui-space-md);
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Auto-fit minimum column width                                       */
+/* ------------------------------------------------------------------ */
+
+.mui-grid--min-sm { --mui-grid-min: 10rem; }
+.mui-grid--min-lg { --mui-grid-min: 18rem; }
+.mui-grid--min-xl { --mui-grid-min: 24rem; }
+
+/* ------------------------------------------------------------------ */
+/* Fixed column counts                                                 */
+/* ------------------------------------------------------------------ */
+
+.mui-grid--cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.mui-grid--cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mui-grid--cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mui-grid--cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mui-grid--cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.mui-grid--cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.mui-grid--cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+/* Fixed counts collapse to one column on narrow viewports unless the caller
+   opted out. `minmax(0, 1fr)` above (rather than a bare `1fr`) is what stops a
+   long unbreakable child from forcing the track wider than its share. */
+@media (max-width: 40rem) {
+  .mui-grid--collapse {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Gap scale — mirrors `tokens::spacing`, shared with stack             */
+/* ------------------------------------------------------------------ */
+
+.mui-grid--gap-none { gap: 0; }
+.mui-grid--gap-xs { gap: var(--mui-space-xs); }
+.mui-grid--gap-sm { gap: var(--mui-space-sm); }
+.mui-grid--gap-lg { gap: var(--mui-space-lg); }
+.mui-grid--gap-xl { gap: var(--mui-space-xl); }
+.mui-grid--gap-xxl { gap: var(--mui-space-xxl); }
+
+/* ------------------------------------------------------------------ */
+/* Padding scale                                                       */
+/* ------------------------------------------------------------------ */
+
+.mui-grid--p-xs { padding: var(--mui-space-xs); }
+.mui-grid--p-sm { padding: var(--mui-space-sm); }
+.mui-grid--p-md { padding: var(--mui-space-md); }
+.mui-grid--p-lg { padding: var(--mui-space-lg); }
+.mui-grid--p-xl { padding: var(--mui-space-xl); }
+.mui-grid--p-xxl { padding: var(--mui-space-xxl); }
+
+/* ------------------------------------------------------------------ */
+/* Block-axis alignment of items within their track                     */
+/* ------------------------------------------------------------------ */
+
+.mui-grid--align-start { align-items: start; }
+.mui-grid--align-center { align-items: center; }
+.mui-grid--align-end { align-items: end; }
+.mui-grid--align-baseline { align-items: baseline; }

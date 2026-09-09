@@ -1,0 +1,7 @@
+.mui-app-footer { display: grid; gap: var(--mui-space-xl); background: var(--mui-bg); border-block-start: 1px solid var(--mui-border); padding: var(--mui-space-lg) var(--mui-page-gutter) max(var(--mui-space-lg), env(safe-area-inset-bottom, 0px)); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); line-height: var(--mui-leading-small); }
+.mui-app-footer__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--mui-space-md) var(--mui-space-xl); align-items: center; }
+.mui-app-footer__row:empty { display: none; }
+.mui-app-footer nav { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); }
+.mui-app-footer__columns { display: grid; grid-template-columns: repeat(auto-fit,minmax(10rem,1fr)); gap: var(--mui-space-xl); }
+.mui-app-footer__columns ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--mui-space-sm); }
+.mui-app-footer__columns .mui-eyebrow { margin: 0 0 var(--mui-space-md); }

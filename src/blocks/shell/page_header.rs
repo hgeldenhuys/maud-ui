@@ -1,0 +1,85 @@
+//! Sticky page context: breadcrumbs, search, actions and arbitrary switcher slots.
+use crate::primitives::breadcrumb::{self, BreadcrumbItem};
+use maud::{html, Markup};
+
+#[derive(Clone, Debug)]
+pub struct Search {
+    /// Native GET destination; search works without the behavior bundle.
+    pub action: String,
+    pub name: String,
+    pub value: String,
+    pub placeholder: String,
+}
+impl Default for Search {
+    fn default() -> Self {
+        Self {
+            action: String::new(),
+            name: "q".into(),
+            value: String::new(),
+            placeholder: "Search workspace…".into(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct Props {
+    /// Mobile menu trigger or other leading control, before the breadcrumb.
+    pub leading: Markup,
+    pub breadcrumbs: Vec<BreadcrumbItem>,
+    pub search: Option<Search>,
+    /// Replaces the native search form, e.g. with a command palette trigger.
+    pub search_markup: Option<Markup>,
+    pub actions: Markup,
+    /// Role, language and theme controls in caller-defined markup.
+    pub switchers: Markup,
+}
+
+pub fn render(props: Props) -> Markup {
+    html! {
+        header class="mui-page-header" {
+            div class="mui-page-header__context" {
+                (props.leading)
+                (breadcrumb::render(breadcrumb::Props { items: props.breadcrumbs, ..Default::default() }))
+            }
+            div class="mui-page-header__search" {
+                @if let Some(search) = props.search_markup { (search) }
+                @else if let Some(search) = props.search {
+                    form method="get" action=(search.action) role="search" {
+                        label {
+                            span class="mui-sr-only" { "Search workspace" }
+                            input class="mui-input" type="search" name=(search.name) value=(search.value) placeholder=(search.placeholder) data-mui="page-search";
+                        }
+                        kbd aria-hidden="true" { "⌘ K" }
+                        button class="mui-sr-only mui-page-header__submit" type="submit" { "Search" }
+                    }
+                }
+            }
+            div class="mui-page-header__controls" {
+                (props.actions)
+                @if !props.switchers.0.is_empty() { div class="mui-page-header__switchers" { (props.switchers) } }
+            }
+        }
+    }
+}
+
+pub fn preview() -> Markup {
+    render(Props {
+        breadcrumbs: vec![
+            BreadcrumbItem {
+                label: "Workspace".into(),
+                href: Some("/blocks/shell-sidebar".into()),
+            },
+            BreadcrumbItem {
+                label: "Reservations".into(),
+                href: None,
+            },
+        ],
+        search: Some(Search {
+            action: "/".into(),
+            ..Default::default()
+        }),
+        actions: html! { a class="mui-btn mui-btn--outline mui-btn--sm" href="/blocks/worklist-header" { "New reservation" } },
+        switchers: html! { label { span class="mui-sr-only" { "Role" } select class="mui-native-select" { option { "Front desk" } option { "Manager" } } } },
+        ..Default::default()
+    })
+}

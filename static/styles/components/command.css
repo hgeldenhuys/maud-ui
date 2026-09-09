@@ -1,0 +1,197 @@
+/* Command palette component — Cmd+K modal */
+
+dialog.mui-command {
+  border: none;
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 0;
+  box-shadow: var(--mui-shadow-lg);
+  max-width: 32rem;
+  width: 90vw;
+  overflow: hidden;
+  animation: mui-command-enter var(--mui-motion-enter) var(--mui-motion-ease);
+}
+
+dialog.mui-command::backdrop {
+  background: var(--mui-bg-overlay);
+  animation: mui-command-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease);
+}
+
+@keyframes mui-command-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mui-command-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Search area */
+
+.mui-command__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  padding: var(--mui-space-md) var(--mui-space-lg);
+  border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-command__search-icon {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-body-size);
+  flex-shrink: 0;
+}
+
+.mui-command__search {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--mui-text);
+  font-family: inherit;
+  font-size: var(--mui-text-body-size);
+  line-height: var(--mui-leading-small);
+  padding: 0;
+}
+
+.mui-command__search::placeholder {
+  color: var(--mui-text-muted);
+}
+
+/* Item list */
+
+.mui-command__list {
+  overflow-y: auto;
+  max-height: 18rem;
+  padding: var(--mui-space-xs);
+}
+
+/* Groups */
+
+.mui-command__group {
+  padding: var(--mui-space-2xs) 0;
+}
+
+.mui-command__group + .mui-command__group {
+  border-top: 1px solid var(--mui-border);
+  margin-top: var(--mui-space-xs);
+  padding-top: var(--mui-inset-tight);
+}
+
+.mui-command__group-label {
+  padding: var(--mui-inset-tight) var(--mui-space-sm) var(--mui-space-xs);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--mui-tracking-label);
+  color: var(--mui-text-muted);
+  user-select: none;
+}
+
+/* Items */
+
+.mui-command__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mui-space-md);
+  padding: var(--mui-space-sm) var(--mui-space-sm);
+  border-radius: var(--mui-radius-sm);
+  font-size: var(--mui-text-small-size);
+  cursor: pointer;
+  transition: background var(--mui-transition);
+}
+
+.mui-command__item:hover {
+  background: var(--mui-bg-input);
+}
+
+.mui-command__item--highlighted {
+  background: var(--mui-bg-input);
+}
+
+.mui-command__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-command__item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Shortcut kbd inside command items */
+.mui-command__item .mui-kbd {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+/* Shortcut slot — mui-command__shortcut is typically applied alongside
+ * .mui-kbd; the margin-inline-start rule above already handles layout when
+ * it lives inside a .mui-command__item. Expose a minimal rule so standalone
+ * usage outside an item still pushes the shortcut to the trailing edge. */
+.mui-command__shortcut {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
+/* Separator between groups when composing a list manually */
+.mui-command__separator {
+  height: 1px;
+  background: var(--mui-border);
+  margin: var(--mui-space-xs) var(--mui-space-sm);
+}
+
+/* Empty state */
+
+.mui-command__empty {
+  padding: var(--mui-space-xxl) var(--mui-space-lg);
+  text-align: center;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-command__empty[hidden] {
+  display: none;
+}
+
+/* Hidden items during search */
+.mui-command__item[data-hidden="true"] {
+  display: none;
+}
+
+.mui-command__group[data-hidden="true"] {
+  display: none;
+}
+
+/* Mobile: full-width command palette with tighter padding */
+@media (max-width: 40rem) {
+  dialog.mui-command {
+    width: calc(100vw - 1.5rem);
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .mui-command__search-wrap {
+    padding: var(--mui-inset-cell) var(--mui-inset-control);
+  }
+
+  .mui-command__list {
+    max-height: 60vh;
+  }
+
+  .mui-command__item {
+    padding: var(--mui-space-sm) var(--mui-inset-tight);
+  }
+}

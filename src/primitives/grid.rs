@@ -255,7 +255,7 @@ pub fn showcase() -> Markup {
 
     let cell = |text: &str| -> Markup {
         html! {
-            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius:var(--mui-radius-md);padding:0.75rem;font-size:0.8125rem;color:var(--mui-text-muted);text-align:center;" {
+            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);text-align:center;" {
                 (text)
             }
         }
@@ -331,7 +331,7 @@ pub fn showcase() -> Markup {
                     gap: Space::Sm,
                     children: html! {
                         @for hex in ["#2563eb", "#15803d", "#a16207", "#dc2626", "#6d28d9", "#be123c"] {
-                            div style=(format!("background:{hex};height:2.5rem;border-radius:var(--mui-radius-md);")) {}
+                            div style=(format!("background:{hex};height:2.5rem;border-radius: var(--mui-radius-md);")) {}
                         }
                     },
                     ..Default::default()
@@ -373,7 +373,7 @@ pub fn showcase() -> Markup {
                     (Align::End, "End"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md);margin-bottom:1rem;" {
+                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:1rem;" {
                         (render(Props {
                             columns: Columns::Three,
                             collapse_narrow: false,
@@ -381,7 +381,7 @@ pub fn showcase() -> Markup {
                             padding: Space::Sm,
                             children: html! {
                                 (cell("Short"))
-                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius:var(--mui-radius-md);padding:2rem 0.75rem;font-size:0.8125rem;color:var(--mui-text-muted);text-align:center;" { "Tall" }
+                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-xxl) var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);text-align:center;" { "Tall" }
                                 (cell("Short"))
                             },
                             ..Default::default()
@@ -413,7 +413,7 @@ pub fn showcase() -> Markup {
                                     // full-width bar instead of a chip.
                                     align: Align::Start,
                                     children: html! {
-                                        p style="font-size:1.5rem;font-weight:700;margin:0;" { (value) }
+                                        p style="font-size: var(--mui-text-h2-size);font-weight: var(--mui-weight-heading);margin: 0;" { (value) }
                                         (badge::render(badge::Props {
                                             label: format!("{delta} from last month"),
                                             variant: tone,

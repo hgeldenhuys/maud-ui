@@ -1,0 +1,97 @@
+/* ── Menubar ──────────────────────────────────────────────────────────── */
+
+.mui-menubar {
+  display: inline-flex;
+  align-items: center;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: var(--mui-space-xs);
+  gap: var(--mui-space-2xs);
+}
+
+/* ── Trigger buttons ────────────────────────────────────────────────── */
+
+.mui-menubar__menu {
+  position: relative;
+}
+
+.mui-menubar__trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--mui-inset-tight) var(--mui-space-sm);
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text);
+  cursor: pointer;
+  border-radius: var(--mui-radius-sm);
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-menubar__trigger:hover,
+.mui-menubar__trigger:focus-visible {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  outline: none;
+}
+
+.mui-menubar__trigger[aria-expanded="true"] {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+/* ── Dropdown content ───────────────────────────────────────────────── */
+
+.mui-menubar__content {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  inset-inline-start: 0;
+  min-width: 12rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: var(--mui-space-xs);
+  z-index: var(--mui-layer-overlay);
+}
+
+.mui-menubar__content[hidden] {
+  display: none;
+}
+
+/* Reuse menu item styles inside menubar dropdowns */
+.mui-menubar__content .mui-menu__item,
+.mui-menubar__content .mui-menu__separator,
+.mui-menubar__content .mui-menu__label,
+.mui-menubar__content .mui-menu__shortcut,
+.mui-menubar__content .mui-menu__checkbox-indicator,
+.mui-menubar__content .mui-menu__radio-indicator,
+.mui-menubar__content .mui-menu__radio-group,
+.mui-menubar__content .mui-menu__group,
+.mui-menubar__content .mui-menu__sub-wrapper,
+.mui-menubar__content .mui-menu__sub,
+.mui-menubar__content .mui-menu__sub-trigger {
+  /* Inherits all styles from menu.css — no overrides needed */
+}
+
+/* Mobile: allow menubar to wrap and dropdowns to fit viewport */
+@media (max-width: 40rem) {
+  .mui-menubar {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-menubar__content {
+    min-width: 12rem;
+    max-width: calc(100vw - 2rem);
+  }
+}

@@ -53,7 +53,7 @@ pub fn render(props: Props) -> Markup {
 /// Showcase of all three variants.
 pub fn showcase() -> Markup {
     html! {
-        div.mui-showcase__column style="gap: 1rem;" {
+        div.mui-showcase__column style="gap: var(--mui-space-lg);" {
             div {
                 p class="mui-showcase__caption" { "Streaming cursor (inline text)" }
                 p { "The answer is 42" (render(Props { variant: Variant::Cursor, ..Default::default() })) }

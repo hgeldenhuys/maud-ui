@@ -58,12 +58,12 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             section {
                 h2 { "Common ratios" }
-                div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;" {
+                div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--mui-space-lg);" {
                     div {
                         p.mui-showcase__caption { "16:9" }
                         (render(Props::video(
                             html! {
-                                div style="background: linear-gradient(135deg, var(--mui-accent) 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                div style="background: linear-gradient(135deg, var(--mui-accent) 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: var(--mui-weight-heading); font-size: var(--mui-text-small-size);" {
                                     "16:9"
                                 }
                             }
@@ -73,7 +73,7 @@ pub fn showcase() -> Markup {
                         p.mui-showcase__caption { "4:3" }
                         (render(Props::four_by_three(
                             html! {
-                                div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: var(--mui-weight-heading); font-size: var(--mui-text-small-size);" {
                                     "4:3"
                                 }
                             }
@@ -83,7 +83,7 @@ pub fn showcase() -> Markup {
                         p.mui-showcase__caption { "1:1" }
                         (render(Props::square(
                             html! {
-                                div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;" {
+                                div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: var(--mui-weight-heading); font-size: var(--mui-text-small-size);" {
                                     "1:1"
                                 }
                             }

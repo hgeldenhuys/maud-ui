@@ -1,0 +1,63 @@
+/* Chart component — inline SVG bar and line charts */
+
+.mui-chart {
+  width: 100%;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: var(--mui-space-20) var(--mui-space-lg) var(--mui-space-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+}
+
+.mui-chart__title {
+  font-size: var(--mui-text-body-size);
+  font-weight: var(--mui-weight-heading);
+  margin: 0 0 var(--mui-space-md);
+  color: var(--mui-text);
+  letter-spacing: var(--mui-tracking-heading);
+  line-height: var(--mui-leading-tight);
+}
+
+.mui-chart__svg {
+  color: var(--mui-text);
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.mui-chart__label {
+  font-size: var(--mui-text-caption-size);
+  fill: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
+}
+
+.mui-chart__value {
+  font-size: var(--mui-text-caption-size);
+  fill: var(--mui-text-subtle);
+  font-family: var(--mui-font-sans);
+}
+
+/* Bar hover effect — brighten and lift */
+.mui-chart rect {
+  transition: opacity var(--mui-motion-fast) var(--mui-motion-ease), filter var(--mui-motion-fast) var(--mui-motion-ease);
+  cursor: pointer;
+}
+.mui-chart rect:hover {
+  opacity: 1 !important;
+  filter: brightness(1.15) saturate(1.1);
+}
+
+/* Line chart dot hover — grow and glow on hover */
+.mui-chart circle {
+  transition: r var(--mui-motion-fast) var(--mui-motion-ease);
+  cursor: pointer;
+}
+.mui-chart circle:hover {
+  r: 5;
+}
+
+/* Grid lines — keep them very subtle */
+.mui-chart line[stroke-opacity] {
+  shape-rendering: crispEdges;
+}

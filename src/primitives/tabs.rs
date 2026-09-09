@@ -125,16 +125,16 @@ pub fn render(props: Props) -> Markup {
 pub fn showcase() -> Markup {
     use crate::primitives::{button, input, label};
 
-    let tabs = vec![
+    let tabs = [
         Tab {
             id: "account".to_string(),
             label: "Account".to_string(),
             content: html! {
-                div style="padding:1rem 0;" {
-                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                div style="padding: var(--mui-space-lg) 0;" {
+                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Make changes to your account here. Click save when you\u{2019}re done."
                     }
-                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                    div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:24rem;" {
                         div class="mui-field" {
                             (label::render(label::Props {
                                 text: "Name".into(),
@@ -180,11 +180,11 @@ pub fn showcase() -> Markup {
             id: "password".to_string(),
             label: "Password".to_string(),
             content: html! {
-                div style="padding:1rem 0;" {
-                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                div style="padding: var(--mui-space-lg) 0;" {
+                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Change your password here. After saving, you\u{2019}ll be logged out."
                     }
-                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:24rem;" {
+                    div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:24rem;" {
                         div class="mui-field" {
                             (label::render(label::Props {
                                 text: "Current password".into(),
@@ -230,22 +230,22 @@ pub fn showcase() -> Markup {
             id: "team".to_string(),
             label: "Team".to_string(),
             content: html! {
-                div style="padding:1rem 0;" {
-                    p style="font-size:0.875rem;color:var(--mui-text-muted);margin:0 0 1rem;" {
+                div style="padding: var(--mui-space-lg) 0;" {
+                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: 0 0 var(--mui-space-lg);" {
                         "Invite your team members to collaborate."
                     }
-                    div style="display:flex;flex-direction:column;gap:0.75rem;max-width:28rem;" {
+                    div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:28rem;" {
                         @for (name, email, role) in [
                             ("Sofia Davis", "sofia@example.com", "Owner"),
                             ("Jackson Lee", "jackson@example.com", "Member"),
                             ("Isabella Nguyen", "isabella@example.com", "Member"),
                         ] {
-                            div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--mui-border,#e5e7eb);" {
+                            div style="display:flex;align-items:center;justify-content:space-between;padding: var(--mui-space-sm) 0;border-bottom:1px solid var(--mui-border,#e5e7eb);" {
                                 div {
-                                    p style="font-size:0.875rem;font-weight:500;margin:0;" { (name) }
-                                    p style="font-size:0.8125rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" { (email) }
+                                    p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { (name) }
+                                    p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { (email) }
                                 }
-                                span style="font-size:0.75rem;color:var(--mui-text-muted);padding:0.25rem 0.5rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:0.375rem;" {
+                                span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);padding: var(--mui-space-xs) var(--mui-space-sm);border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-md);" {
                                     (role)
                                 }
                             }
@@ -257,19 +257,33 @@ pub fn showcase() -> Markup {
         },
     ];
 
-    let default_tabs = tabs.clone();
-    let line_tabs = tabs.clone();
-
-    let mut vertical_tabs = tabs.clone();
+    // Each specimen owns its controls and labels, including the fields inside panels.
+    let scoped_tabs = |prefix: &str| -> Vec<Tab> {
+        tabs.iter()
+            .cloned()
+            .map(|mut tab| {
+                tab.id = format!("{prefix}-{}", tab.id);
+                tab.content.0 = tab
+                    .content
+                    .0
+                    .replace("id=\"", &format!("id=\"{prefix}-"))
+                    .replace("for=\"", &format!("for=\"{prefix}-"));
+                tab
+            })
+            .collect()
+    };
+    let default_tabs = scoped_tabs("default");
+    let line_tabs = scoped_tabs("line");
+    let mut vertical_tabs = scoped_tabs("vertical");
     // Mark one tab disabled in the vertical demo
     if let Some(last) = vertical_tabs.last_mut() {
         last.disabled = true;
     }
 
     html! {
-        div style="display:flex;flex-direction:column;gap:2.5rem;" {
+        div style="display:flex;flex-direction:column;gap: var(--mui-space-xxl);" {
             section {
-                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Default (horizontal, segmented)"
                 }
                 (render(Props {
@@ -281,7 +295,7 @@ pub fn showcase() -> Markup {
             }
 
             section {
-                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Line variant (underline)"
                 }
                 (render(Props {
@@ -294,7 +308,7 @@ pub fn showcase() -> Markup {
             }
 
             section {
-                h4 style="font-size:0.875rem;font-weight:600;margin:0 0 0.75rem;color:var(--mui-text);" {
+                h4 style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);margin: 0 0 var(--mui-space-md);color:var(--mui-text);" {
                     "Vertical orientation + disabled tab + manual activation"
                 }
                 (render(Props {

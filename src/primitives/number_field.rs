@@ -57,15 +57,15 @@ pub fn showcase() -> Markup {
             // Cart quantity
             div {
                 p.mui-showcase__caption { "Cart \u{2014} Wireless Headphones" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:20rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
                         div {
-                            p style="font-size:0.875rem;font-weight:500;margin:0;" { "Aurora Wireless Headphones" }
-                            p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0.125rem 0 0;" { "$149 each" }
+                            p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Aurora Wireless Headphones" }
+                            p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { "$149 each" }
                         }
-                        span style="font-size:0.875rem;font-weight:600;" { "$298" }
+                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "$298" }
                     }
-                    label for="cart-qty" style="font-size:0.75rem;color:var(--mui-text-muted);" { "Quantity" }
+                    label for="cart-qty" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Quantity" }
                     (render(Props {
                         name: "cart_quantity".into(),
                         value: 2.0,
@@ -76,15 +76,15 @@ pub fn showcase() -> Markup {
                         label: "Cart quantity".into(),
                         ..Default::default()
                     }))
-                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" { "Max 10 per order" }
+                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Max 10 per order" }
                 }
             }
 
             // Age field
             div {
                 p.mui-showcase__caption { "Account \u{2014} Age verification" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
-                    label for="signup-age" style="font-size:0.875rem;font-weight:500;" { "Age" }
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:20rem;" {
+                    label for="signup-age" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);" { "Age" }
                     (render(Props {
                         name: "age".into(),
                         value: 24.0,
@@ -95,7 +95,7 @@ pub fn showcase() -> Markup {
                         label: "Age".into(),
                         ..Default::default()
                     }))
-                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                         "You must be at least 13 to create an account."
                     }
                 }
@@ -104,8 +104,8 @@ pub fn showcase() -> Markup {
             // Recipe servings
             div {
                 p.mui-showcase__caption { "Recipe \u{2014} Tomato Basil Risotto" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
-                    label for="recipe-servings" style="font-size:0.875rem;font-weight:500;" { "Servings" }
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:20rem;" {
+                    label for="recipe-servings" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);" { "Servings" }
                     (render(Props {
                         name: "servings".into(),
                         value: 4.0,
@@ -116,7 +116,7 @@ pub fn showcase() -> Markup {
                         label: "Servings".into(),
                         ..Default::default()
                     }))
-                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                         "Adjust to scale ingredients (1\u{2013}12 people)."
                     }
                 }
@@ -125,8 +125,8 @@ pub fn showcase() -> Markup {
             // Disabled — backorder
             div {
                 p.mui-showcase__caption { "Backordered \u{2014} quantity locked" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:20rem;" {
-                    label for="backorder-qty" style="font-size:0.875rem;font-weight:500;color:var(--mui-text-muted);" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:20rem;" {
+                    label for="backorder-qty" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text-muted);" {
                         "Quantity (reserved)"
                     }
                     (render(Props {
@@ -139,7 +139,7 @@ pub fn showcase() -> Markup {
                         id: "backorder-qty".into(),
                         label: "Backordered quantity".into(),
                     }))
-                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                         "Ships when restocked on April 28."
                     }
                 }

@@ -158,7 +158,7 @@ pub fn showcase() -> Markup {
                 title: "Settings".to_string(),
                 description: Some("Adjust your preferences here.".to_string()),
                 children: html! {
-                    div style="display: flex; flex-direction: column; gap: 1rem;" {
+                    div style="display: flex; flex-direction: column; gap: var(--mui-space-lg);" {
                         (field::render(field::Props {
                             label: "Theme".to_string(),
                             id: "demo-theme".to_string(),
@@ -222,7 +222,7 @@ pub fn showcase() -> Markup {
                 title: "Navigation".to_string(),
                 description: None,
                 children: html! {
-                    nav style="display: flex; flex-direction: column; gap: 0.25rem;" {
+                    nav style="display: flex; flex-direction: column; gap: var(--mui-space-xs);" {
                         a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Home" }
                         a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Products" }
                         a class="mui-btn mui-btn--ghost mui-btn--md" style="justify-content: flex-start; width: 100%;" href="#" { "Documentation" }

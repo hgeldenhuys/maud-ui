@@ -1,0 +1,42 @@
+/* Separator component — visual and semantic divider */
+
+.mui-separator {
+  background: var(--mui-border);
+  flex-shrink: 0;
+}
+
+/* Horizontal separator — full width, minimal height */
+.mui-separator--horizontal {
+  height: 1px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Vertical separator — minimal width, stretches to fill parent */
+.mui-separator--vertical {
+  width: 1px;
+  align-self: stretch;
+  min-height: 1rem;
+  display: inline-block;
+}
+
+/* Labelled separator — a mono, letter-spaced, muted label and a hairline rule
+   that fills the remaining width. Transcript turn divider. */
+.mui-separator-labelled {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-md);
+}
+.mui-separator-labelled__label {
+  flex: none;
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  letter-spacing: var(--mui-tracking-label);
+  color: var(--mui-text-muted);
+  white-space: nowrap;
+}
+.mui-separator-labelled__rule {
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: var(--mui-border);
+}

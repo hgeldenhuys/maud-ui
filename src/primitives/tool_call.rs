@@ -155,7 +155,7 @@ pub fn render(props: Props) -> Markup {
 /// Showcase of a handful of common tool invocations.
 pub fn showcase() -> Markup {
     html! {
-        div.mui-showcase__column style="max-width: 44rem; gap: 0.5rem;" {
+        div.mui-showcase__column style="max-width: 44rem; gap: var(--mui-space-sm);" {
             (render(Props {
                 id: "s-edit".into(),
                 kind: Kind::Edit,

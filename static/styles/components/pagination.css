@@ -1,0 +1,158 @@
+/* Pagination component — page navigation with prev/next and numbered pages */
+
+/* `.mui-visually-hidden` (used by icons_only mode) is a shared utility and
+ * lives in the global block of css/maud-ui.css, next to .mui-text-muted. */
+
+/* Anchor variants inherit the same visual treatment as the button variants */
+a.mui-pagination__btn,
+a.mui-pagination__page {
+  text-decoration: none;
+}
+
+.mui-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mui-space-xs);
+  width: 100%;
+}
+
+/* Prev / Next buttons — outline style, matching button --outline */
+.mui-pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mui-space-sm);
+  height: 2.25rem;
+  padding: 0 var(--mui-space-md);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+  background: transparent;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+  -webkit-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.mui-pagination__btn:hover:not(:disabled) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-hover);
+}
+
+.mui-pagination__btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-pagination__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Arrow icons inside prev/next */
+.mui-pagination__btn-icon {
+  display: inline-flex;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.mui-pagination__btn-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Page number container */
+.mui-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-xs);
+}
+
+/* Individual page buttons — ghost style by default */
+.mui-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mui-pagination__page:hover:not([aria-current="page"]) {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border);
+}
+
+.mui-pagination__page:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Active page — solid accent background */
+.mui-pagination__page[aria-current="page"] {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  cursor: default;
+}
+
+/* Ellipsis */
+.mui-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  letter-spacing: var(--mui-tracking-label);
+  user-select: none;
+}
+
+/* Mobile: collapse to prev/next + current/total; hide numbered page buttons */
+@media (max-width: 40rem) {
+  .mui-pagination {
+    gap: var(--mui-space-sm);
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .mui-pagination__pages {
+    flex: 1;
+    justify-content: center;
+    gap: var(--mui-space-2xs);
+    /* Keep only the active page visible; hide siblings + ellipsis */
+    overflow: hidden;
+  }
+
+  .mui-pagination__pages .mui-pagination__page:not([aria-current="page"]),
+  .mui-pagination__pages .mui-pagination__ellipsis {
+    display: none;
+  }
+
+  .mui-pagination__page[aria-current="page"] {
+    min-width: 3.5rem;
+  }
+}

@@ -1,0 +1,66 @@
+/* NativeSelect component — styled native <select> matching Input appearance */
+
+.mui-native-select {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+.mui-native-select__select {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  height: 2.25rem;
+  padding: var(--mui-space-sm) 2.25rem var(--mui-space-sm) var(--mui-space-md);
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-tight);
+  cursor: pointer;
+  transition: border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+  box-sizing: border-box;
+}
+
+.mui-native-select__select:hover:not(:disabled) {
+  border-color: var(--mui-border-hover);
+}
+
+/* Focus ring — matching Input component style */
+.mui-native-select__select:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+.mui-native-select__select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Placeholder option styling */
+.mui-native-select__select:invalid,
+.mui-native-select__select option[value=""][disabled] {
+  color: var(--mui-text-muted);
+}
+
+/* Chevron indicator — subtle, right-aligned */
+.mui-native-select__chevron {
+  position: absolute;
+  inset-inline-end: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--mui-text-muted);
+  pointer-events: none;
+  opacity: 0.7;
+}

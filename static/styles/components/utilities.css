@@ -1,0 +1,22 @@
+/* Shared utility classes — used by components across the library, so they live
+   here rather than in the global block of maud-ui.css: a consumer vendoring a
+   subset of components must be able to pick up the utilities those components
+   depend on without also taking the token palette. */
+
+.mui-text-muted { color: var(--mui-text-muted); }
+.mui-text-subtle { color: var(--mui-text-subtle); }
+
+/* Screen-reader-only: visible to assistive tech, invisible to sighted users.
+   Any component that carries meaning in a colour, icon, or shape pairs it with
+   one of these so the meaning survives without that channel. */
+.mui-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

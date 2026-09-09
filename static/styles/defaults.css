@@ -1,0 +1,108 @@
+/* Design defaults: quiet operational surfaces, a restrained accent, explicit hierarchy.
+   The 15px body and compact desktop rows deliberately depart from the artifact doctrine.
+   Touch controls expand independently; structural hairlines never identify a control. */
+body { font-family: var(--mui-font-sans); font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); letter-spacing: var(--mui-text-body-tracking); background: var(--mui-bg); color: var(--mui-text); -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font-family: inherit; }
+:where(h1, h2, h3, h4, h5, h6) { font-weight: var(--mui-weight-heading); text-wrap: balance; }
+:where(h1), .mui-h1 { font-size: var(--mui-text-h1-size); line-height: var(--mui-text-h1-leading); letter-spacing: var(--mui-text-h1-tracking); }
+:where(h2), .mui-h2 { font-size: var(--mui-text-h2-size); line-height: var(--mui-text-h2-leading); letter-spacing: var(--mui-text-h2-tracking); }
+:where(h3, h4), .mui-h3, .mui-h4 { font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading); letter-spacing: var(--mui-text-h3-tracking); }
+.mui-p { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); }
+.mui-lead { font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-eyebrow, .mui-fieldset__legend, .mui-sidebar__group-label, .mui-block--shell__nav-group-label { font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; color: var(--mui-text-muted); }
+:where(code, pre, kbd, time, output), .mui-facts-list__value, .mui-meter__value, .mui-data-table__cell--numeric, .mui-table__cell--numeric { font-variant-numeric: tabular-nums; }
+
+/* A link's decoration comes from its role, and never changes on hover/visit. */
+a { color: var(--mui-link); text-decoration: none; text-underline-offset: 0.2em; }
+a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
+:where(p, .mui-prose, .mui-docs) a:where(:not(.mui-btn)) { color: var(--mui-link); text-decoration: underline; text-decoration-color: var(--mui-border-control); }
+:where(p, .mui-prose, .mui-docs) a:where(:not(.mui-btn)):visited { color: var(--mui-link); }
+:where(p, .mui-prose, .mui-docs) a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
+:is(nav, td, th) a, a.mui-btn, a.mui-btn:hover, a.mui-btn:focus,
+.mui-status-chip-group__chip, .mui-status-chip-group__chip:hover,
+.mui-bottom-tab-bar__item, .mui-bottom-tab-bar__item:hover,
+.mui-btn--link:hover:not([aria-disabled="true"]) { text-decoration: none; }
+.mui-btn--link { color: var(--mui-link); }
+.mui-btn--link:hover { color: var(--mui-text); }
+
+/* Comfortable compact defaults; sizes still serve their explicit purposes. */
+.mui-btn { min-height: var(--mui-control-height); height: auto; padding: var(--mui-space-sm) var(--mui-inset-control); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); font-weight: var(--mui-weight-medium); border-radius: var(--mui-radius-md); box-shadow: none; transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-btn--sm, .mui-btn--row { min-height: var(--mui-space-xxl); padding: var(--mui-space-xs) var(--mui-space-md); font-size: var(--mui-text-caption-size); }
+.mui-btn--row { height: var(--mui-space-xxl); }
+.mui-btn--lg { min-height: var(--mui-touch-target); padding-inline: var(--mui-space-20); }
+.mui-btn--xs { min-height: var(--mui-space-xl); padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
+.mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs { padding: 0; min-width: var(--mui-control-height); width: var(--mui-control-height); height: var(--mui-control-height); }
+.mui-btn--link { padding: 0; min-height: 0; }
+.mui-btn--primary { background: var(--mui-accent); border-color: var(--mui-accent); color: var(--mui-accent-fg); }
+.mui-btn--primary:hover:not([aria-disabled="true"]) { background: var(--mui-accent-hover); border-color: var(--mui-accent-hover); color: var(--mui-accent-fg); }
+:where(button, a.mui-btn, [role="button"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
+.mui-input, .mui-textarea, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); padding: var(--mui-space-sm) var(--mui-space-md); }
+.mui-input:hover:not(:disabled), .mui-textarea:hover:not(:disabled), .mui-native-select:hover:not(:disabled) { background: var(--mui-bg-input); }
+.mui-card { padding: 0; border-radius: var(--mui-radius-lg); border-color: transparent; background: var(--mui-bg-card); box-shadow: var(--mui-shadow-sm); }
+.mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer { padding: var(--mui-space-20) var(--mui-space-xl); }
+.mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
+.mui-card__title { font-size: var(--mui-text-h3-size); font-weight: var(--mui-weight-heading); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-card__description { color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-badge, .mui-status-chip-group__chip, .mui-status-chip-group__count { border-radius: var(--mui-radius-full); }
+.mui-badge { font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); padding: var(--mui-space-2xs) var(--mui-space-sm); }
+.mui-status-chip-group__chip { min-height: var(--mui-control-height); padding: var(--mui-space-xs) var(--mui-space-md); }
+.mui-status-chip-group__chip[aria-current] { background: var(--mui-accent-soft); box-shadow: none; border-color: var(--mui-chip-tone); }
+.mui-status-chip-group__count { padding: 0 var(--mui-inset-tight); }
+
+/* Explicit table selectors win against generic prose/table rules. */
+th.mui-table__th { color: var(--mui-text-muted); font-weight: var(--mui-weight-medium); text-align: start; font-size: var(--mui-text-caption-size); line-height: var(--mui-leading-small); height: auto; padding: var(--mui-inset-cell) var(--mui-inset-control); }
+td.mui-table__td { padding: var(--mui-inset-cell) var(--mui-inset-control); font-size: var(--mui-text-small-size); }
+th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; font-variant-numeric: tabular-nums; }
+.mui-table--compact :is(th.mui-table__th, td.mui-table__td) { padding: var(--mui-inset-tight) var(--mui-space-md); }
+.mui-table tfoot { border-color: var(--mui-border); }
+.mui-table-wrapper { border-radius: var(--mui-radius-md); }
+.mui-block__frame { padding: var(--mui-space-xl); background: var(--mui-bg); border-color: var(--mui-border); min-height: 0; }
+.mui-worklist-header__title, .mui-record-header__title { font-size: var(--mui-text-h2-size); line-height: var(--mui-text-h2-leading); letter-spacing: var(--mui-text-h2-tracking); }
+.mui-task-grid__card { border-color: var(--mui-border); padding: var(--mui-space-20); box-shadow: none; }
+.mui-task-grid__title { font-size: var(--mui-text-body-size); }
+.mui-empty-state { padding: var(--mui-space-3xl) var(--mui-space-xl); }
+
+/* One visible focus treatment. Functional outlines are distinct from hairlines. */
+[class*="mui-"]:is(a, button, input, textarea, select, summary, [tabindex], [role="button"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; box-shadow: none; }
+:where([class*="mui-"]) { accent-color: var(--mui-accent); }
+@media (pointer: coarse) {
+  .mui-btn:not(.mui-btn--link), .mui-input, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger { min-height: var(--mui-touch-target); }
+  .mui-input, .mui-textarea, .mui-native-select { font-size: 1rem; }
+}
+@media (max-width: 40rem) {
+  .mui-block__frame { padding: var(--mui-space-sm); }
+  .mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer { padding-inline: var(--mui-space-20); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; animation-duration: 0s !important; animation-iteration-count: 1 !important; }
+}
+
+.mui-badge--info, .mui-alert--info { background: var(--mui-info-bg); border-color: var(--mui-info-border); color: var(--mui-info-text); }
+
+.mui-badge--success, .mui-alert--success { background: var(--mui-success-bg); border-color: var(--mui-success-border); color: var(--mui-success-text); }
+
+.mui-badge--warning, .mui-alert--warning { background: var(--mui-warning-bg); border-color: var(--mui-warning-border); color: var(--mui-warning-text); }
+
+.mui-badge--danger, .mui-alert--danger { background: var(--mui-danger-bg); border-color: var(--mui-danger-border); color: var(--mui-danger-text); }
+
+.mui-badge--violet, .mui-alert--violet { background: var(--mui-violet-bg); border-color: var(--mui-violet-border); color: var(--mui-violet-text); }
+
+.mui-badge--rose, .mui-alert--rose { background: var(--mui-rose-bg); border-color: var(--mui-rose-border); color: var(--mui-rose-text); }
+
+/* Prose decoration stays quiet and stable; embedded controls retain their role. */
+.mui-prose a:not(.mui-btn), .mui-docs a:not(.mui-btn) { color: var(--mui-link); text-decoration: underline; text-decoration-color: var(--mui-border-control); }
+.mui-prose a:not(.mui-btn):visited, .mui-docs a:not(.mui-btn):visited { color: var(--mui-link); }
+.mui-prose a:not(.mui-btn):hover, .mui-docs a:not(.mui-btn):hover { color: var(--mui-text); text-decoration: underline; }
+.mui-prose :is(nav, td, th) a, .mui-docs :is(nav, td, th) a, .mui-prose :is(nav, td, th) a:hover, .mui-docs :is(nav, td, th) a:hover { text-decoration: none; }
+.mui-badge--link, .mui-badge--link:hover { text-decoration: none; }
+.mui-badge--link:hover { color: var(--mui-text); }
+.mui-record-header__title > :is(h1, h2, h3) { margin: 0; font-size: inherit; line-height: inherit; letter-spacing: inherit; }
+.mui-task-grid__card { border-radius: var(--mui-radius-lg); }
+.mui-record-header__more > summary { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); }
+.mui-record-header__more > summary:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-btn--danger:hover:not([aria-disabled="true"]) { background: var(--mui-danger-hover); border-color: var(--mui-danger-hover); }
+
+
+.mui-display { font-size: var(--mui-text-display-size); line-height: var(--mui-text-display-leading); letter-spacing: var(--mui-text-display-tracking); font-weight: var(--mui-weight-heading); margin: 0; }
+.mui-caption { font-size: var(--mui-text-caption-size); line-height: var(--mui-text-caption-leading); letter-spacing: var(--mui-text-caption-tracking); color: var(--mui-text-muted); }
+.mui-typography-small { font-size: var(--mui-text-small-size); line-height: var(--mui-text-small-leading); letter-spacing: var(--mui-text-small-tracking); }

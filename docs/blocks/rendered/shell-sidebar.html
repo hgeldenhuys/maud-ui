@@ -9,7 +9,7 @@ sidebar::render(Props {
     header: Some(html! { label { "Workspace" select { option { "Front desk" } } } }),
     nav_groups: vec![NavGroup {
         label: Some("Operations".into()),
-        items: vec![NavItem { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None, badge: Some("48".into()) }],
+        items: vec![NavItem { label: "Reservations".into(), short_label: Some("Stays".into()), href: "/reservations".into(), icon: None, badge: Some("48".into()), ..Default::default() }],
     }],
     active_path: "/reservations".into(),
     mobile_navigation: MobileNavigation::Tabs,
@@ -26,11 +26,22 @@ sidebar::render(Props {
 <tr><td>active_path</td><td>String</td><td>empty</td><td>First exact href match is current.</td></tr>
 <tr><td>mobile_navigation</td><td>MobileNavigation</td><td>Drawer</td><td>Drawer or Tabs; desktop sidebar remains grouped.</td></tr>
 <tr><td>user</td><td>Option<UserBlock></td><td>None</td><td>name, email, avatar_initials, menu_href: String.</td></tr>
-<tr><td>topbar_title</td><td>Option<String></td><td>None</td><td>Topbar H1; use section headings inside it.</td></tr>
+<tr><td>topbar_title</td><td>Option<String></td><td>None</td><td>Quiet context label; put a heading in your content.</td></tr>
 <tr><td>topbar_actions</td><td>Markup</td><td>empty</td><td>Topbar controls.</td></tr>
+<tr><td>sidebar_footer</td><td>Option<Markup></td><td>None</td><td>Arbitrary footer markup, overriding user.</td></tr>
+<tr><td>collapsible</td><td>bool</td><td>true</td><td>Offer a desktop icon rail at 64rem and above.</td></tr>
+<tr><td>default_collapsed</td><td>bool</td><td>false</td><td>Initial rail state; a saved local preference takes precedence.</td></tr>
+<tr><td>page_header</td><td>Option&lt;page_header::Props&gt;</td><td>None</td><td>Replaces the title/actions bar. The shell adds its own Menu and rail controls.</td></tr>
+<tr><td>app_header</td><td>Markup</td><td>empty</td><td>Optional masthead above sidebar and content.</td></tr>
+<tr><td>app_footer</td><td>Markup</td><td>empty</td><td>Optional footer below sidebar and content.</td></tr>
+<tr><td>embedded</td><td>bool</td><td>false</td><td>Render a section instead of main for previews/nested compositions.</td></tr>
 <tr><td>children</td><td>Markup</td><td>empty</td><td>Route content; the shell supplies main.</td></tr>
 </tbody></table>
-<p><code>NavItem</code> fields: label/href: String, short_label: Option<String>, icon: Option<Markup>, badge: Option<String>. A group's label names its accessible group. <code>Tabs</code> uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with <code>data-mui-nav-search</code> for local destination filtering.</p>
+<p><code>NavItem</code> fields: label/href: String, short_label: Option<String>, icon: Option<Markup>, badge: Option<String>, children: Vec<NavItem>. Use <code>..Default::default()</code> for optional fields. Nested items indent without a rail. A group's label names its accessible group. <code>Tabs</code> uses the first four flattened destinations plus More; any later current destination marks More as current. All destinations remain in the drawer. Put your frequent destinations first. The optional header can use a labelled input with <code>data-mui-nav-search</code> for local destination filtering.</p>
 <h2>Accessibility and behavior</h2>
-<p>Native page links and <code>aria-current</code>, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique <code>id</code> for each shell. Do not nest this block inside another main landmark.</p>
+<p>Native page links and <code>aria-current</code>, labelled groups, visible mobile labels, safe-area clearance and focus rings. More/Menu have an ordinary fallback href before enhancement. The drawer moves the existing sidebar node without duplicating controls or IDs; native dialog provides Escape and focus containment. Closing restores navigation and trigger focus. Returning to desktop closes the drawer. Server swaps reinitialize through MaudUI's existing lifecycle. Use a fresh unique <code>id</code> for each shell. Use <code>embedded: true</code> when nesting inside an existing main landmark. Embedded mobile tabs flow below the example; ordinary app tabs remain fixed.</p>
 <p>Use <code>short_label: Some("Stays".into())</code> to fit a long label such as Reservations in a bottom tab. Use <code>None</code> to display the full label. Empty or whitespace-only short labels fall back to the full label. Labels stay on one line and ellipsize; five destinations use a smaller type size. The accessible name includes both the visible short label and the full label, so voice control and screen readers retain context. Sidebar labels stay full-length.</p>
+<h2>Navigation preferences</h2>
+<p>Labeled groups use native details/summary and remember their state under <code>mui-nav-group:{navigation-id}:{index}:{label}</code>. A current destination opens its group on route entry. Sidebar collapse uses <code>mui-shell-rail:{id}</code>; storage failures fall back to rendered defaults. Keep IDs stable and unique, and keep group ordering stable to retain preferences. The desktop icon rail appears at 64rem, with full accessible labels and title hints. It temporarily opens groups to retain every icon and restores their remembered state when expanded or moved into the phone drawer. Inputs in the header and arbitrary footer controls are hidden while collapsed; place essentials in the page bar as well.</p>
+<h2>Header and footer composition</h2>
+<p>Pass <code>app_header::render(...)</code> and <code>app_footer::render(...)</code> into the corresponding shell slots. Their empty defaults emit no wrappers. Pass <code>page_header::Props</code> for breadcrumbs, native search or a custom command trigger, actions and switchers. The shell page renders this full composition in both themes. The landing example supports client-side guest filtering, row selection and adding a local example reservation; its data is fictional and never persisted or sent to a booking system.</p>

@@ -1,0 +1,111 @@
+/* Message bubble — chat message with avatar + author + timestamp + body + footer slot. */
+.mui-message {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--mui-space-md);
+  padding: var(--mui-inset-cell) var(--mui-space-md);
+  align-items: flex-start;
+}
+.mui-message__avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-heading);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--mui-bg);
+  transition: box-shadow var(--mui-motion-fast) var(--mui-motion-ease), transform var(--mui-motion-fast) var(--mui-motion-ease);
+}
+.mui-message__avatar--live {
+  animation: mui-avatar-pulse var(--mui-motion-loading) var(--mui-motion-ease) infinite;
+}
+@keyframes mui-avatar-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-accent); }
+  50%      { box-shadow: var(--mui-shadow-sm); }
+}
+.mui-message__body-wrap {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-xs);
+}
+.mui-message__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mui-space-sm);
+  font-size: var(--mui-text-small-size);
+}
+.mui-message__author {
+  font-weight: var(--mui-weight-heading);
+  color: var(--mui-text);
+}
+.mui-message__timestamp {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-caption-size);
+}
+.mui-message__body {
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text);
+  line-height: var(--mui-leading-small);
+  word-wrap: break-word;
+}
+.mui-message__body p { margin: 0 0 var(--mui-space-sm); }
+.mui-message__body p:last-child { margin-bottom: 0; }
+.mui-message__body code {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-small-size);
+  padding: var(--mui-space-2xs) var(--mui-inset-tight);
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-sm);
+}
+.mui-message__footer {
+  margin-top: var(--mui-inset-tight);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mui-space-xs);
+}
+
+/* Role variants.
+   `--user` was the only one of the three hardcoding literal hex (#7EB6D4 on
+   #0b1320) while `--assistant` and `--system` directly below both used tokens.
+   A consumer retheming the library got two avatars that followed and one that
+   didn't.
+
+   Violet, not info: `--mui-info` (#1d4ed8) sits right next to the `--mui-accent`
+   (#2563eb) that `--assistant` uses, so tokenising to it would have made the two
+   roles near-indistinguishable — the literal hex was distinct from the assistant
+   by LIGHTNESS, and that distinction is the whole point of a role variant.
+   Violet is one of the token file's declared "taxonomy hues, for category sets
+   that outgrow the four semantic states", which is exactly what speaker roles
+   are. Its paired ink is `--mui-violet-fg`. */
+.mui-message--user .mui-message__avatar {
+  background: var(--mui-violet);
+  color: var(--mui-violet-fg);
+}
+.mui-message--assistant .mui-message__avatar {
+  background: var(--mui-accent);
+  color: var(--mui-accent-fg);
+}
+.mui-message--system {
+  opacity: 0.75;
+}
+.mui-message--system .mui-message__avatar {
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-caption-size);
+}
+.mui-message--system .mui-message__body {
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  font-style: italic;
+}
+
+/* A decorative liveness pulse. The message content carries the meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-message__avatar--live { animation: none; }
+}

@@ -101,14 +101,14 @@ pub fn showcase() -> Markup {
             // Realistic settings panel
             section {
                 h2 { "Notification Settings" }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:28rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:28rem;" {
                     // Marketing emails — off
-                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                         div {
-                            label for="sw-marketing" style="font-size:0.875rem;font-weight:500;color:var(--mui-text);display:block;" {
+                            label for="sw-marketing" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Marketing emails"
                             }
-                            span style="font-size:0.8125rem;color:var(--mui-text-muted);" {
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                                 "Receive emails about new products, features, and more."
                             }
                         }
@@ -123,12 +123,12 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     // Push notifications — on
-                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;" {
+                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);" {
                         div {
-                            label for="sw-push" style="font-size:0.875rem;font-weight:500;color:var(--mui-text);display:block;" {
+                            label for="sw-push" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Push notifications"
                             }
-                            span style="font-size:0.8125rem;color:var(--mui-text-muted);" {
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                                 "Receive notifications directly on your device."
                             }
                         }
@@ -143,12 +143,12 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     // Airplane mode — disabled
-                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;opacity:0.6;" {
+                    div style="display:flex;align-items:flex-start;justify-content:space-between;gap: var(--mui-space-lg);opacity:0.6;" {
                         div {
-                            label for="sw-airplane" style="font-size:0.875rem;font-weight:500;color:var(--mui-text);display:block;" {
+                            label for="sw-airplane" style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);display:block;" {
                                 "Airplane mode"
                             }
-                            span style="font-size:0.8125rem;color:var(--mui-text-muted);" {
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                                 "Managed by your organization."
                             }
                         }

@@ -52,13 +52,13 @@ pub fn showcase() -> Markup {
                     code { "dir" }
                     " attribute cascades to all descendants — inputs, lists, and even scrollbars flip automatically."
                 }
-                div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;" {
+                div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--mui-space-lg);" {
                     div {
                         p.mui-showcase__caption { "dir=\"ltr\"" }
                         (render(Props {
                             dir: Dir::Ltr,
                             children: html! {
-                                div style="padding: 1rem; border: 1px solid var(--mui-border); border-radius: 0.5rem;" {
+                                div style="padding: var(--mui-space-lg); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg);" {
                                     p { "Hello World" }
                                     p { "English flows left to right." }
                                 }
@@ -70,7 +70,7 @@ pub fn showcase() -> Markup {
                         (render(Props {
                             dir: Dir::Rtl,
                             children: html! {
-                                div style="padding: 1rem; border: 1px solid var(--mui-border); border-radius: 0.5rem;" {
+                                div style="padding: var(--mui-space-lg); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg);" {
                                     p { "مرحبا بالعالم" }
                                     p { "تتدفق اللغة العربية من اليمين إلى اليسار." }
                                 }

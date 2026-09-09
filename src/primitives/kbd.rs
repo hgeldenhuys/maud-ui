@@ -31,26 +31,26 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             div {
                 p.mui-showcase__caption { "Keyboard shortcuts" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);padding:1rem;background:var(--mui-bg-card);max-width:20rem;" {
-                    div style="display:flex;flex-direction:column;gap:0.625rem;" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);padding: var(--mui-space-lg);background:var(--mui-bg-card);max-width:20rem;" {
+                    div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Save" }
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);" { "Save" }
                             (render(Props { keys: vec!["\u{2318}".into(), "S".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Undo" }
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);" { "Undo" }
                             (render(Props { keys: vec!["\u{2318}".into(), "Z".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Redo" }
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);" { "Redo" }
                             (render(Props { keys: vec!["\u{21E7}".into(), "\u{2318}".into(), "Z".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Command palette" }
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);" { "Command palette" }
                             (render(Props { keys: vec!["\u{2318}".into(), "K".into()] }))
                         }
                         div style="display:flex;justify-content:space-between;align-items:center;" {
-                            span style="font-size:0.875rem;color:var(--mui-fg-muted);" { "Toggle comment" }
+                            span style="font-size: var(--mui-text-small-size);color:var(--mui-fg-muted);" { "Toggle comment" }
                             (render(Props { keys: vec!["\u{2318}".into(), "/".into()] }))
                         }
                     }

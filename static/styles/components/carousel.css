@@ -1,0 +1,137 @@
+/* Carousel component — horizontal slider with arrows + dot indicators */
+
+.mui-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+}
+
+/* Mobile: ensure carousel never exceeds viewport at 375px */
+@media (max-width: 40rem) {
+  .mui-carousel {
+    max-width: 100%;
+  }
+}
+
+.mui-carousel__viewport {
+  overflow: hidden;
+  border-radius: var(--mui-radius-lg);
+}
+
+.mui-carousel__container {
+  display: flex;
+  transition: transform var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* Prev / Next arrows — ghost circles, vertically centered, slightly inset */
+.mui-carousel__prev,
+.mui-carousel__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--mui-radius-full);
+  background: transparent;
+  color: var(--mui-text);
+  font-size: var(--mui-text-h3-size);
+  line-height: var(--mui-text-h3-leading);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease),
+              opacity var(--mui-motion-fast) var(--mui-motion-ease);
+  z-index: 1;
+  padding: 0;
+  font-family: inherit;
+  opacity: 0.7;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+ letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-carousel__prev {
+  inset-inline-start: 0.75rem;
+}
+
+.mui-carousel__next {
+  inset-inline-end: 0.75rem;
+}
+
+.mui-carousel__prev:hover,
+.mui-carousel__next:hover {
+  background: var(--mui-bg-input);
+  opacity: 1;
+}
+
+.mui-carousel__prev:active,
+.mui-carousel__next:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* 0.25 put the arrow at 2.17:1 — present but genuinely hard to see, so "no more
+   slides" read as "the control vanished". 0.4 keeps it obviously inactive while
+   staying findable. */
+.mui-carousel__prev:disabled,
+.mui-carousel__next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-carousel__prev:focus-visible,
+.mui-carousel__next:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Dot indicators — small circles, active is larger + accent-colored */
+.mui-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--mui-space-sm);
+  padding-top: var(--mui-space-md);
+}
+
+.mui-carousel__dot {
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mui-carousel__dot::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-border);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), width var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-carousel__dot:hover::before {
+  background: var(--mui-text-muted);
+}
+
+.mui-carousel__dot--active::before,
+.mui-carousel__dot[aria-selected="true"]::before {
+  background: var(--mui-accent);
+  width: 1.25rem;
+}
+
+.mui-carousel__dot:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}

@@ -1,0 +1,197 @@
+/* API reference rendered from docs/components/<name>.md via pulldown-cmark.
+   Keeps the look-and-feel consistent with the rest of the gallery. */
+
+.mui-docs {
+  margin-top: 2.5rem;
+  padding-top: var(--mui-space-xxl);
+  border-top: 1px solid var(--mui-border);
+  max-width: 48rem;
+  font-size: var(--mui-text-body-size);
+  line-height: var(--mui-leading-body);
+  color: var(--mui-text);
+  /* Every component doc ends with a bare Shadcn reference URL, and prop
+     prose carries long `path::like::this` tokens. With the default
+     `overflow-wrap: normal` these cannot break, so they overflow their
+     paragraph and widen the whole document on a phone. */
+  overflow-wrap: break-word;
+}
+
+.mui-docs h1 {
+  font-size: var(--mui-text-h2-size);
+  font-weight: var(--mui-weight-heading);
+  margin: 0 0 var(--mui-space-sm);
+ line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
+.mui-docs h1 + p {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-h3-size);
+  margin-top: 0;
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-docs h2 {
+  font-size: var(--mui-text-h3-size);
+  font-weight: var(--mui-weight-heading);
+  margin: var(--mui-space-xxl) 0 var(--mui-space-sm);
+  padding-bottom: var(--mui-inset-tight);
+  border-bottom: 1px solid var(--mui-border);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-docs h3 {
+  font-size: var(--mui-text-body-size);
+  font-weight: var(--mui-weight-heading);
+  margin: var(--mui-space-xl) 0 var(--mui-space-sm);
+  color: var(--mui-text);
+}
+
+.mui-docs p { margin: 0 0 var(--mui-space-md); }
+
+.mui-docs code {
+  font-family: var(--mui-font-mono);
+  font-size: 0.875em;
+  background: var(--mui-bg-input);
+  padding: var(--mui-space-2xs) var(--mui-inset-tight);
+  border-radius: var(--mui-radius-sm);
+  border: 1px solid var(--mui-border);
+  color: var(--mui-accent);
+}
+
+.mui-docs pre {
+  margin: var(--mui-space-md) 0 var(--mui-space-20);
+  padding: var(--mui-space-lg);
+  background: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  overflow-x: auto;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+}
+.mui-docs pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--mui-text);
+  font-size: inherit;
+}
+
+/* Prop tables carry long type signatures and description prose, so at
+   in-between widths their min-content width can still exceed the column.
+   The wrapper (emitted by `wrap_tables` in src/showcase/docs.rs) scrolls
+   the table in its own box instead of widening the document.
+   `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone computes
+   overflow-y to auto and can raise a stray vertical scrollbar. */
+.mui-docs__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: var(--mui-space-sm) 0 var(--mui-space-20);
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+}
+
+.mui-docs table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+}
+.mui-docs th,
+.mui-docs td {
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--mui-border);
+  vertical-align: top;
+}
+.mui-docs th {
+  font-weight: var(--mui-weight-heading);
+  color: var(--mui-text);
+  background: var(--mui-bg-input);
+  border-top: 1px solid var(--mui-border);
+}
+.mui-docs td code,
+.mui-docs th code { font-size: 0.8125em; }
+
+.mui-docs ul,
+.mui-docs ol {
+  margin: 0 0 var(--mui-space-md);
+  padding-left: var(--mui-space-xl);
+}
+.mui-docs li { margin: var(--mui-space-xs) 0; }
+
+.mui-docs a {
+  color: var(--mui-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.mui-docs a:hover { color: var(--mui-text); }
+
+.mui-docs blockquote {
+  margin: var(--mui-space-md) 0;
+  padding: var(--mui-space-sm) var(--mui-space-lg);
+  border-left: 3px solid var(--mui-border);
+  color: var(--mui-text-muted);
+  background: var(--mui-bg-input);
+  border-radius: 0 var(--mui-radius-md) var(--mui-radius-md) 0;
+}
+
+.mui-docs hr {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: var(--mui-space-xxl) 0;
+}
+
+/* ── Prop tables on a phone ──────────────────────────────────────────
+ * A four-column table cannot be read through a ~276px window: forcing it
+ * wide enough to keep its columns intact means the columns pad out to fill
+ * that width, so you scroll past mostly empty space to reach the
+ * description. Below 640px each row becomes its own card instead, with the
+ * column header printed above each value (`data-label`, stamped onto every
+ * cell by `wrap_tables` in src/showcase/docs.rs). No sideways scroll, no
+ * dead space, and the description gets the full column measure. */
+@media (max-width: 40rem) {
+  /* Nothing left to scroll once the rows are stacked. */
+  .mui-docs__scroll {
+    overflow-x: visible;
+    overflow-y: visible;
+  }
+
+  .mui-docs table,
+  .mui-docs tbody,
+  .mui-docs tr,
+  .mui-docs td {
+    display: block;
+    width: 100%;
+  }
+
+  /* The headers move into each cell via ::before. `display: none` would
+     also drop them from the accessibility tree, so keep them clipped. */
+  .mui-docs thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .mui-docs tr {
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    background: var(--mui-bg-input);
+    padding: var(--mui-space-sm) var(--mui-inset-control) var(--mui-space-md);
+    margin-bottom: var(--mui-inset-cell);
+  }
+
+  .mui-docs td {
+    border-bottom: 0;
+    padding: var(--mui-inset-tight) 0 0;
+  }
+
+  .mui-docs td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: var(--mui-space-2xs);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    color: var(--mui-text-muted);
+  }
+}

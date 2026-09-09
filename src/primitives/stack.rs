@@ -347,7 +347,7 @@ pub fn showcase() -> Markup {
     // A visible box so the layout itself is legible in the gallery.
     let cell = |text: &str| -> Markup {
         html! {
-            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius:var(--mui-radius-md);padding:0.5rem 0.75rem;font-size:0.8125rem;color:var(--mui-text-muted);" {
+            div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-sm) var(--mui-space-md);font-size: var(--mui-text-small-size);color:var(--mui-text-muted);" {
                 (text)
             }
         }
@@ -406,14 +406,14 @@ pub fn showcase() -> Markup {
                     (Align::Baseline, "Baseline"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="height:5rem;border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md);margin-bottom:0.75rem;" {
+                    div style="height:5rem;border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:0.75rem;" {
                         (render(Props {
                             direction: Direction::Horizontal,
                             align,
                             padding: Space::Sm,
                             children: html! {
                                 (cell("Short"))
-                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius:var(--mui-radius-md);padding:1.25rem 0.75rem;font-size:1.25rem;color:var(--mui-text-muted);" { "Tall" }
+                                div style="background:var(--mui-bg-input);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);padding: var(--mui-space-20) var(--mui-space-md);font-size: var(--mui-text-h3-size);color:var(--mui-text-muted);" { "Tall" }
                                 (cell("Short"))
                             },
                             ..Default::default()
@@ -434,7 +434,7 @@ pub fn showcase() -> Markup {
                     (Justify::Evenly, "Evenly"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md);margin-bottom:0.75rem;" {
+                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:0.75rem;" {
                         (render(Props {
                             direction: Direction::Horizontal,
                             justify,
@@ -450,7 +450,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Wrap" }
                 p.mui-showcase__caption { "wrap: true \u{2014} children flow onto new lines instead of overflowing" }
-                div style="max-width:22rem;border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md);" {
+                div style="max-width:22rem;border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);" {
                     (render(Props {
                         direction: Direction::Horizontal,
                         wrap: true,
@@ -472,7 +472,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Padding" }
                 p.mui-showcase__caption { "padding: Xl \u{2014} inset applied by the container itself" }
-                div style="border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md);" {
+                div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);" {
                     (render(Props {
                         padding: Space::Xl,
                         children: html! { (cell("Inset content")) },
@@ -507,7 +507,7 @@ pub fn showcase() -> Markup {
                             justify: Justify::Between,
                             align: Align::Center,
                             children: html! {
-                                span style="font-size:0.875rem;" { "Region" }
+                                span style="font-size: var(--mui-text-small-size);" { "Region" }
                                 (badge::render(badge::Props { label: "eu-central".into(), ..Default::default() }))
                             },
                             ..Default::default()
@@ -517,7 +517,7 @@ pub fn showcase() -> Markup {
                             justify: Justify::Between,
                             align: Align::Center,
                             children: html! {
-                                span style="font-size:0.875rem;" { "Status" }
+                                span style="font-size: var(--mui-text-small-size);" { "Status" }
                                 (badge::render(badge::Props {
                                     label: "Healthy".into(),
                                     variant: badge::Variant::Success,
@@ -541,9 +541,9 @@ pub fn showcase() -> Markup {
                     gap: Space::Lg,
                     aria_label: Some("Stack example navigation".into()),
                     children: html! {
-                        a href="#" style="font-size:0.875rem;color:var(--mui-accent-text);" { "Overview" }
-                        a href="#" style="font-size:0.875rem;color:var(--mui-accent-text);" { "Deployments" }
-                        a href="#" style="font-size:0.875rem;color:var(--mui-accent-text);" { "Settings" }
+                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Overview" }
+                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Deployments" }
+                        a href="#" style="font-size: var(--mui-text-small-size);color:var(--mui-accent-text);" { "Settings" }
                     },
                     ..Default::default()
                 }))

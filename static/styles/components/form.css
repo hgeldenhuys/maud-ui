@@ -1,0 +1,8 @@
+/* Form — the <form> element. Semantic only: layout is stack's job, so this
+   carries no display/gap of its own. The reset exists because several UA
+   stylesheets still give <form> a bottom margin, which would silently add a
+   gap that no prop asked for. */
+
+.mui-form {
+  margin: 0;
+}

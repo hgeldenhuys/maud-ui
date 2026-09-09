@@ -89,7 +89,7 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             section {
                 h2 { "Radio — Plan" }
-                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
+                div style="display: flex; flex-direction: column; gap: var(--mui-space-md);" {
                     (render(Props {
                         name: "plan".to_string(),
                         value: "free".to_string(),
@@ -124,7 +124,7 @@ pub fn showcase() -> Markup {
             }
             section {
                 h2 { "Radio — States" }
-                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
+                div style="display: flex; flex-direction: column; gap: var(--mui-space-md);" {
                     (render(Props {
                         name: "state-unchecked".to_string(),
                         value: "unchecked".to_string(),
@@ -169,7 +169,7 @@ pub fn showcase() -> Markup {
             }
             section {
                 h2 { "Radio — With Descriptions" }
-                div style="display: flex; flex-direction: column; gap: 0.75rem;" {
+                div style="display: flex; flex-direction: column; gap: var(--mui-space-md);" {
                     (render(Props {
                         name: "notify".to_string(),
                         value: "all".to_string(),

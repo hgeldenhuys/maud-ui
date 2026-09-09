@@ -1,0 +1,25 @@
+<h1>App masthead</h1>
+<p>An optional product header above the sidebar/content row. It identifies the product and offers primary links; use the separate page header for route context.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::blocks::{action::Link, shell::{app_header, sidebar}};
+sidebar::render(sidebar::Props {
+    app_header: app_header::render(app_header::Props {
+        brand: Some(html! { a href="/" { "Garden House" } }),
+        links: vec![Link { label: "Workspace".into(), href: "/workspace".into() }],
+        current_href: Some("/workspace".into()),
+        actions: Some(html! { a href="/account" { "My account" } }),
+        ..Default::default()
+    }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>brand</td><td>Option<Markup></td><td>None</td><td>Logo, wordmark or name; supply an accessible label for image-only content.</td></tr>
+<tr><td>links</td><td>Vec<a href="action::Link">action::Link</a></td><td>empty</td><td>Label and href strings, rendered in a product navigation landmark.</td></tr>
+<tr><td>current_href</td><td>Option<String></td><td>None</td><td>Exact current-link match.</td></tr>
+<tr><td>actions</td><td>Option<Markup></td><td>None</td><td>Right-side account/theme slot.</td></tr>
+<tr><td>children</td><td>Markup</td><td>empty</td><td>Additional caller-rendered content.</td></tr>
+</tbody></table>
+<p><code>render(Default::default())</code> returns empty markup. Empty brand/actions fragments also count as empty. The 56px minimum row wraps its navigation beneath the brand on phones. No JS is required. The sidebar showcase demonstrates this masthead and the footer together in both themes.</p>

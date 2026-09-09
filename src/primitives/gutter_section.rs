@@ -29,7 +29,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Inspector gutter sections" }
                 p.mui-showcase__caption { "A mono uppercase header (10px, letter-spaced, subtle) over any content." }
-                div style="max-width:20rem;display:flex;flex-direction:column;gap:1.25rem;" {
+                div style="max-width:20rem;display:flex;flex-direction:column;gap: var(--mui-space-20);" {
                     (render(Props {
                         title: "Session".into(),
                         content: html! {
@@ -42,7 +42,7 @@ pub fn showcase() -> Markup {
                     (render(Props {
                         title: "Linked docs".into(),
                         content: html! {
-                            div style="display:flex;flex-direction:column;gap:0.25rem;font-size:0.8125rem;" {
+                            div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);font-size: var(--mui-text-small-size);" {
                                 a href="#" style="color:var(--mui-accent-text);text-decoration:none;" { "auth-middleware RFC" }
                                 a href="#" style="color:var(--mui-accent-text);text-decoration:none;" { "tower Layer contract" }
                             }

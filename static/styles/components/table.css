@@ -1,0 +1,91 @@
+/* Table component — shadcn-quality data table */
+
+.mui-table-wrapper {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+}
+
+/* The wrapper carries tabindex="0" so the scroll container is keyboard
+   reachable; it needs a visible focus ring like any other tab stop. */
+.mui-table-wrapper:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--mui-text-small-size);
+  caption-side: bottom;
+}
+
+/* Caption — bottom, muted, left-aligned */
+.mui-table__caption {
+  padding: var(--mui-space-md) 0;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  text-align: start;
+}
+
+/* Header cells — subtle weight, muted color, bottom border */
+.mui-table__th {
+  text-align: start;
+  font-weight: var(--mui-weight-medium);
+  padding: var(--mui-space-md) var(--mui-space-lg);
+  border-bottom: 1px solid var(--mui-border);
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  white-space: nowrap;
+  height: 2.5rem;
+}
+
+/* Body cells */
+.mui-table__td {
+  padding: var(--mui-space-md) var(--mui-space-lg);
+  color: var(--mui-text);
+  vertical-align: middle;
+}
+
+/* Row borders */
+.mui-table__row {
+  border-bottom: 1px solid var(--mui-border);
+  transition: background-color var(--mui-transition);
+}
+
+/* Remove border on last row */
+.mui-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.mui-table tbody tr:last-child .mui-table__row {
+  border-bottom: none;
+}
+
+/* Striped variant — muted bg on even rows */
+.mui-table--striped tbody tr:nth-child(even) {
+  background-color: var(--mui-bg-input);
+}
+
+/* Hoverable variant */
+.mui-table--hoverable tbody tr:hover {
+  background-color: var(--mui-bg-input);
+}
+
+/* Compact variant */
+.mui-table--compact .mui-table__th {
+  padding: var(--mui-inset-tight) var(--mui-space-md);
+  height: 2rem;
+}
+
+.mui-table--compact .mui-table__td {
+  padding: var(--mui-inset-tight) var(--mui-space-md);
+}
+
+/* Narrow-viewport column drop — columns named in `hide_cols_sm` shed below
+   45rem rather than squeezing the whole row into illegibility. */
+@media (max-width: 40rem) {
+  .mui-table [data-hide-sm] {
+    display: none;
+  }
+}

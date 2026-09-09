@@ -1,0 +1,149 @@
+/* Dialog Component Styles */
+
+dialog.mui-dialog {
+  border: none;
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  padding: 0;
+  box-shadow: var(--mui-shadow-lg);
+  max-width: 32rem;
+  width: 90vw;
+  animation: mui-dialog-enter var(--mui-motion-enter) var(--mui-motion-ease);
+}
+
+/* Size: Sm — reduced max-width and padding for compact dialogs */
+dialog.mui-dialog.mui-dialog--sm {
+  max-width: 28rem;
+}
+
+.mui-dialog--sm .mui-dialog__header {
+  padding: var(--mui-space-md);
+}
+
+.mui-dialog--sm .mui-dialog__body {
+  padding: var(--mui-space-md);
+}
+
+dialog.mui-dialog::backdrop {
+  background: var(--mui-bg-overlay);
+  backdrop-filter: blur(4px);
+  animation: mui-dialog-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease);
+}
+
+@keyframes mui-dialog-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mui-dialog-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Header — no close button in flow; title + description only */
+.mui-dialog__header {
+  padding: var(--mui-space-xl) var(--mui-space-xl) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-inset-tight);
+}
+
+.mui-dialog__title {
+  margin: 0;
+  font-size: var(--mui-text-h3-size);
+  font-weight: var(--mui-weight-heading);
+  line-height: var(--mui-text-h3-leading);
+  letter-spacing: var(--mui-text-h3-tracking);
+}
+
+/* Close button — positioned absolute, out of header flow */
+.mui-dialog__close {
+  position: absolute;
+  top: 1rem;
+  inset-inline-end: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mui-radius-sm);
+  font-size: var(--mui-text-body-size);
+  transition: opacity var(--mui-transition);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.mui-dialog__close:hover {
+  opacity: 1;
+}
+
+.mui-dialog__close:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+.mui-dialog__close:active {
+  opacity: 0.5;
+}
+
+.mui-dialog__description {
+  padding: var(--mui-space-xs) var(--mui-space-xl) 0;
+  margin: 0;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+}
+
+.mui-dialog__body {
+  padding: var(--mui-space-lg) var(--mui-space-xl);
+}
+
+.mui-dialog__body > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Footer for dialog actions — flex row, right-aligned, gap */
+.mui-dialog__footer {
+  display: flex;
+  gap: var(--mui-space-sm);
+  justify-content: flex-end;
+  padding: 0 var(--mui-space-xl) var(--mui-space-xl);
+}
+
+/* Mobile: reduce padding and stack footer buttons full-width */
+@media (max-width: 40rem) {
+  dialog.mui-dialog {
+    width: calc(100vw - 1.5rem);
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .mui-dialog__header,
+  .mui-dialog__description {
+    padding-inline-start: var(--mui-space-lg);
+    padding-inline-end: var(--mui-space-lg);
+  }
+
+  .mui-dialog__body {
+    padding: var(--mui-inset-control) var(--mui-space-lg);
+  }
+
+  .mui-dialog__footer {
+    flex-direction: column-reverse;
+    padding: 0 var(--mui-space-lg) var(--mui-space-lg);
+  }
+
+  .mui-dialog__footer > * {
+    width: 100%;
+  }
+}

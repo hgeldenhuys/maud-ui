@@ -258,6 +258,10 @@ pub fn render_block_docs(slug: &str) -> Option<Markup> {
         "record-header" => include_str!("../../docs/blocks/rendered/record-header.html"),
         "task-grid" => include_str!("../../docs/blocks/rendered/task-grid.html"),
         "shell-sidebar" => include_str!("../../docs/blocks/rendered/shell-sidebar.html"),
+        "shell-page-header" => include_str!("../../docs/blocks/rendered/shell-page-header.html"),
+        "shell-app-header" => include_str!("../../docs/blocks/rendered/shell-app-header.html"),
+        "shell-app-footer" => include_str!("../../docs/blocks/rendered/shell-app-footer.html"),
+
         _ => return None,
     };
     Some(html! { section class="mui-docs" { (PreEscaped(wrap_tables(raw))) } })

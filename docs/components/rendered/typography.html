@@ -173,3 +173,5 @@ html! {
 </ul>
 <h2>Shadcn Reference</h2>
 <p>Maud-ui Typography provides headings (h1–h4), body text (p, lead, large, small, muted), lists (list_ul, list_ol), code (code_inline), blockquote, and table wrapper—covering shadcn's text utility patterns.</p>
+<h2>Design scale (0.9)</h2>
+<p><code>display(text)</code> renders a display H1 and <code>caption(text)</code> renders a quiet caption span. All text helpers use role tokens with size, leading and tracking: <code>--mui-text-{display,h1,h2,h3,body,small,caption}-{size,leading,tracking}</code>. The body is 15px; ordinary secondary text is 14px and captions are 12px. Heading weights are 600. Inputs use 16px with a coarse pointer to avoid mobile browser zoom; touch targets expand independently from text. Use <code>eyebrow</code> for a section label and a proper heading level for your page structure.</p>

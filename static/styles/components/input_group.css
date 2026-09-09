@@ -1,0 +1,186 @@
+/* InputGroup component — input with prefix/suffix/block addons as one visual unit */
+
+.mui-input-group {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap; /* block-start / block-end addons wrap to their own row */
+  width: 100%;
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: transparent;
+  transition: border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+/* Hover on the whole group */
+.mui-input-group:hover:not(:focus-within) {
+  border-color: var(--mui-border-hover);
+}
+
+/* Focus ring wraps entire group — matching Input component style */
+.mui-input-group:focus-within {
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+/* Prefix & suffix addons — distinct muted background */
+.mui-input-group__prefix,
+.mui-input-group__suffix {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--mui-space-md);
+  color: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  background: var(--mui-bg-input);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.mui-input-group__prefix {
+  border-inline-end: 1px solid var(--mui-border);
+}
+
+.mui-input-group__suffix {
+  border-inline-start: 1px solid var(--mui-border);
+}
+
+/* Input inside the group — no border, inherits group ring */
+.mui-input-group > input,
+.mui-input-group > .mui-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text);
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  height: 2.25rem;
+  box-sizing: border-box;
+}
+
+.mui-input-group > input::placeholder,
+.mui-input-group > .mui-input::placeholder {
+  color: var(--mui-text-muted);
+}
+
+.mui-input-group > input:focus,
+.mui-input-group > .mui-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Buttons inside suffix/prefix */
+.mui-input-group__suffix > button,
+.mui-input-group__prefix > button {
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  cursor: pointer;
+  padding: 0 var(--mui-space-xs);
+  transition: color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-input-group__suffix > button:hover,
+.mui-input-group__prefix > button:hover {
+  color: var(--mui-text);
+}
+
+/* -----------------------------------------------------------------------------
+   P1 addon + control surfaces (shadcn Base UI parity)
+   --------------------------------------------------------------------------- */
+
+/* Base addon surface — mirrors prefix/suffix styling; align modifiers reposition it. */
+.mui-input-group__addon {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--mui-space-md);
+  color: var(--mui-text-muted);
+  font-family: var(--mui-font-sans);
+  font-size: var(--mui-text-small-size);
+  background: var(--mui-bg-input);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* InlineStart — leading addon, sits before the control. */
+.mui-input-group__addon--inline-start {
+  order: -1;
+  border-inline-end: 1px solid var(--mui-border);
+}
+
+/* InlineEnd — trailing addon, sits after the control. */
+.mui-input-group__addon--inline-end {
+  order: 99;
+  border-inline-start: 1px solid var(--mui-border);
+}
+
+/* BlockStart — full-width banner above the control row. */
+.mui-input-group__addon--block-start {
+  order: -2;
+  flex-basis: 100%;
+  border-block-end: 1px solid var(--mui-border);
+  justify-content: flex-start;
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  background: transparent;
+}
+
+/* BlockEnd — full-width footer/hint below the control row. */
+.mui-input-group__addon--block-end {
+  order: 100;
+  flex-basis: 100%;
+  border-block-start: 1px solid var(--mui-border);
+  justify-content: flex-start;
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  background: transparent;
+  white-space: normal; /* hints can wrap across lines */
+}
+
+/* InputGroupText — muted supplementary label inside an addon. */
+.mui-input-group__text {
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  line-height: var(--mui-leading-tight);
+}
+
+/* data-slot="input-group-control" wrapper — flex child that owns the control.
+   Reset chrome so the inner <input>/<textarea> inherits the group's ring. */
+.mui-input-group__control,
+.mui-input-group > [data-slot="input-group-control"] {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.mui-input-group__control > .mui-input,
+.mui-input-group__control > .mui-textarea,
+.mui-input-group > [data-slot="input-group-control"] > .mui-input,
+.mui-input-group > [data-slot="input-group-control"] > .mui-textarea {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mui-input-group__control > .mui-input:focus,
+.mui-input-group__control > .mui-textarea:focus,
+.mui-input-group > [data-slot="input-group-control"] > .mui-input:focus,
+.mui-input-group > [data-slot="input-group-control"] > .mui-textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Buttons rendered via `input_group::button()` — strip addon padding; the button
+   already owns its own hit area. */
+.mui-input-group__addon--inline-end > .mui-btn,
+.mui-input-group__addon--inline-start > .mui-btn {
+  margin: var(--mui-space-xs);
+}

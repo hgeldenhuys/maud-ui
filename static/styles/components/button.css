@@ -1,0 +1,223 @@
+/* Button component — shadcn-quality polish */
+
+.mui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mui-space-sm);
+  font-family: var(--mui-font-sans);
+  font-weight: var(--mui-weight-medium);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--mui-radius-md);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* --- Sizes ------------------------------------------------------------ */
+
+.mui-btn--sm {
+  height: 2rem;
+  padding: 0 var(--mui-space-md);
+  font-size: var(--mui-text-caption-size);
+}
+
+.mui-btn--md {
+  height: 2.25rem;
+  padding: 0 var(--mui-space-lg);
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-btn--lg {
+  height: 2.5rem;
+  padding: 0 var(--mui-space-xl);
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-btn--icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mui-btn--xs {
+  height: 1.5rem;
+  padding: 0 var(--mui-space-sm);
+  font-size: var(--mui-text-caption-size);
+}
+
+.mui-btn--icon-xs {
+  height: 1.5rem;
+  width: 1.5rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mui-btn--icon-sm {
+  height: 1.75rem;
+  width: 1.75rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mui-btn--icon-lg {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* --- Variant: Default (secondary feel — muted bg, text) --------------- */
+
+.mui-btn--default {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-control);
+  color: var(--mui-text);
+}
+
+.mui-btn--default:hover:not([aria-disabled="true"]) {
+  background: var(--mui-border);
+  border-color: var(--mui-border-hover);
+}
+
+/* --- Variant: Primary (accent standout) ------------------------------- */
+
+.mui-btn--primary {
+  background: var(--mui-accent);
+  border-color: var(--mui-accent);
+  color: var(--mui-accent-fg);
+  box-shadow: var(--mui-shadow-sm);
+}
+
+.mui-btn--primary:hover:not([aria-disabled="true"]) {
+  background: var(--mui-accent-hover);
+  border-color: var(--mui-accent-hover);
+}
+
+/* --- Variant: Secondary (same as default — neutral) ------------------- */
+
+.mui-btn--secondary {
+  background: var(--mui-bg-input);
+  border-color: var(--mui-border-control);
+  color: var(--mui-text);
+}
+
+.mui-btn--secondary:hover:not([aria-disabled="true"]) {
+  background: var(--mui-border);
+  border-color: var(--mui-border-hover);
+}
+
+/* --- Variant: Outline (transparent bg, border, accent on hover) ------- */
+
+.mui-btn--outline {
+  background: transparent;
+  border-color: var(--mui-border-control);
+  color: var(--mui-text);
+}
+
+.mui-btn--outline:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+/* --- Variant: Ghost (invisible until hover) --------------------------- */
+
+.mui-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-text);
+}
+
+.mui-btn--ghost:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-input);
+}
+
+/* --- Variant: Danger / Destructive ------------------------------------ */
+
+/* Ink is a token, matching every other variant and .mui-badge--danger: a hard
+   #fff assumes the consumer's danger fill is dark enough to carry white, and a
+   lighter fill drops it to 2.74:1 — measured on Conductor's Delete-session
+   button, where it was invisible to a contrast sweep because the control lives
+   inside a closed <dialog>. The fallback keeps the old ink for a consumer that
+   imports components without this library's token block. */
+.mui-btn--danger {
+  background: var(--mui-danger);
+  border-color: var(--mui-danger);
+  color: var(--mui-danger-fg, #fff);
+  box-shadow: var(--mui-shadow-sm);
+}
+
+.mui-btn--danger:hover:not([aria-disabled="true"]) {
+  background: color-mix(in srgb, var(--mui-danger) 85%, black);
+  border-color: color-mix(in srgb, var(--mui-danger) 85%, black);
+}
+
+/* --- Variant: Link ---------------------------------------------------- */
+
+.mui-btn--link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mui-accent);
+  height: auto;
+  padding: 0;
+  font-weight: var(--mui-weight-medium);
+  text-underline-offset: 4px;
+}
+
+.mui-btn--link:hover:not([aria-disabled="true"]) {
+  text-decoration: none;
+}
+
+/* --- Focus ring (all variants) ---------------------------------------- */
+
+.mui-btn:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* --- Disabled state --------------------------------------------------- */
+
+.mui-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- Leading icon ----------------------------------------------------- */
+
+.mui-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mui-btn__icon svg {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+/* --- Spinner animation (for loading states) --------------------------- */
+
+.mui-spin {
+  animation: mui-spin var(--mui-motion-loading) linear infinite;
+}
+
+@keyframes mui-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* A frozen spinner stops reporting that work is in flight, so reduced motion
+   slows it rather than stopping it — under the 5s threshold that would make it
+   'moving content' users must be able to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-spin { animation-duration: 2.4s; }
+}

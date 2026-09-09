@@ -1,0 +1,115 @@
+/* Field component — form control wrapper with label, description, and error */
+
+.mui-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-inset-tight);
+  max-width: 24rem;
+}
+
+/* A field inside a surface that has already capped its own width.
+ *
+ * The 24rem above is a measure guard for a field sitting on an open page, where
+ * nothing else stops an input growing to the full window. Inside a dialog it
+ * becomes a SECOND and narrower cap: the dialog is 32rem, so its content column
+ * is 464px, and the title and description fill that column while every field
+ * stops at 384px — an 80px ragged edge down the right-hand side of the form.
+ *
+ * The surface has already made the measure decision. Yield to it.
+ *
+ * Only the surfaces WIDER than 24rem need this: sheet and drawer are themselves
+ * 24rem, so their fields are already bounded by the container and this rule
+ * would be a no-op there. Listing them anyway would be stating a fix for a
+ * problem they do not have. */
+dialog.mui-dialog .mui-field,
+dialog.mui-alert-dialog .mui-field {
+  max-width: none;
+}
+
+/* Horizontal: label on the left, control + meta on the right */
+.mui-field--horizontal {
+  display: grid;
+  grid-template-columns: minmax(8rem, auto) 1fr;
+  gap: var(--mui-space-sm);
+  align-items: start;
+  max-width: 36rem;
+}
+
+/* Responsive: vertical on narrow viewports, horizontal at ≥ 640px */
+.mui-field--responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-inset-tight);
+}
+
+@media (min-width: 40rem) {
+  .mui-field--responsive {
+    display: grid;
+    grid-template-columns: minmax(8rem, auto) 1fr;
+    gap: var(--mui-space-sm);
+    align-items: start;
+    max-width: 36rem;
+  }
+}
+
+.mui-field__label {
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+}
+
+.mui-field__required {
+  color: var(--mui-danger-text);
+  margin-inline-start: var(--mui-space-xs);
+}
+
+.mui-field__description {
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  margin: var(--mui-space-xs) 0 0;
+}
+
+.mui-field__error {
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-danger-text, var(--mui-danger));
+  margin: var(--mui-space-xs) 0 0;
+}
+
+.mui-field--invalid .mui-field__label {
+  color: var(--mui-text);
+}
+
+/* ---- Helper / compose primitives ---- */
+
+.mui-field__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-xs);
+  min-width: 0;
+}
+
+.mui-field__separator {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: var(--mui-space-sm) 0;
+}
+
+.mui-field__title {
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-heading);
+  color: var(--mui-text);
+}
+
+.mui-field__legend {
+  font-weight: var(--mui-weight-medium);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text);
+}
+
+.mui-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-md);
+}

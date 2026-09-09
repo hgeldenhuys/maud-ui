@@ -208,7 +208,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Preferences" }
                 p.mui-showcase__caption { "A realistic settings form with theme, language, and a locked timezone field." }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:24rem;" {
                     div class="mui-field" {
                         label class="mui-field__label" for="pref-theme" { "Theme" }
                         (render(Props {
@@ -244,7 +244,7 @@ pub fn showcase() -> Markup {
                     div class="mui-field" {
                         label class="mui-field__label mui-label--disabled" for="pref-timezone" {
                             "Timezone"
-                            span style="font-weight:400;color:var(--mui-muted-foreground);margin-left:0.5rem;font-size:0.75rem;" { "(locked by admin)" }
+                            span style="font-weight: var(--mui-weight-normal);color:var(--mui-muted-foreground);margin-left:0.5rem;font-size: var(--mui-text-caption-size);" { "(locked by admin)" }
                         }
                         (render(Props {
                             name: "timezone".to_string(),
@@ -269,9 +269,9 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Select Anatomy" }
                 p.mui-showcase__caption { "Individual select states shown in isolation." }
-                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:1.5rem;" {
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Pre-selected" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Pre-selected" }
                         (render(Props {
                             name: "status".to_string(),
                             id: "anatomy-preselected".to_string(),
@@ -286,7 +286,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Placeholder" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Placeholder" }
                         (render(Props {
                             name: "priority".to_string(),
                             id: "anatomy-placeholder".to_string(),
@@ -301,7 +301,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Disabled option" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Disabled option" }
                         (render(Props {
                             name: "plan".to_string(),
                             id: "anatomy-disabled-opt".to_string(),
@@ -316,7 +316,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Fully disabled" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Fully disabled" }
                         (render(Props {
                             name: "role".to_string(),
                             id: "anatomy-disabled".to_string(),
@@ -332,7 +332,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Small size" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Small size" }
                         (render(Props {
                             name: "density".to_string(),
                             id: "anatomy-size-sm".to_string(),
@@ -348,7 +348,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Invalid state" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Invalid state" }
                         (render(Props {
                             name: "country".to_string(),
                             id: "anatomy-invalid".to_string(),
@@ -369,7 +369,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Grouped options" }
                 p.mui-showcase__caption { "Options organized under labeled groups with separator helper." }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:24rem;" {
                     div class="mui-field" {
                         label class="mui-field__label" for="grouped-timezone" { "Timezone" }
                         (render(Props {

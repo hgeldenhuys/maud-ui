@@ -6,7 +6,7 @@
 <text x="72" y="252" font-size="64" font-weight="600">Server-rendered UI</text>
 <text x="72" y="332" font-size="64" font-weight="600">for Rust applications.</text>
 <text x="72" y="463" font-size="52" font-weight="600" data-stat="components">81</text>
-<text x="342" y="463" font-size="52" font-weight="600" data-stat="blocks">13</text>
+<text x="342" y="463" font-size="52" font-weight="600" data-stat="blocks">16</text>
 <text x="608" y="463" font-size="52" font-weight="600">15</text>
 </g>
 <g font-family="sans-serif" fill="#a1a1aa" font-size="22"><text x="72" y="503">typed components</text><text x="342" y="503">composed blocks</text><text x="608" y="503">integration shells</text><text x="72" y="581">Accessible · Themeable · Progressive enhancement</text></g>

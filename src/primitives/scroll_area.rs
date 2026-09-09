@@ -86,7 +86,7 @@ pub fn showcase() -> Markup {
     let tag_list = html! {
         div style="display:flex;flex-direction:column;" {
             @for tag in tags.iter() {
-                div style="padding:0.5rem 0.75rem;font-size:0.8125rem;font-family:var(--mui-font-mono);border-bottom:1px solid var(--mui-border);" {
+                div style="padding: var(--mui-space-sm) var(--mui-space-md);font-size: var(--mui-text-small-size);font-family:var(--mui-font-mono);border-bottom:1px solid var(--mui-border);" {
                     (tag)
                 }
             }
@@ -94,7 +94,7 @@ pub fn showcase() -> Markup {
     };
 
     let changelog = html! {
-        div style="padding:0.75rem;font-size:0.8125rem;font-family:var(--mui-font-mono);line-height:1.6;white-space:pre;" {
+        div style="padding: var(--mui-space-md);font-size: var(--mui-text-small-size);font-family:var(--mui-font-mono);line-height: var(--mui-leading-body);white-space:pre;" {
             "commit a1b2c3d\n"
             "Author: Jane Smith\n"
             "Date:   Mon Apr 13 09:14:22 2026 +0000\n\n"
@@ -122,7 +122,7 @@ pub fn showcase() -> Markup {
         div.mui-showcase__grid {
             div {
                 p.mui-showcase__caption { "Release tags" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);overflow:hidden;max-width:14rem;" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);overflow:hidden;max-width:14rem;" {
                     (render(Props {
                         max_height: "14rem".to_string(),
                         id: "demo-scroll-tags".to_string(),
@@ -133,7 +133,7 @@ pub fn showcase() -> Markup {
 
             div {
                 p.mui-showcase__caption { "Commit log" }
-                div style="border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);overflow:hidden;max-width:26rem;" {
+                div style="border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);overflow:hidden;max-width:26rem;" {
                     (render(Props {
                         max_height: "14rem".to_string(),
                         id: "demo-scroll-log".to_string(),

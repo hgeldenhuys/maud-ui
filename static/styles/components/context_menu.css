@@ -1,0 +1,38 @@
+.mui-context-menu {
+  position: relative;
+}
+
+.mui-context-menu__region {
+  cursor: context-menu;
+}
+
+.mui-context-menu-demo {
+  padding: var(--mui-space-xxl) var(--mui-space-4xl);
+  background: var(--mui-bg-input);
+  border: 2px dashed var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  text-align: center;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: context-menu;
+}
+
+.mui-context-menu__content {
+  position: fixed;
+  min-width: 12rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+  padding: var(--mui-space-xs);
+  z-index: var(--mui-layer-toast);
+}
+
+.mui-context-menu__content[hidden] {
+  display: none;
+}
+
+/* Context menu reuses .mui-menu__item, .mui-menu__separator,
+   .mui-menu__shortcut, and .mui-menu__item--danger from menu.css */

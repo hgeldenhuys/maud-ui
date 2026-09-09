@@ -1,0 +1,69 @@
+/* EmptyState component — polished empty/blank-slate placeholder */
+
+.mui-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--mui-space-3xl) var(--mui-space-xxl);
+}
+
+/* Header slot — groups media + title + description (shadcn EmptyHeader) */
+.mui-empty-state__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mui-empty-state__icon {
+  font-size: var(--mui-text-display-size);
+  margin-bottom: var(--mui-space-20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mui-text-subtle);
+  opacity: 0.6;
+  line-height: var(--mui-text-display-leading);
+ letter-spacing: var(--mui-text-display-tracking); }
+
+/* MediaVariant::Default — larger decorative block */
+.mui-empty-state__icon--default {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* MediaVariant::Icon — smaller glyph sized for lucide-style icons */
+.mui-empty-state__icon--icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--mui-text-h2-size);
+ line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
+
+.mui-empty-state__title {
+  font-size: var(--mui-text-body-size);
+  font-weight: var(--mui-weight-heading);
+  margin: 0 0 var(--mui-space-sm) 0;
+  color: var(--mui-text);
+}
+
+.mui-empty-state__description {
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text-muted);
+  margin: 0;
+  max-width: 20rem;
+}
+
+/* Content slot — holds secondary actions / body content (shadcn EmptyContent) */
+.mui-empty-state__content {
+  margin-top: var(--mui-space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mui-space-md);
+}
+
+.mui-empty-state__action {
+  margin-top: var(--mui-space-xl);
+}

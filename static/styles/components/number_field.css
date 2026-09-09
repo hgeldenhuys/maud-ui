@@ -1,0 +1,94 @@
+/* Number field component — [minus] [input] [plus] as one cohesive control */
+
+.mui-number-field {
+  display: inline-flex;
+  align-items: stretch;
+  align-self: flex-start;
+  width: fit-content;
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: transparent;
+  transition: border-color var(--mui-motion-fast) var(--mui-motion-ease),
+              box-shadow var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-number-field:focus-within {
+  outline: none;
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+.mui-number-field[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- Buttons ----------------------------------------------------------- */
+
+.mui-number-field__btn {
+  background: transparent;
+  border: none;
+  color: var(--mui-text-muted);
+  width: 2rem;
+  padding: 0;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-tight);
+  cursor: pointer;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mui-number-field__btn:hover:not(:disabled) {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+.mui-number-field__btn:active:not(:disabled) {
+  background: var(--mui-border);
+}
+
+.mui-number-field__btn:disabled {
+  cursor: not-allowed;
+  color: var(--mui-text-subtle);
+}
+
+.mui-number-field__btn--decrement {
+  border-inline-end: 1px solid var(--mui-border);
+}
+
+.mui-number-field__btn--increment {
+  border-inline-start: 1px solid var(--mui-border);
+}
+
+/* --- Input ------------------------------------------------------------- */
+
+.mui-number-field__input {
+  border: none;
+  background: transparent;
+  color: var(--mui-text);
+  padding: 0 var(--mui-space-xs);
+  font-size: var(--mui-text-small-size);
+  font-family: inherit;
+  width: 3.5rem;
+  height: 2rem;
+  text-align: center;
+  -moz-appearance: textfield;
+  box-sizing: border-box;
+}
+
+/* Remove default number input spinners */
+.mui-number-field__input::-webkit-inner-spin-button,
+.mui-number-field__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mui-number-field__input:focus {
+  outline: none;
+}

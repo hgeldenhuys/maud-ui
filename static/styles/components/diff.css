@@ -1,0 +1,76 @@
+/* Diff view — unified diff with line numbers and ± counts. */
+.mui-diff {
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-small-size);
+}
+.mui-diff__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mui-inset-tight) var(--mui-inset-cell);
+  border-bottom: 1px solid var(--mui-border);
+  background: var(--mui-bg);
+  font-size: var(--mui-text-caption-size);
+}
+.mui-diff__file {
+  color: var(--mui-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mui-diff__stats { display: inline-flex; gap: var(--mui-space-sm); }
+.mui-diff__added   { color: var(--mui-success); font-weight: var(--mui-weight-heading); }
+.mui-diff__removed { color: var(--mui-danger);  font-weight: var(--mui-weight-heading); }
+
+.mui-diff__body {
+  line-height: var(--mui-leading-small);
+  overflow-x: auto;
+}
+.mui-diff__line {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: start;
+  padding: 0 var(--mui-inset-tight);
+  column-gap: var(--mui-space-sm);
+  min-height: 1.5rem;
+}
+.mui-diff__line--context {}
+.mui-diff__line--add {
+  background: color-mix(in srgb, var(--mui-success) 10%, transparent);
+}
+.mui-diff__line--remove {
+  background: color-mix(in srgb, var(--mui-danger) 10%, transparent);
+}
+.mui-diff__line--hunk {
+  background: var(--mui-bg-input);
+  color: var(--mui-text-muted);
+  font-weight: var(--mui-weight-medium);
+  grid-template-columns: 1fr;
+  padding: var(--mui-space-xs) var(--mui-inset-cell);
+}
+.mui-diff__lineno {
+  display: inline-block;
+  min-width: 2.25rem;
+  color: var(--mui-text-muted);
+  text-align: right;
+  user-select: none;
+  font-size: var(--mui-text-caption-size);
+}
+.mui-diff__sigil {
+  color: var(--mui-text-muted);
+  width: 1ch;
+}
+.mui-diff__line--add .mui-diff__sigil    { color: var(--mui-success); }
+.mui-diff__line--remove .mui-diff__sigil { color: var(--mui-danger); }
+.mui-diff__text {
+  color: var(--mui-text);
+  white-space: pre;
+}
+.mui-diff__line--hunk .mui-diff__text {
+  font-style: normal;
+  color: var(--mui-text-muted);
+}

@@ -1,0 +1,216 @@
+* { box-sizing: border-box; }
+
+/* Scrollbars — transparent track everywhere, tokened thumb (operator standing
+   order 2026-07-27). scrollbar-color inherits from the root in Firefox and
+   Chromium 121+; the ::-webkit-* rules cover engines without it. Never paint
+   a scrollbar track or corner. */
+:root {
+  scrollbar-color: var(--mui-border) transparent;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* 2px transparent border + padding-box clip = a slim 6px thumb floating
+   inside the 10px gutter, never touching the content edge. */
+::-webkit-scrollbar-thumb {
+  background: var(--mui-border);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--mui-radius-md);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--mui-border-hover);
+}
+
+body {
+  margin: 0;
+  background: var(--mui-bg);
+  color: var(--mui-text);
+  font-family: var(--mui-font-sans);
+  line-height: var(--mui-leading-small);
+}
+
+/* Shared utilities (.mui-text-muted, .mui-visually-hidden, …) live in
+   components/utilities.css so a subset vendoring can pick them up. */
+
+/* Showcase layout */
+.mui-showcase__header {
+  padding: var(--mui-space-xxl) var(--mui-space-xxl) var(--mui-space-lg);
+  border-bottom: 1px solid var(--mui-border);
+}
+.mui-showcase__header h1 { margin: 0 0 var(--mui-space-xs); font-size: var(--mui-text-h2-size);  line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
+
+.mui-showcase {
+  display: grid;
+  gap: var(--mui-space-xxl);
+  padding: var(--mui-space-xxl);
+  max-width: 1100px;
+}
+.mui-showcase section {
+  padding: var(--mui-space-xl);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+}
+.mui-showcase section h2 { margin: 0 0 var(--mui-space-lg); font-size: var(--mui-text-h3-size);  line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-placeholder {
+  color: var(--mui-text-subtle);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-small-size);
+  margin: 0;
+}
+
+/* Showcase grid — used by each component's showcase() fn to lay out variants */
+.mui-showcase__grid {
+  display: grid;
+  gap: var(--mui-space-lg);
+}
+.mui-showcase__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mui-space-md);
+  align-items: center;
+}
+.mui-showcase__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-md);
+}
+.mui-showcase__label {
+  color: var(--mui-text-muted);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  text-transform: uppercase;
+  letter-spacing: var(--mui-tracking-label);
+  min-width: 5.5rem;
+}
+.mui-showcase__caption {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  margin: 0 0 var(--mui-space-sm);
+}
+
+/* Showcase navigation grid */
+.mui-showcase__nav {
+  padding: var(--mui-space-xl);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+}
+.mui-showcase__nav h2 { margin: 0 0 var(--mui-space-lg); font-size: var(--mui-text-h3-size);  line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-showcase__nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--mui-space-sm);
+}
+.mui-showcase__nav-link {
+  display: block;
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  text-decoration: none;
+  border-radius: var(--mui-radius-md);
+  font-size: var(--mui-text-small-size);
+  transition: var(--mui-transition);
+  border: 1px solid transparent;
+}
+.mui-showcase__nav-link:hover {
+  background: var(--mui-bg-overlay);
+  border-color: var(--mui-border);
+}
+
+/* Showcase breadcrumb */
+.mui-showcase__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-xs);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+}
+.mui-showcase__breadcrumb a {
+  color: var(--mui-text-subtle);
+  text-decoration: none;
+}
+.mui-showcase__breadcrumb a:hover {
+  color: var(--mui-text);
+  text-decoration: none;
+}
+
+/* Showcase component nav strip (individual pages) */
+.mui-showcase__component-nav {
+  display: flex;
+  gap: var(--mui-space-xs);
+  overflow-x: auto;
+  padding: var(--mui-space-sm) 0;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.mui-showcase__component-nav-link {
+  white-space: nowrap;
+  padding: var(--mui-space-xs) var(--mui-inset-cell);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: var(--mui-transition);
+}
+.mui-showcase__component-nav-link:hover {
+  color: var(--mui-text);
+  background: var(--mui-bg-input);
+}
+.mui-showcase__component-nav-link--active {
+  color: var(--mui-text);
+  background: var(--mui-bg-card);
+  font-weight: var(--mui-weight-medium);
+}
+
+/* Showcase back link */
+.mui-showcase__back {
+  padding-top: var(--mui-space-sm);
+}
+
+/* Showcase code examples */
+.mui-showcase__code-section {
+  margin-top: var(--mui-space-xl);
+  border-top: 1px solid var(--mui-border);
+  padding-top: var(--mui-space-xl);
+}
+.mui-showcase__code-title {
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-heading);
+  margin: 0 0 var(--mui-space-md);
+}
+.mui-showcase__code {
+  background: var(--mui-bg-input);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  padding: var(--mui-space-lg);
+  overflow-x: auto;
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  margin: 0;
+  color: var(--mui-text);
+  white-space: pre;
+}
+.mui-showcase__code code {
+  background: none;
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+}
+
+/* Focus ring — use :focus-visible only, never :focus */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}

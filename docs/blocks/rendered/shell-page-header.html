@@ -1,0 +1,24 @@
+<h1>Page header</h1>
+<p>Sticky route context, distinct from the optional product masthead. The default row is 56px tall, with breadcrumb, search, actions and caller-provided switchers.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::{blocks::shell::page_header::{self, Props, Search}, primitives::breadcrumb::BreadcrumbItem};
+page_header::render(Props {
+    breadcrumbs: vec![BreadcrumbItem { label: "Reservations".into(), href: None }],
+    search: Some(Search { action: "/search".into(), ..Default::default() }),
+    actions: html! { a class="mui-btn mui-btn--outline" href="/reservations/new" { "New reservation" } },
+    switchers: html! { label { "Role" select class="mui-native-select" { option { "Front desk" } } } },
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>leading</td><td>Markup</td><td>empty</td><td>Leading menu or other control. The sidebar shell supplies its own trigger.</td></tr>
+<tr><td>breadcrumbs</td><td>Vec<BreadcrumbItem></td><td>empty</td><td>Quiet path; current item has href: None.</td></tr>
+<tr><td>search</td><td>Option<Search></td><td>None</td><td>Native GET form. Search has action/name/value/placeholder: String; name defaults to q.</td></tr>
+<tr><td>search_markup</td><td>Option<Markup></td><td>None</td><td>Overrides search, including an empty fragment. Use a command-palette trigger here.</td></tr>
+<tr><td>actions</td><td>Markup</td><td>empty</td><td>Page actions on the right.</td></tr>
+<tr><td>switchers</td><td>Markup</td><td>empty</td><td>Caller-wired role, language, theme or account controls.</td></tr>
+</tbody></table>
+<h2>Composition and accessibility</h2>
+<p>Pass these props as <code>sidebar::Props::page_header</code>. Use <code>app_header</code> for product-level navigation above the shell. <code>⌘K</code> / <code>Ctrl+K</code> focuses the native search when the behavior bundle is present. The native search always has a submit action; consumers supply the destination. Custom search markup owns its interaction. Search compresses and ancestor breadcrumbs hide on phones; current page and controls remain. Additional controls can make the minimum-height row taller, so keep switchers short and use a menu for secondary actions. The shell's Menu opens the same sidebar node in a native dialog below 60rem.</p>

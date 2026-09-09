@@ -1,0 +1,57 @@
+/* Breadcrumb component — shadcn-quality navigation trail */
+
+.mui-breadcrumb {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.mui-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mui-inset-tight);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mui-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+}
+
+.mui-breadcrumb__item a {
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  text-underline-offset: 4px;
+  transition: color var(--mui-transition);
+}
+
+.mui-breadcrumb__item a:hover {
+  color: var(--mui-text);
+  text-decoration: none;
+}
+
+.mui-breadcrumb__item a:focus-visible {
+  outline: 2px solid var(--mui-border-focus);
+  outline-offset: 2px;
+}
+
+/* Current page — foreground color, no link */
+.mui-breadcrumb__item--current {
+  color: var(--mui-text);
+  font-weight: var(--mui-weight-normal);
+}
+
+/* Separator chevron — muted, no pointer events */
+.mui-breadcrumb__separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-small-size);
+  user-select: none;
+  pointer-events: none;
+}

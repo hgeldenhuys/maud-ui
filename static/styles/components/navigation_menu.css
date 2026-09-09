@@ -1,0 +1,204 @@
+/* ── Navigation Menu ──────────────────────────────────────────────────── */
+
+.mui-nav-menu {
+  position: relative;
+}
+
+.mui-nav-menu__list {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-2xs);
+  list-style: none;
+  margin: 0;
+  padding: var(--mui-space-xs);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+}
+
+/* Vertical orientation — stacks top-level items in a column. */
+.mui-nav-menu--vertical {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* NavigationMenuIndicator — small chevron/arrow between active triggers. */
+.mui-nav-menu__indicator {
+  display: inline-block;
+  margin-left: var(--mui-space-xs);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  line-height: var(--mui-leading-tight);
+}
+
+/* Per-item popover wrapper (viewport=false). Keeps the same visual as the
+   shared viewport panel, but scoped to a single trigger. */
+.mui-nav-menu__popover {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  inset-inline-start: 0;
+  z-index: var(--mui-layer-overlay);
+}
+
+.mui-nav-menu__popover[hidden] {
+  display: none;
+}
+
+/* ── Direct links ────────────────────────────────────────────────────── */
+
+.mui-nav-menu__link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--mui-inset-tight) var(--mui-space-md);
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text-muted);
+  text-decoration: none;
+  border-radius: var(--mui-radius-sm);
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-nav-menu__link:hover,
+.mui-nav-menu__link:focus-visible {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  outline: none;
+}
+
+/* ── Trigger buttons ─────────────────────────────────────────────────── */
+
+.mui-nav-menu__item {
+  position: relative;
+}
+
+.mui-nav-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mui-space-xs);
+  padding: var(--mui-inset-tight) var(--mui-space-md);
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text-muted);
+  cursor: pointer;
+  border-radius: var(--mui-radius-sm);
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
+              color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-nav-menu__trigger:hover,
+.mui-nav-menu__trigger:focus-visible {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+  outline: none;
+  opacity: 0.9;
+}
+
+.mui-nav-menu__trigger[aria-expanded="true"] {
+  background: var(--mui-bg-input);
+  color: var(--mui-text);
+}
+
+/* ── Dropdown content panel ──────────────────────────────────────────── */
+
+.mui-nav-menu__content {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  inset-inline-start: 0;
+  min-width: 16rem;
+  width: max-content;
+  max-width: 36rem;
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  box-shadow: var(--mui-shadow-lg);
+  padding: var(--mui-space-md);
+  z-index: var(--mui-layer-overlay);
+  animation: mui-nav-menu-in var(--mui-motion-enter) var(--mui-motion-ease);
+  transform-origin: top center;
+}
+
+.mui-nav-menu__content[hidden] {
+  display: none;
+}
+
+@keyframes mui-nav-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Sub-list (link grid) ────────────────────────────────────────────── */
+
+.mui-nav-menu__sub-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--mui-space-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mui-nav-menu__sub-link {
+  display: block;
+  padding: var(--mui-inset-cell) var(--mui-space-md);
+  border-radius: var(--mui-radius-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+.mui-nav-menu__sub-link:hover,
+.mui-nav-menu__sub-link:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
+}
+
+.mui-nav-menu__sub-title {
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-heading);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text);
+  letter-spacing: var(--mui-tracking-heading);
+}
+
+.mui-nav-menu__sub-desc {
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text-muted);
+  margin-top: var(--mui-space-xs);
+}
+
+/* Mobile: wrap list, clamp dropdown to viewport, single-column sub-list */
+@media (max-width: 40rem) {
+  .mui-nav-menu__list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mui-nav-menu__content {
+    min-width: 0;
+    width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    inset-inline-start: 0;
+  }
+
+  .mui-nav-menu__sub-list {
+    grid-template-columns: 1fr;
+  }
+}

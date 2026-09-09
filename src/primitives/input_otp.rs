@@ -103,7 +103,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Verify your email" }
                 p.mui-showcase__caption { "We sent a code to sofia@example.com" }
-                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:22rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:22rem;" {
                     (render(Props {
                         length: 6,
                         group_size: 3,
@@ -112,9 +112,9 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         ..Default::default()
                     }))
-                    div style="display:flex;justify-content:space-between;align-items:center;font-size:0.8125rem;" {
+                    div style="display:flex;justify-content:space-between;align-items:center;font-size: var(--mui-text-small-size);" {
                         span style="color:var(--mui-text-muted);" { "Code expires in 9:42" }
-                        button type="button" style="background:transparent;border:0;padding:0;color:var(--mui-text);font-weight:500;cursor:pointer;text-decoration:underline;font-size:0.8125rem;" {
+                        button type="button" style="background:transparent;border:0;padding: 0;color:var(--mui-text);font-weight: var(--mui-weight-medium);cursor:pointer;text-decoration:underline;font-size: var(--mui-text-small-size);" {
                             "Resend"
                         }
                     }
@@ -125,7 +125,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Enter PIN" }
                 p.mui-showcase__caption { "Your transaction PIN" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:18rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:18rem;" {
                     (render(Props {
                         length: 4,
                         group_size: 0,
@@ -134,7 +134,7 @@ pub fn showcase() -> Markup {
                         disabled: false,
                         ..Default::default()
                     }))
-                    p style="font-size:0.75rem;color:var(--mui-text-muted);margin:0;" {
+                    p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                         "Confirms payments over $100. Never share this PIN."
                     }
                 }

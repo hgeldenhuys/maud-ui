@@ -210,7 +210,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Command palette trigger" }
                 div.mui-showcase__row {
                     (trigger("demo-command", "Open command palette"))
-                    span.mui-text-muted style="font-size: 0.875rem;" {
+                    span.mui-text-muted style="font-size: var(--mui-text-small-size);" {
                         "Press "
                         kbd.mui-kbd { "\u{2318}K" }
                     }

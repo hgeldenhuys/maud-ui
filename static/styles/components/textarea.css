@@ -1,0 +1,67 @@
+/* Textarea component — multi-line text input field */
+
+.mui-textarea {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: var(--mui-text);
+  border: 1px solid var(--mui-border-control);
+  border-radius: var(--mui-radius-md);
+  padding: var(--mui-space-sm) var(--mui-space-md);
+  font-family: inherit;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  transition: var(--mui-transition);
+  min-height: calc(0.5rem * 2 + 1.5em * 3);
+  box-sizing: border-box;
+}
+
+.mui-textarea::placeholder {
+  color: var(--mui-text-muted);
+}
+
+.mui-textarea:hover:not(:disabled):not([readonly]) {
+  border-color: var(--mui-border-hover);
+}
+
+.mui-textarea:focus-visible {
+  outline: none;
+  border-color: transparent;
+  box-shadow: var(--mui-ring);
+}
+
+.mui-textarea[aria-invalid="true"] {
+  border-color: var(--mui-danger);
+}
+
+.mui-textarea[aria-invalid="true"]:focus-visible {
+  box-shadow: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-danger);
+}
+
+.mui-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mui-textarea[readonly] {
+  background: var(--mui-bg-card);
+  cursor: default;
+}
+
+/* Resize variants */
+.mui-textarea--resize-none {
+  resize: none;
+}
+
+.mui-textarea--resize-vertical {
+  resize: vertical;
+}
+
+.mui-textarea--resize-horizontal {
+  resize: horizontal;
+}
+
+.mui-textarea--resize-both {
+  resize: both;
+}

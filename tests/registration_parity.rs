@@ -198,16 +198,16 @@ fn every_component_has_a_doc_file() {
 #[test]
 fn every_component_stylesheet_is_imported() {
     let root = repo_root();
-    let bundle = read("css/maud-ui.css");
+    let bundle = read("static/styles/maud-ui.css");
     let unimported: Vec<String> = COMPONENT_NAMES
         .iter()
-        .filter(|name| root.join(format!("css/components/{name}.css")).exists())
+        .filter(|name| root.join(format!("static/styles/components/{name}.css")).exists())
         .filter(|name| !bundle.contains(&format!("components/{name}.css")))
         .map(|s| s.to_string())
         .collect();
     assert!(
         unimported.is_empty(),
-        "css/components/<slug>.css exists but is not @imported in css/maud-ui.css, \
+        "static/styles/components/<slug>.css exists but is not @imported in static/styles/maud-ui.css, \
          so the component renders unstyled: {unimported:?}"
     );
 }
@@ -608,7 +608,7 @@ fn interactive_controls_do_not_use_the_decorative_border_token() {
 
     let mut offenders: Vec<String> = Vec::new();
     for name in CONTROLS {
-        let path = format!("css/components/{name}.css");
+        let path = format!("static/styles/components/{name}.css");
         if !repo_root().join(&path).exists() {
             continue;
         }

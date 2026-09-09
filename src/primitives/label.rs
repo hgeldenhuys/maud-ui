@@ -86,11 +86,11 @@ pub fn showcase() -> Markup {
                     div class="mui-field" {
                         (render(Props {
                             text: "Email".into(),
-                            html_for: Some("demo-email".into()),
+                            html_for: Some("demo-label-email".into()),
                             required: true,
                             ..Props::default()
                         }))
-                        input class="mui-input" id="demo-email" type="email" placeholder="you@example.com" {}
+                        input class="mui-input" id="demo-label-email" type="email" placeholder="you@example.com" {}
                     }
                 }
             }

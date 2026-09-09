@@ -1,0 +1,155 @@
+/* pricing::tiers — 3-column marketing pricing grid. */
+
+.mui-block--pricing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xxl);
+    width: 100%;
+    padding: var(--mui-space-lg) 0;
+}
+
+.mui-block--pricing__header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-sm);
+    max-width: 36rem;
+    margin: 0 auto;
+}
+
+.mui-block--pricing__heading {
+    font-size: var(--mui-text-h1-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    margin: 0;
+    letter-spacing: var(--mui-text-h1-tracking);
+ line-height: var(--mui-text-h1-leading); }
+
+.mui-block--pricing__subheading {
+    font-size: var(--mui-text-body-size);
+    color: var(--mui-text-muted);
+    margin: 0;
+    line-height: var(--mui-leading-small);
+}
+
+.mui-block--pricing__grid {
+    display: grid;
+    /* 14rem min so 3 tiers fit side-by-side at ≥48rem wide (the
+       gallery's main column clocks in around 56-60rem). Below that,
+       tiers wrap to 2-up and finally stack on mobile. */
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--mui-space-lg);
+    align-items: stretch;
+}
+
+.mui-block--pricing__tier {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-lg);
+    padding: var(--mui-space-20) var(--mui-space-xl);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    transition: transform var(--mui-transition), box-shadow var(--mui-transition);
+}
+
+.mui-block--pricing__tier--highlighted {
+    border-color: var(--mui-accent-text);
+    box-shadow: var(--mui-shadow-sm);
+    background: var(--mui-bg-card);
+}
+
+.mui-block--pricing__tier-badge {
+    position: absolute;
+    top: -0.625rem;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+}
+
+.mui-block--pricing__tier-name {
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    margin: 0;
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-block--pricing__tier-tagline {
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+    margin: 0;
+    line-height: var(--mui-leading-small);
+    min-height: 2.6em; /* two lines so cards align */
+}
+
+.mui-block--pricing__tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: var(--mui-space-xs);
+    padding: var(--mui-space-sm) 0;
+    border-top: 1px solid var(--mui-border);
+    border-bottom: 1px solid var(--mui-border);
+    font-variant-numeric: tabular-nums;
+}
+
+.mui-block--pricing__tier-price-amount {
+    font-size: var(--mui-text-h1-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    letter-spacing: var(--mui-text-h1-tracking);
+    line-height: var(--mui-text-h1-leading);
+}
+
+.mui-block--pricing__tier-price-period {
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+}
+
+.mui-block--pricing__tier-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-inset-cell);
+    flex: 1;
+}
+
+.mui-block--pricing__tier-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mui-inset-cell);
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text);
+    line-height: var(--mui-leading-small);
+}
+
+.mui-block--pricing__tier-check {
+    color: var(--mui-success-text);
+    flex-shrink: 0;
+    margin-top: 0.1875rem;
+}
+
+.mui-block--pricing__tier-cta-link {
+    width: 100%;
+}
+
+.mui-block--pricing__tier-cta,
+.mui-block--pricing__tier-cta form {
+    margin: 0;
+    width: 100%;
+}
+
+.mui-block--pricing__tier-cta .mui-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+.mui-block--pricing__fine-print {
+    text-align: center;
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+    margin: 0;
+    max-width: 42rem;
+    margin: 0 auto;
+}

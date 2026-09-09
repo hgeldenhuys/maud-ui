@@ -69,16 +69,16 @@ pub fn showcase() -> Markup {
             // Loading tweet/post card
             div {
                 p.mui-showcase__caption { "Loading post" }
-                div style="display:flex;gap:0.75rem;padding:1rem;max-width:24rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-lg);" {
+                div style="display:flex;gap: var(--mui-space-md);padding: var(--mui-space-lg);max-width:24rem;border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-lg);" {
                     // Avatar
                     (render(Props {
                         variant: Variant::Circle,
                         width: Some("2.75rem".into()),
                         height: Some("2.75rem".into()),
                     }))
-                    div.mui-showcase__column style="flex:1;gap:0.5rem;min-width:0;" {
+                    div.mui-showcase__column style="flex:1;gap: var(--mui-space-sm);min-width:0;" {
                         // Handle + timestamp row
-                        div style="display:flex;gap:0.5rem;align-items:center;" {
+                        div style="display:flex;gap: var(--mui-space-sm);align-items:center;" {
                             (render(Props {
                                 variant: Variant::Text,
                                 width: Some("6rem".into()),
@@ -107,7 +107,7 @@ pub fn showcase() -> Markup {
                             height: None,
                         }))
                         // Action row
-                        div style="display:flex;gap:1.5rem;margin-top:0.25rem;" {
+                        div style="display:flex;gap: var(--mui-space-xl);margin-top:0.25rem;" {
                             (render(Props {
                                 variant: Variant::Text,
                                 width: Some("2rem".into()),
@@ -131,9 +131,9 @@ pub fn showcase() -> Markup {
             // Loading table row
             div {
                 p.mui-showcase__caption { "Loading table row" }
-                div style="display:flex;flex-direction:column;gap:0;max-width:32rem;border:1px solid var(--mui-border);border-radius:var(--mui-radius-lg);overflow:hidden;" {
+                div style="display:flex;flex-direction:column;gap: 0;max-width:32rem;border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);overflow:hidden;" {
                     // Header row (real, so the skeleton has context)
-                    div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.625rem 0.875rem;background:var(--mui-bg-input);font-size:0.75rem;font-weight:600;color:var(--mui-text);text-transform:uppercase;letter-spacing:0.04em;" {
+                    div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap: var(--mui-space-lg);padding: var(--mui-inset-cell) var(--mui-inset-control);background:var(--mui-bg-input);font-size: var(--mui-text-caption-size);font-weight: var(--mui-weight-heading);color:var(--mui-text);text-transform:uppercase;letter-spacing: var(--mui-tracking-label);" {
                         span { "Customer" }
                         span { "Plan" }
                         span { "Status" }
@@ -141,8 +141,8 @@ pub fn showcase() -> Markup {
                     }
                     // Skeleton rows
                     @for _ in 0..3 {
-                        div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:1rem;padding:0.75rem 0.875rem;align-items:center;border-top:1px solid var(--mui-border);" {
-                            div style="display:flex;align-items:center;gap:0.625rem;" {
+                        div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap: var(--mui-space-lg);padding: var(--mui-space-md) var(--mui-inset-control);align-items:center;border-top:1px solid var(--mui-border);" {
+                            div style="display:flex;align-items:center;gap: var(--mui-inset-cell);" {
                                 (render(Props {
                                     variant: Variant::Circle,
                                     width: Some("1.75rem".into()),
@@ -177,7 +177,7 @@ pub fn showcase() -> Markup {
             // Loading product card
             div {
                 p.mui-showcase__caption { "Loading product card" }
-                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:16rem;padding:0.75rem;border:1px solid var(--mui-border,#e5e7eb);border-radius:var(--mui-radius-lg);" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:16rem;padding: var(--mui-space-md);border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-lg);" {
                     // Product image
                     (render(Props {
                         variant: Variant::Rect,

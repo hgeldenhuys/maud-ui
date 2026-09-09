@@ -1,0 +1,151 @@
+/* Tool call — collapsible agent-tool invocation.
+ *
+ * The kind signal lives on the GLYPH, not on a coloured edge. An earlier
+ * version used a 3px coloured `border-left` per kind; that is the single most
+ * recognisable tell of generated UI, and it also parked the colour on the far
+ * side of the row from the thing it described. Colouring the glyph attaches the
+ * meaning to the mark that carries it, and lets the container keep one honest
+ * 1px border like every other surface in the library.
+ */
+
+.mui-tool-call {
+  /* Per-kind hue, consumed by the glyph. Neutral until a kind sets it. */
+  --mui-tool-accent: var(--mui-text-muted);
+
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  background: var(--mui-bg-card);
+  overflow: hidden;
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-tool-call__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  width: 100%;
+  padding: var(--mui-inset-tight) var(--mui-inset-cell);
+  background: transparent;
+  border: 0;
+  color: var(--mui-text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.mui-tool-call__trigger:hover { background: var(--mui-bg-input); }
+
+.mui-tool-call__glyph {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-tool-accent);
+  width: 1rem;
+  text-align: center;
+  flex: none;
+}
+
+/* The tool name is an identifier, so it reads in the machine register —
+   monospace, sentence case. It was previously uppercase + letter-spaced, which
+   is the tracked-eyebrow trope and made every row shout its own name. */
+.mui-tool-call__name {
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text);
+  flex: none;
+}
+
+.mui-tool-call__summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status reads as a quiet tinted chip. The bordered pill it replaced put a
+   second outline inside a bordered row inside a bordered card — three nested
+   rectangles to say one word. */
+.mui-tool-call__status {
+  flex: none;
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-medium);
+  padding: var(--mui-space-2xs) 0.4375rem;
+  border-radius: var(--mui-radius-sm);
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+.mui-tool-call__status--success { color: var(--mui-success-text); }
+.mui-tool-call__status--running { color: var(--mui-warning-text); animation: mui-tool-pulse var(--mui-motion-loading) var(--mui-motion-ease) infinite; }
+.mui-tool-call__status--error   { color: var(--mui-danger-text); }
+.mui-tool-call__status--pending { color: var(--mui-text-muted); }
+
+@keyframes mui-tool-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+/* `running` pulses forever. Reduced-motion users get the chip at full opacity —
+   still legible, still obviously "running" from its label and tint. */
+@media (prefers-reduced-motion: reduce) {
+  .mui-tool-call__status--running { animation: none; }
+  .mui-tool-call__chevron { transition: none; }
+}
+
+.mui-tool-call__chevron {
+  flex: none;
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+  transition: transform var(--mui-motion-fast) var(--mui-motion-ease);
+}
+.mui-tool-call__trigger[aria-expanded="true"] .mui-tool-call__chevron { transform: rotate(180deg); }
+
+.mui-tool-call__body {
+  padding: var(--mui-space-sm) var(--mui-space-md) var(--mui-inset-cell);
+  border-top: 1px solid var(--mui-border);
+  background: var(--mui-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-sm);
+}
+
+/* `hidden` is a UA-stylesheet `display: none`, so ANY author `display` beats it.
+   Without this, a collapsed row still paints its padding + top border as an
+   empty ~19px strip under the trigger. The `hidden` attribute is the collapse
+   mechanism (see the trigger's onclick), so it has to actually win. */
+.mui-tool-call__body[hidden] { display: none; }
+
+.mui-tool-call__section-label {
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-subtle);
+  margin-bottom: 0.1875rem;
+}
+
+.mui-tool-call__section-body pre {
+  margin: 0;
+  padding: var(--mui-space-sm) var(--mui-inset-cell);
+  background: var(--mui-bg-input);
+  border-radius: var(--mui-radius-sm);
+  font-family: var(--mui-font-mono);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ------------------------------------------------------------------ */
+/* Per-kind hue — consumed by the glyph, never by an edge               */
+/* ------------------------------------------------------------------ */
+
+.mui-tool-call--edit   { --mui-tool-accent: var(--mui-accent-text); }
+.mui-tool-call--write  { --mui-tool-accent: var(--mui-success-text); }
+.mui-tool-call--read   { --mui-tool-accent: var(--mui-info-text); }
+.mui-tool-call--bash   { --mui-tool-accent: var(--mui-warning-text); }
+.mui-tool-call--grep,
+.mui-tool-call--glob,
+.mui-tool-call--search { --mui-tool-accent: var(--mui-violet-text); }
+.mui-tool-call--task,
+.mui-tool-call--agent  { --mui-tool-accent: var(--mui-rose-text); }
+.mui-tool-call--custom { --mui-tool-accent: var(--mui-text-muted); }

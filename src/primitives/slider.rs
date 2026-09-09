@@ -234,14 +234,14 @@ pub fn showcase() -> Markup {
             // Price range — min + max sliders stacked
             div {
                 p.mui-showcase__caption { "Price range" }
-                div style="display:flex;flex-direction:column;gap:0.75rem;max-width:22rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label style="font-size:0.875rem;color:var(--mui-text);font-weight:500;" { "Price" }
-                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" { "$80 \u{2014} $320" }
+                        label style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Price" }
+                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$80 \u{2014} $320" }
                     }
-                    div style="display:flex;flex-direction:column;gap:0.625rem;" {
-                        div style="display:flex;align-items:center;gap:0.75rem;" {
-                            span style="font-size:0.75rem;color:var(--mui-text-muted);min-width:2.25rem;" { "Min" }
+                    div style="display:flex;flex-direction:column;gap: var(--mui-inset-cell);" {
+                        div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
+                            span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);min-width:2.25rem;" { "Min" }
                             div style="flex:1;" {
                                 (render(Props {
                                     name: "price-min".into(),
@@ -256,8 +256,8 @@ pub fn showcase() -> Markup {
                                 }))
                             }
                         }
-                        div style="display:flex;align-items:center;gap:0.75rem;" {
-                            span style="font-size:0.75rem;color:var(--mui-text-muted);min-width:2.25rem;" { "Max" }
+                        div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
+                            span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);min-width:2.25rem;" { "Max" }
                             div style="flex:1;" {
                                 (render(Props {
                                     name: "price-max".into(),
@@ -273,7 +273,7 @@ pub fn showcase() -> Markup {
                             }
                         }
                     }
-                    div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mui-text-muted);" {
+                    div style="display:flex;justify-content:space-between;font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
                         span { "$0" }
                         span { "$500" }
                     }
@@ -283,10 +283,10 @@ pub fn showcase() -> Markup {
             // Range slider — single track, two thumbs (P1 demo)
             div {
                 p.mui-showcase__caption { "Range slider (two thumbs)" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:22rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label style="font-size:0.875rem;color:var(--mui-text);font-weight:500;" { "Budget range" }
-                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" { "$120 \u{2014} $360" }
+                        label style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Budget range" }
+                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "$120 \u{2014} $360" }
                     }
                     (render(Props {
                         name: "budget-range".into(),
@@ -299,7 +299,7 @@ pub fn showcase() -> Markup {
                         show_value: true,
                         ..Default::default()
                     }))
-                    div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mui-text-muted);" {
+                    div style="display:flex;justify-content:space-between;font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" {
                         span { "$0" }
                         span { "$500" }
                     }
@@ -309,12 +309,12 @@ pub fn showcase() -> Markup {
             // Volume — with speaker icons on ends
             div {
                 p.mui-showcase__caption { "Volume" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:22rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label for="slider-volume" style="font-size:0.875rem;color:var(--mui-text);font-weight:500;" { "Volume" }
-                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" { "72" }
+                        label for="slider-volume" style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Volume" }
+                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "72" }
                     }
-                    div style="display:flex;align-items:center;gap:0.75rem;" {
+                    div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
                         // Speaker muted icon
                         svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mui-text-muted);flex-shrink:0" {
                             path d="M11 5 6 9H2v6h4l5 4z" {}
@@ -347,12 +347,12 @@ pub fn showcase() -> Markup {
             // Brightness
             div {
                 p.mui-showcase__caption { "Brightness" }
-                div style="display:flex;flex-direction:column;gap:0.5rem;max-width:22rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-sm);max-width:22rem;" {
                     div style="display:flex;justify-content:space-between;align-items:center;" {
-                        label for="slider-brightness" style="font-size:0.875rem;color:var(--mui-text);font-weight:500;" { "Brightness" }
-                        span style="font-size:0.875rem;font-weight:500;color:var(--mui-text);" { "40%" }
+                        label for="slider-brightness" style="font-size: var(--mui-text-small-size);color:var(--mui-text);font-weight: var(--mui-weight-medium);" { "Brightness" }
+                        span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);" { "40%" }
                     }
-                    div style="display:flex;align-items:center;gap:0.75rem;" {
+                    div style="display:flex;align-items:center;gap: var(--mui-space-md);" {
                         // Sun dim icon
                         svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mui-text-muted);flex-shrink:0" {
                             circle cx="12" cy="12" r="4" {}
@@ -397,8 +397,8 @@ pub fn showcase() -> Markup {
             // Vertical slider (P2 demo)
             div {
                 p.mui-showcase__caption { "Vertical slider" }
-                div style="display:flex;align-items:flex-end;gap:1.5rem;" {
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                div style="display:flex;align-items:flex-end;gap: var(--mui-space-xl);" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-sm);" {
                         (render(Props {
                             name: "equalizer-low".into(),
                             id: "slider-eq-low".into(),
@@ -410,9 +410,9 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "Low" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Low" }
                     }
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-sm);" {
                         (render(Props {
                             name: "equalizer-mid".into(),
                             id: "slider-eq-mid".into(),
@@ -424,9 +424,9 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "Mid" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Mid" }
                     }
-                    div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;" {
+                    div style="display:flex;flex-direction:column;align-items:center;gap: var(--mui-space-sm);" {
                         (render(Props {
                             name: "equalizer-high".into(),
                             id: "slider-eq-high".into(),
@@ -438,7 +438,7 @@ pub fn showcase() -> Markup {
                             orientation: Orientation::Vertical,
                             ..Default::default()
                         }))
-                        span style="font-size:0.75rem;color:var(--mui-text-muted);" { "High" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "High" }
                     }
                 }
             }

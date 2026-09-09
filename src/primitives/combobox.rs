@@ -385,9 +385,9 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Framework picker" }
                 p.mui-showcase__caption { "Search and select from a list of frontend frameworks." }
-                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:1.5rem;" {
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Pre-selected" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Pre-selected" }
                         (render(Props {
                             id: "fw-1".to_string(),
                             name: "framework-1".to_string(),
@@ -401,7 +401,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Placeholder" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Placeholder" }
                         (render(Props {
                             id: "fw-2".to_string(),
                             name: "framework-2".to_string(),
@@ -415,7 +415,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Disabled" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Disabled" }
                         (render(Props {
                             id: "fw-3".to_string(),
                             name: "framework-3".to_string(),
@@ -429,7 +429,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Auto-highlight" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Auto-highlight" }
                         (render(Props {
                             id: "fw-4".to_string(),
                             name: "framework-4".to_string(),
@@ -443,7 +443,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "With clear button" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "With clear button" }
                         (render(Props {
                             id: "fw-5".to_string(),
                             name: "framework-5".to_string(),
@@ -457,7 +457,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Invalid state" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Invalid state" }
                         (render(Props {
                             id: "fw-6".to_string(),
                             name: "framework-6".to_string(),
@@ -477,7 +477,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Assign team member" }
                 p.mui-showcase__caption { "A realistic search-to-select pattern for assigning people to a task." }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:24rem;" {
                     div class="mui-field" {
                         label class="mui-field__label" for="assign-lead" { "Lead" }
                         (render(Props {
@@ -531,7 +531,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Options separated into logical groups with uppercase labels." }
                 div style="max-width:24rem;" {
                     (render(Props {
-                        id: "stack".to_string(),
+                        id: "demo-combobox-stack".to_string(),
                         name: "stack".to_string(),
                         groups: grouped,
                         selected: Some("rust".to_string()),

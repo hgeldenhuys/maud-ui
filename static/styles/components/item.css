@@ -1,0 +1,196 @@
+/* Item component — media + content + actions list row. Sibling to
+   EmptyState. Three variants (default / outline / muted), three densities
+   (default / sm / xs), and a media sub-variant (default / icon / image). */
+
+.mui-item-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-xs);
+}
+
+.mui-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mui-space-md);
+  padding: var(--mui-space-md);
+  border-radius: var(--mui-radius-md);
+  background: transparent;
+  color: var(--mui-text);
+  /* Allow header/footer rows to stack above/below the media+content flex row */
+  flex-wrap: wrap;
+}
+
+.mui-item--default {
+  /* No frame — inherits background from the surrounding surface. */
+}
+
+.mui-item--outline {
+  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-card);
+}
+
+.mui-item--muted {
+  background: var(--mui-bg-input);
+}
+
+/* Density */
+.mui-item--sm {
+  padding: var(--mui-space-sm);
+  gap: var(--mui-space-sm);
+}
+
+.mui-item--xs {
+  padding: var(--mui-space-xs) var(--mui-space-sm);
+  gap: var(--mui-inset-tight);
+  font-size: var(--mui-text-small-size);
+}
+
+/* Media slot */
+.mui-item__media {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mui-text-muted);
+}
+
+.mui-item__media--default {
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.mui-item__media--icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: var(--mui-text-h3-size);
+  line-height: var(--mui-text-h3-leading);
+ letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-item__media--image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--mui-radius-md);
+  overflow: hidden;
+  background: var(--mui-bg-input);
+}
+
+.mui-item__media--image > * {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Content stack */
+.mui-item__content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-2xs);
+  min-width: 0; /* allow text truncation inside */
+}
+
+.mui-item__title {
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+  font-weight: var(--mui-weight-medium);
+  line-height: var(--mui-leading-tight);
+  color: var(--mui-text);
+  /* Truncate single-line overflow cleanly */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mui-item__description {
+  margin: 0;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text-muted);
+  /* Clamp to 2 lines where supported */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Actions trail */
+.mui-item__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  margin-left: auto;
+}
+
+/* Optional header / footer strips */
+.mui-item__header,
+.mui-item__footer {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  font-size: var(--mui-text-caption-size);
+  color: var(--mui-text-muted);
+}
+
+.mui-item__header {
+  margin-bottom: var(--mui-space-2xs);
+}
+
+.mui-item__footer {
+  margin-top: var(--mui-space-2xs);
+}
+
+/* Separator between items in a group */
+.mui-item__separator {
+  border: 0;
+  border-top: 1px solid var(--mui-border);
+  margin: var(--mui-space-xs) 0;
+  width: 100%;
+}
+
+/* XS variant tightens typography */
+.mui-item--xs .mui-item__title {
+  font-size: var(--mui-text-small-size);
+}
+
+.mui-item--xs .mui-item__description {
+  font-size: var(--mui-text-caption-size);
+}
+
+/* Hover affordance on outline rows (mirrors the subtle bg lift used
+   across other interactive primitives). */
+.mui-item--outline:hover {
+  border-color: var(--mui-border-hover);
+}
+
+/* Status dot — a state pip for the media slot. The dot is aria-hidden and
+   ships with a visually-hidden text label, so colour is never the only
+   channel carrying the state. */
+.mui-item__status {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mui-item__dot {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-text-subtle);
+}
+
+.mui-item__dot--ok { background: var(--mui-success-text); }
+.mui-item__dot--warn { background: var(--mui-warning-text); }
+.mui-item__dot--down { background: var(--mui-danger-text); }
+.mui-item__dot--unknown { background: var(--mui-text-subtle); }
+
+/* Row tint — a wash keyed to the same tone, faint enough that the row still
+   reads as part of the surface rather than as an alert. */
+.mui-item--tone-ok { background: color-mix(in srgb, var(--mui-success) 6%, transparent); }
+.mui-item--tone-warn { background: color-mix(in srgb, var(--mui-warning) 8%, transparent); }
+.mui-item--tone-down { background: color-mix(in srgb, var(--mui-danger) 9%, transparent); }
+.mui-item--tone-unknown { opacity: 0.65; }

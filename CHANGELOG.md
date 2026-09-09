@@ -5,6 +5,135 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.9.0] — 2026-09-08 — Design defaults
+
+Designer-oriented defaults now carry across 81 primitives and 16 blocks: a neutral ink hierarchy, paired semantic palettes, a seven-role type scale, quiet links, consistent spacing/radii, two shadow levels and reduced-motion-safe interaction.
+
+- Navigation gains persistent groups, a 36px desktop rhythm, icon rail, same-node phone drawer, and consistent active/hover states. The gallery palette adds native modality, sections and recent destinations.
+- New optional app masthead/footer and a sticky page-header block compose with the sidebar shell. Empty masthead/footer props render nothing.
+- The landing now demonstrates one live workspace, then three claims and the component wall. The initial theme is light; saved theme choices still apply.
+- Record headers accept overriding title/status markup without nested headings. Table headers are muted and left-aligned; numeric columns align right. Data-table alignment survives sorting/pagination because the runtime retains original row nodes and rich fields.
+- Breaking additions: `sidebar::NavItem.children`, new shell Props fields, `record::header` markup slots, and `data_table::Column.align`. Prefer struct defaults for optional fields. New helpers preserve the old two-argument `column_header` call.
+- Active CSS now lives under `static/styles/`; build with `node examples/build-assets.mjs` (`--check` verifies freshness). API docs and all bundles are regenerated. Legacy source trees remain unchanged.
+
+### Every changed or added token
+
+Values are dark / light where they differ. A dash means new. Unchanged tokens are omitted; full rationale and migration notes are in [Design defaults](docs/design-defaults.md).
+
+| Token | 0.8 dark / light | 0.9 dark / light |
+|---|---|---|
+| `--mui-bg` | `#0a0a0b` / `#ffffff` | `#101216` / `#f7f8fa` |
+| `--mui-bg-card` | `#111113` / `#f9fafb` | `#181b20` / `#ffffff` |
+| `--mui-bg-input` | `#18181b` / `#f4f4f5` | `#20242b` / `#f0f2f5` |
+| `--mui-bg-overlay` | `rgba(0, 0, 0, 0.8)` / `rgba(0, 0, 0, 0.4)` | `rgba(0, 0, 0, 0.64)` / `rgba(15, 23, 42, 0.48)` |
+| `--mui-text` | `#fafafa` / `#09090b` | `#edf0f4` / `#1b2330` |
+| `--mui-text-body-leading` | — | `1.6` |
+| `--mui-text-body-size` | — | `0.9375rem` |
+| `--mui-text-body-tracking` | — | `0` |
+| `--mui-text-caption-leading` | — | `1.4` |
+| `--mui-text-caption-size` | — | `0.75rem` |
+| `--mui-text-caption-tracking` | — | `0.01em` |
+| `--mui-text-display-leading` | — | `1.1` |
+| `--mui-text-display-size` | — | `2.75rem` |
+| `--mui-text-display-tracking` | — | `-0.035em` |
+| `--mui-text-h1-leading` | — | `1.2` |
+| `--mui-text-h1-size` | — | `2rem` |
+| `--mui-text-h1-tracking` | — | `-0.025em` |
+| `--mui-text-h2-leading` | — | `1.25` |
+| `--mui-text-h2-size` | — | `1.5rem` |
+| `--mui-text-h2-tracking` | — | `-0.02em` |
+| `--mui-text-h3-leading` | — | `1.35` |
+| `--mui-text-h3-size` | — | `1.125rem` |
+| `--mui-text-h3-tracking` | — | `-0.01em` |
+| `--mui-text-muted` | `#a1a1aa` / `#61616b` | `#a1acba` / `#5e6a7a` |
+| `--mui-text-secondary` | — | `#c1c8d2` / `#475364` |
+| `--mui-text-small-leading` | — | `1.5` |
+| `--mui-text-small-size` | — | `0.875rem` |
+| `--mui-text-small-tracking` | — | `0` |
+| `--mui-text-subtle` | `#8e8e93` / `#686872` | `#939eae` / `#606d80` |
+| `--mui-accent` | `#2563eb` | `#84aaff` / `#285bc5` |
+| `--mui-accent-fg` | `#ffffff` | `#101b32` / `#ffffff` |
+| `--mui-accent-hover` | `#1d4ed8` | `#9bbaff` / `#214ba4` |
+| `--mui-accent-soft` | — | `#26344e` / `#e9effb` |
+| `--mui-accent-text` | `#60a5fa` / `#1d4ed8` | `#acbfff` / `#2855ae` |
+| `--mui-info` | `#1d4ed8` | `#2456a6` |
+| `--mui-info-bg` | — | `#1d2b43` / `#eaf1fc` |
+| `--mui-info-border` | — | `#3c557c` / `#acc5ed` |
+| `--mui-info-fg` | `#fff` | `#ffffff` |
+| `--mui-info-text` | `#60a5fa` / `#1d4ed8` | `#aac7fb` / `#2456a6` |
+| `--mui-success` | `#15803d` | `#28734f` |
+| `--mui-success-bg` | — | `#192f27` / `#edf6f1` |
+| `--mui-success-border` | — | `#365747` / `#b4d8c4` |
+| `--mui-success-fg` | `#fff` | `#ffffff` |
+| `--mui-success-text` | `#4ade80` / `#15803d` | `#a0d2b9` / `#246348` |
+| `--mui-warning` | `#a16207` | `#805815` |
+| `--mui-warning-bg` | — | `#332b1d` / `#fbf4e5` |
+| `--mui-warning-border` | — | `#695333` / `#e4cd9d` |
+| `--mui-warning-fg` | `#fff` | `#ffffff` |
+| `--mui-warning-text` | `#fbbf24` / `#854d0e` | `#e5c78b` / `#805815` |
+| `--mui-danger` | `#dc2626` / `#b91c1c` | `#a1363b` |
+| `--mui-danger-bg` | — | `#382326` / `#fbefef` |
+| `--mui-danger-border` | — | `#724449` / `#e4b9ba` |
+| `--mui-danger-fg` | `#fff` | `#ffffff` |
+| `--mui-danger-hover` | — | `#892e32` |
+| `--mui-danger-text` | `#f87171` / `#b91c1c` | `#f0b1b5` / `#a1363b` |
+| `--mui-violet` | `#6d28d9` | `#63458a` |
+| `--mui-violet-bg` | — | `#2b243a` / `#f4effb` |
+| `--mui-violet-border` | — | `#55466f` / `#cec0e8` |
+| `--mui-violet-fg` | `#fff` | `#ffffff` |
+| `--mui-violet-text` | `#c4b5fd` / `#6d28d9` | `#cdbbe7` / `#63458a` |
+| `--mui-rose` | `#be123c` | `#96385c` |
+| `--mui-rose-bg` | — | `#34232d` / `#fbf0f5` |
+| `--mui-rose-border` | — | `#704459` / `#e2bbcb` |
+| `--mui-rose-fg` | `#fff` | `#ffffff` |
+| `--mui-rose-text` | `#fda4af` / `#be123c` | `#edb5cd` / `#96385c` |
+| `--mui-border` | `#27272a` / `#e4e4e7` | `#303640` / `#dde2e8` |
+| `--mui-border-control` | `#71717a` | `#727e90` / `#778396` |
+| `--mui-border-focus` | `#60a5fa` / `#2563eb` | `#84aaff` / `#285bc5` |
+| `--mui-border-hover` | `#3f3f46` / `#d4d4d8` | `var(--mui-border)` |
+| `--mui-font-mono` | `"SF Mono", "JetBrains Mono", Monaco, Menlo, monospace` | `"JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace` |
+| `--mui-font-sans` | `-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif` | `"Avenir Next", "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif` |
+| `--mui-radius-md` | `0.5rem` | `0.375rem` |
+| `--mui-radius-sm` | `calc(0.5rem - 2px)` | `0.25rem` |
+| `--mui-space-20` | — | `1.25rem` |
+| `--mui-space-2xs` | — | `0.125rem` |
+| `--mui-space-3xl` | — | `3rem` |
+| `--mui-space-4xl` | — | `4rem` |
+| `--mui-inset-cell` | — | `0.625rem` |
+| `--mui-inset-control` | — | `0.875rem` |
+| `--mui-inset-tight` | — | `0.375rem` |
+| `--mui-weight-heading` | — | `600` |
+| `--mui-weight-medium` | — | `500` |
+| `--mui-weight-normal` | — | `400` |
+| `--mui-leading-body` | — | `1.6` |
+| `--mui-leading-small` | — | `1.5` |
+| `--mui-leading-tight` | — | `1.25` |
+| `--mui-tracking-heading` | — | `-0.025em` |
+| `--mui-tracking-label` | — | `0.08em` |
+| `--mui-motion-enter` | `160ms` | `180ms` |
+| `--mui-motion-fast` | — | `120ms` |
+| `--mui-motion-loading` | — | `1200ms` |
+| `--mui-transition` | `150ms cubic-bezier(0.4, 0, 0.2, 1)` | `var(--mui-motion-fast) var(--mui-motion-ease)` |
+| `--mui-shadow-lg` | `0 10px 15px rgba(0, 0, 0, 0.3)` / `0 10px 15px rgba(0, 0, 0, 0.1)` | `0 12px 32px rgba(0, 0, 0, 0.36)` / `0 12px 32px rgba(27, 35, 48, 0.14)` |
+| `--mui-shadow-md` | `0 4px 6px rgba(0, 0, 0, 0.3)` / `0 4px 6px rgba(0, 0, 0, 0.07)` | `var(--mui-shadow-sm)` |
+| `--mui-shadow-sm` | `0 1px 2px rgba(0, 0, 0, 0.3)` / `0 1px 2px rgba(0, 0, 0, 0.05)` | `0 1px 3px rgba(0, 0, 0, 0.18)` / `0 1px 3px rgba(27, 35, 48, 0.06)` |
+| `--mui-sidebar-rail-w` | — | `4rem` |
+| `--mui-sidebar-w` | `16rem` | `15rem` |
+| `--mui-nav-row-height` | — | `2.25rem` |
+| `--mui-header-height` | — | `3.5rem` |
+| `--mui-bottom-tab-bar-height` | `calc(4rem + env(safe-area-inset-bottom, 0px))` | `calc(3.5rem + env(safe-area-inset-bottom, 0px))` |
+| `--mui-control-height` | — | `2.25rem` |
+| `--mui-touch-target` | — | `2.75rem` |
+| `--mui-icon-size` | — | `1rem` |
+| `--mui-page-gutter` | — | `1.5rem` |
+| `--mui-layer-navigation` | — | `40` |
+| `--mui-layer-overlay` | — | `50` |
+| `--mui-layer-sticky` | — | `30` |
+| `--mui-layer-toast` | — | `60` |
+| `--mui-link` | `var(--mui-accent-text)` | `var(--mui-text-secondary)` |
+
+The page gutter is 1rem at ≤40rem. The two interaction durations are 120/180ms; ongoing loading uses its own 1200ms cadence. Structural hairlines are shared; control boundaries and semantic borders retain their distinct accessibility roles. Touch controls grow to 44px and coarse-pointer text inputs use 16px. `shadow-md` aliases sm, retaining two elevation levels.
+
 ## [0.8.0] — 2026-09-08 — operational UI belongs in the library
 
 The receptionist worklist exposed repeatable application structure: counted filters,

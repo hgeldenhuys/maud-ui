@@ -179,7 +179,7 @@ pub fn showcase() -> Markup {
 
             section {
                 h2 { "Raw values" }
-                p.mui-text-muted style="font-size:0.875rem;margin:0 0 0.75rem;" {
+                p.mui-text-muted style="font-size: var(--mui-text-small-size);margin: 0 0 var(--mui-space-md);" {
                     "Any valid CSS colour string. Click a chip to copy the value."
                 }
                 div.mui-showcase__row {
@@ -194,9 +194,9 @@ pub fn showcase() -> Markup {
 
             section {
                 h2 { "Design tokens (live)" }
-                p.mui-text-muted style="font-size:0.875rem;margin:0 0 0.75rem;" {
+                p.mui-text-muted style="font-size: var(--mui-text-small-size);margin: 0 0 var(--mui-space-md);" {
                     "Each chip reads "
-                    code style="font-family:var(--mui-font-mono);font-size:0.8125rem;" { "var(--mui-*)" }
+                    code style="font-family:var(--mui-font-mono);font-size: var(--mui-text-small-size);" { "var(--mui-*)" }
                     " at paint time, so toggling the gallery theme flips the grid."
                 }
                 (render_tokens(&[
@@ -217,7 +217,7 @@ pub fn showcase() -> Markup {
 
             section {
                 h2 { "Scale ramps (Tailwind-style)" }
-                p.mui-text-muted style="font-size:0.875rem;margin:0 0 0.75rem;" {
+                p.mui-text-muted style="font-size: var(--mui-text-small-size);margin: 0 0 var(--mui-space-md);" {
                     "Horizontal ramps from 50 to 950 — click any tone to copy its hex."
                 }
                 (render_scale("slate", &tailwind_ramp("slate")))

@@ -1,0 +1,149 @@
+/* dashboard::stats block layout — header + auto-fit stat card grid +
+   optional chart + optional activity feed. */
+
+.mui-block--stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xl);
+    width: 100%;
+}
+
+.mui-block--stats__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xs);
+}
+
+.mui-block--stats__title {
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    margin: 0;
+    letter-spacing: var(--mui-text-h3-tracking);
+ line-height: var(--mui-text-h3-leading); }
+
+.mui-block--stats__subtitle {
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+    margin: 0;
+}
+
+.mui-block--stats__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--mui-space-lg);
+}
+
+/* A single card's inner layout */
+.mui-block--stats__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-inset-tight);
+}
+
+.mui-block--stats__label {
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    color: var(--mui-text-muted);
+    margin: 0;
+}
+
+.mui-block--stats__value {
+    font-size: var(--mui-text-h2-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+    margin: 0;
+    letter-spacing: var(--mui-text-h2-tracking);
+    font-variant-numeric: tabular-nums;
+ line-height: var(--mui-text-h2-leading); }
+
+.mui-block--stats__delta-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--mui-space-sm);
+    margin: 0;
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-block--stats__delta {
+    font-weight: var(--mui-weight-medium);
+    font-variant-numeric: tabular-nums;
+}
+
+.mui-block--stats__delta--up {
+    color: var(--mui-success-text);
+}
+
+.mui-block--stats__delta--down {
+    color: var(--mui-danger-text);
+}
+
+.mui-block--stats__hint {
+    color: var(--mui-text-muted);
+}
+
+/* ── Activity feed ──────────────────────────────────────────── */
+
+.mui-block--stats__activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.mui-block--stats__activity-item {
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-md);
+    padding: var(--mui-inset-cell) 0;
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-block--stats__activity-item:last-child {
+    border-bottom: none;
+}
+
+.mui-block--stats__activity-avatar {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--mui-radius-full);
+    background: var(--mui-bg-input);
+    color: var(--mui-text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    letter-spacing: var(--mui-tracking-label);
+    flex-shrink: 0;
+}
+
+.mui-block--stats__activity-text {
+    flex: 1;
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text);
+    min-width: 0;
+}
+
+.mui-block--stats__activity-actor {
+    font-weight: var(--mui-weight-medium);
+}
+
+.mui-block--stats__activity-time {
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-subtle);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 40rem) {
+    .mui-block--stats__grid {
+        grid-template-columns: 1fr;
+    }
+    .mui-block--stats__activity-time {
+        display: none;
+    }
+}

@@ -1,0 +1,126 @@
+/* Alert component — shadcn-quality callout/banner */
+
+.mui-alert {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--mui-space-sm) var(--mui-space-md);
+  padding: var(--mui-space-lg);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  width: 100%;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text);
+  background-color: var(--mui-bg);
+}
+
+.mui-alert__icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: start;
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  font-size: var(--mui-text-body-size);
+  line-height: var(--mui-leading-tight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--mui-space-2xs);
+  color: var(--mui-text);
+}
+
+.mui-alert__title {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+  font-weight: var(--mui-weight-medium);
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  letter-spacing: var(--mui-tracking-heading);
+  color: var(--mui-text);
+}
+
+.mui-alert__description {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  font-size: var(--mui-text-small-size);
+  line-height: var(--mui-leading-small);
+  color: var(--mui-text-muted);
+  margin: 0;
+}
+
+.mui-alert__action {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-xs);
+}
+
+/* Default variant — neutral border, foreground text */
+.mui-alert--default {
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-alert--default .mui-alert__icon {
+  color: var(--mui-text);
+}
+
+/* Destructive / danger variant — shadcn destructive style */
+.mui-alert--danger {
+  border-color: var(--mui-danger);
+  color: var(--mui-danger-text);
+}
+
+.mui-alert--danger .mui-alert__icon {
+  color: var(--mui-danger-text);
+}
+
+.mui-alert--danger .mui-alert__title {
+  color: var(--mui-danger-text);
+}
+
+/* Softened rather than set to the title's colour. Painting both the same value
+   left the alert with no title/body hierarchy at all — the one variant on the
+   page where the eye had nothing to land on first. Every other variant reads
+   `title: --mui-text` over `description: --mui-text-muted`; this keeps that
+   relationship while retaining the danger tint the variant exists to carry.
+   (shadcn does the same thing with `text-destructive/90`.) */
+.mui-alert--danger .mui-alert__description {
+  color: color-mix(in srgb, var(--mui-danger-text) 72%, var(--mui-text-muted));
+}
+
+/* Info variant — accent border, subtle tint */
+.mui-alert--info {
+  border-color: var(--mui-accent);
+  color: var(--mui-text);
+}
+
+.mui-alert--info .mui-alert__icon {
+  color: var(--mui-accent);
+}
+
+/* Success variant — green border */
+.mui-alert--success {
+  border-color: var(--mui-success);
+  color: var(--mui-text);
+}
+
+.mui-alert--success .mui-alert__icon {
+  color: var(--mui-success-text);
+}
+
+/* Warning variant — amber border */
+.mui-alert--warning {
+  border-color: var(--mui-warning);
+  color: var(--mui-text);
+}
+
+.mui-alert--warning .mui-alert__icon {
+  color: var(--mui-warning);
+}

@@ -125,7 +125,7 @@ pub fn showcase() -> Markup {
                 // Wraps rather than holding a hard 3-across grid: `repeat(3,
                 // max-content)` sets a width the row cannot go below, which
                 // pushed the page sideways on a narrow phone.
-                div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem" {
+                div style="display:flex;flex-wrap:wrap;gap: var(--mui-space-sm);margin-bottom:0.75rem" {
                     button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-sonner-pos="top-left" aria-pressed="false" { "top-left" }
                     button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-sonner-pos="top-center" aria-pressed="false" { "top-center" }
                     button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-sonner-pos="top-right" aria-pressed="false" { "top-right" }

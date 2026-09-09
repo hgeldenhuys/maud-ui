@@ -170,7 +170,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Create Account" }
                 p.mui-showcase__caption { "A realistic registration form showing label, description, error, and required field patterns together." }
-                div style="display:flex;flex-direction:column;gap:1rem;max-width:24rem;" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-lg);max-width:24rem;" {
                     (render(Props {
                         label: "Full Name".to_string(),
                         id: "demo-ca-name".to_string(),
@@ -246,7 +246,7 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Horizontal Orientation" }
                 p.mui-showcase__caption { "Label on the left, control on the right — good for dense forms and settings panels." }
-                div style="max-width:32rem;display:flex;flex-direction:column;gap:0.75rem;" {
+                div style="max-width:32rem;display:flex;flex-direction:column;gap: var(--mui-space-md);" {
                     (render(Props {
                         label: "Display Name".to_string(),
                         id: "demo-hz-name".to_string(),
@@ -306,9 +306,9 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Field Anatomy" }
                 p.mui-showcase__caption { "Each feature of the Field component shown in isolation." }
-                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:1.5rem;" {
+                div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Basic" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Basic" }
                         (render(Props {
                             label: "Username".to_string(),
                             id: "demo-a-basic".to_string(),
@@ -322,7 +322,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Required" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Required" }
                         (render(Props {
                             label: "Email Address".to_string(),
                             id: "demo-a-required".to_string(),
@@ -336,7 +336,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "With Description" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "With Description" }
                         (render(Props {
                             label: "Phone".to_string(),
                             id: "demo-a-desc".to_string(),
@@ -350,7 +350,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "With Error" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "With Error" }
                         (render(Props {
                             label: "Website".to_string(),
                             id: "demo-a-error".to_string(),
@@ -364,7 +364,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Description + Error" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Description + Error" }
                         (render(Props {
                             label: "Invite Code".to_string(),
                             id: "demo-a-both".to_string(),
@@ -378,7 +378,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size:0.875rem;margin-bottom:0.5rem;" { "Textarea Field" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Textarea Field" }
                         (render(Props {
                             label: "Notes".to_string(),
                             id: "demo-a-textarea".to_string(),

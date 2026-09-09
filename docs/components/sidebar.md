@@ -173,3 +173,8 @@ Navigation, NavMenu, Shell.
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/sidebar
+
+## Persistent groups and navigation links (0.9)
+Use `collapsible_group("workspace-group", "Workspace", menu_markup, true)` for native details/summary with remembered state. IDs must be stable and unique. `menu_link("/reservations", "Reservations", Some(icon), true)` renders a labelled current-page link with a 16px icon slot; `None` uses a letter fallback. Nest rows using `menu_sub(...)` for indentation without a decorative rail. Header and footer helpers accept arbitrary markup.
+
+Icon collapse is available at 64rem and above. Below 60rem, the behavior moves the same sidebar node into its sibling native dialog and restores it on close or desktop resize. The provider shows the toggle after enhancement; without JS, navigation stays visible. Cmd/Ctrl+B targets the focused provider. Use one trigger per sidebar with the matching ID, and use `menu_link` for destinations so full names survive icon-only display. The behavior source is `static/behaviors/sidebar.js`; two rail click handlers from 0.8 have been consolidated into one.

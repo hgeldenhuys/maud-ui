@@ -2,7 +2,7 @@
    Keeps the look-and-feel consistent with the rest of the gallery. */
 
 .mui-docs {
-  margin-top: 2.5rem;
+  margin-top: var(--mui-space-xxl);
   padding-top: var(--mui-space-xxl);
   border-top: 1px solid var(--mui-border);
   max-width: 48rem;

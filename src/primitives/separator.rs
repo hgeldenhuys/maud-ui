@@ -82,11 +82,11 @@ pub fn showcase() -> Markup {
             section {
                 h2 { "Profile card sections" }
                 p.mui-showcase__caption { "Separator divides the Bio block from account Settings in a user profile." }
-                div style="border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); padding: var(--mui-space-20); max-width: 24rem; background: var(--mui-card-bg, var(--mui-bg, transparent));" {
+                div style="border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); padding: var(--mui-space-20); max-width: 24rem; background: var(--mui-bg-card));" {
                     div {
-                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Bio" }
+                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Bio" }
                         div style="font-weight: var(--mui-weight-heading); font-size: var(--mui-text-body-size);" { "Henry Geldenhuys" }
-                        div style="font-size: var(--mui-text-small-size); color: var(--mui-text-muted); margin-top: 0.25rem;" {
+                        div style="font-size: var(--mui-text-small-size); color: var(--mui-text-muted); margin-top: var(--mui-space-xs);" {
                             "Staff engineer at Kapable. Building Claude Conductor. Cape Town \u{2192} Remote."
                         }
                     }
@@ -94,7 +94,7 @@ pub fn showcase() -> Markup {
                         (render(Props { orientation: Orientation::Horizontal, decorative: true }))
                     }
                     div {
-                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: 0.25rem;" { "Settings" }
+                        div style="font-size: var(--mui-text-caption-size); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); margin-bottom: var(--mui-space-xs);" { "Settings" }
                         div style="display: flex; justify-content: space-between; font-size: var(--mui-text-small-size); padding: var(--mui-space-xs) 0;" {
                             span { "Email" }
                             span style="color: var(--mui-text-muted);" { "invoice@geldentech.ca" }
@@ -113,7 +113,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "\u{201c}OR\u{201d} label separates social sign-in from email + password." }
                 div style="display: flex; flex-direction: column; gap: var(--mui-space-md); max-width: 22rem;" {
                     button class="mui-btn mui-btn--outline mui-btn--md" style="width: 100%;" {
-                        span aria-hidden="true" style="margin-right: 0.5rem;" { "G" }
+                        span aria-hidden="true" style="margin-right: var(--mui-space-sm);" { "G" }
                         "Sign in with Google"
                     }
                     div style="display: flex; align-items: center; gap: var(--mui-space-md); margin: var(--mui-space-xs) 0;" {

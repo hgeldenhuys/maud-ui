@@ -110,6 +110,12 @@
   margin: var(--mui-space-sm) 0;
 }
 
+.mui-typography-table-wrapper table { width: 100%; border-collapse: collapse; }
+.mui-typography-table-wrapper :is(th, td) { text-align: start; padding: var(--mui-inset-cell) var(--mui-inset-control); border-block-end: 1px solid var(--mui-border); }
+.mui-typography-table-wrapper th { color: var(--mui-text-muted); font-weight: var(--mui-weight-medium); font-size: var(--mui-text-caption-size); }
+.mui-typography-table-wrapper td { font-size: var(--mui-text-small-size); }
+.mui-typography-table-wrapper [data-align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
+
 /* ── Eyebrow ──
    Small uppercase section label. Sits below the h1/h2 scale on purpose: it
    labels a band of content without claiming the visual weight of a heading. */

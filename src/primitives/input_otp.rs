@@ -114,7 +114,7 @@ pub fn showcase() -> Markup {
                     }))
                     div style="display:flex;justify-content:space-between;align-items:center;font-size: var(--mui-text-small-size);" {
                         span style="color:var(--mui-text-muted);" { "Code expires in 9:42" }
-                        button type="button" style="background:transparent;border:0;padding: 0;color:var(--mui-text);font-weight: var(--mui-weight-medium);cursor:pointer;text-decoration:underline;font-size: var(--mui-text-small-size);" {
+                        button type="button" class="mui-btn mui-btn--link" {
                             "Resend"
                         }
                     }

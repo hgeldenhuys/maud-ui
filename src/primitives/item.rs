@@ -257,7 +257,7 @@ pub fn showcase() -> Markup {
                         variant: Variant::Outline,
                         children: html! {
                             (media(MediaVariant::Image, html! {
-                                div style="width:100%;height:100%;background:linear-gradient(135deg,#2563eb,#60a5fa);" {}
+                                div style="width:100%;height:100%;background:var(--mui-accent-soft);" {}
                             }))
                             (content(html! {
                                 (title(html! { "Acme Corp launch brief" }))

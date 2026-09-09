@@ -67,7 +67,7 @@ pub fn preview() -> Markup {
         }))
         (crate::primitives::status_chip_group::render(crate::primitives::status_chip_group::Props {
             items: [("All", 48, crate::primitives::status_chip_group::Tone::Neutral), ("Arriving", 12, crate::primitives::status_chip_group::Tone::Info), ("Checked in", 24, crate::primitives::status_chip_group::Tone::Success), ("Needs review", 9, crate::primitives::status_chip_group::Tone::Warning), ("Failed", 3, crate::primitives::status_chip_group::Tone::Danger)].into_iter().map(|(label, count, tone)| crate::primitives::status_chip_group::Chip {
-                label: label.into(), href: format!("?status={label}"), count, tone,
+                label: label.into(), href: format!("?status={label}"), count: Some(count), tone,
             }).collect(), current: 1, ..Default::default()
         }))
         (crate::primitives::table::render(crate::primitives::table::Props {

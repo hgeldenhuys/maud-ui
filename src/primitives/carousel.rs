@@ -88,13 +88,13 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
-/// Render one product slide: SVG placeholder, name, price, CTA.
-fn product_slide(name: &str, price: &str, gradient: &str, glyph: &str) -> Markup {
+/// Render one product slide: product mark, name, price, component link.
+fn product_slide(name: &str, price: &str, glyph: &str) -> Markup {
     html! {
         div style="display:flex;flex-direction:column;gap: var(--mui-space-md);padding: var(--mui-space-md);" {
-            // Product image — SVG placeholder inside gradient
-            div style=(format!("background: linear-gradient(135deg, {}); border-radius: var(--mui-radius-lg); height: 10rem; display: flex; align-items: center; justify-content: center;", gradient)) {
-                span style="font-size: var(--mui-text-display-size);filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));" { (glyph) }
+            // Neutral product placeholder follows the active palette.
+            div style="background: var(--mui-bg-input); color: var(--mui-text-secondary); border-radius: var(--mui-radius-lg); height: 10rem; display: flex; align-items: center; justify-content: center;" {
+                span style="font-size: var(--mui-text-display-size);" { (glyph) }
             }
             div style="display:flex;justify-content:space-between;align-items:flex-start;gap: var(--mui-space-sm);" {
                 div style="min-width:0;" {
@@ -103,8 +103,8 @@ fn product_slide(name: &str, price: &str, gradient: &str, glyph: &str) -> Markup
                 }
                 span style="font-size: var(--mui-text-body-size);font-weight: var(--mui-weight-heading);" { (price) }
             }
-            button type="button" style="align-self:flex-start;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text);background:transparent;border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-md);padding: var(--mui-inset-tight) var(--mui-space-md);cursor:pointer;" {
-                "View details →"
+            a href="/card" class="mui-btn mui-btn--outline mui-btn--sm" style="align-self:flex-start;" {
+                "View card pattern →"
             }
         }
     }
@@ -120,10 +120,10 @@ pub fn showcase() -> Markup {
                 (render(Props {
                     id: "demo-carousel-products".to_string(),
                     items: vec![
-                        product_slide("Aurora Wireless Headphones", "$149", "#3b82f6, #6366f1", "\u{1F3A7}"),
-                        product_slide("Orbit Smart Watch", "$249", "#8b5cf6, #ec4899", "\u{231A}"),
-                        product_slide("Nimbus Desk Lamp", "$79", "#f59e0b, #ef4444", "\u{1F4A1}"),
-                        product_slide("Meridian Leather Wallet", "$64", "#10b981, #3b82f6", "\u{1F45B}"),
+                        product_slide("Aurora Wireless Headphones", "$149", "AU"),
+                        product_slide("Orbit Smart Watch", "$249", "OR"),
+                        product_slide("Nimbus Desk Lamp", "$79", "NI"),
+                        product_slide("Meridian Leather Wallet", "$64", "ME"),
                     ],
                     show_dots: true,
                     show_arrows: true,
@@ -145,7 +145,7 @@ pub fn showcase() -> Markup {
                                     "\u{201C}Charging speed is absurd. Went from 0 to 80% during my morning coffee.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:linear-gradient(135deg,#14b8a6,#22c55e);color:#fff;display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "SM" }
+                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "SM" }
                                     div {
                                         p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Sofia Martinez" }
                                         p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
@@ -159,7 +159,7 @@ pub fn showcase() -> Markup {
                                     "\u{201C}Sound isolation is the best I've tried under $200. Worth every penny.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:linear-gradient(135deg,#a855f7,#6366f1);color:#fff;display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "DK" }
+                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "DK" }
                                     div {
                                         p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Daniel Kim" }
                                         p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 5 stars" }
@@ -173,7 +173,7 @@ pub fn showcase() -> Markup {
                                     "\u{201C}Returned two other pairs before this one. Comfortable for full workdays.\u{201D}"
                                 }
                                 div style="display:flex;align-items:center;gap: var(--mui-inset-cell);margin-top:auto;" {
-                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:linear-gradient(135deg,#f43f5e,#f59e0b);color:#fff;display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "AP" }
+                                    div style="width:2rem;height:2rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);color:var(--mui-text-secondary);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-heading);" { "AP" }
                                     div {
                                         p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { "Amelia Park" }
                                         p style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" { "Verified buyer \u{00B7} 4 stars" }

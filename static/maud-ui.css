@@ -56,6 +56,11 @@
   --mui-header-height: 3.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   --mui-control-height: 2.25rem;
+  --mui-status-chip-height: 1.875rem;
+  --mui-status-chip-label-size: 0.8125rem;
+  --mui-status-chip-count-height: 1.125rem;
+  --mui-status-chip-count-size: 0.6875rem;
+  --mui-badge-height: 1.375rem;
   --mui-touch-target: 2.75rem;
   --mui-icon-size: 1rem;
   --mui-page-gutter: 1.5rem;
@@ -534,7 +539,7 @@ dialog.mui-alert-dialog::backdrop {
   height: 0.75rem;
   border-radius: var(--mui-radius-full);
   border: 2px solid var(--mui-bg-card);
-  background: var(--mui-success, #10b981);
+  background: var(--mui-success);
   color: var(--mui-bg-card);
   display: flex;
   align-items: center;
@@ -584,7 +589,7 @@ dialog.mui-alert-dialog::backdrop {
   align-items: center;
 }
 .mui-avatar-group .mui-avatar {
-  margin-left: -0.5rem;
+  margin-inline-start: calc(-1 * var(--mui-space-sm));
   border: 2px solid var(--mui-bg-card);
   box-sizing: content-box;
 }
@@ -603,14 +608,15 @@ dialog.mui-alert-dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 1.375rem;
-  padding: 0 var(--mui-inset-cell);
+  box-sizing: border-box;
+  height: var(--mui-badge-height);
+  padding: 0 var(--mui-space-sm);
   font-size: var(--mui-text-caption-size);
   font-weight: var(--mui-weight-medium);
   line-height: var(--mui-leading-tight);
   white-space: nowrap;
   border: 1px solid transparent;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-full);
   transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease);
 }
 .mui-badge--default {
@@ -623,32 +629,38 @@ dialog.mui-alert-dialog::backdrop {
   color: var(--mui-text-muted);
 }
 .mui-badge--success {
-  background-color: var(--mui-success);
-  color: var(--mui-success-fg);
+  background-color: var(--mui-success-bg);
+  border-color: var(--mui-success-border);
+  color: var(--mui-success-text);
 }
 .mui-badge--warning {
-  background-color: var(--mui-warning);
-  color: var(--mui-warning-fg);
+  background-color: var(--mui-warning-bg);
+  border-color: var(--mui-warning-border);
+  color: var(--mui-warning-text);
 }
 .mui-badge--danger {
-  background-color: var(--mui-danger);
-  color: var(--mui-danger-fg);
+  background-color: var(--mui-danger-bg);
+  border-color: var(--mui-danger-border);
+  color: var(--mui-danger-text);
 }
 .mui-badge--info {
-  background-color: var(--mui-info);
-  color: var(--mui-info-fg);
+  background-color: var(--mui-info-bg);
+  border-color: var(--mui-info-border);
+  color: var(--mui-info-text);
 }
 .mui-badge--accent {
   background-color: var(--mui-accent);
   color: var(--mui-accent-fg);
 }
 .mui-badge--violet {
-  background-color: var(--mui-violet);
-  color: var(--mui-violet-fg);
+  background-color: var(--mui-violet-bg);
+  border-color: var(--mui-violet-border);
+  color: var(--mui-violet-text);
 }
 .mui-badge--rose {
-  background-color: var(--mui-rose);
-  color: var(--mui-rose-fg);
+  background-color: var(--mui-rose-bg);
+  border-color: var(--mui-rose-border);
+  color: var(--mui-rose-text);
 }
 .mui-badge--outline {
   background-color: transparent;
@@ -669,7 +681,7 @@ dialog.mui-alert-dialog::backdrop {
   color: var(--mui-accent);
   padding: 0;
   height: auto;
-  text-decoration: underline;
+  text-decoration: none;
 }
 .mui-badge[data-icon=inline-start] {
   gap: var(--mui-space-xs);
@@ -682,7 +694,7 @@ dialog.mui-alert-dialog::backdrop {
   height: 1.625rem;
   padding: 0 var(--mui-space-sm);
   gap: var(--mui-inset-tight);
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-full);
   border-color: var(--mui-border);
   background-color: transparent;
 }
@@ -944,7 +956,7 @@ dialog.mui-alert-dialog::backdrop {
 .mui-btn--danger {
   background: var(--mui-danger);
   border-color: var(--mui-danger);
-  color: var(--mui-danger-fg, #fff);
+  color: var(--mui-danger-fg);
   box-shadow: var(--mui-shadow-sm);
 }
 .mui-btn--danger:hover:not([aria-disabled=true]) {
@@ -1469,11 +1481,11 @@ dialog.mui-alert-dialog::backdrop {
   cursor: not-allowed;
 }
 .mui-checkbox--invalid .mui-checkbox__indicator {
-  border-color: var(--mui-danger, #dc2626);
-  box-shadow: 0 0 0 1px var(--mui-danger, #dc2626);
+  border-color: var(--mui-danger);
+  box-shadow: 0 0 0 1px var(--mui-danger);
 }
 .mui-checkbox--invalid .mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
-  outline-color: var(--mui-danger, #dc2626);
+  outline-color: var(--mui-danger);
 }
 .mui-checkbox__label {
   color: var(--mui-text);
@@ -1562,32 +1574,19 @@ dialog.mui-alert-dialog::backdrop {
   color: inherit;
 }
 :root,
-[data-theme=dark] {
-  --mui-code-keyword: #c586c0;
-  --mui-code-string: #ce9178;
-  --mui-code-number: #b5cea8;
-  --mui-code-comment: #6a9955;
-  --mui-code-type: #4ec9b0;
-  --mui-code-attr: #9cdcfe;
-  --mui-code-lifetime: #569cd6;
-  --mui-code-flag: #9cdcfe;
-  --mui-code-var: #dcdcaa;
-  --mui-code-bool: #569cd6;
-  --mui-code-null: #569cd6;
-  --mui-code-punct: inherit;
-}
+[data-theme=dark],
 [data-theme=light] {
-  --mui-code-keyword: #a626a4;
-  --mui-code-string: #50a14f;
-  --mui-code-number: #986801;
-  --mui-code-comment: #a0a1a7;
-  --mui-code-type: #c18401;
-  --mui-code-attr: #4078f2;
-  --mui-code-lifetime: #0184bc;
-  --mui-code-flag: #4078f2;
-  --mui-code-var: #e45649;
-  --mui-code-bool: #0184bc;
-  --mui-code-null: #0184bc;
+  --mui-code-keyword: var(--mui-violet-text);
+  --mui-code-string: var(--mui-success-text);
+  --mui-code-number: var(--mui-warning-text);
+  --mui-code-comment: var(--mui-text-muted);
+  --mui-code-type: var(--mui-info-text);
+  --mui-code-attr: var(--mui-text-secondary);
+  --mui-code-lifetime: var(--mui-accent-text);
+  --mui-code-flag: var(--mui-info-text);
+  --mui-code-var: var(--mui-rose-text);
+  --mui-code-bool: var(--mui-warning-text);
+  --mui-code-null: var(--mui-text-muted);
   --mui-code-punct: inherit;
 }
 .mui-code__tok {
@@ -1919,7 +1918,7 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-combobox[aria-invalid=true] .mui-combobox__trigger,
 .mui-combobox__trigger[aria-invalid=true] {
-  border-color: var(--mui-danger, #dc2626);
+  border-color: var(--mui-danger);
 }
 @media (max-width: 40rem) {
   .mui-combobox {
@@ -2263,7 +2262,7 @@ dialog.mui-command::backdrop {
   background-color: var(--mui-danger-bg);
 }
 .mui-composer__status {
-  margin-top: 7px;
+  margin-top: var(--mui-space-sm);
   display: flex;
   gap: var(--mui-inset-control);
   font-family: var(--mui-font-mono);
@@ -2960,7 +2959,7 @@ dialog.mui-dialog::backdrop {
 
 /* static/styles/components/docs.css */
 .mui-docs {
-  margin-top: 2.5rem;
+  margin-top: var(--mui-space-xxl);
   padding-top: var(--mui-space-xxl);
   border-top: 1px solid var(--mui-border);
   max-width: 48rem;
@@ -7503,7 +7502,7 @@ dialog.mui-sheet--bottom {
 .mui-tool-call__section-label {
   font-size: var(--mui-text-caption-size);
   color: var(--mui-text-subtle);
-  margin-bottom: 0.1875rem;
+  margin-bottom: var(--mui-space-xs);
 }
 .mui-tool-call__section-body pre {
   margin: 0;
@@ -7743,6 +7742,27 @@ dialog.mui-sheet--bottom {
 .mui-typography-table-wrapper {
   overflow-x: auto;
   margin: var(--mui-space-sm) 0;
+}
+.mui-typography-table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.mui-typography-table-wrapper :is(th, td) {
+  text-align: start;
+  padding: var(--mui-inset-cell) var(--mui-inset-control);
+  border-block-end: 1px solid var(--mui-border);
+}
+.mui-typography-table-wrapper th {
+  color: var(--mui-text-muted);
+  font-weight: var(--mui-weight-medium);
+  font-size: var(--mui-text-caption-size);
+}
+.mui-typography-table-wrapper td {
+  font-size: var(--mui-text-small-size);
+}
+.mui-typography-table-wrapper [data-align=right] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 .mui-eyebrow {
   margin: 0;
@@ -8830,6 +8850,22 @@ dialog.mui-sheet--bottom {
   width: 100%;
   box-sizing: border-box;
 }
+.mui-block--shell__mobile-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mui-space-md);
+  padding: var(--mui-space-md);
+}
+.mui-block--shell__mobile-controls:empty {
+  display: none;
+}
+.mui-block--shell__mobile-controls .mui-page-header__search {
+  flex: none;
+  width: 100%;
+}
+.mui-block--shell__mobile-controls .mui-page-header__controls {
+  flex-wrap: wrap;
+}
 .mui-block--shell__nav {
   display: flex;
   flex: 1;
@@ -8871,6 +8907,7 @@ dialog.mui-sheet--bottom {
   height: 100%;
 }
 .mui-block--shell__nav-badge {
+  flex: none;
   border-radius: var(--mui-radius-full);
   background: var(--mui-bg-input);
   padding-inline: var(--mui-inset-tight);
@@ -8980,6 +9017,9 @@ dialog.mui-sheet--bottom {
   gap: var(--mui-space-xl);
 }
 .mui-workspace-example .mui-worklist-header {
+  margin: 0;
+}
+.mui-workspace-example .mui-status-chip-group {
   margin: 0;
 }
 .mui-workspace-example__table {
@@ -9130,25 +9170,32 @@ a.mui-btn--link:hover:not([aria-disabled=true]),
   display: flex;
   flex-wrap: wrap;
   gap: var(--mui-space-sm);
-  margin-block: var(--mui-space-lg);
+  margin: 0;
 }
 .mui-status-chip-group__chip {
   --mui-chip-tone: var(--mui-text-muted);
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: var(--mui-space-sm);
-  min-height: 2.75rem;
+  gap: var(--mui-inset-tight);
+  min-height: var(--mui-status-chip-height);
   max-width: 100%;
-  padding: var(--mui-space-sm) var(--mui-space-md);
+  padding: var(--mui-space-xs) var(--mui-inset-cell);
   border: 1px solid var(--mui-border-control);
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-full);
   background: var(--mui-bg-card);
   color: var(--mui-text);
-  font-size: var(--mui-text-small-size);
+  font-size: var(--mui-status-chip-label-size);
   line-height: var(--mui-leading-small);
   text-decoration: none;
   transition: background var(--mui-transition);
+}
+.mui-status-chip-group + .mui-status-chip-group,
+.mui-status-chip-group + .mui-showcase__caption {
+  margin-block-start: var(--mui-space-lg);
+}
+.mui-worklist-header + .mui-status-chip-group {
+  margin-block-end: var(--mui-space-lg);
 }
 .mui-status-chip-group__chip[data-tone=info] {
   --mui-chip-tone: var(--mui-info-text);
@@ -9167,7 +9214,7 @@ a.mui-btn--link:hover:not([aria-disabled=true]),
 }
 .mui-status-chip-group__chip[aria-current] {
   border-color: var(--mui-chip-tone);
-  box-shadow: inset 0 -2px var(--mui-chip-tone);
+  background: var(--mui-accent-soft);
   font-weight: var(--mui-weight-heading);
 }
 .mui-status-chip-group__label {
@@ -9186,11 +9233,17 @@ a.mui-btn--link:hover:not([aria-disabled=true]),
   color: var(--mui-chip-tone);
   background: var(--mui-bg-input);
   border-radius: var(--mui-radius-full);
-  font-size: var(--mui-text-caption-size);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mui-status-chip-count-size);
   font-weight: var(--mui-weight-medium);
   font-variant-numeric: tabular-nums;
-  min-width: 1.5rem;
-  padding: var(--mui-space-2xs) 0.4375rem;
+  height: var(--mui-status-chip-count-height);
+  min-width: var(--mui-status-chip-count-height);
+  padding: 0 var(--mui-space-xs);
+  line-height: 1;
   text-align: center;
   flex: none;
 }
@@ -9715,12 +9768,6 @@ body {
   padding: var(--mui-space-xxl) var(--mui-space-xxl) var(--mui-space-lg);
   border-bottom: 1px solid var(--mui-border);
 }
-.mui-showcase__header h1 {
-  margin: 0 0 var(--mui-space-xs);
-  font-size: var(--mui-text-h2-size);
-  line-height: var(--mui-text-h2-leading);
-  letter-spacing: var(--mui-text-h2-tracking);
-}
 .mui-showcase {
   display: grid;
   gap: var(--mui-space-xxl);
@@ -10087,28 +10134,6 @@ a.mui-btn:focus,
   color: var(--mui-text-muted);
   font-size: var(--mui-text-small-size);
 }
-.mui-badge,
-.mui-status-chip-group__chip,
-.mui-status-chip-group__count {
-  border-radius: var(--mui-radius-full);
-}
-.mui-badge {
-  font-size: var(--mui-text-caption-size);
-  font-weight: var(--mui-weight-medium);
-  padding: var(--mui-space-2xs) var(--mui-space-sm);
-}
-.mui-status-chip-group__chip {
-  min-height: var(--mui-control-height);
-  padding: var(--mui-space-xs) var(--mui-space-md);
-}
-.mui-status-chip-group__chip[aria-current] {
-  background: var(--mui-accent-soft);
-  box-shadow: none;
-  border-color: var(--mui-chip-tone);
-}
-.mui-status-chip-group__count {
-  padding: 0 var(--mui-inset-tight);
-}
 th.mui-table__th {
   color: var(--mui-text-muted);
   font-weight: var(--mui-weight-medium);
@@ -10202,37 +10227,31 @@ td.mui-table__cell--numeric {
     animation-iteration-count: 1 !important;
   }
 }
-.mui-badge--info,
 .mui-alert--info {
   background: var(--mui-info-bg);
   border-color: var(--mui-info-border);
   color: var(--mui-info-text);
 }
-.mui-badge--success,
 .mui-alert--success {
   background: var(--mui-success-bg);
   border-color: var(--mui-success-border);
   color: var(--mui-success-text);
 }
-.mui-badge--warning,
 .mui-alert--warning {
   background: var(--mui-warning-bg);
   border-color: var(--mui-warning-border);
   color: var(--mui-warning-text);
 }
-.mui-badge--danger,
 .mui-alert--danger {
   background: var(--mui-danger-bg);
   border-color: var(--mui-danger-border);
   color: var(--mui-danger-text);
 }
-.mui-badge--violet,
 .mui-alert--violet {
   background: var(--mui-violet-bg);
   border-color: var(--mui-violet-border);
   color: var(--mui-violet-text);
 }
-.mui-badge--rose,
 .mui-alert--rose {
   background: var(--mui-rose-bg);
   border-color: var(--mui-rose-border);
@@ -10373,7 +10392,7 @@ td.mui-table__cell--numeric {
   transform: translateY(-50%);
   pointer-events: none;
 }
-.mui-page-header kbd {
+.mui-page-header__search kbd {
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-sm);
   padding: 0 var(--mui-space-xs);
@@ -10413,20 +10432,22 @@ td.mui-table__cell--numeric {
 }
 @media (max-width: 40rem) {
   .mui-page-header {
+    flex-wrap: wrap;
     gap: var(--mui-space-sm);
+    padding-block: var(--mui-space-xs);
+  }
+  .mui-page-header__context {
+    flex-basis: 100%;
+    min-height: var(--mui-control-height);
   }
   .mui-page-header__search {
-    flex: 0 1 6rem;
+    flex: 1 1 100%;
+  }
+  .mui-page-header__controls {
+    flex-wrap: wrap;
   }
   .mui-page-header__search kbd {
     display: none;
-  }
-  .mui-page-header__search-trigger {
-    gap: 0;
-    padding-inline: var(--mui-space-sm);
-  }
-  .mui-page-header__switchers :is(select, button) {
-    max-width: 5rem;
   }
   .mui-page-header__context .mui-breadcrumb__list > :not(:last-child) {
     display: none;

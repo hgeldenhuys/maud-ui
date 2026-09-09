@@ -42,6 +42,11 @@
   --mui-header-height: 3.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   --mui-control-height: 2.25rem;
+  --mui-status-chip-height: 1.875rem;
+  --mui-status-chip-label-size: 0.8125rem;
+  --mui-status-chip-count-height: 1.125rem;
+  --mui-status-chip-count-size: 0.6875rem;
+  --mui-badge-height: 1.375rem;
   --mui-touch-target: 2.75rem;
   --mui-icon-size: 1rem;
   --mui-page-gutter: 1.5rem;

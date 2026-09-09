@@ -88,12 +88,12 @@
 
 /* Invalid state — red ring on indicator, optional red label emphasis */
 .mui-checkbox--invalid .mui-checkbox__indicator {
-  border-color: var(--mui-danger, #dc2626);
-  box-shadow: 0 0 0 1px var(--mui-danger, #dc2626);
+  border-color: var(--mui-danger);
+  box-shadow: 0 0 0 1px var(--mui-danger);
 }
 
 .mui-checkbox--invalid .mui-checkbox__input:focus-visible + .mui-checkbox__indicator {
-  outline-color: var(--mui-danger, #dc2626);
+  outline-color: var(--mui-danger);
 }
 
 /* Label — 0.875rem, medium weight, leading-none */

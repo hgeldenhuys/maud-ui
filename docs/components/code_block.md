@@ -75,3 +75,6 @@ Message, Diff, ToolCall, StreamingCursor — CodeBlock is part of the AI-chat/ag
 ## Shadcn reference
 
 No shadcn equivalent — `code_block` is a custom AI-chat/agent-family primitive with no corresponding component in shadcn/ui.
+
+## Theme roles (0.9.1)
+The `--mui-code-*` properties now alias the shared text and semantic ink tokens instead of maintaining separate editor palettes. Comments use muted ink; keywords use violet, strings success, numbers warning, types and flags info, lifetimes accent, variables rose, and null muted. All eleven color roles pass 4.5:1 on the code surface across the eight gallery presets. Consumer overrides of `--mui-code-*` remain available.

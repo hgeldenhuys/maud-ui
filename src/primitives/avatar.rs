@@ -134,7 +134,7 @@ pub fn showcase() -> Markup {
                             fallback: "ON".to_string(),
                             size: Size::Md,
                         }))
-                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#22c55e;border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
+                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-success);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
                     // Away
                     span style="position:relative;display:inline-block;" {
@@ -144,7 +144,7 @@ pub fn showcase() -> Markup {
                             fallback: "AW".to_string(),
                             size: Size::Md,
                         }))
-                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:#eab308;border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
+                        span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-warning);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
                     // Offline (fallback)
                     span style="position:relative;display:inline-block;" {

@@ -72,7 +72,7 @@ pub fn showcase() -> Markup {
             // Loading button
             div {
                 p.mui-showcase__caption { "Loading button" }
-                div.mui-showcase__row style="gap:0.75rem" {
+                div.mui-showcase__row style="gap:var(--mui-space-md)" {
                     button type="button" class="mui-btn mui-btn--primary mui-btn--md" disabled style="opacity:0.7;cursor:not-allowed" {
                         (render(Props { size: Size::Sm, label: Some("Loading".into()) }))
                         "Loading..."
@@ -87,7 +87,7 @@ pub fn showcase() -> Markup {
             // Page loading — centered with label
             div {
                 p.mui-showcase__caption { "Page loading" }
-                div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap: var(--mui-space-md);padding: var(--mui-space-xxl);border:1px dashed var(--mui-border);border-radius:var(--mui-radius,0.5rem)" {
+                div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap: var(--mui-space-md);padding: var(--mui-space-xxl);border:1px dashed var(--mui-border);border-radius:var(--mui-radius-md)" {
                     (render(Props { size: Size::Lg, label: Some("Loading page".into()) }))
                     span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" { "Loading page..." }
                 }
@@ -96,7 +96,7 @@ pub fn showcase() -> Markup {
             // Inline status
             div {
                 p.mui-showcase__caption { "Inline status" }
-                div style="display:flex;flex-direction:column;gap:0.75rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-md)" {
                     span style="display:inline-flex;align-items:center;gap: var(--mui-space-sm);font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" {
                         (render(Props { size: Size::Sm, label: Some("Checking".into()) }))
                         "Checking for updates..."

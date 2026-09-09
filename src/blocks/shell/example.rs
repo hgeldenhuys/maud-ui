@@ -21,7 +21,7 @@ pub(super) fn content(id: &str) -> Markup {
             }))
             (chips::render(chips::Props {
                 items: [("All",4,chips::Tone::Neutral),("Arriving",2,chips::Tone::Info),("Checked in",1,chips::Tone::Success),("Needs review",1,chips::Tone::Warning)]
-                    .into_iter().enumerate().map(|(i,(label,count,tone))| chips::Chip { label: label.into(), count, tone, href: format!("#{id}-filter-{i}") }).collect(),
+                    .into_iter().enumerate().map(|(i,(label,count,tone))| chips::Chip { label: label.into(), count: Some(count), tone, href: format!("#{id}-filter-{i}") }).collect(),
                 ..Default::default()
             }))
             div class="mui-workspace-example__table" id=(format!("{id}-list")) {

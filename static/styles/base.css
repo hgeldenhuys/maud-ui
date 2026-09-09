@@ -44,7 +44,6 @@ body {
   padding: var(--mui-space-xxl) var(--mui-space-xxl) var(--mui-space-lg);
   border-bottom: 1px solid var(--mui-border);
 }
-.mui-showcase__header h1 { margin: 0 0 var(--mui-space-xs); font-size: var(--mui-text-h2-size);  line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
 
 .mui-showcase {
   display: grid;

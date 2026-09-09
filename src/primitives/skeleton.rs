@@ -69,7 +69,7 @@ pub fn showcase() -> Markup {
             // Loading tweet/post card
             div {
                 p.mui-showcase__caption { "Loading post" }
-                div style="display:flex;gap: var(--mui-space-md);padding: var(--mui-space-lg);max-width:24rem;border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-lg);" {
+                div style="display:flex;gap: var(--mui-space-md);padding: var(--mui-space-lg);max-width:24rem;border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);" {
                     // Avatar
                     (render(Props {
                         variant: Variant::Circle,
@@ -107,7 +107,7 @@ pub fn showcase() -> Markup {
                             height: None,
                         }))
                         // Action row
-                        div style="display:flex;gap: var(--mui-space-xl);margin-top:0.25rem;" {
+                        div style="display:flex;gap: var(--mui-space-xl);margin-top:var(--mui-space-xs);" {
                             (render(Props {
                                 variant: Variant::Text,
                                 width: Some("2rem".into()),
@@ -177,7 +177,7 @@ pub fn showcase() -> Markup {
             // Loading product card
             div {
                 p.mui-showcase__caption { "Loading product card" }
-                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:16rem;padding: var(--mui-space-md);border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-lg);" {
+                div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:16rem;padding: var(--mui-space-md);border:1px solid var(--mui-border);border-radius: var(--mui-radius-lg);" {
                     // Product image
                     (render(Props {
                         variant: Variant::Rect,
@@ -197,7 +197,7 @@ pub fn showcase() -> Markup {
                         height: Some("0.75rem".into()),
                     }))
                     // Price row
-                    div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.25rem;" {
+                    div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--mui-space-xs);" {
                         (render(Props {
                             variant: Variant::Text,
                             width: Some("4rem".into()),

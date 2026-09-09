@@ -96,3 +96,12 @@ pub mod breakpoints {
     pub const BELOW_LG: &str = "59.99rem";
     pub const BELOW_XL: &str = "63.99rem";
 }
+
+/// Compact status filters and table pills, shared by both palettes.
+pub mod status {
+    pub const CHIP_HEIGHT: &str = "1.875rem";
+    pub const CHIP_LABEL_SIZE: &str = "0.8125rem";
+    pub const CHIP_COUNT_HEIGHT: &str = "1.125rem";
+    pub const CHIP_COUNT_SIZE: &str = "0.6875rem";
+    pub const BADGE_HEIGHT: &str = "1.375rem";
+}

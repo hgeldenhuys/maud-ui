@@ -5,6 +5,37 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.9.1] — 2026-09-08 — Design defaults refinements
+
+Status filters now sit at 30px in both desktop and phone layouts: 13px labels, 18px count bubbles and 11px tabular digits. The group wraps without adding its own outer margins; table status badges stay 22px. Semantic badges and syntax highlighting use the shared palette.
+
+**Source migration:** `status_chip_group::Chip::count` is now `Option<u64>`; replace `count: n` with `count: Some(n)`. `None` emits no bubble or count announcement. Empty items emit nothing. Consuming apps should omit the group for an empty collection and use `Some(0)` only for a zero-result filter in a populated collection.
+
+The gallery header uses an opaque surface from the active document theme, including the landing. At ≤40rem the sidebar shell moves the original page-header search, actions and switchers into its existing drawer, retaining values, IDs, keyboard behavior and focus. Standalone/no-JS headers wrap controls below the title. The example shortens its destination to “Reservations” and removes the duplicate sidebar search; longer navigation labels retain a full title hint and a non-shrinking count.
+
+Removed 10 obsolete CSS rule blocks and replaced/removed 143 local style declarations in 34 source files. Six mixed badge/alert selectors now target alerts alone. Fixed stale token names, decorative demo gradients, an underlined chrome action, and raw typography-table headers. Raw color swatches, third-party data palettes and functional geometry remain deliberate exceptions. See [source audit](docs/design-r2-style-audit.json).
+
+All added or changed tokens follow. Existing shared palette, type-scale and spacing token values are unchanged; syntax roles now resolve through them.
+
+| Token | 0.9.0 (dark / light where different) | 0.9.1 |
+|---|---|---|
+| `--mui-status-chip-height` | absent; control default 36px | `1.875rem (30px)` |
+| `--mui-status-chip-label-size` | absent; small text 14px | `0.8125rem (13px)` |
+| `--mui-status-chip-count-height` | absent; automatic line box | `1.125rem (18px)` |
+| `--mui-status-chip-count-size` | absent; caption 12px | `0.6875rem (11px)` |
+| `--mui-badge-height` | absent; local 1.375rem | `1.375rem (22px)` |
+| `--mui-code-keyword` | #c586c0 / #a626a4 | `var(--mui-violet-text)` |
+| `--mui-code-string` | #ce9178 / #50a14f | `var(--mui-success-text)` |
+| `--mui-code-number` | #b5cea8 / #986801 | `var(--mui-warning-text)` |
+| `--mui-code-comment` | #6a9955 / #a0a1a7 | `var(--mui-text-muted)` |
+| `--mui-code-type` | #4ec9b0 / #c18401 | `var(--mui-info-text)` |
+| `--mui-code-attr` | #9cdcfe / #4078f2 | `var(--mui-text-secondary)` |
+| `--mui-code-lifetime` | #569cd6 / #0184bc | `var(--mui-accent-text)` |
+| `--mui-code-flag` | #9cdcfe / #4078f2 | `var(--mui-info-text)` |
+| `--mui-code-var` | #dcdcaa / #e45649 | `var(--mui-rose-text)` |
+| `--mui-code-bool` | #569cd6 / #0184bc | `var(--mui-warning-text)` |
+| `--mui-code-null` | #569cd6 / #0184bc | `var(--mui-text-muted)` |
+
 ## [0.9.0] — 2026-09-08 — Design defaults
 
 Designer-oriented defaults now carry across 81 primitives and 16 blocks: a neutral ink hierarchy, paired semantic palettes, a seven-role type scale, quiet links, consistent spacing/radii, two shadow levels and reduced-motion-safe interaction.

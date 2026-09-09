@@ -23,7 +23,7 @@ fn counted_filters_keep_native_navigation_one_current_and_escaped_labels() {
     .map(|tone| chips::Chip {
         label: "<script>guest</script>".into(),
         href: "/records?q=one&status=two".into(),
-        count: 0,
+        count: Some(0),
         tone,
     })
     .collect();

@@ -244,7 +244,7 @@ pub fn showcase() -> Markup {
                     div class="mui-field" {
                         label class="mui-field__label mui-label--disabled" for="pref-timezone" {
                             "Timezone"
-                            span style="font-weight: var(--mui-weight-normal);color:var(--mui-muted-foreground);margin-left:0.5rem;font-size: var(--mui-text-caption-size);" { "(locked by admin)" }
+                            span style="font-weight: var(--mui-weight-normal);color:var(--mui-text-muted);margin-left:var(--mui-space-sm);font-size: var(--mui-text-caption-size);" { "(locked by admin)" }
                         }
                         (render(Props {
                             name: "timezone".to_string(),
@@ -271,7 +271,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Individual select states shown in isolation." }
                 div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap: var(--mui-space-xl);" {
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Pre-selected" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Pre-selected" }
                         (render(Props {
                             name: "status".to_string(),
                             id: "anatomy-preselected".to_string(),
@@ -286,7 +286,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Placeholder" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Placeholder" }
                         (render(Props {
                             name: "priority".to_string(),
                             id: "anatomy-placeholder".to_string(),
@@ -301,7 +301,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Disabled option" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Disabled option" }
                         (render(Props {
                             name: "plan".to_string(),
                             id: "anatomy-disabled-opt".to_string(),
@@ -316,7 +316,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Fully disabled" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Fully disabled" }
                         (render(Props {
                             name: "role".to_string(),
                             id: "anatomy-disabled".to_string(),
@@ -332,7 +332,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Small size" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Small size" }
                         (render(Props {
                             name: "density".to_string(),
                             id: "anatomy-size-sm".to_string(),
@@ -348,7 +348,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div {
-                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:0.5rem;" { "Invalid state" }
+                        h3 style="font-size: var(--mui-text-small-size);margin-bottom:var(--mui-space-sm);" { "Invalid state" }
                         (render(Props {
                             name: "country".to_string(),
                             id: "anatomy-invalid".to_string(),

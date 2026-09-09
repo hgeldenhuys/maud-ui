@@ -2,8 +2,19 @@
   "use strict";
   const ui = window.MaudUI;
   if (!ui) return;
+  function focusSearch(target, source) {
+    const dialog = source.closest('dialog');
+    if (dialog?.open) {
+      // Run after navigation's focus restoration, outside the modal focus trap.
+      dialog.addEventListener('close', () => target.focus(), { once: true });
+      dialog.close();
+    } else target.focus();
+  }
   ui.behaviors["workspace-search"] = trigger => {
-    trigger.addEventListener("click", () => trigger.closest('.mui-block--shell')?.querySelector('.mui-worklist-header input[type="search"]')?.focus());
+    trigger.addEventListener("click", () => {
+      const target = trigger.closest('.mui-block--shell')?.querySelector('.mui-worklist-header input[type="search"]');
+      if (target) focusSearch(target, trigger);
+    });
   };
   ui.behaviors["page-search"] = input => {
     input.setAttribute('aria-keyshortcuts', 'Meta+K Control+K');
@@ -14,7 +25,7 @@
       if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k') return;
       const scope = event.target.closest('.mui-block--shell') || document;
       const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
-      if (target && target.getClientRects().length) { event.preventDefault(); target.focus(); }
+      if (target && target.getClientRects().length) { event.preventDefault(); focusSearch(target, event.target); }
     });
   }
   ui.behaviors["workspace-demo"] = demo => {

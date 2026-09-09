@@ -1,23 +1,19 @@
 /* Badge component — shadcn-quality solid-color status chips */
 
-/* Corner rides --mui-radius-sm, never a literal and never radius-full: a
-   consumer's brand decides how machined a badge reads, and some (Kapable)
-   reserve the full round for the logo mark, avatars and the concierge FAB
-   alone. Anything genuinely circular — a status dot, a spinner, a radio
-   indicator — keeps --mui-radius-full, because that is a circle and not a
-   chip. */
+/* Status pills stay 22px; explicit command chips keep their 26px size. */
 .mui-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 1.375rem;
-  padding: 0 var(--mui-inset-cell);
+  box-sizing: border-box;
+  height: var(--mui-badge-height);
+  padding: 0 var(--mui-space-sm);
   font-size: var(--mui-text-caption-size);
   font-weight: var(--mui-weight-medium);
   line-height: var(--mui-leading-tight);
   white-space: nowrap;
   border: 1px solid transparent;
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-full);
   transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
               color var(--mui-motion-fast) var(--mui-motion-ease);
 }
@@ -35,29 +31,32 @@
   color: var(--mui-text-muted);
 }
 
-/* Success — solid green fill; ink is a token, not a literal, so a consumer
-   whose palette puts a LIGHT green here can flip it (see --mui-*-fg). */
+/* Semantic statuses use a quiet tone surface and readable ink. */
 .mui-badge--success {
-  background-color: var(--mui-success);
-  color: var(--mui-success-fg);
+  background-color: var(--mui-success-bg);
+  border-color: var(--mui-success-border);
+  color: var(--mui-success-text);
 }
 
-/* Warning — solid amber fill */
+/* Warning */
 .mui-badge--warning {
-  background-color: var(--mui-warning);
-  color: var(--mui-warning-fg);
+  background-color: var(--mui-warning-bg);
+  border-color: var(--mui-warning-border);
+  color: var(--mui-warning-text);
 }
 
-/* Danger / destructive — solid red fill */
+/* Danger / destructive */
 .mui-badge--danger {
-  background-color: var(--mui-danger);
-  color: var(--mui-danger-fg);
+  background-color: var(--mui-danger-bg);
+  border-color: var(--mui-danger-border);
+  color: var(--mui-danger-text);
 }
 
-/* Info — solid blue fill */
+/* Info */
 .mui-badge--info {
-  background-color: var(--mui-info);
-  color: var(--mui-info-fg);
+  background-color: var(--mui-info-bg);
+  border-color: var(--mui-info-border);
+  color: var(--mui-info-text);
 }
 
 /* Accent — brand accent solid */
@@ -68,14 +67,16 @@
 
 /* Violet — taxonomy hue */
 .mui-badge--violet {
-  background-color: var(--mui-violet);
-  color: var(--mui-violet-fg);
+  background-color: var(--mui-violet-bg);
+  border-color: var(--mui-violet-border);
+  color: var(--mui-violet-text);
 }
 
 /* Rose — taxonomy hue */
 .mui-badge--rose {
-  background-color: var(--mui-rose);
-  color: var(--mui-rose-fg);
+  background-color: var(--mui-rose-bg);
+  border-color: var(--mui-rose-border);
+  color: var(--mui-rose-text);
 }
 
 /* Outline — transparent bg, border, text inherits */
@@ -102,7 +103,7 @@
   color: var(--mui-accent);
   padding: 0;
   height: auto;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* Inline-start icon — ensure gap between icon and label */
@@ -126,7 +127,7 @@
   height: 1.625rem;                 /* 26px */
   padding: 0 var(--mui-space-sm);
   gap: var(--mui-inset-tight);
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-radius-full);
   border-color: var(--mui-border);
   background-color: transparent;
 }

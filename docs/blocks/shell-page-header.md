@@ -26,4 +26,9 @@ page_header::render(Props {
 | switchers | Markup | empty | Caller-wired role, language, theme or account controls. |
 
 ## Composition and accessibility
-Pass these props as `sidebar::Props::page_header`. Use `app_header` for product-level navigation above the shell. `⌘K` / `Ctrl+K` focuses the native search when the behavior bundle is present. The native search always has a submit action; consumers supply the destination. Custom search markup owns its interaction. Search compresses and ancestor breadcrumbs hide on phones; current page and controls remain. Additional controls can make the minimum-height row taller, so keep switchers short and use a menu for secondary actions. The shell's Menu opens the same sidebar node in a native dialog below 60rem.
+Pass these props as `sidebar::Props::page_header`. Use `app_header` for product-level navigation above the shell. `⌘K` / `Ctrl+K` focuses the native search when the behavior bundle is present. The native search always has a submit action; consumers supply the destination. Custom search markup owns its interaction. Ancestor breadcrumbs hide on phones; search and other controls move into the shell drawer, or wrap below the title when used without a shell. Additional controls can make the minimum-height row taller, so keep switchers short and use a menu for secondary actions. The shell's Menu opens the same sidebar node in a native dialog below 60rem.
+
+## Phone layout (0.9.1)
+Inside `shell::sidebar`, at widths of 40rem and below, the original search and action/switcher controls move into the same navigation drawer. The header retains Menu and the current breadcrumb. No controls are cloned: form values, IDs and handlers survive closing the drawer and resizing. Returning above 40rem restores their original header order; a focused control follows that move. The example search shortcut closes the modal before focusing the guest field.
+
+Used on its own, or without JavaScript, this block wraps controls below the title instead of hiding them. Avoid duplicating the same search in a sidebar header.

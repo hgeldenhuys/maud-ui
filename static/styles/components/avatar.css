@@ -25,7 +25,7 @@
   height: 0.75rem;
   border-radius: var(--mui-radius-full);
   border: 2px solid var(--mui-bg-card);
-  background: var(--mui-success, #10b981);
+  background: var(--mui-success);
   color: var(--mui-bg-card);
   display: flex;
   align-items: center;
@@ -86,7 +86,7 @@
 }
 
 .mui-avatar-group .mui-avatar {
-  margin-left: -0.5rem;
+  margin-inline-start: calc(-1 * var(--mui-space-sm));
   border: 2px solid var(--mui-bg-card);
   box-sizing: content-box;
 }

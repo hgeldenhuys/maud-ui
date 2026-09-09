@@ -149,7 +149,7 @@
 .mui-btn--danger {
   background: var(--mui-danger);
   border-color: var(--mui-danger);
-  color: var(--mui-danger-fg, #fff);
+  color: var(--mui-danger-fg);
   box-shadow: var(--mui-shadow-sm);
 }
 

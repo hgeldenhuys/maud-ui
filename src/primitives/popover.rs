@@ -214,7 +214,7 @@ pub fn showcase() -> Markup {
                                     label.mui-label { "Height" }
                                     input.mui-input type="text" placeholder="e.g., 100px" {}
                                 }
-                                button.mui-btn.mui-btn--primary style="margin-top: 1rem;" {
+                                button.mui-btn.mui-btn--primary style="margin-top: var(--mui-space-lg);" {
                                     "Apply"
                                 }
                             }

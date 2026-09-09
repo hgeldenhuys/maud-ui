@@ -16,6 +16,7 @@ assert(matchesPreset(presets.emerald, "dark", emerald));
 assert(!matchesPreset(presets.emerald, "dark", { ...emerald, "mui-accent": "#ffffff" }));
 const css = readFileSync("static/styles/tokens.css", "utf8");
 const tokenValues = text => Object.fromEntries([...text.matchAll(/--(mui-[a-z0-9-]+):\s*([^;]+);/gi)].map(m => [m[1], m[2].trim()]));
+const syntax = tokenValues(readFileSync("static/styles/components/code_block.css", "utf8"));
 const shared = tokenValues(css.split(':root {')[1].split('\n}')[0]);
 const dark = { ...shared, ...tokenValues(css.split(':root,\n[data-theme="dark"] {')[1].split('\n}')[0]) };
 const light = { ...shared, ...tokenValues(css.split('[data-theme="light"] {')[1].split('\n}')[0]) };
@@ -41,6 +42,12 @@ for (const [name, preset] of Object.entries(presets)) {
       const ratio = contrast(tokens[boundary], tokens[surface]);
       if (ratio < 3) failures.push(`${name}: ${boundary} / ${surface} = ${ratio.toFixed(2)}`); checks++;
     }
+  }
+  for (const [role, value] of Object.entries(syntax)) {
+    if (value === 'inherit') continue;
+    const ratio = contrast(resolve(value, tokens), tokens['mui-bg-input']);
+    if (ratio < 4.5) failures.push(`${name}: ${role} / code surface = ${ratio.toFixed(2)}`);
+    checks++;
   }
   const activeRatio = contrast(tokens['mui-accent-text'], tokens['mui-accent-soft']);
   checks++; if (activeRatio < 4.5) failures.push(`${name}: active text/tint = ${activeRatio.toFixed(2)}`);

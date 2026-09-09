@@ -85,3 +85,6 @@ Alert, Button, Label, Tag.
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/badge
+
+## Status density (0.9.1)
+Default status badges use a 22px border box, 12px labels and the full radius. Semantic variants use the shared tone background/border/text triples in both themes. `Variant::Chip` remains an explicit 26px command chip; use the standard semantic variants for table statuses. Links stay undecorated in application chrome.

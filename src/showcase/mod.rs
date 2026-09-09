@@ -6918,12 +6918,12 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
 }
 
 .mui-gallery__tier {
-    margin-bottom: 3rem;
+    margin-bottom: var(--mui-space-3xl);
 }
 
 .mui-gallery__tier-header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
+    margin-bottom: var(--mui-space-xl);
+    padding-bottom: var(--mui-space-md);
     border-bottom: 1px solid var(--mui-border);
 }
 
@@ -6941,7 +6941,7 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
 
 .mui-gallery__component {
     padding: var(--mui-space-xl);
-    margin-bottom: 1rem;
+    margin-bottom: var(--mui-space-lg);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
@@ -6974,7 +6974,7 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
     gap: var(--mui-space-xs);
     font-size: var(--mui-text-small-size);
     color: var(--mui-text-muted);
-    margin-bottom: 1rem;
+    margin-bottom: var(--mui-space-lg);
 }
 .mui-gallery__breadcrumb a {
     color: var(--mui-text-subtle);
@@ -6985,7 +6985,7 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
     text-decoration: none;
 }
 
-.mui-gallery__back { padding-top: 1rem; }
+.mui-gallery__back { padding-top: var(--mui-space-lg); }
 
 /* ── Responsive: mobile drawer ──────────────────────────────────────
  * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
@@ -7146,7 +7146,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     gap: var(--mui-space-lg);
-    margin-top: 0.5rem;
+    margin-top: var(--mui-space-sm);
 }
 .mui-showcase__block-card {
     display: flex;
@@ -7272,7 +7272,7 @@ html { scroll-behavior: smooth; }
     display: flex;
     flex-direction: column;
     gap: var(--mui-space-sm);
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--mui-space-md);
 }
 .mui-swatch__scale-label {
     font-size: var(--mui-text-caption-size);
@@ -7315,8 +7315,8 @@ html { scroll-behavior: smooth; }
 /* ── Sticky compact page header ─────────────────────────────────────
  * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
  * + a two-row "brand above nav" layout). The new header is a single
- * row with brand · nav · tools, pinned to the top with a blurred
- * backdrop. --mui-header-h is published as a custom property so the
+ * row with brand · nav · tools, on an opaque surface from the document
+ * theme. --mui-header-h is published as a custom property so the
  * sidebar and section anchors can offset accurately. */
 :root { --mui-header-h: 3.25rem; }
 
@@ -7325,16 +7325,8 @@ html { scroll-behavior: smooth; }
     top: 0;
     z-index: var(--mui-layer-overlay);
     padding: var(--mui-space-sm) var(--mui-space-20) !important;
-    background: color-mix(in srgb, var(--mui-bg) 82%, transparent);
-    -webkit-backdrop-filter: saturate(150%) blur(14px);
-    backdrop-filter: saturate(150%) blur(14px);
-}
-.mui-showcase__header h1 {
-    /* the old dist rule styled an <h1> inside the header; we no
-     * longer render one, but keep this reset in case something else
-     * hits it. */
-    font-size: var(--mui-text-body-size);
-    margin: 0;
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
 }
 
 .mui-showcase__header-inner {
@@ -7503,8 +7495,8 @@ html { scroll-behavior: smooth; }
     display: inline-flex;
     gap: var(--mui-space-xs);
     align-items: center;
-    margin-left: 0.25rem;
-    padding-left: 0.5rem;
+    margin-left: var(--mui-space-xs);
+    padding-left: var(--mui-space-sm);
     border-left: 1px solid var(--mui-border);
 }
 
@@ -7528,7 +7520,7 @@ html { scroll-behavior: smooth; }
 .mui-gallery__component,
 .mui-gallery__breadcrumb,
 [id] {
-    scroll-margin-top: calc(var(--mui-header-h) + 0.75rem);
+    scroll-margin-top: calc(var(--mui-header-h) + var(--mui-space-md));
 }
 
 /* Two short rows on phones. Site links move into the existing menu. */
@@ -7545,7 +7537,7 @@ html { scroll-behavior: smooth; }
     .mui-showcase__tool-btn { width: 2.75rem; height: 2.75rem; }
     .mui-showcase__palette-btn { display: none; }
     .mui-showcase__header-inner > .mui-showcase__nav { grid-column: 1 / -1; }
-    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 var(--mui-space-md) var(--mui-space-md); margin-bottom: 0.75rem; border-bottom: 1px solid var(--mui-border); }
+    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 var(--mui-space-md) var(--mui-space-md); margin-bottom: var(--mui-space-md); border-bottom: 1px solid var(--mui-border); }
     .mui-gallery__sidebar > .mui-showcase__nav > .mui-btn,
     .mui-gallery__sidebar .mui-gallery__nav-advanced-summary { min-height: 2.75rem; justify-content: flex-start; width: 100%; }
     .mui-gallery__sidebar .mui-gallery__nav-advanced-menu { position: static; min-width: 0; max-height: none; box-shadow: none; }
@@ -7564,7 +7556,7 @@ html { scroll-behavior: smooth; }
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--mui-space-xl);
-    margin-bottom: 1rem;
+    margin-bottom: var(--mui-space-lg);
 }
 
 /* ── Mobile overflow hardening ───────────────────────────────────────
@@ -7652,8 +7644,7 @@ html { scroll-behavior: smooth; }
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
-                0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--mui-shadow-lg);
 }
 
 .mui-gallery__nav-advanced-group {
@@ -7679,7 +7670,7 @@ html { scroll-behavior: smooth; }
     display: flex;
     flex-direction: column;
     gap: var(--mui-space-2xs);
-    padding: 0.4375rem var(--mui-space-md);
+    padding: var(--mui-space-sm) var(--mui-space-md);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text);
     text-decoration: none;
@@ -7785,7 +7776,7 @@ fn palette_index_js() -> String {
 fn showcase_js() -> &'static str {
     r#"
 (function() {
-    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+    // The gallery theme is owned by the document toggle below.
 
     // ── Keep the current component visible in the sidebar ──────────
     // The sidebar lists 72 items in tier order and scrolls independently.

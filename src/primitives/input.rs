@@ -145,7 +145,7 @@ pub fn showcase() -> Markup {
                             aria_describedby: Some("demo-password-hint".into()),
                             ..Default::default()
                         }))
-                        p id="demo-password-hint" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);margin: 0;" {
+                        p id="demo-password-hint" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                             "Use at least 8 characters with a mix of letters and numbers."
                         }
                     }
@@ -158,7 +158,7 @@ pub fn showcase() -> Markup {
                             aria_describedby: Some("demo-avatar-hint".into()),
                             ..Default::default()
                         }))
-                        p id="demo-avatar-hint" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);margin: 0;" {
+                        p id="demo-avatar-hint" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);margin: 0;" {
                             "PNG or JPG, up to 2MB."
                         }
                     }
@@ -171,7 +171,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Each HTML input type rendered with a contextual placeholder." }
                 div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap: var(--mui-space-md);" {
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Text" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Text" }
                         (render(Props {
                             name: "type-text".into(),
                             input_type: InputType::Text,
@@ -180,7 +180,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Email" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Email" }
                         (render(Props {
                             name: "type-email".into(),
                             input_type: InputType::Email,
@@ -189,7 +189,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Password" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Password" }
                         (render(Props {
                             name: "type-password".into(),
                             input_type: InputType::Password,
@@ -198,7 +198,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "URL" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "URL" }
                         (render(Props {
                             name: "type-url".into(),
                             input_type: InputType::Url,
@@ -207,7 +207,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Phone" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Phone" }
                         (render(Props {
                             name: "type-tel".into(),
                             input_type: InputType::Tel,
@@ -216,7 +216,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Search" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Search" }
                         (render(Props {
                             name: "type-search".into(),
                             input_type: InputType::Search,
@@ -225,7 +225,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Number" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Number" }
                         (render(Props {
                             name: "type-number".into(),
                             input_type: InputType::Number,
@@ -234,7 +234,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "File" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "File" }
                         (render(Props {
                             name: "type-file".into(),
                             input_type: InputType::File,
@@ -250,7 +250,7 @@ pub fn showcase() -> Markup {
                 p.mui-showcase__caption { "Default, populated, invalid, disabled, and read-only." }
                 div style="display:flex;flex-direction:column;gap: var(--mui-space-md);max-width:24rem;" {
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Default" }
+                        span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Default" }
                         (render(Props {
                             name: "state-default".into(),
                             placeholder: "Enter a value...".into(),
@@ -258,7 +258,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        label for="state-value" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "With value" }
+                        label for="state-value" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "With value" }
                         (render(Props {
                             name: "state-value".into(),
                             id: "state-value".into(),
@@ -268,7 +268,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        label for="state-invalid" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Invalid" }
+                        label for="state-invalid" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Invalid" }
                         (render(Props {
                             name: "state-invalid".into(),
                             id: "state-invalid".into(),
@@ -278,10 +278,10 @@ pub fn showcase() -> Markup {
                             aria_describedby: Some("state-invalid-error".into()),
                             ..Default::default()
                         }))
-                        span id="state-invalid-error" style="font-size: var(--mui-text-caption-size);color:var(--mui-destructive,#ef4444);" { "Please enter a valid email address." }
+                        span id="state-invalid-error" style="font-size: var(--mui-text-caption-size);color:var(--mui-danger-text);" { "Please enter a valid email address." }
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        label for="state-disabled" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Disabled" }
+                        label for="state-disabled" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Disabled" }
                         (render(Props {
                             name: "state-disabled".into(),
                             id: "state-disabled".into(),
@@ -291,7 +291,7 @@ pub fn showcase() -> Markup {
                         }))
                     }
                     div style="display:flex;flex-direction:column;gap: var(--mui-space-xs);" {
-                        label for="state-readonly" style="font-size: var(--mui-text-caption-size);color:var(--mui-muted-fg,#888);" { "Read-only" }
+                        label for="state-readonly" style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);" { "Read-only" }
                         (render(Props {
                             name: "state-readonly".into(),
                             id: "state-readonly".into(),

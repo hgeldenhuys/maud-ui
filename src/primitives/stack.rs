@@ -363,7 +363,7 @@ pub fn showcase() -> Markup {
                     children: html! { (cell("First")) (cell("Second")) (cell("Third")) },
                     ..Default::default()
                 }))
-                p.mui-showcase__caption style="margin-top:1rem;" { "Horizontal" }
+                p.mui-showcase__caption style="margin-top:var(--mui-space-lg);" { "Horizontal" }
                 (render(Props {
                     direction: Direction::Horizontal,
                     children: html! { (cell("First")) (cell("Second")) (cell("Third")) },
@@ -384,7 +384,7 @@ pub fn showcase() -> Markup {
                     (Space::Xxl, "Xxl \u{2014} 2rem"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="margin-bottom:0.75rem;" {
+                    div style="margin-bottom:var(--mui-space-md);" {
                         (render(Props {
                             direction: Direction::Horizontal,
                             gap,
@@ -406,7 +406,7 @@ pub fn showcase() -> Markup {
                     (Align::Baseline, "Baseline"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="height:5rem;border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:0.75rem;" {
+                    div style="height:5rem;border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:var(--mui-space-md);" {
                         (render(Props {
                             direction: Direction::Horizontal,
                             align,
@@ -434,7 +434,7 @@ pub fn showcase() -> Markup {
                     (Justify::Evenly, "Evenly"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:0.75rem;" {
+                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:var(--mui-space-md);" {
                         (render(Props {
                             direction: Direction::Horizontal,
                             justify,
@@ -497,7 +497,7 @@ pub fn showcase() -> Markup {
                         ..Default::default()
                     }))
                 }))
-                p.mui-showcase__caption style="margin-top:1rem;" { "stack::vertical(\u{2026}) inside a card body" }
+                p.mui-showcase__caption style="margin-top:var(--mui-space-lg);" { "stack::vertical(\u{2026}) inside a card body" }
                 (card::render(card::Props {
                     title: Some("Deployment".into()),
                     description: Some("Composed with nested stacks \u{2014} no inline flex styles.".into()),
@@ -547,7 +547,7 @@ pub fn showcase() -> Markup {
                     },
                     ..Default::default()
                 }))
-                p.mui-showcase__caption style="margin-top:1rem;" { "tag: Tag::Section \u{2014} requires aria_label (debug_assert)" }
+                p.mui-showcase__caption style="margin-top:var(--mui-space-lg);" { "tag: Tag::Section \u{2014} requires aria_label (debug_assert)" }
                 (render(Props {
                     tag: Tag::Section,
                     padding: Space::Md,

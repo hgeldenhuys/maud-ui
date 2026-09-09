@@ -27,7 +27,9 @@ impl Tone {
 pub struct Chip {
     pub label: String,
     pub href: String,
-    pub count: u64,
+    /// None means unknown: no visible bubble or count announcement is rendered.
+    /// Some(0) is a known empty filter in a non-empty collection.
+    pub count: Option<u64>,
     pub tone: Tone,
 }
 
@@ -50,6 +52,10 @@ impl Default for Props {
 }
 
 pub fn render(props: Props) -> Markup {
+    // The caller passes no filters for an empty collection, leaving its empty state alone.
+    if props.items.is_empty() {
+        return html! {};
+    }
     let current = if props.current < props.items.len() {
         props.current
     } else {
@@ -62,8 +68,10 @@ pub fn render(props: Props) -> Markup {
                     aria-current=[(index == current).then_some("page")] {
                     span class="mui-status-chip-group__mark" aria-hidden="true" { "✓" }
                     span class="mui-status-chip-group__label" { (item.label) }
-                    span class="mui-status-chip-group__count" aria-hidden="true" { (item.count) }
-                    span class="mui-sr-only" { " " (item.count) " items" }
+                    @if let Some(count) = item.count {
+                        span class="mui-status-chip-group__count" aria-hidden="true" { (count) }
+                        span class="mui-sr-only" { " " (count) " items" }
+                    }
                 }
             }
         }
@@ -79,15 +87,16 @@ pub fn showcase() -> Markup {
                 ("Checked in", 24, Tone::Success), ("Needs review", 9, Tone::Warning),
                 ("Failed", 3, Tone::Danger),
             ].into_iter().enumerate().map(|(i, (label, count, tone))| Chip {
-                label: label.into(), href: format!("/status_chip_group?status={i}"), count, tone,
+                label: label.into(), href: format!("/status_chip_group?status={i}"), count: Some(count), tone,
             }).collect(),
             current: 1, ..Default::default()
         }))
-        p class="mui-showcase__caption" { "Long labels and large counts wrap as whole chips. Zero is a real count." }
+        p class="mui-showcase__caption" { "Known zero filters show 0. Unknown counts have no bubble. Hide the group when the collection itself is empty." }
         (render(Props {
             items: vec![
-                Chip { label: "Awaiting confirmation from the guest".into(), href: "?status=waiting".into(), count: 10482, tone: Tone::Warning },
-                Chip { label: "Cancelled".into(), href: "?status=cancelled".into(), count: 0, tone: Tone::Neutral },
+                Chip { label: "Awaiting confirmation from the guest".into(), href: "?status=waiting".into(), count: Some(10482), tone: Tone::Warning },
+                Chip { label: "Cancelled".into(), href: "?status=cancelled".into(), count: Some(0), tone: Tone::Neutral },
+                Chip { label: "Pending review".into(), href: "?status=pending".into(), count: None, tone: Tone::Info },
             ], ..Default::default()
         }))
     }

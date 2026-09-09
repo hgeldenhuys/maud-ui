@@ -43,11 +43,6 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 .mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
 .mui-card__title { font-size: var(--mui-text-h3-size); font-weight: var(--mui-weight-heading); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 .mui-card__description { color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
-.mui-badge, .mui-status-chip-group__chip, .mui-status-chip-group__count { border-radius: var(--mui-radius-full); }
-.mui-badge { font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); padding: var(--mui-space-2xs) var(--mui-space-sm); }
-.mui-status-chip-group__chip { min-height: var(--mui-control-height); padding: var(--mui-space-xs) var(--mui-space-md); }
-.mui-status-chip-group__chip[aria-current] { background: var(--mui-accent-soft); box-shadow: none; border-color: var(--mui-chip-tone); }
-.mui-status-chip-group__count { padding: 0 var(--mui-inset-tight); }
 
 /* Explicit table selectors win against generic prose/table rules. */
 th.mui-table__th { color: var(--mui-text-muted); font-weight: var(--mui-weight-medium); text-align: start; font-size: var(--mui-text-caption-size); line-height: var(--mui-leading-small); height: auto; padding: var(--mui-inset-cell) var(--mui-inset-control); }
@@ -77,17 +72,17 @@ th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; fo
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; animation-duration: 0s !important; animation-iteration-count: 1 !important; }
 }
 
-.mui-badge--info, .mui-alert--info { background: var(--mui-info-bg); border-color: var(--mui-info-border); color: var(--mui-info-text); }
+.mui-alert--info { background: var(--mui-info-bg); border-color: var(--mui-info-border); color: var(--mui-info-text); }
 
-.mui-badge--success, .mui-alert--success { background: var(--mui-success-bg); border-color: var(--mui-success-border); color: var(--mui-success-text); }
+.mui-alert--success { background: var(--mui-success-bg); border-color: var(--mui-success-border); color: var(--mui-success-text); }
 
-.mui-badge--warning, .mui-alert--warning { background: var(--mui-warning-bg); border-color: var(--mui-warning-border); color: var(--mui-warning-text); }
+.mui-alert--warning { background: var(--mui-warning-bg); border-color: var(--mui-warning-border); color: var(--mui-warning-text); }
 
-.mui-badge--danger, .mui-alert--danger { background: var(--mui-danger-bg); border-color: var(--mui-danger-border); color: var(--mui-danger-text); }
+.mui-alert--danger { background: var(--mui-danger-bg); border-color: var(--mui-danger-border); color: var(--mui-danger-text); }
 
-.mui-badge--violet, .mui-alert--violet { background: var(--mui-violet-bg); border-color: var(--mui-violet-border); color: var(--mui-violet-text); }
+.mui-alert--violet { background: var(--mui-violet-bg); border-color: var(--mui-violet-border); color: var(--mui-violet-text); }
 
-.mui-badge--rose, .mui-alert--rose { background: var(--mui-rose-bg); border-color: var(--mui-rose-border); color: var(--mui-rose-text); }
+.mui-alert--rose { background: var(--mui-rose-bg); border-color: var(--mui-rose-border); color: var(--mui-rose-text); }
 
 /* Prose decoration stays quiet and stable; embedded controls retain their role. */
 .mui-prose a:not(.mui-btn), .mui-docs a:not(.mui-btn) { color: var(--mui-link); text-decoration: underline; text-decoration-color: var(--mui-border-control); }

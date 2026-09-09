@@ -41,5 +41,5 @@ for (const [url, file] of [['/css/maud-ui.css', 'static/maud-ui.css'], ['/js/mau
   assets.push({ path: url, bytes: bytes.length, matches: file });
 }
 for (const page of pages) assert.equal(page.duplicate_ids.length, 0, `${page.path}: duplicate IDs ${page.duplicate_ids}`);
-writeFileSync('docs/design-http-audit.json', JSON.stringify({ origin, pages: pages.length, assets, unique_inline_scripts: scripts.size, results: pages }, null, 2) + '\n');
+writeFileSync(process.argv[3] || 'docs/design-http-audit.json', JSON.stringify({ origin, pages: pages.length, assets, unique_inline_scripts: scripts.size, results: pages }, null, 2) + '\n');
 console.log(`${pages.length} pages returned 200 with unique IDs; ${assets.length} assets byte-exact; ${scripts.size} unique inline scripts parsed.`);

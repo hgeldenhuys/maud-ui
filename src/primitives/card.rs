@@ -281,7 +281,7 @@ pub fn showcase() -> Markup {
                     size: Size::Sm,
                     children: html! {
                         div style="height:0.5rem;background:var(--mui-border);border-radius: var(--mui-radius-full);overflow:hidden;" {
-                            div style="width:41%;height:100%;background:var(--mui-primary, #2563eb);" {}
+                            div style="width:41%;height:100%;background:var(--mui-accent);" {}
                         }
                     },
                     ..Default::default()

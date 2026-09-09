@@ -119,7 +119,7 @@
 .mui-tool-call__section-label {
   font-size: var(--mui-text-caption-size);
   color: var(--mui-text-subtle);
-  margin-bottom: 0.1875rem;
+  margin-bottom: var(--mui-space-xs);
 }
 
 .mui-tool-call__section-body pre {

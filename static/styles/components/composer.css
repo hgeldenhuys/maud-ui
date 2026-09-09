@@ -179,7 +179,7 @@
 
 /* The "beside" data line — mono, 11px, deeply muted. */
 .mui-composer__status {
-  margin-top: 7px;
+  margin-top: var(--mui-space-sm);
   display: flex;
   gap: var(--mui-inset-control);
   font-family: var(--mui-font-mono);

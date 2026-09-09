@@ -1,0 +1,338 @@
+{
+  "baseline": "4c99f0607d0550a72001dc25dc6bcbaea5b11507",
+  "scope": "Every primitive/block and canonical stylesheet, plus gallery CSS; exported assets excluded from counts",
+  "removed_rule_blocks": 10,
+  "removed_rules": [
+    {
+      "file": "static/styles/defaults.css",
+      "count": 5,
+      "reason": "Competing chip and badge defaults now live in their component styles"
+    },
+    {
+      "file": "static/styles/base.css",
+      "count": 1,
+      "reason": "Obsolete showcase header h1 reset"
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "count": 1,
+      "reason": "Second obsolete showcase header h1 reset"
+    },
+    {
+      "file": "static/styles/blocks/page-header.css",
+      "count": 2,
+      "reason": "Cramped phone search-trigger padding and five-rem switcher cap"
+    },
+    {
+      "file": "static/styles/components/code_block.css",
+      "count": 1,
+      "reason": "Two independent palettes consolidated into one shared role mapping"
+    }
+  ],
+  "additional_consolidation": "Six badge selectors removed from shared badge/alert overrides; alerts retain those rules",
+  "removed_or_replaced_local_declarations": 143,
+  "changed_style_files": 34,
+  "changes": [
+    {
+      "file": "src/primitives/aspect_ratio.rs",
+      "removed_local_declarations": 3,
+      "declarations": {
+        "background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)": 1,
+        "background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)": 1,
+        "background: linear-gradient(135deg, var(--mui-accent) 0%, #764ba2 100%)": 1
+      }
+    },
+    {
+      "file": "src/primitives/avatar.rs",
+      "removed_local_declarations": 2,
+      "declarations": {
+        "background: #22c55e": 1,
+        "background: #eab308": 1
+      }
+    },
+    {
+      "file": "src/primitives/card.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "background: var(--mui-primary, #2563eb)": 1
+      }
+    },
+    {
+      "file": "src/primitives/carousel.rs",
+      "removed_local_declarations": 8,
+      "declarations": {
+        "background: linear-gradient(135deg,#14b8a6,#22c55e)": 1,
+        "background: linear-gradient(135deg,#a855f7,#6366f1)": 1,
+        "background: linear-gradient(135deg,#f43f5e,#f59e0b)": 1,
+        "border: 1px solid var(--mui-border,#e5e7eb)": 1,
+        "color: #fff": 3,
+        "filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2))": 1
+      }
+    },
+    {
+      "file": "src/primitives/combobox.rs",
+      "removed_local_declarations": 6,
+      "declarations": {
+        "margin-bottom: 0.5rem": 6
+      }
+    },
+    {
+      "file": "src/primitives/dialog.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-bottom: 1rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/field.rs",
+      "removed_local_declarations": 6,
+      "declarations": {
+        "margin-bottom: 0.5rem": 6
+      }
+    },
+    {
+      "file": "src/primitives/grid.rs",
+      "removed_local_declarations": 4,
+      "declarations": {
+        "margin-bottom: 1rem": 4
+      }
+    },
+    {
+      "file": "src/primitives/input.rs",
+      "removed_local_declarations": 16,
+      "declarations": {
+        "color: var(--mui-destructive,#ef4444)": 1,
+        "color: var(--mui-muted-fg,#888)": 15
+      }
+    },
+    {
+      "file": "src/primitives/item.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "background: linear-gradient(135deg,#2563eb,#60a5fa)": 1
+      }
+    },
+    {
+      "file": "src/primitives/kbd.rs",
+      "removed_local_declarations": 5,
+      "declarations": {
+        "color: var(--mui-fg-muted)": 5
+      }
+    },
+    {
+      "file": "src/primitives/pagination.rs",
+      "removed_local_declarations": 2,
+      "declarations": {
+        "color: var(--mui-fg-muted)": 1,
+        "margin-bottom: 0.75rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/popover.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-top: 1rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/progress.rs",
+      "removed_local_declarations": 5,
+      "declarations": {
+        "gap: 0.5rem\ndisplay:flex": 4,
+        "gap: 0.5rem\nfont-size: var(--mui-text-small-size)": 1
+      }
+    },
+    {
+      "file": "src/primitives/select.rs",
+      "removed_local_declarations": 8,
+      "declarations": {
+        "color: var(--mui-muted-foreground)": 1,
+        "margin-bottom: 0.5rem": 6,
+        "margin-left: 0.5rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/separator.rs",
+      "removed_local_declarations": 5,
+      "declarations": {
+        "background: var(--mui-card-bg, var(--mui-bg, transparent))": 1,
+        "margin-bottom: 0.25rem": 2,
+        "margin-right: 0.5rem": 1,
+        "margin-top: 0.25rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/skeleton.rs",
+      "removed_local_declarations": 4,
+      "declarations": {
+        "border: 1px solid var(--mui-border,#e5e7eb)": 2,
+        "margin-top: 0.25rem": 2
+      }
+    },
+    {
+      "file": "src/primitives/sonner.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-bottom: 0.75rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/spinner.rs",
+      "removed_local_declarations": 3,
+      "declarations": {
+        "border-radius: var(--mui-radius,0.5rem)\nfont-size: var(--mui-text-small-size)": 1,
+        "gap: 0.75rem\ndisplay:inline-flex": 1,
+        "gap: var(--mui-space-xs)\nfont-size:var(--mui-text-caption-size)\ngap:0.75rem\nopacity:0.7": 1
+      }
+    },
+    {
+      "file": "src/primitives/stack.rs",
+      "removed_local_declarations": 6,
+      "declarations": {
+        "margin-bottom: 0.75rem": 3,
+        "margin-top: 1rem": 3
+      }
+    },
+    {
+      "file": "src/primitives/tabs.rs",
+      "removed_local_declarations": 4,
+      "declarations": {
+        "border-bottom: 1px solid var(--mui-border,#e5e7eb)": 1,
+        "border: 1px solid var(--mui-border,#e5e7eb)": 1,
+        "margin-top: 0.5rem": 2
+      }
+    },
+    {
+      "file": "src/primitives/toggle_group.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-top: 0.5rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/turn_progress.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-top: 0.375rem": 1
+      }
+    },
+    {
+      "file": "src/primitives/typography.rs",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "gap: 0.5rem\ngap:0.75rem\ngap:0.75rem\ngap:0.75rem\nborder-collapse:collapse": 1
+      }
+    },
+    {
+      "file": "src/showcase/mod.rs",
+      "removed_local_declarations": 14,
+      "declarations": {
+        "box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),\n                0 2px 6px rgba(0, 0, 0, 0.2)": 1,
+        "margin-bottom: 0.75rem": 2,
+        "margin-bottom: 1.5rem": 1,
+        "margin-bottom: 1rem": 3,
+        "margin-bottom: 3rem": 1,
+        "margin-left: 0.25rem": 1,
+        "margin-top: 0.5rem": 1,
+        "padding-bottom: 0.75rem": 1,
+        "padding-left: 0.5rem": 1,
+        "padding-top: 1rem": 1,
+        "padding: 0.4375rem var(--mui-space-md)": 1
+      }
+    },
+    {
+      "file": "static/styles/components/avatar.css",
+      "removed_local_declarations": 2,
+      "declarations": {
+        "background: var(--mui-success, #10b981)": 1,
+        "margin-left: -0.5rem": 1
+      }
+    },
+    {
+      "file": "static/styles/components/button.css",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "color: var(--mui-danger-fg, #fff)": 1
+      }
+    },
+    {
+      "file": "static/styles/components/checkbox.css",
+      "removed_local_declarations": 3,
+      "declarations": {
+        "border-color: var(--mui-danger, #dc2626)": 1,
+        "box-shadow: 0 0 0 1px var(--mui-danger, #dc2626)": 1,
+        "outline-color: var(--mui-danger, #dc2626)": 1
+      }
+    },
+    {
+      "file": "static/styles/components/code_block.css",
+      "removed_local_declarations": 22,
+      "declarations": {
+        "--mui-code-attr: #4078f2": 1,
+        "--mui-code-attr: #9cdcfe": 1,
+        "--mui-code-bool: #0184bc": 1,
+        "--mui-code-bool: #569cd6": 1,
+        "--mui-code-comment: #6a9955": 1,
+        "--mui-code-comment: #a0a1a7": 1,
+        "--mui-code-flag: #4078f2": 1,
+        "--mui-code-flag: #9cdcfe": 1,
+        "--mui-code-keyword: #a626a4": 1,
+        "--mui-code-keyword: #c586c0": 1,
+        "--mui-code-lifetime: #0184bc": 1,
+        "--mui-code-lifetime: #569cd6": 1,
+        "--mui-code-null: #0184bc": 1,
+        "--mui-code-null: #569cd6": 1,
+        "--mui-code-number: #986801": 1,
+        "--mui-code-number: #b5cea8": 1,
+        "--mui-code-string: #50a14f": 1,
+        "--mui-code-string: #ce9178": 1,
+        "--mui-code-type: #4ec9b0": 1,
+        "--mui-code-type: #c18401": 1,
+        "--mui-code-var: #dcdcaa": 1,
+        "--mui-code-var: #e45649": 1
+      }
+    },
+    {
+      "file": "static/styles/components/combobox.css",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "border-color: var(--mui-danger, #dc2626)": 1
+      }
+    },
+    {
+      "file": "static/styles/components/composer.css",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-top: 7px": 1
+      }
+    },
+    {
+      "file": "static/styles/components/docs.css",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-top: 2.5rem": 1
+      }
+    },
+    {
+      "file": "static/styles/components/tool_call.css",
+      "removed_local_declarations": 1,
+      "declarations": {
+        "margin-bottom: 0.1875rem": 1
+      }
+    },
+    {
+      "file": "static/styles/curation.css",
+      "removed_local_declarations": 2,
+      "declarations": {
+        "box-shadow: inset 0 -2px var(--mui-chip-tone)": 1,
+        "padding: var(--mui-space-2xs) 0.4375rem": 1
+      }
+    }
+  ],
+  "retained": [
+    "Raw swatch palettes and checkerboard transparency specimen",
+    "Third-party data-series/drawing colors and terminal ANSI palette",
+    "Layout geometry, accessible hidden-field offsets, ratios, and 16px phone text inputs",
+    "Hover-card preview clearance of 6rem"
+  ]
+}

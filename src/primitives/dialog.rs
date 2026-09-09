@@ -134,7 +134,7 @@ pub fn showcase() -> Markup {
                     title: "Edit Profile".to_string(),
                     description: Some("Update your personal information below.".to_string()),
                     children: html! {
-                        div style="display:flex;align-items:center;gap: var(--mui-space-lg);margin-bottom:1rem;" {
+                        div style="display:flex;align-items:center;gap: var(--mui-space-lg);margin-bottom:var(--mui-space-lg);" {
                             div style="width:3rem;height:3rem;border-radius: var(--mui-radius-full);background:var(--mui-bg-input);display:flex;align-items:center;justify-content:center;font-size: var(--mui-text-h3-size);flex-shrink:0;" {
                                 "JD"
                             }

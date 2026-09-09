@@ -297,3 +297,71 @@ test("data table sorting and pagination preserve original rich cells, numeric al
   next.dispatchEvent(event('click')); assert.equal(alpha.hidden, false); assert.equal(info.textContent, 'Showing 2-2 of 2');
   search.value = 'beta'; search.dispatchEvent(event('input')); assert.equal(beta.hidden, false); assert.equal(next.disabled, true); assert.equal(info.textContent, 'Showing 1-1 of 1');
 });
+
+test("phone header moves original controls to the drawer and restores state, order and focus", () => {
+  const previous = window.matchMedia;
+  const phone = new Node(), narrow = new Node(), rail = new Node();
+  phone.matches = false; narrow.matches = true; rail.matches = false;
+  window.matchMedia = query => query.includes('40rem') ? phone : query.includes('64rem') ? rail : narrow;
+  const shell = new Node({ 'data-mui': 'shell-navigation' }), sidebar = new Node(), main = new Node(), panel = dialog();
+  const header = new Node(), title = new Node(), search = new Node(), controls = new Node(), mobile = new Node(), trigger = new Node();
+  const input = new Node({ id: 'unique-search' }), language = new Node({ id: 'unique-language' });
+  input.value = 'Amira'; language.value = 'fr'; search.append(input); controls.append(language);
+  header.append(title); header.append(search); header.append(controls); main.append(header); sidebar.append(mobile);
+  shell.append(sidebar); shell.append(main); shell.append(panel);
+  shell.nodes['.mui-block--shell__sidebar'] = [sidebar]; shell.nodes['.mui-navigation-dialog'] = [panel]; shell.nodes['.mui-block--shell__main'] = [main];
+  main.nodes['.mui-page-header'] = [header]; sidebar.nodes['.mui-block--shell__mobile-controls'] = [mobile];
+  shell.nodes['.mui-page-header__search'] = [search]; shell.nodes['.mui-page-header__controls'] = [controls]; shell.nodes['.mui-block--shell__trigger'] = [trigger];
+  let calls = 0; input.addEventListener('input', () => calls++);
+  ui.init(shell); input.focus(); phone.matches = true; phone.dispatchEvent(event('change'));
+  assert.deepEqual(header.children, [title]); assert.deepEqual(mobile.children, [search, controls]);
+  assert.equal(document.activeElement, trigger);
+  panel.dispatchEvent(event('mui:navigation-open')); panel.showModal();
+  assert.equal(sidebar.parentNode, panel); input.focus(); input.dispatchEvent(event('input'));
+  assert.equal(calls, 1); assert.equal(input.value, 'Amira'); assert.equal(language.value, 'fr');
+  // Native close events are queued; navigation restores trigger focus first.
+  const immediateClose = panel.close, closeEvents = [];
+  panel.addEventListener('close', () => trigger.focus());
+  panel.close = () => { panel.open = false; closeEvents.push(() => panel.dispatchEvent(event('close'))); };
+  phone.matches = false; phone.dispatchEvent(event('change'));
+  closeEvents.forEach(deliver => deliver()); panel.close = immediateClose;
+  assert(!panel.open); assert.deepEqual(header.children, [title, search, controls]);
+  assert.equal(mobile.children.length, 0); assert.equal(document.activeElement, input);
+  phone.matches = true; phone.dispatchEvent(event('change'));
+  panel.dispatchEvent(event('mui:navigation-open')); panel.showModal(); panel.close();
+  assert.equal(search.parentNode, mobile); assert.equal(sidebar.parentNode, shell);
+  shell.isConnected = false; phone.dispatchEvent(event('change')); narrow.dispatchEvent(event('change')); rail.dispatchEvent(event('change'));
+  assert.equal(phone.listeners.change.length, 0);
+  window.matchMedia = previous;
+});
+
+test("workspace search closes the modal before focusing the only guest search", () => {
+  const trigger = new Node({ 'data-mui': 'workspace-search' }), shell = new Node(), panel = dialog(), input = new Node(), menu = new Node();
+  trigger.closest = selector => selector === 'dialog' ? panel : shell;
+  shell.nodes['.mui-worklist-header input[type="search"]'] = [input];
+  panel.addEventListener('close', () => menu.focus()); panel.showModal(); ui.init(trigger);
+  trigger.dispatchEvent(event('click'));
+  assert(!panel.open); assert.equal(document.activeElement, input);
+});
+
+test("gallery initial, saved and toggled themes use one root in both viewport modes", () => {
+  const source = readFileSync('src/showcase/mod.rs', 'utf8');
+  const start = source.indexOf('    function setTheme(theme)');
+  const end = source.indexOf('    // ── Swatch click-to-copy', start);
+  for (const width of [390, 1280]) for (const saved of [null, 'light', 'dark', 'invalid']) {
+    const root = new Node({ 'data-theme': 'light' }), button = new Node();
+    const local = new Map(saved ? [['mui-theme', saved]] : []);
+    vm.runInNewContext(source.slice(start, end), {
+      document: { documentElement: root, getElementById: id => id === 'theme-toggle' ? button : null },
+      localStorage: { getItem: key => local.get(key), setItem: (key, value) => local.set(key, value) },
+      window: { innerWidth: width },
+    });
+    const initial = saved === 'dark' ? 'dark' : 'light';
+    assert.equal(root.getAttribute('data-theme'), initial);
+    button.dispatchEvent(event('click', { stopImmediatePropagation() {} }));
+    assert.equal(root.getAttribute('data-theme'), initial === 'dark' ? 'light' : 'dark');
+    assert.equal(local.get('mui-theme'), root.getAttribute('data-theme'));
+    button.dispatchEvent(event('click', { stopImmediatePropagation() {} }));
+    assert.equal(root.getAttribute('data-theme'), initial);
+  }
+});

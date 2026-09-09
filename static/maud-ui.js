@@ -2905,6 +2905,36 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     };
     media.addEventListener("change", resize);
+    const header = main?.querySelector(".mui-page-header");
+    const mobileControls = sidebar.querySelector(".mui-block--shell__mobile-controls");
+    const headerSearch = shell.querySelector(".mui-page-header__search");
+    const headerControls = shell.querySelector(".mui-page-header__controls");
+    const compactMedia = window.matchMedia("(max-width: 40rem)");
+    function syncHeader() {
+      if (!shell.isConnected) {
+        compactMedia.removeEventListener("change", syncHeader);
+        return;
+      }
+      if (!header || !mobileControls) return;
+      const parts = [headerSearch, headerControls].filter((part) => part && (part.children.length || part.textContent?.trim()));
+      const destination = compactMedia.matches ? mobileControls : header;
+      if (parts.every((part) => part.parentNode === destination)) return;
+      const focused = parts.some((part) => part.contains(document.activeElement)) ? document.activeElement : null;
+      const closing = !compactMedia.matches && dialog.open;
+      if (closing) {
+        if (focused) dialog.addEventListener("close", () => {
+          if (focused.isConnected) focused.focus();
+        }, { once: true });
+        dialog.close();
+      }
+      parts.forEach((part) => destination.append(part));
+      if (focused && !closing) {
+        if (compactMedia.matches && !dialog.open) shell.querySelector(".mui-block--shell__trigger")?.focus();
+        else focused.focus();
+      }
+    }
+    compactMedia.addEventListener("change", syncHeader);
+    syncHeader();
     const prefs = ui.navigation;
     const railMedia = window.matchMedia("(min-width: 64rem)");
     const rail = shell.querySelector('[data-mui="shell-rail"]');
@@ -2961,8 +2991,18 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   "use strict";
   const ui = window.MaudUI;
   if (!ui) return;
+  function focusSearch(target, source) {
+    const dialog = source.closest("dialog");
+    if (dialog?.open) {
+      dialog.addEventListener("close", () => target.focus(), { once: true });
+      dialog.close();
+    } else target.focus();
+  }
   ui.behaviors["workspace-search"] = (trigger) => {
-    trigger.addEventListener("click", () => trigger.closest(".mui-block--shell")?.querySelector('.mui-worklist-header input[type="search"]')?.focus());
+    trigger.addEventListener("click", () => {
+      const target = trigger.closest(".mui-block--shell")?.querySelector('.mui-worklist-header input[type="search"]');
+      if (target) focusSearch(target, trigger);
+    });
   };
   ui.behaviors["page-search"] = (input) => {
     input.setAttribute("aria-keyshortcuts", "Meta+K Control+K");
@@ -2975,7 +3015,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
       if (target && target.getClientRects().length) {
         event.preventDefault();
-        target.focus();
+        focusSearch(target, event.target);
       }
     });
   }

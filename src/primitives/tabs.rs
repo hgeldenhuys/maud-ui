@@ -163,7 +163,7 @@ pub fn showcase() -> Markup {
                                 ..Default::default()
                             }))
                         }
-                        div style="display:flex;justify-content:flex-end;margin-top:0.5rem;" {
+                        div style="display:flex;justify-content:flex-end;margin-top:var(--mui-space-sm);" {
                             (button::render(button::Props {
                                 label: "Save changes".into(),
                                 variant: button::Variant::Primary,
@@ -213,7 +213,7 @@ pub fn showcase() -> Markup {
                                 ..Default::default()
                             }))
                         }
-                        div style="display:flex;justify-content:flex-end;margin-top:0.5rem;" {
+                        div style="display:flex;justify-content:flex-end;margin-top:var(--mui-space-sm);" {
                             (button::render(button::Props {
                                 label: "Change password".into(),
                                 variant: button::Variant::Primary,
@@ -240,12 +240,12 @@ pub fn showcase() -> Markup {
                             ("Jackson Lee", "jackson@example.com", "Member"),
                             ("Isabella Nguyen", "isabella@example.com", "Member"),
                         ] {
-                            div style="display:flex;align-items:center;justify-content:space-between;padding: var(--mui-space-sm) 0;border-bottom:1px solid var(--mui-border,#e5e7eb);" {
+                            div style="display:flex;align-items:center;justify-content:space-between;padding: var(--mui-space-sm) 0;border-bottom:1px solid var(--mui-border);" {
                                 div {
                                     p style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);margin: 0;" { (name) }
                                     p style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted);margin: var(--mui-space-2xs) 0 0;" { (email) }
                                 }
-                                span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);padding: var(--mui-space-xs) var(--mui-space-sm);border:1px solid var(--mui-border,#e5e7eb);border-radius: var(--mui-radius-md);" {
+                                span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted);padding: var(--mui-space-xs) var(--mui-space-sm);border:1px solid var(--mui-border);border-radius: var(--mui-radius-md);" {
                                     (role)
                                 }
                             }

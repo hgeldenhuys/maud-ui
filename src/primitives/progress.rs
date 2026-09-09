@@ -66,7 +66,7 @@ pub fn showcase() -> Markup {
             // File upload in progress
             div {
                 p.mui-showcase__caption { "File upload" }
-                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
                         span style="font-size: var(--mui-text-small-size);color:var(--mui-text)" { "Uploading file..." }
                         span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "65%" }
@@ -84,7 +84,7 @@ pub fn showcase() -> Markup {
             // Stepped progress
             div {
                 p.mui-showcase__caption { "Stepped progress" }
-                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
                         span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-text)" { "Step 2 of 4" }
                         span style="font-size: var(--mui-text-caption-size);color:var(--mui-text-muted)" { "Account details" }
@@ -101,7 +101,7 @@ pub fn showcase() -> Markup {
             // Indeterminate — processing
             div {
                 p.mui-showcase__caption { "Indeterminate" }
-                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     span style="font-size: var(--mui-text-small-size);color:var(--mui-text-muted)" { "Processing your request..." }
                     (render(Props {
                         value: 0,
@@ -115,7 +115,7 @@ pub fn showcase() -> Markup {
             // Semantic label + value helpers (shadcn ProgressLabel / ProgressValue parity)
             div {
                 p.mui-showcase__caption { "With label + value helpers" }
-                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
                         (label("Sync status"))
                         (value(40))
@@ -132,7 +132,7 @@ pub fn showcase() -> Markup {
             // Download complete (100%)
             div {
                 p.mui-showcase__caption { "Download complete" }
-                div style="display:flex;flex-direction:column;gap:0.5rem" {
+                div style="display:flex;flex-direction:column;gap:var(--mui-space-sm)" {
                     div style="display:flex;justify-content:space-between;align-items:center" {
                         span style="font-size: var(--mui-text-small-size);color:var(--mui-text)" { "Download complete" }
                         span style="font-size: var(--mui-text-small-size);font-weight: var(--mui-weight-medium);color:var(--mui-accent,var(--mui-text))" { "100%" }

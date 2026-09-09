@@ -130,7 +130,7 @@ pub fn showcase() -> Markup {
                         ..Default::default()
                     }))
                 }
-                div.mui-showcase__row style="margin-top:0.5rem;" {
+                div.mui-showcase__row style="margin-top:var(--mui-space-sm);" {
                     span.mui-showcase__label { "Compact" }
                     (render(Props {
                         items: vec![

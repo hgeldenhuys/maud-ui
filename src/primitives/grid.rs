@@ -286,7 +286,7 @@ pub fn showcase() -> Markup {
                     (MinColumn::Xl, "Xl \u{2014} 24rem"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="margin-bottom:1rem;" {
+                    div style="margin-bottom:var(--mui-space-lg);" {
                         (render(Props {
                             min_column: min,
                             children: html! {
@@ -311,7 +311,7 @@ pub fn showcase() -> Markup {
                     (Columns::Six, "Six"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="margin-bottom:1rem;" {
+                    div style="margin-bottom:var(--mui-space-lg);" {
                         (columns(cols, html! {
                             @for n in 1..=cols.count().unwrap_or(3) { (cell(&format!("{n}"))) }
                         }))
@@ -349,7 +349,7 @@ pub fn showcase() -> Markup {
                     (Space::Xl, "Xl"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="margin-bottom:1rem;" {
+                    div style="margin-bottom:var(--mui-space-lg);" {
                         (render(Props {
                             columns: Columns::Four,
                             collapse_narrow: false,
@@ -373,7 +373,7 @@ pub fn showcase() -> Markup {
                     (Align::End, "End"),
                 ] {
                     p.mui-showcase__caption { (name) }
-                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:1rem;" {
+                    div style="border:1px dashed var(--mui-border);border-radius: var(--mui-radius-md);margin-bottom:var(--mui-space-lg);" {
                         (render(Props {
                             columns: Columns::Three,
                             collapse_narrow: false,

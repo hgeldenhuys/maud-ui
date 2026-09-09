@@ -141,6 +141,7 @@ pub fn render(props: Props) -> Markup {
             aside class="mui-block--shell__sidebar" id=(&nav_id) aria-label="Application navigation" tabindex="-1" {
                 div class="mui-block--shell__brand" { (props.brand) }
                 @if let Some(header) = props.header { div class="mui-block--shell__header" { (header) } }
+                div class="mui-block--shell__mobile-controls" {}
                 nav class="mui-block--shell__nav" aria-label="Primary" {
                     @for (index, group) in props.nav_groups.iter().enumerate() {
                         @if let Some(label) = &group.label {
@@ -231,9 +232,6 @@ pub(crate) fn example(id: &str) -> Markup {
             ..Default::default()
         }),
         brand: html! { span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) } span class="mui-block--shell__brand-name" { "Front desk" } },
-        header: Some(
-            html! { label { span class="mui-sr-only" { "Find a destination" } input class="mui-input" type="search" placeholder="Find a destination…" data-mui-nav-search; } },
-        ),
         active_path: "/blocks/worklist-header".into(),
         nav_groups: vec![
             NavGroup {
@@ -246,7 +244,7 @@ pub(crate) fn example(id: &str) -> Markup {
                         ..Default::default()
                     },
                     NavItem {
-                        label: "Reservations and guest arrivals".into(),
+                        label: "Reservations".into(),
                         short_label: Some("Stays".into()),
                         href: "/blocks/worklist-header".into(),
                         icon: Some(icon_folder()),

@@ -187,7 +187,7 @@ pub fn showcase() -> Markup {
 
             div {
                 p.mui-showcase__caption { "Headings" }
-                div.mui-showcase__column style="gap:0.5rem" {
+                div.mui-showcase__column style="gap:var(--mui-space-sm)" {
                     (h1("The quick brown fox"))
                     (h2("The quick brown fox"))
                     (h3("The quick brown fox"))
@@ -197,7 +197,7 @@ pub fn showcase() -> Markup {
 
             div {
                 p.mui-showcase__caption { "Body text" }
-                div.mui-showcase__column style="gap:0.75rem" {
+                div.mui-showcase__column style="gap:var(--mui-space-md)" {
                     (lead("A lead paragraph is great for intros. It's visually larger and lighter than body text, drawing the eye without shouting."))
                     (p("Regular paragraph text. This is the standard body copy size used throughout the interface for readable content at comfortable line lengths."))
                     (large("Large text for emphasis or section intros."))
@@ -208,7 +208,7 @@ pub fn showcase() -> Markup {
 
             div {
                 p.mui-showcase__caption { "Lists" }
-                div.mui-showcase__column style="gap:0.75rem" {
+                div.mui-showcase__column style="gap:var(--mui-space-md)" {
                     (list_ul(vec![
                         html! { "First bullet item" },
                         html! { "Second bullet item" },
@@ -224,7 +224,7 @@ pub fn showcase() -> Markup {
 
             div {
                 p.mui-showcase__caption { "Code" }
-                div.mui-showcase__column style="gap:0.75rem" {
+                div.mui-showcase__column style="gap:var(--mui-space-md)" {
                     p.mui-p {
                         "Install dependencies with " (code_inline("bun install")) " then run " (code_inline("bun dev")) " to start."
                     }
@@ -255,24 +255,24 @@ pub fn showcase() -> Markup {
             div {
                 p.mui-showcase__caption { "Table" }
                 (table(html! {
-                    table style="border-collapse:collapse;width:100%" {
+                    table {
                         thead {
                             tr {
-                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Name" }
-                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Role" }
-                                th style="text-align:left;padding: var(--mui-space-sm);border-bottom:1px solid var(--mui-border)" { "Status" }
+                                th { "Name" }
+                                th { "Role" }
+                                th { "Status" }
                             }
                         }
                         tbody {
                             tr {
-                                td style="padding:0.5rem" { "Ada Lovelace" }
-                                td style="padding:0.5rem" { "Mathematician" }
-                                td style="padding:0.5rem" { "Active" }
+                                td { "Ada Lovelace" }
+                                td { "Mathematician" }
+                                td { "Active" }
                             }
                             tr {
-                                td style="padding:0.5rem" { "Alan Turing" }
-                                td style="padding:0.5rem" { "Cryptanalyst" }
-                                td style="padding:0.5rem" { "Active" }
+                                td { "Alan Turing" }
+                                td { "Cryptanalyst" }
+                                td { "Active" }
                             }
                         }
                     }

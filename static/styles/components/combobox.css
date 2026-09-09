@@ -285,7 +285,7 @@
 
 .mui-combobox[aria-invalid="true"] .mui-combobox__trigger,
 .mui-combobox__trigger[aria-invalid="true"] {
-  border-color: var(--mui-danger, #dc2626);
+  border-color: var(--mui-danger);
 }
 
 /* Mobile: trigger spans full width; dropdown clamps to viewport */

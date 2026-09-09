@@ -16,6 +16,8 @@
         tab.setAttribute('aria-selected', String(i === index)); tab.setAttribute('tabindex', i === index ? '0' : '-1');
         panels[i].setAttribute('role', 'tabpanel'); panels[i].hidden = i !== index;
       });
+      const density = panels[index].getAttribute('data-default-density');
+      if (density && !ui.densityChosen) ui.setDensity?.(density, false);
       if (focus) tabs[index].focus();
     }
     const initial = tabs.findIndex(tab => tab.getAttribute('href') === window.location?.hash);

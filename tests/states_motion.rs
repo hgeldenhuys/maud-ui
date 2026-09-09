@@ -25,7 +25,7 @@ macro_rules! operational_states {
                     State::Empty { .. } => { assert!(output.contains("No related items")); assert!(!output.contains("role=\"alert\"")); },
                     State::Error { .. } => { assert!(output.contains("Request failed")); assert!(output.contains("role=\"alert\"")); },
                     State::Disabled { .. } => { assert!(output.contains("inert=\"\" aria-disabled=\"true\"")); assert!(output.contains("Editing unavailable")); },
-                    State::Ready => unreachable!(),
+                    State::Ready | State::Absent => unreachable!(),
                 }
             }
         }

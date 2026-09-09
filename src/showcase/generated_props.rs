@@ -1028,6 +1028,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "state", ty: "crate::blocks::state::State", default: format!("{:?}", props.state), description: "Explicit presentation state; Ready preserves the ordinary content." },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Stable, unique ID: navigation, drawer and local preferences are scoped to it." },
                 Prop { name: "brand", ty: "Markup", default: format!("{:?}", props.brand), description: "" },
+                Prop { name: "brand_mark", ty: "Option<super::brand_mark::Props>", default: format!("{:?}", props.brand_mark), description: "Typed identity shared with app_header; overrides legacy brand markup." },
                 Prop { name: "header", ty: "Option<Markup>", default: format!("{:?}", props.header), description: "" },
                 Prop { name: "sidebar_footer", ty: "Option<Markup>", default: format!("{:?}", props.sidebar_footer), description: "" },
                 Prop { name: "nav_groups", ty: "Vec<NavGroup>", default: format!("{:?}", props.nav_groups), description: "" },
@@ -1062,6 +1063,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "state", ty: "crate::blocks::state::State", default: format!("{:?}", props.state), description: "Explicit presentation state; Ready preserves the ordinary content." },
                 Prop { name: "brand", ty: "Option<Markup>", default: format!("{:?}", props.brand), description: "" },
+                Prop { name: "brand_mark", ty: "Option<super::brand_mark::Props>", default: format!("{:?}", props.brand_mark), description: "Typed brand mark; overrides the legacy brand markup when supplied." },
                 Prop { name: "links", ty: "Vec<Link>", default: format!("{:?}", props.links), description: "" },
                 Prop { name: "current_href", ty: "Option<String>", default: format!("{:?}", props.current_href), description: "" },
                 Prop { name: "actions", ty: "Option<Markup>", default: format!("{:?}", props.actions), description: "" },
@@ -1076,6 +1078,15 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "line", ty: "Option<String>", default: format!("{:?}", props.line), description: "" },
                 Prop { name: "columns", ty: "Vec<Column>", default: format!("{:?}", props.columns), description: "" },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "" },
+            ])
+        },
+        (true, "shell-brand-mark") => {
+            let props = crate::blocks::shell::brand_mark::Props::default();
+            table(vec![
+                Prop { name: "wordmark", ty: "String", default: format!("{:?}", props.wordmark), description: "Plain text identity. Empty identity emits nothing." },
+                Prop { name: "href", ty: "Option<String>", default: format!("{:?}", props.href), description: "Optional destination for the wordmark; the tagline remains outside the link." },
+                Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Full-color image or custom logo. None uses the brand's CSS logo mask." },
+                Prop { name: "tagline", ty: "Option<Markup>", default: format!("{:?}", props.tagline), description: "Optional caller-owned tagline slot." },
             ])
         },
         (true, "worklist-header") => {

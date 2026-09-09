@@ -1,4 +1,4 @@
-//! Three-column launcher with one named action per task; one column on phones.
+//! A launcher that fits its task count; a single task is a compact row.
 use crate::blocks::action::{Action, Heading};
 use maud::{html, Markup};
 
@@ -35,8 +35,9 @@ pub fn render(mut props: Props) -> Markup {
 }
 
 fn render_ready(props: Props) -> Markup {
+    if props.tasks.is_empty() { return html! {}; }
     html! {
-        ul class="mui-task-grid" aria-label=(props.aria_label) {
+        ul class="mui-task-grid" data-count=(props.tasks.len()) aria-label=(props.aria_label) {
             @for task in props.tasks {
                 li class="mui-task-grid__card" {
                     (props.heading.render(&task.title, "mui-task-grid__title"))
@@ -49,7 +50,10 @@ fn render_ready(props: Props) -> Markup {
 }
 
 pub fn preview() -> Markup {
-    render(Props {
+    html! {
+        div class="mui-kit-previews" {
+        (render(Props { tasks: vec![Task { title: "Review applications".into(), description: "Check the supplied identity documents before completing onboarding.".into(), action: Action::link("Open the queue", "/#lp-bank-panel") }], ..Default::default() }))
+        (render(Props {
         tasks: [
             (
                 "Check in a guest",
@@ -75,5 +79,7 @@ pub fn preview() -> Markup {
         })
         .collect(),
         ..Default::default()
-    })
+    }))
+        }
+    }
 }

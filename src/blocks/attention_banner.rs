@@ -49,6 +49,7 @@ pub fn render(mut props: Props) -> Markup {
 }
 
 fn render_ready(props: Props) -> Markup {
+    if props.title.trim().is_empty() { return html! {}; }
     html! {
         aside class="mui-attention-banner" data-tone=(props.tone.as_str()) aria-label=(&props.title) data-mui="attention-banner" {
             div class="mui-attention-banner__body" {

@@ -28,3 +28,8 @@ Use action labels that make sense on their own, such as Start check-in. Actions 
 ## Presentation states (0.10.1)
 
 `Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.
+
+## Count and copy (0.11.0)
+No tasks emits no wrapper. One task is a compact row spanning the available width; multiple tasks use columns that fit their count and available space. Descriptions retain their complete text in the DOM and title attribute; CSS ellipsis handles visual truncation.
+
+`State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.

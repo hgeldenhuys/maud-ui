@@ -3,6 +3,8 @@
   const ui = window.MaudUI;
   if (!ui) return;
   function focusSearch(target, source) {
+    const disclosure = target.closest('.mui-page-header__search-disclosure');
+    if (disclosure) disclosure.open = true;
     const dialog = source.closest('dialog');
     if (dialog?.open) {
       // Run after navigation's focus restoration, outside the modal focus trap.
@@ -25,7 +27,7 @@
       if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k') return;
       const scope = event.target.closest('.mui-block--shell') || document;
       const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
-      if (target && target.getClientRects().length) { event.preventDefault(); focusSearch(target, event.target); }
+      if (target && (target.getClientRects().length || target.closest('.mui-page-header__search-disclosure')?.getClientRects().length)) { event.preventDefault(); focusSearch(target, event.target); }
     });
   }
   ui.behaviors["workspace-demo"] = demo => {

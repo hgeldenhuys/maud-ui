@@ -5,6 +5,8 @@ use maud::{html, Markup};
 
 #[derive(Clone, Debug, Default)]
 pub enum State {
+    /// No input or rule is declared. Emit no wrapper, heading, message or action.
+    Absent,
     #[default]
     Ready,
     Loading {
@@ -47,6 +49,7 @@ impl State {
     }
     pub fn as_str(&self) -> &'static str {
         match self {
+            Self::Absent => "absent",
             Self::Ready => "ready",
             Self::Loading { .. } => "loading",
             Self::Empty { .. } => "empty",
@@ -59,6 +62,7 @@ impl State {
 /// content and makes its whole interaction subtree inert, including canonical fragments.
 pub(crate) fn render(state: State, ready: impl FnOnce() -> Markup) -> Markup {
     match state {
+        State::Absent => html! {},
         State::Ready => ready(),
         State::Loading { message } => html! {
             div class="mui-block-state" data-state="loading" aria-busy="true" {

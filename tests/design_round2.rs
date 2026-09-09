@@ -79,27 +79,20 @@ fn emitted_chip_and_badge_classes_resolve_to_compact_border_boxes() {
     let badge = declarations(".mui-badge");
     assert_eq!(style["box-sizing"], "border-box");
     let label = pixels(&style["font-size"], &tokens);
-    let height = pixels(&style["min-height"], &tokens);
-    let padding = pixels(style["padding"].split_whitespace().next().unwrap(), &tokens);
-    let line = resolve(&style["line-height"], &tokens)
-        .parse::<f64>()
-        .unwrap()
-        * label;
+    // Density and coarse-pointer geometry are evaluated against both emitted
+    // stylesheets by record-kit-css.mjs, which understands media contexts.
     let bubble = pixels(&count["height"], &tokens);
-    let border_box = height.max(line.max(bubble) + padding * 2.0 + 2.0);
-    assert_eq!(border_box, 30.0);
     assert_eq!(label, 13.0);
     assert_eq!(bubble, 18.0);
     assert_eq!(pixels(&count["font-size"], &tokens), 11.0);
     assert_eq!(count["font-variant-numeric"], "tabular-nums");
     assert_eq!(badge["box-sizing"], "border-box");
     assert_eq!(pixels(&badge["height"], &tokens), 22.0);
-    assert_eq!(pixels(&badge["font-size"], &tokens), 12.0);
     assert_eq!(declarations(".mui-status-chip-group")["flex-wrap"], "wrap");
 }
 
 #[test]
-fn landing_has_one_document_theme_and_one_workspace_search_input() {
+fn landing_has_one_document_theme_and_scoped_workspace_search_inputs() {
     let page = maud_ui::showcase::landing_page().0;
     // Includes markup only: theme selectors and documentation are not elements.
     let body = page
@@ -118,7 +111,9 @@ fn landing_has_one_document_theme_and_one_workspace_search_input() {
         .next()
         .unwrap();
     assert!(!hero.contains("data-theme="));
-    assert_eq!(hero.matches("type=\"search\"").count(), 1);
+    assert_eq!(hero.matches("type=\"search\"").count(), 2);
+    assert_eq!(hero.matches("mui-input mui-data-table__search").count(), 1);
+    assert!(hero.contains("id=\"lp-bank-panel\""));
     assert!(
         !hero.contains("Find a destination") && !hero.contains("Reservations and guest arrivals")
     );

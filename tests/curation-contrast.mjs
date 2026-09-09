@@ -20,8 +20,9 @@ const syntax = tokenValues(readFileSync("static/styles/components/code_block.css
 const shared = tokenValues(css.split(':root {')[1].split('\n}')[0]);
 const dark = { ...shared, ...tokenValues(css.split(':root,\n[data-theme="dark"] {')[1].split('\n}')[0]) };
 const light = { ...shared, ...tokenValues(css.split('[data-theme="light"] {')[1].split('\n}')[0]) };
-const resolve = (value, tokens) => value.replace(/var\(--(mui-[a-z0-9-]+)\)/g, (_, key) => resolve(tokens[key], tokens));
+const resolve = (value, tokens) => value.replace(/var\(--(mui-[a-z0-9-]+)\)/g, (_, key) => resolve(tokens[key], tokens)).replace(/color-mix\(in srgb,\s*(#[\da-f]{6})\s+(\d+)%,\s*(#[\da-f]{6})\)/gi, (_, left, weight, right) => '#' + [1, 3, 5].map(i => Math.round(parseInt(left.slice(i, i + 2), 16) * weight / 100 + parseInt(right.slice(i, i + 2), 16) * (1 - weight / 100)).toString(16).padStart(2, '0')).join(''));
 const luminance = hex => {
+  assert(/^#(?:[\da-f]{3}|[\da-f]{6})$/i.test(hex), `Unresolved contrast color: ${hex}`);
   let rgb = hex.slice(1);
   if (rgb.length === 3) rgb = [...rgb].map(c => c + c).join("");
   const channels = [0, 2, 4].map(i => parseInt(rgb.slice(i, i + 2), 16) / 255).map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
@@ -30,7 +31,9 @@ const luminance = hex => {
 const contrast = (a, b) => { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 let checks = 0;
 const failures = [];
-for (const [name, preset] of Object.entries(presets)) {
+const brandData = JSON.parse(readFileSync('static/brands/brands.json', 'utf8'));
+const brandPairs = Object.fromEntries(brandData.presets.flatMap(brand => ['light','dark'].map(base => [`${brand.key}/${base}`, { _base: base, ...Object.fromEntries(brandData.tokens.map((token, index) => [token.name.slice(2), brand.values[index]])) }])));
+for (const [name, preset] of Object.entries({ ...presets, ...brandPairs })) {
   const raw = { ...(preset._base === "light" ? light : dark), ...preset };
   const tokens = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, resolve(value, raw)]));
   if (preset._base !== 'light') {
@@ -106,4 +109,4 @@ vm.runInNewContext("applyPreset('light');", state);
 assert.equal(styles.size, 0, "base presets must clear every previous preset override");
 assert.equal(baseTheme, "light");
 assert.equal(storage.get("mui-theme"), "light");
-console.log(`${checks} contrast checks passed across ${Object.keys(presets).length} presets; theme controls, reset and persistence passed.`);
+console.log(`${checks} contrast checks passed across ${Object.keys(presets).length} theme presets and ${Object.keys(brandPairs).length} brand/theme pairs; theme controls, reset and persistence passed.`);

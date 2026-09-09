@@ -62,3 +62,9 @@
 .mui-related-card--inline .mui-related-card__action { padding: 0; margin-block: 0; margin-inline-start: auto; }
 .mui-related-card--inline .mui-related-card__action .mui-btn { width: auto; }
 .mui-related-card--inline .mui-facts { flex-basis: 100%; }
+.mui-related-card--compact { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--mui-space-sm) var(--mui-space-md); padding: var(--mui-space-md) var(--mui-space-lg); }
+.mui-related-card--compact .mui-kit-title { font-size: var(--mui-text-body-size); }
+.mui-related-card--compact .mui-related-card__subtitle { margin: 0; grid-column: 1; }
+.mui-related-card--compact .mui-facts { grid-column: 1 / -1; }
+.mui-related-card--compact .mui-related-card__action { grid-column: 2; grid-row: 1 / span 2; margin: 0; padding: 0; align-self: center; }
+.mui-related-card--compact .mui-related-card__action .mui-btn { width: auto; }

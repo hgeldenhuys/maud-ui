@@ -11,7 +11,7 @@ related_card::render(Props {
 </code></pre>
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td>variant</td><td>Variant</td><td>Auto</td><td>Auto selects Inline without facts and Card with facts; Card/Inline force either layout.</td></tr>
+<tr><td>variant</td><td>Variant</td><td>Auto</td><td>Auto selects Inline without facts and Card with facts; Card/Inline force either layout; Compact keeps supplied facts in a dense card.</td></tr>
 <tr><td>title</td><td>String</td><td>empty</td><td>Escaped entity title.</td></tr>
 <tr><td>title_markup</td><td>Option<Markup></td><td>None</td><td>Overrides title, including an explicitly empty fragment.</td></tr>
 <tr><td>subtitle</td><td>Option<String></td><td>None</td><td>Supporting identity/state.</td></tr>
@@ -28,3 +28,6 @@ related_card::render(Props {
 <p><a href="../components/facts_list.md">Facts list</a>, <a href="record-timeline.md">record timeline</a>, <a href="../components/choice_card.md">choice cards</a>.</p>
 <h2>Presentation states (0.10.1)</h2>
 <p><code>Props::state: maud_ui::blocks::state::State</code> defaults to <code>Ready</code>. <code>Loading { message }</code> shows skeletons; <code>Empty { message, action }</code> and <code>Error { message, retry }</code> provide distinct recovery paths; <code>Disabled { reason }</code> retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add <code>state: Default::default()</code> to exhaustive Props literals.</p>
+<h2>Compact facts (0.11.0)</h2>
+<p><code>Variant::Compact</code> keeps admitted facts and the sole action together in a denser card. Explicit Inline also retains supplied facts. Add Compact to exhaustive Variant matches. Render guest contact and room facts here once; omit duplicate overview rows in the consuming application.</p>
+<p><code>State::Absent</code> (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.</p>

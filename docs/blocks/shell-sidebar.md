@@ -60,3 +60,8 @@ At 40rem and below, a supplied page header moves its original search, actions an
 ## Presentation states (0.10.1)
 
 `Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.
+
+## Typed identity (0.11.0)
+`brand_mark: Option<shell::brand_mark::Props>` defaults to None and overrides the raw brand slot when supplied. The mark contains a logo, wordmark and optional tagline. Add the new field to exhaustive Props literals. See [brand mark](shell-brand-mark.md).
+
+`State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.

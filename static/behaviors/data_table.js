@@ -2,6 +2,21 @@
   "use strict";
   const ui = window.MaudUI;
   if (!ui) return;
+  // Exact decimal comparison: no IEEE-754 rounding, including values beyond 2^53.
+  ui.compareDecimal = (left, right) => {
+    function parse(text) {
+      const value = text.trim().replace('−', '-');
+      const match = /^([+-]?)(?:[$€£¥])?((?:\d{1,3}(?:,\d{3})+|\d+))(?:\.(\d+))?$/.exec(value);
+      if (!match) return null;
+      const decimals = match[3] || '';
+      return { value: BigInt((match[1] === '-' ? '-' : '') + match[2].replaceAll(',', '') + decimals), scale: decimals.length };
+    }
+    const a = parse(left), b = parse(right);
+    if (!a || !b) return null;
+    const scale = Math.max(a.scale, b.scale);
+    const l = a.value * 10n ** BigInt(scale - a.scale), r = b.value * 10n ** BigInt(scale - b.scale);
+    return l < r ? -1 : l > r ? 1 : 0;
+  };
   ui.behaviors["data-table"] = root => {
     const pageSize = Math.max(1, parseInt(root.getAttribute('data-page-size') || '5', 10) || 5);
     const body = root.querySelector('.mui-data-table__body');
@@ -24,9 +39,7 @@
       const filtered = rows.filter(row => row.values.some(value => value.toLocaleLowerCase().includes(query)) || !query);
       if (direction && column >= 0) filtered.sort((a, b) => {
         const left = a.values[column] || '', right = b.values[column] || '';
-        const numeric = value => Number(value.replace(/[$€£,\s]/g, ''));
-        const l = numeric(left), r = numeric(right);
-        return direction * (left.trim() && right.trim() && Number.isFinite(l) && Number.isFinite(r) ? l - r : left.localeCompare(right));
+        return direction * (ui.compareDecimal(left, right) ?? left.localeCompare(right));
       });
       page = Math.max(0, Math.min(page, Math.ceil(filtered.length / pageSize) - 1));
       rows.forEach(row => { row.node.hidden = true; });

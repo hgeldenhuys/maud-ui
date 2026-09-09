@@ -19,6 +19,27 @@
 .mui-page-header__search-trigger:hover { color: var(--mui-text); background: var(--mui-bg-input); }
 .mui-page-header__submit:focus { position: static; width: auto; height: auto; clip-path: none; margin: 0; padding: var(--mui-space-xs); }
 .mui-page-header__switchers :is(select, button) { max-width: 10rem; }
+.mui-page-header__search-disclosure { position: relative; }
+.mui-page-header__search-toggle { list-style: none; cursor: pointer; }
+.mui-page-header__search-toggle::-webkit-details-marker { display: none; }
+.mui-page-header__search-panel { width: min(20rem, calc(100vw - 2rem)); padding: var(--mui-space-sm); background: var(--mui-bg-card); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md); box-shadow: var(--mui-shadow-lg); }
+.mui-page-header__search-panel form { gap: var(--mui-space-xs); }
+.mui-page-header__search-panel label { min-width: 0; }
+.mui-page-header__search-panel form > kbd { display: none; }
+.mui-page-header__search-panel .mui-input { padding-inline-end: var(--mui-space-md); }
+@media (min-width: 64rem) {
+  .mui-page-header { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; flex-wrap: nowrap; height: var(--mui-header-height); min-height: var(--mui-header-height); gap: var(--mui-space-sm); padding-block: 0; }
+  .mui-page-header__context { min-width: 0; }
+  .mui-page-header__controls, .mui-page-header__switchers { flex-wrap: nowrap; }
+  .mui-page-header__controls { max-width: 32rem; overflow-x: auto; scrollbar-width: thin; padding: var(--mui-space-xs); }
+  .mui-page-header__switchers { flex-shrink: 0; }
+  .mui-page-header__controls :is(button, a, select) { white-space: nowrap; }
+  .mui-page-header__search { grid-column: 2; width: auto; max-width: 20rem; }
+  .mui-page-header__controls { grid-column: 3; }
+  .mui-page-header__search-toggle { width: var(--mui-control-height); height: var(--mui-control-height); padding: 0; }
+  .mui-page-header__search-label { display: none; }
+  .mui-page-header__search-panel { position: absolute; inset-inline-end: 0; top: calc(100% + var(--mui-space-sm)); z-index: var(--mui-layer-overlay); }
+}
 @media (max-width: 40rem) {
   .mui-page-header { flex-wrap: wrap; gap: var(--mui-space-sm); padding-block: var(--mui-space-xs); }
   .mui-page-header__context { flex-basis: 100%; min-height: var(--mui-control-height); }

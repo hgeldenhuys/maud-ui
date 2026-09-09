@@ -32,5 +32,5 @@ for (const file of ['static/maud-ui.css', 'static/maud-ui.min.css']) {
   assert(/\.mui-skeleton::?after\{display:none;?\}/.test(reduced));
 }
 const result = { source_files: files.length, fixed_font_sizes: 0, local_font_size_declarations: 0, untokenized_motion: 0, duration_tokens: durations, bundles_checked: 2, browser_review: 'Not performed; supervisor review required.' };
-writeFileSync('docs/night-2-source-audit.json', JSON.stringify(result, null, 2) + '\n');
+writeFileSync(process.argv[2] || 'docs/states-motion-audit.json', JSON.stringify(result, null, 2) + '\n');
 console.log(`${files.length} source files checked: no local font sizes or untokenized motion; two duration tokens and reduced-motion contracts pass in both bundles.`);

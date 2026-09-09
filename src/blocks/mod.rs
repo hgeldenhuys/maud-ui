@@ -53,6 +53,7 @@ pub const BLOCK_NAMES: &[&str] = &[
     "shell-page-header",
     "shell-app-header",
     "shell-app-footer",
+    "shell-brand-mark",
     "worklist-header",
     "record-header",
     "task-grid",

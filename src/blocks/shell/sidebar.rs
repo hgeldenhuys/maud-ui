@@ -19,6 +19,8 @@ pub struct Props {
     /// Stable, unique ID: navigation, drawer and local preferences are scoped to it.
     pub id: String,
     pub brand: Markup,
+    /// Typed identity shared with app_header; overrides legacy brand markup.
+    pub brand_mark: Option<super::brand_mark::Props>,
     pub header: Option<Markup>,
     pub sidebar_footer: Option<Markup>,
     pub nav_groups: Vec<NavGroup>,
@@ -43,6 +45,7 @@ impl Default for Props {
             state: Default::default(),
             id: "mui-app".into(),
             brand: html! { span class="mui-block--shell__brand-name" { "App" } },
+            brand_mark: None,
             header: None,
             sidebar_footer: None,
             nav_groups: vec![],
@@ -147,7 +150,10 @@ fn render_ready(props: Props) -> Markup {
             data-mobile-navigation=(if mobile_tabs { "tabs" } else { "drawer" }) {
             (props.app_header)
             aside class="mui-block--shell__sidebar" id=(&nav_id) aria-label="Application navigation" tabindex="-1" {
-                div class="mui-block--shell__brand" { (props.brand) }
+                div class="mui-block--shell__brand" {
+                    @if let Some(brand) = props.brand_mark { (super::brand_mark::render(brand)) }
+                    @else { (props.brand) }
+                }
                 @if let Some(header) = props.header { div class="mui-block--shell__header" { (header) } }
                 div class="mui-block--shell__mobile-controls" {}
                 nav class="mui-block--shell__nav" aria-label="Primary" {
@@ -227,7 +233,7 @@ pub(crate) fn example(id: &str) -> Markup {
         id: id.into(),
         embedded: true,
         app_header: app_header::render(app_header::Props {
-            brand: Some(html! { a href="/blocks/shell-sidebar" { "Garden House" } }),
+            brand_mark: super::brand_mark::preset("lodge"),
             actions: Some(html! { span class="mui-app-header__note" { "Example workspace" } }),
             ..Default::default()
         }),
@@ -239,7 +245,7 @@ pub(crate) fn example(id: &str) -> Markup {
             }],
             ..Default::default()
         }),
-        brand: html! { span class="mui-block--shell__brand-mark" aria-hidden="true" { (logo_mark()) } span class="mui-block--shell__brand-name" { "Front desk" } },
+        brand_mark: Some(super::brand_mark::Props { wordmark: "Front desk".into(), ..Default::default() }),
         active_path: "/blocks/worklist-header".into(),
         nav_groups: vec![
             NavGroup {
@@ -325,10 +331,6 @@ pub(crate) fn example(id: &str) -> Markup {
         children: super::example::content(id),
         ..Default::default()
     })
-}
-
-fn logo_mark() -> Markup {
-    PreEscaped(r##"<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 18L12 4L20 18H16L12 12L8 18H4Z" fill="currentColor"/></svg>"##.to_string())
 }
 
 fn icon_chevron_right() -> Markup {

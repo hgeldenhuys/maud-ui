@@ -6,6 +6,7 @@
 
 pub mod assets;
 pub mod blocks;
+pub mod brand;
 pub mod primitives;
 pub mod showcase;
 pub mod time;

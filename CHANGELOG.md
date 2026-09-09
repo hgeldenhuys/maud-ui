@@ -5,6 +5,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.11.0] — 2026-09-09 — Brand and density
+
+A nine-token brand contract connects accent/ink, heading/body fonts, radius, density and logo treatment. The customiser switches Lodge, Bank and Clinic live and exports exactly that set as brand.css. One registry generates Rust metadata, CSS presets and runtime data. `shell::brand_mark` provides the logo, wordmark and tagline slot used by app-header and sidebar typed identity props. The catalog now contains 83 primitives and 23 blocks.
+
+- Root compact/comfortable/spacious density scales control heights (32/36/40px), type, table rows and card insets across the kit. Row controls/chips use 32/32/36px minima; coarse pointers retain 44px. Header height remains 56px at ≥64rem. Legacy accent/font/radius roles now derive from brand tokens; selected tints mix 8% accent with the card surface.
+- Banking joins the landing workspace: accounts, transactions and a KYC queue, with compact density by default. Integer cents retain exact formatting, numeric sorting uses BigInt decimal comparison, and original table/case nodes survive interaction. Amounts stay aligned and unabridged.
+- Page headers use one 56px desktop row with native collapsible search and a compact toolbar. Task grids fit their count; one task is a full-width compact row and zero emits nothing. Full descriptions remain available through title attributes. Compact related cards retain admitted facts.
+- `State::Absent` omits undeclared sections without developer messages; blank attention banners emit nothing. Application rules and duplicate overview/count copy remain the caller's responsibility.
+
+**Source migration:** app-header and sidebar Props gain `brand_mark`; related-card Variant gains Compact; shared State gains Absent. Update exhaustive literals/matches. Default state remains Ready, raw brand slots stay supported, and the new export deliberately excludes advanced theme overrides. [Brand and density](docs/brand-and-density.md) lists every brand token, derived role, density value and interaction contract.
+
 ## [0.10.1] — 2026-09-09 — States and motion
 
 All 13 operational blocks now render loading, empty, error and disabled states from props, with four adjacent examples per API page. Loading/empty/error omit ready content; disabled keeps admitted fragments in an inert subtree with a visible reason. The landing workspace adds a record tab using the complete kit, an arrival-only banner and explicit fictional manager amounts.

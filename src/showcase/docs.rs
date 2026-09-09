@@ -301,6 +301,7 @@ pub(crate) fn block_docs_source(slug: &str) -> Option<&'static str> {
         "task-grid" => include_str!("../../docs/blocks/rendered/task-grid.html"),
         "shell-sidebar" => include_str!("../../docs/blocks/rendered/shell-sidebar.html"),
         "shell-page-header" => include_str!("../../docs/blocks/rendered/shell-page-header.html"),
+        "shell-brand-mark" => include_str!("../../docs/blocks/rendered/shell-brand-mark.html"),
         "shell-app-header" => include_str!("../../docs/blocks/rendered/shell-app-header.html"),
         "shell-app-footer" => include_str!("../../docs/blocks/rendered/shell-app-footer.html"),
 

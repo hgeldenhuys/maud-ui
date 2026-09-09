@@ -7,7 +7,7 @@ use maud::{html, Markup};
 
 /// Auto chooses a compact reference when no effective facts were supplied.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub enum Variant { #[default] Auto, Card, Inline }
+pub enum Variant { #[default] Auto, Card, Inline, Compact }
 
 #[derive(Clone, Debug, Default)]
 pub struct Props {
@@ -35,7 +35,7 @@ fn render_ready(props: Props) -> Markup {
     let facts = props.facts_markup.unwrap_or_else(|| facts_list::render(facts_list::Props { facts: props.facts }));
     let inline = props.variant == Variant::Inline || (props.variant == Variant::Auto && no_facts);
     html! {
-        section class=(if inline { "mui-related-card mui-related-card--inline" } else { "mui-related-card" }) {
+        section class=(if inline { "mui-related-card mui-related-card--inline" } else if props.variant == Variant::Compact { "mui-related-card mui-related-card--compact" } else { "mui-related-card" }) {
             @if let Some(title) = props.title_markup { div class="mui-kit-title" { (title) } }
             @else { (props.heading.render(&props.title, "mui-kit-title")) }
             @if let Some(subtitle) = props.subtitle { p class="mui-related-card__subtitle" { (subtitle) } }
@@ -49,6 +49,7 @@ pub fn preview() -> Markup {
     crate::blocks::kit_preview(|_| {
         html! {
             (render(Props { title: "Maya Chen".into(), subtitle: Some("Guest reference · No additional facts supplied".into()), action: Some(Action::link("View guest", "/blocks/record-header")), ..Default::default() }))
+            (render(Props { variant: Variant::Compact, title: "Guest".into(), subtitle: Some("Maya Chen".into()), facts: vec![Fact::new("Email", "maya.chen@example.com"), Fact::new("Phone", "+1 514 555 0120")], action: Some(Action::link("View guest", "/blocks/record-header")), ..Default::default() }))
             div class="mui-kit-related-examples" {
                 (render(Props { title: "Maya Chen".into(), subtitle: Some("Returning guest · 2nd stay".into()), facts: vec![Fact::new("Email", "maya.chen@example.com"), Fact::new("Language", "English · Contact by email"), Fact::new("Travelling with", "Alex Chen")], action: Some(Action::link("View guest record", "/blocks/record-header")), ..Default::default() }))
                 (render(Props { title: "Juniper 04".into(), subtitle: Some("Garden room · Ready".into()), facts: vec![Fact::new("Room", "Queen bed · Ground floor"), Fact::new("Capacity", "2 adults"), Fact::new("Checked", "Nora · Today at 07:40")], action: Some(Action::link("Choose a room", "/choice_card")), ..Default::default() }))

@@ -1,0 +1,25 @@
+<h1>Brand mark</h1>
+<p>Logo, wordmark and optional tagline shared by app_header and the sidebar. Visual identity comes from the nine brand tokens; content and destinations stay in props. An empty wordmark emits nothing.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::blocks::shell::brand_mark::{self, Props};
+brand_mark::render(Props {
+    wordmark: "Northline".into(), href: Some("/accounts".into()),
+    tagline: Some(html! { "Business banking" }),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>wordmark</td><td>String</td><td>empty</td><td>Escaped identity text; empty emits nothing.</td></tr>
+<tr><td>href</td><td>Option<String></td><td>None</td><td>Destination of the wordmark link.</td></tr>
+<tr><td>logo</td><td>Option<Markup></td><td>None</td><td>Overrides the CSS logo mask; supports full-color images.</td></tr>
+<tr><td>tagline</td><td>Option<Markup></td><td>None</td><td>Caller-owned tagline fragment, outside the link.</td></tr>
+</tbody></table>
+<h2>Helpers and composition</h2>
+<p><code>preset("lodge" | "bank" | "clinic") -&gt; Option&lt;Props&gt;</code> supplies fictional example identities. Pair it with a matching <code>data-brand</code> wrapper for a showcase preset. Pass typed props through <code>app_header::Props::brand_mark</code> or <code>sidebar::Props::brand_mark</code>; they override the legacy raw brand slot when supplied.</p>
+<p>Brand tokens: <code>--mui-brand-accent</code>, <code>--mui-brand-accent-ink</code>, <code>--mui-brand-font-heading</code>, <code>--mui-brand-font-body</code>, <code>--mui-brand-radius</code>, <code>--mui-brand-density</code>, <code>--mui-brand-logo-mask</code>, <code>--mui-brand-logo-size</code>, <code>--mui-brand-logo-radius</code>. The theme customiser exports exactly these names as brand.css. Load it after the library CSS.</p>
+<h2>Accessibility</h2>
+<p>The wordmark names the identity; the logo is decorative. Optional tagline markup stays outside the wordmark link. In the desktop icon rail the text and its link are hidden together; they return in the phone drawer. Supply fonts with local fallbacks, and verify contrast for custom accent/ink values in both themes.</p>
+<h2>Related</h2>
+<p><a href="shell-app-header.md">App header</a>, <a href="shell-sidebar.md">sidebar</a>, <a href="shell-page-header.md">page header</a>.</p>

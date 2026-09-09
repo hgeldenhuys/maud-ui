@@ -51,13 +51,21 @@ fn render_ready(props: Props) -> Markup {
             div class="mui-page-header__search" {
                 @if let Some(search) = props.search_markup { (search) }
                 @else if let Some(search) = props.search {
+                    details class="mui-page-header__search-disclosure" data-mui="header-search" {
+                        summary class="mui-btn mui-btn--outline mui-page-header__search-toggle" aria-label="Search workspace" title="Search workspace" {
+                            svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" { circle cx="10" cy="10" r="6"; path d="m15 15 5 5"; }
+                            span class="mui-page-header__search-label" { "Search" }
+                        }
+                        div class="mui-page-header__search-panel" {
                     form method="get" action=(search.action) role="search" {
                         label {
                             span class="mui-sr-only" { "Search workspace" }
                             input class="mui-input" type="search" name=(search.name) value=(search.value) placeholder=(search.placeholder) data-mui="page-search";
                         }
                         kbd aria-hidden="true" { "⌘ K" }
-                        button class="mui-sr-only mui-page-header__submit" type="submit" { "Search" }
+                        button class="mui-btn mui-btn--outline mui-page-header__submit" type="submit" { "Search" }
+                    }
+                        }
                     }
                 }
             }

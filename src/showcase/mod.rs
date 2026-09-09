@@ -11,6 +11,7 @@ use crate::{blocks, primitives};
 pub mod docs;
 mod generated_props;
 mod catalog;
+mod brand;
 pub mod landing;
 
 pub use landing::landing_page;
@@ -413,6 +414,7 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
         uses: &["button", "card", "badge"],
     },
     BlockEntry { slug: "shell-page-header", category: "Application shell", title: "Page header", description: "Sticky page context: breadcrumbs, global search, actions and switchers on one calm row.", uses: &["breadcrumb", "input", "button"] },
+    BlockEntry { slug: "shell-brand-mark", category: "Application shell", title: "Brand mark", description: "Logo, wordmark and tagline shared by the app masthead and sidebar.", uses: &[] },
     BlockEntry { slug: "shell-app-header", category: "Application shell", title: "App masthead", description: "Optional product identity, primary links and an account slot. Empty props render nothing.", uses: &["button"] },
     BlockEntry { slug: "shell-app-footer", category: "Application shell", title: "App footer", description: "Optional links, a version line and secondary columns below your whole workspace.", uses: &["separator"] },
     BlockEntry { slug: "worklist-header", category: "Operations", title: "Worklist header", description: "Title, count sentence, inline GET search and one primary action. Stacks on phones.", uses: &["status_chip_group", "button", "input"] },
@@ -440,6 +442,7 @@ fn block_content(slug: &str) -> Option<Markup> {
         "settings-team" => blocks::settings::team::preview(),
         "shell-sidebar" => blocks::shell::sidebar::preview(),
         "shell-page-header" => blocks::shell::page_header::preview(),
+        "shell-brand-mark" => blocks::shell::brand_mark::preview(),
         "shell-app-header" => blocks::shell::app_header::preview(),
         "shell-app-footer" => blocks::shell::app_footer::preview(),
         "worklist-header" => blocks::worklist::header::preview(),
@@ -1164,11 +1167,8 @@ pub fn showcase_page() -> Markup {
     }
 }
 
-/// Onboarding page at /getting-started — install, first paint, theming, runtime.
-/// Theme customiser page at `/theme`. A two-column page: token
-/// controls on the left, a live preview on the right. Overrides are
-/// applied to `:root` as inline styles, so every page element that
-/// reads `--mui-*` tokens reacts. Persisted to localStorage.
+/// Brand customiser at `/theme`, with an optional advanced theme preview.
+/// Brand choices apply to the document, persist locally and export nine tokens.
 pub fn theme_customizer_page() -> Markup {
     use crate::primitives::{alert, badge, button, card, field, input, swatch};
 
@@ -1198,17 +1198,15 @@ pub fn theme_customizer_page() -> Markup {
                         section class="mui-gallery__component mui-theme__intro" id="theme" {
                             h1 class="mui-gallery__component-name" { "Theme customiser" }
                             p data-mui-type="body" style="color:var(--mui-text-muted);max-width:48rem;margin: 0 0 var(--mui-space-lg);line-height: var(--mui-leading-body);" {
-                                "Tweak the "
-                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "--mui-*" }
-                                " tokens on the left and watch the preview on the right re-render instantly. "
-                                "Changes are saved to "
-                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "localStorage" }
-                                " so they survive reloads. Export a "
-                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { ":root" }
-                                " block when you're happy, paste into your app."
+                                "Choose a brand and adjust its colors, type and density. The whole interface updates as you edit, and your choices survive reloads. Download "
+                                code data-mui-type="small" style="font-family:var(--mui-font-mono);" { "brand.css" }
+                                " to bring those nine tokens into your app."
                             }
                         }
 
+                        (brand::controls())
+                        details class="mui-theme__advanced" {
+                            summary class="mui-btn mui-btn--outline" { "Advanced theme preview" }
                         div class="mui-theme__split" {
                             // ── Left column: controls ───────────────
                             aside class="mui-theme__controls" id="mui-theme-controls" {
@@ -1227,7 +1225,7 @@ pub fn theme_customizer_page() -> Markup {
                                         button type="button" class="mui-btn mui-btn--outline mui-btn--sm" data-preset="high-contrast" aria-pressed="false" { "High contrast" }
                                     }
                                     div class="mui-theme__preset-actions" {
-                                        button type="button" id="mui-theme-reset" class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset to defaults" }
+                                        button type="button" id="mui-theme-reset" class="mui-btn mui-btn--ghost mui-btn--sm" { "Reset advanced preview" }
                                     }
                                 }
 
@@ -1394,25 +1392,26 @@ pub fn theme_customizer_page() -> Markup {
                                     }
                                 }
 
+                            }
+                        }
+
+                        }
                                 div class="mui-theme__preview-section" {
                                     h4 class="mui-theme__section-title" { "Export" }
                                     p data-mui-type="small" style="color:var(--mui-text-muted);margin: 0 0 var(--mui-space-md);" {
                                         "Paste this "
                                         code data-mui-type="small" style="font-family:var(--mui-font-mono);" { ":root" }
-                                        " block into your app's global CSS. All overrides are inline so you can re-enable maud-ui's defaults by removing this block."
+                                        " block after maud-ui.css. The export contains exactly the nine brand tokens; advanced theme tweaks stay in this preview."
                                     }
                                     div class="mui-theme__export" {
-                                        pre id="mui-theme-export" class="mui-theme__export-pre" tabindex="0" aria-label="Theme CSS" { "/* ready — the block updates as you tweak tokens */" }
+                                        pre id="mui-theme-export" class="mui-theme__export-pre" tabindex="0" aria-label="Brand CSS" { (brand::stylesheet("lodge")) }
                                         div class="mui-theme__export-actions" {
                                             button type="button" id="mui-theme-copy"     class="mui-btn mui-btn--primary mui-btn--sm" { "Copy CSS" }
-                                            button type="button" id="mui-theme-download" class="mui-btn mui-btn--outline mui-btn--sm" { "Download .css" }
+                                            button type="button" id="mui-theme-download" class="mui-btn mui-btn--outline mui-btn--sm" { "Download brand.css" }
                                         }
                                         p id="mui-theme-export-status" class="mui-theme__export-status" role="status" {}
                                     }
                                 }
-                            }
-                        }
-
                         div class="mui-gallery__back" {
                             a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm" {
                                 "\u{2190} Back to Gallery"
@@ -1906,7 +1905,7 @@ fn theme_customizer_js() -> &'static str {
 
   // ── Reset ─────────────────────────────────────────────────────
   document.getElementById('mui-theme-reset')?.addEventListener('click', function () {
-    if (!window.confirm('Reset all tokens to defaults?')) return;
+    if (!window.confirm('Reset advanced theme adjustments?')) return;
     clearOverrides();
     save(overrides);
     setTimeout(syncControlsFromComputed, 0);
@@ -1915,15 +1914,7 @@ fn theme_customizer_js() -> &'static str {
 
   // ── Export ────────────────────────────────────────────────────
   function buildCss() {
-    var keys = Object.keys(overrides);
-    if (keys.length === 0) return '/* No overrides — using maud-ui defaults. */';
-    keys.sort();
-    var lines = [':root {'];
-    for (var i = 0; i < keys.length; i++) {
-      lines.push('  --' + keys[i] + ': ' + overrides[keys[i]] + ';');
-    }
-    lines.push('}');
-    return lines.join('\n');
+    return window.MaudUI?.brand?.buildCss() || '/* Brand editor initialising. */';
   }
   function matchesPreset(preset, base, values) {
     var keys = Object.keys(preset).filter(function (key) { return key.charAt(0) !== '_'; });
@@ -1941,6 +1932,13 @@ fn theme_customizer_js() -> &'static str {
   }
   refreshExport();
 
+  document.addEventListener('mui:brand-change', function () {
+    overrides = {};
+    save(overrides);
+    syncControlsFromComputed();
+    refreshExport();
+  });
+
   document.getElementById('mui-theme-copy')?.addEventListener('click', async function () {
     var status = document.getElementById('mui-theme-export-status');
     try {
@@ -1954,7 +1952,7 @@ fn theme_customizer_js() -> &'static str {
     var blob = new Blob([buildCss()], { type: 'text/css' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url; a.download = 'maud-ui-theme.css';
+    a.href = url; a.download = 'brand.css';
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);

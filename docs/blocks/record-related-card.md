@@ -16,7 +16,7 @@ related_card::render(Props {
 ## Props
 | Field | Type | Default | Description |
 |---|---|---|---|
-| variant | Variant | Auto | Auto selects Inline without facts and Card with facts; Card/Inline force either layout. |
+| variant | Variant | Auto | Auto selects Inline without facts and Card with facts; Card/Inline force either layout; Compact keeps supplied facts in a dense card. |
 | title | String | empty | Escaped entity title. |
 | title_markup | Option<Markup> | None | Overrides title, including an explicitly empty fragment. |
 | subtitle | Option<String> | None | Supporting identity/state. |
@@ -37,3 +37,8 @@ The plain title uses the requested heading level. `title_markup` is wrapped in a
 ## Presentation states (0.10.1)
 
 `Props::state: maud_ui::blocks::state::State` defaults to `Ready`. `Loading { message }` shows skeletons; `Empty { message, action }` and `Error { message, retry }` provide distinct recovery paths; `Disabled { reason }` retains admitted content in an inert subtree with an external reason. Loading, empty and error omit ready content. Inert disables interaction, not server authorization or submission of values by an enclosing form. Each live API page shows all four states together. Add `state: Default::default()` to exhaustive Props literals.
+
+## Compact facts (0.11.0)
+`Variant::Compact` keeps admitted facts and the sole action together in a denser card. Explicit Inline also retains supplied facts. Add Compact to exhaustive Variant matches. Render guest contact and room facts here once; omit duplicate overview rows in the consuming application.
+
+`State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.

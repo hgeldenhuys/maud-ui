@@ -1,0 +1,201 @@
+{
+  "origin": "http://127.0.0.1:23448",
+  "pages": 16,
+  "results": [
+    {
+      "path": "/",
+      "ids": 46,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "workspace_tabs": 3,
+      "native_panels_without_js": 3,
+      "kyc_review_targets": 2
+    },
+    {
+      "path": "/theme",
+      "ids": 127,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "brand_fields": 9,
+      "export_tokens": 9
+    },
+    {
+      "path": "/blocks/shell-brand-mark",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": []
+    },
+    {
+      "path": "/blocks/worklist-header",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/worklist-grouped",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/record-header",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/record-timeline",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/record-money",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/record-related-card",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/task-grid",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/attention-banner",
+      "ids": 19,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/action-row",
+      "ids": 23,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/shell-sidebar",
+      "ids": 46,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/shell-page-header",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/shell-app-header",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    },
+    {
+      "path": "/blocks/shell-app-footer",
+      "ids": 17,
+      "duplicate_ids": [],
+      "missing_references": [],
+      "invalid_nesting": [],
+      "state_examples": {
+        "loading": 1,
+        "empty": 1,
+        "error": 1,
+        "disabled": 1
+      }
+    }
+  ]
+}

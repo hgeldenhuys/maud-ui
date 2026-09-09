@@ -90,11 +90,18 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-record-header__actions { align-items: flex-start; }
 .mui-record-header__secondary { display: flex; flex-direction: column; align-items: stretch; gap: var(--mui-space-sm); margin-block-start: var(--mui-space-sm); }
 .mui-record-header__secondary .mui-btn { width: 100%; }
-.mui-task-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--mui-space-md); padding: 0; margin: 0; list-style: none; }
+.mui-task-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mui-space-md); padding: 0; margin: 0; list-style: none; }
 .mui-task-grid__card { display: flex; flex-direction: column; gap: var(--mui-space-sm); min-width: 0; padding: var(--mui-space-lg); background: var(--mui-bg-card); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md); }
 .mui-task-grid__title { font-size: var(--mui-text-body-size); line-height: var(--mui-leading-small); font-weight: var(--mui-weight-heading); margin: 0; overflow-wrap: anywhere; }
 .mui-task-grid__description { margin: 0; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-small); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mui-task-grid__action { margin-block-start: auto; padding-block-start: var(--mui-space-sm); }
+.mui-task-grid[data-count="1"] { grid-template-columns: minmax(0, 1fr); }
+.mui-task-grid[data-count="1"] .mui-task-grid__card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--mui-space-xs) var(--mui-space-lg); }
+.mui-task-grid[data-count="1"] .mui-task-grid__action { grid-column: 2; grid-row: 1 / span 2; margin: 0; padding: 0; align-self: center; }
+@media (max-width: 30rem) {
+  .mui-task-grid[data-count="1"] .mui-task-grid__card { grid-template-columns: minmax(0, 1fr); }
+  .mui-task-grid[data-count="1"] .mui-task-grid__action { grid-column: 1; grid-row: auto; }
+}
 .mui-empty-state[data-state="failed"] { border: 1px solid var(--mui-danger-text); border-radius: var(--mui-radius-md); }
 .mui-empty-state[data-state="failed"] .mui-empty-state__icon { color: var(--mui-danger-text); font-family: var(--mui-font-sans); font-weight: var(--mui-weight-heading); }
 .mui-empty-state[data-state] .mui-empty-state__description { max-width: 38ch; margin-inline: auto; }

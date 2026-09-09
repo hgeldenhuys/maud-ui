@@ -879,6 +879,20 @@
   "use strict";
   const ui = window.MaudUI;
   if (!ui) return;
+  ui.compareDecimal = (left, right) => {
+    function parse(text) {
+      const value = text.trim().replace("\u2212", "-");
+      const match = /^([+-]?)(?:[$€£¥])?((?:\d{1,3}(?:,\d{3})+|\d+))(?:\.(\d+))?$/.exec(value);
+      if (!match) return null;
+      const decimals = match[3] || "";
+      return { value: BigInt((match[1] === "-" ? "-" : "") + match[2].replaceAll(",", "") + decimals), scale: decimals.length };
+    }
+    const a = parse(left), b = parse(right);
+    if (!a || !b) return null;
+    const scale = Math.max(a.scale, b.scale);
+    const l = a.value * 10n ** BigInt(scale - a.scale), r = b.value * 10n ** BigInt(scale - b.scale);
+    return l < r ? -1 : l > r ? 1 : 0;
+  };
   ui.behaviors["data-table"] = (root) => {
     const pageSize = Math.max(1, parseInt(root.getAttribute("data-page-size") || "5", 10) || 5);
     const body = root.querySelector(".mui-data-table__body");
@@ -903,9 +917,7 @@
       const filtered = rows.filter((row) => row.values.some((value) => value.toLocaleLowerCase().includes(query)) || !query);
       if (direction && column >= 0) filtered.sort((a, b) => {
         const left = a.values[column] || "", right = b.values[column] || "";
-        const numeric = (value) => Number(value.replace(/[$€£,\s]/g, ""));
-        const l = numeric(left), r = numeric(right);
-        return direction * (left.trim() && right.trim() && Number.isFinite(l) && Number.isFinite(r) ? l - r : left.localeCompare(right));
+        return direction * (ui.compareDecimal(left, right) ?? left.localeCompare(right));
       });
       page = Math.max(0, Math.min(page, Math.ceil(filtered.length / pageSize) - 1));
       rows.forEach((row) => {
@@ -2853,6 +2865,186 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   const ui = window.MaudUI;
   if (!ui) return;
   const initialized = /* @__PURE__ */ new WeakSet();
+  ui.behaviors["banking-demo"] = (root) => {
+    if (initialized.has(root)) return;
+    initialized.add(root);
+    let trigger;
+    root.addEventListener("click", (event) => {
+      const link = event.target.closest("[data-bank-review]");
+      if (link && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) {
+        const panel = document.getElementById(link.getAttribute("href").slice(1));
+        if (panel && root.contains(panel)) {
+          event.preventDefault();
+          trigger = link;
+          panel.open = true;
+          panel.querySelector("summary").focus();
+        }
+      }
+      const close = event.target.closest("[data-bank-close]");
+      if (close) {
+        const panel = close.closest("details");
+        panel.open = false;
+        if (trigger?.isConnected) trigger.focus();
+        else panel.querySelector("summary").focus();
+      }
+    });
+    const shell = root.closest(".mui-block--shell");
+    const search = shell?.querySelector('.mui-page-header input[type="search"]');
+    const transactions = root.querySelector(".mui-data-table__search");
+    search?.closest("form")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      transactions.value = search.value;
+      transactions.dispatchEvent(new Event("input", { bubbles: true }));
+      search.closest("details").open = false;
+      transactions.focus();
+    });
+  };
+  ui.init();
+})();
+window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": "Accent", "kind": "color", "default": "#285bc5" }, { "name": "--mui-brand-accent-ink", "label": "Text on accent", "kind": "color", "default": "#ffffff" }, { "name": "--mui-brand-font-heading", "label": "Heading font", "kind": "text", "default": '"Avenir Next", "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }, { "name": "--mui-brand-font-body", "label": "Body font", "kind": "text", "default": '"Avenir Next", "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }, { "name": "--mui-brand-radius", "label": "Corner radius", "kind": "text", "default": "0.375rem" }, { "name": "--mui-brand-density", "label": "Density", "kind": "density", "default": "1" }, { "name": "--mui-brand-logo-mask", "label": "Logo mask (CSS url)", "kind": "text", "default": 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203%203%2010v3h26v-3ZM5%2016h4v10H5Zm9%200h4v10h-4Zm9%200h4v10h-4ZM3%2028h26v3H3Z%22%2F%3E%3C%2Fsvg%3E")' }, { "name": "--mui-brand-logo-size", "label": "Logo size", "kind": "text", "default": "2rem" }, { "name": "--mui-brand-logo-radius", "label": "Logo corner radius", "kind": "text", "default": "0" }], "presets": [{ "key": "lodge", "label": "Lodge", "wordmark": "Garden House", "tagline": "Independent hospitality", "values": ["#466752", "#ffffff", "Georgia, serif", '"Avenir Next", system-ui, sans-serif', "0.5rem", "1", 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22m16%203%2011%2012h-6l7%209H18v5h-4v-5H4l7-9H5Z%22%2F%3E%3C%2Fsvg%3E")', "2rem", "0"] }, { "key": "bank", "label": "Bank", "wordmark": "Northline", "tagline": "Business banking", "values": ["#24428c", "#ffffff", '"Avenir Next", system-ui, sans-serif', '"Avenir Next", system-ui, sans-serif', "0.25rem", "0", 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203%203%2010v3h26v-3ZM5%2016h4v10H5Zm9%200h4v10h-4Zm9%200h4v10h-4ZM3%2028h26v3H3Z%22%2F%3E%3C%2Fsvg%3E")', "1.75rem", "0"] }, { "key": "clinic", "label": "Clinic", "wordmark": "Commonwell", "tagline": "Care for your community", "values": ["#076b67", "#ffffff", '"Trebuchet MS", system-ui, sans-serif', '"Avenir Next", system-ui, sans-serif', "0.75rem", "2", 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M12%203h8v9h9v8h-9v9h-8v-9H3v-8h9Z%22%2F%3E%3C%2Fsvg%3E")', "2rem", "0.25rem"] }] };
+(function() {
+  "use strict";
+  const ui = window.MaudUI, data = ui?.brandData;
+  if (!data) return;
+  const root = document.documentElement;
+  const modes = ["compact", "comfortable", "spacious"];
+  const read = (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+  const write = (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+    }
+  };
+  let values = data.tokens.map((token) => token.default);
+  let current = "";
+  const savedDensity = read("mui-density");
+  ui.densityChosen = modes.includes(savedDensity);
+  function refresh() {
+    const output = document.getElementById("mui-theme-export");
+    if (output) output.textContent = buildCss();
+    document.querySelectorAll("[data-brand-token]").forEach((input) => {
+      const index = data.tokens.findIndex((token) => token.name === input.getAttribute("data-brand-token"));
+      if (index >= 0 && input !== document.activeElement) input.value = values[index];
+    });
+    document.querySelectorAll("[data-brand-select]").forEach((select) => {
+      select.value = current;
+    });
+  }
+  function buildCss() {
+    return ":root {\n" + data.tokens.map((token, index) => "  " + token.name + ": " + values[index] + ";").join("\n") + "\n}\n";
+  }
+  function valid(token, value) {
+    if (typeof value !== "string" || !value.trim()) return false;
+    if (token.kind === "density") return ["0", "1", "2"].includes(value);
+    if (token.kind === "color") return /^#[0-9a-f]{6}$/i.test(value);
+    const property = token.name.includes("font-") ? "font-family" : token.name.endsWith("mask") ? "mask-image" : token.name.includes("radius") ? "border-radius" : "width";
+    return window.CSS?.supports(property, value) ?? false;
+  }
+  function persist() {
+    write("mui-brand", JSON.stringify({ current, values }));
+  }
+  function setDensity(mode, persistChoice = true) {
+    if (!modes.includes(mode)) return;
+    root.setAttribute("data-density", mode);
+    document.querySelectorAll("[data-mui-density-scope]").forEach((scope) => scope.setAttribute("data-mui-density-scope", mode));
+    document.querySelectorAll('[data-mui="density-control"]').forEach((select) => {
+      select.value = mode;
+    });
+    values[5] = String(modes.indexOf(mode));
+    if (persistChoice) {
+      ui.densityChosen = true;
+      write("mui-density", mode);
+      persist();
+    }
+    refresh();
+  }
+  ui.setDensity = setDensity;
+  function apply(next, name, save = true) {
+    if (next.length !== data.tokens.length || !next.every((v, i) => valid(data.tokens[i], v))) return false;
+    let old = {};
+    try {
+      old = JSON.parse(read("mui-theme-overrides") || "{}");
+    } catch {
+    }
+    Object.keys(old).forEach((key) => {
+      if (key.startsWith("mui-") && !key.startsWith("mui-brand-")) root.style.removeProperty("--" + key);
+    });
+    values = [...next];
+    current = name;
+    root.removeAttribute("data-brand");
+    data.tokens.forEach((token, i) => root.style.setProperty(token.name, values[i]));
+    const brand = data.presets.find((preset) => preset.key === name);
+    if (brand) document.querySelectorAll("[data-brand-live]").forEach((preview) => {
+      preview.querySelector(".mui-brand-mark__wordmark").textContent = brand.wordmark;
+      preview.querySelector(".mui-brand-mark__tagline").textContent = brand.tagline;
+    });
+    setDensity(modes[Number(values[5])], false);
+    if (save) persist();
+    document.dispatchEvent(new CustomEvent("mui:brand-change"));
+    refresh();
+    return true;
+  }
+  ui.brand = { buildCss, apply, valid };
+  try {
+    const saved = JSON.parse(read("mui-brand") || "null");
+    if (Array.isArray(saved?.values)) apply(saved.values, saved.current, false);
+  } catch {
+  }
+  if (ui.densityChosen) setDensity(savedDensity, false);
+  const initialized = /* @__PURE__ */ new WeakSet();
+  ui.behaviors["density-control"] = (select) => {
+    if (initialized.has(select)) return;
+    initialized.add(select);
+    select.value = root.getAttribute("data-density") || "comfortable";
+    select.addEventListener("change", () => setDensity(select.value));
+  };
+  ui.behaviors["brand-customizer"] = (editor) => {
+    if (initialized.has(editor)) return;
+    initialized.add(editor);
+    let saved;
+    try {
+      saved = JSON.parse(read("mui-brand") || "null");
+    } catch {
+    }
+    if (!saved || !Array.isArray(saved.values) || !apply(saved.values, saved.current, false)) apply(data.presets[0].values, data.presets[0].key, false);
+    if (ui.densityChosen) setDensity(savedDensity, false);
+    editor.querySelector("[data-brand-select]").addEventListener("change", (event) => {
+      const preset = data.presets.find((preset2) => preset2.key === event.target.value);
+      if (preset) {
+        apply(preset.values, preset.key);
+        write("mui-density", modes[Number(preset.values[5])]);
+        ui.densityChosen = true;
+      }
+    });
+    editor.addEventListener("input", (event) => {
+      const index = data.tokens.findIndex((token) => token.name === event.target.getAttribute("data-brand-token"));
+      if (index < 0) return;
+      const next = [...values];
+      next[index] = event.target.value;
+      const accepted = valid(data.tokens[index], next[index]);
+      event.target.setAttribute("aria-invalid", String(!accepted));
+      if (accepted) {
+        apply(next, "");
+        if (index === 5) setDensity(modes[Number(next[index])]);
+      }
+    });
+    editor.querySelector("[data-brand-example-action]").addEventListener("click", () => {
+      editor.querySelector("[data-brand-status]").textContent = "Action received. This preview uses your current brand and density.";
+    });
+  };
+  ui.init();
+})();
+(function() {
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["status-chip-group"] = function(group) {
     if (initialized.has(group)) return;
     initialized.add(group);
@@ -3010,6 +3202,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   const ui = window.MaudUI;
   if (!ui) return;
   function focusSearch(target, source) {
+    const disclosure = target.closest(".mui-page-header__search-disclosure");
+    if (disclosure) disclosure.open = true;
     const dialog = source.closest("dialog");
     if (dialog?.open) {
       dialog.addEventListener("close", () => target.focus(), { once: true });
@@ -3031,7 +3225,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
       const scope = event.target.closest(".mui-block--shell") || document;
       const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
-      if (target && target.getClientRects().length) {
+      if (target && (target.getClientRects().length || target.closest(".mui-page-header__search-disclosure")?.getClientRects().length)) {
         event.preventDefault();
         focusSearch(target, event.target);
       }
@@ -3155,6 +3349,29 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   const ui = window.MaudUI;
   if (!ui) return;
   const initialized = /* @__PURE__ */ new WeakSet();
+  ui.behaviors["header-search"] = (details) => {
+    if (initialized.has(details)) return;
+    initialized.add(details);
+    const summary = details.querySelector("summary");
+    const input = details.querySelector('input[type="search"]');
+    details.addEventListener("toggle", () => {
+      if (details.open && details.contains(document.activeElement)) input?.focus();
+    });
+    details.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && details.open) {
+        event.preventDefault();
+        details.open = false;
+        summary.focus();
+      }
+    });
+  };
+  ui.init();
+})();
+(function() {
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  const initialized = /* @__PURE__ */ new WeakSet();
   function ordinal(value) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
     const [year, month, day] = value.split("-").map(Number);
@@ -3255,6 +3472,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         panels[i].setAttribute("role", "tabpanel");
         panels[i].hidden = i !== index;
       });
+      const density = panels[index].getAttribute("data-default-density");
+      if (density && !ui.densityChosen) ui.setDensity?.(density, false);
       if (focus) tabs[index].focus();
     }
     const initial = tabs.findIndex((tab) => tab.getAttribute("href") === window.location?.hash);

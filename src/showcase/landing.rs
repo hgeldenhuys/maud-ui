@@ -27,21 +27,26 @@ pub fn landing_page() -> Markup {
                     section class="lp__hero" aria-label="Live application example" {
                         div class="lp__example-caption" {
                             span { "A workspace, composed." }
-                            span { "Filter guests and add a stay, then explore the record tab. Try both themes." }
+                            span { "Explore hospitality and banking, then choose the density that fits your work." }
                         }
+                        (super::brand::density_control())
                         div class="lp__workspace-pages" data-mui="workspace-pages" {
                             nav class="lp__workspace-tabs" aria-label="Workspace pages" {
                                 a id="lp-worklist-tab" href="#lp-worklist-panel" data-workspace-tab { "Worklist" }
                                 a id="lp-record-tab" href="#lp-record-panel" data-workspace-tab { "Record" }
+                                a id="lp-bank-tab" href="#lp-bank-panel" data-workspace-tab { "Banking" }
                             }
-                            section class="lp__screen" id="lp-worklist-panel" aria-labelledby="lp-worklist-tab" data-workspace-panel {
+                            section class="lp__screen" id="lp-worklist-panel" aria-labelledby="lp-worklist-tab" data-workspace-panel data-default-density="comfortable" {
                                 (blocks::shell::sidebar::example("landing-workspace"))
                             }
-                            section class="lp__screen" id="lp-record-panel" aria-labelledby="lp-record-tab" data-workspace-panel {
+                            section class="lp__screen" id="lp-record-panel" aria-labelledby="lp-record-tab" data-workspace-panel data-default-density="comfortable" {
                                 (blocks::shell::record_example::render("landing-record"))
                             }
+                            section class="lp__screen" id="lp-bank-panel" aria-labelledby="lp-bank-tab" data-workspace-panel data-default-density="compact" {
+                                (blocks::shell::banking_example::render("landing-bank"))
+                            }
                         }
-                        noscript { p class="lp__noscript" { "Both workspace pages are available below. JavaScript adds tabs, filters, the drawer and the local form." } }
+                        noscript { p class="lp__noscript" { "All workspace pages are available below. JavaScript adds tabs, filters, the drawer and the local form." } }
                     }
                     section class="lp__claims" aria-label="Why maud-ui" {
                         article { h2 { "Start with a whole screen." } p { "A shell, a worklist, a record. " (blocks::BLOCK_NAMES.len()) " composed blocks give your first route a clear structure." } a href="/blocks" { "Explore blocks →" } }

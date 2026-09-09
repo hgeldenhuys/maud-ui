@@ -1,6 +1,8 @@
 /* static/styles/tokens.css */
 :root {
-  --mui-font-sans:
+  --mui-brand-accent: #285bc5;
+  --mui-brand-accent-ink: #ffffff;
+  --mui-brand-font-heading:
     "Avenir Next",
     "Nunito Sans",
     -apple-system,
@@ -8,6 +10,20 @@
     "Segoe UI",
     system-ui,
     sans-serif;
+  --mui-brand-font-body:
+    "Avenir Next",
+    "Nunito Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+  --mui-brand-radius: 0.375rem;
+  --mui-brand-density: 1;
+  --mui-brand-logo-mask: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203%203%2010v3h26v-3ZM5%2016h4v10H5Zm9%200h4v10h-4Zm9%200h4v10h-4ZM3%2028h26v3H3Z%22%2F%3E%3C%2Fsvg%3E);
+  --mui-brand-logo-size: 2rem;
+  --mui-brand-logo-radius: 0;
+  --mui-font-sans: var(--mui-brand-font-body);
   --mui-font-mono:
     "JetBrains Mono",
     ui-monospace,
@@ -103,16 +119,18 @@
   --mui-bg-overlay: rgba(0, 0, 0, 0.64);
   --mui-border: #303640;
   --mui-border-control: #727e90;
-  --mui-border-focus: #84aaff;
+  --mui-border-focus: var(--mui-accent-text);
   --mui-text: #edf0f4;
   --mui-text-secondary: #c1c8d2;
   --mui-text-muted: #a1acba;
   --mui-text-subtle: #939eae;
-  --mui-accent: #84aaff;
-  --mui-accent-hover: #9bbaff;
-  --mui-accent-fg: #101b32;
-  --mui-accent-text: #acbfff;
-  --mui-accent-soft: #26344e;
+  --mui-brand-accent: #84aaff;
+  --mui-brand-accent-ink: #101b32;
+  --mui-accent: var(--mui-brand-accent);
+  --mui-accent-hover: var(--mui-brand-accent);
+  --mui-accent-fg: var(--mui-brand-accent-ink);
+  --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
+  --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
   --mui-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.18);
   --mui-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.36);
   --mui-info: #2456a6;
@@ -158,16 +176,18 @@
   --mui-bg-overlay: rgba(15, 23, 42, 0.48);
   --mui-border: #dde2e8;
   --mui-border-control: #778396;
-  --mui-border-focus: #285bc5;
+  --mui-border-focus: var(--mui-accent-text);
   --mui-text: #1b2330;
   --mui-text-secondary: #475364;
   --mui-text-muted: #5e6a7a;
   --mui-text-subtle: #606d80;
-  --mui-accent: #285bc5;
-  --mui-accent-hover: #214ba4;
-  --mui-accent-fg: #ffffff;
-  --mui-accent-text: #2855ae;
-  --mui-accent-soft: #e9effb;
+  --mui-brand-accent: #285bc5;
+  --mui-brand-accent-ink: #ffffff;
+  --mui-accent: var(--mui-brand-accent);
+  --mui-accent-hover: var(--mui-brand-accent);
+  --mui-accent-fg: var(--mui-brand-accent-ink);
+  --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
+  --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
   --mui-shadow-sm: 0 1px 3px rgba(27, 35, 48, 0.06);
   --mui-shadow-lg: 0 12px 32px rgba(27, 35, 48, 0.14);
   --mui-info: #2456a6;
@@ -206,6 +226,50 @@
   :root {
     --mui-page-gutter: 1rem;
   }
+}
+:root,
+[data-theme],
+[data-brand],
+[data-mui-density-scope] {
+  --mui-density-level: var(--mui-density-choice, var(--mui-brand-density));
+  --mui-font-sans: var(--mui-brand-font-body);
+  --mui-font-heading: var(--mui-brand-font-heading);
+  --mui-radius-sm: calc(var(--mui-brand-radius) * 2 / 3);
+  --mui-radius-md: var(--mui-brand-radius);
+  --mui-radius-lg: calc(var(--mui-brand-radius) * 2);
+  --mui-control-height: calc(2rem + 0.25rem * var(--mui-density-level));
+  --mui-row-height: max(2rem, calc(1.75rem + 0.25rem * var(--mui-density-level)));
+  --mui-nav-row-height: var(--mui-control-height);
+  --mui-card-inset-block: calc(1rem + 0.25rem * var(--mui-density-level));
+  --mui-card-inset-inline: calc(1.25rem + 0.25rem * var(--mui-density-level));
+  --mui-inset-cell: calc(0.375rem + 0.125rem * var(--mui-density-level));
+  --mui-text-display-size: calc(2.5rem + 0.25rem * var(--mui-density-level));
+  --mui-text-h1-size: calc(1.75rem + 0.25rem * var(--mui-density-level));
+  --mui-text-h2-size: calc(1.3125rem + 0.1875rem * var(--mui-density-level));
+  --mui-text-h3-size: calc(1rem + 0.125rem * var(--mui-density-level));
+  --mui-text-body-size: calc(0.875rem + 0.0625rem * var(--mui-density-level));
+  --mui-text-small-size: calc(0.8125rem + 0.0625rem * var(--mui-density-level));
+  --mui-text-caption-size: max(0.75rem, calc(0.6875rem + 0.0625rem * var(--mui-density-level)));
+}
+[data-brand] {
+  --mui-accent: var(--mui-brand-accent);
+  --mui-accent-fg: var(--mui-brand-accent-ink);
+  --mui-accent-hover: var(--mui-brand-accent);
+  --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
+  --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
+  --mui-border-focus: var(--mui-accent-text);
+}
+:root[data-density=compact],
+[data-mui-density-scope=compact] {
+  --mui-density-choice: 0;
+}
+:root[data-density=comfortable],
+[data-mui-density-scope=comfortable] {
+  --mui-density-choice: 1;
+}
+:root[data-density=spacious],
+[data-mui-density-scope=spacious] {
+  --mui-density-choice: 2;
 }
 
 /* static/styles/components/accordion.css */
@@ -9326,7 +9390,7 @@ a.mui-btn--link:hover:not([aria-disabled=true]),
 }
 .mui-task-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
   gap: var(--mui-space-md);
   padding: 0;
   margin: 0;
@@ -9361,6 +9425,30 @@ a.mui-btn--link:hover:not([aria-disabled=true]),
 .mui-task-grid__action {
   margin-block-start: auto;
   padding-block-start: var(--mui-space-sm);
+}
+.mui-task-grid[data-count="1"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.mui-task-grid[data-count="1"] .mui-task-grid__card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--mui-space-xs) var(--mui-space-lg);
+}
+.mui-task-grid[data-count="1"] .mui-task-grid__action {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+@media (max-width: 30rem) {
+  .mui-task-grid[data-count="1"] .mui-task-grid__card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mui-task-grid[data-count="1"] .mui-task-grid__action {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 .mui-empty-state[data-state=failed] {
   border: 1px solid var(--mui-danger-text);
@@ -10251,6 +10339,88 @@ td.mui-table__cell--numeric {
 .mui-page-header__switchers :is(select, button) {
   max-width: 10rem;
 }
+.mui-page-header__search-disclosure {
+  position: relative;
+}
+.mui-page-header__search-toggle {
+  list-style: none;
+  cursor: pointer;
+}
+.mui-page-header__search-toggle::-webkit-details-marker {
+  display: none;
+}
+.mui-page-header__search-panel {
+  width: min(20rem, calc(100vw - 2rem));
+  padding: var(--mui-space-sm);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-md);
+  box-shadow: var(--mui-shadow-lg);
+}
+.mui-page-header__search-panel form {
+  gap: var(--mui-space-xs);
+}
+.mui-page-header__search-panel label {
+  min-width: 0;
+}
+.mui-page-header__search-panel form > kbd {
+  display: none;
+}
+.mui-page-header__search-panel .mui-input {
+  padding-inline-end: var(--mui-space-md);
+}
+@media (min-width: 64rem) {
+  .mui-page-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    flex-wrap: nowrap;
+    height: var(--mui-header-height);
+    min-height: var(--mui-header-height);
+    gap: var(--mui-space-sm);
+    padding-block: 0;
+  }
+  .mui-page-header__context {
+    min-width: 0;
+  }
+  .mui-page-header__controls,
+  .mui-page-header__switchers {
+    flex-wrap: nowrap;
+  }
+  .mui-page-header__controls {
+    max-width: 32rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding: var(--mui-space-xs);
+  }
+  .mui-page-header__switchers {
+    flex-shrink: 0;
+  }
+  .mui-page-header__controls :is(button, a, select) {
+    white-space: nowrap;
+  }
+  .mui-page-header__search {
+    grid-column: 2;
+    width: auto;
+    max-width: 20rem;
+  }
+  .mui-page-header__controls {
+    grid-column: 3;
+  }
+  .mui-page-header__search-toggle {
+    width: var(--mui-control-height);
+    height: var(--mui-control-height);
+    padding: 0;
+  }
+  .mui-page-header__search-label {
+    display: none;
+  }
+  .mui-page-header__search-panel {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + var(--mui-space-sm));
+    z-index: var(--mui-layer-overlay);
+  }
+}
 @media (max-width: 40rem) {
   .mui-page-header {
     flex-wrap: wrap;
@@ -11015,6 +11185,32 @@ summary.mui-block--shell__nav-group-label:hover {
 .mui-related-card--inline .mui-facts {
   flex-basis: 100%;
 }
+.mui-related-card--compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--mui-space-sm) var(--mui-space-md);
+  padding: var(--mui-space-md) var(--mui-space-lg);
+}
+.mui-related-card--compact .mui-kit-title {
+  font-size: var(--mui-text-body-size);
+}
+.mui-related-card--compact .mui-related-card__subtitle {
+  margin: 0;
+  grid-column: 1;
+}
+.mui-related-card--compact .mui-facts {
+  grid-column: 1 / -1;
+}
+.mui-related-card--compact .mui-related-card__action {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+.mui-related-card--compact .mui-related-card__action .mui-btn {
+  width: auto;
+}
 
 /* static/styles/blocks/worklist-grouped.css */
 .mui-grouped-worklist {
@@ -11678,6 +11874,295 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
   font-size: var(--mui-text-h1-size);
   line-height: var(--mui-text-h1-leading);
   letter-spacing: var(--mui-text-h1-tracking);
+}
+
+/* static/styles/brand-presets.css */
+[data-brand=lodge] {
+  --mui-brand-accent: #466752;
+  --mui-brand-accent-ink: #ffffff;
+  --mui-brand-font-heading: Georgia, serif;
+  --mui-brand-font-body:
+    "Avenir Next",
+    system-ui,
+    sans-serif;
+  --mui-brand-radius: 0.5rem;
+  --mui-brand-density: 1;
+  --mui-brand-logo-mask: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22m16%203%2011%2012h-6l7%209H18v5h-4v-5H4l7-9H5Z%22%2F%3E%3C%2Fsvg%3E);
+  --mui-brand-logo-size: 2rem;
+  --mui-brand-logo-radius: 0;
+}
+[data-brand=bank] {
+  --mui-brand-accent: #24428c;
+  --mui-brand-accent-ink: #ffffff;
+  --mui-brand-font-heading:
+    "Avenir Next",
+    system-ui,
+    sans-serif;
+  --mui-brand-font-body:
+    "Avenir Next",
+    system-ui,
+    sans-serif;
+  --mui-brand-radius: 0.25rem;
+  --mui-brand-density: 0;
+  --mui-brand-logo-mask: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203%203%2010v3h26v-3ZM5%2016h4v10H5Zm9%200h4v10h-4Zm9%200h4v10h-4ZM3%2028h26v3H3Z%22%2F%3E%3C%2Fsvg%3E);
+  --mui-brand-logo-size: 1.75rem;
+  --mui-brand-logo-radius: 0;
+}
+[data-brand=clinic] {
+  --mui-brand-accent: #076b67;
+  --mui-brand-accent-ink: #ffffff;
+  --mui-brand-font-heading:
+    "Trebuchet MS",
+    system-ui,
+    sans-serif;
+  --mui-brand-font-body:
+    "Avenir Next",
+    system-ui,
+    sans-serif;
+  --mui-brand-radius: 0.75rem;
+  --mui-brand-density: 2;
+  --mui-brand-logo-mask: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M12%203h8v9h9v8h-9v9h-8v-9H3v-8h9Z%22%2F%3E%3C%2Fsvg%3E);
+  --mui-brand-logo-size: 2rem;
+  --mui-brand-logo-radius: 0.25rem;
+}
+
+/* static/styles/brand-density.css */
+:is(h1, h2, h3, h4, h5, h6, .mui-display, .mui-brand-mark__wordmark) {
+  font-family: var(--mui-font-heading);
+}
+.mui-brand-mark {
+  display: flex;
+  align-items: center;
+  gap: var(--mui-space-sm);
+  min-width: 0;
+  color: var(--mui-text);
+}
+.mui-brand-mark__logo {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--mui-brand-logo-size);
+  height: var(--mui-brand-logo-size);
+  border-radius: var(--mui-brand-logo-radius);
+  overflow: hidden;
+}
+.mui-brand-mark__logo--mask {
+  mask-image: var(--mui-brand-logo-mask);
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background: var(--mui-accent-text);
+}
+.mui-brand-mark__logo :is(img, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mui-brand-mark__text {
+  min-width: 0;
+}
+.mui-brand-mark__wordmark {
+  display: block;
+  font-size: var(--mui-text-h3-size);
+  line-height: var(--mui-text-h3-leading);
+  font-weight: var(--mui-weight-heading);
+  color: var(--mui-text);
+  overflow-wrap: anywhere;
+}
+.mui-brand-mark__tagline {
+  color: var(--mui-text-muted);
+  font-size: var(--mui-text-caption-size);
+  line-height: var(--mui-text-caption-leading);
+}
+.mui-brand-example {
+  padding: var(--mui-card-inset-block) var(--mui-card-inset-inline);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+}
+@media (min-width: 64rem) {
+  .mui-block--shell[data-collapsed=true] .mui-block--shell__sidebar .mui-brand-mark__text {
+    display: none;
+  }
+}
+.mui-brand-controls {
+  display: grid;
+  gap: var(--mui-space-lg);
+  padding-block: var(--mui-space-xl);
+  border-block-end: 1px solid var(--mui-border);
+}
+.mui-brand-controls__toolbar,
+.mui-density-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mui-space-md);
+  align-items: center;
+}
+.mui-brand-controls__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--mui-space-md);
+}
+.mui-brand-controls label {
+  display: grid;
+  gap: var(--mui-space-xs);
+  font-size: var(--mui-text-small-size);
+}
+.mui-brand-controls :is(input, select) {
+  width: 100%;
+  box-sizing: border-box;
+}
+.mui-brand-controls input[type=color] {
+  padding: var(--mui-space-xs);
+}
+.mui-brand-controls__output {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 18rem;
+  overflow: auto;
+  padding: var(--mui-space-lg);
+  background: var(--mui-bg-input);
+  color: var(--mui-text-secondary);
+  font-size: var(--mui-text-caption-size);
+  border-radius: var(--mui-radius-md);
+}
+.mui-brand-controls__preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--mui-space-lg);
+  padding: var(--mui-card-inset-block) var(--mui-card-inset-inline);
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-lg);
+  background: var(--mui-bg-card);
+}
+.mui-input,
+.mui-data-table__search,
+.mui-native-select,
+.mui-select__trigger,
+.mui-combobox__trigger,
+.mui-number-field__input {
+  box-sizing: border-box;
+  height: var(--mui-control-height);
+  padding-block: 0;
+}
+.mui-btn {
+  padding-block: var(--mui-space-xs);
+  min-height: var(--mui-control-height);
+}
+.mui-btn--sm {
+  min-height: var(--mui-row-height);
+  height: auto;
+}
+.mui-btn--row,
+.mui-action-row[data-density] .mui-btn,
+.mui-action-row[data-density] .mui-action-row__trigger {
+  min-height: var(--mui-row-height);
+  height: auto;
+  padding-block: 0;
+}
+.mui-action-row[data-density=comfortable] .mui-btn:not(.mui-action-row__trigger) {
+  min-height: var(--mui-control-height);
+}
+.mui-card__header,
+.mui-card__body,
+.mui-card__content,
+.mui-card__footer,
+.mui-record-timeline,
+.mui-record-money,
+.mui-related-card:not(.mui-related-card--inline):not(.mui-related-card--compact),
+.mui-block-state {
+  padding: var(--mui-card-inset-block) var(--mui-card-inset-inline);
+}
+.mui-card__header + .mui-card__body,
+.mui-card__header + .mui-card__content {
+  padding-block-start: 0;
+}
+.mui-task-grid__card,
+.mui-attention-banner {
+  padding: var(--mui-card-inset-block);
+}
+.mui-related-card--compact {
+  padding: var(--mui-inset-cell) var(--mui-card-inset-block);
+}
+.mui-related-card--inline {
+  padding-block: var(--mui-inset-cell);
+}
+.mui-grouped-worklist__row {
+  padding-block: var(--mui-inset-cell);
+}
+.mui-app-header,
+.mui-app-footer {
+  padding-block: var(--mui-inset-cell);
+}
+.mui-status-chip-group__chip {
+  min-height: var(--mui-row-height);
+}
+.mui-block--shell__content {
+  padding: var(--mui-card-inset-inline);
+}
+th.mui-table__th,
+td.mui-table__td,
+.mui-data-table th,
+.mui-data-table td {
+  padding-block: var(--mui-inset-cell);
+}
+.mui-table--compact :is(th.mui-table__th, td.mui-table__td) {
+  padding-block: var(--mui-inset-cell);
+}
+.mui-bank-example {
+  display: grid;
+  gap: var(--mui-space-xl);
+  min-width: 0;
+}
+.mui-bank-example > section {
+  min-width: 0;
+  scroll-margin-block-start: calc(var(--mui-header-height) + var(--mui-space-lg));
+}
+.mui-bank-example__heading {
+  margin: 0 0 var(--mui-space-md);
+  font-size: var(--mui-text-h3-size);
+}
+.mui-bank-example :is(.mui-table__cell--numeric, [data-align=right]) {
+  font-family: var(--mui-font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.mui-bank-example__case {
+  margin-block-start: var(--mui-space-md);
+}
+.mui-bank-example__case > summary {
+  padding: var(--mui-inset-cell) 0;
+  cursor: pointer;
+  font-size: var(--mui-text-small-size);
+  color: var(--mui-text-secondary);
+}
+.lp__hero > .mui-density-controls {
+  justify-content: flex-end;
+  margin-block-end: var(--mui-space-md);
+}
+@media (pointer: coarse) {
+  .mui-page-header__search-toggle {
+    min-width: var(--mui-touch-target);
+  }
+  .mui-btn:not(.mui-btn--link),
+  .mui-action-row[data-density] .mui-btn,
+  .mui-action-row[data-density] .mui-action-row__trigger,
+  .mui-action-row[data-density=comfortable] .mui-btn:not(.mui-action-row__trigger),
+  .mui-input,
+  .mui-data-table__search,
+  .mui-native-select,
+  .mui-select__trigger,
+  .mui-combobox__trigger,
+  .mui-status-chip-group__chip {
+    min-height: var(--mui-touch-target);
+  }
+  .mui-input,
+  .mui-data-table__search,
+  .mui-textarea,
+  .mui-native-select {
+    font-size: var(--mui-text-input-touch-size);
+  }
 }
 
 /* static/styles/maud-ui.css */

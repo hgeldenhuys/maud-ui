@@ -1,0 +1,52 @@
+/* Shared identity and document density. Component variants retain their purpose. */
+:is(h1, h2, h3, h4, h5, h6, .mui-display, .mui-brand-mark__wordmark) { font-family: var(--mui-font-heading); }
+.mui-brand-mark { display: flex; align-items: center; gap: var(--mui-space-sm); min-width: 0; color: var(--mui-text); }
+.mui-brand-mark__logo { display: grid; place-items: center; flex: none; width: var(--mui-brand-logo-size); height: var(--mui-brand-logo-size); border-radius: var(--mui-brand-logo-radius); overflow: hidden; }
+.mui-brand-mark__logo--mask { mask-image: var(--mui-brand-logo-mask); mask-size: contain; mask-position: center; mask-repeat: no-repeat; background: var(--mui-accent-text); }
+.mui-brand-mark__logo :is(img, svg) { width: 100%; height: 100%; object-fit: contain; }
+.mui-brand-mark__text { min-width: 0; }
+.mui-brand-mark__wordmark { display: block; font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading); font-weight: var(--mui-weight-heading); color: var(--mui-text); overflow-wrap: anywhere; }
+.mui-brand-mark__tagline { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); line-height: var(--mui-text-caption-leading); }
+.mui-brand-example { padding: var(--mui-card-inset-block) var(--mui-card-inset-inline); background: var(--mui-bg-card); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); }
+@media (min-width: 64rem) { .mui-block--shell[data-collapsed="true"] .mui-block--shell__sidebar .mui-brand-mark__text { display: none; } }
+.mui-brand-controls { display: grid; gap: var(--mui-space-lg); padding-block: var(--mui-space-xl); border-block-end: 1px solid var(--mui-border); }
+.mui-brand-controls__toolbar, .mui-density-controls { display: flex; flex-wrap: wrap; gap: var(--mui-space-md); align-items: center; }
+.mui-brand-controls__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--mui-space-md); }
+.mui-brand-controls label { display: grid; gap: var(--mui-space-xs); font-size: var(--mui-text-small-size); }
+.mui-brand-controls :is(input, select) { width: 100%; box-sizing: border-box; }
+.mui-brand-controls input[type="color"] { padding: var(--mui-space-xs); }
+.mui-brand-controls__output { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 18rem; overflow: auto; padding: var(--mui-space-lg); background: var(--mui-bg-input); color: var(--mui-text-secondary); font-size: var(--mui-text-caption-size); border-radius: var(--mui-radius-md); }
+.mui-brand-controls__preview { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--mui-space-lg); padding: var(--mui-card-inset-block) var(--mui-card-inset-inline); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); background: var(--mui-bg-card); }
+
+/* Controls and containers read the same root choice, including kit composition. */
+.mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { box-sizing: border-box; height: var(--mui-control-height); padding-block: 0; }
+.mui-btn { padding-block: var(--mui-space-xs); min-height: var(--mui-control-height); }
+.mui-btn--sm { min-height: var(--mui-row-height); height: auto; }
+.mui-btn--row, .mui-action-row[data-density] .mui-btn, .mui-action-row[data-density] .mui-action-row__trigger { min-height: var(--mui-row-height); height: auto; padding-block: 0; }
+.mui-action-row[data-density="comfortable"] .mui-btn:not(.mui-action-row__trigger) { min-height: var(--mui-control-height); }
+.mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer,
+.mui-record-timeline, .mui-record-money, .mui-related-card:not(.mui-related-card--inline):not(.mui-related-card--compact), .mui-block-state { padding: var(--mui-card-inset-block) var(--mui-card-inset-inline); }
+.mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
+.mui-task-grid__card, .mui-attention-banner { padding: var(--mui-card-inset-block); }
+.mui-related-card--compact { padding: var(--mui-inset-cell) var(--mui-card-inset-block); }
+.mui-related-card--inline { padding-block: var(--mui-inset-cell); }
+.mui-grouped-worklist__row { padding-block: var(--mui-inset-cell); }
+.mui-app-header, .mui-app-footer { padding-block: var(--mui-inset-cell); }
+.mui-status-chip-group__chip { min-height: var(--mui-row-height); }
+.mui-block--shell__content { padding: var(--mui-card-inset-inline); }
+th.mui-table__th, td.mui-table__td, .mui-data-table th, .mui-data-table td { padding-block: var(--mui-inset-cell); }
+.mui-table--compact :is(th.mui-table__th, td.mui-table__td) { padding-block: var(--mui-inset-cell); }
+.mui-bank-example { display: grid; gap: var(--mui-space-xl); min-width: 0; }
+.mui-bank-example > section { min-width: 0; scroll-margin-block-start: calc(var(--mui-header-height) + var(--mui-space-lg)); }
+.mui-bank-example__heading { margin: 0 0 var(--mui-space-md); font-size: var(--mui-text-h3-size); }
+.mui-bank-example :is(.mui-table__cell--numeric, [data-align="right"]) { font-family: var(--mui-font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mui-bank-example__case { margin-block-start: var(--mui-space-md); }
+.mui-bank-example__case > summary { padding: var(--mui-inset-cell) 0; cursor: pointer; font-size: var(--mui-text-small-size); color: var(--mui-text-secondary); }
+.lp__hero > .mui-density-controls { justify-content: flex-end; margin-block-end: var(--mui-space-md); }
+@media (pointer: coarse) {
+  .mui-page-header__search-toggle { min-width: var(--mui-touch-target); }
+  .mui-btn:not(.mui-btn--link), .mui-action-row[data-density] .mui-btn, .mui-action-row[data-density] .mui-action-row__trigger,
+  .mui-action-row[data-density="comfortable"] .mui-btn:not(.mui-action-row__trigger),
+  .mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-status-chip-group__chip { min-height: var(--mui-touch-target); }
+  .mui-input, .mui-data-table__search, .mui-textarea, .mui-native-select { font-size: var(--mui-text-input-touch-size); }
+}

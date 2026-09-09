@@ -93,3 +93,6 @@ Renders a "Columns ▾" dropdown trigger stub for toggling column visibility. Pl
 
 ### `column_header_aligned(label, sortable, Align::Right) → Markup`
 The original two-argument helper keeps left alignment; the aligned helper supports Left, Center and Right. Use Right for numeric columns. `Column` now has `align: Align` and implements Default; add `..Default::default()` when migrating existing literals. Header cells remain muted and medium weight. Sortable headers respond to Enter/Space as well as clicks and announce their sort state. Runtime sorting/pagination moves existing rows, preserving alignment, rich content, checkbox state and attached controls. Rich rows sort/filter by their visible cell text; server-side rich filtering remains an application choice.
+
+## Exact numeric sorting (0.11.0)
+Signed decimal sorting preserves precision with BigInt, including values beyond 2^53. It accepts correctly grouped commas, optional $/€/£/¥ symbols and Unicode minus. Empty or malformed numeric values and nonnumeric text fall back to text comparison. Compare one currency/unit per column; this is not a currency converter or locale parser. Sorting/filtering keep original row nodes and canonical markup intact.

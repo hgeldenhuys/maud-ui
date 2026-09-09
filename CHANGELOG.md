@@ -5,6 +5,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.13.0] — 2026-09-09 — Round 5
+
+A reusable generic record page now composes `record::facts`, `record::related_list` and the record header. Fact groups share one surface with responsive 2–4-column sections (one column on phones), masked values carry a mono face and explicit hint, and a single fact stays a row. Related records use compact links, status and dates with repeated reference prefixes removed and quiet empty text.
+
+- `.mui-stack` and `stack::vertical` use the shared 16px stack gap. Shell content, card bodies, record/worklist blocks and archetype examples adopt it; child margins no longer add a second spacing system.
+- Record headers show title, one kind/reference subtitle, then their primary verb and More disclosure. Breadcrumbs own collection navigation.
+- Native shell search defaults to `Search`, anchors the keyboard badge inside the field and reserves its actual width. Breadcrumb ancestors shrink while the final crumb stays inside the context; blank labels never create separators.
+- Three new catalog blocks, eight generic-record fixtures, emitted-bundle spacing/search contracts and a supervisor browser verification script.
+
+**Migration:** Two optional `record::header::Props` fields (`kind`, `reference`) join the API; exhaustive literals must supply them or use `..Default::default()`. Stack default changes from 12px to `--mui-stack-gap` (16px); `Space::Md` now emits an explicit compact class. Group fact sections in one `record::facts` call and use the page/stack wrapper for caller-owned content. Canonical value/title/status fragments and action submission ownership remain supported.
+
 ## [0.12.0] — 2026-09-09 — Round 4 — shell frame, footer, radius scale, nav current state
 
 Density never moves the frame. Independent `--mui-shell-*` tokens fix chrome geometry and type while root or container density continues to scale content. The shell uses a viewport minimum and `auto 1fr auto` rows; a full-height sidebar column contains the original sticky, scrolling navigation node. Short pages keep the footer at the viewport bottom. Phone navigation retains the same native drawer and no-JS fallback.

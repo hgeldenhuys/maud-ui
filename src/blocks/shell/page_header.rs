@@ -16,7 +16,7 @@ impl Default for Search {
             action: String::new(),
             name: "q".into(),
             value: String::new(),
-            placeholder: "Search workspace…".into(),
+            placeholder: "Search".into(),
         }
     }
 }
@@ -46,14 +46,15 @@ pub fn render(mut props: Props) -> Markup {
 }
 
 fn render_ready(props: Props) -> Markup {
-    let title = props.title.or_else(|| props.breadcrumbs.last().map(|item| item.label.clone()));
-    let single_crumb = props.single_crumb || props.breadcrumbs.len() == 1;
+    let breadcrumbs = breadcrumb::visible_items(props.breadcrumbs);
+    let title = props.title.filter(|title| !title.trim().is_empty()).or_else(|| breadcrumbs.last().map(|item| item.label.clone()));
+    let single_crumb = props.single_crumb || breadcrumbs.len() == 1;
     html! {
         header class="mui-page-header" data-single-crumb=(single_crumb.to_string()) {
             div class="mui-page-header__context" {
                 (props.leading)
                 @if let Some(title) = title { span class="mui-page-header__title" { (title) } }
-                (breadcrumb::render(breadcrumb::Props { items: props.breadcrumbs, ..Default::default() }))
+                (breadcrumb::render(breadcrumb::Props { items: breadcrumbs, ..Default::default() }))
             }
             div class="mui-page-header__search" {
                 @if let Some(search) = props.search_markup { (search) }
@@ -65,11 +66,11 @@ fn render_ready(props: Props) -> Markup {
                         }
                         div class="mui-page-header__search-panel" {
                     form method="get" action=(search.action) role="search" {
-                        label {
+                        label class="mui-page-header__search-field" {
                             span class="mui-sr-only" { "Search workspace" }
                             input class="mui-input" type="search" name=(search.name) value=(search.value) placeholder=(search.placeholder) data-mui="page-search";
+                            kbd aria-hidden="true" { "⌘ K" }
                         }
-                        kbd aria-hidden="true" { "⌘ K" }
                         button class="mui-btn mui-btn--outline mui-page-header__submit" type="submit" { "Search" }
                     }
                         }

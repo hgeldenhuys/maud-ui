@@ -294,6 +294,10 @@ pub(crate) fn block_docs_source(slug: &str) -> Option<&'static str> {
         "record-timeline" => include_str!("../../docs/blocks/rendered/record-timeline.html"),
         "record-money" => include_str!("../../docs/blocks/rendered/record-money.html"),
         "record-related-card" => include_str!("../../docs/blocks/rendered/record-related-card.html"),
+        "record-facts" => include_str!("../../docs/blocks/rendered/record-facts.html"),
+        "record-related-list" => include_str!("../../docs/blocks/rendered/record-related-list.html"),
+        "record-page" => include_str!("../../docs/blocks/rendered/record-page.html"),
+
         "worklist-grouped" => include_str!("../../docs/blocks/rendered/worklist-grouped.html"),
         "attention-banner" => include_str!("../../docs/blocks/rendered/attention-banner.html"),
         "action-row" => include_str!("../../docs/blocks/rendered/action-row.html"),

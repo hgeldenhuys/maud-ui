@@ -164,6 +164,9 @@ pub fn preview(slug: &str) -> Option<Markup> {
                 ..Default::default()
             })
         }),
+        "record-facts" => examples(|state| record::facts::render(record::facts::Props { state, groups: vec![record::facts::Group { title: "Identity".into(), facts: vec![record::facts::Fact::new("Guest", "Sofia Patel")] }], ..Default::default() })),
+        "record-related-list" => examples(|state| record::related_list::render(record::related_list::Props { state, title: "Bookings".into(), items: vec![record::related_list::Item { reference: "UI-B05".into(), title: "Garden suite".into(), href: Some("/blocks/record-page".into()), ..Default::default() }], ..Default::default() })),
+        "record-page" => examples(|state| record::page::render(record::page::Props { state, header: record::header::Props { title: "Sofia Patel".into(), kind: Some("Guest".into()), reference: Some("UI-G5".into()), ..Default::default() }, ..Default::default() })),
         "record-timeline" => examples(|state| {
             record::timeline::render(record::timeline::Props {
                 state,

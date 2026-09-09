@@ -94,7 +94,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "breadcrumb") => {
             let props = crate::primitives::breadcrumb::Props::default();
             table(vec![
-                Prop { name: "items", ty: "Vec<BreadcrumbItem>", default: format!("{:?}", props.items), description: "List of breadcrumb items (last item has no href)" },
+                Prop { name: "items", ty: "Vec<BreadcrumbItem>", default: format!("{:?}", props.items), description: "List of breadcrumb items (last item has no href). Blank labels are discarded." },
                 Prop { name: "separator", ty: "Option<String>", default: format!("{:?}", props.separator), description: "Separator character (default \"/\")" },
             ])
         },
@@ -743,7 +743,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::stack::Props::default();
             table(vec![
                 Prop { name: "direction", ty: "Direction", default: format!("{:?}", props.direction), description: "Main-axis direction. Default [`Direction::Vertical`]." },
-                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between children. Default [`Space::Md`] (`0.75rem`)." },
+                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between children. Default [`Space::Lg`] (`--mui-stack-gap`, normally 1rem)." },
                 Prop { name: "padding", ty: "Space", default: format!("{:?}", props.padding), description: "Space inside the container's edges. Default [`Space::None`], so a stack is a drop-in wrapper that adds no inset of its own." },
                 Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Cross-axis alignment. Default [`Align::Stretch`]." },
                 Prop { name: "justify", ty: "Justify", default: format!("{:?}", props.justify), description: "Main-axis distribution. Default [`Justify::Start`]." },
@@ -1110,11 +1110,13 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "" },
                 Prop { name: "title_markup", ty: "Option<Markup>", default: format!("{:?}", props.title_markup), description: "Overrides `title`. May contain a field-emitter heading; no heading is wrapped around it." },
                 Prop { name: "subtitle", ty: "Option<String>", default: format!("{:?}", props.subtitle), description: "" },
+                Prop { name: "kind", ty: "Option<String>", default: format!("{:?}", props.kind), description: "Human-facing kind, e.g. Guest. Together with reference, replaces subtitle." },
+                Prop { name: "reference", ty: "Option<String>", default: format!("{:?}", props.reference), description: "Record reference, e.g. UI-G5; rendered once in the muted identity line." },
                 Prop { name: "status", ty: "Option<badge::Props>", default: format!("{:?}", props.status), description: "" },
                 Prop { name: "status_markup", ty: "Option<Markup>", default: format!("{:?}", props.status_markup), description: "Overrides `status`, including when the supplied markup is empty." },
                 Prop { name: "primary_action", ty: "Option<Action>", default: format!("{:?}", props.primary_action), description: "" },
                 Prop { name: "secondary_actions", ty: "Vec<Action>", default: format!("{:?}", props.secondary_actions), description: "" },
-                Prop { name: "back", ty: "Option<Link>", default: format!("{:?}", props.back), description: "" },
+                Prop { name: "back", ty: "Option<Link>", default: format!("{:?}", props.back), description: "Legacy navigation link; prefer the shell breadcrumb. Never put Back in actions." },
                 Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
             ])
         },
@@ -1165,6 +1167,35 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "action", ty: "Option<Action>", default: format!("{:?}", props.action), description: "" },
                 Prop { name: "action_markup", ty: "Option<Markup>", default: format!("{:?}", props.action_markup), description: "" },
                 Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
+            ])
+        },
+        (true, "record-facts") => {
+            let props = crate::blocks::record::facts::Props::default();
+            table(vec![
+                Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "" },
+                Prop { name: "groups", ty: "Vec<Group>", default: format!("{:?}", props.groups), description: "Pass every group together, rather than rendering one card per group." },
+                Prop { name: "columns", ty: "Columns", default: format!("{:?}", props.columns), description: "Maximum columns; narrow containers reduce to two, then one." },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "Heading level for group titles; use H2 below the page's H1." },
+                Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "" },
+                Prop { name: "masked_hint", ty: "String", default: format!("{:?}", props.masked_hint), description: "" },
+            ])
+        },
+        (true, "record-related-list") => {
+            let props = crate::blocks::record::related_list::Props::default();
+            table(vec![
+                Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "" },
+                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "Use an audience-facing plural such as Bookings, never a schema relationship name." },
+                Prop { name: "items", ty: "Vec<Item>", default: format!("{:?}", props.items), description: "" },
+                Prop { name: "empty_message", ty: "String", default: format!("{:?}", props.empty_message), description: "" },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
+            ])
+        },
+        (true, "record-page") => {
+            let props = crate::blocks::record::page::Props::default();
+            table(vec![
+                Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "" },
+                Prop { name: "header", ty: "header::Props", default: format!("{:?}", props.header), description: "Defaults to an H1; choose a lower level when embedding a record preview." },
+                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Admitted facts, related lists and other record blocks. The page owns their gap." },
             ])
         },
         (true, "worklist-grouped") => {

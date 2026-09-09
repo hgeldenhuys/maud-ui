@@ -1,0 +1,27 @@
+<h1>Record facts</h1>
+<p>Pass all of a record's fact groups to <strong>one</strong> <code>record::facts</code> block. Identity, Contact and Loyalty are sections of that surface, not separate cards. Use separate cards only for independent tasks or entities with their own actions. A group with one admitted fact becomes a compact row; a lone single-fact group has no card border, fill or inset.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::blocks::record::facts::{self, Fact, Group};
+facts::render(facts::Props {
+    groups: vec![
+        Group { title: "Identity".into(), facts: vec![
+            Fact::new("Full name", "Sofia Patel"),
+            Fact::new("Email", "sofia.patel@example.com"),
+        ] },
+        Group { title: "Sensitive details".into(), facts: vec![
+            Fact::masked("Phone", "••••••0005"),
+            Fact::masked("ID number", "••••••0005"),
+        ] },
+        Group { title: "Loyalty".into(), facts: vec![Fact::mono("Loyalty points", "0")] },
+    ],
+    ..Default::default()
+});
+</code></pre>
+<h2>Props and value ownership</h2>
+<p><code>groups: Vec&lt;Group&gt;</code> owns the sections in caller order. Each <code>Group</code> has a human-facing <code>title</code> and <code>facts: Vec&lt;Fact&gt;</code>. Empty groups are omitted; all groups empty renders nothing. <code>columns: Columns::{Two, Three, Four}</code> caps the responsive grid, default Four. Available container width gives one column below 28rem, two at 28rem, up to three at 42rem and up to four at 56rem. A single fact always stays one row.</p>
+<p><code>Fact::new(label, value)</code> uses body text. <code>Fact::mono</code> uses the mono face. <code>Fact::masked</code> expects an <strong>already redacted</strong> value and adds mono text plus the visible <code>masked_hint</code> (default <code>masked</code>). Masking is never CSS hiding: do not send the underlying secret to this renderer. The caller keeps classification and authorization decisions.</p>
+<p><code>Fact::value_markup: Option&lt;Markup&gt;</code> preserves a canonical field emitter, including its links and data attributes; it takes precedence over plain <code>value</code>. An explicitly empty fragment omits that fact, including its label. A plain empty string is preserved as supplied. Markup must already be safe and authorized. Plain labels and values are escaped.</p>
+<p><code>heading: action::Heading</code> defaults to H2 for section headings below a page H1; <code>aria_label</code> defaults to <code>Record facts</code>. Set both for nested compositions. <code>state: State</code> supports Ready, Absent, Loading, Empty, Error and Disabled using the shared presentation contract. Non-ready replacement states do not render supplied facts.</p>
+<h2>Layout and accessibility</h2>
+<p>Semantic <code>dl</code>, <code>dt</code> and <code>dd</code> keep each label associated with its value. Muted labels and masking hints use the theme's contrast-tested tokens. Masked status has text as well as styling; only its value uses mono. Long admitted values wrap within the grid. Sections share <code>--mui-radius-lg</code>, one surface and <code>--mui-stack-gap</code>; no nested rounded boxes.</p>
+<p>See <a href="record-page.md">Record page</a>, <a href="record-related-list.md">Related records</a> and <a href="../components/stack.md">Stack</a>. Fixtures: <code>/fixtures/record-page-{compact,comfortable,spacious}-{guest,long}.html</code>.</p>

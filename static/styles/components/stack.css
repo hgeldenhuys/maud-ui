@@ -1,11 +1,11 @@
 /* Stack — the general layout container. One flex axis, one token gap.
    Every modifier is emitted only when it differs from the default, so the
-   base class alone is "vertical, 0.75rem gap, stretch, start, no wrap". */
+   base class alone is "vertical, shared stack gap, stretch, start, no wrap". */
 
 .mui-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--mui-space-md);
+  gap: var(--mui-stack-gap);
   /* Flex items default to min-width:auto, which refuses to shrink below their
      content and blows out the parent instead. Nested stacks are the common
      case here, so opt every stack into shrinking. */
@@ -27,6 +27,7 @@
 .mui-stack--gap-none { gap: 0; }
 .mui-stack--gap-xs { gap: var(--mui-space-xs); }
 .mui-stack--gap-sm { gap: var(--mui-space-sm); }
+.mui-stack--gap-md { gap: var(--mui-space-md); }
 .mui-stack--gap-lg { gap: var(--mui-space-lg); }
 .mui-stack--gap-xl { gap: var(--mui-space-xl); }
 .mui-stack--gap-xxl { gap: var(--mui-space-xxl); }

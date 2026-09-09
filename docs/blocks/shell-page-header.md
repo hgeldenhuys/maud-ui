@@ -42,3 +42,9 @@ Pass these props as `sidebar::Props::page_header`. Use `app_header` for product-
 The native summary works without JavaScript. The enhancement opens the same input for the search shortcut, focuses it when opened from the summary, and closes phone search on Escape while keeping the query and restoring summary focus. Desktop search remains visible. Caller-provided search markup owns its behavior; an icon command-palette trigger fits the compact toolbar.
 
 `State::Absent` (0.11.0) means no input/rule was declared and emits nothing. Keep any caller-owned section heading inside the same conditional. Use Error only for a declared operation that failed; never show an unconfigured-rule message to the user.
+
+## Search and breadcrumb bounds (0.13.0)
+
+Native Search defaults to the short placeholder `Search`. The keyboard badge now lives inside `.mui-page-header__search-field`, which is positioned relative; it is no longer placed using an assumed submit-button width. `--mui-search-shortcut-width` (36px) and `--mui-search-shortcut-gap` (8px) reserve 52px at the input's inline end. Phone search hides the badge and restores ordinary input padding. For `search_markup`, use the same field wrapper with input + kbd inside it, and keep the submit button outside the label.
+
+The breadcrumb and its grid context use `min-width:0`; root/middle labels can shrink and ellipsize, and the last crumb wraps without ellipsis inside the context boundary. Empty labels are filtered before separators, mobile title and single-crumb state are derived. Native search, Ctrl/Command+K, GET submission and the phone disclosure retain their behavior.

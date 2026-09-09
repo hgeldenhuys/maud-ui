@@ -1,6 +1,6 @@
 # maud-ui
 
-**83 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 23 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**83 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 26 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -25,7 +25,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 - **83 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
 - **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
 - **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
-- **23 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, a task launcher, grouped worklists, record timeline/money/related cards, attention banners, shared action rows, and optional app masthead, page header and footer. Drop-in compositions.
+- **26 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, a task launcher, grouped worklists, record timeline/money/related cards, attention banners, shared action rows, and optional app masthead, page header and footer. Drop-in compositions.
 - **Live brand customiser** at `/theme` — switch Lodge, Bank and Clinic, edit nine brand tokens, and export `brand.css`. Choices persist across reloads. Eight advanced theme presets remain available for preview.
 - **Integration shells** for 15 third-party widgets — Monaco, xyflow, Excalidraw, TipTap, Mermaid, Cytoscape, Three.js, AG Grid, Apache ECharts, Leaflet, FullCalendar, Wavesurfer.js, PDF.js, xterm.js, SortableJS. Each ships a themed chrome around the widget so the third-party canvas adopts your design tokens automatically.
 - **Global `cmd+k` command palette** — fuzzy jump to any component, block, integration, or page. Indexed from the same Rust constants the sidebar uses.
@@ -43,6 +43,14 @@ Use `short_label: Some("Stays".into())` on a bottom-tab `Item` or sidebar `NavIt
 Use `status_chip_group` for counted filters, `bottom_tab_bar` for mobile destinations, and `button::Size::Row` with `Variant::Outline` for compact cell actions. Blocks at `worklist::header`, `record::header`, and `task::grid` compose them into application surfaces. The sidebar shell adds `header`, `id`, and `mobile_navigation` props; `empty_state::Variant::{Empty, Filtered, Failed, Inline}` separates zero results from a failed load.
 
 Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the current bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
+
+## Generic record pages (0.13.0)
+
+Use `blocks::record::{page, facts, related_list}` for every generic detail page. `page` owns title → kind/reference → main action → spaced content; `facts` combines groups into one surface and renders a single fact as a row; `related_list` renders compact links/status/dates without repeated references. See [Record page](docs/blocks/record-page.md) for the complete composition and the adapter's role in labels, masking and actions.
+
+`.mui-stack` / `stack::vertical` now use `--mui-stack-gap` (16px), with child margins reset. Explicit `Space::Md` still means 12px. Native shell search reserves its keyboard badge's width, defaults to `Search`, and breadcrumbs discard blank labels.
+
+Generate fixtures with `cargo run --example record_page_fixture`; compare `/fixtures/record-page-comfortable-guest.html` and `/fixtures/record-page-three-cards.html` at 1280 and 390. The catalog contains 83 primitives and 26 blocks.
 
 ## 30-second tour
 
@@ -122,7 +130,7 @@ Routes:
 | `/` | Landing page — the pitch, built out of the library's own primitives |
 | `/gallery` | The component index: all 83, grouped by tier, with a sidebar filter |
 | `/{component}` | One component's page — variants, code samples, API docs |
-| `/blocks`, `/blocks/{slug}` | The 23 pre-composed block templates |
+| `/blocks`, `/blocks/{slug}` | The 26 pre-composed block templates |
 | `/theme` | Live theme customiser (edits tokens, persists to localStorage) |
 | `/getting-started` | Install, first paint, theming, runtime |
 | `/integrations/{slug}` | The 15 third-party widget integrations |

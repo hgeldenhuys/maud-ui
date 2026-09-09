@@ -1,0 +1,67 @@
+{
+  "method": "CSS cascade over Rust fixture markup; not browser geometry",
+  "cases": [
+    {
+      "file": "static/maud-ui.css",
+      "contract": "three sibling cards",
+      "siblings": 3,
+      "gap": 16,
+      "child_block_margins": 0
+    },
+    {
+      "file": "static/maud-ui.css",
+      "contract": "search clearance",
+      "density": "compact",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    },
+    {
+      "file": "static/maud-ui.css",
+      "contract": "search clearance",
+      "density": "comfortable",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    },
+    {
+      "file": "static/maud-ui.css",
+      "contract": "search clearance",
+      "density": "spacious",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "contract": "three sibling cards",
+      "siblings": 3,
+      "gap": 16,
+      "child_block_margins": 0
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "contract": "search clearance",
+      "density": "compact",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "contract": "search clearance",
+      "density": "comfortable",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    },
+    {
+      "file": "static/maud-ui.min.css",
+      "contract": "search clearance",
+      "density": "spacious",
+      "input_inline_end": 52,
+      "badge_width": 36,
+      "badge_inset": 8
+    }
+  ]
+}

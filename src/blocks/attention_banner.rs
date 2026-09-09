@@ -51,8 +51,8 @@ pub fn render(mut props: Props) -> Markup {
 fn render_ready(props: Props) -> Markup {
     if props.title.trim().is_empty() { return html! {}; }
     html! {
-        aside class="mui-attention-banner" data-tone=(props.tone.as_str()) aria-label=(&props.title) data-mui="attention-banner" {
-            div class="mui-attention-banner__body" {
+        aside class="mui-attention-banner mui-stack mui-stack--horizontal" data-tone=(props.tone.as_str()) aria-label=(&props.title) data-mui="attention-banner" {
+            div class="mui-attention-banner__body mui-stack mui-stack--gap-xs" {
                 strong class="mui-attention-banner__title" { (props.title) }
                 @if let Some(subline) = props.subline { p { (subline) } }
             }

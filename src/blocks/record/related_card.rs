@@ -35,7 +35,7 @@ fn render_ready(props: Props) -> Markup {
     let facts = props.facts_markup.unwrap_or_else(|| facts_list::render(facts_list::Props { facts: props.facts }));
     let inline = props.variant == Variant::Inline || (props.variant == Variant::Auto && no_facts);
     html! {
-        section class=(if inline { "mui-related-card mui-related-card--inline" } else if props.variant == Variant::Compact { "mui-related-card mui-related-card--compact" } else { "mui-related-card" }) {
+        section class=(if inline { "mui-related-card mui-related-card--inline mui-stack" } else if props.variant == Variant::Compact { "mui-related-card mui-related-card--compact mui-stack" } else { "mui-related-card mui-stack" }) {
             @if let Some(title) = props.title_markup { div class="mui-kit-title" { (title) } }
             @else { (props.heading.render(&props.title, "mui-kit-title")) }
             @if let Some(subtitle) = props.subtitle { p class="mui-related-card__subtitle" { (subtitle) } }

@@ -14,7 +14,7 @@ pub struct BreadcrumbItem {
 #[derive(Debug, Clone)]
 #[derive(Default)]
 pub struct Props {
-    /// List of breadcrumb items (last item has no href)
+    /// List of breadcrumb items (last item has no href). Blank labels are discarded.
     pub items: Vec<BreadcrumbItem>,
     /// Separator character (default "/")
     pub separator: Option<String>,
@@ -24,18 +24,20 @@ pub struct Props {
 /// Render breadcrumb navigation
 pub fn render(props: Props) -> Markup {
     let sep = props.separator.as_deref().unwrap_or("/");
+    let items = visible_items(props.items);
+    if items.is_empty() { return html! {}; }
 
     html! {
         nav class="mui-breadcrumb" aria-label="Breadcrumb" {
             ol class="mui-breadcrumb__list" {
-                @for (idx, item) in props.items.iter().enumerate() {
+                @for (idx, item) in items.iter().enumerate() {
                     @if idx > 0 {
                         li class="mui-breadcrumb__separator" aria-hidden="true" {
                             (sep)
                         }
                     }
                     @if item.href.is_some() {
-                        li class="mui-breadcrumb__item" data-position=(if idx == 0 { "root" } else { "middle" }) {
+                        li class="mui-breadcrumb__item" data-position=(if idx == items.len() - 1 { "current" } else if idx == 0 { "root" } else { "middle" }) {
                             a href=(item.href.as_ref().unwrap()) title=(&item.label) {
                                 (item.label)
                             }
@@ -54,6 +56,13 @@ pub fn render(props: Props) -> Markup {
             }
         }
     }
+}
+
+/// Shared with page-header title derivation: empty labels never create trail positions.
+pub(crate) fn visible_items(items: Vec<BreadcrumbItem>) -> Vec<BreadcrumbItem> {
+    let items: Vec<_> = items.into_iter().filter(|item| !item.label.trim().is_empty()).collect();
+    debug_assert!(items.iter().all(|item| !item.label.trim().is_empty()), "Rendered breadcrumbs must have labels");
+    items
 }
 
 /// Showcase all breadcrumb use cases

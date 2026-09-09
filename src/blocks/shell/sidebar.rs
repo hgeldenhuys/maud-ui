@@ -214,8 +214,8 @@ fn render_ready(props: Props) -> Markup {
                         div class="mui-block--shell__topbar-actions" { (props.topbar_actions) }
                     }
                 }
-                @if props.embedded { section class="mui-block--shell__content" aria-label="Workspace content" { (props.children) } }
-                @else { main class="mui-block--shell__content" { (props.children) } }
+                @if props.embedded { section class="mui-block--shell__content mui-stack" aria-label="Workspace content" { (props.children) } }
+                @else { main class="mui-block--shell__content mui-stack" { (props.children) } }
             }
             }
             (props.app_footer)

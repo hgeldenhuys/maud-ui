@@ -29,7 +29,7 @@ html! {
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>direction</code></td><td><code>Direction</code></td><td><code>Vertical</code></td><td>Main-axis direction — column or row</td></tr>
-<tr><td><code>gap</code></td><td><code>Space</code></td><td><code>Md</code> (<code>0.75rem</code>)</td><td>Space between children</td></tr>
+<tr><td><code>gap</code></td><td><code>Space</code></td><td><code>Lg</code> (<code>--mui-stack-gap</code>, 1rem)</td><td>Space between children</td></tr>
 <tr><td><code>padding</code></td><td><code>Space</code></td><td><code>None</code></td><td>Inset applied by the container itself; <code>None</code> keeps a stack a drop-in wrapper</td></tr>
 <tr><td><code>align</code></td><td><code>Align</code></td><td><code>Stretch</code></td><td>Cross-axis alignment (<code>align-items</code>)</td></tr>
 <tr><td><code>justify</code></td><td><code>Justify</code></td><td><code>Start</code></td><td>Main-axis distribution (<code>justify-content</code>)</td></tr>
@@ -52,8 +52,8 @@ html! {
 <li><code>None</code>: <code>0</code> — the <code>padding</code> default</li>
 <li><code>Xs</code>: <code>0.25rem</code></li>
 <li><code>Sm</code>: <code>0.5rem</code></li>
-<li><code>Md</code>: <code>0.75rem</code> — the <code>gap</code> default</li>
-<li><code>Lg</code>: <code>1rem</code></li>
+<li><code>Md</code>: <code>0.75rem</code> — explicit compact gap</li>
+<li><code>Lg</code>: <code>--mui-stack-gap</code> (normally <code>1rem</code>) — the <code>gap</code> default</li>
 <li><code>Xl</code>: <code>1.5rem</code></li>
 <li><code>Xxl</code>: <code>2rem</code></li>
 </ul>
@@ -94,7 +94,7 @@ html! {
 <tr><td><code>vertical</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Vertical stack with the default gap — the common case, without the <code>Props</code> ceremony</td></tr>
 <tr><td><code>horizontal</code></td><td><code>fn(Markup) -&gt; Markup</code></td><td>Horizontal stack, vertically centred, default gap — a toolbar row, a button pair</td></tr>
 <tr><td><code>Direction::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a direction, empty for the default</td></tr>
-<tr><td><code>Space::gap_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a step used as <code>gap</code>, empty for <code>Md</code></td></tr>
+<tr><td><code>Space::gap_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a step used as <code>gap</code>, empty for <code>Lg</code></td></tr>
 <tr><td><code>Space::padding_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for a step used as <code>padding</code>, empty for <code>None</code></td></tr>
 <tr><td><code>Space::as_length</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>The CSS length a step resolves to — mirrors <code>tokens::spacing</code></td></tr>
 <tr><td><code>Align::as_class</code></td><td><code>fn(self) -&gt; &amp;'static str</code></td><td>Modifier class for an alignment, empty for the default</td></tr>
@@ -109,3 +109,5 @@ html! {
 <p>Card (a styled container with header/body/footer, often filled with a stack), Separator (a rule between stacked items), Item (a row with leading/trailing slots), AspectRatio (fixed-ratio box)</p>
 <h2>Shadcn reference</h2>
 <p>No direct shadcn/Base UI equivalent — shadcn leans on Tailwind utility classes (<code>flex flex-col gap-4</code>) for this role. <code>stack</code> fills the same need in a utility-free, enumerable form.</p>
+<h2>Shared page rhythm (0.13.0)</h2>
+<p>Bare <code>.mui-stack</code> and <code>stack::vertical</code> are vertical stacks with <code>gap: var(--mui-stack-gap)</code> (16px). Immediate child block margins are reset, so a stack of three cards has exactly two gaps. Record pages, shell content, card bodies, grouped worklists and the vertical parts of record/worklist/attention blocks use this contract. <code>.mui-page-stack</code> remains compatible. Caller-owned page wrappers must opt into one of these containers; do not add sibling margins as well. Explicit <code>Space::Md</code> now emits <code>mui-stack--gap-md</code> and keeps 12px; explicit horizontal/compact layouts remain available.</p>

@@ -69,7 +69,7 @@ pub fn render(mut props: Props) -> Markup {
 
 fn render_ready(props: Props) -> Markup {
     html! {
-        section class="mui-record-money" aria-label=(&props.title) {
+        section class="mui-record-money mui-stack" aria-label=(&props.title) {
             header class="mui-record-money__header" {
                 (props.heading.render(&props.title, "mui-kit-title"))
                 @if !props.currency.is_empty() { span class="mui-record-money__currency" { (props.currency) } }

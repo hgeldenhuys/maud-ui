@@ -393,8 +393,9 @@ mod stack_layout {
 
     #[test]
     fn default_variants_emit_no_class_but_gap_none_does() {
-        // Md is the gap default, so it is carried by `.mui-stack` itself.
-        assert_eq!(Space::Md.gap_class(), "");
+        // Lg is the shared stack default; an explicit Md keeps its 12px spacing.
+        assert_eq!(Space::Lg.gap_class(), "");
+        assert_eq!(Space::Md.gap_class(), "mui-stack--gap-md");
         // ...but "no gap at all" is NOT the default and must be explicit.
         assert_eq!(Space::None.gap_class(), "mui-stack--gap-none");
         // Padding runs the other way: None is the default, Md is explicit.
@@ -740,7 +741,7 @@ mod form_contract {
     fn stacked_is_a_post_form_wrapping_a_stack() {
         let out = form::stacked("/save", html! { span { "field" } }).into_string();
         assert!(out.starts_with(r#"<form class="mui-form" action="/save" method="post">"#), "got: {out}");
-        assert!(out.contains(r#"<div class="mui-stack mui-stack--gap-lg">"#), "got: {out}");
+        assert!(out.contains(r#"<div class="mui-stack">"#), "got: {out}");
         assert!(out.contains("<span>field</span>"), "got: {out}");
     }
 }

@@ -1,0 +1,12 @@
+{
+  "source_files": 244,
+  "fixed_font_sizes": 0,
+  "local_font_size_declarations": 0,
+  "untokenized_motion": 0,
+  "duration_tokens": [
+    "--mui-motion-fast",
+    "--mui-motion-enter"
+  ],
+  "bundles_checked": 2,
+  "browser_review": "Not performed; supervisor review required."
+}

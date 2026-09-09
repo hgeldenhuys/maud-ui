@@ -86,7 +86,7 @@ pub fn render(id: &str) -> Markup {
                     switchers: html! { span class="mui-caption" { "USD · 8 September 2026" } }, ..Default::default()
                 }),
                 children: html! {
-                    div class="mui-bank-example" data-mui="banking-demo" {
+                    div class="mui-bank-example mui-stack" data-mui="banking-demo" {
                         (worklist::header::render(worklist::header::Props { title: "Business operations".into(), count_sentence: "2 accounts · 2 reviews waiting".into(), ..Default::default() }))
                         (record::money::render(record::money::Props { title: "Cash position".into(), currency: "USD".into(), total: record::money::Figure::new("Ledger balance", usd(ledger)), paid: record::money::Figure::new("Available", usd(available)), due: record::money::Figure::new("On hold", usd(ledger - available)), emphasize_due: false, breakdown: Some("Balances across the two accounts below.".into()), ..Default::default() }))
                         section id=(ledger_id) aria-label="Accounts" {

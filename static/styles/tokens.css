@@ -68,6 +68,8 @@
   --mui-shell-text-h1-size: 2rem;
   --mui-shell-text-h2-size: 1.5rem;
   --mui-stack-gap: var(--mui-space-lg);
+  --mui-search-shortcut-width: 2.25rem;
+  --mui-search-shortcut-gap: 0.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
   --mui-control-height: 2.25rem;
   --mui-status-chip-height: 1.875rem;

@@ -1,6 +1,5 @@
 .mui-grouped-worklist { container: grouped-worklist / inline-size; min-width: 0; }
 .mui-grouped-worklist__group { background: var(--mui-bg-card); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); overflow: hidden; }
-.mui-grouped-worklist__group + .mui-grouped-worklist__group { margin-block-start: var(--mui-space-lg); }
 .mui-grouped-worklist__header { padding: var(--mui-inset-cell) var(--mui-space-20); background: var(--mui-bg-input); }
 .mui-grouped-worklist__heading { margin: 0; color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; }
 .mui-grouped-worklist__header p { margin: var(--mui-space-xs) 0 0; color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); }

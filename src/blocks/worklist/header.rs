@@ -45,8 +45,8 @@ pub fn render(mut props: Props) -> Markup {
 
 fn render_ready(props: Props) -> Markup {
     html! {
-        header class="mui-worklist-header" {
-            div class="mui-worklist-header__identity" {
+        header class="mui-worklist-header mui-stack mui-stack--horizontal" {
+            div class="mui-worklist-header__identity mui-stack mui-stack--gap-sm" {
                 (props.heading.render(&props.title, "mui-worklist-header__title"))
                 @if !props.count_sentence.is_empty() { p class="mui-worklist-header__count" { (props.count_sentence) } }
             }

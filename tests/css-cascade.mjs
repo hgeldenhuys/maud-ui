@@ -60,8 +60,8 @@ function active(context, env) {
       return (!max || viewport <= Number(max[1]) * (max[2] === 'rem' ? 16 : 1)) && (!min || viewport >= Number(min[1]) * (min[2] === 'rem' ? 16 : 1));
     }
     if (rule.startsWith('@container')) {
-      const max = rule.match(/max-width:\s*([\d.]+)rem/);
-      return !!max && env.width <= Number(max[1]) * 16;
+      const max = rule.match(/max-width:\s*([\d.]+)rem/), min = rule.match(/min-width:\s*([\d.]+)rem/);
+      return !!(max || min) && (!max || env.width <= Number(max[1]) * 16) && (!min || env.width >= Number(min[1]) * 16);
     }
     return false;
   });
@@ -126,7 +126,7 @@ export function computed(rules, node, env) {
       for (const declaration of rule.body.split(';')) {
         const colon = declaration.indexOf(':'); if (colon < 0) continue;
         const name = declaration.slice(0, colon).trim(), raw = declaration.slice(colon + 1).trim();
-        if (!/^(?:padding(?:-(?:block|inline|top|right|bottom|left))?|height|min-height|max-height|width|min-width|align-self|align-items|font-size|font-weight|line-height|border(?:-radius)?|box-sizing|grid-auto-flow|grid-template-columns|grid-template-rows|grid-row|flex-wrap|flex-direction|flex-shrink|display|white-space|position|top|contain|overflow-y|overscroll-behavior|gap|margin(?:-block)?|padding-inline-start|padding-inline-end|background|color|inset-inline-start)$/.test(name)) continue;
+        if (!/^(?:padding(?:-(?:block|inline|top|right|bottom|left))?|height|min-height|max-height|width|min-width|max-width|align-self|align-items|font-size|font-weight|font-family|line-height|border(?:-radius)?|box-sizing|grid-auto-flow|grid-template-columns|grid-template-rows|grid-row|flex|flex-wrap|flex-direction|flex-shrink|display|white-space|text-overflow|position|top|contain|overflow|overflow-wrap|overflow-y|overscroll-behavior|gap|margin(?:-block)?|padding-inline-start|padding-inline-end|background|color|inset-inline-start|inset-inline-end)$/.test(name)) continue;
         const value = resolve(raw);
         assign(name, value, specificity, order);
         if (name === 'padding') {

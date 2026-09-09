@@ -1,4 +1,4 @@
-//! Record identity, status, one primary action and subordinate actions.
+//! Record title, one kind/reference line, then the main verb and a More disclosure.
 use crate::{
     blocks::action::{Action, Heading, Link},
     primitives::badge,
@@ -13,11 +13,16 @@ pub struct Props {
     /// Overrides `title`. May contain a field-emitter heading; no heading is wrapped around it.
     pub title_markup: Option<Markup>,
     pub subtitle: Option<String>,
+    /// Human-facing kind, e.g. Guest. Together with reference, replaces subtitle.
+    pub kind: Option<String>,
+    /// Record reference, e.g. UI-G5; rendered once in the muted identity line.
+    pub reference: Option<String>,
     pub status: Option<badge::Props>,
     /// Overrides `status`, including when the supplied markup is empty.
     pub status_markup: Option<Markup>,
     pub primary_action: Option<Action>,
     pub secondary_actions: Vec<Action>,
+    /// Legacy navigation link; prefer the shell breadcrumb. Never put Back in actions.
     pub back: Option<Link>,
     pub heading: Heading,
 }
@@ -28,12 +33,15 @@ pub fn render(mut props: Props) -> Markup {
 }
 
 fn render_ready(props: Props) -> Markup {
+    let identity = [props.kind.as_deref(), props.reference.as_deref()].into_iter().flatten()
+        .map(str::trim).filter(|part| !part.is_empty()).collect::<Vec<_>>().join(" · ");
+    let subtitle = if identity.is_empty() { props.subtitle.filter(|line| !line.trim().is_empty()) } else { Some(identity) };
     html! {
-        header class="mui-record-header" {
+        header class="mui-record-header mui-stack" {
             @if let Some(back) = props.back {
                 a class="mui-record-header__back" href=(back.href) { span aria-hidden="true" { "← " } (back.label) }
             }
-            div class="mui-record-header__row" {
+            div class="mui-record-header__row mui-stack" {
                 div class="mui-record-header__identity" {
                     div class="mui-record-header__title-line" {
                         @if let Some(title) = props.title_markup {
@@ -44,7 +52,7 @@ fn render_ready(props: Props) -> Markup {
                         @if let Some(status) = props.status_markup { (status) }
                         @else if let Some(status) = props.status { (badge::render(status)) }
                     }
-                    @if let Some(subtitle) = props.subtitle { p class="mui-record-header__subtitle" { (subtitle) } }
+                    @if let Some(subtitle) = subtitle { p class="mui-record-header__subtitle" title=(&subtitle) { (subtitle) } }
                 }
                 (crate::blocks::action_row::render(crate::blocks::action_row::Props {
                     primary: props.primary_action, overflow: props.secondary_actions,
@@ -58,7 +66,8 @@ fn render_ready(props: Props) -> Markup {
 pub fn preview() -> Markup {
     render(Props {
         title: "Sofia Davis".into(),
-        subtitle: Some("Reservation RS-2048 · Garden suite · 8–12 September".into()),
+        kind: Some("Reservation".into()),
+        reference: Some("RS-2048".into()),
         status: Some(badge::Props {
             label: "Arriving today".into(),
             variant: badge::Variant::Info,
@@ -72,10 +81,6 @@ pub fn preview() -> Markup {
             Action::link("Edit reservation", "?step=edit"),
             Action::link("View invoice", "?step=invoice"),
         ],
-        back: Some(Link {
-            label: "Reservations".into(),
-            href: "/blocks/worklist-header".into(),
-        }),
         ..Default::default()
     })
 }

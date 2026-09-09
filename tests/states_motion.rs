@@ -35,6 +35,7 @@ operational_states!(
     worklist_header: blocks::worklist::header, grouped: blocks::worklist::grouped,
     record_header: blocks::record::header, timeline: blocks::record::timeline,
     money: blocks::record::money, related: blocks::record::related_card,
+    facts: blocks::record::facts, related_list: blocks::record::related_list, record_page: blocks::record::page,
     tasks: blocks::task::grid, banner: blocks::attention_banner, actions: blocks::action_row,
     sidebar: blocks::shell::sidebar, page_header: blocks::shell::page_header,
     app_header: blocks::shell::app_header, app_footer: blocks::shell::app_footer,

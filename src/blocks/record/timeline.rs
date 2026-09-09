@@ -74,7 +74,7 @@ fn render_ready(props: Props) -> Markup {
         "timeline accepts at most one current milestone"
     );
     html! {
-        section class="mui-record-timeline" aria-label=(&props.title) {
+        section class="mui-record-timeline mui-stack" aria-label=(&props.title) {
             (props.heading.render(&props.title, "mui-kit-title"))
             ol class="mui-record-timeline__items" {
                 @for milestone in props.milestones {

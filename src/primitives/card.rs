@@ -84,7 +84,7 @@ pub fn render(props: Props) -> Markup {
                     }
                 }
             }
-            div class="mui-card__body" {
+            div class="mui-card__body mui-stack" {
                 (props.children)
             }
             @if let Some(footer_markup) = props.footer {
@@ -109,7 +109,7 @@ pub fn action(children: Markup) -> Markup {
 /// Standalone content helper — renders the card body wrapper.
 pub fn content(children: Markup) -> Markup {
     html! {
-        div class="mui-card__body" {
+        div class="mui-card__body mui-stack" {
             (children)
         }
     }

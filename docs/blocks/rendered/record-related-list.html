@@ -1,0 +1,24 @@
+<h1>Related records</h1>
+<p>Use <code>record::related_list</code> for a record's bookings, members, notes or other related/composed collections. Each item has one compact identity link, an optional status chip and a date. It is a list, not a stack of nested cards or disclosure panels.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud_ui::{blocks::record::related_list::{self, Date, Item}, primitives::badge};
+related_list::render(related_list::Props {
+    title: "Bookings".into(),
+    items: vec![Item {
+        reference: "UI-B05".into(), title: "Garden suite".into(),
+        href: Some("/ui/booking/UI-B05".into()),
+        status: Some(badge::Props { label: "Confirmed".into(), variant: badge::Variant::Success, ..Default::default() }),
+        date: Some(Date { label: "8 Sep 2026".into(), datetime: Some("2026-09-08".into()) }),
+    }],
+    empty_message: "No bookings yet.".into(),
+    ..Default::default()
+});
+</code></pre>
+<h2>Props and copy contract</h2>
+<p><code>title</code> defaults to <code>Related records</code>; use a human-facing plural such as <code>Bookings</code>. <code>items: Vec&lt;Item&gt;</code> stays in caller order. <code>empty_message</code> defaults to <code>No related records.</code> and renders as one quiet line under the heading, without an empty card or placeholder rows. Items with neither reference nor title are omitted. <code>heading</code> defaults to H2. <code>state</code> supports the shared Ready/Absent/Loading/Empty/Error/Disabled contract.</p>
+<p>An <code>Item</code> has <code>reference</code>, <code>title</code>, optional <code>href</code>, optional <code>badge::Props</code> in <code>status</code>, and optional <code>Date { label, datetime }</code>. A missing or blank href renders plain identity text, without a dead link. Date <code>label</code> is formatted for the audience; supply a valid machine-readable <code>datetime</code> if known. Missing/blank dates leave no placeholder column.</p>
+<p>Reference and title appear once, separated by a middle dot when both remain. Repeated leading copies of the same reference are removed from the title, with or without <code>#</code>: reference <code>UI-B05</code>, title <code>#UI-B05 #UI-B05</code> renders only <code>UI-B05</code>. Exact boundaries protect different references such as <code>UI-B050</code>. Distinct title text is preserved; the component does not rewrite arbitrary prose.</p>
+<p>The adapter must map schema names to product labels. Never pass <code>COMPOSITION</code>, <code>1 nested</code>, <code>via guest</code>, relation names, join paths or diagnostics as user-facing titles. There are deliberately no schema/count/path subtitle slots. Business status and dates come from admitted values, never inferred from the relationship.</p>
+<h2>Layout and accessibility</h2>
+<p>Semantic <code>ul</code>/<code>li</code> gives one row per record. Links use <code>--mui-link</code> in visited and normal states, underline and visible keyboard focus. Text in the status chip supplies meaning beyond color. The reference stays visible, the human title may ellipsize, and the link's full title remains available. Date and status stay alongside the identity; touch identity links meet the existing 44px target. Empty content is quiet text, not an alert.</p>
+<p>Use <a href="record-related-card.md">Related card</a> for a <strong>single</strong> entity with additional facts and an action. Use this list for collections. Pair with <a href="record-facts.md">Record facts</a> and <a href="record-page.md">Record page</a>.</p>

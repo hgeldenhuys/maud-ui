@@ -13,7 +13,7 @@ pub(super) fn content(id: &str) -> Markup {
     let new_id = format!("{id}-new");
     let form_id = format!("{id}-new-form");
     html! {
-        div class="mui-workspace-example" data-mui="workspace-demo" {
+        div class="mui-workspace-example mui-stack" data-mui="workspace-demo" {
             (worklist::header::render(worklist::header::Props {
                 title: "Reservations".into(), count_sentence: "4 reservations · Tuesday, 8 September".into(),
                 search: Some(worklist::header::Search { action: format!("#{id}"), label: "Find a guest".into(), placeholder: "Find a guest…".into(), ..Default::default() }),

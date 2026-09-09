@@ -40,7 +40,7 @@ html! {
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `direction` | `Direction` | `Vertical` | Main-axis direction — column or row |
-| `gap` | `Space` | `Md` (`0.75rem`) | Space between children |
+| `gap` | `Space` | `Lg` (`--mui-stack-gap`, 1rem) | Space between children |
 | `padding` | `Space` | `None` | Inset applied by the container itself; `None` keeps a stack a drop-in wrapper |
 | `align` | `Align` | `Stretch` | Cross-axis alignment (`align-items`) |
 | `justify` | `Justify` | `Start` | Main-axis distribution (`justify-content`) |
@@ -64,8 +64,8 @@ Shared by `gap` and `padding`. Mirrors `tokens::spacing`, resolving through the 
 - `None`: `0` — the `padding` default
 - `Xs`: `0.25rem`
 - `Sm`: `0.5rem`
-- `Md`: `0.75rem` — the `gap` default
-- `Lg`: `1rem`
+- `Md`: `0.75rem` — explicit compact gap
+- `Lg`: `--mui-stack-gap` (normally `1rem`) — the `gap` default
 - `Xl`: `1.5rem`
 - `Xxl`: `2rem`
 
@@ -109,7 +109,7 @@ The element the stack renders as. A page assembled entirely from `div`s has no l
 | `vertical` | `fn(Markup) -> Markup` | Vertical stack with the default gap — the common case, without the `Props` ceremony |
 | `horizontal` | `fn(Markup) -> Markup` | Horizontal stack, vertically centred, default gap — a toolbar row, a button pair |
 | `Direction::as_class` | `fn(self) -> &'static str` | Modifier class for a direction, empty for the default |
-| `Space::gap_class` | `fn(self) -> &'static str` | Modifier class for a step used as `gap`, empty for `Md` |
+| `Space::gap_class` | `fn(self) -> &'static str` | Modifier class for a step used as `gap`, empty for `Lg` |
 | `Space::padding_class` | `fn(self) -> &'static str` | Modifier class for a step used as `padding`, empty for `None` |
 | `Space::as_length` | `fn(self) -> &'static str` | The CSS length a step resolves to — mirrors `tokens::spacing` |
 | `Align::as_class` | `fn(self) -> &'static str` | Modifier class for an alignment, empty for the default |
@@ -131,3 +131,7 @@ Card (a styled container with header/body/footer, often filled with a stack), Se
 ## Shadcn reference
 
 No direct shadcn/Base UI equivalent — shadcn leans on Tailwind utility classes (`flex flex-col gap-4`) for this role. `stack` fills the same need in a utility-free, enumerable form.
+
+## Shared page rhythm (0.13.0)
+
+Bare `.mui-stack` and `stack::vertical` are vertical stacks with `gap: var(--mui-stack-gap)` (16px). Immediate child block margins are reset, so a stack of three cards has exactly two gaps. Record pages, shell content, card bodies, grouped worklists and the vertical parts of record/worklist/attention blocks use this contract. `.mui-page-stack` remains compatible. Caller-owned page wrappers must opt into one of these containers; do not add sibling margins as well. Explicit `Space::Md` now emits `mui-stack--gap-md` and keeps 12px; explicit horizontal/compact layouts remain available.

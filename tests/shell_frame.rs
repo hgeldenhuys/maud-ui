@@ -18,7 +18,8 @@ fn fixtures_keep_one_navigation_node_in_a_full_height_column() {
                 "mui-block--shell__content",
             ] {
                 assert_eq!(
-                    page.matches(&format!("class=\"{class}\"")).count(),
+                    page.matches(&format!("class=\"{class}\"")).count()
+                        + page.matches(&format!("class=\"{class} ")).count(),
                     1,
                     "{class}"
                 );

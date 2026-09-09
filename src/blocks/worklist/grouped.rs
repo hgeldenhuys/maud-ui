@@ -61,7 +61,7 @@ pub fn render(mut props: Props) -> Markup {
 fn render_ready(props: Props) -> Markup {
     let empty = props.groups.iter().all(|g| g.rows.is_empty());
     html! {
-        div class="mui-grouped-worklist" role="region" aria-label=(props.aria_label) {
+        div class="mui-grouped-worklist mui-stack" role="region" aria-label=(props.aria_label) {
             @if empty { p class="mui-grouped-worklist__empty" { (props.empty_message) } }
             @else {
                 @for group in props.groups.into_iter().filter(|g| !g.rows.is_empty()) {

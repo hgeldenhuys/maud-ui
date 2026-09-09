@@ -63,3 +63,7 @@ Navigation, Link, Pagination.
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/breadcrumb
+
+## Empty labels and constrained headers (0.13.0)
+
+Blank or whitespace-only labels are discarded before separators and positions are calculated; all blank input emits no navigation. A debug assertion checks the filtered rendering invariant. Page-header title/single-crumb derivation uses the same filter. Ancestor labels may ellipsize when constrained, middle crumbs yield space first, and the final crumb wraps within its context instead of sliding beneath search. Its full text remains in the DOM.

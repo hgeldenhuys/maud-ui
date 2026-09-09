@@ -64,14 +64,14 @@ pub enum Space {
 
 impl Space {
     /// Returns the modifier class for this step used as the *gap*, or an empty
-    /// string for the gap default ([`Space::Md`], carried by `.mui-stack`).
+    /// string for the gap default ([`Space::Lg`], carried by `.mui-stack`).
     pub fn gap_class(self) -> &'static str {
         match self {
             Space::None => "mui-stack--gap-none",
             Space::Xs => "mui-stack--gap-xs",
             Space::Sm => "mui-stack--gap-sm",
-            Space::Md => "",
-            Space::Lg => "mui-stack--gap-lg",
+            Space::Md => "mui-stack--gap-md",
+            Space::Lg => "",
             Space::Xl => "mui-stack--gap-xl",
             Space::Xxl => "mui-stack--gap-xxl",
         }
@@ -215,7 +215,7 @@ impl Tag {
 pub struct Props {
     /// Main-axis direction. Default [`Direction::Vertical`].
     pub direction: Direction,
-    /// Space between children. Default [`Space::Md`] (`0.75rem`).
+    /// Space between children. Default [`Space::Lg`] (`--mui-stack-gap`, normally 1rem).
     pub gap: Space,
     /// Space inside the container's edges. Default [`Space::None`], so a stack
     /// is a drop-in wrapper that adds no inset of its own.
@@ -243,7 +243,7 @@ impl Default for Props {
     fn default() -> Self {
         Self {
             direction: Direction::default(),
-            gap: Space::Md,
+            gap: Space::Lg,
             padding: Space::None,
             align: Align::default(),
             justify: Justify::default(),
@@ -378,7 +378,7 @@ pub fn showcase() -> Markup {
                     (Space::None, "None \u{2014} 0"),
                     (Space::Xs, "Xs \u{2014} 0.25rem"),
                     (Space::Sm, "Sm \u{2014} 0.5rem"),
-                    (Space::Md, "Md \u{2014} 0.75rem (default)"),
+                    (Space::Md, "Md \u{2014} 0.75rem"),
                     (Space::Lg, "Lg \u{2014} 1rem"),
                     (Space::Xl, "Xl \u{2014} 1.5rem"),
                     (Space::Xxl, "Xxl \u{2014} 2rem"),

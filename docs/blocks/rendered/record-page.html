@@ -1,0 +1,37 @@
+<h1>Record page</h1>
+<p>The generic detail archetype for every record type: title, one muted kind/reference line, action row, then content with a guaranteed library gap. The default header uses H1; the block adds no main landmark because the surrounding shell owns it.</p>
+<h2>Import and example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::blocks::{action::{Action, Heading}, record::{facts, header, page, related_list}};
+page::render(page::Props {
+    header: header::Props {
+        title: "Sofia Patel".into(), kind: Some("Guest".into()), reference: Some("UI-G5".into()),
+        heading: Heading::H1,
+        primary_action: Some(Action::link("Edit guest", "/ui/guests/UI-G5/edit")),
+        secondary_actions: vec![Action::link("Graph view", "/ui/guests/UI-G5/graph")],
+        ..Default::default()
+    },
+    children: html! {
+        (facts::render(facts::Props {
+            groups: vec![facts::Group { title: "Identity".into(), facts: vec![
+                facts::Fact::new("Full name", "Sofia Patel"),
+                facts::Fact::new("Email", "sofia.patel@example.com"),
+            ] }], ..Default::default()
+        }))
+        (related_list::render(related_list::Props {
+            title: "Bookings".into(), empty_message: "No bookings yet.".into(), ..Default::default()
+        }))
+    },
+    ..Default::default()
+});
+</code></pre>
+<h2>Props and action hierarchy</h2>
+<p><code>header: record::header::Props</code> carries identity and the main verb. <code>children: Markup</code> contains admitted blocks. <code>state: State</code> supports the shared presentation states; Absent renders nothing, while Loading/Empty/Error replace the record and Disabled keeps it inert with an external reason.</p>
+<p>Use one main verb, such as Edit guest, Check in or Approve. Developer views belong in <code>secondary_actions</code>, behind native <code>More ▾</code>. Back to list belongs in the shell breadcrumb, preserving any collection filters in its href. Do not duplicate it in the action row. The library cannot infer an application's main verb, role access or translated schema labels; that mapping remains in the generic adapter.</p>
+<p><code>kind</code> and <code>reference</code> render one subtitle (<code>Guest · UI-G5</code>), taking precedence over the older <code>subtitle</code> prop. Do not add a second “Guest Profile View” subtitle. Existing canonical title/status markup slots retain precedence. When providing your own <code>header</code> literal, set its heading to H1; use H2/H3 for embedded records.</p>
+<h2>One stack, sections versus cards</h2>
+<p><code>.mui-record-page</code> is a <code>.mui-stack</code>: vertical flex, <code>gap: var(--mui-stack-gap)</code> (16px), with child block margins reset. Shell content, card bodies, record blocks, grouped worklists and archetype examples use the same stack contract. <code>.mui-page-stack</code> remains compatible. <code>stack::vertical</code> and bare <code>.mui-stack</code> use this rhythm too.</p>
+<p>Group facts about the <strong>same record</strong> into one <a href="record-facts.md">Record facts</a> surface. Independent tasks/entities may use separate cards. Wrap those cards in <code>stack::vertical</code> or <code>.mui-stack</code>; never add sibling margins as well. Arbitrary caller-owned wrappers must also adopt the library stack: the library does not rewrite unknown application DOM. Explicit stack gap modifiers are intentional compact-layout overrides.</p>
+<h2>Accessibility and verification</h2>
+<p>Reading and keyboard order follow title → subtitle → main verb → More → content. Native links, forms, definition lists and lists retain their semantics. No new JavaScript is needed for this page or the More disclosure. Standard theme, density, touch-target and reduced-motion contracts continue to apply.</p>
+<p><code>examples/record_page_fixture.rs</code> generates six guest/long-label pages over three densities plus a three-card stack and a minimal record. The gallery serves <code>/fixtures/record-page-{compact,comfortable,spacious}-{guest,long}.html</code>, <code>/fixtures/record-page-three-cards.html</code> and <code>/fixtures/record-page-minimal.html</code>. Use 1280×900 and 390×900 in light/dark; source/DOM tests are distinct from supervisor browser measurements.</p>

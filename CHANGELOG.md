@@ -5,6 +5,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.14.0] — 2026-09-10 — Round 6 — from real use
+
+Live Chrome use created a fictional guest, booking and completed cash payment, exercised check-in, editing, validation, search, cancellation and both phone drawers. The resulting form and journey kit provides reusable feedback for those paths. See `docs/night-6-real-use.md` for observations and the separate application defects; this release does not change or deploy the live apps.
+
+- Opt-in `form::Props.feedback` persists native validation messages, associates field hints/errors, focuses the failed field and guards duplicate submits. Pending submit/reset controls preserve input values and a successful named submitter. `MaudUI.formFeedback` settles success, field errors and general failures; history restoration releases stale pending state.
+- `native_select` now supports `required`, `invalid`, `aria_describedby` and Default; selected options do not compete with a selected placeholder.
+- Five blocks: `feedback::notice`, `feedback::confirm`, `search::results`, `wizard::header`, and `worklist::empty`. Notices keep a human line before details; confirmations contain a real POST form and focus Cancel first; search and wizard headers keep identity and context readable on phones.
+- Native dialogs retain Tab/Shift+Tab, Escape and trigger focus. Drawer cancellation synchronizes its native close, sidebar ownership and `aria-expanded`.
+- Six generated fixtures exercise both brands and three densities. A dependency-free CDP test uses real Chrome and local HTTP failure/retry responses across 24 brand/density/theme/viewport cases, plus native POST and lifecycle checks. The catalog now has 83 primitives and 31 blocks.
+
+**Migration:** Exhaustive `form::Props` literals need `feedback` and `pending_label`; `NativeSelectProps` literals need `required`, `invalid`, and `aria_describedby`, or `..Default::default()`. Async adapters must call `MaudUI.formFeedback` on every outcome; request encoding, permissions, amount conversion, radio serialization, record refresh and journey progression remain caller owned. Field rendering wires hints/errors when the runtime is present; custom controls still need their explicit ARIA attributes for no-JavaScript server errors. Alert dialogs now permit Escape.
+
 ## [0.13.0] — 2026-09-09 — Round 5
 
 A reusable generic record page now composes `record::facts`, `record::related_list` and the record header. Fact groups share one surface with responsive 2–4-column sections (one column on phones), masked values carry a mono face and explicit hint, and a single fact stays a row. Related records use compact links, status and dates with repeated reference prefixes removed and quiet empty text.

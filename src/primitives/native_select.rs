@@ -1,12 +1,14 @@
 //! NativeSelect component — styled native `<select>` matching Input appearance.
 use maud::{html, Markup, PreEscaped};
 
+#[derive(Clone, Debug)]
 pub struct NativeOption {
     pub value: String,
     pub label: String,
     pub disabled: bool,
 }
 
+#[derive(Clone, Debug, Default)]
 pub struct NativeSelectProps {
     pub name: String,
     pub id: String,
@@ -14,6 +16,11 @@ pub struct NativeSelectProps {
     pub selected: Option<String>,
     pub disabled: bool,
     pub placeholder: Option<String>,
+    /// Participate in native constraint validation when no option is chosen.
+    pub required: bool,
+    pub invalid: bool,
+    /// Existing hints/errors; field-feedback preserves these references.
+    pub aria_describedby: Option<String>,
 }
 
 /// SVG chevron-down (lucide icon, 15x15)
@@ -26,9 +33,12 @@ pub fn render(props: NativeSelectProps) -> Markup {
                 name=(props.name)
                 id=(props.id)
                 disabled[props.disabled]
+                required[props.required]
+                aria-invalid=[props.invalid.then_some("true")]
+                aria-describedby=[props.aria_describedby.as_deref()]
             {
                 @if let Some(placeholder) = props.placeholder {
-                    option value="" disabled selected hidden { (placeholder) }
+                    option value="" disabled selected[props.selected.as_deref().unwrap_or("").is_empty()] hidden { (placeholder) }
                 }
                 @for option in props.options {
                     option
@@ -68,6 +78,7 @@ pub fn showcase() -> Markup {
                         selected: None,
                         disabled: false,
                         placeholder: Some("Select a country\u{2026}".to_string()),
+                        ..Default::default()
                     }))
                 }
             }
@@ -89,6 +100,7 @@ pub fn showcase() -> Markup {
                         selected: Some("USD".to_string()),
                         disabled: false,
                         placeholder: None,
+                        ..Default::default()
                     }))
                 }
             }
@@ -108,6 +120,7 @@ pub fn showcase() -> Markup {
                         selected: Some("utc".to_string()),
                         disabled: true,
                         placeholder: None,
+                        ..Default::default()
                     }))
                 }
             }

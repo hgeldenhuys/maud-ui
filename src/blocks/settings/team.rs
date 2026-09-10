@@ -103,6 +103,7 @@ pub fn render(props: Props) -> Markup {
                                 .or_else(|| props.roles.first()).cloned(),
                             placeholder: Some("Role".into()),
                             disabled: false,
+                            ..Default::default()
                         }))
                         (button::render(button::Props {
                             label: "Invite".into(),
@@ -158,6 +159,7 @@ pub fn render(props: Props) -> Markup {
                                                             selected: Some(m.role.clone()),
                                                             placeholder: None,
                                                             disabled: false,
+                                                            ..Default::default()
                                                         }))
                                                     }
                                                 }

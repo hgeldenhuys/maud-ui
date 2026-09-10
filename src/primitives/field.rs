@@ -71,6 +71,7 @@ pub fn render(props: Props) -> Markup {
     html! {
         div
             class=(format!("mui-field{invalid_class}{orientation_class}"))
+            data-mui="field-feedback" data-field-control=(props.id)
             data-invalid=[if invalid { Some("true") } else { None }]
         {
             label.mui-field__label for=(props.id) {

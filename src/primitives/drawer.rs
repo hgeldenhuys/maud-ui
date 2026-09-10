@@ -175,6 +175,7 @@ pub fn showcase() -> Markup {
                                     selected: Some("auto".to_string()),
                                     disabled: false,
                                     placeholder: None,
+                                    ..Default::default()
                                 }))
                             },
                             ..Default::default()

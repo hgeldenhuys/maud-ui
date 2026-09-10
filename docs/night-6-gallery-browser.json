@@ -1,0 +1,115 @@
+{
+  "pages": [
+    {
+      "slug": "feedback-notice",
+      "width": 1280,
+      "overflow": false,
+      "box": {
+        "x": 289,
+        "y": 1314.3125,
+        "width": 931,
+        "height": 610.34375
+      }
+    },
+    {
+      "slug": "feedback-confirm",
+      "width": 1280,
+      "overflow": false,
+      "box": {
+        "x": 289,
+        "y": 1677.828125,
+        "width": 931,
+        "height": 284
+      }
+    },
+    {
+      "slug": "search-results",
+      "width": 1280,
+      "overflow": false,
+      "box": {
+        "x": 289,
+        "y": 1465.875,
+        "width": 931,
+        "height": 582.5625
+      }
+    },
+    {
+      "slug": "wizard-header",
+      "width": 1280,
+      "overflow": false,
+      "box": {
+        "x": 289,
+        "y": 1335.3125,
+        "width": 931,
+        "height": 476.78125
+      }
+    },
+    {
+      "slug": "worklist-empty",
+      "width": 1280,
+      "overflow": false,
+      "box": {
+        "x": 289,
+        "y": 1151.53125,
+        "width": 931,
+        "height": 485
+      }
+    },
+    {
+      "slug": "feedback-notice",
+      "width": 390,
+      "overflow": false,
+      "box": {
+        "x": 33,
+        "y": 2836.25,
+        "width": 324,
+        "height": 607.125
+      }
+    },
+    {
+      "slug": "feedback-confirm",
+      "width": 390,
+      "overflow": false,
+      "box": {
+        "x": 33,
+        "y": 3565.015625,
+        "width": 324,
+        "height": 236
+      }
+    },
+    {
+      "slug": "search-results",
+      "width": 390,
+      "overflow": false,
+      "box": {
+        "x": 33,
+        "y": 2925.609375,
+        "width": 324,
+        "height": 644.125
+      }
+    },
+    {
+      "slug": "wizard-header",
+      "width": 390,
+      "overflow": false,
+      "box": {
+        "x": 33,
+        "y": 2785.25,
+        "width": 324,
+        "height": 604.78125
+      }
+    },
+    {
+      "slug": "worklist-empty",
+      "width": 390,
+      "overflow": false,
+      "box": {
+        "x": 33,
+        "y": 2058.84375,
+        "width": 324,
+        "height": 485
+      }
+    }
+  ],
+  "javascriptErrors": []
+}

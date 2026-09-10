@@ -31,6 +31,9 @@ pub mod shell;
 pub mod worklist;
 pub mod record;
 pub mod task;
+pub mod feedback;
+pub mod search;
+pub mod wizard;
 
 /// Canonical slug registry. Mirrors the showcase routes.
 ///
@@ -66,6 +69,11 @@ pub const BLOCK_NAMES: &[&str] = &[
     "worklist-grouped",
     "attention-banner",
     "action-row",
+    "feedback-notice",
+    "feedback-confirm",
+    "search-results",
+    "wizard-header",
+    "worklist-empty",
 ];
 
 /// Convert a block slug into a human-readable name.

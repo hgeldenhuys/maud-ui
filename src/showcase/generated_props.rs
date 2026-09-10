@@ -407,6 +407,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Accessible name. A `<form>` is only exposed as a `form` landmark when it has one — see [`render`]." },
                 Prop { name: "novalidate", ty: "bool", default: format!("{:?}", props.novalidate), description: "Skip the browser's built-in constraint validation on submit. Default `false`." },
                 Prop { name: "autocomplete", ty: "bool", default: format!("{:?}", props.autocomplete), description: "Allow the browser to autofill fields. Default `true`; `false` emits `autocomplete=\"off\"`." },
+                Prop { name: "feedback", ty: "bool", default: format!("{:?}", props.feedback), description: "Opt into persistent inline errors, first-error focus and duplicate-submit protection. Call MaudUI.formFeedback(form, result) after an asynchronous response." },
+                Prop { name: "pending_label", ty: "String", default: format!("{:?}", props.pending_label), description: "Text shown on the submitting button while an opted-in form is pending." },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The form's contents — fields, and the submit control." },
             ])
         },
@@ -540,13 +542,17 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             ])
         },
         (false, "native_select") => {
+            let props = crate::primitives::native_select::NativeSelectProps::default();
             table(vec![
-                Prop { name: "name", ty: "String", default: "No struct Default; supply explicitly".into(), description: "" },
-                Prop { name: "id", ty: "String", default: "No struct Default; supply explicitly".into(), description: "" },
-                Prop { name: "options", ty: "Vec<NativeOption>", default: "No struct Default; supply explicitly".into(), description: "" },
-                Prop { name: "selected", ty: "Option<String>", default: "No struct Default; supply explicitly".into(), description: "" },
-                Prop { name: "disabled", ty: "bool", default: "No struct Default; supply explicitly".into(), description: "" },
-                Prop { name: "placeholder", ty: "Option<String>", default: "No struct Default; supply explicitly".into(), description: "" },
+                Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "" },
+                Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
+                Prop { name: "options", ty: "Vec<NativeOption>", default: format!("{:?}", props.options), description: "" },
+                Prop { name: "selected", ty: "Option<String>", default: format!("{:?}", props.selected), description: "" },
+                Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
+                Prop { name: "placeholder", ty: "Option<String>", default: format!("{:?}", props.placeholder), description: "" },
+                Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Participate in native constraint validation when no option is chosen." },
+                Prop { name: "invalid", ty: "bool", default: format!("{:?}", props.invalid), description: "" },
+                Prop { name: "aria_describedby", ty: "Option<String>", default: format!("{:?}", props.aria_describedby), description: "Existing hints/errors; field-feedback preserves these references." },
             ])
         },
         (false, "navigation_menu") => {
@@ -1234,6 +1240,63 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "density", ty: "Density", default: format!("{:?}", props.density), description: "" },
                 Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "" },
                 Prop { name: "overflow_label", ty: "String", default: format!("{:?}", props.overflow_label), description: "" },
+            ])
+        },
+        (true, "feedback-notice") => {
+            let props = crate::blocks::feedback::notice::Props::default();
+            table(vec![
+                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "" },
+                Prop { name: "message", ty: "String", default: format!("{:?}", props.message), description: "A complete human sentence, e.g. \"The guest could not be saved.\"" },
+                Prop { name: "description", ty: "Option<String>", default: format!("{:?}", props.description), description: "Helpful next step or record context, before technical details." },
+                Prop { name: "details", ty: "Option<String>", default: format!("{:?}", props.details), description: "Optional diagnostics, behind a native Details disclosure." },
+                Prop { name: "tone", ty: "Tone", default: format!("{:?}", props.tone), description: "" },
+                Prop { name: "action", ty: "Option<Link>", default: format!("{:?}", props.action), description: "" },
+            ])
+        },
+        (true, "feedback-confirm") => {
+            let props = crate::blocks::feedback::confirm::Props::default();
+            table(vec![
+                Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
+                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "Name the consequence, e.g. \"Check in Leila Morgan?\"" },
+                Prop { name: "message", ty: "String", default: format!("{:?}", props.message), description: "Human context: guest, room, dates or amount." },
+                Prop { name: "confirm_label", ty: "String", default: format!("{:?}", props.confirm_label), description: "" },
+                Prop { name: "cancel_label", ty: "String", default: format!("{:?}", props.cancel_label), description: "" },
+                Prop { name: "pending_label", ty: "String", default: format!("{:?}", props.pending_label), description: "" },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "Native POST destination; application owns validation, authorization and CSRF." },
+                Prop { name: "hidden_fields", ty: "Vec<(String, String)>", default: format!("{:?}", props.hidden_fields), description: "" },
+                Prop { name: "danger", ty: "bool", default: format!("{:?}", props.danger), description: "" },
+            ])
+        },
+        (true, "search-results") => {
+            let props = crate::blocks::search::results::Props::default();
+            table(vec![
+                Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
+                Prop { name: "query", ty: "String", default: format!("{:?}", props.query), description: "" },
+                Prop { name: "items", ty: "Vec<Item>", default: format!("{:?}", props.items), description: "" },
+                Prop { name: "total", ty: "Option<usize>", default: format!("{:?}", props.total), description: "Authoritative total when results are paginated. None means the supplied list is complete." },
+                Prop { name: "clear_action", ty: "Option<Link>", default: format!("{:?}", props.clear_action), description: "" },
+                Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "" },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
+            ])
+        },
+        (true, "wizard-header") => {
+            let props = crate::blocks::wizard::header::Props::default();
+            table(vec![
+                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "" },
+                Prop { name: "context", ty: "Option<String>", default: format!("{:?}", props.context), description: "Human identity carried across every step, e.g. guest, room and dates." },
+                Prop { name: "steps", ty: "Vec<String>", default: format!("{:?}", props.steps), description: "" },
+                Prop { name: "current", ty: "usize", default: format!("{:?}", props.current), description: "One-based current step. Clamped to the supplied step list." },
+                Prop { name: "complete", ty: "bool", default: format!("{:?}", props.complete), description: "Explicit terminal state, supplied by the application." },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
+            ])
+        },
+        (true, "worklist-empty") => {
+            let props = crate::blocks::worklist::empty::Props::default();
+            table(vec![
+                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "" },
+                Prop { name: "description", ty: "Option<String>", default: format!("{:?}", props.description), description: "" },
+                Prop { name: "create", ty: "Option<Link>", default: format!("{:?}", props.create), description: "Only provide creation when the caller has admitted that action." },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
             ])
         },
         _ => return None,

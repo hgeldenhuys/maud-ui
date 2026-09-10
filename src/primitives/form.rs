@@ -87,6 +87,11 @@ pub struct Props {
     /// Allow the browser to autofill fields. Default `true`; `false` emits
     /// `autocomplete="off"`.
     pub autocomplete: bool,
+    /// Opt into persistent inline errors, first-error focus and duplicate-submit protection.
+    /// Call MaudUI.formFeedback(form, result) after an asynchronous response.
+    pub feedback: bool,
+    /// Text shown on the submitting button while an opted-in form is pending.
+    pub pending_label: String,
     /// The form's contents — fields, and the submit control.
     pub children: Markup,
 }
@@ -101,6 +106,8 @@ impl Default for Props {
             aria_label: None,
             novalidate: false,
             autocomplete: true,
+            feedback: false,
+            pending_label: "Saving…".into(),
             children: html! {},
         }
     }
@@ -122,6 +129,8 @@ impl Default for Props {
 pub fn render(props: Props) -> Markup {
     html! {
         form class="mui-form"
+             data-mui=[if props.feedback { Some("form-feedback") } else { None }]
+             data-pending-label=[if props.feedback { Some(props.pending_label.as_str()) } else { None }]
              action=[props.action.as_deref()]
              method=(props.method.as_attr())
              enctype=[props.enctype.as_attr()]

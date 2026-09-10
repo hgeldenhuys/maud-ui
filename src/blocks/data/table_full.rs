@@ -154,6 +154,7 @@ pub fn render(props: Props) -> Markup {
                                     selected: f.selected.clone(),
                                     placeholder: Some(f.label.clone()),
                                     disabled: false,
+                                    ..Default::default()
                                 }))
                             }
                         }
@@ -186,6 +187,7 @@ pub fn render(props: Props) -> Markup {
                                 selected: None,
                                 placeholder: Some("Choose an action\u{2026}".into()),
                                 disabled: false,
+                                ..Default::default()
                             }))
                             (button::render(button::Props {
                                 label: "Run".into(),

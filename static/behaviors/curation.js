@@ -39,6 +39,16 @@
       dialog.dispatchEvent(new CustomEvent("mui:navigation-open"));
       dialog.showModal();
       trigger.setAttribute("aria-expanded", "true");
+      // Consumers can also handle native cancel and remove `open` themselves,
+      // which bypasses close. Keep the trigger truthful on both paths.
+      dialog.addEventListener("cancel", function () {
+        setTimeout(() => {
+          if (!dialog.open) {
+            trigger.setAttribute("aria-expanded", "false");
+            if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
+          }
+        });
+      }, { once: true });
       dialog.addEventListener("close", function () {
         trigger.setAttribute("aria-expanded", "false");
         if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
@@ -74,6 +84,12 @@
       dialog.append(sidebar);
     });
     dialog.addEventListener("close", restore);
+    dialog.addEventListener("cancel", event => {
+      // Complete native cancellation here so close, focus and sidebar ownership
+      // settle together, including hosts that also handle the cancel event.
+      if (!event.defaultPrevented) { event.preventDefault(); dialog.close(); }
+      setTimeout(() => { if (!dialog.open) restore(); });
+    });
     dialog.addEventListener("click", function (event) {
       if (event.target === dialog || event.target.closest("a[href]")) dialog.close();
     });

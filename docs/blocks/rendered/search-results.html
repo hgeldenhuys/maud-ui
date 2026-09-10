@@ -1,0 +1,13 @@
+<h1>Search results</h1>
+<p><code>blocks::search::results</code> renders the query, count and native linked rows. Each row has one human identity, a quiet kind, optional reference and useful description. Exact duplicate descriptions are omitted; the caller should supply distinct snippets. Native links preserve Tab, Enter, open-in-new-tab and browser history.</p>
+<pre><code class="language-rust">use maud_ui::blocks::search::results::{self, Item, Props};
+let results = results::render(Props {
+    query: "Leila".into(),
+    items: vec![Item { title: "Leila Morgan".into(), kind: "Guest".into(),
+        description: Some("leila.morgan@example.com".into()),
+        href: "/guests/G-204".into(), ..Default::default() }],
+    ..Default::default()
+});
+</code></pre>
+<p><code>total: None</code> means the supplied list is complete. Supply the authoritative total for a page of results; a separate showing-count then appears. Loading, empty, error and disabled states use <code>blocks::state::State</code>. An empty Ready list keeps the query and offers <code>clear_action</code>, if supplied. Do not offer “create the first record” for an unsuccessful search; use <a href="worklist-empty.md">First record</a> only for a genuinely empty collection.</p>
+<p>Search execution, debouncing, query preservation, filtering and authorization stay with the application. The block contains no synthetic combobox/listbox keyboard model.</p>

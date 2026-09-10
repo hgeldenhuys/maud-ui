@@ -174,7 +174,7 @@ fn breadcrumbs_keep_full_root_and_current_and_identify_only_middle_for_ellipsis(
 }
 #[test]
 fn all_operational_examples_show_each_state_once() {
-    assert_eq!(state::OPERATIONAL_BLOCKS.len(), 13);
+    assert_eq!(state::OPERATIONAL_BLOCKS.len(), 14);
     for slug in state::OPERATIONAL_BLOCKS {
         let output = state::preview(slug).unwrap().into_string();
         for state in ["loading", "empty", "error", "disabled"] {

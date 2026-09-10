@@ -40,6 +40,7 @@ html! {
             selected: Some("us".to_string()),
             disabled: false,
             placeholder: None,
+            ..Default::default()
         }))
     }
 }
@@ -104,3 +105,7 @@ Input, Native Textarea, Label, Dropdown Menu.
 ## Shadcn reference
 
 https://ui.shadcn.com/docs/components/base/select
+
+## Validation (0.14.0)
+
+`NativeSelectProps` implements `Default` and accepts `required`, `invalid` and `aria_describedby`. Set `required: true` with an empty placeholder for payment methods or other mandatory choices. The native select now participates in browser constraints; `form::Props.feedback` keeps the failure beside the field and focuses it. `invalid` and `aria_describedby` also support server-rendered feedback without JavaScript. Exhaustive older literals must add these fields or `..Default::default()`. A supplied selected option no longer leaves the placeholder selected as well.

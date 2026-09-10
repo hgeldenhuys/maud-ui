@@ -94,6 +94,7 @@ pub(crate) fn render(state: State, ready: impl FnOnce() -> Markup) -> Markup {
 }
 
 pub const OPERATIONAL_BLOCKS: &[&str] = &[
+    "search-results",
     "worklist-header",
     "worklist-grouped",
     "record-header",
@@ -125,6 +126,7 @@ pub fn preview(slug: &str) -> Option<Markup> {
     use super::{action_row, attention_banner, record, shell, task, worklist};
     use crate::primitives::{badge, breadcrumb::BreadcrumbItem, facts_list::Fact};
     Some(match slug {
+        "search-results" => examples(|state| super::search::results::render(super::search::results::Props { id: format!("search-results-state-{}", state.as_str()), state, query: "Leila".into(), ..Default::default() })),
         "worklist-header" => examples(|state| {
             worklist::header::render(worklist::header::Props {
                 state,

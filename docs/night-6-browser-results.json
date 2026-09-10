@@ -1,0 +1,176 @@
+{
+  "cases": [
+    {
+      "brand": "lodge",
+      "density": "compact",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "compact",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "compact",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "compact",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "comfortable",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "comfortable",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "comfortable",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "comfortable",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "spacious",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "spacious",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "spacious",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "lodge",
+      "density": "spacious",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "compact",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "compact",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "compact",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "compact",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "comfortable",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "comfortable",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "comfortable",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "comfortable",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "spacious",
+      "width": 1280,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "spacious",
+      "width": 1280,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "spacious",
+      "width": 390,
+      "theme": "light",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    },
+    {
+      "brand": "neutral",
+      "density": "spacious",
+      "width": 390,
+      "theme": "dark",
+      "checks": "validation, server errors, payload, duplicate submit, retry, cancel, notice, modal, wizard, search, empty, drawer"
+    }
+  ],
+  "lifecycleChecks": 7,
+  "nativePost": true,
+  "requests": 121,
+  "javascriptErrors": []
+}

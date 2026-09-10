@@ -429,6 +429,11 @@ const BLOCK_CATALOG: &[BlockEntry] = &[
     BlockEntry { slug: "worklist-grouped", category: "Operations", title: "Grouped worklist", description: "Caller-defined time or state groups, two facts per row, and compact actions; cards on phones.", uses: &["badge", "facts_list", "button"] },
     BlockEntry { slug: "attention-banner", category: "Operations", title: "Attention banner", description: "A supplied warning, danger or information message with one action and optional local dismissal.", uses: &["button"] },
     BlockEntry { slug: "action-row", category: "Operations", title: "Action row", description: "One Save and Cancel geometry: row, compact or comfortable, plus native overflow.", uses: &["button"] },
+    BlockEntry { slug: "feedback-notice", category: "Operations", title: "Result notice", description: "A persistent human sentence before recovery advice and diagnostic details.", uses: &[] },
+    BlockEntry { slug: "feedback-confirm", category: "Operations", title: "Confirm an action", description: "A named native dialog, Cancel focus and a POST form with pending and failure feedback.", uses: &["dialog", "form", "button"] },
+    BlockEntry { slug: "search-results", category: "Operations", title: "Search results", description: "A query and count with compact linked identities, references and an empty-results recovery action.", uses: &[] },
+    BlockEntry { slug: "wizard-header", category: "Operations", title: "Wizard header", description: "One step title and guest context, compact progress and accessible current/completed steps.", uses: &[] },
+    BlockEntry { slug: "worklist-empty", category: "Operations", title: "First record", description: "Explain the empty list and offer one clear create action when allowed.", uses: &["button"] },
 ];
 
 /// Render the preview for a block by slug.
@@ -460,6 +465,12 @@ fn block_content(slug: &str) -> Option<Markup> {
         "worklist-grouped" => blocks::worklist::grouped::preview(),
         "attention-banner" => blocks::attention_banner::preview(),
         "action-row" => blocks::action_row::preview(),
+        "feedback-notice" => blocks::feedback::notice::preview(),
+        "feedback-confirm" => blocks::feedback::confirm::preview(),
+        "search-results" => blocks::search::results::preview(),
+        "wizard-header" => blocks::wizard::header::preview(),
+        "worklist-empty" => blocks::worklist::empty::preview(),
+
 
         _ => return None,
     };

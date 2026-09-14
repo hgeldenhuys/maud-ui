@@ -224,8 +224,16 @@
    bar's box entirely: no border, no background, one 24px line, vertically
    centred by the bar's flex. */
 .mui-composer__input--sleep {
-  flex: 1 1 auto;
+  /* The sleep bar is meant to WRAP rather than clip (see composer.rs), but
+     `flex: 1 1 auto` let the model / effort / permission chips squeeze this
+     field instead. Measured on the shipped CSS at a 560px pane it collapsed
+     to 148px while "Type to wake sched-duty-officer" needs ~210px, so the
+     placeholder was cut mid-word with no ellipsis — and only between roughly
+     500 and 800px, which is why a desktop-width look never showed it. A real
+     basis plus a floor makes the row wrap first. */
+  flex: 1 1 16rem;
   width: auto;
+  min-width: 14rem;
   min-height: 24px;
   height: 24px;
   overflow: hidden;

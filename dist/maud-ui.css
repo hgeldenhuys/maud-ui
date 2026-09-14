@@ -2086,8 +2086,9 @@ dialog.mui-command::backdrop {
   color: var(--mui-text-subtle);
 }
 .mui-composer__input--sleep {
-  flex: 1 1 auto;
+  flex: 1 1 16rem;
   width: auto;
+  min-width: 14rem;
   min-height: 24px;
   height: 24px;
   overflow: hidden;

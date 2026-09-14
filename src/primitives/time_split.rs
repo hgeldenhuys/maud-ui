@@ -135,22 +135,32 @@ pub fn render(props: Props) -> Markup {
     if total == 0 {
         return html! {};
     }
+    // The step the caption names takes the full accent, so the bar and the sentence
+    // point at the same thing. Without this the ramp can hand the dominant step its
+    // palest tone, which is exactly backwards (seen in QA on the live page).
+    let top: Option<u64> = props.segments.iter().filter_map(|s| s.millis).max();
 
     html! {
         section.mui-time-split aria-label=(props.aria_label.clone()) {
             div.mui-time-split__track role="img" aria-label=(props.aria_label) {
-                @for seg in &props.segments {
+                @for (i, seg) in props.segments.iter().enumerate() {
                     @let pct = seg.millis.unwrap_or(0) as f64 * 100.0 / total as f64;
                     @let title = if seg.label.is_empty() {
                         seg.name.clone()
                     } else {
                         format!("{} · {}", seg.name, seg.label)
                     };
+                    @let tone = format!("mui-time-split__seg--t{}", i % 5);
+                    @let lead = seg.millis.is_some() && seg.millis == top;
                     span
                         .mui-time-split__seg
                         .(seg.state.class())
+                        .(tone)
+                        .mui-time-split__seg--lead[lead]
                         style=(PreEscaped(format!("width:{pct:.4}%")))
-                        title=(title) {}
+                        tabindex="0"
+                        title=(title.clone())
+                        data-tip=(title) {}
                 }
             }
             @if !props.caption.is_empty() {
@@ -306,6 +316,40 @@ mod tests {
         .into_string();
         assert!(html.contains("width:0.0000%"), "no invented width:\n{html}");
         assert!(html.contains("mui-time-split__seg--unmeasured"), "{html}");
+    }
+
+    #[test]
+    fn segments_are_tellable_apart_and_the_caption_s_step_leads() {
+        // Six segments in one fill read as a single block on the live page; the ramp
+        // is what fixes that, and the dominant step takes the accent so the picture
+        // agrees with the sentence.
+        let segs = sample();
+        let html = render(Props {
+            caption: dominant_caption(&segs, "2m 30s").unwrap_or_default(),
+            aria_label: aria_from(&segs),
+            segments: segs,
+        })
+        .into_string();
+        for tone in ["--t0", "--t1", "--t2"] {
+            assert!(html.contains(tone), "adjacent steps must differ: {tone}\n{html}");
+        }
+        assert_eq!(html.matches("--lead").count(), 1, "exactly one lead:\n{html}");
+    }
+
+    #[test]
+    fn every_segment_carries_a_tooltip_and_can_take_focus() {
+        // The tooltip is the only place a step is named on screen, so it must reach
+        // a keyboard too — hover-only would be dead on touch and to a screen reader.
+        let segs = sample();
+        let html = render(Props {
+            caption: String::new(),
+            aria_label: aria_from(&segs),
+            segments: segs,
+        })
+        .into_string();
+        assert_eq!(html.matches("data-tip=").count(), 3, "{html}");
+        assert_eq!(html.matches("tabindex=\"0\"").count(), 3, "{html}");
+        assert!(html.contains("data-tip=\"build · 2m 29s\""), "{html}");
     }
 
     #[test]

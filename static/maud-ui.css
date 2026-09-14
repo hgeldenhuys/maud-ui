@@ -4701,15 +4701,17 @@ dialog.mui-alert-dialog .mui-field {
 }
 .mui-time-split__track {
   display: flex;
-  height: 1.625rem;
+  height: 1.875rem;
   box-sizing: border-box;
   border: 1px solid var(--mui-border);
   background: var(--mui-bg-input);
-  overflow: hidden;
+  overflow: visible;
 }
 .mui-time-split__seg {
-  min-width: 2px;
+  min-width: 3px;
   box-sizing: border-box;
+  position: relative;
+  outline: none;
 }
 .mui-time-split__seg--unmeasured {
   min-width: 8px;
@@ -4717,8 +4719,26 @@ dialog.mui-alert-dialog .mui-field {
 .mui-time-split__seg + .mui-time-split__seg {
   border-left: 1px solid var(--mui-bg-input);
 }
+.mui-time-split__seg--t0 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 72%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t1 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 48%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t2 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 88%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t3 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 60%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t4 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 34%, var(--mui-bg-input));
+}
 .mui-time-split__seg--done {
-  background: var(--mui-text-muted);
+  background: var(--mui-time-split-fill, var(--mui-text-muted));
+}
+.mui-time-split__seg--done.mui-time-split__seg--lead {
+  background: var(--mui-accent);
 }
 .mui-time-split__seg--failed {
   background: var(--mui-danger);
@@ -4750,6 +4770,41 @@ dialog.mui-alert-dialog .mui-field {
   font-size: 0.75rem;
   color: var(--mui-text-muted);
   font-variant-numeric: tabular-nums;
+}
+.mui-time-split__seg::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--mui-text);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  padding: 0.3125rem 0.5625rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.mui-time-split__seg:first-child::after,
+.mui-time-split__seg:nth-child(2)::after {
+  left: 0;
+  transform: none;
+}
+.mui-time-split__seg:last-child::after,
+.mui-time-split__seg:nth-last-child(2)::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+.mui-time-split__seg:hover::after,
+.mui-time-split__seg:focus-visible::after {
+  opacity: 1;
+}
+.mui-time-split__seg:focus-visible {
+  box-shadow: 0 0 0 2px var(--mui-accent);
+  z-index: 4;
 }
 
 /* static/styles/components/native_select.css */

@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.16.0] — 2026-09-14 — time split, after looking at it
+
+The 0.15.0 component shipped straight from its design. Rendering it on a real page with real data, in both schemes, showed three things the source could not.
+
+- **Segments are tellable apart.** Six steps in one fill with hairline seams read as a single block. They now cycle a five-tone ramp on the accent's own hue — a ramp rather than a categorical palette, because distinct hues would need a legend and a legend is what this widget refuses to have.
+- **The step the caption names leads.** It takes the full accent, so the picture and the sentence point at the same thing. The position-cycled ramp had been handing the dominant step its palest tone, which is exactly backwards.
+- **Tooltips reach a keyboard, and stay on the page.** They show on hover AND focus, with each segment focusable, since the tooltip is the only place a step is named on screen. A centred tooltip on the first segment pushed a 900px document to 936px — those segments are slivers at the very edge of the track — so edge segments now anchor to their own edge.
+
 ## [0.15.0] — 2026-09-14 — time split
 
 A widget for the question "what took so long". One bar, one sequence of steps in execution order, each segment sized by its share of measured time; `dominant_caption` writes the sentence that states the finding. Built for the Kapable delivery dashboard's run page, where one build step is routinely 96% of a run, and designed in consultation with Kimi K3.

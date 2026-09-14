@@ -12,18 +12,21 @@
 
 .mui-time-split__track {
   display: flex;
-  height: 1.625rem;
+  height: 1.875rem;
   box-sizing: border-box;
   border: 1px solid var(--mui-border);
   background: var(--mui-bg-input);
-  overflow: hidden;
+  /* visible, not hidden: the tooltips below sit above the track */
+  overflow: visible;
 }
 
 /* A step that ran without a measurement is given a mark, never a width — an
  * invented width would put a made-up number into the only picture on the page. */
 .mui-time-split__seg {
-  min-width: 2px;
+  min-width: 3px;
   box-sizing: border-box;
+  position: relative;
+  outline: none;
 }
 
 /* A measured step is never narrower than a hairline; an UNMEASURED one needs more
@@ -37,8 +40,34 @@
   border-left: 1px solid var(--mui-bg-input);
 }
 
+/* A five-tone ramp on ONE hue. Six segments in a single fill with hairline seams
+   read as one block — you could not tell six steps from one (QA on the live page,
+   2026-09-14). A categorical palette would tell them apart too, and would need a
+   legend; a legend is what this widget refuses to have. */
+.mui-time-split__seg--t0 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 72%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t1 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 48%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t2 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 88%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t3 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 60%, var(--mui-bg-input));
+}
+.mui-time-split__seg--t4 {
+  --mui-time-split-fill: color-mix(in oklab, var(--mui-accent) 34%, var(--mui-bg-input));
+}
+
 .mui-time-split__seg--done {
-  background: var(--mui-text-muted);
+  background: var(--mui-time-split-fill, var(--mui-text-muted));
+}
+
+/* The step the caption names takes the full accent, so the picture and the sentence
+   point at the same thing. */
+.mui-time-split__seg--done.mui-time-split__seg--lead {
+  background: var(--mui-accent);
 }
 
 .mui-time-split__seg--failed {
@@ -80,4 +109,51 @@
   font-size: 0.75rem;
   color: var(--mui-text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+/* Tooltip. The only place a step is NAMED on screen, since there is no legend.
+   Shown on hover and on focus — the segment is focusable — because a hover-only
+   tooltip is dead to a keyboard and to touch. The native `title` stays as a
+   fallback for anything that does not render this. */
+.mui-time-split__seg::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--mui-text);
+  background: var(--mui-bg-card);
+  border: 1px solid var(--mui-border);
+  padding: 0.3125rem 0.5625rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* A centred tooltip on the first or last segment hangs off the page — those are
+   usually slivers at the very edge of the track. Measured on the live page at
+   900px: the first one pushed the document to 936px. Anchor them to their edge. */
+.mui-time-split__seg:first-child::after,
+.mui-time-split__seg:nth-child(2)::after {
+  left: 0;
+  transform: none;
+}
+
+.mui-time-split__seg:last-child::after,
+.mui-time-split__seg:nth-last-child(2)::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.mui-time-split__seg:hover::after,
+.mui-time-split__seg:focus-visible::after {
+  opacity: 1;
+}
+
+.mui-time-split__seg:focus-visible {
+  box-shadow: 0 0 0 2px var(--mui-accent);
+  z-index: 4;
 }

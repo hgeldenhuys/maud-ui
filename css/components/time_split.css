@@ -1,0 +1,83 @@
+/* Time split — one bar showing where a sequence of steps spent its time.
+ *
+ * No legend and no per-segment labels, deliberately: at phone width any labelling
+ * scheme is the thing that breaks, and the table this usually sits above already
+ * carries every name. Status carries a fill AND a border treatment, so it never
+ * rests on colour alone. Nothing here rescales — a step that took 96% is drawn at
+ * 96%, because "fixing" that is how the widget would stop saying anything. */
+
+.mui-time-split {
+  margin: 0 0 1rem;
+}
+
+.mui-time-split__track {
+  display: flex;
+  height: 1.625rem;
+  box-sizing: border-box;
+  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-input);
+  overflow: hidden;
+}
+
+/* A step that ran without a measurement is given a mark, never a width — an
+ * invented width would put a made-up number into the only picture on the page. */
+.mui-time-split__seg {
+  min-width: 2px;
+  box-sizing: border-box;
+}
+
+/* A measured step is never narrower than a hairline; an UNMEASURED one needs more
+   than that or it reads as nothing at all rather than as "we could not time this"
+   (seen in the first render, 2026-09-14). */
+.mui-time-split__seg--unmeasured {
+  min-width: 8px;
+}
+
+.mui-time-split__seg + .mui-time-split__seg {
+  border-left: 1px solid var(--mui-bg-input);
+}
+
+.mui-time-split__seg--done {
+  background: var(--mui-text-muted);
+}
+
+.mui-time-split__seg--failed {
+  background: var(--mui-danger);
+  border-top: 2px dashed var(--mui-danger);
+}
+
+/* Tinted, not transparent: a running step is most of an in-flight run, and an
+   unfilled segment made the whole bar read as empty rather than as "in progress". */
+.mui-time-split__seg--running {
+  background: color-mix(in srgb, var(--mui-accent) 22%, transparent);
+  border: 1px solid var(--mui-accent);
+}
+
+.mui-time-split__seg--unmeasured {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--mui-border) 0 2px,
+    transparent 2px 4px
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mui-time-split__seg--running {
+    animation: mui-time-split-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes mui-time-split-pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+/* The caption is half the widget: the bar carries the shape, this carries the
+ * finding. Never smaller than 12px. */
+.mui-time-split__caption {
+  margin: 0.4375rem 0 0;
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  font-variant-numeric: tabular-nums;
+}

@@ -4437,6 +4437,63 @@ dialog.mui-alert-dialog .mui-field {
   background: var(--mui-danger);
 }
 
+/* css/components/time_split.css */
+.mui-time-split {
+  margin: 0 0 1rem;
+}
+.mui-time-split__track {
+  display: flex;
+  height: 1.625rem;
+  box-sizing: border-box;
+  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-input);
+  overflow: hidden;
+}
+.mui-time-split__seg {
+  min-width: 2px;
+  box-sizing: border-box;
+}
+.mui-time-split__seg--unmeasured {
+  min-width: 8px;
+}
+.mui-time-split__seg + .mui-time-split__seg {
+  border-left: 1px solid var(--mui-bg-input);
+}
+.mui-time-split__seg--done {
+  background: var(--mui-text-muted);
+}
+.mui-time-split__seg--failed {
+  background: var(--mui-danger);
+  border-top: 2px dashed var(--mui-danger);
+}
+.mui-time-split__seg--running {
+  background: color-mix(in srgb, var(--mui-accent) 22%, transparent);
+  border: 1px solid var(--mui-accent);
+}
+.mui-time-split__seg--unmeasured {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--mui-border) 0 2px,
+      transparent 2px 4px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mui-time-split__seg--running {
+    animation: mui-time-split-pulse 2s ease-in-out infinite;
+  }
+  @keyframes mui-time-split-pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+.mui-time-split__caption {
+  margin: 0.4375rem 0 0;
+  font-size: 0.75rem;
+  color: var(--mui-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 /* css/components/native_select.css */
 .mui-native-select {
   position: relative;

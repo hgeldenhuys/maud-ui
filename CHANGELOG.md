@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.15.0] — 2026-09-14 — time split
+
+A widget for the question "what took so long". One bar, one sequence of steps in execution order, each segment sized by its share of measured time; `dominant_caption` writes the sentence that states the finding. Built for the Kapable delivery dashboard's run page, where one build step is routinely 96% of a run, and designed in consultation with Kimi K3.
+
+- `primitives::time_split` — `Segment`, `SegmentState` (done / failed / running / unmeasured), `render`, plus `dominant_caption` and `aria_from` helpers. Status carries a fill AND a border treatment, so it never rests on colour alone; every step reaches a screen reader through the track's `aria-label`.
+- Deliberately absent: a legend, per-segment labels, and any rescaling. At phone width a labelling scheme is the first thing to break, and a log scale or equal-width segments would make 96% look like 40% — which destroys the only thing the bar has to say.
+- A step that ran without a measurement gets a marker and never a width; a sequence with nothing measured renders no markup at all, because an empty track reads as "this did nothing".
+- `dominant_caption` holds its claim at 99% rather than rounding 99.7% up to 100 whenever another step also ran.
+- Two states were widened after looking at the first render: an unmeasured marker at 2px read as nothing, and a fully transparent running segment made the whole bar look empty.
+
 ## [0.14.0] — 2026-09-10 — Round 6 — from real use
 
 Live Chrome use created a fictional guest, booking and completed cash payment, exercised check-in, editing, validation, search, cancellation and both phone drawers. The resulting form and journey kit provides reusable feedback for those paths. See `docs/night-6-real-use.md` for observations and the separate application defects; this release does not change or deploy the live apps.

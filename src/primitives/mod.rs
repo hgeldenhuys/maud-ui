@@ -79,6 +79,7 @@ pub mod toggle;
 pub mod toggle_group;
 pub mod tool_call;
 pub mod tooltip;
+pub mod time_split;
 pub mod turn_progress;
 pub mod typography;
 

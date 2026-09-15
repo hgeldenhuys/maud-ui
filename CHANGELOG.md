@@ -5,6 +5,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.17.0] — 2026-09-15 — the chat kit
+
+Built for the conductor's `/chat` view, whose owner said it read like a log with turn cards around it. The primitives half-existed (`message`, `streaming_cursor`, `tool_call` since 0.4.0) and nothing composed them into a conversation.
+
+- `message::Layout::Chat` — no avatar, the person's prompt as a right-side tinted card at most three quarters of the column, the reply flat across the full column, the timestamp on hover; `Props::actions` is the quiet row under a reply (copy, fork, model, cost), revealed on hover and always visible without one. `is_live` puts a blinking caret at the end of the reply's last block.
+- `message::thread` — one centred reading column (44rem). The pane is not the column.
+- `message::jump_to_latest` — the floating pill for "you scrolled up and something arrived", rendered hidden for the consumer's follow logic.
+- `tool_call::Props::compact` + `duration`, and `tool_call::row` — one chip per call (name, 40-char preview, duration, status as a colour dot), expanding in place. A settled turn shows chips; a card per call is the inspector's shape, not a chat's.
+
 ## [0.16.2] — 2026-09-14 — time split: room for the tooltip
 
 Anchoring the tooltip to the track (0.16.1) stopped it hanging off the page and made it land on whatever sits above the bar every single time, rather than only sometimes. A reserved band above the track gives it somewhere to go, and reads as ordinary spacing when nothing is hovered.

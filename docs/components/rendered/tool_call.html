@@ -30,6 +30,8 @@ html! {
 <tr><td><code>args</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional args panel — rendered in the expanded body</td></tr>
 <tr><td><code>result</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional result panel — rendered in the expanded body</td></tr>
 <tr><td><code>open</code></td><td><code>bool</code></td><td><code>false</code></td><td>Initial open state (default false — collapsed)</td></tr>
+<tr><td><code>compact</code></td><td><code>bool</code></td><td><code>false</code></td><td>Chip density (<code>mui-tool-call--compact</code>): one rounded chip that sits inline in a <code>row(...)</code> and expands in place. The status is drawn as a colour dot; its word stays in the DOM.</td></tr>
+<tr><td><code>duration</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Wall time, already formatted ("0.4s"); rendered in <code>mui-tool-call__duration</code> after the summary.</td></tr>
 </tbody></table>
 <p><code>Props</code> derives <code>Default</code>, so defaults above come from <code>#[derive(Default)]</code> on <code>Props</code>, <code>Kind</code>, and <code>Status</code> (each enum marks its default variant with <code>#[default]</code>) — there is no hand-written <code>impl Default</code> block.</p>
 <h2>Variants / Enums</h2>
@@ -56,6 +58,9 @@ html! {
 <li><code>Pending</code> — class <code>mui-tool-call__status--pending</code>, label "queued"</li>
 </ul>
 <h2>Helper Functions</h2>
+<ul>
+<li><code>row(chips)</code> — a wrapping flex row (<code>mui-tool-call-row</code>) for compact chips, the settled-turn shape.</li>
+</ul>
 <p>None. <code>Kind</code> and <code>Status</code> each carry private <code>class()</code>/<code>glyph()</code> and <code>class()</code>/<code>label()</code> methods, but neither is marked <code>pub</code>, so they are not part of the public API. The only <code>pub fn</code>s in the module are <code>render</code> and <code>showcase</code>, both excluded from this section by convention.</p>
 <h2>Accessibility</h2>
 <ul>

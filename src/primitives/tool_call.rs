@@ -104,6 +104,13 @@ pub struct Props {
     pub result: Option<Markup>,
     /// Initial open state (default false — collapsed).
     pub open: bool,
+    /// Chip density: one rounded chip per call that sits inline in a row
+    /// (`mui-tool-call-row`) and expands in place. What a settled turn in a
+    /// chat shows instead of a card per call.
+    pub compact: bool,
+    /// Wall time the call took, already formatted ("0.4s", "12ms"). Shown in
+    /// the trigger after the summary; absent when unmeasured.
+    pub duration: Option<String>,
 }
 
 /// Render a single tool call.
@@ -119,7 +126,10 @@ pub fn render(props: Props) -> Markup {
     let aria_expanded = if props.open { "true" } else { "false" };
 
     html! {
-        div class={"mui-tool-call " (props.kind.class())} data-mui="tool-call" {
+        div class={
+            "mui-tool-call " (props.kind.class())
+            @if props.compact { " mui-tool-call--compact" }
+        } data-mui="tool-call" {
             button type="button"
                 class="mui-tool-call__trigger"
                 aria-expanded=(aria_expanded)
@@ -129,6 +139,9 @@ pub fn render(props: Props) -> Markup {
                 span class="mui-tool-call__glyph" aria-hidden="true" { (props.kind.glyph()) }
                 span class="mui-tool-call__name" { (props.name) }
                 span class="mui-tool-call__summary" { (props.summary) }
+                @if let Some(d) = props.duration.as_ref() {
+                    span class="mui-tool-call__duration" { (d) }
+                }
                 span class={"mui-tool-call__status " (props.status.class())} {
                     (props.status.label())
                 }
@@ -152,10 +165,39 @@ pub fn render(props: Props) -> Markup {
     }
 }
 
+/// A row of compact chips — the settled-turn shape.
+pub fn row(chips: Markup) -> Markup {
+    html! { div class="mui-tool-call-row" { (chips) } }
+}
+
 /// Showcase of a handful of common tool invocations.
 pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__column style="max-width: 44rem; gap: var(--mui-space-sm);" {
+            p class="mui-showcase__caption" { "Compact — one chip per call, expands in place" }
+            (row(html! {
+                (render(Props {
+                    id: "c-read".into(), kind: Kind::Read, name: "Read".into(),
+                    summary: "src/primitives/message.rs".into(),
+                    duration: Some("0.1s".into()), compact: true,
+                    result: Some(html! { pre { "126 lines" } }),
+                    ..Default::default()
+                }))
+                (render(Props {
+                    id: "c-bash".into(), kind: Kind::Bash, name: "Bash".into(),
+                    summary: "cargo test -p maud-ui --lib message".into(),
+                    duration: Some("4.2s".into()), status: Status::Running, compact: true,
+                    ..Default::default()
+                }))
+                (render(Props {
+                    id: "c-edit".into(), kind: Kind::Edit, name: "Edit".into(),
+                    summary: "css/components/message.css".into(),
+                    status: Status::Error, compact: true,
+                    result: Some(html! { pre { "old_string not found" } }),
+                    ..Default::default()
+                }))
+            }))
+            p class="mui-showcase__caption" { "Card — the inspector shape" }
             (render(Props {
                 id: "s-edit".into(),
                 kind: Kind::Edit,
@@ -167,6 +209,7 @@ pub fn showcase() -> Markup {
                     pre { "old_string: \"role: Role::Default\"\nnew_string: \"role: Role::Assistant\"" }
                 }),
                 result: Some(html! { pre { "Applied edit — 1 replacement." } }),
+                ..Default::default()
             }))
             (render(Props {
                 id: "s-bash".into(),

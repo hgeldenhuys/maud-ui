@@ -4411,6 +4411,142 @@ dialog.mui-alert-dialog .mui-field {
     animation: none;
   }
 }
+.mui-thread {
+  max-width: 44rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.75rem 0;
+}
+.mui-message--chat {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 0.25rem;
+}
+.mui-message--chat .mui-message__body-wrap {
+  max-width: 100%;
+}
+.mui-message--chat.mui-message--user {
+  align-items: flex-end;
+}
+.mui-message--chat.mui-message--user .mui-message__body-wrap {
+  max-width: 75%;
+  align-items: flex-end;
+}
+.mui-message--chat.mui-message--user .mui-message__body {
+  background: color-mix(in srgb, var(--mui-accent) 9%, var(--mui-bg-card));
+  border: 1px solid color-mix(in srgb, var(--mui-accent) 18%, var(--mui-border));
+  border-radius: var(--mui-radius-lg);
+  border-bottom-right-radius: var(--mui-radius-sm);
+  padding: 0.5rem 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.mui-message--chat.mui-message--assistant .mui-message__body-wrap {
+  width: 100%;
+}
+.mui-message--chat.mui-message--assistant .mui-message__body {
+  padding: 0;
+}
+.mui-message--chat.mui-message--system {
+  align-items: center;
+}
+.mui-message--chat .mui-message__timestamp {
+  font-family: var(--mui-font-mono);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.mui-message--chat:hover .mui-message__timestamp,
+.mui-message--chat:focus-within .mui-message__timestamp {
+  opacity: 1;
+}
+.mui-message__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  font-family: var(--mui-font-mono);
+  font-size: 0.6875rem;
+  color: var(--mui-text-muted);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.mui-message--chat:hover .mui-message__actions,
+.mui-message__actions:focus-within {
+  opacity: 1;
+}
+.mui-message__action {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.mui-message__action:hover {
+  color: var(--mui-text);
+  text-decoration: underline;
+}
+.mui-message__meta {
+  color: var(--mui-text-subtle);
+}
+@media (hover: none) {
+  .mui-message__actions,
+  .mui-message--chat .mui-message__timestamp {
+    opacity: 1;
+  }
+}
+.mui-message__body--live > :last-child::after {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.95em;
+  margin-left: 0.125rem;
+  vertical-align: text-bottom;
+  background: var(--mui-accent);
+  animation: mui-cursor-blink 1s steps(2) infinite;
+}
+.mui-jump-pill {
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 20;
+  padding: 0.3125rem 0.875rem;
+  border: 1px solid var(--mui-border);
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-card);
+  color: var(--mui-text);
+  font: inherit;
+  font-size: 0.75rem;
+  box-shadow: var(--mui-shadow-md, 0 4px 14px rgba(0,0,0,0.12));
+  cursor: pointer;
+}
+.mui-jump-pill:hover {
+  background: var(--mui-bg-input);
+}
+.mui-jump-pill[hidden] {
+  display: none;
+}
+@media (max-width: 30rem) {
+  .mui-thread {
+    gap: 1rem;
+  }
+  .mui-message--chat.mui-message--user .mui-message__body-wrap {
+    max-width: 88%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mui-message--chat .mui-message__timestamp,
+  .mui-message__actions {
+    transition: none;
+  }
+  .mui-message__body--live > :last-child::after {
+    animation: none;
+  }
+}
 
 /* css/components/meter.css */
 .mui-meter {
@@ -7543,6 +7679,73 @@ dialog.mui-sheet--bottom {
 }
 .mui-tool-call--custom {
   --mui-tool-accent: var(--mui-text-muted);
+}
+.mui-tool-call-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  align-items: flex-start;
+}
+.mui-tool-call--compact {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: var(--mui-radius-full);
+  background: var(--mui-bg-input);
+  border-color: transparent;
+  vertical-align: middle;
+}
+.mui-tool-call--compact .mui-tool-call__trigger {
+  padding: 0.1875rem 0.625rem 0.1875rem 0.5rem;
+  gap: 0.375rem;
+  width: auto;
+  max-width: 100%;
+}
+.mui-tool-call--compact .mui-tool-call__summary {
+  flex: 0 1 auto;
+  max-width: 40ch;
+}
+.mui-tool-call__duration {
+  flex: none;
+  font-family: var(--mui-font-mono);
+  font-size: 0.6875rem;
+  color: var(--mui-text-subtle);
+}
+.mui-tool-call--compact .mui-tool-call__status {
+  padding: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+  overflow: hidden;
+  color: transparent;
+  text-indent: -999px;
+}
+.mui-tool-call--compact .mui-tool-call__status--success {
+  background: var(--mui-success);
+}
+.mui-tool-call--compact .mui-tool-call__status--running {
+  background: var(--mui-warning);
+}
+.mui-tool-call--compact .mui-tool-call__status--error {
+  background: var(--mui-danger);
+}
+.mui-tool-call--compact .mui-tool-call__status--pending {
+  background: var(--mui-text-muted);
+}
+.mui-tool-call--compact .mui-tool-call__chevron {
+  display: none;
+}
+.mui-tool-call--compact:has(.mui-tool-call__trigger[aria-expanded=true]) {
+  display: block;
+  border-radius: var(--mui-radius-md);
+  border-color: var(--mui-border);
+  flex-basis: 100%;
+}
+.mui-tool-call--compact:has(.mui-tool-call__trigger[aria-expanded=true]) .mui-tool-call__trigger {
+  width: 100%;
+}
+.mui-tool-call--compact:has(.mui-tool-call__trigger[aria-expanded=true]) .mui-tool-call__summary {
+  max-width: none;
 }
 
 /* css/components/tooltip.css */

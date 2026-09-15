@@ -29,6 +29,8 @@ html! {
 <tr><td><code>body</code></td><td><code>Markup</code></td><td><code>html! {}</code></td><td>The message body — may contain markdown-rendered HTML, code blocks, etc.</td></tr>
 <tr><td><code>is_live</code></td><td><code>bool</code></td><td><code>false</code></td><td>When true, the avatar pulses to indicate an in-progress streaming response.</td></tr>
 <tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Footer slot — tool chips, action buttons, attachments.</td></tr>
+<tr><td><code>layout</code></td><td><code>Layout</code></td><td><code>Layout::Avatar</code></td><td><code>Avatar</code> is a transcript row; <code>Chat</code> is a conversation: prompt right as a tinted card (≤75% of the column), reply flat and full width, no avatar, timestamp on hover.</td></tr>
+<tr><td><code>actions</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>The quiet action row under a reply (copy, fork, model, cost). Chat layout; revealed on hover, always visible without hover. Use <code>mui-message__action</code> for buttons/links and <code>mui-message__meta</code> for facts.</td></tr>
 </tbody></table>
 <h2>Variants / Enums</h2>
 <h3>Role</h3>
@@ -38,8 +40,17 @@ html! {
 <li><code>User</code>: renders with the <code>mui-message--user</code> class.</li>
 <li><code>System</code>: renders with the <code>mui-message--system</code> class.</li>
 </ul>
+<h3>Layout</h3>
+<ul>
+<li><code>Avatar</code> (default): the transcript row — avatar, author, timestamp, body.</li>
+<li><code>Chat</code>: adds <code>mui-message--chat</code>; renders an <code>&lt;article&gt;</code> with no avatar or author line.</li>
+</ul>
 <h2>Helper Functions</h2>
-<p>This module exposes no public helper functions besides <code>render</code> and <code>showcase</code>. <code>initials_of</code> (computes avatar initials, falling back to the first letter of <code>author</code>) and <code>Role::class</code> (maps a role to its CSS modifier class) both exist in the module but are private — not part of the public API.</p>
+<ul>
+<li><code>thread(body)</code> — one centred reading column (<code>mui-thread</code>, max 44rem) for a conversation. The pane is not the column.</li>
+<li><code>jump_to_latest(id, label)</code> — the floating "jump to latest" pill (<code>mui-jump-pill</code>), rendered <code>hidden</code>; the consumer's follow logic shows it, positions it and handles the click.</li>
+</ul>
+<p>Otherwise this module exposes no public helper functions besides <code>render</code> and <code>showcase</code>. <code>initials_of</code> (computes avatar initials, falling back to the first letter of <code>author</code>) and <code>Role::class</code> (maps a role to its CSS modifier class) both exist in the module but are private — not part of the public API.</p>
 <h2>Accessibility</h2>
 <ul>
 <li>The avatar element carries <code>aria-hidden="true"</code> — it's treated as decorative since the author name is already exposed as visible text alongside it.</li>

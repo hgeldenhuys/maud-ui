@@ -39,6 +39,8 @@ html! {
 | `body` | `Markup` | `html! {}` | The message body — may contain markdown-rendered HTML, code blocks, etc. |
 | `is_live` | `bool` | `false` | When true, the avatar pulses to indicate an in-progress streaming response. |
 | `footer` | `Option<Markup>` | `None` | Footer slot — tool chips, action buttons, attachments. |
+| `layout` | `Layout` | `Layout::Avatar` | `Avatar` is a transcript row; `Chat` is a conversation: prompt right as a tinted card (≤75% of the column), reply flat and full width, no avatar, timestamp on hover. |
+| `actions` | `Option<Markup>` | `None` | The quiet action row under a reply (copy, fork, model, cost). Chat layout; revealed on hover, always visible without hover. Use `mui-message__action` for buttons/links and `mui-message__meta` for facts. |
 
 ## Variants / Enums
 
@@ -50,9 +52,17 @@ Who the message is from — drives colour and alignment.
 - `User`: renders with the `mui-message--user` class.
 - `System`: renders with the `mui-message--system` class.
 
+### Layout
+
+- `Avatar` (default): the transcript row — avatar, author, timestamp, body.
+- `Chat`: adds `mui-message--chat`; renders an `<article>` with no avatar or author line.
+
 ## Helper Functions
 
-This module exposes no public helper functions besides `render` and `showcase`. `initials_of` (computes avatar initials, falling back to the first letter of `author`) and `Role::class` (maps a role to its CSS modifier class) both exist in the module but are private — not part of the public API.
+- `thread(body)` — one centred reading column (`mui-thread`, max 44rem) for a conversation. The pane is not the column.
+- `jump_to_latest(id, label)` — the floating "jump to latest" pill (`mui-jump-pill`), rendered `hidden`; the consumer's follow logic shows it, positions it and handles the click.
+
+Otherwise this module exposes no public helper functions besides `render` and `showcase`. `initials_of` (computes avatar initials, falling back to the first letter of `author`) and `Role::class` (maps a role to its CSS modifier class) both exist in the module but are private — not part of the public API.
 
 ## Accessibility
 

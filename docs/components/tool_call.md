@@ -40,6 +40,8 @@ html! {
 | `args` | `Option<Markup>` | `None` | Optional args panel — rendered in the expanded body |
 | `result` | `Option<Markup>` | `None` | Optional result panel — rendered in the expanded body |
 | `open` | `bool` | `false` | Initial open state (default false — collapsed) |
+| `compact` | `bool` | `false` | Chip density (`mui-tool-call--compact`): one rounded chip that sits inline in a `row(...)` and expands in place. The status is drawn as a colour dot; its word stays in the DOM. |
+| `duration` | `Option<String>` | `None` | Wall time, already formatted ("0.4s"); rendered in `mui-tool-call__duration` after the summary. |
 
 `Props` derives `Default`, so defaults above come from `#[derive(Default)]` on `Props`, `Kind`, and `Status` (each enum marks its default variant with `#[default]`) — there is no hand-written `impl Default` block.
 
@@ -70,6 +72,8 @@ Execution state — drives the status pill colour and label.
 - `Pending` — class `mui-tool-call__status--pending`, label "queued"
 
 ## Helper Functions
+
+- `row(chips)` — a wrapping flex row (`mui-tool-call-row`) for compact chips, the settled-turn shape.
 
 None. `Kind` and `Status` each carry private `class()`/`glyph()` and `class()`/`label()` methods, but neither is marked `pub`, so they are not part of the public API. The only `pub fn`s in the module are `render` and `showcase`, both excluded from this section by convention.
 

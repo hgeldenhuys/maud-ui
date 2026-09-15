@@ -16,8 +16,10 @@
   box-sizing: border-box;
   border: 1px solid var(--mui-border);
   background: var(--mui-bg-input);
-  /* visible, not hidden: the tooltips below sit above the track */
+  /* visible, not hidden: the tooltips sit above the track */
   overflow: visible;
+  /* the tooltip's containing block — see the tooltip rule below */
+  position: relative;
 }
 
 /* A step that ran without a measurement is given a mark, never a width — an
@@ -25,7 +27,6 @@
 .mui-time-split__seg {
   min-width: 3px;
   box-sizing: border-box;
-  position: relative;
   outline: none;
 }
 
@@ -115,13 +116,22 @@
    Shown on hover and on focus — the segment is focusable — because a hover-only
    tooltip is dead to a keyboard and to touch. The native `title` stays as a
    fallback for anything that does not render this. */
+/* Anchored to the TRACK's left edge, not to the segment. A tooltip centred on its
+   own segment hangs off the page whenever that segment is a sliver near an edge —
+   and overflow to the LEFT does not grow scrollWidth, so a page-overflow check
+   reports clean while the tooltip is cut off. Measured in a live browser at phone
+   width: a middle segment's tooltip started 32px off-screen. Segments here are
+   routinely 3px wide, so pointing at one bought nothing; a fixed, readable slot is
+   worth more than a pointer. */
 .mui-time-split__seg::after {
   content: attr(data-tip);
   position: absolute;
-  left: 50%;
+  left: 0;
   bottom: calc(100% + 8px);
-  transform: translateX(-50%);
+  max-width: 100%;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.75rem;
   color: var(--mui-text);
   background: var(--mui-bg-card);
@@ -130,22 +140,6 @@
   opacity: 0;
   pointer-events: none;
   z-index: 5;
-}
-
-/* A centred tooltip on the first or last segment hangs off the page — those are
-   usually slivers at the very edge of the track. Measured on the live page at
-   900px: the first one pushed the document to 936px. Anchor them to their edge. */
-.mui-time-split__seg:first-child::after,
-.mui-time-split__seg:nth-child(2)::after {
-  left: 0;
-  transform: none;
-}
-
-.mui-time-split__seg:last-child::after,
-.mui-time-split__seg:nth-last-child(2)::after {
-  left: auto;
-  right: 0;
-  transform: none;
 }
 
 .mui-time-split__seg:hover::after,

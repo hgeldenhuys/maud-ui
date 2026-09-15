@@ -4706,11 +4706,11 @@ dialog.mui-alert-dialog .mui-field {
   border: 1px solid var(--mui-border);
   background: var(--mui-bg-input);
   overflow: visible;
+  position: relative;
 }
 .mui-time-split__seg {
   min-width: 3px;
   box-sizing: border-box;
-  position: relative;
   outline: none;
 }
 .mui-time-split__seg--unmeasured {
@@ -4774,10 +4774,12 @@ dialog.mui-alert-dialog .mui-field {
 .mui-time-split__seg::after {
   content: attr(data-tip);
   position: absolute;
-  left: 50%;
+  left: 0;
   bottom: calc(100% + 8px);
-  transform: translateX(-50%);
+  max-width: 100%;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.75rem;
   color: var(--mui-text);
   background: var(--mui-bg-card);
@@ -4786,17 +4788,6 @@ dialog.mui-alert-dialog .mui-field {
   opacity: 0;
   pointer-events: none;
   z-index: 5;
-}
-.mui-time-split__seg:first-child::after,
-.mui-time-split__seg:nth-child(2)::after {
-  left: 0;
-  transform: none;
-}
-.mui-time-split__seg:last-child::after,
-.mui-time-split__seg:nth-last-child(2)::after {
-  left: auto;
-  right: 0;
-  transform: none;
 }
 .mui-time-split__seg:hover::after,
 .mui-time-split__seg:focus-visible::after {

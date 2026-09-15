@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.16.1] — 2026-09-14 — time split: the tooltip stays on the page
+
+Found in a live browser at phone width, not in a test: a middle segment's tooltip started 32px off the left of the screen. 0.16.0 anchored only the first two and last two segments, and on a narrow track a middle segment is still a sliver near the edge. Overflow to the LEFT does not grow `scrollWidth`, so a page-overflow check reports clean while the tooltip is cut off — which is why the earlier right-hand case was caught and this one was not.
+
+- The tooltip now hangs off the TRACK's left edge at a fixed, readable slot, and truncates with an ellipsis. Segments are routinely 3px wide, so pointing at one bought nothing; a consistent slot is worth more than a pointer.
+
 ## [0.16.0] — 2026-09-14 — time split, after looking at it
 
 The 0.15.0 component shipped straight from its design. Rendering it on a real page with real data, in both schemes, showed three things the source could not.

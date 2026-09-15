@@ -4441,6 +4441,8 @@ dialog.mui-alert-dialog .mui-field {
 /* css/components/time_split.css */
 .mui-time-split {
   margin: 0 0 1rem;
+  padding-top: 2.125rem;
+  position: relative;
 }
 .mui-time-split__track {
   display: flex;

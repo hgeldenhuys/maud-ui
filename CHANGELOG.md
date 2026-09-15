@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.16.2] — 2026-09-14 — time split: room for the tooltip
+
+Anchoring the tooltip to the track (0.16.1) stopped it hanging off the page and made it land on whatever sits above the bar every single time, rather than only sometimes. A reserved band above the track gives it somewhere to go, and reads as ordinary spacing when nothing is hovered.
+
 ## [0.16.1] — 2026-09-14 — time split: the tooltip stays on the page
 
 Found in a live browser at phone width, not in a test: a middle segment's tooltip started 32px off the left of the screen. 0.16.0 anchored only the first two and last two segments, and on a narrow track a middle segment is still a sliver near the edge. Overflow to the LEFT does not grow `scrollWidth`, so a page-overflow check reports clean while the tooltip is cut off — which is why the earlier right-hand case was caught and this one was not.

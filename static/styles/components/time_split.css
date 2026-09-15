@@ -6,8 +6,14 @@
  * rests on colour alone. Nothing here rescales — a step that took 96% is drawn at
  * 96%, because "fixing" that is how the widget would stop saying anything. */
 
+/* The reserved band the tooltip appears in. Without it the tooltip lands on
+   whatever sits above the bar, every time — anchoring it to the track made that
+   constant rather than occasional. Reads as ordinary spacing when nothing is
+   hovered. */
 .mui-time-split {
   margin: 0 0 1rem;
+  padding-top: 2.125rem;
+  position: relative;
 }
 
 .mui-time-split__track {

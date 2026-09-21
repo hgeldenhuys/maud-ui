@@ -69,7 +69,7 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-bottom-tab-bar__icon svg { width: 1.25rem; height: 1.25rem; }
 .mui-bottom-tab-bar__item:focus-visible { outline-offset: -3px; }
 
-.mui-btn--row { box-sizing: border-box; height: 2rem; min-height: 2rem; padding: 0 var(--mui-inset-cell); font-size: var(--mui-text-caption-size); white-space: nowrap; flex: none; }
+.mui-btn--row { box-sizing: border-box; height: var(--mui-row-height); min-height: var(--mui-row-height); padding: 0 var(--mui-inset-cell); font-size: var(--mui-text-caption-size); white-space: nowrap; flex: none; }
 .mui-btn--outline.mui-btn--row { color: var(--mui-text-muted); background: transparent; border-color: var(--mui-border-control); }
 .mui-btn--outline.mui-btn--row:hover { color: var(--mui-text); background: var(--mui-bg-input); }
 .mui-block-action { margin: 0; }
@@ -109,7 +109,7 @@ a.mui-btn--link:hover:not([aria-disabled="true"]),
 .mui-navigation-dialog {
   box-sizing: border-box; position: fixed; inset-block: 0; inset-inline-start: 0; inset-inline-end: auto;
   margin: 0; width: min(24rem, 90vw); max-width: 90vw; height: 100dvh; max-height: 100dvh;
-  padding: 0; border: 0; background: var(--mui-bg-card); color: var(--mui-text); overflow: auto;
+  padding: 0; border: 0; background: var(--mui-bg-overlay-panel); color: var(--mui-text); overflow: auto;
 }
 .mui-navigation-dialog[open] { display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; }
 .mui-navigation-dialog::backdrop { background: var(--mui-bg-overlay); }

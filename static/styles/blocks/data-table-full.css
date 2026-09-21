@@ -110,13 +110,13 @@
     letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-muted);
     background: var(--mui-bg-card);
-    border-bottom: 1px solid var(--mui-border);
+    border-bottom: var(--mui-hairline) solid var(--mui-border);
     white-space: nowrap;
 }
 
 .mui-block--data__table td {
     padding: var(--mui-inset-control) var(--mui-space-md);
-    border-bottom: 1px solid var(--mui-border);
+    border-bottom: var(--mui-hairline) solid var(--mui-border);
     vertical-align: middle;
     color: var(--mui-text);
 }

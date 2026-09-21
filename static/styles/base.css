@@ -33,6 +33,7 @@ body {
   background: var(--mui-bg);
   color: var(--mui-text);
   font-family: var(--mui-font-sans);
+  font-feature-settings: var(--mui-font-features);
   line-height: var(--mui-leading-small);
 }
 

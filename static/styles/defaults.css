@@ -25,12 +25,14 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 .mui-btn--link { color: var(--mui-link); }
 .mui-btn--link:hover { color: var(--mui-text); }
 
-/* Comfortable compact defaults; sizes still serve their explicit purposes. */
-.mui-btn { min-height: var(--mui-control-height); height: auto; padding: var(--mui-space-sm) var(--mui-inset-control); font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); font-weight: var(--mui-weight-medium); border-radius: var(--mui-radius-md); box-shadow: none; transition: background-color var(--mui-transition), color var(--mui-transition); }
-.mui-btn--sm, .mui-btn--row { min-height: var(--mui-space-xxl); padding: var(--mui-space-xs) var(--mui-space-md); font-size: var(--mui-text-caption-size); }
-.mui-btn--row { height: var(--mui-space-xxl); padding-block: 0; }
-.mui-btn--lg { min-height: var(--mui-touch-target); padding-inline: var(--mui-space-20); }
-.mui-btn--xs { min-height: var(--mui-space-xl); padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
+/* Comfortable compact defaults; sizes still serve their explicit purposes.
+   Button scale follows the Linear recipe: md (the default) 32px, sm 24px,
+   lg 40px, with 12/10/14px inline padding and 13/12/15px labels. */
+.mui-btn { min-height: var(--mui-control-height); height: auto; padding: var(--mui-space-xs) 0.75rem; font-size: var(--mui-text-small-size); line-height: var(--mui-leading-tight); font-weight: var(--mui-weight-medium); border-radius: var(--mui-radius-md); box-shadow: none; transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-btn--sm { min-height: 1.5rem; height: 1.5rem; padding: 0 0.625rem; font-size: var(--mui-text-caption-size); }
+.mui-btn--row { min-height: var(--mui-row-height); height: var(--mui-row-height); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); padding-block: 0; }
+.mui-btn--lg { min-height: 2.5rem; height: 2.5rem; padding: 0 0.875rem; font-size: var(--mui-text-body-size); }
+.mui-btn--xs { min-height: 1.5rem; padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
 .mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs { padding: 0; min-width: var(--mui-control-height); width: var(--mui-control-height); height: var(--mui-control-height); }
 .mui-btn--link { padding: 0; min-height: 0; }
 .mui-btn--primary { background: var(--mui-accent); border-color: var(--mui-accent); color: var(--mui-accent-fg); }
@@ -38,7 +40,7 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 :where(button, a.mui-btn, [role="button"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
 .mui-input, .mui-textarea, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); padding: var(--mui-space-sm) var(--mui-space-md); }
 .mui-input:hover:not(:disabled), .mui-textarea:hover:not(:disabled), .mui-native-select:hover:not(:disabled) { background: var(--mui-bg-input); }
-.mui-card { padding: 0; border-radius: var(--mui-radius-lg); border-color: var(--mui-border); background: var(--mui-bg-card); box-shadow: none; }
+.mui-card { padding: 0; border-radius: var(--mui-radius-lg); border: var(--mui-hairline) solid var(--mui-border); background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card); box-shadow: var(--mui-ring-hairline); }
 .mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer { padding: var(--mui-space-20) var(--mui-space-xl); }
 .mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
 .mui-card__title { font-size: var(--mui-text-h3-size); font-weight: var(--mui-weight-heading); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }

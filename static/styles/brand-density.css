@@ -21,7 +21,7 @@
 /* Controls and containers read the same root choice, including kit composition. */
 .mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { box-sizing: border-box; height: var(--mui-control-height); padding-block: 0; }
 .mui-btn { padding-block: var(--mui-space-xs); min-height: var(--mui-control-height); }
-.mui-btn--sm { min-height: var(--mui-row-height); height: auto; }
+.mui-btn--sm { min-height: 1.5rem; height: 1.5rem; }
 .mui-btn--row, .mui-action-row[data-density] .mui-btn, .mui-action-row[data-density] .mui-action-row__trigger { min-height: var(--mui-row-height); height: auto; padding-block: 0; }
 .mui-action-row[data-density="comfortable"] .mui-btn:not(.mui-action-row__trigger) { min-height: var(--mui-control-height); }
 .mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer,

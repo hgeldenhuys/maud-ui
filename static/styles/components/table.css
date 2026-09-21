@@ -33,7 +33,7 @@
   text-align: start;
   font-weight: var(--mui-weight-medium);
   padding: var(--mui-space-md) var(--mui-space-lg);
-  border-bottom: 1px solid var(--mui-border);
+  border-bottom: var(--mui-hairline) solid var(--mui-border);
   color: var(--mui-text-muted);
   font-size: var(--mui-text-small-size);
   white-space: nowrap;
@@ -47,9 +47,9 @@
   vertical-align: middle;
 }
 
-/* Row borders */
+/* Row borders — structural hairline, never a control boundary */
 .mui-table__row {
-  border-bottom: 1px solid var(--mui-border);
+  border-bottom: var(--mui-hairline) solid var(--mui-border);
   transition: background-color var(--mui-transition);
 }
 

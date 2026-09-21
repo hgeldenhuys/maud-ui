@@ -18,6 +18,9 @@ const js = [
 for (const minify of [false, true]) {
   const suffix = minify ? ".min" : "";
   await emit({ stdin: { contents: js, loader: "js" }, minify, target: "es2020", outfile: `static/maud-ui${suffix}.js` });
-  await emit({ stdin: { contents: '@import "./static/styles/maud-ui.css";', resolveDir: process.cwd(), loader: "css" }, bundle: true, minify, outfile: `static/maud-ui${suffix}.css` });
+  // Fonts stay EXTERNAL: the @font-face url() must pass through verbatim so it
+  // keeps resolving next to wherever the consumer serves the bundle. The font
+  // bytes are the consumer's to serve (see assets::INTER_WOFF2).
+  await emit({ stdin: { contents: '@import "./static/styles/maud-ui.css";', resolveDir: process.cwd(), loader: "css" }, bundle: true, minify, external: ["*.woff2"], outfile: `static/maud-ui${suffix}.css` });
 }
 console.log(`${check ? "Verified" : "Built"} static/maud-ui{,.min}.{css,js}`);

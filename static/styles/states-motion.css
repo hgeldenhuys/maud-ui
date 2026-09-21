@@ -21,8 +21,9 @@
 @media (max-width: 63.99rem) { .mui-state-examples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 40rem) { .mui-state-examples { grid-template-columns: minmax(0, 1fr); } }
 
-/* Dark surfaces are separated by tone; edges use structural rather than control ink. */
-dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog) { border: 1px solid var(--mui-border); color: var(--mui-text); background: var(--mui-bg-card); }
+/* Dialogs are raised overlay panels: overlay-panel surface, strong translucent
+   border, md shadow. The backdrop keeps its blur. */
+dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog) { border: 1px solid var(--mui-border-strong); color: var(--mui-text); background: var(--mui-bg-overlay-panel); box-shadow: var(--mui-shadow-md); }
 dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] { animation: mui-surface-enter var(--mui-motion-enter) var(--mui-motion-ease); }
 dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)::backdrop { background: var(--mui-bg-overlay); animation: mui-backdrop-enter var(--mui-motion-enter) var(--mui-motion-ease); }
 :is(.mui-sheet--right, .mui-drawer--right) { --mui-enter-x: var(--mui-space-xl); --mui-enter-y: 0px; }

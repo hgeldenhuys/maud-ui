@@ -1,15 +1,28 @@
-/* 0.9 Design defaults. Structural hairlines are separate from accessible control boundaries. */
+/* 0.18 default theme — the measured Linear recipe (linear.app live CSS, 2026-09-21).
+   Near-black five-layer surfaces, translucent borders, tighter controls, muted status
+   tints. Inter Variable ships at static/fonts/InterVariable.woff2 (OFL); the @font-face
+   URL below is RELATIVE, so it resolves next to wherever the consumer serves
+   maud-ui.css — serve the font at <css dir>/fonts/InterVariable.woff2 or the stack
+   falls to system-ui. Structural hairlines are separate from accessible control boundaries. */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("fonts/InterVariable.woff2") format("woff2");
+}
 :root {
-  --mui-brand-accent: #285bc5;
+  --mui-brand-accent: #6e79d6;
   --mui-brand-accent-ink: #ffffff;
-  --mui-brand-font-heading: "Avenir Next", "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --mui-brand-font-body: "Avenir Next", "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mui-brand-font-heading: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mui-brand-font-body: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --mui-brand-radius: 0.375rem;
   --mui-brand-density: 1;
   --mui-brand-logo-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16%203%203%2010v3h26v-3ZM5%2016h4v10H5Zm9%200h4v10h-4Zm9%200h4v10h-4ZM3%2028h26v3H3Z%22%2F%3E%3C%2Fsvg%3E");
   --mui-brand-logo-size: 2rem;
   --mui-brand-logo-radius: 0;
   --mui-font-sans: var(--mui-brand-font-body);
+  --mui-font-features: "cv01", "ss03";
   --mui-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --mui-radius-sm: 0.25rem;
   --mui-radius-md: 0.375rem;
@@ -29,25 +42,26 @@
   --mui-inset-cell: 0.625rem;
   --mui-inset-control: 0.875rem;
   --mui-weight-normal: 400;
-  --mui-weight-medium: 500;
-  --mui-weight-heading: 600;
+  --mui-weight-medium: 510;
+  --mui-weight-heading: 590;
+  --mui-weight-bold: 680;
   --mui-leading-tight: 1.25;
   --mui-leading-body: 1.6;
   --mui-leading-small: 1.5;
   --mui-tracking-heading: -0.025em;
   --mui-tracking-label: 0.08em;
-  --mui-motion-fast: 120ms;
-  --mui-motion-enter: 180ms;
-  --mui-motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --mui-motion-fast: 100ms;
+  --mui-motion-enter: 150ms;
+  --mui-motion-ease: cubic-bezier(0.43, 0.07, 0.59, 0.94);
   --mui-motion-loading: calc(var(--mui-motion-enter) * 6);
   --mui-transition: var(--mui-motion-fast) var(--mui-motion-ease);
-  --mui-shadow-md: var(--mui-shadow-sm);
-  --mui-ring: 0 0 0 2px var(--mui-border-focus);
+  --mui-ring: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+  --mui-hairline: 1px;
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
   --mui-sidebar-w: 15rem;
   --mui-sidebar-rail-w: 4rem;
-  --mui-nav-row-height: 2.25rem;
+  --mui-nav-row-height: 1.75rem;
   --mui-header-height: 3.5rem;
   /* Frame geometry never follows content density. */
   --mui-shell-masthead-height: 4rem;
@@ -71,7 +85,7 @@
   --mui-search-shortcut-width: 2.25rem;
   --mui-search-shortcut-gap: 0.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
-  --mui-control-height: 2.25rem;
+  --mui-control-height: 2rem;
   --mui-status-chip-height: 1.875rem;
   --mui-status-chip-label-size: 0.8125rem;
   --mui-status-chip-count-height: 1.125rem;
@@ -87,73 +101,79 @@
   --mui-layer-toast: 60;
   --mui-text-display-size: 2.75rem;
   --mui-text-display-leading: 1.1;
-  --mui-text-display-tracking: -0.035em;
+  --mui-text-display-tracking: -0.028em;
   --mui-text-h1-size: 2rem;
   --mui-text-h1-leading: 1.2;
-  --mui-text-h1-tracking: -0.025em;
+  --mui-text-h1-tracking: -0.022em;
   --mui-text-h2-size: 1.5rem;
   --mui-text-h2-leading: 1.25;
-  --mui-text-h2-tracking: -0.02em;
+  --mui-text-h2-tracking: -0.018em;
   --mui-text-h3-size: 1.125rem;
   --mui-text-h3-leading: 1.35;
-  --mui-text-h3-tracking: -0.01em;
+  --mui-text-h3-tracking: -0.012em;
   --mui-text-body-size: 0.9375rem;
   --mui-text-body-leading: 1.6;
-  --mui-text-body-tracking: 0;
-  --mui-text-small-size: 0.875rem;
+  --mui-text-body-tracking: -0.011em;
+  --mui-text-small-size: 0.8125rem;
   --mui-text-small-leading: 1.5;
-  --mui-text-small-tracking: 0;
+  --mui-text-small-tracking: -0.01em;
   --mui-text-caption-size: 0.75rem;
   --mui-text-caption-leading: 1.4;
-  --mui-text-caption-tracking: 0.01em;
+  --mui-text-caption-tracking: 0;
+  --mui-badge-font-size: 0.6875rem;
 }
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
-  --mui-shadow-md: var(--mui-shadow-sm);
-  --mui-bg: #101216;
-  --mui-bg-card: #181b20;
-  --mui-bg-input: #20242b;
+  --mui-bg: #08090a;
+  --mui-bg-card: #0f1011;
+  --mui-bg-input: #1c1c1f;
+  --mui-bg-raised: #232326;
+  --mui-bg-overlay-panel: #1c1c1f;
   --mui-bg-overlay: rgba(0, 0, 0, 0.64);
-  --mui-border: #303640;
-  --mui-border-control: #727e90;
+  --mui-border: rgba(255, 255, 255, 0.08);
+  --mui-border-strong: rgba(255, 255, 255, 0.14);
+  --mui-border-control: rgba(255, 255, 255, 0.22);
   --mui-border-focus: var(--mui-accent-text);
-  --mui-text: #edf0f4;
-  --mui-text-secondary: #c1c8d2;
-  --mui-text-muted: #a1acba;
-  --mui-text-subtle: #939eae;
-  --mui-brand-accent: #84aaff;
-  --mui-brand-accent-ink: #101b32;
+  --mui-text: #f7f8f8;
+  --mui-text-secondary: #d0d6e0;
+  --mui-text-muted: #8a8f98;
+  --mui-text-subtle: #62666d;
+  --mui-brand-accent: #5e6ad2;
+  --mui-brand-accent-ink: #ffffff;
   --mui-accent: var(--mui-brand-accent);
   --mui-accent-hover: var(--mui-brand-accent);
   --mui-accent-fg: var(--mui-brand-accent-ink);
   --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
   --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
-  --mui-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.18);
-  --mui-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.36);
+  --mui-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.10);
+  --mui-shadow-md: 0 4px 24px rgba(0, 0, 0, 0.20);
+  --mui-shadow-lg: 0 7px 32px rgba(0, 0, 0, 0.35);
+  --mui-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.20);
+  --mui-surface-wash: rgba(255, 255, 255, 0.02);
   --mui-info: #2456a6;
   --mui-info-fg: #ffffff;
-  --mui-info-bg: #1d2b43;
-  --mui-info-border: #3c557c;
-  --mui-info-text: #aac7fb;
+  --mui-info-bg: rgba(78, 167, 252, 0.12);
+  --mui-info-border: rgba(78, 167, 252, 0.30);
+  --mui-info-text: #4ea7fc;
   --mui-success: #28734f;
   --mui-success-fg: #ffffff;
-  --mui-success-bg: #192f27;
-  --mui-success-border: #365747;
-  --mui-success-text: #a0d2b9;
+  --mui-success-bg: rgba(76, 183, 130, 0.12);
+  --mui-success-border: rgba(76, 183, 130, 0.30);
+  --mui-success-text: #4cb782;
   --mui-warning: #805815;
   --mui-warning-fg: #ffffff;
-  --mui-warning-bg: #332b1d;
-  --mui-warning-border: #695333;
-  --mui-warning-text: #e5c78b;
+  --mui-warning-bg: rgba(242, 201, 76, 0.12);
+  --mui-warning-border: rgba(242, 201, 76, 0.30);
+  --mui-warning-text: #f2c94c;
   --mui-danger: #a1363b;
   --mui-danger-hover: #892e32;
   --mui-danger-fg: #ffffff;
-  --mui-danger-bg: #382326;
-  --mui-danger-border: #724449;
-  --mui-danger-text: #f0b1b5;
+  --mui-danger-bg: rgba(235, 87, 87, 0.12);
+  --mui-danger-border: rgba(235, 87, 87, 0.30);
+  --mui-danger-text: #eb5757;
   --mui-violet: #63458a;
   --mui-violet-fg: #ffffff;
   --mui-violet-bg: #2b243a;
@@ -169,48 +189,53 @@
   color-scheme: light;
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
-  --mui-shadow-md: var(--mui-shadow-sm);
-  --mui-bg: #f7f8fa;
+  --mui-bg: #ffffff;
   --mui-bg-card: #ffffff;
-  --mui-bg-input: #f0f2f5;
+  --mui-bg-input: #f9f8f9;
+  --mui-bg-raised: #f4f2f4;
+  --mui-bg-overlay-panel: #ffffff;
   --mui-bg-overlay: rgba(15, 23, 42, 0.48);
-  --mui-border: #dde2e8;
-  --mui-border-control: #778396;
+  --mui-border: rgba(0, 0, 0, 0.08);
+  --mui-border-strong: rgba(0, 0, 0, 0.12);
+  --mui-border-control: rgba(0, 0, 0, 0.24);
   --mui-border-focus: var(--mui-accent-text);
-  --mui-text: #1b2330;
-  --mui-text-secondary: #475364;
-  --mui-text-muted: #5e6a7a;
-  --mui-text-subtle: #606d80;
-  --mui-brand-accent: #285bc5;
+  --mui-text: #1c1c1f;
+  --mui-text-secondary: #3c3f44;
+  --mui-text-muted: #6b6f76;
+  --mui-text-subtle: #8a8f98;
+  --mui-brand-accent: #6e79d6;
   --mui-brand-accent-ink: #ffffff;
   --mui-accent: var(--mui-brand-accent);
   --mui-accent-hover: var(--mui-brand-accent);
   --mui-accent-fg: var(--mui-brand-accent-ink);
   --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
   --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
-  --mui-shadow-sm: 0 1px 3px rgba(27, 35, 48, 0.06);
-  --mui-shadow-lg: 0 12px 32px rgba(27, 35, 48, 0.14);
+  --mui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --mui-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --mui-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.09);
+  --mui-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --mui-surface-wash: transparent;
   --mui-info: #2456a6;
   --mui-info-fg: #ffffff;
-  --mui-info-bg: #eaf1fc;
-  --mui-info-border: #acc5ed;
-  --mui-info-text: #2456a6;
+  --mui-info-bg: rgba(78, 167, 252, 0.12);
+  --mui-info-border: rgba(78, 167, 252, 0.30);
+  --mui-info-text: #316da6;
   --mui-success: #28734f;
   --mui-success-fg: #ffffff;
-  --mui-success-bg: #edf6f1;
-  --mui-success-border: #b4d8c4;
-  --mui-success-text: #246348;
+  --mui-success-bg: rgba(76, 183, 130, 0.12);
+  --mui-success-border: rgba(76, 183, 130, 0.30);
+  --mui-success-text: #2c7350;
   --mui-warning: #805815;
   --mui-warning-fg: #ffffff;
-  --mui-warning-bg: #fbf4e5;
-  --mui-warning-border: #e4cd9d;
-  --mui-warning-text: #805815;
+  --mui-warning-bg: rgba(242, 201, 76, 0.12);
+  --mui-warning-border: rgba(242, 201, 76, 0.30);
+  --mui-warning-text: #7a6524;
   --mui-danger: #a1363b;
   --mui-danger-hover: #892e32;
   --mui-danger-fg: #ffffff;
-  --mui-danger-bg: #fbefef;
-  --mui-danger-border: #e4b9ba;
-  --mui-danger-text: #a1363b;
+  --mui-danger-bg: rgba(235, 87, 87, 0.12);
+  --mui-danger-border: rgba(235, 87, 87, 0.30);
+  --mui-danger-text: #b04242;
   --mui-violet: #63458a;
   --mui-violet-fg: #ffffff;
   --mui-violet-bg: #f4effb;
@@ -225,6 +250,10 @@
 @media (max-width: 40rem) {
   :root { --mui-page-gutter: 1rem; --mui-shell-gutter: 1rem; }
 }
+/* Retina screens get true hairline structure; controls keep their 1px boundary. */
+@media (min-resolution: 2dppx) {
+  :root { --mui-hairline: 0.5px; }
+}
 
 /* Rebind aliases at theme/brand scopes so inherited brand tokens stay live. */
 :root, [data-theme], [data-brand], [data-mui-density-scope], [data-density]:not(.mui-action-row) {
@@ -234,12 +263,12 @@
   --mui-text-primary: var(--mui-text);
   --mui-radius-sm: calc(var(--mui-brand-radius) * 0.5);
   --mui-radius-md: var(--mui-brand-radius);
-  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 1.5), 12px);
+  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 4 / 3), 12px);
   --mui-radius-control: min(var(--mui-radius-sm), 8px);
   --mui-radius-tight: min(var(--mui-radius-sm), 4px);
-  --mui-control-height: calc(2rem + 0.25rem * var(--mui-density-level));
-  --mui-row-height: max(2rem, calc(1.75rem + 0.25rem * var(--mui-density-level)));
-  --mui-nav-row-height: var(--mui-control-height);
+  --mui-control-height: calc(1.75rem + 0.25rem * var(--mui-density-level));
+  --mui-row-height: max(1.5rem, calc(1.5rem + 0.25rem * var(--mui-density-level)));
+  --mui-nav-row-height: calc(1.5rem + 0.25rem * var(--mui-density-level));
   --mui-card-inset-block: calc(1rem + 0.25rem * var(--mui-density-level));
   --mui-card-inset-inline: calc(1.25rem + 0.25rem * var(--mui-density-level));
   --mui-inset-cell: calc(0.375rem + 0.125rem * var(--mui-density-level));
@@ -248,7 +277,7 @@
   --mui-text-h2-size: calc(1.3125rem + 0.1875rem * var(--mui-density-level));
   --mui-text-h3-size: calc(1rem + 0.125rem * var(--mui-density-level));
   --mui-text-body-size: calc(0.875rem + 0.0625rem * var(--mui-density-level));
-  --mui-text-small-size: calc(0.8125rem + 0.0625rem * var(--mui-density-level));
+  --mui-text-small-size: calc(0.75rem + 0.0625rem * var(--mui-density-level));
   --mui-text-caption-size: max(0.75rem, calc(0.6875rem + 0.0625rem * var(--mui-density-level)));
 }
 [data-brand] {

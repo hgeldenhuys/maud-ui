@@ -1,10 +1,12 @@
-/* Card component — shadcn-quality container */
+/* Card component — Linear-style surface: hairline structure border, a 1px
+   shadow ring for the edge highlight, and a faint top wash (dark only, the
+   --mui-surface-wash token is transparent in light). */
 
 .mui-card {
-  background-color: var(--mui-bg-card);
-  border: 1px solid var(--mui-border);
+  background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card);
+  border: var(--mui-hairline) solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
-  box-shadow: none;
+  box-shadow: var(--mui-ring-hairline);
   color: var(--mui-text);
   overflow: hidden;
 }

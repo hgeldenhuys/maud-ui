@@ -8,7 +8,7 @@
   box-sizing: border-box;
   height: var(--mui-badge-height);
   padding: 0 var(--mui-space-sm);
-  font-size: var(--mui-text-caption-size);
+  font-size: var(--mui-badge-font-size);
   font-weight: var(--mui-weight-medium);
   line-height: var(--mui-leading-tight);
   white-space: nowrap;

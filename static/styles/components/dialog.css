@@ -1,12 +1,12 @@
 /* Dialog Component Styles */
 
 dialog.mui-dialog {
-  border: none;
+  border: 1px solid var(--mui-border-strong);
   border-radius: var(--mui-radius-lg);
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-overlay-panel);
   color: var(--mui-text);
   padding: 0;
-  box-shadow: none;
+  box-shadow: var(--mui-shadow-md);
   max-width: 32rem;
   width: 90vw;
 }

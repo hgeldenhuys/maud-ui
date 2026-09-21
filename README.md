@@ -222,6 +222,10 @@ Override any token in your CSS. Classes are prefixed `mui-` so nothing collides 
 
 The full token list is in [static/styles/tokens.css](static/styles/tokens.css).
 
+### The default theme (0.18.0)
+
+The default theme is rebuilt on the measured Linear recipe: Inter Variable at 15px body with tight tracking, near-black five-layer surfaces (`#08090a` page, `#0f1011` cards, `#1c1c1f` inputs and overlay panels, `#232326` raised menus), translucent white borders, 32px controls, and muted 12%-tint status colours. The `@font-face` points at the **relative** url `fonts/InterVariable.woff2`, so serve the bundled font — `maud_ui::assets::INTER_WOFF2` — at `<css dir>/fonts/InterVariable.woff2` next to wherever you serve maud-ui.css; if it 404s the stack falls back to system-ui. Apps carrying a `data-brand` (or their own `--mui-brand-*` overrides) keep their accent, fonts, radius and density exactly as before.
+
 ## Component reference
 
 <details>

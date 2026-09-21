@@ -13,12 +13,13 @@
   outline-offset: 2px;
 }
 
-/* shadcn: bg-popover border rounded-md shadow-md p-4 w-72 */
+/* shadcn: bg-popover border rounded-md shadow-md p-4 w-72 — raised surface,
+   strong translucent border, md shadow (the Linear overlay recipe). */
 .mui-popover__content {
   position: absolute;
-  background: var(--mui-bg-card);
+  background: var(--mui-bg-raised);
   color: var(--mui-text);
-  border: 1px solid var(--mui-border);
+  border: 1px solid var(--mui-border-strong);
   border-radius: var(--mui-radius-md);
   box-shadow: var(--mui-shadow-md);
   padding: var(--mui-space-lg);

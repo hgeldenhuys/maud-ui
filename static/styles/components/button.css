@@ -19,29 +19,31 @@
   user-select: none;
 }
 
-/* --- Sizes ------------------------------------------------------------ */
+/* --- Sizes ------------------------------------------------------------
+   Linear recipe: sm 24px / md 32px / lg 40px tall, 10/12/14px inline padding,
+   12/13/15px label. Maps onto the existing Size enum class names. */
 
 .mui-btn--sm {
-  height: 2rem;
-  padding: 0 var(--mui-space-md);
+  height: 1.5rem;
+  padding: 0 0.625rem;
   font-size: var(--mui-text-caption-size);
 }
 
 .mui-btn--md {
-  height: 2.25rem;
-  padding: 0 var(--mui-space-lg);
+  height: 2rem;
+  padding: 0 0.75rem;
   font-size: var(--mui-text-small-size);
 }
 
 .mui-btn--lg {
   height: 2.5rem;
-  padding: 0 var(--mui-space-xl);
-  font-size: var(--mui-text-small-size);
+  padding: 0 0.875rem;
+  font-size: var(--mui-text-body-size);
 }
 
 .mui-btn--icon {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
   flex-shrink: 0;
 }
@@ -60,8 +62,8 @@
 }
 
 .mui-btn--icon-sm {
-  height: 1.75rem;
-  width: 1.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
   padding: 0;
   flex-shrink: 0;
 }

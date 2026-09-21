@@ -17,6 +17,15 @@ async fn serve_css() -> impl IntoResponse {
     )
 }
 
+/// Serve Inter Variable next to the CSS, at the relative URL the @font-face names.
+async fn serve_inter() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [(header::CONTENT_TYPE, "font/woff2")],
+        maud_ui::assets::INTER_WOFF2,
+    )
+}
+
 /// Serve the bundled JS from static/maud-ui.js
 async fn serve_js() -> impl IntoResponse {
     let js = maud_ui::assets::JS;
@@ -156,6 +165,7 @@ async fn main() {
                 get(|| async { maud_ui::showcase::integrations_sortable_page() }),
             )
             .route("/css/maud-ui.css", get(serve_css))
+            .route("/css/fonts/InterVariable.woff2", get(serve_inter))
             .route("/js/maud-ui.js", get(serve_js))
             .route("/favicon.svg", get(serve_favicon))
             .route("/apple-touch-icon.png", get(serve_touch_icon))

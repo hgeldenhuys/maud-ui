@@ -90,13 +90,13 @@
 .mui-block--shell__where-label { display: block; margin-block-end: var(--mui-space-sm); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); }
 .mui-block--shell__where .mui-breadcrumb__list { flex-wrap: wrap; }
 .mui-block--shell__nav { gap: var(--mui-space-lg); }
-.mui-block--shell__nav-item { position: relative; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: 2.25rem; box-sizing: border-box; padding: 0 var(--mui-space-md); border-radius: var(--mui-radius-sm); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-block--shell__nav-item { position: relative; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-nav-row-height); box-sizing: border-box; padding: 0 var(--mui-space-sm); border-radius: var(--mui-radius-sm); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-medium); }
 .mui-block--shell__nav-item:hover { background: var(--mui-bg-input); }
 .mui-block--shell__nav-item[aria-current="page"] { color: var(--mui-accent-text); background: var(--mui-accent-soft); }
 .mui-block--shell__nav-item[aria-current="page"]::before { content: ""; position: absolute; inset-block: var(--mui-space-sm); inset-inline-start: 0; width: 2px; background: var(--mui-accent-text); }
 .mui-block--shell__nav-icon { width: 1rem; height: 1rem; flex-basis: 1rem; }
 .mui-block--shell__nav-list .mui-block--shell__nav-list { border-inline-start: 1px solid var(--mui-border); margin-inline-start: var(--mui-space-20); padding-inline-start: var(--mui-space-sm); }
-.mui-block--shell__nav-group-label { min-height: 2.25rem; box-sizing: border-box; cursor: pointer; text-align: start; }
+.mui-block--shell__nav-group-label { min-height: var(--mui-nav-row-height); box-sizing: border-box; cursor: pointer; text-align: start; }
 .mui-block--shell__nav-group-label::after { transition: transform var(--mui-motion-enter) var(--mui-motion-ease); }
 .mui-block--shell__mobile-controls:not(:empty) { margin-block-start: auto; border-block-start: 1px solid var(--mui-border); }
 .mui-menu-icon { flex: none; }

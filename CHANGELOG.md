@@ -5,6 +5,45 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.18.0] — 2026-09-21 — the default theme, rebuilt
+
+Every token in this list is measured from linear.app's live CSS (2026-09-21), reproduced verbatim rather than "improved". The three brand presets (lodge, bank, clinic) still render and still override accent/font/radius/density exactly as before — they carry their own values.
+
+**Read this before upgrading:** every app that uses the DEFAULT theme (no `data-brand`) changes appearance on upgrade — darker near-black surfaces, translucent borders, tighter controls, Inter, muted status colours. Inter Variable must be served at `fonts/InterVariable.woff2` **next to wherever you serve maud-ui.css** (serve `assets::INTER_WOFF2` there) or the type stack silently falls to system-ui.
+
+**Added**
+- `@font-face "Inter Variable"` (weight 100–900, `font-display: swap`, relative url `fonts/InterVariable.woff2`); the OFL font ships at `static/fonts/InterVariable.woff2` and as `assets::INTER_WOFF2`.
+- `--mui-font-features` (`"cv01", "ss03"`, applied on `body`), `--mui-weight-bold` (680).
+- `--mui-bg-raised` (dark `#232326`, light `#f4f2f4`) — menus/popovers; `--mui-bg-overlay-panel` (dark `#1c1c1f`, light `#ffffff`) — dialogs/sheets/drawers.
+- `--mui-border-strong` (dark `rgba(255,255,255,.14)`, light `rgba(0,0,0,.12)`) — overlay panel borders.
+- `--mui-ring-hairline` (`0 0 0 1px rgba(0,0,0,.20)` dark / `rgba(0,0,0,.08)` light) — the card edge highlight.
+- `--mui-surface-wash` (`rgba(255,255,255,.02)` dark, transparent light) — the card top wash; one rule serves both schemes.
+- `--mui-hairline` (1px; 0.5px under `min-resolution: 2dppx`) — structural separators only, never controls.
+- `--mui-badge-font-size` (0.6875rem / 11px).
+
+**Changed — tokens**
+- Fonts: `--mui-brand-font-heading`/`--mui-brand-font-body` default to `"Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif`.
+- Accent (default theme, brands keep theirs): dark `#84aaff` → `#5e6ad2` (ink `#101b32` → `#ffffff`); light `#285bc5` → `#6e79d6` (ink `#ffffff`).
+- Weights: `--mui-weight-medium` 500 → 510, `--mui-weight-heading` 600 → 590.
+- Motion: `--mui-motion-fast` 120 → 100ms, `--mui-motion-enter` 180 → 150ms, `--mui-motion-ease` → `cubic-bezier(.43,.07,.59,.94)`.
+- Focus: `--mui-ring` is now an offset ring — `0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus)` (inputs etc. pick it up; outlines stay `:focus-visible`-only).
+- Dark surfaces: `--mui-bg` `#101216` → `#08090a`, `--mui-bg-card` `#181b20` → `#0f1011`, `--mui-bg-input` `#20242b` → `#1c1c1f`, `--mui-border` `#303640` → `rgba(255,255,255,.08)`, `--mui-border-control` `#727e90` → `rgba(255,255,255,.22)`.
+- Light surfaces: `--mui-bg` `#f7f8fa` → `#ffffff`, `--mui-bg-input` `#f0f2f5` → `#f9f8f9`, `--mui-border` `#dde2e8` → `rgba(0,0,0,.08)`, `--mui-border-control` `#778396` → `rgba(0,0,0,.24)`.
+- Text (dark): `#f7f8f8` / `#d0d6e0` / `#8a8f98` / `#62666d` (was `#edf0f4` / `#c1c8d2` / `#a1acba` / `#939eae`). Text (light): `#1c1c1f` / `#3c3f44` / `#6b6f76` / `#8a8f98`.
+- Shadows: dark sm/md/lg = `0 2px 4px rgba(0,0,0,.10)` / `0 4px 24px rgba(0,0,0,.20)` / `0 7px 32px rgba(0,0,0,.35)`; light = `0 1px 2px rgba(0,0,0,.06)` / `0 4px 16px rgba(0,0,0,.08)` / `0 8px 32px rgba(0,0,0,.09)`. `--mui-shadow-md` is no longer an alias of sm.
+- Status colours are muted tints now: dark text `success #4cb782`, `warning #f2c94c`, `danger #eb5757`, `info #4ea7fc` on 12% bg with 30% border of the same hue; light text darkened for 4.5:1 (`#2c7350`, `#7a6524`, `#b04242`, `#316da6`, all ≥ 4.5:1 over their tint, browser-measured). The solid `--mui-success`/`--mui-warning`/`--mui-danger`/`--mui-info` fills are unchanged (buttons still use them); `.mui-badge` status variants now render as tint, not solid.
+- Tracking: display −0.035 → −0.028em, h1 −0.025 → −0.022em, h2 −0.02 → −0.018em, h3 −0.01 → −0.012em, body 0 → −0.011em, small 0 → −0.01em, caption 0.01em → 0. Uppercase label tracking (`--mui-tracking-label`) unchanged.
+- Density calcs: `--mui-control-height` = `calc(1.75rem + 0.25rem * level)` → 28/32/36px; `--mui-row-height` = `max(1.5rem, calc(1.5rem + 0.25rem * level))` → 24/28/32px; `--mui-nav-row-height` = `calc(1.5rem + 0.25rem * level)` → 28px default; `--mui-text-small-size` base 0.8125 → 0.75rem so level 1 yields 13px (body stays 15px, caption 12px).
+- `--mui-radius-lg` = `min(calc(var(--mui-brand-radius) * 4 / 3), 12px)` — 8px at the default 0.375rem brand radius (the old ×1.5 multiplier yielded 9px).
+
+**Changed — components**
+- `.mui-card`: hairline border, `--mui-ring-hairline` edge shadow, and the surface-wash gradient over `--mui-bg-card`.
+- Table row separators (`table`, the `data-table-full` block, typography tables) use `var(--mui-hairline)`; inputs/buttons/controls keep their 1px boundary.
+- Popovers, menus and submenus: `--mui-bg-raised` + `--mui-border-strong` + `--mui-shadow-md`. Dialogs/sheets/drawers/alert and navigation dialogs: `--mui-bg-overlay-panel` + `--mui-border-strong` + `--mui-shadow-md`; the backdrop keeps its blur.
+- Buttons: sm/md/lg heights 24/32/40px, inline padding 10/12/14px, labels 12/13/15px (same `Size` enum, same class names); icon buttons follow.
+- Sidebar/nav rows: 28px tall (`--mui-nav-row-height`), `0 0.5rem` padding, `0.5rem` gap, 1rem icon, small size, medium weight.
+- Badges: 11px medium labels (the 22px `--mui-badge-height` is unchanged).
+
 ## [0.17.0] — 2026-09-15 — the chat kit
 
 Built for the conductor's `/chat` view, whose owner said it read like a log with turn cards around it. The primitives half-existed (`message`, `streaming_cursor`, `tool_call` since 0.4.0) and nothing composed them into a conversation.

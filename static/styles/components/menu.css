@@ -28,10 +28,10 @@
   top: calc(100% + 0.25rem);
   inset-inline-start: 0;
   min-width: 12rem;
-  background: var(--mui-bg-card);
-  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-raised);
+  border: 1px solid var(--mui-border-strong);
   border-radius: var(--mui-radius-md);
-  box-shadow: var(--mui-shadow-lg);
+  box-shadow: var(--mui-shadow-md);
   padding: var(--mui-space-xs);
   z-index: var(--mui-layer-overlay);
 }
@@ -203,10 +203,10 @@
   top: -0.25rem;
   inset-inline-start: 100%;
   min-width: 12rem;
-  background: var(--mui-bg-card);
-  border: 1px solid var(--mui-border);
+  background: var(--mui-bg-raised);
+  border: 1px solid var(--mui-border-strong);
   border-radius: var(--mui-radius-md);
-  box-shadow: var(--mui-shadow-lg);
+  box-shadow: var(--mui-shadow-md);
   padding: var(--mui-space-xs);
   z-index: var(--mui-layer-overlay);
 }

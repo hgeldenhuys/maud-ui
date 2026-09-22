@@ -1,0 +1,1036 @@
+/* Linear demo-issue replica — overrides ONLY for what maud-ui cannot express.
+   Every block that bends the library carries a `/* GAP: … * /` comment naming
+   the component and the missing capability. Values come from linear-demo-dump.json
+   (computed styles of the live linear.app demo frame). */
+
+/* Linear page vars — the verbatim inline SVGs reference the source page's
+   custom properties, so they are defined here with the sampled reference values. */
+.lr-frame {
+  --label-faint: #7a7f87;
+  --color-yellow: #f2cd00;
+  --color-indigo: #6470c3;
+  --color-orange: #d97c45;
+  --color-text-tertiary: #a7abb1;
+  --color-text-quaternary: #62666d;
+  --hero-line: #2e2f31;
+}
+
+html, body {
+  margin: 0;
+  width: 1320px;
+  height: 720px;
+  overflow: hidden;
+  background: rgb(9, 10, 11);
+}
+
+/* GAP: no shell primitive renders the 1320x720 rounded demo frame (grid
+   232px/1072px, 8px padding, radius 12) — hand-written frame. */
+.lr-frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: 232px 1072px;
+  width: 1320px;
+  height: 720px;
+  padding: 8px;
+  background: rgb(9, 10, 11);
+  border-radius: 12px;
+  overflow: hidden;
+  color: rgb(247, 248, 248);
+  font: 400 16px/24px var(--mui-font-sans);
+  /* `font:` above resets features; the library's Inter features (cv01/ss03,
+     measured off linear.app) change digit/cap advances and must survive. */
+  font-feature-settings: var(--mui-font-features);
+  letter-spacing: normal;
+}
+/* The dump's `/0`: a full-bleed overlay surface the grid children paint over. */
+.lr-frame-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(16, 17, 18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* The dump's `/2/0`: a 400x400 radial glow anchored at the content pane's
+   top-left corner (frame coords 41,-191 — measured: the lift fades by x~460
+   and y~170, absent at x=481+, so the blob is clipped by the content pane).
+   GAP: no primitive carries a decorative glow layer — hand-written. */
+.lr-glow {
+  position: absolute;
+  left: -199px;
+  top: -199px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(50% 50%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 90%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* The dump's `/3` grain layer (Linear's Grain component: a noise png at
+   opacity 0.6 over a #ffffff0f wash) collapsed to its measured mean effect:
+   a 1.8% white wash over every surface, plus the broad glow off the frame's
+   top-left corner that lifts the sidebar's top rows (fades by y~150, x~230).
+   GAP: no primitive renders a frame-level wash/grain layer — hand-written. */
+.lr-grain {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  background-image:
+    radial-gradient(200px 190px at 10px -10px, rgba(255, 255, 255, 0.036) 0%, rgba(255, 255, 255, 0) 90%),
+    linear-gradient(rgba(255, 255, 255, 0.016), rgba(255, 255, 255, 0.016));
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────────────
+   GAP: sidebar component is a 15rem flex sibling with a card background;
+   Linear's nav is a 232px grid cell with a transparent background. */
+.lr-frame > .mui-sidebar {
+  width: 100%;
+  flex-basis: auto;
+  background: transparent;
+  padding: 8px 16px 16px 8px;
+  overflow: hidden;
+}
+/* GAP: sidebar header is a 3.5rem padded block; Linear's head row is 28px. */
+.lr-frame .mui-sidebar__header {
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+.lr-nav-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+}
+/* GAP: button has no className passthrough and no text-button geometry that
+   reaches 28px/6px-gap/8px-radius — brand switcher is hand-written. */
+.lr-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgb(255, 255, 255);
+  font: 400 13.3333px/1 var(--mui-font-sans);
+  cursor: pointer;
+}
+.lr-logo-tile {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  background: rgb(18, 20, 20);
+  color: rgb(226, 228, 230);
+}
+.lr-brand-name {
+  font-size: 14px;
+  font-weight: 590;
+  line-height: 21px;
+  letter-spacing: -0.182px;
+  color: rgb(208, 214, 224);
+}
+.lr-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lr-search,
+.lr-newissue {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgb(98, 102, 109);
+  cursor: pointer;
+}
+/* GAP: button Ghost variant carries no bordered pill treatment. */
+.lr-newissue {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgb(36, 40, 44);
+  color: rgb(226, 228, 231);
+}
+.lr-nav-body {
+  margin-top: 16px;
+  opacity: 0.8;
+}
+/* GAP: nav row token --mui-nav-row-height is 24px and --mui-icon-size 16px;
+   Linear rows are 28px with 14px icons. Radius 8px vs --mui-radius-md 6px. */
+.lr-frame .mui-sidebar__menu-button {
+  height: 28px;
+  min-height: 28px;
+  padding: 0 7px;
+  gap: 8px;
+  border-radius: 8px;
+  color: rgb(208, 214, 224);
+  font: 510 13px/16px var(--mui-font-sans);
+}
+.lr-frame .mui-sidebar__menu-icon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  color: rgb(98, 102, 109);
+}
+/* GAP: menu_button has no active/current variant; library paints
+   --mui-accent-soft + accent ink, Linear paints white 4% with unchanged ink. */
+.lr-frame .mui-sidebar__menu-button.lr-active {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgb(208, 214, 224);
+}
+/* GAP: group_label is a small-caps mono heading; Linear's is a 24px flex row
+   button with a chevron glyph. */
+.lr-frame .mui-sidebar__group-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  margin-top: 16px;
+  padding: 4px 0 4px 6px;
+  background: transparent;
+  color: rgb(98, 102, 109);
+  font: 510 12px/14px var(--mui-font-sans);
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+}
+
+/* ─── Content pane ──────────────────────────────────────────────────────── */
+.lr-content {
+  position: relative;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+.lr-content-inner {
+  display: flex;
+  flex-direction: column;
+  height: 702px;
+}
+.lr-header1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  height: 44px;
+  padding: 8px 12px;
+}
+.lr-header1-left {
+  display: flex;
+  align-items: center;
+}
+.lr-crumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 6px 10px;
+}
+/* GAP: breadcrumb items render --mui-text-small-size (13px) muted with an
+   underline transition; Linear's trail is 12px/510 in secondary ink. */
+.lr-crumb .mui-breadcrumb {
+  width: auto;
+}
+.lr-crumb .mui-breadcrumb__item,
+.lr-crumb .mui-breadcrumb__item a {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 510;
+  color: rgb(208, 214, 224);
+  text-decoration: none;
+}
+/* GAP: breadcrumb separator is a required string; Linear's trail has none —
+   the empty separator li provides exactly the 6px list gap. */
+.lr-crumb .mui-breadcrumb__separator {
+  font-size: 0;
+}
+/* GAP: button Icon size is 32px; Linear's header icon buttons are 28px. */
+.lr-header1-left .mui-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgb(98, 102, 109);
+}
+.lr-header1-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lr-count {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(98, 102, 109);
+}
+.lr-count-cur {
+  color: rgb(138, 143, 152);
+}
+/* GAP: pager buttons are 30x28 — no such size (Icon 32 / IconSm 24). */
+.lr-pager {
+  display: flex;
+}
+.lr-pager .mui-btn {
+  width: 30px;
+  height: 28px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgb(255, 255, 255);
+}
+.lr-header2 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: none;
+  height: 44px;
+  padding: 8px 12px;
+}
+.lr-header2-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* GAP: the translucent pill with a 1px inset highlight ring is not a button
+   variant (Ghost is bare), and again 28px not 32px. */
+.lr-header2-row .mui-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  color: rgb(138, 143, 152);
+}
+.lr-delegate {
+  display: flex;
+  align-items: center;
+  width: 61px;
+  height: 28px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  overflow: hidden;
+}
+.lr-delegate-main,
+.lr-delegate-more {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgb(138, 143, 152);
+  cursor: pointer;
+}
+.lr-delegate-sep {
+  width: 1px;
+  height: 16px;
+  background: rgb(46, 46, 50);
+}
+
+/* ─── Main grid ─────────────────────────────────────────────────────────── */
+/* GAP: no layout primitive renders the dump's 5-column grid
+   (55.89 / 661.77 / 55.89 / 286.47 / 9.97) — hand-written. */
+.lr-main {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 55.89px 661.77px 55.89px 286.47px 9.97px;
+  min-height: 0;
+}
+.lr-article {
+  padding: 19px 16px 0;
+}
+/* GAP: typography tokens give h3 18px/1.35; Linear's issue title is 20px/26.6
+   at -0.24px tracking in secondary ink. */
+.lr-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 590;
+  line-height: 26.6px;
+  letter-spacing: -0.24px;
+  color: rgb(208, 214, 224);
+}
+.lr-desc {
+  margin: 8px 0 0;
+  max-width: 540px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: -0.182px;
+  color: rgb(138, 143, 152);
+}
+/* GAP: kbd renders a mono keycap with bottom border + shadow; the inline code
+   chip is a 24px bordered pill — hand-written. */
+.lr-code {
+  display: inline-flex;
+  align-items: center;
+  margin: -3px 0;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgb(208, 214, 224);
+  font-family: var(--mui-font-mono);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.lr-activity-h {
+  margin: 24px 0 0;
+  font-size: 16px;
+  font-weight: 590;
+  line-height: 28px;
+  color: rgb(208, 214, 224);
+}
+.lr-activity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+.lr-arow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+}
+.lr-avcell {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.lr-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: rgb(98, 102, 109);
+}
+.lr-b {
+  font-weight: 510;
+}
+.lr-connector {
+  position: absolute;
+  left: 7.5px;
+  top: 24px;
+  width: 1px;
+  height: 8px;
+  background: rgb(46, 46, 50);
+}
+/* GAP: card has no bare-children recipe (padding lives on __header/__content
+   sections), no size prop for 12/16/16 padding, radius-lg is 8px not 9px, and
+   no wash-strength prop (library wash is 2%; the reference card reads
+   rgb(28,28,29) = bg-card + 5.5% — washed here over the token). Also no
+   margin prop for the -16px gutter breakout. */
+.lr-card1 > .mui-card {
+  margin: 20px -16px 0;
+  padding: 12px 16px 16px;
+  border-radius: 9px;
+  background: linear-gradient(rgba(255, 255, 255, 0.036), rgba(255, 255, 255, 0.036)), var(--mui-bg-card);
+}
+/* GAP: card::render wraps children in .mui-card__body with its own 20/16px
+   padding + stack gap; Linear's cards have none. */
+.lr-card1 .mui-card__body,
+.lr-card2 .mui-card__body,
+.lr-prcard-wrap .mui-card__body {
+  padding: 0;
+}
+.lr-card2 .mui-card__body {
+  gap: 12px;
+}
+.lr-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lr-comment-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 20px;
+}
+.lr-comment + .mui-separator + .lr-comment .lr-comment-head {
+  height: 17.8px;
+}
+.lr-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16.8px;
+  color: rgb(98, 102, 109);
+}
+.lr-name {
+  font-size: 13px;
+  font-weight: 510;
+  line-height: 20px;
+  letter-spacing: -0.13px;
+  color: rgb(208, 214, 224);
+}
+.lr-comment-body {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -0.13px;
+  color: rgb(138, 143, 152);
+}
+.lr-reply {
+  padding-left: 24px;
+}
+/* GAP: separator paints --mui-border (white 8%); Linear's divider is rgb(46,46,50). */
+.mui-card .mui-separator--horizontal {
+  background: rgb(46, 46, 50);
+}
+.lr-card2 > .mui-card {
+  margin: 20px -16px 0;
+  padding: 13px 0;
+  border-radius: 9px;
+  background: linear-gradient(rgba(255, 255, 255, 0.036), rgba(255, 255, 255, 0.036)), var(--mui-bg-card);
+  overflow: hidden;
+}
+.lr-row-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 20px;
+  padding: 0 16px;
+}
+.lr-card2 .mui-card__body > .lr-row-wrap:first-child {
+  height: 19.5px;
+}
+.lr-bot-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16.8px;
+  color: rgb(98, 102, 109);
+}
+/* GAP: avatar sizes are fixed 28/40/56 — Linear uses 14px and 16px here. */
+.lr-avcell .mui-avatar,
+.lr-prop-assignee .mui-avatar,
+.lr-prop-sub .mui-avatar {
+  width: 14px;
+  height: 14px;
+}
+.lr-bot-row > .mui-avatar {
+  width: 16px;
+  height: 16px;
+}
+.lr-frame .mui-avatar {
+  border: 0;
+  background: transparent;
+}
+.lr-connected .lr-b2 {
+  font-weight: 510;
+  color: rgb(208, 214, 224);
+}
+.lr-changed {
+  font-weight: 510;
+  color: rgb(138, 143, 152);
+}
+
+/* ─── Properties column ─────────────────────────────────────────────────── */
+.lr-props {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding-top: 8px;
+  opacity: 0.8;
+}
+.lr-prop-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.lr-prop-label {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 6px 0 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: rgb(138, 143, 152);
+}
+.lr-prop-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px 0 7px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: rgb(208, 214, 224);
+}
+.lr-prop-dim {
+  color: rgb(138, 143, 152);
+}
+.lr-prop-assignee > svg {
+  position: absolute;
+  left: 15px;
+  top: 24px;
+}
+.lr-prop-sub {
+  padding-left: 29px;
+}
+.lr-prop-labels {
+  display: flex;
+  gap: 8px;
+  height: 24px;
+}
+/* GAP: badge is text-only; Linear's label chips carry a 16px colour dot and a
+   24px pill border rgb(46,46,50) — hand-written. */
+.lr-labelchip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  padding: 0 11px 0 7px;
+  border: 1px solid rgb(46, 46, 50);
+  border-radius: 16px;
+  background: transparent;
+  color: rgb(208, 214, 224);
+  font: 400 12px/14px var(--mui-font-sans);
+  cursor: pointer;
+}
+.lr-label-dot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+/* ─── Agent panel ───────────────────────────────────────────────────────── */
+.lr-panel {
+  position: absolute;
+  left: 658px;
+  top: 82px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 520px;
+  background: rgb(22, 23, 24);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 32px 0px;
+  overflow: hidden;
+}
+.lr-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  height: 48px;
+  padding: 14px 14px 14px 20px;
+  gap: 10px;
+}
+.lr-panel-id {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+}
+.lr-panel-id .mui-avatar {
+  width: 16px;
+  height: 16px;
+}
+.lr-panel-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgb(208, 214, 224);
+}
+/* GAP: badge is 22px tall with 0 8px padding and --mui-radius-tight; Linear's
+   model chip is 18px, 1px 4px padding, 11px/14px type, radius 4px. */
+.lr-panel-id .mui-badge {
+  height: 18px;
+  padding: 1px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: transparent;
+  color: rgb(138, 143, 152);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 14px;
+}
+.lr-panel-win {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 14px;
+}
+.lr-win {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: rgb(138, 143, 152);
+}
+.lr-panel-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 6px;
+}
+.lr-panel-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.lr-panel-feed {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0 80px;
+}
+/* GAP: message (chat layout) is a padded grid with avatar column, author and
+   timestamp slots; Linear's panel turns are bare stacks — wrappers flattened. */
+.lr-panel .mui-message {
+  display: block;
+  padding: 0;
+  margin: 0;
+  grid-template-columns: none;
+}
+.lr-panel .mui-message__body-wrap {
+  display: block;
+  max-width: none;
+}
+.lr-panel .mui-message__body {
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+}
+.lr-panel .mui-message__body p {
+  margin: 0;
+}
+/* GAP: the chat user turn paints an accent-tinted card (bg + accent border +
+   one square corner) and right-aligns; Linear's panel prompt is the bare
+   left-aligned bubble. */
+.lr-panel .mui-message--user,
+.lr-panel .mui-message--user .mui-message__body-wrap {
+  align-items: stretch;
+  max-width: none;
+}
+.lr-panel .mui-message--user .mui-message__body {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  white-space: normal;
+}
+.lr-turn1 {
+  display: flex;
+  flex-direction: column;
+}
+.lr-prompt-row {
+  padding: 4px 4px 8px 40px;
+}
+.lr-prompt {
+  width: 342px;
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  /* Reference reads rgb(38,39,40) — the prompt bubble is a raised surface:
+     base + a 5.2% wash (the grain layer adds the rest). */
+  background: linear-gradient(rgba(255, 255, 255, 0.054), rgba(255, 255, 255, 0.054)), rgb(22, 23, 24);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 1px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.039px;
+  color: rgb(247, 248, 248);
+}
+.lr-ctx-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  height: 16px;
+  padding: 0 10px 0 0;
+  font-size: 12px;
+  line-height: 14px;
+}
+.lr-ctx-id {
+  color: rgb(138, 143, 152);
+}
+.lr-ctx-label {
+  color: rgb(98, 102, 109);
+}
+.lr-turn2 {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+.lr-worked-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: rgb(138, 143, 152);
+}
+.lr-worked-chev {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+.lr-answer {
+  margin: 0;
+  padding: 0 14px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.039px;
+  color: rgb(208, 214, 224);
+  opacity: 0.9;
+}
+.lr-prcard-wrap {
+  padding: 0 3px;
+}
+/* GAP: card surface again — the PR card is rgb(22,23,24) with a 6px radius,
+   11px padding, 6px gap and a rgba(255,255,255,0.06) border; the reference
+   reads rgb(38,39,40) — lifted with a 5.2% wash like the prompt bubble. */
+.lr-prcard-wrap .mui-card {
+  position: relative;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  background: linear-gradient(rgba(255, 255, 255, 0.054), rgba(255, 255, 255, 0.054)), rgb(22, 23, 24);
+  box-shadow: none;
+}
+.lr-pr-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lr-pr-row1,
+.lr-pr-row2,
+.lr-pr-row3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  color: rgb(247, 248, 248);
+}
+.lr-pr-row1 {
+  padding-bottom: 1px;
+}
+.lr-pr-row3 {
+  gap: 6px;
+  font-size: 10px;
+  color: rgb(148, 148, 150);
+}
+.lr-pr-strong {
+  font-weight: 500;
+}
+.lr-pr-diff {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.lr-add {
+  color: rgb(39, 166, 68);
+}
+.lr-rem {
+  color: rgb(243, 78, 82);
+}
+.lr-pr-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.lr-pr-arrow {
+  color: rgb(85, 85, 87);
+}
+/* GAP: card has no overlay slot; the Preview chip is an absolutely positioned
+   pill the library cannot express. */
+.lr-preview {
+  position: absolute;
+  top: 5.5px;
+  right: 5.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 4px 8px 4px 6px;
+  border: 1px solid rgb(42, 42, 45);
+  border-radius: 999px;
+  background: rgb(28, 28, 29);
+  box-shadow:
+    rgba(0, 0, 0, 0.06) 0px 4px 4px -1px,
+    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px;
+  color: rgb(148, 148, 150);
+  font: 500 12px/14px var(--mui-font-sans);
+  cursor: pointer;
+}
+
+/* Composer area */
+.lr-composer-area {
+  flex: none;
+  height: 100px;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+/* GAP: composer max-width token 67.5rem and field chrome (bg-card surface,
+   control border, radius-lg, 12/14 padding) do not match Linear's flat
+   ring-outlined box; the send button is a labelled text button while Linear's
+   is a 26px icon circle; chips cannot carry icons; there are no slots for
+   trailing icon actions (retry/attach). All overridden below. */
+.lr-composer-area .mui-composer {
+  max-width: none;
+}
+.lr-composer-area .mui-composer__field {
+  gap: 8px;
+  height: 94px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  /* Reference reads rgb(35,36,37) — the composer field is a raised surface:
+     a 3.9% wash over the panel background (the grain layer adds the rest). */
+  background: rgba(255, 255, 255, 0.041);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 0px 1px;
+}
+.lr-composer-area .mui-composer__input {
+  min-height: 0;
+  height: 38px;
+  font-size: 13px;
+  line-height: 20px;
+  color: rgb(247, 248, 248);
+}
+.lr-composer-area .mui-composer__input::placeholder {
+  color: rgb(98, 102, 109);
+}
+.lr-composer-area .mui-composer__actions {
+  gap: 6px;
+  height: 26px;
+  position: relative;
+}
+/* Skills chip: the control-chip slot carries hand markup; the caret ::after
+   and mono face are library chrome Linear does not have. */
+.lr-composer-area .mui-composer__chip--control {
+  padding: 0;
+  background: transparent;
+  border-radius: 5px;
+}
+.lr-composer-area .mui-composer__chip--control::after {
+  content: none;
+}
+.lr-composer-area .mui-composer__chip--control:nth-of-type(2) {
+  position: absolute;
+  right: 62px;
+}
+.lr-composer-area .mui-composer__chip--control:nth-of-type(3) {
+  position: absolute;
+  right: 32px;
+}
+.lr-skills {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 6px 0 4px;
+  border-radius: 5px;
+  color: rgb(138, 143, 152);
+  font: 400 12px/16px var(--mui-font-sans);
+  cursor: pointer;
+}
+.lr-skills > svg:first-child {
+  width: 14px;
+  height: 14px;
+}
+.lr-skills > svg:last-child {
+  width: 8px;
+  height: 5.53px;
+}
+.lr-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 5px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: rgb(138, 143, 152);
+  cursor: pointer;
+}
+/* Captured render sizes: several verbatim svgs carry width/height 16 attrs
+   but render at 14px on the source page (CSS-shrunk there) — the card2 branch
+   icon, the panel PR-branch icon and the composer mini action icons. */
+.lr-bot-row .lr-avcell > svg,
+.lr-pr-row2 > svg,
+.lr-mini > svg {
+  width: 14px;
+  height: 14px;
+}
+/* GAP: send is a 26px icon-only circle (bg white 3%, hairline ring, shadow);
+   the library button paints an accent pill around a text label, so the label
+   is hidden and the captured glyph drawn via CSS mask. */
+.lr-composer-area .mui-composer__send {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    rgba(0, 0, 0, 0.06) 0px 4px 4px -1px,
+    rgba(0, 0, 0, 0.12) 0px 1px 1px 0px;
+  color: transparent;
+  font-size: 0;
+}
+.lr-composer-area .mui-composer__send::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  background-color: rgb(208, 214, 224);
+  -webkit-mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor'%3E%3Cpath d=%22M4 7.2C4 6.07989 4 5.51984 4.21799 5.09202C4.40973 4.71569 4.71569 4.40973 5.09202 4.21799C5.51984 4 6.0799 4 7.2 4H8.8C9.92011 4 10.4802 4 10.908 4.21799C11.2843 4.40973 11.5903 4.71569 11.782 5.09202C12 5.51984 12 6.0799 12 7.2V8.8C12 9.92011 12 10.4802 11.782 10.908C11.5903 11.2843 11.2843 11.5903 10.908 11.782C10.4802 12 9.92011 12 8.8 12H7.2C6.07989 12 5.51984 12 5.09202 11.782C4.71569 11.5903 4.40973 11.2843 4.21799 10.908C4 10.4802 4 9.92011 4 8.8V7.2Z%22/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='currentColor'%3E%3Cpath d=%22M4 7.2C4 6.07989 4 5.51984 4.21799 5.09202C4.40973 4.71569 4.71569 4.40973 5.09202 4.21799C5.51984 4 6.0799 4 7.2 4H8.8C9.92011 4 10.4802 4 10.908 4.21799C11.2843 4.40973 11.5903 4.71569 11.782 5.09202C12 5.51984 12 6.0799 12 7.2V8.8C12 9.92011 12 10.4802 11.782 10.908C11.5903 11.2843 11.2843 11.5903 10.908 11.782C10.4802 12 9.92011 12 8.8 12H7.2C6.07989 12 5.51984 12 5.09202 11.782C4.71569 11.5903 4.40973 11.2843 4.21799 10.908C4 10.4802 4 9.92011 4 8.8V7.2Z%22/%3E%3C/svg%3E") center / contain no-repeat;
+}

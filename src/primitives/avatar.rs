@@ -8,6 +8,9 @@ pub struct Props {
     pub alt: String,
     pub fallback: String,
     pub size: Size,
+    /// Extra class names appended to the class list — the escape hatch for
+    /// per-instance overrides that a closed enum cannot express.
+    pub class: Option<String>,
 }
 
 impl Default for Props {
@@ -17,12 +20,17 @@ impl Default for Props {
             alt: "Avatar".to_string(),
             fallback: "U".to_string(),
             size: Size::Md,
+            class: None,
         }
     }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Size {
+    /// 14px — activity and property rows (Linear recipe).
+    Xs14,
+    /// 16px — inline rows beside 12px text (Linear recipe).
+    Sm16,
     Sm,
     Md,
     Lg,
@@ -31,6 +39,8 @@ pub enum Size {
 impl Size {
     fn class_name(self) -> &'static str {
         match self {
+            Size::Xs14 => "mui-avatar--xs-14",
+            Size::Sm16 => "mui-avatar--sm-16",
             Size::Sm => "mui-avatar--sm",
             Size::Md => "mui-avatar--md",
             Size::Lg => "mui-avatar--lg",
@@ -40,7 +50,10 @@ impl Size {
 
 pub fn render(props: Props) -> Markup {
     let size_class = props.size.class_name();
-    let class = format!("mui-avatar {}", size_class);
+    let class = match &props.class {
+        Some(extra) => format!("mui-avatar {size_class} {extra}"),
+        None => format!("mui-avatar {size_class}"),
+    };
 
     // A11y: avoid double-announcement when a real <img> is present.
     // - src Some: the native <img alt="…"> carries the accessible name; the outer
@@ -110,6 +123,7 @@ pub fn showcase() -> Markup {
                         alt: "Sofia Davis".to_string(),
                         fallback: "SD".to_string(),
                         size: Size::Lg,
+class: None,
                     }))
                     div {
                         div data-mui-type="small" style="font-weight: var(--mui-weight-medium);color:var(--mui-text);" {
@@ -133,6 +147,7 @@ pub fn showcase() -> Markup {
                             alt: "Online user".to_string(),
                             fallback: "ON".to_string(),
                             size: Size::Md,
+class: None,
                         }))
                         span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-success);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
@@ -143,6 +158,7 @@ pub fn showcase() -> Markup {
                             alt: "Away user".to_string(),
                             fallback: "AW".to_string(),
                             size: Size::Md,
+class: None,
                         }))
                         span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-warning);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
@@ -153,6 +169,7 @@ pub fn showcase() -> Markup {
                             alt: "Offline user".to_string(),
                             fallback: "JD".to_string(),
                             size: Size::Md,
+class: None,
                         }))
                         span style="position:absolute;bottom:0;right:0;width:0.625rem;height:0.625rem;background:var(--mui-text-muted);border:2px solid var(--mui-bg);border-radius: var(--mui-radius-full);" {}
                     }
@@ -169,6 +186,7 @@ pub fn showcase() -> Markup {
                             alt: "Online".to_string(),
                             fallback: "ON".to_string(),
                             size: Size::Lg,
+class: None,
                         }))
                         (badge(html! { }))
                     }
@@ -184,24 +202,28 @@ pub fn showcase() -> Markup {
                         alt: "Alice".to_string(),
                         fallback: "A".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                     (render(Props {
                         src: Some("https://i.pravatar.cc/120?img=8".to_string()),
                         alt: "Bob".to_string(),
                         fallback: "B".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                     (render(Props {
                         src: Some("https://i.pravatar.cc/120?img=15".to_string()),
                         alt: "Carol".to_string(),
                         fallback: "C".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                     (render(Props {
                         src: Some("https://i.pravatar.cc/120?img=22".to_string()),
                         alt: "Dan".to_string(),
                         fallback: "D".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                     (group_count(3))
                 }))
@@ -217,12 +239,14 @@ pub fn showcase() -> Markup {
                         alt: "Small avatar".to_string(),
                         fallback: "SM".to_string(),
                         size: Size::Sm,
+class: None,
                     }))
                     (render(Props {
                         src: None,
                         alt: "Small fallback".to_string(),
                         fallback: "SM".to_string(),
                         size: Size::Sm,
+class: None,
                     }))
                 }
                 div.mui-showcase__row {
@@ -232,12 +256,14 @@ pub fn showcase() -> Markup {
                         alt: "Medium avatar".to_string(),
                         fallback: "MD".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                     (render(Props {
                         src: None,
                         alt: "Medium fallback".to_string(),
                         fallback: "MD".to_string(),
                         size: Size::Md,
+class: None,
                     }))
                 }
                 div.mui-showcase__row {
@@ -247,12 +273,14 @@ pub fn showcase() -> Markup {
                         alt: "Large avatar".to_string(),
                         fallback: "LG".to_string(),
                         size: Size::Lg,
+class: None,
                     }))
                     (render(Props {
                         src: None,
                         alt: "Large fallback".to_string(),
                         fallback: "LG".to_string(),
                         size: Size::Lg,
+class: None,
                     }))
                 }
             }

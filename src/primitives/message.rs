@@ -33,6 +33,28 @@ pub enum Role {
     System,
 }
 
+/// Chat-layout treatment for the turn's body.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Variant {
+    /// The default conversation shapes: the user's turn is a tinted,
+    /// right-aligned card with one square corner; the assistant's is flat.
+    #[default]
+    Default,
+    /// Plain: no tint, no right alignment, no card chrome on either side —
+    /// both turns read as flat column content (an agent-panel feed rendered
+    /// inside its own panel chrome).
+    Plain,
+}
+
+impl Variant {
+    fn class(&self) -> &'static str {
+        match self {
+            Variant::Default => "",
+            Variant::Plain => "mui-message--plain",
+        }
+    }
+}
+
 impl Role {
     fn class(&self) -> &'static str {
         match self {
@@ -64,6 +86,9 @@ pub struct Props {
     pub footer: Option<Markup>,
     /// Which layout to render. See [`Layout`].
     pub layout: Layout,
+    /// Chat-layout body treatment. See [`Variant`]. Ignored in the avatar
+    /// layout.
+    pub variant: Variant,
     /// The quiet action row under a reply (copy, fork from here, the model
     /// that answered, the cost). Revealed on hover on a pointer device,
     /// always visible where there is no hover. Chat layout only; the avatar
@@ -143,10 +168,16 @@ pub fn render(props: Props) -> Markup {
 /// The chat layout. No avatar and no author line: in a two-party
 /// conversation the side and the shape say who spoke. The user's card is
 /// right-aligned and tinted; the assistant's body is flat. A `System`
-/// message keeps its muted italic treatment, centred.
+/// message keeps its muted italic treatment, centred. [`Variant::Plain`]
+/// drops the card chrome on every role.
 fn render_chat(props: Props) -> Markup {
+    let variant_class = props.variant.class();
     html! {
-        article class={"mui-message mui-message--chat " (props.role.class())} data-mui="message"
+        article class={
+            "mui-message mui-message--chat "
+            (props.role.class())
+            @if !variant_class.is_empty() { " " (variant_class) }
+        } data-mui="message"
             aria-label=[(!props.author.is_empty()).then_some(props.author.as_str())] {
             div class="mui-message__body-wrap" {
                 div class={

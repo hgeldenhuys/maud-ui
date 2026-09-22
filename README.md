@@ -44,6 +44,10 @@ Use `status_chip_group` for counted filters, `bottom_tab_bar` for mobile destina
 
 Serve `maud_ui::assets::{CSS_MIN, JS_MIN}` directly, or vendor the complete files in **static/**. The older **dist/** and **public/** trees are 0.7 snapshots and do not contain these additions. `node examples/build-assets.mjs` rebuilds the current bundles; `cargo run --example build_docs` regenerates API HTML after Markdown edits. Consumers have one direct dependency, Maud; Markdown parsing and Axum are development-only.
 
+## The gaps a pixel replica found (0.19.0)
+
+A pixel-level replica of linear.app's demo issue frame (docs/linear-replica/) was built on this library, and every override it needed became a default: nav rows are 28px with 14px icons and an 8px corner, badges are the 18px/1px-4px/11px chip, cards are flat `bg-card` at a 9px corner with a dedicated `--mui-border-divider` between them, breadcrumbs trail at 12px/510 in secondary ink, and icon buttons lost their 32px clamp. New props cover what a closed enum could not reach: `button::Size::IconSm28` and `Variant::Translucent` (plus a Ghost `bordered` flag), a `class:` escape hatch on button/card/badge/avatar and sidebar menu buttons, `sidebar::Surface::Transparent` and a white-4% `current` row, card `padding`/`gap`/`radius`/`bare`/`overlay`, 14px and 16px avatars, badge colour `dot`s, a `Plain` chat message, a `flat` composer with trailing action slots and an icon-only send, separator-less breadcrumbs, a `kbd::Variant::Code` inline chip, and a `Title20` text step. `node examples/build-assets.mjs` rebuilds the bundles.
+
 ## Forms and journeys (0.14.0)
 
 Use `form::Props { feedback: true, ..Default::default() }` for inline errors, failed-field focus, accessible descriptions, pending submit/reset controls and duplicate-submit protection. Async adapters report every outcome with `MaudUI.formFeedback(form, result)`; transport, business values and authorization remain application owned. See [Form feedback](docs/components/form.md).

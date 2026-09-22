@@ -5,6 +5,42 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.0] — 2026-09-22 — the gaps the Linear replica found
+- Icon-only button sizes (24/28/32/40) now hold their height under the density layer: `brand-density.css` re-applied `min-height: var(--mui-control-height)` to every button after the icon reset, so a 28px icon button rendered 36px inside a shell.
+
+Building the pixel replica of linear.app's demo issue frame (docs/linear-replica/) surfaced everything the library bent or could not express; this release folds that gap list back into the library as tokens and props. The replica now runs on library defaults with `examples/linear-replica/replica.css` reduced to the Linear-specific remainder (195 lines, was 1036), and reproduces the reference at the same score as before the refactor (98.47% of pixels within tol 24).
+
+**Changed — tokens (the replica's measured list, now defaults)**
+- `--mui-nav-row-height` 28px in the shell scope too (`--mui-shell-nav-row-height` 2.25rem → 1.75rem): sidebar nav rows render 28px everywhere, not 36px.
+- Nav/menu rows get their own tokens: `--mui-icon-size` stays 16px for buttons, while `--mui-nav-icon-size` (0.875rem) sizes sidebar/menu row icons at 14px; `--mui-nav-row-radius` (0.5rem) gives nav rows their 8px corner (they were forced square); `--mui-nav-current-bg` (white 4% dark / black 4% light) grounds the current row.
+- `--mui-radius-lg` is now 9px at the default brand radius (multiplier ×4/3 → ×1.5, 12px cap kept).
+- Badge recipe: `--mui-badge-height` 22px → 1.125rem (18px) with `1px 4px` padding and the 11px label — the Linear model-chip geometry.
+- Cards are flat `var(--mui-bg-card)`: the surface-wash gradient is out of the recipe (`--mui-surface-wash` stays defined for consumers who want it).
+- `--mui-border-divider` (dark `#2e2e32` — Linear's rgb(46,46,50) — light `rgba(0,0,0,0.12)`): separators inside cards step stronger than the structural border.
+- Breadcrumb items are the 12px/14px weight-510 secondary-ink trail; the current crumb stays secondary with the rest.
+- Icon buttons lost the `min-width`/`min-height` clamp from `defaults.css` — a 24px `icon-sm` no longer renders 32px; every icon size takes its own geometry.
+- New type step: `--mui-text-title-size/leading/tracking` (20px / 1.33 / −0.012em), the "issue title" between h3 and h2.
+
+**Added — components**
+- `button::Size::IconSm28` — the 28px square icon-only size (still requires `aria_label`).
+- `button::Variant::Translucent` — white 4% ground, 1px inset highlight ring, muted ink, full radius (header action pills).
+- `button::Props::bordered` — Ghost with a visible hairline boundary (the "New issue" pill).
+- `class: Option<String>` passthrough on button, card, badge, avatar and sidebar `menu_button` — the documented escape hatch: append a class, target it from your own stylesheet, no wrapper divs.
+- `sidebar::Surface::Transparent` — a sidebar with no card ground and no reserved width; its box comes from the parent grid/flex layout.
+- `sidebar::menu_button_props(MenuButtonProps)` — the row with `current: bool` and a `CurrentVariant` (`Default` paints white 4% with unchanged ink; `Accent` keeps the legacy accent-soft recolour + inset bar). `sidebar::group_label_collapsible` — the 24px flex-row group label with a chevron slot.
+- `card::Props::padding` (`Option<Space>`; `Space::None` is the explicit `padding: 0`), `gap`, `radius` (`Option<Radius>`), `bare` (children without the `__body` wrapper), and `overlay: Option<Markup>` — an absolutely-positioned top-right slot.
+- `avatar::Size::Xs14` and `Size::Sm16`.
+- `badge::Size::Sm18` (pins the 18px recipe) and `badge::Props::dot` — a 16px colour circle before the label.
+- `message::Variant::Plain` — a chat turn with no tint, no right alignment, no card chrome (agent-panel feeds inside their own panel).
+- `composer::Props::flat` (ring-box field), `trailing: Vec<Markup>` (icon actions between the spacer and the send), `icon_only_send` (26px circle, label visually hidden), and chips that carry a leading icon and trailing chevron.
+- `breadcrumb::Props::separator` is now `Option<&str>` where `None` renders NO separator (the list gap alone separates the trail); the default separator is pinned with `Some("/")`.
+- `kbd::Variant::Code` — the 24px bordered mono pill that sits inline in a sentence (selectable, no keycap chrome). The kbd container is a `span` now, so chips can live inside paragraphs without the browser closing the `<p>`.
+- `typography::TextSize` (+ `Title20`) and `typography::heading(level, text, size)` — a heading whose size step is decoupled from its tag.
+- `tokens::Radius` — the radius scale as a closed enum for component props.
+
+**Fixed**
+- `defaults.css` no longer clamps icon-only buttons to `--mui-control-height`: the clamp leaked a 32px `min-width`/`min-height` onto the 24px icon sizes.
+
 ## [0.18.0] — 2026-09-21 — the default theme, rebuilt
 
 Every token in this list is measured from linear.app's live CSS (2026-09-21), reproduced verbatim rather than "improved". The three brand presets (lodge, bank, clinic) still render and still override accent/font/radius/density exactly as before — they carry their own values.

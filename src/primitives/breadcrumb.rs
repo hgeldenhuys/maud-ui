@@ -13,17 +13,18 @@ pub struct BreadcrumbItem {
 /// Breadcrumb rendering properties
 #[derive(Debug, Clone)]
 #[derive(Default)]
-pub struct Props {
+pub struct Props<'a> {
     /// List of breadcrumb items (last item has no href). Blank labels are discarded.
     pub items: Vec<BreadcrumbItem>,
-    /// Separator character (default "/")
-    pub separator: Option<String>,
+    /// Separator between items. `None` renders NO separator at all — the
+    /// list gap alone separates the trail (a trail with no visible divider).
+    /// Defaults to `Some("/")`.
+    pub separator: Option<&'a str>,
 }
 
 
 /// Render breadcrumb navigation
 pub fn render(props: Props) -> Markup {
-    let sep = props.separator.as_deref().unwrap_or("/");
     let items = visible_items(props.items);
     if items.is_empty() { return html! {}; }
 
@@ -32,8 +33,10 @@ pub fn render(props: Props) -> Markup {
             ol class="mui-breadcrumb__list" {
                 @for (idx, item) in items.iter().enumerate() {
                     @if idx > 0 {
-                        li class="mui-breadcrumb__separator" aria-hidden="true" {
-                            (sep)
+                        @if let Some(sep) = props.separator {
+                            li class="mui-breadcrumb__separator" aria-hidden="true" {
+                                (sep)
+                            }
                         }
                     }
                     @if item.href.is_some() {
@@ -86,7 +89,7 @@ pub fn showcase() -> Markup {
                             href: None,
                         },
                     ],
-                    separator: None,
+                    separator: Some("/"),
                 }))
             }
 
@@ -111,7 +114,7 @@ pub fn showcase() -> Markup {
                             href: None,
                         },
                     ],
-                    separator: Some("\u{203a}".into()),
+                    separator: Some("\u{203a}"),
                 }))
             }
 
@@ -125,6 +128,23 @@ pub fn showcase() -> Markup {
                         },
                         BreadcrumbItem {
                             label: "Getting Started".into(),
+                            href: None,
+                        },
+                    ],
+                    separator: Some("/"),
+                }))
+            }
+
+            div {
+                p.mui-showcase__caption { "No separator" }
+                (render(Props {
+                    items: vec![
+                        BreadcrumbItem {
+                            label: "DRV-8852".into(),
+                            href: Some("#".into()),
+                        },
+                        BreadcrumbItem {
+                            label: "Faster app launch".into(),
                             href: None,
                         },
                     ],

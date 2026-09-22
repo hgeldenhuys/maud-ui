@@ -30,7 +30,7 @@ html! {
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td>items</td><td>Vec<BreadcrumbItem></td><td><code>[]</code></td><td>Array of breadcrumb items; last item's href should be None (represents current page).</td></tr>
-<tr><td>separator</td><td>Option<String></td><td><code>None</code></td><td>Custom separator character (default "/" when None).</td></tr>
+<tr><td>separator</td><td>Option&lt;&amp;str&gt;</td><td><code>None</code></td><td>Separator between items. <code>None</code> renders NO separator at all — the list gap alone separates the trail (a trail with no visible divider). Pin the default with <code>Some("/")</code>.</td></tr>
 </tbody></table>
 <h2>BreadcrumbItem Struct</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>

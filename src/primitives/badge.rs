@@ -44,6 +44,27 @@ impl Variant {
     }
 }
 
+/// Badge size steps.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Size {
+    /// The default token-driven pill (`--mui-badge-height`, 18px at the
+    /// default theme).
+    #[default]
+    Default,
+    /// Pin the 18px recipe (1px 4px padding, 11px type) regardless of token
+    /// drift — the Linear model-chip geometry, explicit.
+    Sm18,
+}
+
+impl Size {
+    fn class(&self) -> &'static str {
+        match self {
+            Self::Default => "",
+            Self::Sm18 => "mui-badge--sm-18",
+        }
+    }
+}
+
 /// Badge rendering properties
 #[derive(Debug, Clone, Default)]
 pub struct Props {
@@ -51,10 +72,16 @@ pub struct Props {
     pub label: String,
     /// Visual variant (color scheme)
     pub variant: Variant,
+    /// Size step. See [`Size`].
+    pub size: Size,
     /// Optional href — when `Some`, the badge renders as an `<a>` element
     pub href: Option<String>,
     /// Optional leading icon — rendered before the label with `data-icon="inline-start"`
     pub leading_icon: Option<Markup>,
+    /// Optional colour dot — a 16px circle rendered before the label (the
+    /// colour-coding of a label chip). The string is any CSS colour value
+    /// applied as the dot's background; pass `""` for an unpainted dot.
+    pub dot: Option<String>,
     /// Render the label in the monospace face — for shas, ids, counts, and
     /// other machine-register text that should not reflow with the sans stack.
     pub mono: bool,
@@ -71,28 +98,53 @@ pub struct Props {
     /// Optional trailing kbd hint — the `⌘K` in a command chip. Rendered in
     /// the mono face inside a subtle key cap.
     pub kbd: Option<String>,
+    /// Extra class names appended to the class list — the escape hatch for
+    /// per-instance overrides that a closed enum cannot express.
+    pub class: Option<String>,
 }
 
 /// Render a single badge with the given properties
 pub fn render(props: Props) -> Markup {
     let mut class = format!("mui-badge {}", props.variant.class());
+    if props.size != Size::Default {
+        class.push(' ');
+        class.push_str(props.size.class());
+    }
     if props.mono {
         class.push_str(" mui-badge--mono");
     }
     if props.chip {
         class.push_str(" mui-badge--chip");
     }
-    let data_icon = if props.leading_icon.is_some() {
+    if props.dot.is_some() {
+        class.push_str(" mui-badge--dot");
+    }
+    if let Some(extra) = &props.class {
+        class.push(' ');
+        class.push_str(extra);
+    }
+    let has_lead = props.leading_icon.is_some() || props.dot.is_some();
+    let data_icon = if has_lead {
         Some("inline-start")
     } else {
         None
     };
+    let dot_style = props
+        .dot
+        .as_ref()
+        .filter(|c| !c.is_empty())
+        .map(|c| format!("background: {c};"));
 
     html! {
         @if let Some(href) = props.href.as_ref() {
             a class=(class) href=(href) data-icon=[data_icon] {
                 @if let Some(icon) = props.leading_icon.as_ref() {
                     (icon)
+                }
+                @if let Some(style) = dot_style.as_deref() {
+                    span class="mui-badge__dot" style=(style) {}
+                } @else if props.dot.is_some() {
+                    span class="mui-badge__dot" {}
                 }
                 (props.label)
                 @if let Some(count) = props.trailing_count.as_ref() {
@@ -106,6 +158,11 @@ pub fn render(props: Props) -> Markup {
             span class=(class) data-icon=[data_icon] {
                 @if let Some(icon) = props.leading_icon.as_ref() {
                     (icon)
+                }
+                @if let Some(style) = dot_style.as_deref() {
+                    span class="mui-badge__dot" style=(style) {}
+                } @else if props.dot.is_some() {
+                    span class="mui-badge__dot" {}
                 }
                 (props.label)
                 @if let Some(count) = props.trailing_count.as_ref() {

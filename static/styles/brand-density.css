@@ -21,6 +21,12 @@
 /* Controls and containers read the same root choice, including kit composition. */
 .mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { box-sizing: border-box; height: var(--mui-control-height); padding-block: 0; }
 .mui-btn { padding-block: var(--mui-space-xs); min-height: var(--mui-control-height); }
+/* Icon-only sizes own their height; the density clamp above must not re-grow them (0.19.0). */
+.mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs, .mui-btn--icon-28 { padding-block: 0; }
+.mui-btn--icon { min-height: 2rem; height: 2rem; }
+.mui-btn--icon-xs, .mui-btn--icon-sm { min-height: 1.5rem; height: 1.5rem; }
+.mui-btn--icon-28 { min-height: 1.75rem; height: 1.75rem; }
+.mui-btn--icon-lg { min-height: 2.5rem; height: 2.5rem; }
 .mui-btn--sm { min-height: 1.5rem; height: 1.5rem; }
 .mui-btn--row, .mui-action-row[data-density] .mui-btn, .mui-action-row[data-density] .mui-action-row__trigger { min-height: var(--mui-row-height); height: auto; padding-block: 0; }
 .mui-action-row[data-density="comfortable"] .mui-btn:not(.mui-action-row__trigger) { min-height: var(--mui-control-height); }

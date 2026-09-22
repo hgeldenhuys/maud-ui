@@ -3,7 +3,7 @@
 .mui-checkbox__indicator { border-radius: var(--mui-radius-tight); }
 .mui-badge, .mui-badge--link, .mui-status-chip-group__count, .mui-block--shell__nav-badge, .mui-sidebar__menu-badge { border-radius: var(--mui-radius-tight); }
 .mui-card, .mui-table-wrapper, .mui-data-table__wrapper, .mui-attention-banner, .mui-record-timeline, .mui-record-money, .mui-related-card:not(.mui-related-card--inline), .mui-task-grid__card, .mui-block-state { border-radius: var(--mui-radius-lg); }
-.mui-sidebar__menu-button, .mui-block--shell__nav-item, summary.mui-sidebar__group-label, summary.mui-block--shell__nav-group-label { border-radius: 0; }
+.mui-sidebar__menu-button, .mui-block--shell__nav-item { border-radius: var(--mui-nav-row-radius); }
 .mui-sidebar__menu-button:focus-visible, .mui-block--shell__nav-item:focus-visible { outline-offset: -2px; }
 .mui-sidebar__menu-button[aria-current]::before, .mui-sidebar__menu-button[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { border-radius: 0; }
 .mui-sidebar__group[data-contains-current="true"] > .mui-sidebar__group-label,

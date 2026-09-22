@@ -160,6 +160,22 @@
 /* A system line is a fact, not a turn: centred and quiet. */
 .mui-message--chat.mui-message--system { align-items: center; }
 
+/* Plain variant — a chat turn without the card: no tint, no right align, no
+   square corner. Both sides read as flat column content (an agent-panel feed
+   dropped into its own panel chrome, not a two-party conversation). */
+.mui-message--chat.mui-message--plain { align-items: stretch; }
+.mui-message--chat.mui-message--plain .mui-message__body-wrap {
+  max-width: none;
+  align-items: stretch;
+}
+.mui-message--chat.mui-message--plain .mui-message__body {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  white-space: normal;
+}
+
 /* The timestamp shows on hover (or focus) so a column of turns is not a
    column of clocks; where nothing can hover it stays visible. */
 .mui-message--chat .mui-message__timestamp {

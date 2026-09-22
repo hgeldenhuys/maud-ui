@@ -63,16 +63,32 @@ pub struct Chip {
     /// Accent-tinted — the "this message carries something extra" treatment
     /// used for attachments (`user.rs ×`).
     pub accent: bool,
+    /// Optional leading icon markup (e.g. a 14px inline SVG), rendered
+    /// before the label inside the chip.
+    pub leading_icon: Option<Markup>,
+    /// Optional trailing chevron markup — rendered after the label (the
+    /// caret of a "Skills"-style menu chip).
+    pub trailing_chevron: Option<Markup>,
 }
 
 impl Chip {
     /// A plain mono chip.
     pub fn new(label: impl Into<String>) -> Self {
-        Self { label: label.into(), accent: false }
+        Self { label: label.into(), accent: false, leading_icon: None, trailing_chevron: None }
     }
     /// An accent-tinted chip — for attachments and other message payloads.
     pub fn accent(label: impl Into<String>) -> Self {
-        Self { label: label.into(), accent: true }
+        Self { label: label.into(), accent: true, leading_icon: None, trailing_chevron: None }
+    }
+    /// A chip with a leading icon (and optionally a trailing chevron via
+    /// [`Chip::trailing_chevron`]).
+    pub fn with_icon(label: impl Into<String>, leading_icon: Markup) -> Self {
+        Self {
+            label: label.into(),
+            accent: false,
+            leading_icon: Some(leading_icon),
+            trailing_chevron: None,
+        }
     }
 }
 
@@ -99,8 +115,19 @@ pub struct Props {
     /// Controls live inside the composer's form, so they submit with the
     /// message and work with JavaScript disabled. Rendered after `chips`.
     pub control_chips: Vec<Markup>,
+    /// Trailing action slot — icon actions (retry, attach, …) rendered in
+    /// the actions row between the spacer and the primary action.
+    pub trailing: Vec<Markup>,
     /// Show the voice-capture button before the primary action.
     pub show_voice: bool,
+    /// Render the send button flat and chromeless: a transparent field with
+    /// no border, the hairline ring carried by shadow alone (a dock sitting
+    /// on a raised panel surface that brings its own ground).
+    pub flat: bool,
+    /// Icon-only send button — a 26px circle; the label stays in the DOM,
+    /// visually hidden (`.mui-sr-only`), so screen readers keep it. Pair
+    /// with a visible glyph drawn by the consumer's CSS or an icon slot.
+    pub icon_only_send: bool,
     /// Optional secondary action label — renders a hollow-destructive button
     /// (the `Interrupt` affordance) before the primary. Only meaningful while
     /// executing.
@@ -130,7 +157,10 @@ impl Default for Props {
             value: String::new(),
             chips: Vec::new(),
             control_chips: Vec::new(),
+            trailing: Vec::new(),
             show_voice: false,
+            flat: false,
+            icon_only_send: false,
             secondary_label: None,
             secondary_action: None,
             primary_label: "Send".into(),
@@ -146,12 +176,26 @@ fn chip_markup(chip: &Chip) -> Markup {
     } else {
         "mui-composer__chip"
     };
-    html! { span class=(class) { (chip.label) } }
+    html! {
+        span class=(class) {
+            @if let Some(icon) = chip.leading_icon.as_ref() {
+                (icon)
+            }
+            (chip.label)
+            @if let Some(chevron) = chip.trailing_chevron.as_ref() {
+                (chevron)
+            }
+        }
+    }
 }
 
 /// Render the composer for the given state.
 pub fn render(props: Props) -> Markup {
-    let class = format!("mui-composer {}", props.state.class());
+    let class = format!(
+        "mui-composer {}{}",
+        props.state.class(),
+        if props.flat { " mui-composer--flat" } else { "" }
+    );
     // The secondary form's id must be stable per composer instance. One
     // composer per pane is the design's contract, so a fixed id suffices;
     // a consumer rendering two composers on one page would need to extend
@@ -233,10 +277,19 @@ pub fn render(props: Props) -> Markup {
                                 }
                             }
                         }
-                        button type="submit" class="mui-composer__send" {
-                            (props.primary_label)
-                            @if let Some(kbd) = props.primary_kbd.as_ref() {
-                                span class="mui-composer__kbd" { (kbd) }
+                        @for action in &props.trailing {
+                            (action)
+                        }
+                        @if props.icon_only_send {
+                            button type="submit" class="mui-composer__send mui-composer__send--icon" {
+                                span class="mui-sr-only" { (props.primary_label) }
+                            }
+                        } @else {
+                            button type="submit" class="mui-composer__send" {
+                                (props.primary_label)
+                                @if let Some(kbd) = props.primary_kbd.as_ref() {
+                                    span class="mui-composer__kbd" { (kbd) }
+                                }
                             }
                         }
                     }

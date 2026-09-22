@@ -26,12 +26,14 @@ html! {
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `keys` | `Vec<String>` | `vec![]` | Sequence of key labels (e.g., ["Ctrl", "S"] or ["⌘", "K"]). |
+| `variant` | `Variant` | `Variant::Default` | `Default` is the keycap (2px bottom edge + shadow). `Code` is the inline code chip: a 24px bordered pill in the mono face that sits inline in a text line — selectable, no keycap chrome. |
 
 ## Rendering
 
 - Each key renders as a `<kbd>` element.
-- Keys are separated by `+` (span.mui-kbd-separator).
-- Container wraps in `div.mui-kbd-container` for flexbox layout.
+- Keys are separated by `+` (span.mui-kbd-separator) in the keycap variant.
+- The keycap group wraps in `span.mui-kbd-container` for flexbox layout (a span, so chips can live inside paragraphs without the browser closing the `<p>`).
+- The `Code` variant renders the chip(s) bare — inline content, no wrapper — so a chip inside a sentence does not perturb the line's height.
 
 ## Accessibility
 

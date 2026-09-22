@@ -40,7 +40,7 @@ html! {
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | items | Vec<BreadcrumbItem> | `[]` | Array of breadcrumb items; last item's href should be None (represents current page). |
-| separator | Option<String> | `None` | Custom separator character (default "/" when None). |
+| separator | Option<&str> | `None` | Separator between items. `None` renders NO separator at all — the list gap alone separates the trail (a trail with no visible divider). Pin the default with `Some("/")`. |
 
 ## BreadcrumbItem Struct
 

@@ -2,6 +2,48 @@
 
 use maud::{html, Markup};
 
+/// Explicit text sizes a heading can be pinned to (`heading`'s `size`
+/// override).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum TextSize {
+    /// The h1 step (`--mui-text-h1-*`).
+    #[default]
+    H1,
+    /// The h2 step (`--mui-text-h2-*`).
+    H2,
+    /// The h3 step (`--mui-text-h3-*`).
+    H3,
+    /// The "issue title" step between h3 and h2 — 20px/1.33 at −0.012em
+    /// (`--mui-text-title-*`, measured off linear.app).
+    Title20,
+}
+
+impl TextSize {
+    fn class(self) -> &'static str {
+        match self {
+            TextSize::H1 => "mui-h1",
+            TextSize::H2 => "mui-h2",
+            TextSize::H3 => "mui-h3",
+            TextSize::Title20 => "mui-title-20",
+        }
+    }
+}
+
+/// A heading with an explicit level and an optional size override (the tag
+/// keeps the document outline; the size does not have to follow the level).
+pub fn heading(level: u8, text: &str, size: Option<TextSize>) -> Markup {
+    let size_class = size.unwrap_or_default().class();
+    let class = format!("mui-heading-size {size_class}");
+    match level.clamp(1, 6) {
+        1 => html! { h1 class=(class) { (text) } },
+        2 => html! { h2 class=(class) { (text) } },
+        3 => html! { h3 class=(class) { (text) } },
+        4 => html! { h4 class=(class) { (text) } },
+        5 => html! { h5 class=(class) { (text) } },
+        _ => html! { h6 class=(class) { (text) } },
+    }
+}
+
 /// Display text for a page's main heading; 2.75rem with its own leading/tracking.
 pub fn display(text: &str) -> Markup {
     html! { h1 class="mui-display" { (text) } }

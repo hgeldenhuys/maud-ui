@@ -1,6 +1,10 @@
 //! Card component — container with optional header, body, and footer.
 use maud::{html, Markup};
 
+// Re-exported for callers constructing Props (`card::Space::Md`).
+pub use crate::primitives::stack::Space;
+pub use crate::tokens::Radius;
+
 /// Card size variant.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum Size {
@@ -37,6 +41,28 @@ pub struct Props {
     /// Optional top-right header slot (shadcn `CardAction` equivalent).
     /// When `Some`, the header becomes a 2-col grid: `(title/description) | (action)`.
     pub action: Option<Markup>,
+    /// Body padding override. `None` keeps the default section padding;
+    /// `Some(Space::None)` is the explicit `padding: 0` — the body becomes a
+    /// bare column and the children own their spacing. When [`Props::bare`]
+    /// is set, the padding applies to the card root instead.
+    pub padding: Option<Space>,
+    /// Body stack gap override (the `mui-stack` gap between children).
+    pub gap: Option<Space>,
+    /// Corner radius override. `None` keeps the token corner
+    /// (`--mui-radius-lg`).
+    pub radius: Option<Radius>,
+    /// Bare render: emit the children directly into the card without the
+    /// `__body` wrapper (which carries its own padding and stack gap). Use
+    /// for composed surfaces — a comment thread, a PR summary — that bring
+    /// their own layout.
+    pub bare: bool,
+    /// Optional overlay slot — rendered absolutely at the card's top-right
+    /// corner, above the body content (a floating status chip).
+    pub overlay: Option<Markup>,
+    /// Extra class names appended to the card's class list — the escape
+    /// hatch for per-instance overrides that a closed enum cannot express.
+    /// Gives your own CSS a hook on this one card.
+    pub class: Option<String>,
 }
 
 impl Default for Props {
@@ -48,6 +74,12 @@ impl Default for Props {
             footer: None,
             size: Size::default(),
             action: None,
+            padding: None,
+            gap: None,
+            radius: None,
+            bare: false,
+            overlay: None,
+            class: None,
         }
     }
 }
@@ -55,14 +87,39 @@ impl Default for Props {
 /// Render a card with the given properties.
 pub fn render(props: Props) -> Markup {
     let size_class = props.size.as_class();
-    let card_class = if size_class.is_empty() {
-        "mui-card".to_string()
-    } else {
-        format!("mui-card {size_class}")
+    let mut classes = vec!["mui-card".to_string()];
+    if !size_class.is_empty() {
+        classes.push(size_class.to_string());
+    }
+    if let Some(extra) = &props.class {
+        classes.push(extra.clone());
+    }
+    let card_class = classes.join(" ");
+
+    let root_style = match (&props.radius, props.bare.then_some(props.padding).flatten()) {
+        (Some(radius), Some(padding)) => {
+            Some(format!("border-radius: {}; padding: {};", radius.value(), padding.as_length()))
+        }
+        (Some(radius), None) => Some(format!("border-radius: {};", radius.value())),
+        (None, Some(padding)) => Some(format!("padding: {};", padding.as_length())),
+        (None, None) => None,
     };
+    let body_style = if props.bare {
+        None
+    } else {
+        match (props.padding, props.gap) {
+            (Some(padding), Some(gap)) => {
+                Some(format!("padding: {}; gap: {};", padding.as_length(), gap.as_length()))
+            }
+            (Some(padding), None) => Some(format!("padding: {};", padding.as_length())),
+            (None, Some(gap)) => Some(format!("gap: {};", gap.as_length())),
+            (None, None) => None,
+        }
+    };
+    let style_attr: Option<String> = root_style;
 
     html! {
-        div class=(card_class) {
+        div class=(card_class) style=[style_attr.as_deref()] {
             @if props.title.is_some() || props.description.is_some() || props.action.is_some() {
                 div class="mui-card__header" {
                     div class="mui-card__header-text" {
@@ -84,12 +141,21 @@ pub fn render(props: Props) -> Markup {
                     }
                 }
             }
-            div class="mui-card__body mui-stack" {
+            @if props.bare {
                 (props.children)
+            } @else {
+                div class="mui-card__body mui-stack" style=[body_style.as_deref()] {
+                    (props.children)
+                }
             }
             @if let Some(footer_markup) = props.footer {
                 div class="mui-card__footer" {
                     (footer_markup)
+                }
+            }
+            @if let Some(overlay) = props.overlay {
+                div class="mui-card__overlay" {
+                    (overlay)
                 }
             }
         }

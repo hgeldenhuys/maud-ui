@@ -147,26 +147,48 @@ fn frame() -> Markup {
 }
 
 // ─── Sidebar ────────────────────────────────────────────────────────────────
+// The nav column itself is the library's sidebar with Surface::Transparent —
+// a grid cell with no card ground and no reserved width (0.19.0).
 
 fn sidebar() -> Markup {
-    maud_ui::primitives::sidebar::render(
-        maud_ui::primitives::sidebar::Props {
+    use maud_ui::primitives::button::{self, Size, Variant};
+    use maud_ui::primitives::sidebar::{self, Surface};
+    sidebar::render(
+        sidebar::Props {
             id: "lr-sidebar".into(),
+            surface: Surface::Transparent,
             children: html! {
-                (maud_ui::primitives::sidebar::header(html! {
+                (sidebar::header(html! {
                     div.lr-nav-head {
-                        button.lr-brand type="button" {
-                            span.lr-logo-tile { (icon(icons::S_LOGO)) }
-                            span.lr-brand-name { "Linear" }
-                            (icon(icons::S_CHEV_DOWN))
-                        }
+                        (button::render(button::Props {
+                            label: "Linear".into(),
+                            variant: Variant::Ghost,
+                            size: Size::Md,
+                            class: Some("lr-brand".into()),
+                            leading_icon: Some(html! { span.lr-logo-tile { (icon(icons::S_LOGO)) } }),
+                            trailing_icon: Some(icon(icons::S_CHEV_DOWN)),
+                            ..Default::default()
+                        }))
                         div.lr-nav-actions {
-                            button.lr-search type="button" aria-label="Search workspace" {
-                                (icon(icons::S_SEARCH))
-                            }
-                            button.lr-newissue type="button" aria-label="New issue" {
-                                (icon(icons::S_NEW_ISSUE))
-                            }
+                            (button::render(button::Props {
+                                label: String::new(),
+                                variant: Variant::Ghost,
+                                size: Size::IconSm28,
+                                class: Some("lr-search".into()),
+                                aria_label: Some("Search workspace".into()),
+                                leading_icon: Some(icon(icons::S_SEARCH)),
+                                ..Default::default()
+                            }))
+                            (button::render(button::Props {
+                                label: String::new(),
+                                variant: Variant::Ghost,
+                                size: Size::IconSm28,
+                                bordered: true,
+                                class: Some("lr-newissue".into()),
+                                aria_label: Some("New issue".into()),
+                                leading_icon: Some(icon(icons::S_NEW_ISSUE)),
+                                ..Default::default()
+                            }))
                         }
                     }
                 }))
@@ -197,22 +219,16 @@ fn sidebar() -> Markup {
     )
 }
 
-/// GAP: sidebar menu_button has no active/current variant — the active row is
-/// emitted as the same markup by hand so it can carry `.lr-active`.
 fn nav_row(icon_name: &str, label: &str, active: bool) -> Markup {
-    if active {
-        html! {
-            button.mui-sidebar__menu-button.lr-nav-row.lr-active type="button" aria-current="page" {
-                span.mui-sidebar__menu-icon { (icon(icon_name)) }
-                span { (label) }
-            }
-        }
-    } else {
-        maud_ui::primitives::sidebar::menu_button(html! {
+    use maud_ui::primitives::sidebar::{menu_button_props, MenuButtonProps};
+    menu_button_props(MenuButtonProps {
+        children: html! {
             span.mui-sidebar__menu-icon { (icon(icon_name)) }
             span { (label) }
-        })
-    }
+        },
+        current: active,
+        ..Default::default()
+    })
 }
 
 fn nav_group(rows: &[(&str, &str, bool)]) -> Markup {
@@ -224,10 +240,11 @@ fn nav_group(rows: &[(&str, &str, bool)]) -> Markup {
 }
 
 fn nav_label(label: &str) -> Markup {
-    maud_ui::primitives::sidebar::group_label(html! {
-        span { (label) }
-        (icon(icons::S_CHEV_RIGHT))
-    })
+    use maud_ui::primitives::sidebar::group_label_collapsible;
+    group_label_collapsible(
+        html! { span { (label) } },
+        Some(icon(icons::S_CHEV_RIGHT)),
+    )
 }
 
 // ─── Content pane ───────────────────────────────────────────────────────────
@@ -253,49 +270,45 @@ fn content() -> Markup {
 }
 
 fn header_bar() -> Markup {
+    use maud_ui::primitives::breadcrumb::{self, BreadcrumbItem};
+    use maud_ui::primitives::button::{self, Size, Variant};
     html! {
         header.lr-header1 {
             div.lr-header1-left {
                 div.lr-crumb {
                     (icon(icons::S_ISSUE_RING))
-                    (maud_ui::primitives::breadcrumb::render(
-                        maud_ui::primitives::breadcrumb::Props {
-                            items: vec![
-                                maud_ui::primitives::breadcrumb::BreadcrumbItem {
-                                    label: "DRV-8852".into(),
-                                    href: Some("#".into()),
-                                },
-                                maud_ui::primitives::breadcrumb::BreadcrumbItem {
-                                    label: "Faster app launch".into(),
-                                    href: None,
-                                },
-                            ],
-                            // GAP: breadcrumb separator is a required string; the
-                            // Linear trail has none — empty separator + list gap 6px.
-                            separator: Some(String::new()),
-                        }
-                    ))
+                    (breadcrumb::render(breadcrumb::Props {
+                        items: vec![
+                            BreadcrumbItem {
+                                label: "DRV-8852".into(),
+                                href: Some("#".into()),
+                            },
+                            BreadcrumbItem {
+                                label: "Faster app launch".into(),
+                                href: None,
+                            },
+                        ],
+                        // 0.19.0: separator None renders no separator at all —
+                        // the list gap alone separates the trail.
+                        separator: None,
+                    }))
                 }
-                (maud_ui::primitives::button::render(
-                    maud_ui::primitives::button::Props {
-                        label: String::new(),
-                        variant: maud_ui::primitives::button::Variant::Ghost,
-                        size: maud_ui::primitives::button::Size::Icon,
-                        aria_label: Some("Remove from favorites".into()),
-                        leading_icon: Some(icon(icons::S_STAR)),
-                        ..Default::default()
-                    }
-                ))
-                (maud_ui::primitives::button::render(
-                    maud_ui::primitives::button::Props {
-                        label: String::new(),
-                        variant: maud_ui::primitives::button::Variant::Ghost,
-                        size: maud_ui::primitives::button::Size::Icon,
-                        aria_label: Some("Issue options".into()),
-                        leading_icon: Some(icon(icons::S_DOTS_H)),
-                        ..Default::default()
-                    }
-                ))
+                (button::render(button::Props {
+                    label: String::new(),
+                    variant: Variant::Ghost,
+                    size: Size::IconSm28,
+                    aria_label: Some("Remove from favorites".into()),
+                    leading_icon: Some(icon(icons::S_STAR)),
+                    ..Default::default()
+                }))
+                (button::render(button::Props {
+                    label: String::new(),
+                    variant: Variant::Ghost,
+                    size: Size::IconSm28,
+                    aria_label: Some("Issue options".into()),
+                    leading_icon: Some(icon(icons::S_DOTS_H)),
+                    ..Default::default()
+                }))
             }
             div.lr-header1-right {
                 span.lr-count {
@@ -303,26 +316,22 @@ fn header_bar() -> Markup {
                     "/ 84"
                 }
                 div.lr-pager {
-                    (maud_ui::primitives::button::render(
-                        maud_ui::primitives::button::Props {
-                            label: String::new(),
-                            variant: maud_ui::primitives::button::Variant::Ghost,
-                            size: maud_ui::primitives::button::Size::Icon,
-                            aria_label: Some("Previous issue".into()),
-                            leading_icon: Some(icon(icons::S_ARROW_UP)),
-                            ..Default::default()
-                        }
-                    ))
-                    (maud_ui::primitives::button::render(
-                        maud_ui::primitives::button::Props {
-                            label: String::new(),
-                            variant: maud_ui::primitives::button::Variant::Ghost,
-                            size: maud_ui::primitives::button::Size::Icon,
-                            aria_label: Some("Next issue".into()),
-                            leading_icon: Some(icon(icons::S_ARROW_DOWN)),
-                            ..Default::default()
-                        }
-                    ))
+                    (button::render(button::Props {
+                        label: String::new(),
+                        variant: Variant::Ghost,
+                        size: Size::IconSm28,
+                        aria_label: Some("Previous issue".into()),
+                        leading_icon: Some(icon(icons::S_ARROW_UP)),
+                        ..Default::default()
+                    }))
+                    (button::render(button::Props {
+                        label: String::new(),
+                        variant: Variant::Ghost,
+                        size: Size::IconSm28,
+                        aria_label: Some("Next issue".into()),
+                        leading_icon: Some(icon(icons::S_ARROW_DOWN)),
+                        ..Default::default()
+                    }))
                 }
             }
         }
@@ -330,17 +339,16 @@ fn header_bar() -> Markup {
 }
 
 fn action_bar() -> Markup {
+    use maud_ui::primitives::button::{self, Size, Variant};
     let ring_btn = |svg: &str, aria: &str| {
-        maud_ui::primitives::button::render(
-            maud_ui::primitives::button::Props {
-                label: String::new(),
-                variant: maud_ui::primitives::button::Variant::Ghost,
-                size: maud_ui::primitives::button::Size::Icon,
-                aria_label: Some(aria.into()),
-                leading_icon: Some(icon(svg)),
-                ..Default::default()
-            }
-        )
+        button::render(button::Props {
+            label: String::new(),
+            variant: Variant::Translucent,
+            size: Size::IconSm28,
+            aria_label: Some(aria.into()),
+            leading_icon: Some(icon(svg)),
+            ..Default::default()
+        })
     };
     html! {
         div.lr-header2 {
@@ -363,12 +371,17 @@ fn action_bar() -> Markup {
 }
 
 fn article() -> Markup {
+    use maud_ui::primitives::kbd::{self, Variant as KbdVariant};
+    use maud_ui::primitives::typography::{self, TextSize};
     html! {
         article.lr-article {
-            h3.lr-title { "Faster app launch" }
+            // 0.19.0: the "issue title" size step (TextSize::Title20) — the
+            // tag keeps the document outline, the size no longer follows it.
+            (typography::heading(3, "Faster app launch", Some(TextSize::Title20)))
             p.lr-desc {
                 "Render UI before "
-                code.lr-code { "vehicle_state" }
+                // 0.19.0: kbd Variant::Code — the 24px bordered mono pill.
+                (kbd::render(kbd::Props { keys: vec!["vehicle_state".into()], variant: KbdVariant::Code }))
                 " sync when minimum required state is present, instead of blocking on full refresh during iOS startup."
             }
             h4.lr-activity-h { "Activity" }
@@ -408,7 +421,7 @@ fn activity_row_avatar(src: &str, meta: Markup, when: &str) -> Markup {
     html! {
         div.lr-arow {
             div.lr-avcell {
-                (avatar(src, "karri"))
+                (avatar(src, "karri", maud_ui::primitives::avatar::Size::Xs14))
             }
             div.lr-meta {
                 span.lr-meta-text { (meta) }
@@ -432,22 +445,28 @@ fn activity_row_icon(svg: &str, meta: Markup, when: &str) -> Markup {
     }
 }
 
-fn avatar(src: &str, alt: &str) -> Markup {
+fn avatar(src: &str, alt: &str, size: maud_ui::primitives::avatar::Size) -> Markup {
     maud_ui::primitives::avatar::render(maud_ui::primitives::avatar::Props {
         src: Some(src.into()),
         alt: alt.into(),
         fallback: alt.chars().next().unwrap_or('?').to_string(),
-        size: maud_ui::primitives::avatar::Size::Sm,
+        size,
+        ..Default::default()
     })
 }
 
 fn comment_card_1() -> Markup {
+    use maud_ui::primitives::card::Space;
+    // 0.19.0: padding None — the body keeps its stack rhythm but owns the
+    // layout (the -16px gutter breakout and the 12/16/16 padding stay the
+    // demo frame's own, fitted to the dump).
     maud_ui::primitives::card::render(maud_ui::primitives::card::Props {
+        padding: Some(Space::None),
         children: html! {
             div.lr-comment {
                 div.lr-comment-head {
                     div.lr-avcell {
-                        (avatar("/img/avatar-karri.png", "karri"))
+                        (avatar("/img/avatar-karri.png", "karri", maud_ui::primitives::avatar::Size::Xs14))
                     }
                     div.lr-name-row {
                         span.lr-name { "karri" }
@@ -461,7 +480,7 @@ fn comment_card_1() -> Markup {
             div.lr-comment {
                 div.lr-comment-head {
                     div.lr-avcell {
-                        (avatar("/img/avatar-jori.png", "jori"))
+                        (avatar("/img/avatar-jori.png", "jori", maud_ui::primitives::avatar::Size::Xs14))
                     }
                     div.lr-name-row {
                         span.lr-name { "jori" }
@@ -477,11 +496,16 @@ fn comment_card_1() -> Markup {
 }
 
 fn comment_card_2() -> Markup {
+    use maud_ui::primitives::card::Space;
+    // 0.19.0: padding None (no body padding) + gap Md (12px) — the two body
+    // overrides the replica used to fight for in CSS.
     maud_ui::primitives::card::render(maud_ui::primitives::card::Props {
+        padding: Some(Space::None),
+        gap: Some(Space::Md),
         children: html! {
             div.lr-row-wrap {
                 div.lr-bot-row {
-                    (avatar("/img/avatar-linear.png", "Linear"))
+                    (avatar("/img/avatar-linear.png", "Linear", maud_ui::primitives::avatar::Size::Sm16))
                     div.lr-name-row {
                         span.lr-name { "Linear" }
                         span.lr-connected { "connected by " span.lr-b2 { "Jori" } }
@@ -529,14 +553,14 @@ fn properties() -> Markup {
                 }
                 div.lr-prop-row.lr-prop-assignee {
                     div.lr-avcell {
-                        (avatar("/img/avatar-karri.png", "Karri"))
+                        (avatar("/img/avatar-karri.png", "Karri", maud_ui::primitives::avatar::Size::Xs14))
                     }
                     span.lr-prop-value { "Karri" }
                     (icon(icons::S_TREE_LINE))
                 }
                 div.lr-prop-row.lr-prop-sub {
                     div.lr-avcell {
-                        (avatar("/img/avatar-linear.png", "Linear"))
+                        (avatar("/img/avatar-linear.png", "Linear", maud_ui::primitives::avatar::Size::Xs14))
                     }
                     span.lr-prop-value { "Linear" }
                 }
@@ -548,14 +572,24 @@ fn properties() -> Markup {
             div.lr-prop-group {
                 span.lr-prop-label { "Labels" }
                 div.lr-prop-labels {
-                    button.lr-labelchip type="button" {
-                        span.lr-label-dot {}
-                        "Performance"
-                    }
-                    button.lr-labelchip type="button" {
-                        span.lr-label-dot {}
-                        "iOS"
-                    }
+                    // 0.19.0: Badge carries a colour-dot slot; the pill
+                    // geometry stays the demo frame's own via the class hook.
+                    (maud_ui::primitives::badge::render(
+                        maud_ui::primitives::badge::Props {
+                            label: "Performance".into(),
+                            dot: Some(String::new()),
+                            class: Some("lr-labelchip".into()),
+                            ..Default::default()
+                        }
+                    ))
+                    (maud_ui::primitives::badge::render(
+                        maud_ui::primitives::badge::Props {
+                            label: "iOS".into(),
+                            dot: Some(String::new()),
+                            class: Some("lr-labelchip".into()),
+                            ..Default::default()
+                        }
+                    ))
                 }
             }
             div.lr-prop-group {
@@ -575,19 +609,23 @@ fn properties() -> Markup {
 // ─── Agent panel ────────────────────────────────────────────────────────────
 
 fn agent_panel() -> Markup {
+    use maud_ui::primitives::badge;
+    use maud_ui::primitives::composer;
+    use maud_ui::primitives::message::{self, Layout, Role, Variant as MessageVariant};
     html! {
         div.lr-panel {
             header.lr-panel-head {
                 div.lr-panel-id {
-                    (avatar("/img/logo-linear-agent.png", "Linear"))
+                    (avatar("/img/logo-linear-agent.png", "Linear", maud_ui::primitives::avatar::Size::Sm16))
                     span.lr-panel-name { "Linear" }
-                    (maud_ui::primitives::badge::render(
-                        maud_ui::primitives::badge::Props {
-                            label: "Opus 5".into(),
-                            variant: maud_ui::primitives::badge::Variant::Outline,
-                            ..Default::default()
-                        }
-                    ))
+                    // 0.19.0: the badge token recipe is 18px / 1px 4px / 11px —
+                    // the model chip needs no overrides, only its ink.
+                    (badge::render(badge::Props {
+                        label: "Opus 5".into(),
+                        variant: badge::Variant::Outline,
+                        class: Some("lr-model-chip".into()),
+                        ..Default::default()
+                    }))
                 }
                 div.lr-panel-win {
                     span.lr-win { (icon(icons::S_MINIMIZE)) }
@@ -598,75 +636,79 @@ fn agent_panel() -> Markup {
             div.lr-panel-body {
                 div.lr-panel-scroll {
                     div.lr-panel-feed {
-                        (maud_ui::primitives::message::render(
-                            maud_ui::primitives::message::Props {
-                                role: maud_ui::primitives::message::Role::User,
-                                layout: maud_ui::primitives::message::Layout::Chat,
-                                body: html! {
-                                    div.lr-turn1 {
-                                        div.lr-prompt-row {
-                                            p.lr-prompt { "Fix the dimmed ride rows that never reset and open a PR" }
-                                        }
-                                        div.lr-ctx-row {
-                                            (icon(icons::S_CTX_BRANCH))
-                                            span.lr-ctx-id { "DRV-364" }
-                                            span.lr-ctx-label { "added to context" }
-                                        }
+                        // 0.19.0: Variant::Plain — no tint, no right align, no
+                        // card chrome; the panel brings its own surfaces.
+                        (message::render(message::Props {
+                            role: Role::User,
+                            layout: Layout::Chat,
+                            variant: MessageVariant::Plain,
+                            body: html! {
+                                div.lr-turn1 {
+                                    div.lr-prompt-row {
+                                        p.lr-prompt { "Fix the dimmed ride rows that never reset and open a PR" }
                                     }
-                                },
-                                ..Default::default()
-                            }
-                        ))
-                        (maud_ui::primitives::message::render(
-                            maud_ui::primitives::message::Props {
-                                role: maud_ui::primitives::message::Role::Assistant,
-                                layout: maud_ui::primitives::message::Layout::Chat,
-                                body: html! {
-                                    div.lr-turn2 {
-                                        div.lr-worked-row {
-                                            span { "Worked for 10 sec" }
-                                            span.lr-worked-chev { (icon(icons::S_CHEV_RIGHT_2)) }
-                                        }
-                                        p.lr-answer { "Pushed and opened a draft PR. Removed dimmedIds — isItemDimmed now checks waitingStatusById directly." }
-                                        div.lr-prcard-wrap {
-                                            (pr_card())
-                                        }
+                                    div.lr-ctx-row {
+                                        (icon(icons::S_CTX_BRANCH))
+                                        span.lr-ctx-id { "DRV-364" }
+                                        span.lr-ctx-label { "added to context" }
                                     }
-                                },
-                                ..Default::default()
-                            }
-                        ))
+                                }
+                            },
+                            ..Default::default()
+                        }))
+                        (message::render(message::Props {
+                            role: Role::Assistant,
+                            layout: Layout::Chat,
+                            variant: MessageVariant::Plain,
+                            body: html! {
+                                div.lr-turn2 {
+                                    div.lr-worked-row {
+                                        span { "Worked for 10 sec" }
+                                        span.lr-worked-chev { (icon(icons::S_CHEV_RIGHT_2)) }
+                                    }
+                                    p.lr-answer { "Pushed and opened a draft PR. Removed dimmedIds — isItemDimmed now checks waitingStatusById directly." }
+                                    div.lr-prcard-wrap {
+                                        (pr_card())
+                                    }
+                                }
+                            },
+                            ..Default::default()
+                        }))
                     }
                 }
                 div.lr-composer-area {
-                    (maud_ui::primitives::composer::render(
-                        maud_ui::primitives::composer::Props {
-                            state: maud_ui::primitives::composer::State::Ready,
-                            action: "#".into(),
-                            placeholder: "Reply…".into(),
-                            primary_label: String::new(),
-                            control_chips: vec![
-                                html! {
-                                    span.lr-skills {
-                                        (icon(icons::S_SKILLS))
-                                        "Skills"
-                                        (icon(icons::S_SKILLS_CHEV))
-                                    }
-                                },
-                                html! {
-                                    button.lr-mini type="button" aria-label="Retry" {
-                                        (icon(icons::S_REFRESH))
-                                    }
-                                },
-                                html! {
-                                    button.lr-mini type="button" aria-label="Attach file" {
-                                        (icon(icons::S_ATTACH))
-                                    }
-                                },
-                            ],
-                            ..Default::default()
-                        }
-                    ))
+                    // 0.19.0: flat field (ring box), trailing action slot, and
+                    // the 26px icon-only send circle.
+                    (composer::render(composer::Props {
+                        state: composer::State::Ready,
+                        action: "#".into(),
+                        placeholder: "Reply…".into(),
+                        flat: true,
+                        icon_only_send: true,
+                        primary_label: String::new(),
+                        control_chips: vec![
+                            html! {
+                                span.lr-skills {
+                                    (icon(icons::S_SKILLS))
+                                    "Skills"
+                                    (icon(icons::S_SKILLS_CHEV))
+                                }
+                            },
+                        ],
+                        trailing: vec![
+                            html! {
+                                button.lr-mini type="button" aria-label="Retry" {
+                                    (icon(icons::S_REFRESH))
+                                }
+                            },
+                            html! {
+                                button.lr-mini type="button" aria-label="Attach file" {
+                                    (icon(icons::S_ATTACH))
+                                }
+                            },
+                        ],
+                        ..Default::default()
+                    }))
                 }
             }
         }
@@ -674,7 +716,11 @@ fn agent_panel() -> Markup {
 }
 
 fn pr_card() -> Markup {
+    // 0.19.0: bare render + the overlay slot — the Preview chip is library
+    // furniture now, positioned by the card; the PR card's own geometry
+    // (11px padding, 6px corner, fitted wash) is the panel's, in CSS.
     maud_ui::primitives::card::render(maud_ui::primitives::card::Props {
+        bare: true,
         children: html! {
             div.lr-pr-rows {
                 div.lr-pr-row1 {
@@ -698,11 +744,13 @@ fn pr_card() -> Markup {
                     span { "ride/drv-364-reset-dimmed-rows" }
                 }
             }
+        },
+        overlay: Some(html! {
             button.lr-preview type="button" {
                 (icon(icons::S_PREVIEW))
                 span { "Preview" }
             }
-        },
+        }),
         ..Default::default()
     })
 }

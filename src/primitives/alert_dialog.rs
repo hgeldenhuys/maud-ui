@@ -95,6 +95,7 @@ fn variant_class(variant: ButtonVariant) -> &'static str {
         ButtonVariant::Secondary => "mui-btn--secondary",
         ButtonVariant::Outline => "mui-btn--outline",
         ButtonVariant::Ghost => "mui-btn--ghost",
+        ButtonVariant::Translucent => "mui-btn--translucent",
         ButtonVariant::Danger => "mui-btn--danger",
         ButtonVariant::Link => "mui-btn--link",
     }

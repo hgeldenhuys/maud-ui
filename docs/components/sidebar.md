@@ -67,6 +67,7 @@ html! {
 | variant | SidebarVariant | `Sidebar` | Visual variant: Sidebar, Floating, or Inset. |
 | collapsible | Collapsible | `Offcanvas` | How the sidebar collapses: Offcanvas, Icon, or None. |
 | default_open | bool | `true` | Initial state (SSR); client-side state persisted in JS. |
+| surface | Surface | `Card` | What ground the sidebar sits on: `Card` paints the card surface and reserves the 15rem column; `Transparent` is a bare cell — no background, no reserved width, its box comes from the parent grid/flex layout (demo-frame and canvas layouts). |
 | children | Markup | `html! {}` | Sidebar content (header, content, footer, etc.). |
 
 ## Enums
@@ -85,6 +86,13 @@ html! {
 | Sidebar | `sidebar` | Full-height sidebar (default). |
 | Floating | `floating` | Floating sidebar with shadow. |
 | Inset | `inset` | Inset variant (reserved space). |
+
+### Surface
+
+| Variant | Data Attr | Behavior |
+|---------|-----------|----------|
+| Card | `card` | Card ground, reserved width (default). |
+| Transparent | `transparent` | No card ground, no reserved width — a grid/flex cell. |
 
 ### Collapsible
 
@@ -113,6 +121,7 @@ html! {
 |--------|---------|---------|
 | `group(Markup)` | Markup | Labeled cluster container. |
 | `group_label(Markup)` | Markup | Small-caps heading for a group. |
+| `group_label_collapsible(Markup, Option<Markup>)` | Markup | The 24px flex-row group label with a chevron slot (Linear's group header) — not the small-caps heading. The second argument is the trailing glyph markup; `None` renders the row with no chevron content. |
 | `group_action(Markup)` | Markup | Button anchored to group header (e.g., add icon). |
 | `group_content(Markup)` | Markup | Wrapper for the menu inside a group. |
 
@@ -123,11 +132,19 @@ html! {
 | `menu(Markup)` | Markup | `<ul>` wrapper for menu items. |
 | `menu_item(Markup)` | Markup | `<li>` wrapper for a single menu row. |
 | `menu_button(Markup)` | Markup | Interactive button row (label + icon markup). |
+| `menu_button_props(MenuButtonProps)` | Markup | The interactive row from props: `children`, `current: bool` (marks the row with `aria-current="page"`), `current_variant: CurrentVariant`, and `class: Option<String>`. |
 | `menu_action(Markup)` | Markup | Trailing action button on a menu item (kebab). |
 | `menu_sub(Markup)` | Markup | Nested `<ul>` indented under parent. |
 | `menu_sub_item(Markup)` | Markup | `<li>` row inside a sub-menu. |
 | `menu_badge(Markup)` | Markup | Small badge/count pill attached to a menu item. |
 | `menu_skeleton()` | Markup | Loading placeholder for a menu row. |
+
+### Current-row variants (`CurrentVariant`)
+
+| Variant | Look |
+|---------|------|
+| `Default` | The Linear recipe: a 4% ground (`--mui-nav-current-bg`), ink and weight unchanged. |
+| `Accent` | The legacy library look: accent-soft ground, accent ink, heavier weight, inset accent bar. |
 
 ### Control Helpers
 

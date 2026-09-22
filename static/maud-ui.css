@@ -40,7 +40,7 @@
     monospace;
   --mui-radius-sm: 0.25rem;
   --mui-radius-md: 0.375rem;
-  --mui-radius-lg: 0.75rem;
+  --mui-radius-lg: 0.5625rem;
   --mui-radius-full: 9999px;
   --mui-space-2xs: 0.125rem;
   --mui-space-xs: 0.25rem;
@@ -76,6 +76,9 @@
   --mui-sidebar-w: 15rem;
   --mui-sidebar-rail-w: 4rem;
   --mui-nav-row-height: 1.75rem;
+  --mui-nav-icon-size: 0.875rem;
+  --mui-nav-row-radius: 0.5rem;
+  --mui-nav-current-bg: rgba(255, 255, 255, 0.04);
   --mui-header-height: 3.5rem;
   --mui-shell-masthead-height: 4rem;
   --mui-shell-header-height: 3.5rem;
@@ -86,7 +89,7 @@
   --mui-shell-inset: 1rem;
   --mui-shell-control-height: 2.25rem;
   --mui-shell-row-height: 2rem;
-  --mui-shell-nav-row-height: 2.25rem;
+  --mui-shell-nav-row-height: 1.75rem;
   --mui-shell-text-body-size: 0.9375rem;
   --mui-shell-text-small-size: 0.875rem;
   --mui-shell-text-caption-size: 0.75rem;
@@ -103,7 +106,7 @@
   --mui-status-chip-label-size: 0.8125rem;
   --mui-status-chip-count-height: 1.125rem;
   --mui-status-chip-count-size: 0.6875rem;
-  --mui-badge-height: 1.375rem;
+  --mui-badge-height: 1.125rem;
   --mui-touch-target: 2.75rem;
   --mui-icon-size: 1rem;
   --mui-text-input-touch-size: 1rem;
@@ -124,6 +127,9 @@
   --mui-text-h3-size: 1.125rem;
   --mui-text-h3-leading: 1.35;
   --mui-text-h3-tracking: -0.012em;
+  --mui-text-title-size: 1.25rem;
+  --mui-text-title-leading: 1.33;
+  --mui-text-title-tracking: -0.012em;
   --mui-text-body-size: 0.9375rem;
   --mui-text-body-leading: 1.6;
   --mui-text-body-tracking: -0.011em;
@@ -150,6 +156,8 @@
   --mui-border-strong: rgba(255, 255, 255, 0.14);
   --mui-border-control: rgba(255, 255, 255, 0.22);
   --mui-border-focus: var(--mui-accent-text);
+  --mui-border-divider: #2e2e32;
+  --mui-nav-current-bg: rgba(255, 255, 255, 0.04);
   --mui-text: #f7f8f8;
   --mui-text-secondary: #d0d6e0;
   --mui-text-muted: #8a8f98;
@@ -212,6 +220,8 @@
   --mui-border-strong: rgba(0, 0, 0, 0.12);
   --mui-border-control: rgba(0, 0, 0, 0.24);
   --mui-border-focus: var(--mui-accent-text);
+  --mui-border-divider: rgba(0, 0, 0, 0.12);
+  --mui-nav-current-bg: rgba(0, 0, 0, 0.04);
   --mui-text: #1c1c1f;
   --mui-text-secondary: #3c3f44;
   --mui-text-muted: #6b6f76;
@@ -282,7 +292,7 @@
   --mui-text-primary: var(--mui-text);
   --mui-radius-sm: calc(var(--mui-brand-radius) * 0.5);
   --mui-radius-md: var(--mui-brand-radius);
-  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 4 / 3), 12px);
+  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 1.5), 12px);
   --mui-radius-control: min(var(--mui-radius-sm), 8px);
   --mui-radius-tight: min(var(--mui-radius-sm), 4px);
   --mui-control-height: calc(1.75rem + 0.25rem * var(--mui-density-level));
@@ -643,6 +653,16 @@ dialog.mui-alert-dialog::backdrop {
   box-sizing: content-box;
   z-index: 1;
 }
+.mui-avatar--xs-14 {
+  width: 0.875rem;
+  height: 0.875rem;
+  font-size: 0.5rem;
+}
+.mui-avatar--sm-16 {
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.5rem;
+}
 .mui-avatar--sm {
   width: 1.75rem;
   height: 1.75rem;
@@ -703,7 +723,7 @@ dialog.mui-alert-dialog::backdrop {
   justify-content: center;
   box-sizing: border-box;
   height: var(--mui-badge-height);
-  padding: 0 var(--mui-space-sm);
+  padding: 1px 4px;
   font-size: var(--mui-badge-font-size);
   font-weight: var(--mui-weight-medium);
   line-height: var(--mui-leading-tight);
@@ -711,6 +731,11 @@ dialog.mui-alert-dialog::backdrop {
   border: 1px solid transparent;
   border-radius: var(--mui-radius-tight);
   transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+.mui-badge--sm-18 {
+  height: 1.125rem;
+  padding: 1px 4px;
+  font-size: var(--mui-badge-font-size);
 }
 .mui-badge--default {
   background-color: var(--mui-accent);
@@ -779,6 +804,15 @@ dialog.mui-alert-dialog::backdrop {
 .mui-badge[data-icon=inline-start] {
   gap: var(--mui-space-xs);
 }
+.mui-badge__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--mui-radius-full);
+  flex: none;
+}
+.mui-badge--dot.mui-badge[data-icon=inline-start] {
+  gap: 2px;
+}
 .mui-badge--mono {
   font-family: var(--mui-font-mono);
   letter-spacing: var(--mui-tracking-heading);
@@ -825,11 +859,13 @@ dialog.mui-alert-dialog::backdrop {
 .mui-breadcrumb__item {
   display: inline-flex;
   align-items: center;
-  font-size: var(--mui-text-small-size);
-  line-height: var(--mui-leading-small);
+  font-size: 0.75rem;
+  line-height: 0.875rem;
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text-secondary);
 }
 .mui-breadcrumb__item a {
-  color: var(--mui-text-muted);
+  color: var(--mui-text-secondary);
   text-decoration: none;
   text-underline-offset: 4px;
   transition: color var(--mui-transition);
@@ -843,8 +879,8 @@ dialog.mui-alert-dialog::backdrop {
   outline-offset: 2px;
 }
 .mui-breadcrumb__item--current {
-  color: var(--mui-text);
-  font-weight: var(--mui-weight-normal);
+  color: var(--mui-text-secondary);
+  font-weight: var(--mui-weight-medium);
 }
 .mui-breadcrumb__separator {
   display: inline-flex;
@@ -995,6 +1031,12 @@ dialog.mui-alert-dialog::backdrop {
   padding: 0;
   flex-shrink: 0;
 }
+.mui-btn--icon-28 {
+  height: 1.75rem;
+  width: 1.75rem;
+  padding: 0;
+  flex-shrink: 0;
+}
 .mui-btn--icon-lg {
   height: 2.5rem;
   width: 2.5rem;
@@ -1045,6 +1087,24 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-btn--ghost:hover:not([aria-disabled=true]) {
   background: var(--mui-bg-input);
+}
+.mui-btn--ghost-bordered {
+  background: transparent;
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+.mui-btn--ghost-bordered:hover:not([aria-disabled=true]) {
+  background: var(--mui-bg-input);
+}
+.mui-btn--translucent {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0;
+  border-radius: var(--mui-radius-full);
+  box-shadow: rgba(255, 255, 255, 0.05) 0 0 0 1px inset;
+  color: var(--mui-text-muted);
+}
+.mui-btn--translucent:hover:not([aria-disabled=true]) {
+  background: rgba(255, 255, 255, 0.08);
 }
 .mui-btn--danger {
   background: var(--mui-danger);
@@ -1107,7 +1167,8 @@ dialog.mui-alert-dialog::backdrop {
 
 /* static/styles/components/card.css */
 .mui-card {
-  background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card);
+  position: relative;
+  background: var(--mui-bg-card);
   border: var(--mui-hairline) solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-ring-hairline);
@@ -1150,6 +1211,12 @@ dialog.mui-alert-dialog::backdrop {
   align-items: center;
   gap: var(--mui-inset-tight);
 }
+.mui-card__overlay {
+  position: absolute;
+  top: var(--mui-space-xs);
+  inset-inline-end: var(--mui-space-xs);
+  z-index: 1;
+}
 .mui-card__body {
   padding: var(--mui-space-xl);
 }
@@ -1163,6 +1230,9 @@ dialog.mui-alert-dialog::backdrop {
 }
 .mui-card__body + .mui-card__footer {
   padding-top: 0;
+}
+.mui-card .mui-separator {
+  background: var(--mui-border-divider);
 }
 .mui-card--sm .mui-card__header {
   padding: var(--mui-space-md) var(--mui-space-md) 0;
@@ -2243,6 +2313,7 @@ dialog.mui-command::backdrop {
   height: var(--mui-control-height);
   display: inline-flex;
   align-items: center;
+  gap: var(--mui-space-xs);
   padding: 0 var(--mui-space-sm);
   border-radius: var(--mui-radius-control);
   background-color: var(--mui-bg-input);
@@ -2251,6 +2322,9 @@ dialog.mui-command::backdrop {
   line-height: var(--mui-leading-tight);
   color: var(--mui-text-muted);
   white-space: nowrap;
+}
+.mui-composer__chip svg {
+  flex: none;
 }
 .mui-composer__chip--accent {
   background-color: var(--mui-accent-soft);
@@ -2330,6 +2404,15 @@ dialog.mui-command::backdrop {
 .mui-composer__send:hover {
   background-color: var(--mui-accent-hover);
 }
+.mui-composer__send--icon {
+  position: relative;
+  width: 1.625rem;
+  height: 1.625rem;
+  min-height: 0;
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--mui-radius-full);
+}
 .mui-composer__kbd {
   font-family: var(--mui-font-mono);
   font-size: var(--mui-text-caption-size);
@@ -2365,6 +2448,15 @@ dialog.mui-command::backdrop {
 }
 .mui-composer--growing .mui-composer__field {
   border-color: var(--mui-border-focus);
+  box-shadow: var(--mui-ring);
+}
+.mui-composer--flat .mui-composer__field {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: var(--mui-ring-hairline);
+}
+.mui-composer--flat.mui-composer--growing .mui-composer__field {
+  border-color: transparent;
   box-shadow: var(--mui-ring);
 }
 .mui-composer--asleep .mui-composer__sleepbar {
@@ -4307,6 +4399,22 @@ dialog.mui-alert-dialog .mui-field {
   margin: 0 var(--mui-space-2xs);
   user-select: none;
 }
+.mui-kbd--code {
+  height: 1.5rem;
+  margin-block: -0.1875rem;
+  padding: 0 6px;
+  border: 1px solid var(--mui-border);
+  border-bottom-width: 1px;
+  border-radius: var(--mui-radius-tight);
+  background-color: color-mix(in srgb, var(--mui-text) 5%, transparent);
+  box-shadow: none;
+  color: var(--mui-text-secondary);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-normal);
+  line-height: 20px;
+  user-select: text;
+  pointer-events: auto;
+}
 
 /* static/styles/components/label.css */
 .mui-label {
@@ -4732,6 +4840,20 @@ dialog.mui-alert-dialog .mui-field {
 }
 .mui-message--chat.mui-message--system {
   align-items: center;
+}
+.mui-message--chat.mui-message--plain {
+  align-items: stretch;
+}
+.mui-message--chat.mui-message--plain .mui-message__body-wrap {
+  max-width: none;
+  align-items: stretch;
+}
+.mui-message--chat.mui-message--plain .mui-message__body {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  white-space: normal;
 }
 .mui-message--chat .mui-message__timestamp {
   font-family: var(--mui-font-mono);
@@ -6362,6 +6484,11 @@ dialog.mui-sheet--bottom {
 .mui-sidebar[data-variant=inset] {
   background: var(--mui-bg);
 }
+.mui-sidebar[data-surface=transparent] {
+  background: transparent;
+  flex: 0 0 auto;
+  width: auto;
+}
 .mui-sidebar__header {
   display: flex;
   align-items: center;
@@ -6448,9 +6575,9 @@ dialog.mui-sheet--bottom {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: var(--mui-icon-size);
-  height: var(--mui-icon-size);
-  flex: 0 0 var(--mui-icon-size);
+  width: var(--mui-nav-icon-size);
+  height: var(--mui-nav-icon-size);
+  flex: 0 0 var(--mui-nav-icon-size);
 }
 .mui-sidebar__menu-icon svg {
   width: 100%;
@@ -10479,6 +10606,11 @@ select {
   line-height: var(--mui-text-h3-leading);
   letter-spacing: var(--mui-text-h3-tracking);
 }
+.mui-title-20 {
+  font-size: var(--mui-text-title-size);
+  line-height: var(--mui-text-title-leading);
+  letter-spacing: var(--mui-text-title-tracking);
+}
 .mui-p {
   font-size: var(--mui-text-body-size);
   line-height: var(--mui-text-body-leading);
@@ -10579,11 +10711,12 @@ a.mui-btn:focus,
 .mui-btn--icon,
 .mui-btn--icon-sm,
 .mui-btn--icon-lg,
-.mui-btn--icon-xs {
+.mui-btn--icon-xs,
+.mui-btn--icon-28 {
   padding: 0;
-  min-width: var(--mui-control-height);
-  width: var(--mui-control-height);
-  height: var(--mui-control-height);
+  flex-shrink: 0;
+  min-height: 0;
+  min-width: 0;
 }
 .mui-btn--link {
   padding: 0;
@@ -10623,7 +10756,7 @@ a.mui-btn:focus,
   padding: 0;
   border-radius: var(--mui-radius-lg);
   border: var(--mui-hairline) solid var(--mui-border);
-  background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card);
+  background: var(--mui-bg-card);
   box-shadow: var(--mui-ring-hairline);
 }
 .mui-card__header,
@@ -11201,7 +11334,7 @@ details:not([open]) > :not(summary) {
   width: 100%;
   padding: 0 var(--mui-space-sm);
   border: 0;
-  border-radius: var(--mui-radius-md);
+  border-radius: var(--mui-nav-row-radius);
   background: transparent;
   color: var(--mui-text-secondary);
   font: var(--mui-weight-medium) var(--mui-text-small-size)/var(--mui-leading-tight) var(--mui-font-sans);
@@ -11217,7 +11350,22 @@ details:not([open]) > :not(summary) {
   text-decoration: none;
 }
 .mui-sidebar__menu-button[aria-current],
-.mui-sidebar__menu-button[data-active=true],
+.mui-sidebar__menu-button[data-active=true] {
+  background: var(--mui-nav-current-bg);
+  color: var(--mui-text-secondary);
+  font-weight: var(--mui-weight-medium);
+  box-shadow: none;
+}
+.mui-sidebar__menu-button[aria-current]:hover,
+.mui-sidebar__menu-button[data-active=true]:hover {
+  color: var(--mui-text);
+}
+.mui-sidebar__menu-button--accent[aria-current],
+.mui-sidebar__menu-button--accent[data-active=true] {
+  background: var(--mui-accent-soft);
+  color: var(--mui-accent-text);
+  font-weight: var(--mui-weight-heading);
+}
 .mui-block--shell__nav-item[aria-current] {
   background: var(--mui-accent-soft);
   color: var(--mui-accent-text);
@@ -11225,7 +11373,11 @@ details:not([open]) > :not(summary) {
   box-shadow: none;
 }
 .mui-sidebar__menu-button[aria-current]::before,
-.mui-sidebar__menu-button[data-active=true]::before,
+.mui-sidebar__menu-button[data-active=true]::before {
+  content: none;
+}
+.mui-sidebar__menu-button--accent[aria-current]::before,
+.mui-sidebar__menu-button--accent[data-active=true]::before,
 .mui-block--shell__nav-item[aria-current]::before {
   content: "";
   position: absolute;
@@ -11278,9 +11430,26 @@ summary.mui-block--shell__nav-group-label:hover {
   background: var(--mui-bg-input);
   color: var(--mui-text);
 }
+.mui-sidebar__group-label--collapsible {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+}
+.mui-sidebar__group-label--collapsible .mui-sidebar__group-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
 .mui-breadcrumb__item a,
 .mui-breadcrumb__item a:visited {
-  color: var(--mui-text-muted);
+  color: var(--mui-text-secondary);
   text-decoration: none;
 }
 .mui-breadcrumb__item a:hover {
@@ -12692,6 +12861,30 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
   padding-block: var(--mui-space-xs);
   min-height: var(--mui-control-height);
 }
+.mui-btn--icon,
+.mui-btn--icon-sm,
+.mui-btn--icon-lg,
+.mui-btn--icon-xs,
+.mui-btn--icon-28 {
+  padding-block: 0;
+}
+.mui-btn--icon {
+  min-height: 2rem;
+  height: 2rem;
+}
+.mui-btn--icon-xs,
+.mui-btn--icon-sm {
+  min-height: 1.5rem;
+  height: 1.5rem;
+}
+.mui-btn--icon-28 {
+  min-height: 1.75rem;
+  height: 1.75rem;
+}
+.mui-btn--icon-lg {
+  min-height: 2.5rem;
+  height: 2.5rem;
+}
 .mui-btn--sm {
   min-height: 1.5rem;
   height: 1.5rem;
@@ -13006,10 +13199,8 @@ td.mui-table__td,
   border-radius: var(--mui-radius-lg);
 }
 .mui-sidebar__menu-button,
-.mui-block--shell__nav-item,
-summary.mui-sidebar__group-label,
-summary.mui-block--shell__nav-group-label {
-  border-radius: 0;
+.mui-block--shell__nav-item {
+  border-radius: var(--mui-nav-row-radius);
 }
 .mui-sidebar__menu-button:focus-visible,
 .mui-block--shell__nav-item:focus-visible {

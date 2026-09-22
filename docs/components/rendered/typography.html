@@ -31,6 +31,8 @@ html! {
 <p>Renders <code>&lt;h3 class="mui-h3"&gt;</code>. Tertiary heading (1.25rem, semi-bold).</p>
 <h4>h4(text: &amp;str) -&gt; Markup</h4>
 <p>Renders <code>&lt;h4 class="mui-h4"&gt;</code>. Quaternary heading (1.125rem, semi-bold).</p>
+<h4>heading(level: u8, text: &amp;str, size: Option<TextSize>) -&gt; Markup</h4>
+<p>Renders <code>&lt;hN&gt;</code> at the given outline level with an explicit size step decoupled from the tag — the document outline and the type size can move independently. <code>TextSize::{H1, H2, H3, Title20}</code>; <code>Title20</code> is the "issue title" step between h3 and h2 (20px / 1.33 / −0.012em, <code>--mui-text-title-*</code>).</p>
 <h3>Body Text</h3>
 <h4>p(text: &amp;str) -&gt; Markup</h4>
 <p>Renders <code>&lt;p class="mui-p"&gt;</code>. Standard paragraph text (0.875rem).</p>

@@ -7,6 +7,9 @@ button, input, textarea, select { font-family: inherit; }
 :where(h1), .mui-h1 { font-size: var(--mui-text-h1-size); line-height: var(--mui-text-h1-leading); letter-spacing: var(--mui-text-h1-tracking); }
 :where(h2), .mui-h2 { font-size: var(--mui-text-h2-size); line-height: var(--mui-text-h2-leading); letter-spacing: var(--mui-text-h2-tracking); }
 :where(h3, h4), .mui-h3, .mui-h4 { font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading); letter-spacing: var(--mui-text-h3-tracking); }
+/* The "issue title" step (TextSize::Title20) — between h3 and h2, measured off
+   linear.app: 20px/1.33 at −0.012em. */
+.mui-title-20 { font-size: var(--mui-text-title-size); line-height: var(--mui-text-title-leading); letter-spacing: var(--mui-text-title-tracking); }
 .mui-p { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); }
 .mui-lead { font-size: var(--mui-text-h3-size); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 .mui-eyebrow, .mui-fieldset__legend, .mui-sidebar__group-label, .mui-block--shell__nav-group-label { font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; color: var(--mui-text-muted); }
@@ -33,14 +36,19 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 .mui-btn--row { min-height: var(--mui-row-height); height: var(--mui-row-height); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); padding-block: 0; }
 .mui-btn--lg { min-height: 2.5rem; height: 2.5rem; padding: 0 0.875rem; font-size: var(--mui-text-body-size); }
 .mui-btn--xs { min-height: 1.5rem; padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
-.mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs { padding: 0; min-width: var(--mui-control-height); width: var(--mui-control-height); height: var(--mui-control-height); }
+/* Icon-only buttons take their square geometry from components/button.css per
+   size (32/24/24/28/40px). No min-width/min-height clamp here: a clamp derived
+   from --mui-control-height forced every icon variant — including the 24px
+   ones — out to 32px and could not be overridden without min-width: 0
+   downstream. */
+.mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs, .mui-btn--icon-28 { padding: 0; flex-shrink: 0; min-height: 0; min-width: 0; }
 .mui-btn--link { padding: 0; min-height: 0; }
 .mui-btn--primary { background: var(--mui-accent); border-color: var(--mui-accent); color: var(--mui-accent-fg); }
 .mui-btn--primary:hover:not([aria-disabled="true"]) { background: var(--mui-accent-hover); border-color: var(--mui-accent-hover); color: var(--mui-accent-fg); }
 :where(button, a.mui-btn, [role="button"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
 .mui-input, .mui-textarea, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); padding: var(--mui-space-sm) var(--mui-space-md); }
 .mui-input:hover:not(:disabled), .mui-textarea:hover:not(:disabled), .mui-native-select:hover:not(:disabled) { background: var(--mui-bg-input); }
-.mui-card { padding: 0; border-radius: var(--mui-radius-lg); border: var(--mui-hairline) solid var(--mui-border); background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card); box-shadow: var(--mui-ring-hairline); }
+.mui-card { padding: 0; border-radius: var(--mui-radius-lg); border: var(--mui-hairline) solid var(--mui-border); background: var(--mui-bg-card); box-shadow: var(--mui-ring-hairline); }
 .mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer { padding: var(--mui-space-20) var(--mui-space-xl); }
 .mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
 .mui-card__title { font-size: var(--mui-text-h3-size); font-weight: var(--mui-weight-heading); line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }

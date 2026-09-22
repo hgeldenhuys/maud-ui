@@ -50,12 +50,17 @@
   .mui-composer__actions { flex-wrap: wrap; }
 }
 .mui-composer__spacer { flex: 1 1 auto; }
+/* Trailing action slot (Props::trailing) — icon actions (retry, attach, …)
+   rendered between the spacer and the primary action. The items join the
+   actions row directly, so they inherit its gap and alignment. */
 
-/* Leading mono chips — model, auto-accept, attachments. */
+/* Leading mono chips — model, auto-accept, attachments. A chip may carry a
+   leading icon and/or a trailing chevron (e.g. the "Skills" control). */
 .mui-composer__chip {
   height: var(--mui-control-height);
   display: inline-flex;
   align-items: center;
+  gap: var(--mui-space-xs);
   padding: 0 var(--mui-space-sm);
   border-radius: var(--mui-radius-control);
   background-color: var(--mui-bg-input);
@@ -65,6 +70,7 @@
   color: var(--mui-text-muted);
   white-space: nowrap;
 }
+.mui-composer__chip svg { flex: none; }
 .mui-composer__chip--accent {
   background-color: var(--mui-accent-soft);
   color: var(--mui-accent-text);
@@ -150,6 +156,17 @@
   transition: background-color var(--mui-transition);
 }
 .mui-composer__send:hover { background-color: var(--mui-accent-hover); }
+/* Icon-only send — a 26px circle; the label stays in the DOM, visually
+   hidden (the .mui-sr-only utility), so screen readers keep it. */
+.mui-composer__send--icon {
+  position: relative;
+  width: 1.625rem;
+  height: 1.625rem;
+  min-height: 0;
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--mui-radius-full);
+}
 .mui-composer__kbd {
   font-family: var(--mui-font-mono);
   font-size: var(--mui-text-caption-size);
@@ -191,6 +208,19 @@
 /* Growing — focused: an accent ring on the field. */
 .mui-composer--growing .mui-composer__field {
   border-color: var(--mui-border-focus);
+  box-shadow: var(--mui-ring);
+}
+
+/* Flat (Props::flat) — a ring box: transparent ground, transparent border,
+   the hairline ring carried by shadow alone (a dock sitting on a raised
+   panel surface brings its own ground). Focus still rings via shadow. */
+.mui-composer--flat .mui-composer__field {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: var(--mui-ring-hairline);
+}
+.mui-composer--flat.mui-composer--growing .mui-composer__field {
+  border-color: transparent;
   box-shadow: var(--mui-ring);
 }
 

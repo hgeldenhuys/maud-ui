@@ -30,6 +30,7 @@ html! {
 <tr><td><code>is_live</code></td><td><code>bool</code></td><td><code>false</code></td><td>When true, the avatar pulses to indicate an in-progress streaming response.</td></tr>
 <tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Footer slot — tool chips, action buttons, attachments.</td></tr>
 <tr><td><code>layout</code></td><td><code>Layout</code></td><td><code>Layout::Avatar</code></td><td><code>Avatar</code> is a transcript row; <code>Chat</code> is a conversation: prompt right as a tinted card (≤75% of the column), reply flat and full width, no avatar, timestamp on hover.</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Variant::Default</code></td><td>Chat-layout body treatment. <code>Default</code>: the user's turn is a tinted, right-aligned card with one square corner. <code>Plain</code>: no tint, no right alignment, no card chrome on either side — both turns read as flat column content (an agent-panel feed inside its own panel chrome). Ignored in the avatar layout.</td></tr>
 <tr><td><code>actions</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>The quiet action row under a reply (copy, fork, model, cost). Chat layout; revealed on hover, always visible without hover. Use <code>mui-message__action</code> for buttons/links and <code>mui-message__meta</code> for facts.</td></tr>
 </tbody></table>
 <h2>Variants / Enums</h2>

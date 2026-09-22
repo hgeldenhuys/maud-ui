@@ -57,6 +57,7 @@ html! {
 <tr><td>variant</td><td>SidebarVariant</td><td><code>Sidebar</code></td><td>Visual variant: Sidebar, Floating, or Inset.</td></tr>
 <tr><td>collapsible</td><td>Collapsible</td><td><code>Offcanvas</code></td><td>How the sidebar collapses: Offcanvas, Icon, or None.</td></tr>
 <tr><td>default_open</td><td>bool</td><td><code>true</code></td><td>Initial state (SSR); client-side state persisted in JS.</td></tr>
+<tr><td>surface</td><td>Surface</td><td><code>Card</code></td><td>What ground the sidebar sits on: <code>Card</code> paints the card surface and reserves the 15rem column; <code>Transparent</code> is a bare cell — no background, no reserved width, its box comes from the parent grid/flex layout (demo-frame and canvas layouts).</td></tr>
 <tr><td>children</td><td>Markup</td><td><code>html! {}</code></td><td>Sidebar content (header, content, footer, etc.).</td></tr>
 </tbody></table>
 <h2>Enums</h2>
@@ -70,6 +71,11 @@ html! {
 <tr><td>Sidebar</td><td><code>sidebar</code></td><td>Full-height sidebar (default).</td></tr>
 <tr><td>Floating</td><td><code>floating</code></td><td>Floating sidebar with shadow.</td></tr>
 <tr><td>Inset</td><td><code>inset</code></td><td>Inset variant (reserved space).</td></tr>
+</tbody></table>
+<h3>Surface</h3>
+<table><thead><tr><th>Variant</th><th>Data Attr</th><th>Behavior</th></tr></thead><tbody>
+<tr><td>Card</td><td><code>card</code></td><td>Card ground, reserved width (default).</td></tr>
+<tr><td>Transparent</td><td><code>transparent</code></td><td>No card ground, no reserved width — a grid/flex cell.</td></tr>
 </tbody></table>
 <h3>Collapsible</h3>
 <table><thead><tr><th>Variant</th><th>Data Attr</th><th>Behavior</th></tr></thead><tbody>
@@ -91,6 +97,7 @@ html! {
 <table><thead><tr><th>Helper</th><th>Returns</th><th>Purpose</th></tr></thead><tbody>
 <tr><td><code>group(Markup)</code></td><td>Markup</td><td>Labeled cluster container.</td></tr>
 <tr><td><code>group_label(Markup)</code></td><td>Markup</td><td>Small-caps heading for a group.</td></tr>
+<tr><td><code>group_label_collapsible(Markup, Option&lt;Markup&gt;)</code></td><td>Markup</td><td>The 24px flex-row group label with a chevron slot (Linear's group header) — not the small-caps heading. The second argument is the trailing glyph markup; <code>None</code> renders the row with no chevron content.</td></tr>
 <tr><td><code>group_action(Markup)</code></td><td>Markup</td><td>Button anchored to group header (e.g., add icon).</td></tr>
 <tr><td><code>group_content(Markup)</code></td><td>Markup</td><td>Wrapper for the menu inside a group.</td></tr>
 </tbody></table>
@@ -99,11 +106,17 @@ html! {
 <tr><td><code>menu(Markup)</code></td><td>Markup</td><td><code>&lt;ul&gt;</code> wrapper for menu items.</td></tr>
 <tr><td><code>menu_item(Markup)</code></td><td>Markup</td><td><code>&lt;li&gt;</code> wrapper for a single menu row.</td></tr>
 <tr><td><code>menu_button(Markup)</code></td><td>Markup</td><td>Interactive button row (label + icon markup).</td></tr>
+<tr><td><code>menu_button_props(MenuButtonProps)</code></td><td>Markup</td><td>The interactive row from props: <code>children</code>, <code>current: bool</code> (marks the row with <code>aria-current="page"</code>), <code>current_variant: CurrentVariant</code>, and <code>class: Option&lt;String&gt;</code>.</td></tr>
 <tr><td><code>menu_action(Markup)</code></td><td>Markup</td><td>Trailing action button on a menu item (kebab).</td></tr>
 <tr><td><code>menu_sub(Markup)</code></td><td>Markup</td><td>Nested <code>&lt;ul&gt;</code> indented under parent.</td></tr>
 <tr><td><code>menu_sub_item(Markup)</code></td><td>Markup</td><td><code>&lt;li&gt;</code> row inside a sub-menu.</td></tr>
 <tr><td><code>menu_badge(Markup)</code></td><td>Markup</td><td>Small badge/count pill attached to a menu item.</td></tr>
 <tr><td><code>menu_skeleton()</code></td><td>Markup</td><td>Loading placeholder for a menu row.</td></tr>
+</tbody></table>
+<h3>Current-row variants (<code>CurrentVariant</code>)</h3>
+<table><thead><tr><th>Variant</th><th>Look</th></tr></thead><tbody>
+<tr><td><code>Default</code></td><td>The Linear recipe: a 4% ground (<code>--mui-nav-current-bg</code>), ink and weight unchanged.</td></tr>
+<tr><td><code>Accent</code></td><td>The legacy library look: accent-soft ground, accent ink, heavier weight, inset accent bar.</td></tr>
 </tbody></table>
 <h3>Control Helpers</h3>
 <table><thead><tr><th>Helper</th><th>Returns</th><th>Purpose</th></tr></thead><tbody>

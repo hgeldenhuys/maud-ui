@@ -21,10 +21,13 @@ html! {
 <tr><td>src</td><td>Option<String></td><td><code>None</code></td><td>Image URL; if None, renders fallback initials instead.</td></tr>
 <tr><td>alt</td><td>String</td><td><code>"Avatar"</code></td><td>Accessible label exposed to screen readers; used as aria-label when src is None.</td></tr>
 <tr><td>fallback</td><td>String</td><td><code>"U"</code></td><td>Initials or short text displayed when src is None (automatically uppercased).</td></tr>
-<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Physical size: Sm, Md, or Lg.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Physical size: Xs14, Sm16, Sm, Md, or Lg.</td></tr>
+<tr><td>class</td><td>Option<String></td><td><code>None</code></td><td>Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express.</td></tr>
 </tbody></table>
 <h2>Size Variants</h2>
 <table><thead><tr><th>Size</th><th>Class</th><th>Use Case</th></tr></thead><tbody>
+<tr><td>Xs14</td><td><code>mui-avatar--xs-14</code></td><td>14px — activity and property rows (Linear recipe).</td></tr>
+<tr><td>Sm16</td><td><code>mui-avatar--sm-16</code></td><td>16px — inline rows beside 12px text (Linear recipe).</td></tr>
 <tr><td>Sm</td><td><code>mui-avatar--sm</code></td><td>Compact avatars in lists or sidebars.</td></tr>
 <tr><td>Md</td><td><code>mui-avatar--md</code></td><td>Default avatar size for most contexts.</td></tr>
 <tr><td>Lg</td><td><code>mui-avatar--lg</code></td><td>Large avatars for profiles or detail views.</td></tr>

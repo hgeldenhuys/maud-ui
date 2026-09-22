@@ -34,3 +34,24 @@
   margin: 0 var(--mui-space-2xs);
   user-select: none;
 }
+
+/* Code chip variant (Variant::Code) — Linear's inline code pill: a 24px
+   bordered chip in the mono face that sits inline in a text line. No keycap
+   bottom border or shadow, and selectable, because it is content, not a
+   shortcut hint. */
+.mui-kbd--code {
+  height: 1.5rem;
+  margin-block: -0.1875rem; /* settles the 24px chip into a surrounding text line */
+  padding: 0 6px;
+  border: 1px solid var(--mui-border);
+  border-bottom-width: 1px;
+  border-radius: var(--mui-radius-tight);
+  background-color: color-mix(in srgb, var(--mui-text) 5%, transparent);
+  box-shadow: none;
+  color: var(--mui-text-secondary);
+  font-size: var(--mui-text-caption-size);
+  font-weight: var(--mui-weight-normal);
+  line-height: 20px; /* keeps the glyph baseline where the surrounding line expects it */
+  user-select: text;
+  pointer-events: auto;
+}

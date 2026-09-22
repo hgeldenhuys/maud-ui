@@ -26,6 +26,12 @@ html! {
 <tr><td><code>footer</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional footer markup (bottom section)</td></tr>
 <tr><td><code>size</code></td><td><code>Size</code></td><td><code>Default</code></td><td>Card padding size variant</td></tr>
 <tr><td><code>action</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Optional top-right header slot (e.g., button for secondary action)</td></tr>
+<tr><td><code>padding</code></td><td><code>Option&lt;Space&gt;</code></td><td><code>None</code></td><td>Body padding override. <code>None</code> keeps the default section padding; <code>Some(Space::None)</code> is the explicit <code>padding: 0</code> — the body becomes a bare column and the children own their spacing. When <code>bare</code> is set, the padding applies to the card root instead.</td></tr>
+<tr><td><code>gap</code></td><td><code>Option&lt;Space&gt;</code></td><td><code>None</code></td><td>Body stack gap override (the <code>mui-stack</code> gap between children).</td></tr>
+<tr><td><code>radius</code></td><td><code>Option&lt;Radius&gt;</code></td><td><code>None</code></td><td>Corner radius override. <code>None</code> keeps the token corner (<code>--mui-radius-lg</code>).</td></tr>
+<tr><td><code>bare</code></td><td><code>bool</code></td><td><code>false</code></td><td>Bare render: emit the children directly into the card without the <code>__body</code> wrapper. Use for composed surfaces — a comment thread, a PR summary — that bring their own layout.</td></tr>
+<tr><td><code>overlay</code></td><td><code>Option&lt;Markup&gt;</code></td><td><code>None</code></td><td>Overlay slot — rendered absolutely at the card's top-right corner, above the body content (a floating status chip).</td></tr>
+<tr><td><code>class</code></td><td><code>Option&lt;String&gt;</code></td><td><code>None</code></td><td>Extra class names appended to the card's class list — the escape hatch for per-instance overrides a closed enum cannot express.</td></tr>
 </tbody></table>
 <h2>Variants / Enums</h2>
 <h3>Size</h3>

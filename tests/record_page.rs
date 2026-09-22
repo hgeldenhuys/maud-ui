@@ -177,6 +177,9 @@ fn empty_breadcrumbs_are_removed_before_separators_positions_and_header_title() 
                 crumb("Guest: Sofia Patel", None),
                 crumb(blank, None),
             ],
+            // 0.19.0: `None` renders no separator at all; the default trail
+            // pins "/" explicitly.
+            separator: Some("/"),
             ..Default::default()
         })
         .0;

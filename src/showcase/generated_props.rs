@@ -66,6 +66,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "alt", ty: "String", default: format!("{:?}", props.alt), description: "" },
                 Prop { name: "fallback", ty: "String", default: format!("{:?}", props.fallback), description: "" },
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "" },
+                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the class list — the escape hatch for per-instance overrides that a closed enum cannot express." },
             ])
         },
         (false, "badge") => {
@@ -73,12 +74,15 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Text content displayed in the badge" },
                 Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Visual variant (color scheme)" },
+                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size step. See [`Size`]." },
                 Prop { name: "href", ty: "Option<String>", default: format!("{:?}", props.href), description: "Optional href — when `Some`, the badge renders as an `<a>` element" },
                 Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon — rendered before the label with `data-icon=\"inline-start\"`" },
+                Prop { name: "dot", ty: "Option<String>", default: format!("{:?}", props.dot), description: "Optional colour dot — a 16px circle rendered before the label (the colour-coding of a label chip). The string is any CSS colour value applied as the dot's background; pass `\"\"` for an unpainted dot." },
                 Prop { name: "mono", ty: "bool", default: format!("{:?}", props.mono), description: "Render the label in the monospace face — for shas, ids, counts, and other machine-register text that should not reflow with the sans stack." },
                 Prop { name: "chip", ty: "bool", default: format!("{:?}", props.chip), description: "Render as a hollow CHIP: a taller (26px) bordered-transparent badge with a 1px foreground-10% border, sized to sit inline with controls. Its corner is `--mui-radius-sm`, the same as a filled badge — the consumer's token, not a fixed 6px. The filled variants above ignore this; it is the counterpart to the solid `Badge`, for a taggable, dismissable, count-bearing chip." },
                 Prop { name: "trailing_count", ty: "Option<String>", default: format!("{:?}", props.trailing_count), description: "Optional trailing count — the `2` in `mail 2`. Rendered as a mono figure set slightly apart from the label." },
                 Prop { name: "kbd", ty: "Option<String>", default: format!("{:?}", props.kbd), description: "Optional trailing kbd hint — the `⌘K` in a command chip. Rendered in the mono face inside a subtle key cap." },
+                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the class list — the escape hatch for per-instance overrides that a closed enum cannot express." },
             ])
         },
         (false, "bottom_tab_bar") => {
@@ -95,7 +99,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::breadcrumb::Props::default();
             table(vec![
                 Prop { name: "items", ty: "Vec<BreadcrumbItem>", default: format!("{:?}", props.items), description: "List of breadcrumb items (last item has no href). Blank labels are discarded." },
-                Prop { name: "separator", ty: "Option<String>", default: format!("{:?}", props.separator), description: "Separator character (default \"/\")" },
+                Prop { name: "separator", ty: "Option<&'a str>", default: format!("{:?}", props.separator), description: "Separator between items. `None` renders NO separator at all — the list gap alone separates the trail (a trail with no visible divider). Defaults to `Some(\"/\")`." },
             ])
         },
         (false, "button") => {
@@ -109,6 +113,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon (SVG markup). Use `stroke=\"currentColor\"` so it inherits the button's text color — emoji characters do NOT inherit color and will render in OS system colors. Emitted as a span with `data-icon=\"inline-start\"`." },
                 Prop { name: "trailing_icon", ty: "Option<Markup>", default: format!("{:?}", props.trailing_icon), description: "Optional trailing icon (SVG markup). Same rules as `leading_icon` — use `stroke=\"currentColor\"` so it inherits the button's text color. Emitted as a span with `data-icon=\"inline-end\"` AFTER the label." },
                 Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "aria-label override. Required for icon-only buttons (where `label` is empty) so screen readers announce the button's purpose." },
+                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the class list — the escape hatch for per-instance overrides that a closed enum cannot express (target the class from your own stylesheet instead of wrapping the button in a div). Rendered last, so it can override nothing by itself; it only gives your CSS a hook." },
+                Prop { name: "bordered", ty: "bool", default: format!("{:?}", props.bordered), description: "Ghost only: give the bare ghost a visible hairline boundary — a quiet bordered pill (the \"New issue\" button). Ignored by every other variant." },
             ])
         },
         (false, "button_group") => {
@@ -141,6 +147,12 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Optional footer markup" },
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Card size modifier." },
                 Prop { name: "action", ty: "Option<Markup>", default: format!("{:?}", props.action), description: "Optional top-right header slot (shadcn `CardAction` equivalent). When `Some`, the header becomes a 2-col grid: `(title/description) | (action)`." },
+                Prop { name: "padding", ty: "Option<Space>", default: format!("{:?}", props.padding), description: "Body padding override. `None` keeps the default section padding; `Some(Space::None)` is the explicit `padding: 0` — the body becomes a bare column and the children own their spacing. When [`Props::bare`] is set, the padding applies to the card root instead." },
+                Prop { name: "gap", ty: "Option<Space>", default: format!("{:?}", props.gap), description: "Body stack gap override (the `mui-stack` gap between children)." },
+                Prop { name: "radius", ty: "Option<Radius>", default: format!("{:?}", props.radius), description: "Corner radius override. `None` keeps the token corner (`--mui-radius-lg`)." },
+                Prop { name: "bare", ty: "bool", default: format!("{:?}", props.bare), description: "Bare render: emit the children directly into the card without the `__body` wrapper (which carries its own padding and stack gap). Use for composed surfaces — a comment thread, a PR summary — that bring their own layout." },
+                Prop { name: "overlay", ty: "Option<Markup>", default: format!("{:?}", props.overlay), description: "Optional overlay slot — rendered absolutely at the card's top-right corner, above the body content (a floating status chip)." },
+                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the card's class list — the escape hatch for per-instance overrides that a closed enum cannot express. Gives your own CSS a hook on this one card." },
             ])
         },
         (false, "carousel") => {
@@ -257,7 +269,10 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "value", ty: "String", default: format!("{:?}", props.value), description: "Pre-filled field content — the in-progress draft." },
                 Prop { name: "chips", ty: "Vec<Chip>", default: format!("{:?}", props.chips), description: "Leading mono chips (model, auto-accept, attachments)." },
                 Prop { name: "control_chips", ty: "Vec<Markup>", default: format!("{:?}", props.control_chips), description: "Interactive chips — each Markup is a FORM CONTROL (typically a `<select name=…>`) rendered inside the chip row, wrapped in `.mui-composer__chip--control` so it takes the chip treatment. Controls live inside the composer's form, so they submit with the message and work with JavaScript disabled. Rendered after `chips`." },
+                Prop { name: "trailing", ty: "Vec<Markup>", default: format!("{:?}", props.trailing), description: "Trailing action slot — icon actions (retry, attach, …) rendered in the actions row between the spacer and the primary action." },
                 Prop { name: "show_voice", ty: "bool", default: format!("{:?}", props.show_voice), description: "Show the voice-capture button before the primary action." },
+                Prop { name: "flat", ty: "bool", default: format!("{:?}", props.flat), description: "Render the send button flat and chromeless: a transparent field with no border, the hairline ring carried by shadow alone (a dock sitting on a raised panel surface that brings its own ground)." },
+                Prop { name: "icon_only_send", ty: "bool", default: format!("{:?}", props.icon_only_send), description: "Icon-only send button — a 26px circle; the label stays in the DOM, visually hidden (`.mui-sr-only`), so screen readers keep it. Pair with a visible glyph drawn by the consumer's CSS or an icon slot." },
                 Prop { name: "secondary_label", ty: "Option<String>", default: format!("{:?}", props.secondary_label), description: "Optional secondary action label — renders a hollow-destructive button (the `Interrupt` affordance) before the primary. Only meaningful while executing." },
                 Prop { name: "secondary_action", ty: "Option<String>", default: format!("{:?}", props.secondary_action), description: "`<form action>` for the secondary button. When set, the button is a real submit targeting a sibling form (HTML5 `form` attribute), so the action works with JavaScript disabled. When unset the button renders `type=\"button\"` and needs a consumer JS layer." },
                 Prop { name: "primary_label", ty: "String", default: format!("{:?}", props.primary_label), description: "Primary button label — `Send`, `Queue`, …" },
@@ -492,6 +507,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::kbd::Props::default();
             table(vec![
                 Prop { name: "keys", ty: "Vec<String>", default: format!("{:?}", props.keys), description: "Keys to display (e.g., [\"Ctrl\", \"S\"] or [\"⌘\", \"K\"])" },
+                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Treatment. See [`Variant`]." },
             ])
         },
         (false, "label") => {
@@ -527,6 +543,9 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "body", ty: "Markup", default: format!("{:?}", props.body), description: "The message body — may contain markdown-rendered HTML, code blocks, etc." },
                 Prop { name: "is_live", ty: "bool", default: format!("{:?}", props.is_live), description: "When true, the avatar pulses to indicate an in-progress streaming response." },
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Footer slot — tool chips, action buttons, attachments." },
+                Prop { name: "layout", ty: "Layout", default: format!("{:?}", props.layout), description: "Which layout to render. See [`Layout`]." },
+                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Chat-layout body treatment. See [`Variant`]. Ignored in the avatar layout." },
+                Prop { name: "actions", ty: "Option<Markup>", default: format!("{:?}", props.actions), description: "The quiet action row under a reply (copy, fork from here, the model that answered, the cost). Revealed on hover on a pointer device, always visible where there is no hover. Chat layout only; the avatar layout renders it as part of the footer." },
             ])
         },
         (false, "meter") => {
@@ -539,6 +558,14 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "high", ty: "Option<f64>", default: format!("{:?}", props.high), description: "Threshold above which the zone is \"suboptimum\" (warning)" },
                 Prop { name: "optimum", ty: "Option<f64>", default: format!("{:?}", props.optimum), description: "The ideal value; if present, determines which side is \"good\"" },
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Label for the meter (accessibility)" },
+            ])
+        },
+        (false, "time_split") => {
+            let props = crate::primitives::time_split::Props::default();
+            table(vec![
+                Prop { name: "segments", ty: "Vec<Segment>", default: format!("{:?}", props.segments), description: "Steps in EXECUTION ORDER. Steps that never ran should be left out entirely rather than passed with a zero duration: the empty remainder of the track is what \"it ended here\" looks like." },
+                Prop { name: "caption", ty: "String", default: format!("{:?}", props.caption), description: "The finding, in words. Do not skip it — see the module note." },
+                Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "Read to a screen reader in place of the bar. [`aria_from`] builds a decent one from the segments." },
             ])
         },
         (false, "native_select") => {
@@ -701,6 +728,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "variant", ty: "SidebarVariant", default: format!("{:?}", props.variant), description: "Visual variant" },
                 Prop { name: "collapsible", ty: "Collapsible", default: format!("{:?}", props.collapsible), description: "How the sidebar collapses" },
                 Prop { name: "default_open", ty: "bool", default: format!("{:?}", props.default_open), description: "Whether the sidebar renders in its expanded state (SSR default)" },
+                Prop { name: "surface", ty: "Surface", default: format!("{:?}", props.surface), description: "What ground the sidebar sits on. See [`Surface`]." },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Markup content (typically header / content / footer helpers)" },
             ])
         },
@@ -891,6 +919,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "args", ty: "Option<Markup>", default: format!("{:?}", props.args), description: "Optional args panel — rendered in the expanded body." },
                 Prop { name: "result", ty: "Option<Markup>", default: format!("{:?}", props.result), description: "Optional result panel — rendered in the expanded body." },
                 Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Initial open state (default false — collapsed)." },
+                Prop { name: "compact", ty: "bool", default: format!("{:?}", props.compact), description: "Chip density: one rounded chip per call that sits inline in a row (`mui-tool-call-row`) and expands in place. What a settled turn in a chat shows instead of a card per call." },
+                Prop { name: "duration", ty: "Option<String>", default: format!("{:?}", props.duration), description: "Wall time the call took, already formatted (\"0.4s\", \"12ms\"). Shown in the trigger after the summary; absent when unmeasured." },
             ])
         },
         (false, "tooltip") => {

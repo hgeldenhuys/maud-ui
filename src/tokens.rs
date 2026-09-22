@@ -38,6 +38,32 @@ pub mod radius {
     pub const FULL: &str = "9999px";
 }
 
+/// The radius scale, as a closed enum for component props.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum Radius {
+    /// `var(--mui-radius-sm)`.
+    #[default]
+    Sm,
+    /// `var(--mui-radius-md)`.
+    Md,
+    /// `var(--mui-radius-lg)` — the card/corner step.
+    Lg,
+    /// `var(--mui-radius-full)` — the pill.
+    Full,
+}
+
+impl Radius {
+    /// The CSS value this role resolves to.
+    pub fn value(self) -> &'static str {
+        match self {
+            Radius::Sm => "var(--mui-radius-sm)",
+            Radius::Md => "var(--mui-radius-md)",
+            Radius::Lg => "var(--mui-radius-lg)",
+            Radius::Full => "var(--mui-radius-full)",
+        }
+    }
+}
+
 /// Viewport breakpoints — the declared scale for **page-level layout**.
 ///
 /// Authored in `rem` on purpose. Inside a media query `rem` resolves against

@@ -47,6 +47,9 @@ Renders `<h3 class="mui-h3">`. Tertiary heading (1.25rem, semi-bold).
 #### h4(text: &str) -> Markup
 Renders `<h4 class="mui-h4">`. Quaternary heading (1.125rem, semi-bold).
 
+#### heading(level: u8, text: &str, size: Option<TextSize>) -> Markup
+Renders `<hN>` at the given outline level with an explicit size step decoupled from the tag — the document outline and the type size can move independently. `TextSize::{H1, H2, H3, Title20}`; `Title20` is the "issue title" step between h3 and h2 (20px / 1.33 / −0.012em, `--mui-text-title-*`).
+
 ### Body Text
 
 #### p(text: &str) -> Markup

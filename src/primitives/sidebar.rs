@@ -43,6 +43,26 @@ impl SidebarVariant {
     }
 }
 
+/// What ground the sidebar sits on. `Card` (the default) paints the card
+/// surface and reserves the `--mui-sidebar-w` column; `Transparent` is a bare
+/// cell — no background, no reserved width, its box comes from the parent
+/// grid/flex layout (demo-frame and canvas layouts).
+#[derive(Clone, Debug, Default)]
+pub enum Surface {
+    #[default]
+    Card,
+    Transparent,
+}
+
+impl Surface {
+    pub fn as_data(&self) -> &'static str {
+        match self {
+            Surface::Card => "card",
+            Surface::Transparent => "transparent",
+        }
+    }
+}
+
 /// How the sidebar collapses when toggled off
 #[derive(Clone, Debug, Default)]
 pub enum Collapsible {
@@ -75,6 +95,8 @@ pub struct Props {
     pub collapsible: Collapsible,
     /// Whether the sidebar renders in its expanded state (SSR default)
     pub default_open: bool,
+    /// What ground the sidebar sits on. See [`Surface`].
+    pub surface: Surface,
     /// Markup content (typically header / content / footer helpers)
     pub children: Markup,
 }
@@ -87,6 +109,7 @@ impl Default for Props {
             variant: SidebarVariant::default(),
             collapsible: Collapsible::default(),
             default_open: true,
+            surface: Surface::default(),
             children: html! {},
         }
     }
@@ -117,6 +140,7 @@ pub fn render(props: Props) -> Markup {
             data-state=(state)
             data-side=(props.side.as_data())
             data-variant=(props.variant.as_data())
+            data-surface=(props.surface.as_data())
             data-collapsible=(props.collapsible.as_data())
             aria-label="Sidebar"
         {
@@ -168,6 +192,80 @@ pub fn menu_link(href: &str, label: &str, icon: Option<Markup>, active: bool) ->
 /// Group label — small-caps heading for a group
 pub fn group_label(children: Markup) -> Markup {
     html! { div class="mui-sidebar__group-label" { (children) } }
+}
+
+/// Group label as a collapsible row — a 24px flex row with a chevron slot
+/// (Linear's group header), instead of the small-caps heading. `chevron` is
+/// the trailing glyph markup (a chevron/caret icon); `None` renders the row
+/// with no chevron slot content.
+pub fn group_label_collapsible(children: Markup, chevron: Option<Markup>) -> Markup {
+    html! { div class="mui-sidebar__group-label mui-sidebar__group-label--collapsible" {
+        (children)
+        @if let Some(chevron) = chevron {
+            span class="mui-sidebar__group-chevron" aria-hidden="true" { (chevron) }
+        }
+    } }
+}
+
+/// How a current (`current: true`) menu row is painted.
+///
+/// [`CurrentVariant::Default`] is the Linear recipe: a 4% ground with the ink
+/// and weight unchanged. [`CurrentVariant::Accent`] is the legacy library
+/// look — accent-soft ground, accent ink, heavier weight and the inset
+/// accent bar.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum CurrentVariant {
+    /// 4% ground, ink unchanged (the default current style).
+    #[default]
+    Default,
+    /// Legacy accent-soft recolour + inset accent bar.
+    Accent,
+}
+
+/// Menu button properties — [`menu_button_props`] renders the interactive
+/// row from these.
+#[derive(Debug, Clone)]
+pub struct MenuButtonProps {
+    /// Row content: the icon span and the label.
+    pub children: Markup,
+    /// Mark the row as the current page (white-4% ground by default; see
+    /// [`CurrentVariant`]).
+    pub current: bool,
+    /// Which current-row treatment to use when `current` is set.
+    pub current_variant: CurrentVariant,
+    /// Extra class names appended to the class list — the escape hatch for
+    /// per-instance overrides that a closed enum cannot express.
+    pub class: Option<String>,
+}
+
+impl Default for MenuButtonProps {
+    fn default() -> Self {
+        Self {
+            children: html! {},
+            current: false,
+            current_variant: CurrentVariant::default(),
+            class: None,
+        }
+    }
+}
+
+/// Menu button — the interactive row, from props (current state, current
+/// variant, class passthrough). The plain [`menu_button`] wrapper still
+/// exists for children-only rows.
+pub fn menu_button_props(props: MenuButtonProps) -> Markup {
+    let mut class = String::from("mui-sidebar__menu-button");
+    if props.current && props.current_variant == CurrentVariant::Accent {
+        class.push_str(" mui-sidebar__menu-button--accent");
+    }
+    if let Some(extra) = &props.class {
+        class.push(' ');
+        class.push_str(extra);
+    }
+    html! {
+        button type="button" class=(class) aria-current=[props.current.then_some("page")] {
+            (props.children)
+        }
+    }
 }
 
 /// Group action — button anchored to the group header (e.g. add/plus icon)
@@ -315,6 +413,7 @@ pub fn showcase() -> Markup {
                             variant: SidebarVariant::Sidebar,
                             collapsible: Collapsible::Icon,
                             default_open: true,
+                            surface: Surface::Card,
                             children: html! {
                                 (header(html! {
                                     div class="mui-sidebar__brand" {

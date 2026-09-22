@@ -37,6 +37,20 @@
   z-index: 1;
 }
 
+/* Size: 14px (Size::Xs14) — activity rows and property rows (Linear recipe). */
+.mui-avatar--xs-14 {
+  width: 0.875rem;
+  height: 0.875rem;
+  font-size: 0.5rem;
+}
+
+/* Size: 16px (Size::Sm16) — inline rows beside 12px text (Linear recipe). */
+.mui-avatar--sm-16 {
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.5rem;
+}
+
 /* Size: Small */
 .mui-avatar--sm {
   width: 1.75rem;

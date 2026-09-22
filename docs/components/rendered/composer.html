@@ -28,8 +28,12 @@ composer::render(Props {
 <tr><td>field_name</td><td>String</td><td><code>"message"</code></td><td><code>&lt;textarea name&gt;</code>.</td></tr>
 <tr><td>placeholder</td><td>String</td><td><code>""</code></td><td>Empty-field placeholder (also the sleep-bar hint).</td></tr>
 <tr><td>value</td><td>String</td><td><code>""</code></td><td>Pre-filled draft content.</td></tr>
-<tr><td>chips</td><td>Vec&lt;Chip&gt;</td><td><code>[]</code></td><td>Leading mono chips (model, auto-accept, attachments).</td></tr>
+<tr><td>chips</td><td>Vec&lt;Chip&gt;</td><td><code>[]</code></td><td>Leading mono chips (model, auto-accept, attachments). A chip may carry <code>leading_icon</code> and <code>trailing_chevron</code> markup (e.g. the "Skills" control).</td></tr>
+<tr><td>control_chips</td><td>Vec&lt;Markup&gt;</td><td><code>[]</code></td><td>Real form controls wrapped in the chip treatment; they submit with the message (JS off).</td></tr>
+<tr><td>trailing</td><td>Vec&lt;Markup&gt;</td><td><code>[]</code></td><td>Trailing action slot — icon actions (retry, attach, …) rendered between the spacer and the primary action, inheriting the actions row's gap and alignment.</td></tr>
 <tr><td>show_voice</td><td>bool</td><td><code>false</code></td><td>Show the voice-capture button before the primary.</td></tr>
+<tr><td>flat</td><td>bool</td><td><code>false</code></td><td>Ring-box field: transparent ground and border, the hairline ring carried by shadow alone — for a dock sitting on a raised panel surface that brings its own ground.</td></tr>
+<tr><td>icon_only_send</td><td>bool</td><td><code>false</code></td><td>Icon-only send button — a 26px circle; the label stays in the DOM, visually hidden, so screen readers keep it.</td></tr>
 <tr><td>secondary_label</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td>Renders a hollow-destructive <code>Interrupt</code> button (executing state).</td></tr>
 <tr><td>secondary_action</td><td>Option&lt;String&gt;</td><td><code>None</code></td><td><code>&lt;form action&gt;</code> for the secondary button. When set, Interrupt is a real submit targeting an empty sibling form via the HTML5 <code>form</code> attribute — it POSTs with JS disabled. Unset → <code>type="button"</code> (consumer JS wires it).</td></tr>
 <tr><td>primary_label</td><td>String</td><td><code>"Send"</code></td><td>Primary submit-button label.</td></tr>
@@ -44,7 +48,7 @@ composer::render(Props {
 <tr><td>Asleep</td><td>46px dashed bar: mono state tag, a real single-row textarea ("type to wake" is literal — it submits with JS off), and a <code>Wake</code> button.</td></tr>
 </tbody></table>
 <h2>Chip</h2>
-<p><code>Chip::new(label)</code> for a plain mono chip; <code>Chip::accent(label)</code> for the accent-tinted "carries a payload" treatment (attachments, e.g. <code>user.rs ×</code>).</p>
+<p><code>Chip::new(label)</code> for a plain mono chip; <code>Chip::accent(label)</code> for the accent-tinted "carries a payload" treatment (attachments, e.g. <code>user.rs ×</code>); <code>Chip::with_icon(label, icon)</code> for a chip with a leading icon — plus <code>trailing_chevron: Some(markup)</code> for the caret of a menu chip.</p>
 <h2>Geometry knobs</h2>
 <ul>
 <li><code>--mui-composer-max</code> — the field's <code>max-width</code> (default <code>67.5rem</code>, the 1080px code measure).</li>

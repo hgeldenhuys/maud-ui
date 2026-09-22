@@ -39,8 +39,12 @@ composer::render(Props {
 | field_name | String | `"message"` | `<textarea name>`. |
 | placeholder | String | `""` | Empty-field placeholder (also the sleep-bar hint). |
 | value | String | `""` | Pre-filled draft content. |
-| chips | Vec\<Chip\> | `[]` | Leading mono chips (model, auto-accept, attachments). |
+| chips | Vec\<Chip\> | `[]` | Leading mono chips (model, auto-accept, attachments). A chip may carry `leading_icon` and `trailing_chevron` markup (e.g. the "Skills" control). |
+| control_chips | Vec\<Markup\> | `[]` | Real form controls wrapped in the chip treatment; they submit with the message (JS off). |
+| trailing | Vec\<Markup\> | `[]` | Trailing action slot — icon actions (retry, attach, …) rendered between the spacer and the primary action, inheriting the actions row's gap and alignment. |
 | show_voice | bool | `false` | Show the voice-capture button before the primary. |
+| flat | bool | `false` | Ring-box field: transparent ground and border, the hairline ring carried by shadow alone — for a dock sitting on a raised panel surface that brings its own ground. |
+| icon_only_send | bool | `false` | Icon-only send button — a 26px circle; the label stays in the DOM, visually hidden, so screen readers keep it. |
 | secondary_label | Option\<String\> | `None` | Renders a hollow-destructive `Interrupt` button (executing state). |
 | secondary_action | Option\<String\> | `None` | `<form action>` for the secondary button. When set, Interrupt is a real submit targeting an empty sibling form via the HTML5 `form` attribute — it POSTs with JS disabled. Unset → `type="button"` (consumer JS wires it). |
 | primary_label | String | `"Send"` | Primary submit-button label. |
@@ -58,7 +62,7 @@ composer::render(Props {
 
 ## Chip
 
-`Chip::new(label)` for a plain mono chip; `Chip::accent(label)` for the accent-tinted "carries a payload" treatment (attachments, e.g. `user.rs ×`).
+`Chip::new(label)` for a plain mono chip; `Chip::accent(label)` for the accent-tinted "carries a payload" treatment (attachments, e.g. `user.rs ×`); `Chip::with_icon(label, icon)` for a chip with a leading icon — plus `trailing_chevron: Some(markup)` for the caret of a menu chip.
 
 ## Geometry knobs
 

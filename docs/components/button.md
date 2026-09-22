@@ -33,13 +33,15 @@ html! {
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | label | String | `"Button"` | Button text content. |
-| variant | Variant | `Default` | Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link. |
-| size | Size | `Md` | Button size: Row, Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg. |
+| variant | Variant | `Default` | Visual variant: Default, Primary, Secondary, Outline, Ghost, Translucent, Danger, Link. |
+| size | Size | `Md` | Button size: Row, Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconSm28, IconLg. |
 | disabled | bool | `false` | Whether the button is disabled (native disabled and aria-disabled set). |
 | button_type | &'static str | `"button"` | HTML button type attribute: "button", "submit", "reset". |
 | leading_icon | Option<Markup> | `None` | Optional icon markup (SVG) rendered before the label with `data-icon="inline-start"`; use `stroke="currentColor"`. |
 | trailing_icon | Option<Markup> | `None` | Optional icon markup rendered after the label with `data-icon="inline-end"`; use `stroke="currentColor"`. |
-| aria_label | Option<String> | `None` | Accessible label; **required** for icon-only sizes (Icon, IconXs, IconSm, IconLg). |
+| aria_label | Option<String> | `None` | Accessible label; **required** for icon-only sizes (Icon, IconXs, IconSm, IconSm28, IconLg). |
+| class | Option<String> | `None` | Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express: target the class from your own stylesheet instead of wrapping the button. |
+| bordered | bool | `false` | Ghost only: give the bare ghost a visible hairline boundary — a quiet bordered pill. Ignored by other variants. |
 
 ## Variant Styles
 
@@ -50,6 +52,8 @@ html! {
 | Secondary | Secondary action (Cancel, Back, etc.). |
 | Outline | Outlined button for emphasis without primary color. |
 | Ghost | Minimal ghost style, usually for low-priority actions. |
+| Ghost + `bordered` | Ghost with a visible hairline (the "New issue" pill). |
+| Translucent | Frosted icon pill: white 4% ground, 1px inset highlight ring, muted ink, full radius. |
 | Danger | Destructive actions (Delete, Revoke); use with AlertDialog. |
 | Link | Styled as a text link. |
 
@@ -65,6 +69,7 @@ html! {
 | Icon | `mui-btn--icon` | Icon-only button (requires `aria_label`). |
 | IconXs | `mui-btn--icon-xs` | Extra-small icon-only (requires `aria_label`). |
 | IconSm | `mui-btn--icon-sm` | Small icon-only (requires `aria_label`). |
+| IconSm28 | `mui-btn--icon-28` | The 28px square icon-only step (requires `aria_label`). |
 | IconLg | `mui-btn--icon-lg` | Large icon-only (requires `aria_label`). |
 
 ## Accessibility

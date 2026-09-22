@@ -2117,7 +2117,7 @@ cargo add axum tokio --features tokio/full
                                 }))
                                 span.mui-text-muted data-mui-type="small" {
                                     "Use the toggle at the top-right, or add "
-                                    (kbd::render(kbd::Props { keys: vec!["button".into(), "data-mui=\"theme-toggle\"".into()] }))
+                                    (kbd::render(kbd::Props { keys: vec!["button".into(), "data-mui=\"theme-toggle\"".into()], ..Default::default() }))
                                     " anywhere in your app."
                                 }
                             }

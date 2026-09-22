@@ -19,12 +19,15 @@
 .mui-breadcrumb__item {
   display: inline-flex;
   align-items: center;
-  font-size: var(--mui-text-small-size);
-  line-height: var(--mui-leading-small);
+  /* The Linear trail recipe: 12px/14px at weight 510 in secondary ink. */
+  font-size: 0.75rem;
+  line-height: 0.875rem;
+  font-weight: var(--mui-weight-medium);
+  color: var(--mui-text-secondary);
 }
 
 .mui-breadcrumb__item a {
-  color: var(--mui-text-muted);
+  color: var(--mui-text-secondary);
   text-decoration: none;
   text-underline-offset: 4px;
   transition: color var(--mui-transition);
@@ -40,10 +43,11 @@
   outline-offset: 2px;
 }
 
-/* Current page — foreground color, no link */
+/* Current page — the trail carries one ink; the current crumb stays secondary
+   like the rest (Linear's trail), so it is the trail's colour, not a highlight. */
 .mui-breadcrumb__item--current {
-  color: var(--mui-text);
-  font-weight: var(--mui-weight-normal);
+  color: var(--mui-text-secondary);
+  font-weight: var(--mui-weight-medium);
 }
 
 /* Separator chevron — muted, no pointer events */

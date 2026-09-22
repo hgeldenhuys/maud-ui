@@ -1,8 +1,15 @@
 /* Shared navigation language across links, menus, tabs and both sidebar APIs. */
-.mui-sidebar__menu-button, .mui-block--shell__nav-item { position: relative; box-sizing: border-box; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-nav-row-height); width: 100%; padding: 0 var(--mui-space-sm); border: 0; border-radius: var(--mui-radius-md); background: transparent; color: var(--mui-text-secondary); font: var(--mui-weight-medium) var(--mui-text-small-size)/var(--mui-leading-tight) var(--mui-font-sans); text-align: start; text-decoration: none; cursor: pointer; transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-sidebar__menu-button, .mui-block--shell__nav-item { position: relative; box-sizing: border-box; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-nav-row-height); width: 100%; padding: 0 var(--mui-space-sm); border: 0; border-radius: var(--mui-nav-row-radius); background: transparent; color: var(--mui-text-secondary); font: var(--mui-weight-medium) var(--mui-text-small-size)/var(--mui-leading-tight) var(--mui-font-sans); text-align: start; text-decoration: none; cursor: pointer; transition: background-color var(--mui-transition), color var(--mui-transition); }
 .mui-sidebar__menu-button:hover, .mui-block--shell__nav-item:hover { color: var(--mui-text); background: var(--mui-bg-input); text-decoration: none; }
-.mui-sidebar__menu-button[aria-current], .mui-sidebar__menu-button[data-active="true"], .mui-block--shell__nav-item[aria-current] { background: var(--mui-accent-soft); color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); box-shadow: none; }
-.mui-sidebar__menu-button[aria-current]::before, .mui-sidebar__menu-button[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { content: ""; position: absolute; inset-inline-start: 0; inset-block: var(--mui-space-sm); width: 2px; background: var(--mui-accent-text); border-radius: 0; }
+/* Sidebar current row — the Linear recipe: a 4% ground, ink and weight
+   unchanged. The legacy accent-soft recolour stays behind the --accent
+   modifier for consumers who opt back in. */
+.mui-sidebar__menu-button[aria-current], .mui-sidebar__menu-button[data-active="true"] { background: var(--mui-nav-current-bg); color: var(--mui-text-secondary); font-weight: var(--mui-weight-medium); box-shadow: none; }
+.mui-sidebar__menu-button[aria-current]:hover, .mui-sidebar__menu-button[data-active="true"]:hover { color: var(--mui-text); }
+.mui-sidebar__menu-button--accent[aria-current], .mui-sidebar__menu-button--accent[data-active="true"] { background: var(--mui-accent-soft); color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); }
+.mui-block--shell__nav-item[aria-current] { background: var(--mui-accent-soft); color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); box-shadow: none; }
+.mui-sidebar__menu-button[aria-current]::before, .mui-sidebar__menu-button[data-active="true"]::before { content: none; }
+.mui-sidebar__menu-button--accent[aria-current]::before, .mui-sidebar__menu-button--accent[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { content: ""; position: absolute; inset-inline-start: 0; inset-block: var(--mui-space-sm); width: 2px; background: var(--mui-accent-text); border-radius: 0; }
 .mui-block--shell__nav-item[aria-current] .mui-block--shell__nav-icon { color: inherit; }
 .mui-sidebar__group-label, .mui-block--shell__nav-group-label { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); padding: var(--mui-space-sm) var(--mui-space-md); margin: 0; }
 summary.mui-sidebar__group-label, summary.mui-block--shell__nav-group-label { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; border-radius: var(--mui-radius-md); cursor: pointer; }
@@ -10,7 +17,11 @@ summary.mui-sidebar__group-label::-webkit-details-marker, summary.mui-block--she
 summary.mui-sidebar__group-label::after, summary.mui-block--shell__nav-group-label::after { content: "›"; font-size: var(--mui-text-small-size); transform: rotate(0deg); transition: transform var(--mui-transition); }
 details[open] > summary.mui-sidebar__group-label::after, details[open] > summary.mui-block--shell__nav-group-label::after { transform: rotate(90deg); }
 summary.mui-sidebar__group-label:hover, summary.mui-block--shell__nav-group-label:hover { background: var(--mui-bg-input); color: var(--mui-text); }
-.mui-breadcrumb__item a, .mui-breadcrumb__item a:visited { color: var(--mui-text-muted); text-decoration: none; }
+/* Collapsible group label (sidebar::group_label_collapsible) — a 24px flex
+   row with a chevron slot (Linear's group header), not the small-caps heading. */
+.mui-sidebar__group-label--collapsible { display: flex; align-items: center; gap: 0.125rem; height: 1.5rem; padding: 0; background: transparent; text-transform: none; letter-spacing: normal; cursor: pointer; }
+.mui-sidebar__group-label--collapsible .mui-sidebar__group-chevron { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.mui-breadcrumb__item a, .mui-breadcrumb__item a:visited { color: var(--mui-text-secondary); text-decoration: none; }
 .mui-breadcrumb__item a:hover { color: var(--mui-text); text-decoration: none; }
 .mui-breadcrumb__separator { color: var(--mui-text-subtle); }
 .mui-menu__label, .mui-command__group-heading { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; }

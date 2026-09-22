@@ -31,12 +31,15 @@ html! {
 | src | Option<String> | `None` | Image URL; if None, renders fallback initials instead. |
 | alt | String | `"Avatar"` | Accessible label exposed to screen readers; used as aria-label when src is None. |
 | fallback | String | `"U"` | Initials or short text displayed when src is None (automatically uppercased). |
-| size | Size | `Md` | Physical size: Sm, Md, or Lg. |
+| size | Size | `Md` | Physical size: Xs14, Sm16, Sm, Md, or Lg. |
+| class | Option<String> | `None` | Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express. |
 
 ## Size Variants
 
 | Size | Class | Use Case |
 |------|-------|----------|
+| Xs14 | `mui-avatar--xs-14` | 14px — activity and property rows (Linear recipe). |
+| Sm16 | `mui-avatar--sm-16` | 16px — inline rows beside 12px text (Linear recipe). |
 | Sm | `mui-avatar--sm` | Compact avatars in lists or sidebars. |
 | Md | `mui-avatar--md` | Default avatar size for most contexts. |
 | Lg | `mui-avatar--lg` | Large avatars for profiles or detail views. |

@@ -23,13 +23,15 @@ html! {
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td>label</td><td>String</td><td><code>"Button"</code></td><td>Button text content.</td></tr>
-<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant: Default, Primary, Secondary, Outline, Ghost, Danger, Link.</td></tr>
-<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Button size: Row, Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconLg.</td></tr>
+<tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant: Default, Primary, Secondary, Outline, Ghost, Translucent, Danger, Link.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Md</code></td><td>Button size: Row, Xs, Sm, Md, Lg, Icon, IconXs, IconSm, IconSm28, IconLg.</td></tr>
 <tr><td>disabled</td><td>bool</td><td><code>false</code></td><td>Whether the button is disabled (native disabled and aria-disabled set).</td></tr>
 <tr><td>button_type</td><td>&amp;'static str</td><td><code>"button"</code></td><td>HTML button type attribute: "button", "submit", "reset".</td></tr>
 <tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup (SVG) rendered before the label with <code>data-icon="inline-start"</code>; use <code>stroke="currentColor"</code>.</td></tr>
 <tr><td>trailing_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered after the label with <code>data-icon="inline-end"</code>; use <code>stroke="currentColor"</code>.</td></tr>
-<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Accessible label; <strong>required</strong> for icon-only sizes (Icon, IconXs, IconSm, IconLg).</td></tr>
+<tr><td>aria_label</td><td>Option<String></td><td><code>None</code></td><td>Accessible label; <strong>required</strong> for icon-only sizes (Icon, IconXs, IconSm, IconSm28, IconLg).</td></tr>
+<tr><td>class</td><td>Option<String></td><td><code>None</code></td><td>Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express: target the class from your own stylesheet instead of wrapping the button.</td></tr>
+<tr><td>bordered</td><td>bool</td><td><code>false</code></td><td>Ghost only: give the bare ghost a visible hairline boundary — a quiet bordered pill. Ignored by other variants.</td></tr>
 </tbody></table>
 <h2>Variant Styles</h2>
 <table><thead><tr><th>Variant</th><th>Use Case</th></tr></thead><tbody>
@@ -38,6 +40,8 @@ html! {
 <tr><td>Secondary</td><td>Secondary action (Cancel, Back, etc.).</td></tr>
 <tr><td>Outline</td><td>Outlined button for emphasis without primary color.</td></tr>
 <tr><td>Ghost</td><td>Minimal ghost style, usually for low-priority actions.</td></tr>
+<tr><td>Ghost + <code>bordered</code></td><td>Ghost with a visible hairline (the "New issue" pill).</td></tr>
+<tr><td>Translucent</td><td>Frosted icon pill: white 4% ground, 1px inset highlight ring, muted ink, full radius.</td></tr>
 <tr><td>Danger</td><td>Destructive actions (Delete, Revoke); use with AlertDialog.</td></tr>
 <tr><td>Link</td><td>Styled as a text link.</td></tr>
 </tbody></table>
@@ -51,6 +55,7 @@ html! {
 <tr><td>Icon</td><td><code>mui-btn--icon</code></td><td>Icon-only button (requires <code>aria_label</code>).</td></tr>
 <tr><td>IconXs</td><td><code>mui-btn--icon-xs</code></td><td>Extra-small icon-only (requires <code>aria_label</code>).</td></tr>
 <tr><td>IconSm</td><td><code>mui-btn--icon-sm</code></td><td>Small icon-only (requires <code>aria_label</code>).</td></tr>
+<tr><td>IconSm28</td><td><code>mui-btn--icon-28</code></td><td>The 28px square icon-only step (requires <code>aria_label</code>).</td></tr>
 <tr><td>IconLg</td><td><code>mui-btn--icon-lg</code></td><td>Large icon-only (requires <code>aria_label</code>).</td></tr>
 </tbody></table>
 <h2>Accessibility</h2>

@@ -36,6 +36,12 @@ html! {
 | `footer` | `Option<Markup>` | `None` | Optional footer markup (bottom section) |
 | `size` | `Size` | `Default` | Card padding size variant |
 | `action` | `Option<Markup>` | `None` | Optional top-right header slot (e.g., button for secondary action) |
+| `padding` | `Option<Space>` | `None` | Body padding override. `None` keeps the default section padding; `Some(Space::None)` is the explicit `padding: 0` — the body becomes a bare column and the children own their spacing. When `bare` is set, the padding applies to the card root instead. |
+| `gap` | `Option<Space>` | `None` | Body stack gap override (the `mui-stack` gap between children). |
+| `radius` | `Option<Radius>` | `None` | Corner radius override. `None` keeps the token corner (`--mui-radius-lg`). |
+| `bare` | `bool` | `false` | Bare render: emit the children directly into the card without the `__body` wrapper. Use for composed surfaces — a comment thread, a PR summary — that bring their own layout. |
+| `overlay` | `Option<Markup>` | `None` | Overlay slot — rendered absolutely at the card's top-right corner, above the body content (a floating status chip). |
+| `class` | `Option<String>` | `None` | Extra class names appended to the card's class list — the escape hatch for per-instance overrides a closed enum cannot express. |
 
 ## Variants / Enums
 

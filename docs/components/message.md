@@ -40,6 +40,7 @@ html! {
 | `is_live` | `bool` | `false` | When true, the avatar pulses to indicate an in-progress streaming response. |
 | `footer` | `Option<Markup>` | `None` | Footer slot — tool chips, action buttons, attachments. |
 | `layout` | `Layout` | `Layout::Avatar` | `Avatar` is a transcript row; `Chat` is a conversation: prompt right as a tinted card (≤75% of the column), reply flat and full width, no avatar, timestamp on hover. |
+| `variant` | `Variant` | `Variant::Default` | Chat-layout body treatment. `Default`: the user's turn is a tinted, right-aligned card with one square corner. `Plain`: no tint, no right alignment, no card chrome on either side — both turns read as flat column content (an agent-panel feed inside its own panel chrome). Ignored in the avatar layout. |
 | `actions` | `Option<Markup>` | `None` | The quiet action row under a reply (copy, fork, model, cost). Chat layout; revealed on hover, always visible without hover. Use `mui-message__action` for buttons/links and `mui-message__meta` for facts. |
 
 ## Variants / Enums

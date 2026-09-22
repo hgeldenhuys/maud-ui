@@ -30,12 +30,15 @@ html! {
 |-------|------|---------|-------------|
 | label | String | `""` | Text content displayed in the badge. |
 | variant | Variant | `Default` | Visual variant (color scheme): Default, Secondary, Success, Warning, Danger, Outline, Ghost, Link. |
+| size | Size | `Default` | Size step. `Default` follows the tokens (18px at the default theme); `Sm18` pins the 18px recipe explicitly. |
 | href | Option<String> | `None` | Optional URL; if Some, badge renders as an `<a>` element; if None, renders as a `<span>`. |
 | leading_icon | Option<Markup> | `None` | Optional icon markup rendered before the label with `data-icon="inline-start"`. |
+| dot | Option<String> | `None` | Optional colour dot — a 16px circle rendered before the label (label-chip colour coding). The string is any CSS colour applied as the dot's background; pass `""` for an unpainted dot. |
 | mono | bool | `false` | Render the label in the monospace face — for shas, ids, counts. |
 | chip | bool | `false` | Render as a taller (26px) hollow chip: bordered-transparent, 1px foreground-10% border, 6px radius. The counterpart to the filled pill. |
 | trailing_count | Option<String> | `None` | Trailing count set apart in the mono face — the `2` in `mail 2`. |
 | kbd | Option<String> | `None` | Trailing kbd hint in a subtle key cap — the `⌘K` in a command chip. |
+| class | Option<String> | `None` | Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express. |
 
 ## Hollow chip
 

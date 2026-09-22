@@ -41,6 +41,15 @@ pub struct Props {
     /// aria-label override. Required for icon-only buttons (where `label` is
     /// empty) so screen readers announce the button's purpose.
     pub aria_label: Option<String>,
+    /// Extra class names appended to the class list — the escape hatch for
+    /// per-instance overrides that a closed enum cannot express (target the
+    /// class from your own stylesheet instead of wrapping the button in a
+    /// div). Rendered last, so it can override nothing by itself; it only
+    /// gives your CSS a hook.
+    pub class: Option<String>,
+    /// Ghost only: give the bare ghost a visible hairline boundary — a quiet
+    /// bordered pill (the "New issue" button). Ignored by every other variant.
+    pub bordered: bool,
 }
 
 impl Default for Props {
@@ -54,6 +63,8 @@ impl Default for Props {
             leading_icon: None,
             trailing_icon: None,
             aria_label: None,
+            class: None,
+            bordered: false,
         }
     }
 }
@@ -65,6 +76,9 @@ pub enum Variant {
     Secondary,
     Outline,
     Ghost,
+    /// A frosted pill: white 4% ground, a 1px inset highlight ring, muted
+    /// ink, full radius (Linear's header action pills).
+    Translucent,
     Danger,
     Link,
 }
@@ -83,6 +97,9 @@ pub enum Size {
     IconXs,
     /// Small icon-only button (matches shadcn `icon-sm`).
     IconSm,
+    /// The 28px square icon-only button — Linear's header and nav icon
+    /// controls. Still an icon-only size: pair with `aria_label`.
+    IconSm28,
     /// Large icon-only button (matches shadcn `icon-lg`).
     IconLg,
 }
@@ -95,8 +112,18 @@ impl Variant {
             Variant::Secondary => "mui-btn--secondary",
             Variant::Outline => "mui-btn--outline",
             Variant::Ghost => "mui-btn--ghost",
+            Variant::Translucent => "mui-btn--translucent",
             Variant::Danger => "mui-btn--danger",
             Variant::Link => "mui-btn--link",
+        }
+    }
+
+    /// The effective class for this variant, honouring the Ghost `bordered`
+    /// refinement.
+    fn effective_class(self, bordered: bool) -> &'static str {
+        match self {
+            Variant::Ghost if bordered => "mui-btn--ghost-bordered",
+            other => other.class_name(),
         }
     }
 }
@@ -112,6 +139,7 @@ impl Size {
             Size::Xs => "mui-btn--xs",
             Size::IconXs => "mui-btn--icon-xs",
             Size::IconSm => "mui-btn--icon-sm",
+            Size::IconSm28 => "mui-btn--icon-28",
             Size::IconLg => "mui-btn--icon-lg",
         }
     }
@@ -121,7 +149,7 @@ impl Size {
     fn is_icon_only(self) -> bool {
         matches!(
             self,
-            Size::Icon | Size::IconXs | Size::IconSm | Size::IconLg
+            Size::Icon | Size::IconXs | Size::IconSm | Size::IconSm28 | Size::IconLg
         )
     }
 }
@@ -142,11 +170,11 @@ pub fn render(props: Props) -> Markup {
 
     let disabled_attr = if props.disabled { "true" } else { "false" };
 
-    let class = format!(
-        "mui-btn {} {}",
-        props.variant.class_name(),
-        props.size.class_name()
-    );
+    let variant_class = props.variant.effective_class(props.bordered);
+    let class = match &props.class {
+        Some(extra) => format!("mui-btn {} {} {extra}", variant_class, props.size.class_name()),
+        None => format!("mui-btn {} {}", variant_class, props.size.class_name()),
+    };
 
     html! {
         @if let Some(label) = &props.aria_label {
@@ -197,6 +225,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "Continue to billing".to_string(),
@@ -207,6 +237,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "Cancel".to_string(),
@@ -217,6 +249,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                 }
             }
@@ -233,6 +267,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "Revoke API key".to_string(),
@@ -243,6 +279,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                 }
             }
@@ -259,6 +297,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_spinner()),
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "Deploying\u{2026}".to_string(),
@@ -269,6 +309,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_spinner()),
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                 }
             }
@@ -285,6 +327,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "GitHub".to_string(),
@@ -295,6 +339,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_github()),
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: String::new(),
@@ -305,6 +351,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: Some("Add item".to_string()),
+class: None,
+bordered: false,
                     }))
                 }
             }
@@ -321,6 +369,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: Some(icon_chevron_right()),
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "Add & continue".to_string(),
@@ -331,6 +381,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: Some(icon_chevron_right()),
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                 }
             }
@@ -347,6 +399,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "sm".to_string(),
@@ -357,6 +411,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "default".to_string(),
@@ -367,6 +423,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: "lg".to_string(),
@@ -377,6 +435,8 @@ pub fn showcase() -> Markup {
                         leading_icon: None,
                         trailing_icon: None,
                         aria_label: None,
+class: None,
+bordered: false,
                     }))
                 }
                 div.mui-showcase__row {
@@ -389,6 +449,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: Some("Add (xs)".to_string()),
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: String::new(),
@@ -399,6 +461,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: Some("Add (sm)".to_string()),
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: String::new(),
@@ -409,6 +473,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: Some("Add (default)".to_string()),
+class: None,
+bordered: false,
                     }))
                     (render(Props {
                         label: String::new(),
@@ -419,6 +485,8 @@ pub fn showcase() -> Markup {
                         leading_icon: Some(icon_plus()),
                         trailing_icon: None,
                         aria_label: Some("Add (lg)".to_string()),
+class: None,
+bordered: false,
                     }))
                 }
             }

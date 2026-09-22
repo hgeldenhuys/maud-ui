@@ -3,6 +3,10 @@
 .mui-sidebar[data-side="right"] { order: 2; }
 .mui-sidebar[data-variant="floating"] { margin: var(--mui-space-sm); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); box-shadow: var(--mui-shadow-sm); }
 .mui-sidebar[data-variant="inset"] { background: var(--mui-bg); }
+/* Transparent surface — no card ground and no reserved width: the sidebar
+   becomes a grid/flex cell that inherits its box from the parent layout
+   (demo-frame and canvas layouts). */
+.mui-sidebar[data-surface="transparent"] { background: transparent; flex: 0 0 auto; width: auto; }
 .mui-sidebar__header { display: flex; align-items: center; min-height: var(--mui-header-height); padding: var(--mui-space-md) var(--mui-space-lg); box-sizing: border-box; }
 .mui-sidebar__brand, .mui-sidebar__user { display: flex; align-items: center; gap: var(--mui-space-sm); font-size: var(--mui-text-small-size); }
 .mui-sidebar__brand-name, .mui-sidebar__user-name { font-weight: var(--mui-weight-heading); }
@@ -17,7 +21,7 @@
 .mui-sidebar__menu, .mui-sidebar__menu-sub { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--mui-space-2xs); }
 .mui-sidebar__menu-item { position: relative; }
 .mui-sidebar__menu-sub { padding-inline-start: var(--mui-space-lg); margin-block-start: var(--mui-space-2xs); border: 0; }
-.mui-sidebar__menu-icon { display: inline-flex; justify-content: center; align-items: center; width: var(--mui-icon-size); height: var(--mui-icon-size); flex: 0 0 var(--mui-icon-size); }
+.mui-sidebar__menu-icon { display: inline-flex; justify-content: center; align-items: center; width: var(--mui-nav-icon-size); height: var(--mui-nav-icon-size); flex: 0 0 var(--mui-nav-icon-size); }
 .mui-sidebar__menu-icon svg { width: 100%; height: 100%; }
 .mui-sidebar__menu-badge { margin-inline-start: auto; padding: 0 var(--mui-inset-tight); border-radius: var(--mui-radius-tight); color: var(--mui-text-muted); background: var(--mui-bg-input); font-size: var(--mui-text-caption-size); font-variant-numeric: tabular-nums; }
 .mui-sidebar__menu-action { position: absolute; inset-inline-end: var(--mui-space-xs); top: var(--mui-space-xs); }

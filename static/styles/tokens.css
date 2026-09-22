@@ -26,7 +26,7 @@
   --mui-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
   --mui-radius-sm: 0.25rem;
   --mui-radius-md: 0.375rem;
-  --mui-radius-lg: 0.75rem;
+  --mui-radius-lg: 0.5625rem;
   --mui-radius-full: 9999px;
   --mui-space-2xs: 0.125rem;
   --mui-space-xs: 0.25rem;
@@ -62,6 +62,12 @@
   --mui-sidebar-w: 15rem;
   --mui-sidebar-rail-w: 4rem;
   --mui-nav-row-height: 1.75rem;
+  /* Nav/menu rows (the Linear recipe): their own icon size, corner radius and
+     current-row ground, independent of the generic icon-size/control tokens.
+     Sidebar icons render 14px; button icons stay on --mui-icon-size (16px). */
+  --mui-nav-icon-size: 0.875rem;
+  --mui-nav-row-radius: 0.5rem;
+  --mui-nav-current-bg: rgba(255, 255, 255, 0.04);
   --mui-header-height: 3.5rem;
   /* Frame geometry never follows content density. */
   --mui-shell-masthead-height: 4rem;
@@ -73,7 +79,7 @@
   --mui-shell-inset: 1rem;
   --mui-shell-control-height: 2.25rem;
   --mui-shell-row-height: 2rem;
-  --mui-shell-nav-row-height: 2.25rem;
+  --mui-shell-nav-row-height: 1.75rem;
   --mui-shell-text-body-size: 0.9375rem;
   --mui-shell-text-small-size: 0.875rem;
   --mui-shell-text-caption-size: 0.75rem;
@@ -90,7 +96,7 @@
   --mui-status-chip-label-size: 0.8125rem;
   --mui-status-chip-count-height: 1.125rem;
   --mui-status-chip-count-size: 0.6875rem;
-  --mui-badge-height: 1.375rem;
+  --mui-badge-height: 1.125rem;
   --mui-touch-target: 2.75rem;
   --mui-icon-size: 1rem;
   --mui-text-input-touch-size: 1rem;
@@ -111,6 +117,10 @@
   --mui-text-h3-size: 1.125rem;
   --mui-text-h3-leading: 1.35;
   --mui-text-h3-tracking: -0.012em;
+  /* The "issue title" step between h3 and h2 (measured off linear.app: 20px). */
+  --mui-text-title-size: 1.25rem;
+  --mui-text-title-leading: 1.33;
+  --mui-text-title-tracking: -0.012em;
   --mui-text-body-size: 0.9375rem;
   --mui-text-body-leading: 1.6;
   --mui-text-body-tracking: -0.011em;
@@ -137,6 +147,10 @@
   --mui-border-strong: rgba(255, 255, 255, 0.14);
   --mui-border-control: rgba(255, 255, 255, 0.22);
   --mui-border-focus: var(--mui-accent-text);
+  /* Intra-card divider (Linear's rgb(46,46,50) dark) and the current nav-row
+     ground. Light counterparts are the same relative step over the light theme. */
+  --mui-border-divider: #2e2e32;
+  --mui-nav-current-bg: rgba(255, 255, 255, 0.04);
   --mui-text: #f7f8f8;
   --mui-text-secondary: #d0d6e0;
   --mui-text-muted: #8a8f98;
@@ -199,6 +213,8 @@
   --mui-border-strong: rgba(0, 0, 0, 0.12);
   --mui-border-control: rgba(0, 0, 0, 0.24);
   --mui-border-focus: var(--mui-accent-text);
+  --mui-border-divider: rgba(0, 0, 0, 0.12);
+  --mui-nav-current-bg: rgba(0, 0, 0, 0.04);
   --mui-text: #1c1c1f;
   --mui-text-secondary: #3c3f44;
   --mui-text-muted: #6b6f76;
@@ -263,7 +279,7 @@
   --mui-text-primary: var(--mui-text);
   --mui-radius-sm: calc(var(--mui-brand-radius) * 0.5);
   --mui-radius-md: var(--mui-brand-radius);
-  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 4 / 3), 12px);
+  --mui-radius-lg: min(calc(var(--mui-brand-radius) * 1.5), 12px);
   --mui-radius-control: min(var(--mui-radius-sm), 8px);
   --mui-radius-tight: min(var(--mui-radius-sm), 4px);
   --mui-control-height: calc(1.75rem + 0.25rem * var(--mui-density-level));

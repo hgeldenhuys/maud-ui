@@ -1,13 +1,14 @@
 /* Badge component — shadcn-quality solid-color status chips */
 
-/* Status pills stay 22px; explicit command chips keep their 26px size. */
+/* Status pills are 18px tall with 1px 4px padding and 11px type (the Linear
+   model-chip recipe, tokenised); explicit command chips keep their 26px size. */
 .mui-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   height: var(--mui-badge-height);
-  padding: 0 var(--mui-space-sm);
+  padding: 1px 4px;
   font-size: var(--mui-badge-font-size);
   font-weight: var(--mui-weight-medium);
   line-height: var(--mui-leading-tight);
@@ -16,6 +17,13 @@
   border-radius: var(--mui-radius-tight);
   transition: background-color var(--mui-motion-fast) var(--mui-motion-ease),
               color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+
+/* Size: Sm18 — pins the 18px recipe regardless of token drift. */
+.mui-badge--sm-18 {
+  height: 1.125rem;
+  padding: 1px 4px;
+  font-size: var(--mui-badge-font-size);
 }
 
 /* Default — accent solid */
@@ -109,6 +117,19 @@
 /* Inline-start icon — ensure gap between icon and label */
 .mui-badge[data-icon="inline-start"] {
   gap: var(--mui-space-xs);
+}
+
+/* Colour dot (Props::dot) — a 16px circle before the label (Linear's label
+   chips). The colour comes from the caller via an inline background; a dot
+   sits 2px from the label, tighter than a glyph icon. */
+.mui-badge__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--mui-radius-full);
+  flex: none;
+}
+.mui-badge--dot.mui-badge[data-icon="inline-start"] {
+  gap: 2px;
 }
 
 /* Monospace face — shas, ids, counts. Tightened tracking keeps the pill

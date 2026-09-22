@@ -20,12 +20,15 @@ html! {
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td>label</td><td>String</td><td><code>""</code></td><td>Text content displayed in the badge.</td></tr>
 <tr><td>variant</td><td>Variant</td><td><code>Default</code></td><td>Visual variant (color scheme): Default, Secondary, Success, Warning, Danger, Outline, Ghost, Link.</td></tr>
+<tr><td>size</td><td>Size</td><td><code>Default</code></td><td>Size step. <code>Default</code> follows the tokens (18px at the default theme); <code>Sm18</code> pins the 18px recipe explicitly.</td></tr>
 <tr><td>href</td><td>Option<String></td><td><code>None</code></td><td>Optional URL; if Some, badge renders as an <code>&lt;a&gt;</code> element; if None, renders as a <code>&lt;span&gt;</code>.</td></tr>
 <tr><td>leading_icon</td><td>Option<Markup></td><td><code>None</code></td><td>Optional icon markup rendered before the label with <code>data-icon="inline-start"</code>.</td></tr>
+<tr><td>dot</td><td>Option<String></td><td><code>None</code></td><td>Optional colour dot — a 16px circle rendered before the label (label-chip colour coding). The string is any CSS colour applied as the dot's background; pass <code>""</code> for an unpainted dot.</td></tr>
 <tr><td>mono</td><td>bool</td><td><code>false</code></td><td>Render the label in the monospace face — for shas, ids, counts.</td></tr>
 <tr><td>chip</td><td>bool</td><td><code>false</code></td><td>Render as a taller (26px) hollow chip: bordered-transparent, 1px foreground-10% border, 6px radius. The counterpart to the filled pill.</td></tr>
 <tr><td>trailing_count</td><td>Option<String></td><td><code>None</code></td><td>Trailing count set apart in the mono face — the <code>2</code> in <code>mail 2</code>.</td></tr>
 <tr><td>kbd</td><td>Option<String></td><td><code>None</code></td><td>Trailing kbd hint in a subtle key cap — the <code>⌘K</code> in a command chip.</td></tr>
+<tr><td>class</td><td>Option<String></td><td><code>None</code></td><td>Extra class names appended to the class list — the escape hatch for per-instance overrides a closed enum cannot express.</td></tr>
 </tbody></table>
 <h2>Hollow chip</h2>
 <p><code>chip: true</code> swaps the pill for a taller bordered-transparent chip sized to sit inline with 24–28px controls. It carries an optional <code>trailing_count</code> or <code>kbd</code>:</p>

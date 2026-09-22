@@ -68,6 +68,14 @@
   flex-shrink: 0;
 }
 
+/* The 28px icon-only step (Linear's header/nav icon controls). */
+.mui-btn--icon-28 {
+  height: 1.75rem;
+  width: 1.75rem;
+  padding: 0;
+  flex-shrink: 0;
+}
+
 .mui-btn--icon-lg {
   height: 2.5rem;
   width: 2.5rem;
@@ -138,6 +146,34 @@
 
 .mui-btn--ghost:hover:not([aria-disabled="true"]) {
   background: var(--mui-bg-input);
+}
+
+/* Ghost with a visible boundary — a quiet pill (the "New issue" button).
+   `bordered: bool` adds the hairline; the ground stays ghost-transparent. */
+.mui-btn--ghost-bordered {
+  background: transparent;
+  border-color: var(--mui-border);
+  color: var(--mui-text);
+}
+
+.mui-btn--ghost-bordered:hover:not([aria-disabled="true"]) {
+  background: var(--mui-bg-input);
+}
+
+/* --- Variant: Translucent (the frosted icon pill) ---------------------- */
+/* White 4% ground with a 1px inset highlight ring and muted ink — Linear's
+   header action pills. Renders as a full-radius pill. */
+
+.mui-btn--translucent {
+  background: rgba(255, 255, 255, 0.04);
+  border: 0;
+  border-radius: var(--mui-radius-full);
+  box-shadow: rgba(255, 255, 255, 0.05) 0 0 0 1px inset;
+  color: var(--mui-text-muted);
+}
+
+.mui-btn--translucent:hover:not([aria-disabled="true"]) {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* --- Variant: Danger / Destructive ------------------------------------ */

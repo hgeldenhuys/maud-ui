@@ -1,9 +1,11 @@
-/* Card component — Linear-style surface: hairline structure border, a 1px
-   shadow ring for the edge highlight, and a faint top wash (dark only, the
-   --mui-surface-wash token is transparent in light). */
+/* Card component — Linear-style surface: a flat bg-card ground with a
+   structure hairline and a 1px shadow ring for the edge highlight. The old
+   faint top wash is gone (drop --mui-surface-wash from the recipe; the token
+   stays defined in tokens.css for consumers who want it). */
 
 .mui-card {
-  background: linear-gradient(var(--mui-surface-wash), var(--mui-surface-wash)), var(--mui-bg-card);
+  position: relative;
+  background: var(--mui-bg-card);
   border: var(--mui-hairline) solid var(--mui-border);
   border-radius: var(--mui-radius-lg);
   box-shadow: var(--mui-ring-hairline);
@@ -54,6 +56,15 @@
   gap: var(--mui-inset-tight);
 }
 
+/* Overlay slot (Props::overlay) — absolutely positioned at the card's
+   top-right corner, above the body content (e.g. a floating status chip). */
+.mui-card__overlay {
+  position: absolute;
+  top: var(--mui-space-xs);
+  inset-inline-end: var(--mui-space-xs);
+  z-index: 1;
+}
+
 .mui-card__body {
   padding: var(--mui-space-xl);
 }
@@ -72,6 +83,12 @@
 /* Collapse top padding on footer when body is above */
 .mui-card__body + .mui-card__footer {
   padding-top: 0;
+}
+
+/* Intra-card separators use the divider step (--mui-border-divider:
+   rgb(46,46,50) dark), a step stronger than the structural --mui-border. */
+.mui-card .mui-separator {
+  background: var(--mui-border-divider);
 }
 
 /* ------------------------------------------------------------------ */

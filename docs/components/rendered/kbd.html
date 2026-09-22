@@ -16,12 +16,14 @@ html! {
 <h2>Props</h2>
 <table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>keys</code></td><td><code>Vec&lt;String&gt;</code></td><td><code>vec![]</code></td><td>Sequence of key labels (e.g., ["Ctrl", "S"] or ["⌘", "K"]).</td></tr>
+<tr><td><code>variant</code></td><td><code>Variant</code></td><td><code>Variant::Default</code></td><td><code>Default</code> is the keycap (2px bottom edge + shadow). <code>Code</code> is the inline code chip: a 24px bordered pill in the mono face that sits inline in a text line — selectable, no keycap chrome.</td></tr>
 </tbody></table>
 <h2>Rendering</h2>
 <ul>
 <li>Each key renders as a <code>&lt;kbd&gt;</code> element.</li>
-<li>Keys are separated by <code>+</code> (span.mui-kbd-separator).</li>
-<li>Container wraps in <code>div.mui-kbd-container</code> for flexbox layout.</li>
+<li>Keys are separated by <code>+</code> (span.mui-kbd-separator) in the keycap variant.</li>
+<li>The keycap group wraps in <code>span.mui-kbd-container</code> for flexbox layout (a span, so chips can live inside paragraphs without the browser closing the <code>&lt;p&gt;</code>).</li>
+<li>The <code>Code</code> variant renders the chip(s) bare — inline content, no wrapper — so a chip inside a sentence does not perturb the line's height.</li>
 </ul>
 <h2>Accessibility</h2>
 <ul>

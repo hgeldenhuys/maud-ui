@@ -87,7 +87,8 @@ fn emitted_chip_and_badge_classes_resolve_to_compact_border_boxes() {
     assert_eq!(pixels(&count["font-size"], &tokens), 11.0);
     assert_eq!(count["font-variant-numeric"], "tabular-nums");
     assert_eq!(badge["box-sizing"], "border-box");
-    assert_eq!(pixels(&badge["height"], &tokens), 22.0);
+    // 0.19.0: the badge recipe is 18px tall (1px 4px padding, 11px type).
+    assert_eq!(pixels(&badge["height"], &tokens), 18.0);
     assert_eq!(declarations(".mui-status-chip-group")["flex-wrap"], "wrap");
 }
 

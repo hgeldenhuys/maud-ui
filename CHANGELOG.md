@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.1] — 2026-09-22 — colour values are colours, not CSS
+
+- `badge::Props::dot` and `swatch` `Mode::Raw`/`Mode::Token` now accept only colour syntax (hex, a named colour, `var(--token)`, or an `rgb`/`hsl`/`oklch`/`lch` function); anything else renders unpainted instead of reaching the `style` attribute. The swatch chip also no longer bypasses attribute escaping. Both values can carry user data.
+
 ## [0.19.0] — 2026-09-22 — the gaps the Linear replica found
 - Icon-only button sizes (24/28/32/40) now hold their height under the density layer: `brand-density.css` re-applied `min-height: var(--mui-control-height)` to every button after the icon reset, so a 28px icon button rendered 36px inside a shell.
 

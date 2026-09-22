@@ -15,7 +15,7 @@
 //! All three use the same `mui-swatch` block for the chip, so gallery
 //! / customiser / documentation share one set of pixels.
 
-use maud::{html, Markup, PreEscaped};
+use maud::{html, Markup};
 
 /// Swatch rendering mode.
 #[derive(Debug, Clone)]
@@ -77,11 +77,15 @@ impl Default for Props {
 /// Render a single swatch.
 pub fn render(props: Props) -> Markup {
     let (chip_style, copy_value) = match &props.mode {
-        Mode::Raw(v) => (format!("background: {};", v), v.clone()),
-        Mode::Token(name) => (
+        // Values may come from user data: a non-colour renders an unpainted chip
+        // rather than reaching the style attribute (0.19.1).
+        Mode::Raw(v) if crate::tokens::is_css_color(v) => (format!("background: {};", v), v.clone()),
+        Mode::Raw(v) => (String::new(), v.clone()),
+        Mode::Token(name) if name.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_') => (
             format!("background: var(--{});", name),
             format!("var(--{})", name),
         ),
+        Mode::Token(name) => (String::new(), format!("var(--{})", name)),
     };
     let role_attr: &'static str = if props.copyable {
         "button"
@@ -96,7 +100,7 @@ pub fn render(props: Props) -> Markup {
             data-mui=(if props.copyable { "swatch-copy" } else { "" })
             data-swatch-value=(copy_value)
             title=(if props.copyable { "Click to copy" } else { "" }) {
-            div class="mui-swatch__chip" style=(PreEscaped(chip_style)) {}
+            div class="mui-swatch__chip" style=(chip_style) {}
             div class="mui-swatch__body" {
                 div class="mui-swatch__label" { (props.label) }
                 @if let Some(sub) = &props.sublabel {
@@ -120,7 +124,7 @@ pub fn render_scale(name: &str, stops: &[(&str, &str)]) -> Markup {
                         data-mui="swatch-copy"
                         data-swatch-value=(*hex)
                         title=(format!("{} · {} — click to copy", name, key)) {
-                        div class="mui-swatch__chip" style=(PreEscaped(format!("background: {};", hex))) {}
+                        div class="mui-swatch__chip" style=[crate::tokens::is_css_color(hex).then(|| format!("background: {};", hex))] {}
                         div class="mui-swatch__scale-key" { (*key) }
                     }
                 }

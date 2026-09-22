@@ -135,3 +135,31 @@ pub mod status {
     pub const CHIP_COUNT_SIZE: &str = "0.6875rem";
     pub const BADGE_HEIGHT: &str = "1.375rem";
 }
+
+/// A caller-supplied colour is a colour, never free CSS: a hex colour, a named colour,
+/// a `var(--token)` reference, or an `rgb()`/`hsl()`/`oklch()`/`lch()`
+/// function over digits, `.`, `,`, `%`, `/` and spaces. Anything else
+/// (a `;`, a `url(`, an expression) renders the dot unpainted rather than
+/// reaching the style attribute — the value may come from user data.
+pub(crate) fn is_css_color(value: &str) -> bool {
+    let v = value.trim();
+    if v.is_empty() || v.len() > 64 {
+        return false;
+    }
+    if let Some(hex) = v.strip_prefix('#') {
+        return matches!(hex.len(), 3 | 4 | 6 | 8) && hex.chars().all(|c| c.is_ascii_hexdigit());
+    }
+    if let Some(inner) = v.strip_prefix("var(--").and_then(|r| r.strip_suffix(')')) {
+        return !inner.is_empty() && inner.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_');
+    }
+    for func in ["rgb(", "rgba(", "hsl(", "hsla(", "oklch(", "lch("] {
+        if let Some(inner) = v.strip_prefix(func).and_then(|r| r.strip_suffix(')')) {
+            return !inner.is_empty()
+                && inner
+                    .chars()
+                    .all(|c| c.is_ascii_digit() || matches!(c, '.' | ',' | '%' | '/' | ' ' | '-'));
+        }
+    }
+    v.chars().all(|c| c.is_ascii_alphabetic())
+}
+

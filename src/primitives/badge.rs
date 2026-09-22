@@ -131,8 +131,8 @@ pub fn render(props: Props) -> Markup {
     };
     let dot_style = props
         .dot
-        .as_ref()
-        .filter(|c| !c.is_empty())
+        .as_deref()
+        .filter(|c| crate::tokens::is_css_color(c))
         .map(|c| format!("background: {c};"));
 
     html! {
@@ -300,6 +300,25 @@ pub fn showcase() -> Markup {
                     }
                 }
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod dot_color_tests {
+    use crate::tokens::is_css_color;
+
+    #[test]
+    fn accepts_real_colours() {
+        for ok in ["#5e6ad2", "#fff", "#ffffff80", "red", "var(--mui-accent)", "rgb(76, 183, 130)", "rgba(76,183,130,.3)", "oklch(70% 0.1 150 / 50%)"] {
+            assert!(is_css_color(ok), "{ok}");
+        }
+    }
+
+    #[test]
+    fn refuses_css_injection() {
+        for bad in ["", "red; background-image: url(https://evil)", "url(x)", "expression(1)", "var(--x); color: red", "#zzz", "rgb(1) ; x:y", "red\"onmouseover=\"1"] {
+            assert!(!is_css_color(bad), "{bad}");
         }
     }
 }

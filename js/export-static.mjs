@@ -124,8 +124,15 @@ async function main() {
 
     // 5. Copy bundled CSS + JS so /css/maud-ui.min.css and
     //    /js/maud-ui.min.js (referenced by the HTML) resolve.
+    // static/ holds the CURRENT bundles (build-assets.mjs writes them); dist/ is
+    // the 0.7 snapshot and shipped a year-old stylesheet under a fresh page tree
+    // (2026-09-22). The font sits next to the CSS, where its @font-face expects it.
     for (const f of ["maud-ui.css", "maud-ui.min.css", "maud-ui.js", "maud-ui.min.js"]) {
-      cpSync(join(ROOT, "dist", f), join(PUBLIC_DIR, f.endsWith(".css") ? "css" : "js", f));
+      cpSync(join(ROOT, "static", f), join(PUBLIC_DIR, f.endsWith(".css") ? "css" : "js", f));
+    }
+    mkdirSync(join(PUBLIC_DIR, "css", "fonts"), { recursive: true });
+    cpSync(join(ROOT, "static", "fonts", "InterVariable.woff2"), join(PUBLIC_DIR, "css", "fonts", "InterVariable.woff2"));
+    {
     }
 
     // 6. Brand assets at the ROOT of the site. These are copied rather than

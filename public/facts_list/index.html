@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Facts List — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Facts List — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><link rel="stylesheet" href="/css/maud-ui.css?v=209159"><style>
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><script>window.muiTypePixels = function(token) {
+  var probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;font-size:var(' + token + ')';
+  document.documentElement.appendChild(probe);
+  var size = parseFloat(getComputedStyle(probe).fontSize);
+  probe.remove();
+  return size;
+};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Facts List — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Facts List — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme; const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=353072"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -13,7 +20,7 @@
     height: 100vh;
     overflow-y: auto;
     border-right: 1px solid var(--mui-border);
-    padding: 1rem 0;
+    padding: var(--mui-space-lg) 0;
     scrollbar-width: thin;
     scrollbar-color: var(--mui-border) transparent;
 }
@@ -21,54 +28,27 @@
 .mui-gallery__nav {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
 }
 
 .mui-gallery__nav-group {
-    padding: 0 0 0.25rem;
+    padding: 0 0 var(--mui-space-xs);
 }
 
-.mui-gallery__nav-tier {
-    display: block;
-    padding: 0.5rem 1rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--mui-text-muted);
-    text-decoration: none;
-    transition: color var(--mui-transition);
-}
-.mui-gallery__nav-tier:hover { color: var(--mui-text); }
-
-.mui-gallery__nav-items {
-    display: flex;
-    flex-direction: column;
-}
-
-.mui-gallery__nav-item {
-    display: block;
-    padding: 0.25rem 1rem 0.25rem 1.5rem;
-    font-size: 0.8125rem;
-    color: var(--mui-text-subtle);
-    text-decoration: none;
-    border-left: 2px solid transparent;
-    transition: all var(--mui-transition);
-}
-.mui-gallery__nav-item:hover {
-    color: var(--mui-text);
-    background: var(--mui-bg-input);
-    border-left-color: var(--mui-border-hover);
-}
-.mui-gallery__nav-item--active {
-    color: var(--mui-text);
-    border-left-color: var(--mui-accent);
-    background: var(--mui-bg-input);
-}
+.mui-gallery__nav-tier { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; padding: var(--mui-space-sm) var(--mui-space-lg); min-height: var(--mui-nav-row-height); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); cursor: pointer; }
+.mui-gallery__nav-tier::-webkit-details-marker { display: none; }
+.mui-gallery__nav-tier::after { content: "›"; font-size: var(--mui-text-small-size); transition: transform var(--mui-transition); }
+details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
+.mui-gallery__nav-tier:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-items { display: flex; flex-direction: column; gap: var(--mui-space-2xs); padding: 0 var(--mui-space-sm); }
+.mui-gallery__nav-item { display: flex; align-items: center; min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); font-size: var(--mui-text-small-size); color: var(--mui-text-secondary); text-decoration: none; border-inline-start: 2px solid transparent; border-radius: var(--mui-radius-md); transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-gallery__nav-item:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-item--active { color: var(--mui-accent-text); border-inline-start-color: var(--mui-accent-text); background: var(--mui-accent-soft); font-weight: var(--mui-weight-heading); }
+@media (pointer: coarse) { .mui-gallery__nav-item, .mui-gallery__nav-tier { min-height: var(--mui-touch-target); } }
 
 /* Main content */
 .mui-gallery__main {
-    padding: 2rem;
+    padding: var(--mui-space-xxl) var(--mui-page-gutter);
     /* The cap is a readable measure, but without the auto margins it jammed
        against the sidebar and left the entire right half of a wide window
        empty — it read as a broken layout rather than a deliberate column.
@@ -88,48 +68,48 @@
 }
 
 .mui-gallery__tier {
-    margin-bottom: 3rem;
+    margin-bottom: var(--mui-space-3xl);
 }
 
 .mui-gallery__tier-header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
+    margin-bottom: var(--mui-space-xl);
+    padding-bottom: var(--mui-space-md);
     border-bottom: 1px solid var(--mui-border);
 }
 
 .mui-gallery__tier-title {
-    margin: 0 0 0.25rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
+    margin: 0 0 var(--mui-space-xs);
+    font-size: var(--mui-text-h2-size);
+    font-weight: var(--mui-weight-heading);
+ line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
 
 .mui-gallery__tier-desc {
     margin: 0;
     color: var(--mui-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
 }
 
 .mui-gallery__component {
-    padding: 1.5rem;
-    margin-bottom: 1rem;
+    padding: var(--mui-space-xl);
+    margin-bottom: var(--mui-space-lg);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
 }
 
 .mui-gallery__component-name {
-    margin: 0 0 1rem;
-    font-size: 1.125rem;
-    font-weight: 600;
+    margin: 0 0 var(--mui-space-lg);
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-}
+    gap: var(--mui-space-sm);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 
 .mui-gallery__anchor {
     color: var(--mui-text-subtle);
     text-decoration: none;
-    font-weight: 400;
+    font-weight: var(--mui-weight-normal);
     opacity: 0;
     transition: opacity var(--mui-transition);
 }
@@ -141,10 +121,10 @@
 .mui-gallery__breadcrumb {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 0.875rem;
+    gap: var(--mui-space-xs);
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text-muted);
-    margin-bottom: 1rem;
+    margin-bottom: var(--mui-space-lg);
 }
 .mui-gallery__breadcrumb a {
     color: var(--mui-text-subtle);
@@ -152,10 +132,10 @@
 }
 .mui-gallery__breadcrumb a:hover {
     color: var(--mui-text);
-    text-decoration: underline;
+    text-decoration: none;
 }
 
-.mui-gallery__back { padding-top: 1rem; }
+.mui-gallery__back { padding-top: var(--mui-space-lg); }
 
 /* ── Responsive: mobile drawer ──────────────────────────────────────
  * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
@@ -179,17 +159,17 @@
     flex-shrink: 0;
 }
 .mui-showcase__menu-btn:hover { border-color: var(--mui-border-hover); }
-.mui-showcase__menu-icon { font-size: 1rem; line-height: 1; }
+.mui-showcase__menu-icon { font-size: var(--mui-text-body-size); line-height: var(--mui-leading-tight); }
 
 .mui-showcase__drawer-backdrop {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 40;
-    background: rgba(0, 0, 0, 0.55);
+    z-index: var(--mui-layer-navigation);
+    background: var(--mui-bg-overlay);
     -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
-    animation: muiFadeIn 180ms ease;
+    animation: muiFadeIn var(--mui-motion-enter) ease;
 }
 @keyframes muiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -197,39 +177,43 @@ html[data-mui-drawer="open"] { overflow: hidden; }
 html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 
 @media (max-width: 60rem) {
-    .mui-showcase__menu-btn { display: inline-flex; }
+    html[data-mui-gallery-ready] .mui-showcase__menu-btn { display: inline-flex; }
     .mui-gallery { grid-template-columns: 1fr; }
 
-    .mui-gallery__sidebar {
+    html[data-mui-gallery-ready] .mui-gallery__sidebar {
         position: fixed !important;
         top: var(--mui-header-h) !important;
-        left: 0;
+        inset-inline-start: 0;
         width: 18rem;
         max-width: 82vw;
-        height: calc(100vh - var(--mui-header-h)) !important;
-        z-index: 45;
+        height: calc(100dvh - var(--mui-header-h)) !important;
+        z-index: var(--mui-layer-navigation);
         background: var(--mui-bg);
         border-right: 1px solid var(--mui-border);
         transform: translateX(-100%);
-        transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+        visibility: hidden;
+        transition: transform var(--mui-motion-enter) var(--mui-motion-ease);
     }
-    html[data-mui-drawer="open"] .mui-gallery__sidebar {
+    html[data-mui-gallery-ready][dir="rtl"] .mui-gallery__sidebar { transform: translateX(100%); }
+    html[data-mui-gallery-ready][data-mui-drawer="open"] .mui-gallery__sidebar {
         transform: translateX(0);
-        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
+        visibility: visible;
+        box-shadow: var(--mui-shadow-lg);
     }
+    html:not([data-mui-gallery-ready]) .mui-gallery__sidebar { position: static; height: auto !important; }
 
     /* Give the sidebar a visible close hint */
-    .mui-gallery__sidebar::after {
-        content: "Tap anywhere outside to close \u2192";
+    html[data-mui-gallery-ready] .mui-gallery__sidebar::after {
+        content: "Tap outside or press Esc to close";
         display: block;
-        padding: 0.75rem 1rem;
-        font-size: 0.6875rem;
+        padding: var(--mui-space-md) var(--mui-space-lg);
+        font-size: var(--mui-text-caption-size);
         color: var(--mui-text-subtle);
         text-align: center;
     }
 
     /* Tighten header spacing on narrow viewports */
-    .mui-showcase__header-inner { gap: 0.5rem; row-gap: 0.375rem; }
+    .mui-showcase__header-inner { gap: var(--mui-space-sm); row-gap: var(--mui-inset-tight); }
     .mui-showcase__nav { order: 10; flex-basis: 100%; }
     .mui-showcase__search { min-width: 0; flex: 1 1 auto; }
     .mui-showcase__palette-btn { display: none; }
@@ -248,178 +232,77 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 .mui-showcase__palette-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.125rem;
-    padding: 0.25rem 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) var(--mui-inset-tight);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text-muted);
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     cursor: pointer;
     transition: border-color var(--mui-transition);
 }
 .mui-showcase__palette-btn:hover { border-color: var(--mui-border-hover); color: var(--mui-text); }
 .mui-showcase__palette-btn kbd {
     font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    line-height: 1;
-    padding: 0.0625rem 0.25rem;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-space-xs);
     background: var(--mui-bg);
     color: var(--mui-text-muted);
     border: 1px solid var(--mui-border);
-    border-radius: 2px;
+    border-radius: var(--mui-radius-sm);
 }
 
-.mui-palette {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    display: none;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 6rem 1rem 1rem;
-}
-html[data-mui-palette="open"] .mui-palette { display: flex; }
-
-.mui-palette__scrim {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-    animation: muiFadeIn 140ms ease;
-}
-
-.mui-palette__panel {
-    position: relative;
-    width: min(42rem, 100%);
-    max-height: calc(100vh - 8rem);
-    display: flex;
-    flex-direction: column;
-    background: var(--mui-bg-card);
-    border: 1px solid var(--mui-border);
-    border-radius: var(--mui-radius-lg);
-    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.55),
-                0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    animation: muiPaletteIn 160ms cubic-bezier(0.2, 0, 0, 1);
-}
-@keyframes muiPaletteIn {
-    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-    to   { opacity: 1; transform: none; }
-}
-
-.mui-palette__search {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.875rem 1rem;
-    border-bottom: 1px solid var(--mui-border);
-}
-.mui-palette__icon { color: var(--mui-text-muted); display: inline-flex; }
-.mui-palette__input {
-    flex: 1;
-    min-width: 0;
-    height: 1.75rem;
-    padding: 0;
-    background: transparent;
-    color: var(--mui-text);
-    border: 0;
-    outline: none;
-    font-size: 1rem;
-    font-family: inherit;
-}
+.mui-palette { width: min(42rem, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); padding: 0; margin: 12vh auto auto; border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); background: var(--mui-bg-card); color: var(--mui-text); box-shadow: var(--mui-shadow-lg); overflow: hidden; }
+.mui-palette::backdrop { background: var(--mui-bg-overlay); }
+.mui-palette[open] { display: block; animation: muiPaletteIn var(--mui-motion-enter) var(--mui-motion-ease); }
+@keyframes muiPaletteIn { from { opacity: 0; transform: translateY(-0.5rem); } to { opacity: 1; transform: none; } }
+.mui-palette__panel { display: flex; flex-direction: column; max-height: calc(80dvh - 2rem); }
+.mui-palette__search { display: flex; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-header-height); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-end: 1px solid var(--mui-border); }
+.mui-palette__icon { display: inline-flex; color: var(--mui-text-muted); }
+.mui-palette__input { flex: 1; min-width: 0; border: 0; outline: none; min-height: var(--mui-control-height); background: transparent; color: var(--mui-text); font: inherit; }
 .mui-palette__input::placeholder { color: var(--mui-text-subtle); }
-.mui-palette__hint {
-    font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    padding: 0.125rem 0.375rem;
-    background: var(--mui-bg);
-    color: var(--mui-text-muted);
-    border: 1px solid var(--mui-border);
-    border-radius: var(--mui-radius-sm);
-}
-
-.mui-palette__list {
-    list-style: none;
-    margin: 0;
-    padding: 0.375rem 0.375rem;
-    overflow-y: auto;
-    max-height: 26rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--mui-border) transparent;
-}
-.mui-palette__item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.75rem;
-    align-items: center;
-    padding: 0.5rem 0.625rem;
-    border-radius: var(--mui-radius-sm);
-    cursor: pointer;
-    color: var(--mui-text);
-}
-.mui-palette__item--active {
-    background: color-mix(in srgb, var(--mui-accent) 20%, transparent);
-}
-.mui-palette__item-kind {
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-family: var(--mui-font-mono);
-    color: var(--mui-text-subtle);
-    padding: 0.125rem 0.375rem;
-    background: var(--mui-bg);
-    border-radius: 3px;
-    min-width: 5rem;
-    text-align: center;
-}
-.mui-palette__item-label { font-size: 0.875rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mui-palette__item-label mark { background: color-mix(in srgb, var(--mui-accent) 40%, transparent); color: inherit; border-radius: 2px; padding: 0 1px; }
-.mui-palette__item-path {
-    font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    color: var(--mui-text-subtle);
-}
-.mui-palette__empty {
-    padding: 1.5rem 1rem;
-    text-align: center;
-    color: var(--mui-text-muted);
-    font-size: 0.875rem;
-}
-
-.mui-palette__footer {
-    display: flex;
-    gap: 1rem;
-    padding: 0.5rem 0.875rem;
-    border-top: 1px solid var(--mui-border);
-    background: var(--mui-bg);
-    font-size: 0.6875rem;
-    color: var(--mui-text-subtle);
-}
-.mui-palette__footer kbd {
-    font-family: var(--mui-font-mono);
-    font-size: 0.625rem;
-    padding: 0.0625rem 0.25rem;
-    background: var(--mui-bg-card);
-    color: var(--mui-text-muted);
-    border: 1px solid var(--mui-border);
-    border-radius: 2px;
-    margin-right: 0.25rem;
-}
+.mui-palette__hint { border: 1px solid var(--mui-border); background: var(--mui-bg); color: var(--mui-text-muted); padding: var(--mui-space-xs) var(--mui-space-sm); border-radius: var(--mui-radius-sm); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); cursor: pointer; }
+.mui-palette__hint:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-palette__list { list-style: none; overflow: auto; padding: var(--mui-space-sm); margin: 0; min-height: 0; }
+.mui-palette__section { padding: var(--mui-space-md) var(--mui-space-sm) var(--mui-space-xs); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; }
+.mui-palette__item { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); border-radius: var(--mui-radius-md); cursor: pointer; }
+.mui-palette__item:hover { background: var(--mui-bg-input); }
+.mui-palette__item--active { background: var(--mui-accent-soft); color: var(--mui-accent-text); }
+.mui-palette__item-label { font-size: var(--mui-text-small-size); }
+.mui-palette__item-path { font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); color: var(--mui-text-muted); }
+.mui-palette__item-key { color: var(--mui-text-subtle); visibility: hidden; font-size: var(--mui-text-caption-size); }
+.mui-palette__item--active .mui-palette__item-key { visibility: visible; }
+.mui-palette__empty { padding: var(--mui-space-xxl) var(--mui-space-lg); font-size: var(--mui-text-small-size); color: var(--mui-text-muted); }
+.mui-palette__footer { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-start: 1px solid var(--mui-border); font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); }
+.mui-palette__footer kbd { font: inherit; font-family: var(--mui-font-mono); color: var(--mui-text-secondary); margin-inline-end: var(--mui-space-xs); }
+@media (pointer: coarse) { .mui-palette__item { min-height: var(--mui-touch-target); } .mui-palette__hint { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } }
+@media (max-width: 40rem) { .mui-palette { margin-block-start: var(--mui-space-lg); } .mui-palette__item-path { display: none; } .mui-palette__input { font-size: var(--mui-text-input-touch-size); } }
+@media (prefers-reduced-motion: reduce) { .mui-palette[open] { animation: none; } }
 
 /* Blocks index grid */
+.mui-gallery__intro { margin-block-end: var(--mui-space-xxl); }
+.mui-gallery__intro h1 { margin: 0 0 var(--mui-space-sm); font-size: var(--mui-text-h1-size); letter-spacing: var(--mui-text-h1-tracking);  line-height: var(--mui-text-h1-leading); }
+.mui-gallery__curation-intro { color: var(--mui-text-muted); line-height: var(--mui-leading-body); }
+.mui-gallery__curation-intro a { color: var(--mui-link); text-underline-offset: 0.2em; }
+.mui-showcase__block-category + .mui-showcase__block-category { margin-block-start: var(--mui-space-xxl); }
+.mui-showcase__block-category-title { margin: 0 0 var(--mui-space-md); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-heading); }
+.mui-showcase__block-card:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 3px; }
+.mui-theme__presets [aria-pressed="true"] { border-color: var(--mui-accent-text); background: var(--mui-bg-input); box-shadow: inset 0 -2px var(--mui-accent-text); }
+.mui-theme__export-status { margin: 0; min-height: 1.5em; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-theme__export-pre:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
 .mui-showcase__block-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: 1rem;
-    margin-top: 0.5rem;
+    gap: var(--mui-space-lg);
+    margin-top: var(--mui-space-sm);
 }
 .mui-showcase__block-card {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.25rem;
+    gap: var(--mui-space-md);
+    padding: var(--mui-space-20);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-lg);
@@ -431,41 +314,28 @@ html[data-mui-palette="open"] .mui-palette { display: flex; }
     border-color: var(--mui-border-hover);
     transform: translateY(-1px);
 }
-.mui-showcase__block-card--placeholder {
-    opacity: 0.55;
-    pointer-events: auto;
-    background: transparent;
-    border-style: dashed;
-}
-.mui-showcase__block-card-category {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--mui-text-subtle);
-}
 .mui-showcase__block-card-title {
-    margin: 0.25rem 0 0;
-    font-size: 1.0625rem;
-    font-weight: 600;
+    margin: var(--mui-space-xs) 0 0;
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
     color: var(--mui-text);
-}
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
 .mui-showcase__block-card-desc {
     margin: 0;
-    font-size: 0.875rem;
+    font-size: var(--mui-text-small-size);
     color: var(--mui-text-muted);
-    line-height: 1.5;
+    line-height: var(--mui-leading-small);
     flex: 1;
 }
 .mui-showcase__block-card-uses {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
 }
 .mui-showcase__block-card-use {
-    font-size: 0.6875rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
-    padding: 0.125rem 0.4375rem;
+    padding: var(--mui-space-2xs) 0.4375rem;
     background: var(--mui-bg-input);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-sm);
@@ -480,9 +350,9 @@ html { scroll-behavior: smooth; }
     display: inline-flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5rem;
+    gap: var(--mui-space-sm);
     min-width: 5rem;
-    padding: 0.25rem;
+    padding: var(--mui-space-xs);
     border-radius: var(--mui-radius-md);
     transition: transform var(--mui-transition),
                 box-shadow var(--mui-transition);
@@ -498,7 +368,7 @@ html { scroll-behavior: smooth; }
     height: 3.5rem;
     border-radius: var(--mui-radius-md);
     border: 1px solid color-mix(in srgb, var(--mui-border) 70%, transparent);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    box-shadow: var(--mui-shadow-sm);
     /* chequered base so translucent swatches are visible */
     background-image:
         linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
@@ -524,16 +394,16 @@ html { scroll-behavior: smooth; }
 .mui-swatch__body {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
+    gap: var(--mui-space-2xs);
     min-width: 0;
 }
 .mui-swatch__label {
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-medium);
     color: var(--mui-text);
 }
 .mui-swatch__sub {
-    font-size: 0.6875rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text-muted);
     white-space: nowrap;
@@ -544,32 +414,32 @@ html { scroll-behavior: smooth; }
 .mui-swatch__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
 }
 
 /* Horizontal tone ramp */
 .mui-swatch__scale {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    gap: var(--mui-space-sm);
+    margin-bottom: var(--mui-space-md);
 }
 .mui-swatch__scale-label {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: lowercase;
     color: var(--mui-text-muted);
-    letter-spacing: 0.06em;
+    letter-spacing: var(--mui-tracking-label);
 }
 .mui-swatch__scale-row {
     display: grid;
     grid-template-columns: repeat(11, minmax(2.25rem, 1fr));
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
 }
 .mui-swatch--scale {
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.125rem;
+    gap: var(--mui-space-xs);
+    padding: var(--mui-space-2xs);
     min-width: 0;
 }
 .mui-swatch--scale .mui-swatch__chip {
@@ -578,14 +448,14 @@ html { scroll-behavior: smooth; }
     border-radius: var(--mui-radius-sm);
 }
 .mui-swatch__scale-key {
-    font-size: 0.625rem;
+    font-size: var(--mui-text-caption-size);
     font-family: var(--mui-font-mono);
     color: var(--mui-text-subtle);
     text-align: center;
 }
 
 /* Toast-ish "copied" hint that fades after click */
-.mui-swatch--copied { animation: muiSwatchCopied 900ms ease forwards; }
+.mui-swatch--copied { animation: muiSwatchCopied calc(var(--mui-motion-enter) * 5) var(--mui-motion-ease) forwards; }
 @keyframes muiSwatchCopied {
     0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 45%, transparent); }
     40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--mui-accent) 25%, transparent); }
@@ -595,32 +465,24 @@ html { scroll-behavior: smooth; }
 /* ── Sticky compact page header ─────────────────────────────────────
  * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
  * + a two-row "brand above nav" layout). The new header is a single
- * row with brand · nav · tools, pinned to the top with a blurred
- * backdrop. --mui-header-h is published as a custom property so the
+ * row with brand · nav · tools, on an opaque surface from the document
+ * theme. --mui-header-h is published as a custom property so the
  * sidebar and section anchors can offset accurately. */
 :root { --mui-header-h: 3.25rem; }
 
 .mui-showcase__header {
     position: sticky;
     top: 0;
-    z-index: 50;
-    padding: 0.5rem 1.25rem !important;
-    background: color-mix(in srgb, var(--mui-bg) 82%, transparent);
-    -webkit-backdrop-filter: saturate(150%) blur(14px);
-    backdrop-filter: saturate(150%) blur(14px);
-}
-.mui-showcase__header h1 {
-    /* the old dist rule styled an <h1> inside the header; we no
-     * longer render one, but keep this reset in case something else
-     * hits it. */
-    font-size: 1rem;
-    margin: 0;
+    z-index: var(--mui-layer-overlay);
+    padding: var(--mui-space-sm) var(--mui-space-20) !important;
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
 }
 
 .mui-showcase__header-inner {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--mui-space-md);
     flex-wrap: wrap;
     min-height: 2.25rem;
 }
@@ -628,10 +490,10 @@ html { scroll-behavior: smooth; }
 .mui-showcase__brand {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.625rem;
+    gap: var(--mui-inset-cell);
     color: inherit;
     text-decoration: none;
-    padding-inline: 0.25rem;
+    padding-inline: var(--mui-space-xs);
     flex-shrink: 0;
 }
 
@@ -655,8 +517,8 @@ html { scroll-behavior: smooth; }
 .mui-showcase__search-input {
     width: 100%;
     height: 2rem;
-    padding: 0 2rem 0 1.875rem;
-    font-size: 0.8125rem;
+    padding: 0 var(--mui-space-xxl) 0 1.875rem;
+    font-size: var(--mui-text-small-size);
     font-family: inherit;
     color: var(--mui-text);
     background: var(--mui-bg-card);
@@ -677,9 +539,9 @@ html { scroll-behavior: smooth; }
     position: absolute;
     right: 0.5rem;
     font-family: var(--mui-font-mono);
-    font-size: 0.6875rem;
-    line-height: 1;
-    padding: 0.125rem 0.375rem;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
     background: var(--mui-bg);
     color: var(--mui-text-muted);
     border: 1px solid var(--mui-border);
@@ -695,13 +557,13 @@ html { scroll-behavior: smooth; }
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.8125rem;
+    gap: var(--mui-space-md);
+    font-size: var(--mui-text-small-size);
 }
 .mui-gallery__seq-link {
     color: var(--mui-text-muted);
     text-decoration: none;
-    padding: 0.125rem 0.375rem;
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
     border-radius: var(--mui-radius-sm);
     white-space: nowrap;
     max-width: 14rem;
@@ -724,14 +586,14 @@ html { scroll-behavior: smooth; }
 .mui-gallery__nav-item mark {
     background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
     color: var(--mui-text);
-    border-radius: 2px;
+    border-radius: var(--mui-radius-sm);
     padding: 0 1px;
 }
 
 /* No-results state inside the sidebar */
 .mui-gallery__nav-empty {
-    padding: 0.75rem 1rem;
-    font-size: 0.75rem;
+    padding: var(--mui-space-md) var(--mui-space-lg);
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
     display: none;
 }
@@ -743,19 +605,19 @@ html { scroll-behavior: smooth; }
     .mui-showcase__search { min-width: 7rem; }
 }
 .mui-showcase__brand-name {
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-size: var(--mui-text-body-size);
+    font-weight: var(--mui-weight-heading);
+    letter-spacing: var(--mui-tracking-heading);
     color: var(--mui-text);
 }
 .mui-showcase__brand-count {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
 }
 
 .mui-showcase__nav {
     display: inline-flex;
-    gap: 0.125rem;
+    gap: var(--mui-space-2xs);
     align-items: center;
     flex-wrap: wrap;
     /* Reset the dist CSS default that paints <nav> elements with a
@@ -781,25 +643,25 @@ html { scroll-behavior: smooth; }
 
 .mui-showcase__tools {
     display: inline-flex;
-    gap: 0.25rem;
+    gap: var(--mui-space-xs);
     align-items: center;
-    margin-left: 0.25rem;
-    padding-left: 0.5rem;
+    margin-left: var(--mui-space-xs);
+    padding-left: var(--mui-space-sm);
     border-left: 1px solid var(--mui-border);
 }
 
 .mui-showcase__tool-btn {
     min-width: 2rem;
-    padding-inline: 0.5rem;
-    font-size: 1rem;
-    line-height: 1;
+    padding-inline: var(--mui-space-sm);
+    font-size: var(--mui-text-body-size);
+    line-height: var(--mui-leading-tight);
 }
 
 /* The sidebar stuck to top:0 hid behind the new header; pin it
  * below the sticky chrome instead. */
 .mui-gallery__sidebar {
     top: var(--mui-header-h) !important;
-    height: calc(100vh - var(--mui-header-h)) !important;
+    height: calc(100dvh - var(--mui-header-h)) !important;
 }
 
 /* When the user clicks a sidebar / in-page jump link, keep the
@@ -808,13 +670,34 @@ html { scroll-behavior: smooth; }
 .mui-gallery__component,
 .mui-gallery__breadcrumb,
 [id] {
-    scroll-margin-top: calc(var(--mui-header-h) + 0.75rem);
+    scroll-margin-top: calc(var(--mui-header-h) + var(--mui-space-md));
 }
 
-/* Narrow screens: let brand + count stack smaller + hide subtitle */
+/* Two short rows on phones. Site links move into the existing menu. */
 @media (max-width: 40rem) {
     .mui-showcase__brand-count { display: none; }
-    :root { --mui-header-h: 3rem; }
+    :root { --mui-header-h: 7rem; }
+    .mui-showcase__header { padding: var(--mui-space-sm) var(--mui-space-lg) !important; }
+    .mui-showcase__header-inner { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: var(--mui-space-sm); }
+    .mui-showcase__menu-btn { grid-column: 1; grid-row: 1; width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__brand { grid-column: 2 / -1; grid-row: 1; min-height: 2.75rem; align-items: center; }
+    .mui-showcase__search { grid-column: 1 / 3; grid-row: 2; width: 100%; max-width: none; min-width: 0; }
+    .mui-showcase__search-input { height: 2.75rem; font-size: var(--mui-text-body-size); }
+    .mui-showcase__tools { grid-column: 3; grid-row: 2; margin: 0; padding: 0; border: 0; }
+    .mui-showcase__tool-btn { width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__palette-btn { display: none; }
+    .mui-showcase__header-inner > .mui-showcase__nav { grid-column: 1 / -1; }
+    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 var(--mui-space-md) var(--mui-space-md); margin-bottom: var(--mui-space-md); border-bottom: 1px solid var(--mui-border); }
+    .mui-gallery__sidebar > .mui-showcase__nav > .mui-btn,
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-summary { min-height: 2.75rem; justify-content: flex-start; width: 100%; }
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-menu { position: static; min-width: 0; max-height: none; box-shadow: none; }
+    .mui-gallery__main { padding: var(--mui-space-lg); }
+    .mui-gallery__component { padding: var(--mui-space-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .mui-gallery__sidebar, .mui-showcase__drawer-backdrop { animation: none; transition: none; }
 }
 
 /* Two-column "you write / you get" comparison — stacks on narrow screens.
@@ -822,8 +705,8 @@ html { scroll-behavior: smooth; }
 .mui-two-up {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
+    gap: var(--mui-space-xl);
+    margin-bottom: var(--mui-space-lg);
 }
 
 /* ── Mobile overflow hardening ───────────────────────────────────────
@@ -878,7 +761,7 @@ html { scroll-behavior: smooth; }
     list-style: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
+    gap: var(--mui-inset-tight);
     cursor: pointer;
     user-select: none;
 }
@@ -887,9 +770,9 @@ html { scroll-behavior: smooth; }
 
 .mui-gallery__nav-advanced-caret {
     display: inline-block;
-    font-size: 0.75rem;
-    line-height: 1;
-    transition: transform 150ms ease;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    transition: transform var(--mui-motion-fast) ease;
     color: var(--mui-text-muted);
 }
 .mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
@@ -900,45 +783,44 @@ html { scroll-behavior: smooth; }
     position: absolute;
     top: calc(100% + 0.375rem);
     right: 0;
-    z-index: 60;
+    z-index: var(--mui-layer-toast);
     min-width: 18rem;
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-inset-tight);
     background: var(--mui-bg-card);
     border: 1px solid var(--mui-border);
     border-radius: var(--mui-radius-md);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35),
-                0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--mui-shadow-lg);
 }
 
 .mui-gallery__nav-advanced-group {
     display: flex;
     flex-direction: column;
-    gap: 0.0625rem;
-    padding: 0.25rem 0 0.375rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) 0 var(--mui-inset-tight);
     border-bottom: 1px solid var(--mui-border);
 }
 .mui-gallery__nav-advanced-group:last-child { border-bottom: 0; }
 
 .mui-gallery__nav-advanced-group-label {
     display: block;
-    padding: 0.375rem 0.75rem 0.25rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
+    padding: var(--mui-inset-tight) var(--mui-space-md) var(--mui-space-xs);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--mui-tracking-label);
     color: var(--mui-text-subtle);
 }
 
 .mui-gallery__nav-advanced-menu a {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.4375rem 0.75rem;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-sm) var(--mui-space-md);
     border-radius: var(--mui-radius-sm);
     color: var(--mui-text);
     text-decoration: none;
@@ -952,15 +834,15 @@ html { scroll-behavior: smooth; }
 }
 
 .mui-gallery__nav-advanced-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-heading);
 }
 .mui-gallery__nav-advanced-sub {
-    font-size: 0.75rem;
+    font-size: var(--mui-text-caption-size);
     color: var(--mui-text-muted);
-    font-weight: 400;
+    font-weight: var(--mui-weight-normal);
 }
-</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle" aria-label="Toggle navigation" aria-expanded="false"><span aria-hidden="true" class="mui-showcase__menu-icon">☰</span></button><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-mark" aria-hidden="true"><svg viewBox="3.5 2.5 25 27" style="height:0.75em;width:auto;display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg></span><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">79 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations… ( ⌘K )" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav"><a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Components</a><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Blocks</a><a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Theme</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu" role="menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor" role="menuitem"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap" role="menuitem"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow" role="menuitem"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape" role="menuitem"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid" role="menuitem"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw" role="menuitem"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs" role="menuitem"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid" role="menuitem"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts" role="menuitem"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet" role="menuitem"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar" role="menuitem"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer" role="menuitem"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs" role="menuitem"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Drag &amp; Drop</span><a href="/integrations/sortable" role="menuitem"><span class="mui-gallery__nav-advanced-label">SortableJS</span><span class="mui-gallery__nav-advanced-sub">Reorder list, kanban, tile grid</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm" role="menuitem"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm" style="text-decoration:none;">GitHub</a></nav><button type="button" class="mui-showcase__palette-btn" id="mui-palette-open" aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--theme" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span class="mui-showcase__tool-icon" aria-hidden="true">◐</span></button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--dir" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction"><span class="mui-showcase__tool-icon" aria-hidden="true">⇄</span></button></div></div></header><div class="mui-showcase__drawer-backdrop" id="mui-drawer-backdrop" aria-hidden="true"></div><script>window.__MUI_PALETTE__ = [
+</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle" aria-label="Open navigation" aria-controls="mui-gallery-navigation" aria-expanded="false"><span aria-hidden="true" class="mui-showcase__menu-icon">☰</span></button><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-mark" aria-hidden="true"><svg viewBox="3.5 2.5 25 27" style="height:0.75em;width:auto;display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg></span><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">84 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations… ( ⌘K )" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav" id="mui-site-navigation" aria-label="Site"><a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm">Components</a><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm">Blocks</a><a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm">Theme</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Drag &amp; Drop</span><a href="/integrations/sortable"><span class="mui-gallery__nav-advanced-label">SortableJS</span><span class="mui-gallery__nav-advanced-sub">Reorder list, kanban, tile grid</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm">GitHub</a></nav><button type="button" class="mui-showcase__palette-btn" id="mui-palette-open" aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--theme" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span class="mui-showcase__tool-icon" aria-hidden="true">◐</span></button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--dir" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction"><span class="mui-showcase__tool-icon" aria-hidden="true">⇄</span></button></div></div></header><div class="mui-showcase__drawer-backdrop" id="mui-drawer-backdrop" aria-hidden="true"></div><script>window.__MUI_PALETTE__ = [
   { l: "Home", u: "/", k: "page" },
   { l: "Component gallery", u: "/gallery", k: "page" },
   { l: "Get started", u: "/getting-started", k: "page" },
@@ -973,6 +855,7 @@ html { scroll-behavior: smooth; }
   { l: "Attention Pill", u: "/attention_pill", k: "component" },
   { l: "Avatar", u: "/avatar", k: "component" },
   { l: "Badge", u: "/badge", k: "component" },
+  { l: "Bottom Tab Bar", u: "/bottom_tab_bar", k: "component" },
   { l: "Breadcrumb", u: "/breadcrumb", k: "component" },
   { l: "Button", u: "/button", k: "component" },
   { l: "Button Group", u: "/button_group", k: "component" },
@@ -981,6 +864,7 @@ html { scroll-behavior: smooth; }
   { l: "Carousel", u: "/carousel", k: "component" },
   { l: "Chart", u: "/chart", k: "component" },
   { l: "Checkbox", u: "/checkbox", k: "component" },
+  { l: "Choice Card", u: "/choice_card", k: "component" },
   { l: "Code Block", u: "/code_block", k: "component" },
   { l: "Collapsible", u: "/collapsible", k: "component" },
   { l: "Combobox", u: "/combobox", k: "component" },
@@ -989,6 +873,7 @@ html { scroll-behavior: smooth; }
   { l: "Context Menu", u: "/context_menu", k: "component" },
   { l: "Data Table", u: "/data_table", k: "component" },
   { l: "Date Picker", u: "/date_picker", k: "component" },
+  { l: "Date Range", u: "/date_range", k: "component" },
   { l: "Dialog", u: "/dialog", k: "component" },
   { l: "Diff", u: "/diff", k: "component" },
   { l: "Direction", u: "/direction", k: "component" },
@@ -1011,6 +896,7 @@ html { scroll-behavior: smooth; }
   { l: "Menubar", u: "/menubar", k: "component" },
   { l: "Message", u: "/message", k: "component" },
   { l: "Meter", u: "/meter", k: "component" },
+  { l: "Time Split", u: "/time_split", k: "component" },
   { l: "Native Select", u: "/native_select", k: "component" },
   { l: "Navigation Menu", u: "/navigation_menu", k: "component" },
   { l: "Number Field", u: "/number_field", k: "component" },
@@ -1031,6 +917,7 @@ html { scroll-behavior: smooth; }
   { l: "Sonner", u: "/sonner", k: "component" },
   { l: "Spinner", u: "/spinner", k: "component" },
   { l: "Stack", u: "/stack", k: "component" },
+  { l: "Status Chip Group", u: "/status_chip_group", k: "component" },
   { l: "Status Dot", u: "/status_dot", k: "component" },
   { l: "Streaming Cursor", u: "/streaming_cursor", k: "component" },
   { l: "Swatch", u: "/swatch", k: "component" },
@@ -1055,6 +942,27 @@ html { scroll-behavior: smooth; }
   { l: "Settings — Profile", u: "/blocks/settings-profile", k: "block" },
   { l: "Settings — Team", u: "/blocks/settings-team", k: "block" },
   { l: "Shell — Sidebar", u: "/blocks/shell-sidebar", k: "block" },
+  { l: "Shell — Page Header", u: "/blocks/shell-page-header", k: "block" },
+  { l: "Shell — App Header", u: "/blocks/shell-app-header", k: "block" },
+  { l: "Shell — App Footer", u: "/blocks/shell-app-footer", k: "block" },
+  { l: "Shell — Brand Mark", u: "/blocks/shell-brand-mark", k: "block" },
+  { l: "Worklist — Header", u: "/blocks/worklist-header", k: "block" },
+  { l: "Record — Header", u: "/blocks/record-header", k: "block" },
+  { l: "Task — Grid", u: "/blocks/task-grid", k: "block" },
+  { l: "Record — Timeline", u: "/blocks/record-timeline", k: "block" },
+  { l: "Record — Money", u: "/blocks/record-money", k: "block" },
+  { l: "Record — Related Card", u: "/blocks/record-related-card", k: "block" },
+  { l: "Record — Facts", u: "/blocks/record-facts", k: "block" },
+  { l: "Record — Related List", u: "/blocks/record-related-list", k: "block" },
+  { l: "Record — Page", u: "/blocks/record-page", k: "block" },
+  { l: "Worklist — Grouped", u: "/blocks/worklist-grouped", k: "block" },
+  { l: "Attention — Banner", u: "/blocks/attention-banner", k: "block" },
+  { l: "Action — Row", u: "/blocks/action-row", k: "block" },
+  { l: "Feedback — Notice", u: "/blocks/feedback-notice", k: "block" },
+  { l: "Feedback — Confirm", u: "/blocks/feedback-confirm", k: "block" },
+  { l: "Search — Results", u: "/blocks/search-results", k: "block" },
+  { l: "Wizard — Header", u: "/blocks/wizard-header", k: "block" },
+  { l: "Worklist — Empty", u: "/blocks/worklist-empty", k: "block" },
   { l: "Monaco editor", u: "/integrations/monaco-editor", k: "integration" },
   { l: "xyflow", u: "/integrations/xyflow", k: "integration" },
   { l: "Excalidraw", u: "/integrations/excalidraw", k: "integration" },
@@ -1071,12 +979,12 @@ html { scroll-behavior: smooth; }
   { l: "xterm.js", u: "/integrations/xterm", k: "integration" },
   { l: "SortableJS", u: "/integrations/sortable", k: "integration" }
 ];
-</script><div class="mui-palette" id="mui-palette" role="dialog" aria-modal="true" aria-label="Command palette" aria-hidden="true"><div class="mui-palette__scrim" id="mui-palette-scrim"></div><div class="mui-palette__panel" role="combobox" aria-expanded="true" aria-haspopup="listbox"><div class="mui-palette__search"><span class="mui-palette__icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-palette-input" class="mui-palette__input" placeholder="Jump to anything… components, blocks, integrations, presets" aria-label="Search" aria-controls="mui-palette-list" spellcheck="false" autocomplete="off"><span class="mui-palette__hint" aria-hidden="true">Esc</span></div><ul class="mui-palette__list" id="mui-palette-list" role="listbox"></ul><div class="mui-palette__footer"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>Esc</kbd> close</span></div></div></div><div class="mui-gallery"><aside class="mui-gallery__sidebar"><nav class="mui-gallery__nav"><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#form-controls">Form Controls</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/form" data-slug="form">Form</a><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#display">Display</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/swatch" data-slug="swatch">Swatch</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#layout">Layout</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/stack" data-slug="stack">Stack</a><a class="mui-gallery__nav-item" href="/grid" data-slug="grid">Grid</a><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/sidebar" data-slug="sidebar">Sidebar</a><a class="mui-gallery__nav-item" href="/item" data-slug="item">Item</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a><a class="mui-gallery__nav-item" href="/direction" data-slug="direction">Direction</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#overlay">Overlay</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/sheet" data-slug="sheet">Sheet</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/sonner" data-slug="sonner">Sonner</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#navigation">Navigation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#composite">Composite</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#conversation">Conversation</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/message" data-slug="message">Message</a><a class="mui-gallery__nav-item" href="/streaming_cursor" data-slug="streaming_cursor">Streaming Cursor</a><a class="mui-gallery__nav-item" href="/code_block" data-slug="code_block">Code Block</a><a class="mui-gallery__nav-item" href="/diff" data-slug="diff">Diff</a><a class="mui-gallery__nav-item" href="/tool_call" data-slug="tool_call">Tool Call</a></div></div><div class="mui-gallery__nav-group"><a class="mui-gallery__nav-tier" href="/gallery#session">Session</a><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/composer" data-slug="composer">Composer</a><a class="mui-gallery__nav-item" href="/segmented_control" data-slug="segmented_control">Segmented Control</a><a class="mui-gallery__nav-item" href="/turn_progress" data-slug="turn_progress">Turn Progress</a><a class="mui-gallery__nav-item" href="/status_dot" data-slug="status_dot">Status Dot</a><a class="mui-gallery__nav-item" href="/attention_pill" data-slug="attention_pill">Attention Pill</a><a class="mui-gallery__nav-item" href="/facts_list" data-slug="facts_list">Facts List</a><a class="mui-gallery__nav-item" href="/gutter_section" data-slug="gutter_section">Gutter Section</a></div></div></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/gallery">Gallery</a><span> / </span><span>Facts List</span><div class="mui-gallery__seq"><a class="mui-gallery__seq-link" href="/attention_pill" rel="prev" title="Previous: Attention Pill"><span aria-hidden="true">← </span>Attention Pill</a><a class="mui-gallery__seq-link mui-gallery__seq-link--next" href="/gutter_section" rel="next" title="Next: Gutter Section">Gutter Section<span aria-hidden="true"> →</span></a></div></nav><section class="mui-gallery__component" id="facts_list"><h3 class="mui-gallery__component-name">Facts List</h3><div class="mui-showcase__grid"><section><h2>Session facts</h2><p class="mui-showcase__caption">Mono subtle labels, foreground values, rows on the 4px rhythm.</p><div style="max-width:22rem;"><dl class="mui-facts"><div class="mui-facts__row"><dt class="mui-facts__label">model</dt><dd class="mui-facts__value">sonnet-4.6</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">context</dt><dd class="mui-facts__value mui-facts__value--mono">18.4k / 200k</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">spend</dt><dd class="mui-facts__value mui-facts__value--mono">$1.84</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">worktree</dt><dd class="mui-facts__value mui-facts__value--mono">refactor-auth-middleware</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">started</dt><dd class="mui-facts__value">41m ago</dd></div></dl></div></section></div><section class="mui-docs"><h1>Facts list</h1>
+</script><dialog class="mui-palette" id="mui-palette" aria-label="Command palette"><div class="mui-palette__panel"><div class="mui-palette__search"><span class="mui-palette__icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-palette-input" class="mui-palette__input" placeholder="Search components, blocks and guides…" aria-label="Search destinations" aria-controls="mui-palette-list" role="combobox" aria-expanded="false" aria-autocomplete="list" spellcheck="false" autocomplete="off"><button class="mui-palette__hint" id="mui-palette-close" type="button" aria-label="Close command palette">Esc</button></div><ul class="mui-palette__list" id="mui-palette-list" role="listbox"></ul><div class="mui-palette__footer"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>Esc</kbd> close</span></div></div></dialog><div class="mui-gallery"><aside class="mui-gallery__sidebar" id="mui-gallery-navigation" aria-label="Gallery navigation"><nav class="mui-gallery__nav" aria-label="Components"><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:form-controls"><summary class="mui-gallery__nav-tier">Form Controls</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/form" data-slug="form">Form</a><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/choice_card" data-slug="choice_card">Choice Card</a><a class="mui-gallery__nav-item" href="/date_range" data-slug="date_range">Date Range</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:display"><summary class="mui-gallery__nav-tier">Display</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/swatch" data-slug="swatch">Swatch</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/time_split" data-slug="time_split">Time Split</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:layout"><summary class="mui-gallery__nav-tier">Layout</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/stack" data-slug="stack">Stack</a><a class="mui-gallery__nav-item" href="/grid" data-slug="grid">Grid</a><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/sidebar" data-slug="sidebar">Sidebar</a><a class="mui-gallery__nav-item" href="/item" data-slug="item">Item</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a><a class="mui-gallery__nav-item" href="/direction" data-slug="direction">Direction</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:overlay"><summary class="mui-gallery__nav-tier">Overlay</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/sheet" data-slug="sheet">Sheet</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/sonner" data-slug="sonner">Sonner</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:navigation"><summary class="mui-gallery__nav-tier">Navigation</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/bottom_tab_bar" data-slug="bottom_tab_bar">Bottom Tab Bar</a><a class="mui-gallery__nav-item" href="/status_chip_group" data-slug="status_chip_group">Status Chip Group</a><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:composite"><summary class="mui-gallery__nav-tier">Composite</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:conversation"><summary class="mui-gallery__nav-tier">Conversation</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/message" data-slug="message">Message</a><a class="mui-gallery__nav-item" href="/streaming_cursor" data-slug="streaming_cursor">Streaming Cursor</a><a class="mui-gallery__nav-item" href="/code_block" data-slug="code_block">Code Block</a><a class="mui-gallery__nav-item" href="/diff" data-slug="diff">Diff</a><a class="mui-gallery__nav-item" href="/tool_call" data-slug="tool_call">Tool Call</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:session"><summary class="mui-gallery__nav-tier">Session</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/composer" data-slug="composer">Composer</a><a class="mui-gallery__nav-item" href="/segmented_control" data-slug="segmented_control">Segmented Control</a><a class="mui-gallery__nav-item" href="/turn_progress" data-slug="turn_progress">Turn Progress</a><a class="mui-gallery__nav-item" href="/status_dot" data-slug="status_dot">Status Dot</a><a class="mui-gallery__nav-item" href="/attention_pill" data-slug="attention_pill">Attention Pill</a><a class="mui-gallery__nav-item" href="/facts_list" data-slug="facts_list">Facts List</a><a class="mui-gallery__nav-item" href="/gutter_section" data-slug="gutter_section">Gutter Section</a></div></details></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/gallery">Gallery</a><span> / </span><span>Facts List</span><div class="mui-gallery__seq"><a class="mui-gallery__seq-link" href="/attention_pill" rel="prev" title="Previous: Attention Pill"><span aria-hidden="true">← </span>Attention Pill</a><a class="mui-gallery__seq-link mui-gallery__seq-link--next" href="/gutter_section" rel="next" title="Next: Gutter Section">Gutter Section<span aria-hidden="true"> →</span></a></div></nav><section class="mui-gallery__component" id="facts_list"><h1 class="mui-gallery__component-name">Facts List</h1><nav class="mui-api-nav" aria-label="On this page"><a href="#api-facts_list-anatomy">Anatomy</a><a href="#api-facts_list-props">Props</a><a href="#api-facts_list-examples">Examples</a><a href="#api-facts_list-accessibility">Accessibility</a></nav><section class="mui-api-section mui-docs" id="api-facts_list-anatomy"><h2>Anatomy</h2>
 <p>Mono subtle labels paired with foreground values, on a 4px rhythm. The key/value register used by the empty-session card and the inspector's SESSION section. Renders as a semantic <code>&lt;dl&gt;</code>.</p>
-<h2>Import</h2>
+<p class="mui-api-module"><code>maud_ui::primitives::facts_list</code></p></section><section class="mui-api-section mui-docs" id="api-facts_list-props"><h2>Props</h2><p class="mui-caption">Generated from public Rust fields. Defaults are evaluated from the implementation.</p><div class="mui-docs__scroll"><table class="mui-props-table" data-generated="rust-props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td data-label="Prop"><code>facts</code></td><td data-label="Type"><code>Vec&lt;Fact&gt;</code></td><td data-label="Default"><code>[]</code></td><td data-label="Description">The rows, top to bottom.</td></tr></tbody></table></div></section><section class="mui-api-section" id="api-facts_list-examples"><h2>Examples</h2><div class="mui-api-preview"><div class="mui-showcase__grid"><section><h2>Session facts</h2><p class="mui-showcase__caption">Mono subtle labels, foreground values, rows on the 4px rhythm.</p><div style="max-width:22rem;"><dl class="mui-facts"><div class="mui-facts__row"><dt class="mui-facts__label">model</dt><dd class="mui-facts__value">sonnet-4.6</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">context</dt><dd class="mui-facts__value mui-facts__value--mono">18.4k / 200k</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">spend</dt><dd class="mui-facts__value mui-facts__value--mono">$1.84</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">worktree</dt><dd class="mui-facts__value mui-facts__value--mono">refactor-auth-middleware</dd></div><div class="mui-facts__row"><dt class="mui-facts__label">started</dt><dd class="mui-facts__value">41m ago</dd></div></dl></div></section></div></div><details class="mui-api-reference"><summary>Usage and composition</summary><div class="mui-docs"><h3>Import</h3>
 <pre><code class="language-rust">use maud_ui::primitives::facts_list::{self, Props, Fact};
 </code></pre>
-<h2>Example</h2>
+<h3>Example</h3>
 <pre><code class="language-rust">use maud_ui::primitives::facts_list::{self, Props, Fact};
 
 facts_list::render(Props {
@@ -1088,26 +996,24 @@ facts_list::render(Props {
     ],
 })
 </code></pre>
-<h2>Props</h2>
-<div class="mui-docs__scroll"><table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
-<tr><td data-label="Field">facts</td><td data-label="Type">Vec&lt;Fact&gt;</td><td data-label="Default"><code>[]</code></td><td data-label="Description">The rows, top to bottom.</td></tr>
-</tbody></table></div>
-<h2>Fact</h2>
+
+
+<h3>Fact</h3>
 <div class="mui-docs__scroll"><table><thead><tr><th>Constructor</th><th>Value face</th></tr></thead><tbody>
 <tr><td data-label="Constructor"><code>Fact::new(label, value)</code></td><td data-label="Value face">Sans value.</td></tr>
 <tr><td data-label="Constructor"><code>Fact::mono(label, value)</code></td><td data-label="Value face">Mono value — for shas, counts, paths.</td></tr>
 </tbody></table></div>
 <p>Labels are always mono and subtle; the <code>mono</code> flag governs only the value.</p>
-<h2>CSS classes</h2>
+<h3>CSS classes</h3>
 <ul>
 <li><code>mui-facts</code> — the <code>&lt;dl&gt;</code>.</li>
 <li><code>mui-facts__row</code>, <code>mui-facts__label</code>, <code>mui-facts__value</code> (+ <code>mui-facts__value--mono</code>).</li>
 </ul>
-<h2>Related</h2>
+<h3>Related</h3>
 <p>Gutter section (wraps this under a header), Table, Item.</p>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=114614" defer></script><script>
+</div></details></section><section class="mui-api-section mui-docs" id="api-facts_list-accessibility"><h2>Accessibility</h2><p>Supply meaningful labels, choose heading levels for the surrounding page, and preserve native link and form behavior. Keyboard focus follows document order. Motion honors reduced-motion preferences.</p></section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=151148" defer></script><script>
 (function() {
-    // Theme toggle is handled by dist/behaviors/theme.js (via data-mui="theme-toggle").
+    // The gallery theme is owned by the document toggle below.
 
     // ── Keep the current component visible in the sidebar ──────────
     // The sidebar lists 72 items in tier order and scrolls independently.
@@ -1122,11 +1028,16 @@ facts_list::render(Props {
         if (current) {
             current.classList.add('mui-gallery__nav-item--active');
             current.setAttribute('aria-current', 'page');
-            // `nearest` scrolls only if it is actually out of view, so an
-            // already-visible item does not jolt the sidebar on every load.
-            // Scoped to the sidebar's own scroll container, so the main
-            // document does not move with it.
-            current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            var currentGroup = current.closest('details'); if (currentGroup) currentGroup.open = true;
+            // Wait until the responsive drawer is placed, then scroll only
+            // its own container. scrollIntoView can move the document during
+            // the initial no-JS layout and hide the page's first content.
+            requestAnimationFrame(function () {
+                var sidebar = current.closest('.mui-gallery__sidebar');
+                if (!sidebar) return;
+                var offset = current.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+                sidebar.scrollTop += offset - sidebar.clientHeight / 2;
+            });
         }
     }
 
@@ -1204,6 +1115,7 @@ facts_list::render(Props {
             var q = search.value.trim().toLowerCase();
             var dirty = q.length > 0;
             wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+            if (window.MaudUI?.navigation && nav) window.MaudUI.navigation.forceGroups(nav, dirty);
 
             var visibleCount = 0;
             var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
@@ -1268,171 +1180,163 @@ facts_list::render(Props {
 
     // ── Mobile drawer ────────────────────────────────────────────
     var htmlEl = document.documentElement;
-    function setDrawer(open) {
+    var menuButton = document.getElementById('mui-drawer-toggle');
+    var gallerySidebar = document.getElementById('mui-gallery-navigation');
+    var siteNavigation = document.getElementById('mui-site-navigation');
+    var galleryMain = document.querySelector('main.mui-gallery__main');
+    var galleryHeader = document.querySelector('.mui-showcase__header');
+    var phoneNavigation = window.matchMedia('(max-width: 40rem)');
+    var drawerNavigation = window.matchMedia('(max-width: 60rem)');
+    var siteHome = siteNavigation && siteNavigation.parentNode;
+    var siteNext = siteNavigation && siteNavigation.nextSibling;
+
+    function setDrawer(open, focusNavigation) {
+        open = open && drawerNavigation.matches && !!gallerySidebar;
         if (open) htmlEl.setAttribute('data-mui-drawer', 'open');
-        else      htmlEl.removeAttribute('data-mui-drawer');
-        var btn = document.getElementById('mui-drawer-toggle');
-        if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        else htmlEl.removeAttribute('data-mui-drawer');
+        if (galleryMain) galleryMain.inert = open;
+        if (menuButton) {
+            menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+        }
+        if (open && focusNavigation) gallerySidebar.querySelector('a[href]')?.focus();
+        if (!open && gallerySidebar?.contains(document.activeElement) && drawerNavigation.matches) menuButton?.focus();
     }
-    document.getElementById('mui-drawer-toggle')?.addEventListener('click', function (e) {
-        e.stopPropagation();
-        setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open');
-    });
-    document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () { setDrawer(false); });
-    // Auto-close when a sidebar link is followed.
-    document.querySelectorAll('.mui-gallery__sidebar a').forEach(function (a) {
-        a.addEventListener('click', function () { setDrawer(false); });
-    });
+    function placeSiteNavigation() {
+        if (!siteNavigation || !gallerySidebar) return;
+        if (phoneNavigation.matches) gallerySidebar.insertBefore(siteNavigation, gallerySidebar.firstChild);
+        else siteHome.insertBefore(siteNavigation, siteNext);
+    }
+    if (menuButton && gallerySidebar) {
+        placeSiteNavigation();
+        htmlEl.setAttribute('data-mui-gallery-ready', '');
+        if (window.ResizeObserver && galleryHeader) {
+            new ResizeObserver(function () {
+                htmlEl.style.setProperty('--mui-header-h', galleryHeader.getBoundingClientRect().height + 'px');
+            }).observe(galleryHeader);
+        }
+        phoneNavigation.addEventListener('change', placeSiteNavigation);
+        drawerNavigation.addEventListener('change', function () { setDrawer(false); });
+        menuButton.addEventListener('click', function () {
+            setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open', true);
+        });
+        document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () {
+            setDrawer(false); menuButton.focus();
+        });
+        gallerySidebar.addEventListener('click', function (event) {
+            if (event.target.closest('a[href]')) setDrawer(false);
+        });
+        // Keep the quick filter usable in the header while showing its results.
+        search?.addEventListener('input', function () { if (search.value.trim()) setDrawer(true, false); });
+        document.addEventListener('keydown', function (event) {
+            if (htmlEl.getAttribute('data-mui-drawer') !== 'open') return;
+            if (event.key === 'Escape') {
+                event.preventDefault(); setDrawer(false); menuButton.focus();
+            } else if (event.key === 'Tab') {
+                var selector = 'a[href], button, input, select, summary, [tabindex="0"]';
+                var focusable = Array.from(galleryHeader.querySelectorAll(selector))
+                    .concat(Array.from(gallerySidebar.querySelectorAll(selector)))
+                    .filter(function (el) { return !el.disabled && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'; });
+                var first = focusable[0], last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+                else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+            }
+        });
+    }
 
     // ── Command palette ──────────────────────────────────────────
     (function () {
-        var palette       = document.getElementById('mui-palette');
-        var paletteInput  = document.getElementById('mui-palette-input');
-        var paletteList   = document.getElementById('mui-palette-list');
-        var paletteScrim  = document.getElementById('mui-palette-scrim');
-        var paletteBtn    = document.getElementById('mui-palette-open');
-        var data          = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
-        if (!palette || !paletteInput || !paletteList) return;
-
-        var filtered = data.slice();
-        var activeIndex = 0;
-
-        function escapeHtml(s) {
-            return String(s || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+        var palette = document.getElementById('mui-palette');
+        var paletteInput = document.getElementById('mui-palette-input');
+        var paletteList = document.getElementById('mui-palette-list');
+        var paletteBtn = document.getElementById('mui-palette-open');
+        var closeBtn = document.getElementById('mui-palette-close');
+        var data = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
+        if (!palette || !paletteInput || !paletteList || typeof palette.showModal !== 'function') return;
+        var recent = [];
+        try { recent = JSON.parse(localStorage.getItem('mui-palette-recent') || '[]'); } catch {}
+        // Storage is untrusted: recents may reference only known routes in this build.
+        if (!Array.isArray(recent)) recent = [];
+        recent = Array.from(new Set(recent.filter(function (url) { return data.some(function (item) { return item.u === url; }); }))).slice(0, 5);
+        var filtered = [], activeIndex = 0, previousFocus = null;
+        var names = { page: 'Start here', block: 'Application blocks', component: 'Components', integration: 'Integrations' };
+        function active() {
+            paletteList.querySelectorAll('[role="option"]').forEach(function (row, i) {
+                row.classList.toggle('mui-palette__item--active', i === activeIndex);
+                row.setAttribute('aria-selected', String(i === activeIndex));
+            });
+            var row = paletteList.querySelector('[aria-selected="true"]');
+            if (row) { paletteInput.setAttribute('aria-activedescendant', row.id); row.scrollIntoView({ block: 'nearest' }); }
+            else paletteInput.removeAttribute('aria-activedescendant');
         }
-        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-        function kindLabel(k) {
-            return k === 'component'   ? 'component'
-                 : k === 'block'       ? 'block'
-                 : k === 'integration' ? 'integration'
-                 : k === 'page'        ? 'page'
-                 : k;
-        }
-
-        function highlight(label, q) {
-            if (!q) return escapeHtml(label);
-            try {
-                var re = new RegExp('(' + escapeRegex(q) + ')', 'ig');
-                return escapeHtml(label).replace(re, '<mark>$1</mark>');
-            } catch { return escapeHtml(label); }
-        }
-
         function render() {
-            if (filtered.length === 0) {
-                paletteList.replaceChildren();
-                var empty = document.createElement('li');
-                empty.className = 'mui-palette__empty';
-                empty.textContent = 'No matches.';
-                paletteList.appendChild(empty);
-                return;
-            }
-            // Build rows using DOM API — we only use innerHTML for the
-            // highlighted label, where the source is our own palette
-            // data (not user input).
             paletteList.replaceChildren();
-            for (var i = 0; i < filtered.length; i++) {
-                var e = filtered[i];
-                var li = document.createElement('li');
-                li.className = 'mui-palette__item' + (i === activeIndex ? ' mui-palette__item--active' : '');
-                li.setAttribute('role', 'option');
-                li.setAttribute('data-index', String(i));
-                li.setAttribute('data-url', e.u);
-                var kind = document.createElement('span');
-                kind.className = 'mui-palette__item-kind';
-                kind.textContent = kindLabel(e.k);
-                var label = document.createElement('span');
-                label.className = 'mui-palette__item-label';
-                label.innerHTML = highlight(e.l, paletteInput.value.trim());
-                var path = document.createElement('span');
-                path.className = 'mui-palette__item-path';
-                path.textContent = e.u;
-                li.appendChild(kind);
-                li.appendChild(label);
-                li.appendChild(path);
-                paletteList.appendChild(li);
+            var lastGroup = '';
+            filtered.forEach(function (entry, index) {
+                var section = entry.section || names[entry.k] || entry.k;
+                if (section !== lastGroup) {
+                    var heading = document.createElement('li');
+                    heading.className = 'mui-palette__section'; heading.setAttribute('role', 'presentation'); heading.textContent = section;
+                    paletteList.appendChild(heading); lastGroup = section;
+                }
+                var row = document.createElement('li'); row.className = 'mui-palette__item'; row.id = 'mui-palette-option-' + index;
+                row.setAttribute('role', 'option'); row.setAttribute('data-index', String(index));
+                var label = document.createElement('span'); label.className = 'mui-palette__item-label'; label.textContent = entry.l;
+                var path = document.createElement('span'); path.className = 'mui-palette__item-path'; path.textContent = entry.u;
+                var hint = document.createElement('kbd'); hint.className = 'mui-palette__item-key'; hint.textContent = '↵'; hint.setAttribute('aria-hidden', 'true');
+                row.appendChild(label); row.appendChild(path); row.appendChild(hint); paletteList.appendChild(row);
+            });
+            if (!filtered.length) {
+                var empty = document.createElement('li'); empty.className = 'mui-palette__empty'; empty.setAttribute('role', 'presentation'); empty.textContent = 'No destinations found. Try a component or block name.'; paletteList.appendChild(empty);
             }
+            active();
         }
-
         function filter() {
-            var q = paletteInput.value.trim().toLowerCase();
-            if (!q) {
-                filtered = data.slice();
-            } else {
-                filtered = data
-                    .map(function (e) {
-                        var l = (e.l || '').toLowerCase();
-                        var u = (e.u || '').toLowerCase();
-                        var idx = l.indexOf(q);
-                        var score = idx < 0 ? (u.indexOf(q) < 0 ? -1 : 100 + u.indexOf(q)) : idx;
-                        return score < 0 ? null : { e: e, score: score };
-                    })
-                    .filter(function (x) { return x !== null; })
-                    .sort(function (a, b) { return a.score - b.score; })
-                    .map(function (x) { return x.e; });
-            }
-            activeIndex = 0;
-            render();
+            var query = paletteInput.value.trim().toLocaleLowerCase();
+            var matches = data.filter(function (entry) { return !query || (entry.l + ' ' + entry.u).toLocaleLowerCase().includes(query); });
+            filtered = [];
+            if (!query) recent.forEach(function (url) { var entry = data.find(function (item) { return item.u === url; }); if (entry) filtered.push(Object.assign({}, entry, { section: 'Recent' })); });
+            ['page', 'block', 'component', 'integration'].forEach(function (kind) {
+                matches.filter(function (entry) { return entry.k === kind && (query || !recent.includes(entry.u)); }).forEach(function (entry) { filtered.push(entry); });
+            });
+            activeIndex = 0; render(); paletteList.scrollTop = 0;
         }
-
         function open() {
-            htmlEl.setAttribute('data-mui-palette', 'open');
-            paletteInput.value = '';
-            filter();
-            // Focus on the next frame so the modal is painted first.
-            requestAnimationFrame(function () { paletteInput.focus(); });
+            if (palette.open) return;
+            previousFocus = document.activeElement; setDrawer(false);
+            paletteInput.value = ''; filter(); palette.showModal();
+            paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
         }
-        function close() {
-            htmlEl.removeAttribute('data-mui-palette');
-        }
-        function isOpen() { return htmlEl.getAttribute('data-mui-palette') === 'open'; }
-
-        function moveActive(delta) {
-            if (filtered.length === 0) return;
-            activeIndex = (activeIndex + delta + filtered.length) % filtered.length;
-            render();
-            var active = paletteList.querySelector('.mui-palette__item--active');
-            if (active) active.scrollIntoView({ block: 'nearest' });
-        }
+        function close() { if (palette.open) palette.close(); }
         function activate() {
-            var e = filtered[activeIndex];
-            if (!e) return;
-            close();
-            window.location.href = e.u;
+            var entry = filtered[activeIndex]; if (!entry) return;
+            recent = [entry.u].concat(recent.filter(function (url) { return url !== entry.u; })).slice(0, 5);
+            try { localStorage.setItem('mui-palette-recent', JSON.stringify(recent)); } catch {}
+            close(); window.location.href = entry.u;
         }
-
-        paletteBtn?.addEventListener('click', open);
-        paletteScrim?.addEventListener('click', close);
+        palette.addEventListener('close', function () {
+            htmlEl.removeAttribute('data-mui-palette'); paletteInput.setAttribute('aria-expanded', 'false');
+            if (previousFocus && previousFocus.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
+        });
+        palette.addEventListener('click', function (event) { if (event.target === palette) close(); });
+        paletteBtn?.addEventListener('click', open); closeBtn?.addEventListener('click', close);
         paletteInput.addEventListener('input', filter);
-        paletteInput.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowDown') { e.preventDefault(); moveActive(1); }
-            else if (e.key === 'ArrowUp')   { e.preventDefault(); moveActive(-1); }
-            else if (e.key === 'Enter')     { e.preventDefault(); activate(); }
-            else if (e.key === 'Escape')    { e.preventDefault(); close(); }
+        paletteInput.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault(); if (filtered.length) activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + filtered.length) % filtered.length; active();
+            } else if (event.key === 'Enter') { event.preventDefault(); activate(); }
+            else if (event.key === 'Home' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = 0; active(); }
+            else if (event.key === 'End' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = Math.max(0, filtered.length - 1); active(); }
         });
-        paletteList.addEventListener('click', function (ev) {
-            var li = ev.target.closest('[data-index]');
-            if (!li) return;
-            activeIndex = parseInt(li.getAttribute('data-index'), 10) || 0;
-            activate();
+        paletteList.addEventListener('click', function (event) {
+            var row = event.target.closest('[data-index]'); if (!row) return;
+            activeIndex = Number(row.getAttribute('data-index')); activate();
         });
-
-        // Global hotkey: cmd+k / ctrl+k. Registered in the capture
-        // phase so we fire before any component-level handlers (the
-        // `command` primitive on the gallery page also binds cmd+k)
-        // and stop the event from propagating further.
-        document.addEventListener('keydown', function (e) {
-            if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                if (isOpen()) close(); else open();
-            } else if (e.key === 'Escape' && isOpen()) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                close();
+        document.addEventListener('keydown', function (event) {
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+                // Inside an embedded app, its own search owns the same shortcut.
+                if (!palette.open && event.target.closest('.mui-block--shell')) return;
+                event.preventDefault(); event.stopImmediatePropagation(); if (palette.open) close(); else open();
             }
         }, true);
     })();

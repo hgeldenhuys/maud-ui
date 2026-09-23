@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.20.1] — 2026-09-23 — navigation without the stripe; the search palette closes
+
+- **No coloured edge stripe on the current row.** The gallery's current page was an accent-tinted pill with a 2px left border bent round its corner radius, and the shell block and the sidebar's accent variant drew a 2px bar. All three are gone: the current row is marked by its ground (and `aria-current`), as in Linear.
+- **The gallery navigation uses the library's own sidebar rows**: 28px, neutral `--mui-nav-current-bg`, no accent tint. It had drifted to its own 37px accent style.
+- **Drawn chevrons.** Sidebar, shell and gallery group headers used the text glyph "›" (and the gallery's Advanced menu "▾"). They now mask a drawn SVG chevron (`--mui-icon-chevron`, `--mui-icon-chevron-size`) with `currentColor`.
+- **Group labels are sentence case** instead of uppercase and letter-spaced (`.mui-sidebar__group-label`, shell group labels).
+- **Gallery search palette closes.** Opened from the header search box, it reopened at once on Escape or a click outside, because closing a modal dialog hands focus back to the box before the dialog's close event. `tests/palette-browser.mjs` covers it, and the release now runs it and the overlay motion test against the exported site.
+
 ## [0.20.0] — 2026-09-23 — overlays close with motion; the library checks itself
 
 - **Overlays fade out.** Dialogs, alert dialogs, sheets, drawers, the navigation dialog, menus, context menus, menubars, popovers, hover cards and the action-row More menu used to vanish in one frame when closed. They now fade (and sheets and drawers slide back) over `--mui-motion-fast`. Native `<dialog>` uses `transition-behavior: allow-discrete`, so browsers without it keep the instant close. Readers who ask for reduced motion keep the instant close. A dialog keeps its layout while it fades.

@@ -45,13 +45,24 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
 - No CHANGELOG entry yet for the unreleased work: the next release's entry must list items 1-4, 6
   (release.sh requires the first `## [` heading to be the new version, so no "Unreleased" section).
 
+## ITEM 5 + RELEASE (2026-09-23 14:20 EDT)
+- Item 5 LANDED 23b0691: 8 fixes (light accent 3.91->4.7:1, combobox nested-button escape, popover
+  collision incl. a 390px fallback that first landed 2,126px off-screen and was re-fixed, team +
+  data table scroll at 390, light surfaces, switch off-track, native select). All measured in a
+  browser. visual-check now compares at tolerance 2 (5db027f): at 24 the accent change was invisible.
+- **maud-ui 0.20.0 RELEASED 14:18 by scripts/release.sh in one run** (781d0b9): crates.io
+  max_version 0.20.0; live site serves `mui-overlay-exit` (2 uncached samples); 4 pushes; herald
+  repo.push seen. The 52 changed captures were reviewed first (visual-run4 + element crops).
+- Screenshots SENT to Herman: breadcrumb catch (13:30), dialog close frames (14:00), item 5
+  before/after sheet (14:15).
+
 ## NEXT_ACTION
 
-Item 5: light-mode + phone-width QA. Candidate captures already exist at
-$CLAUDE_JOB_DIR/tmp/visual-run2/<route>/{light,dark}-{1440,390}-cand.png. Also run
-`bun run sweep:overflow` for horizontal overflow at 390. Have a reviewer list defects, fix, re-run
-scripts/visual-check.mjs + tests/overlay-motion-browser.mjs. Then release (scripts/release.sh) and
-bump the four apps (item 7).
+Item 7 IN FLIGHT (14:22): four Claude builders bumping kapable-kaps, kapable-backlog (kv2-platform
+platform/kapable-backlog), kv2-pulse (master!) and claude-conductor (forgejo main, --all-orgs) to
+=0.20.0; brief $CLAUDE_JOB_DIR/tmp/app-bump-common.md; each proves `mui-overlay-exit` live twice
+and saves $CLAUDE_JOB_DIR/tmp/<app>-0.20.0.png. When all four report: look at the screenshots,
+then /wrapoff.
 
 ## FOUND FOR ITEM 5 (light mode + phone QA)
 - 14:00 QA reviewer (fresh Opus, screenshots) found 28 defects; px-contrast CONFIRMED light primary

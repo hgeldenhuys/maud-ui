@@ -276,6 +276,7 @@ pub(crate) fn component_docs_source(slug: &str) -> Option<&'static str> {
         "table" => Some(include_str!("../../docs/components/rendered/table.html")),
         "tabs" => Some(include_str!("../../docs/components/rendered/tabs.html")),
         "textarea" => Some(include_str!("../../docs/components/rendered/textarea.html")),
+        "time_split" => Some(include_str!("../../docs/components/rendered/time_split.html")),
         "toast" => Some(include_str!("../../docs/components/rendered/toast.html")),
         "toggle" => Some(include_str!("../../docs/components/rendered/toggle.html")),
         "toggle_group" => Some(include_str!("../../docs/components/rendered/toggle_group.html")),

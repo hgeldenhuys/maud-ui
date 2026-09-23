@@ -180,7 +180,6 @@ fn empty_breadcrumbs_are_removed_before_separators_positions_and_header_title() 
             // 0.19.0: `None` renders no separator at all; the default trail
             // pins "/" explicitly.
             separator: Some("/"),
-            ..Default::default()
         })
         .0;
         assert_eq!(output.matches("mui-breadcrumb__separator").count(), 1);

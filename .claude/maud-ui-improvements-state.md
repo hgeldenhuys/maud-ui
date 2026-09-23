@@ -8,24 +8,25 @@ seat: claude-opus-5-5
 
 # maud-ui improvement arc
 
-## POSITION (2026-09-23 12:30 EDT)
+## POSITION (2026-09-23 13:20 EDT)
 
 maud-ui 0.19.5 is on crates.io and live at https://maudui.herman.engineer. The four Kapable apps
-(kapable-kaps, kapable-backlog, kv2-pulse, claude-conductor) run 0.19.3. Six items were ratified;
-none is started. Release procedure as run six times: `docs/releasing.md` → "Current release workflow".
+run 0.19.3. Item 3 LANDED (unreleased, on the branch): `cargo test --no-fail-fast` = 311 passed,
+0 failed; `cargo clippy --all-targets -D warnings` clean (fixed a needless `..Default::default()`
+in tests/record_page.rs:183). time_split is fully registered: doc + rendered page, docs.rs arm,
+render test, alphabetical COMPONENT_NAMES, 84 in Cargo.toml / README (7 places) / og.svg + og.png.
+Gotcha found: `cargo run --example build_docs` cannot compile while docs.rs include_str!s a page
+that does not exist yet; seed an empty `docs/components/rendered/<name>.html` first.
 
 ## NEXT_ACTION
 
-Item 3: make `cargo test` fully green. All six failures are `time_split` never being fully
-registered (measured 2026-09-23 from `cargo test --no-fail-fast`):
-1. `docs/components/time_split.md` missing → write it (copy the shape of a sibling doc).
-2. `src/showcase/docs.rs` has no `include_str!` arm for time_split → add one, then
-   `cargo run --example build_docs` to render `docs/components/rendered/time_split.html`.
-3. `tests/render_tests.rs` `assert_showcase_renders!` lacks time_split → add it.
-4. `COMPONENT_NAMES` in `src/showcase/mod.rs` is not alphabetical (time_split sits after meter) → move it.
-5. `Cargo.toml` description says "83 headless" → "84 headless"; README.md lines 3 and 25 say 83 → 84.
-6. `static/og.svg` must state 84 → edit, then `node examples/build-social-card.mjs` re-renders og.png.
-Done when `cargo test --no-fail-fast` prints no `FAILED` line.
+Item 1: write scripts/release.sh (the workflow in docs/releasing.md "Current release workflow" as
+one command). Must: refuse a dirty tree (ignoring docs/night-6-live-events.jsonl), stop on the first
+failure, require Cargo.toml version > crates.io max_version and a CHANGELOG entry for it, run
+build-assets + dist sync + build:static + cargo test (any FAILED line stops it) + clippy -D warnings,
+commit regenerated output excluding the night-6 log, cargo publish, the four pushes,
+kapable-push-verify, then poll the live stylesheet for a marker given as an argument (sampled twice).
+Have a --dry-run that stops before publish. Dispatch to a builder, review by another family.
 
 ## PLAN (ranked; the reason is the rank)
 

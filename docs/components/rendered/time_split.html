@@ -1,0 +1,64 @@
+<h1>Time Split</h1>
+<p>One bar showing where a sequence of steps spent its time. Use it for a pipeline, a build or a request trace: any ordered list of steps where the reader asks "what took so long". Segments sit in execution order and are sized by their share of measured time, so the shape of the bar is the answer.</p>
+<h2>Import</h2>
+<pre><code class="language-rust">use maud_ui::primitives::time_split::{self, Props, Segment, SegmentState};
+</code></pre>
+<h2>Example</h2>
+<pre><code class="language-rust">use maud::html;
+use maud_ui::primitives::time_split::{self, Segment};
+
+let steps = vec![
+    Segment::done("clone-or-pull", 447, "447 ms"),
+    Segment::done("build-in-guest", 149_101, "2m 29s"),
+    Segment::done("report", 13, "13 ms"),
+];
+
+html! {
+    (time_split::render(time_split::Props {
+        caption: time_split::dominant_caption(&amp;steps, "2m 30s").unwrap_or_default(),
+        aria_label: time_split::aria_from(&amp;steps),
+        segments: steps,
+    }))
+}
+</code></pre>
+<h2>Props</h2>
+<table><thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td>segments</td><td>Vec<Segment></td><td><code>vec![]</code></td><td>Steps in execution order. Leave out steps that never ran; the empty rest of the track shows where the run stopped.</td></tr>
+<tr><td>caption</td><td>String</td><td><code>""</code></td><td>The finding, in words. The bar alone only says "one step was big", so always pass one.</td></tr>
+<tr><td>aria_label</td><td>String</td><td><code>""</code></td><td>Read to a screen reader in place of the bar. <code>aria_from</code> builds one from the segments.</td></tr>
+</tbody></table>
+<h3>Segment</h3>
+<table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>String</td><td>The step's name. Shown in the tooltip and the <code>aria-label</code>, never as an on-screen label.</td></tr>
+<tr><td>millis</td><td>Option<u64></td><td>How long it took. <code>None</code> means it ran without a measurement: it gets a marker, not a width.</td></tr>
+<tr><td>state</td><td>SegmentState</td><td><code>Done</code>, <code>Failed</code>, <code>Running</code> or <code>Unmeasured</code>. Sets both the fill and the border.</td></tr>
+<tr><td>label</td><td>String</td><td>The duration as it should be read, for example <code>"2m 29s"</code>.</td></tr>
+</tbody></table>
+<p><code>Segment::done(name, millis, label)</code> builds a finished step.</p>
+<h2>Variants</h2>
+<table><thead><tr><th>State</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Done</td><td>Finished with no complaint.</td></tr>
+<tr><td>Failed</td><td>Ended the sequence.</td></tr>
+<tr><td>Running</td><td>Still going.</td></tr>
+<tr><td>Unmeasured</td><td>Ran, but its duration is not known. Drawn as a marker with no width.</td></tr>
+</tbody></table>
+<h2>Helpers</h2>
+<ul>
+<li><code>dominant_caption(&amp;segments, total_label) -&gt; Option&lt;String&gt;</code> writes the usual caption: which step took the run and its share. It returns <code>None</code> when nothing was measured.</li>
+<li><code>aria_from(&amp;segments) -&gt; String</code> lists every step and its duration for a screen reader.</li>
+</ul>
+<h2>Rules</h2>
+<ul>
+<li><strong>Never rescale.</strong> A log scale or equal-width segments hide the one thing the bar exists to show. A step that took 96% looks like it took 96%.</li>
+<li><strong>No legend, no segment labels.</strong> Labels break first at phone width, and the table this usually sits above already names every step.</li>
+<li><strong>Nothing measured, nothing drawn.</strong> <code>render</code> emits no markup when no segment has a duration, because an empty track would read as "this did nothing".</li>
+<li>The step the caption names takes the full accent, so the bar and the sentence point at the same thing.</li>
+</ul>
+<h2>Accessibility</h2>
+<ul>
+<li><strong>Role:</strong> the track is <code>role="img"</code> with an <code>aria-label</code> that names every step.</li>
+<li><strong>Keyboard:</strong> each segment has <code>tabindex="0"</code> and a <code>data-tip</code> tooltip, so a keyboard reaches the step names too.</li>
+<li><strong>Colour:</strong> each state has a border treatment as well as a fill, so status never rests on colour alone.</li>
+</ul>
+<h2>Related</h2>
+<p>Progress, Meter, Chart, Table.</p>

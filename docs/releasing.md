@@ -18,7 +18,7 @@ node examples/build-assets.mjs
 for f in maud-ui.css maud-ui.min.css maud-ui.js maud-ui.min.js; do cp static/$f dist/$f; done
 # 3. Regenerate the website (starts the showcase on :3458, fetches every route into public/).
 bun run build:static
-# 4. Tests. 6 registration_parity failures predate 0.19 (time_split registration); anything else is new.
+# 4. Tests. The suite is fully green since 2026-09-23: any FAILED line blocks the release.
 cargo test --no-fail-fast > /tmp/t.log 2>&1; grep -E '^test .*FAILED$' /tmp/t.log
 # 5. Commit everything except docs/night-6-live-events.jsonl (another session's log), then publish.
 git add -A . ':!docs/night-6-live-events.jsonl' && git commit

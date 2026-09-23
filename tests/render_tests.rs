@@ -95,6 +95,7 @@ assert_showcase_renders!(
     table,
     tabs,
     textarea,
+    time_split,
     toast,
     toggle,
     toggle_group,

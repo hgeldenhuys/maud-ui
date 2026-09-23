@@ -1,6 +1,6 @@
 # maud-ui
 
-**83 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 31 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
+**84 headless, accessible UI components for Rust web apps — with shadcn Base UI API parity. Plus 31 block templates, a live theme customiser, a `cmd+k` command palette, and shell hooks for 15 third-party widget integrations.**
 Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled like [shadcn/ui](https://ui.shadcn.com/).
 
 [![Crate][crate-badge]][crate]
@@ -22,7 +22,7 @@ Built on [maud](https://maud.lambda.xyz/) + [htmx](https://htmx.org/). Styled li
 
 ## What you get
 
-- **83 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
+- **84 primitives** — every shadcn Base UI component plus extras (data-table, resizable, hover-card, OTP input, command palette, calendar, charts, colour swatch).
 - **Layout containers** — `stack` (one axis), `grid` (two), and `form` (the submission contract). Every appearance prop is a closed enum, so a page is composed as a tree of containers instead of inline `style="display:flex"`. Added in 0.4.0.
 - **A conversation tier** — `message`, `streaming_cursor`, `code_block` (with a built-in Rust/Bash/TS/JSON highlighter), `diff`, and `tool_call`: an AI-chat / agent surface kit.
 - **31 pre-composed blocks** — auth (login/signup/2FA), dashboard stats, data-table-full, pricing tiers, settings (billing/profile/team), full sidebar shell, worklist and record headers, a task launcher, grouped worklists, record timeline/money/related cards, attention banners, shared action rows, and optional app masthead, page header and footer. Drop-in compositions.
@@ -62,7 +62,7 @@ Use `blocks::record::{page, facts, related_list}` for every generic detail page.
 
 `.mui-stack` / `stack::vertical` now use `--mui-stack-gap` (16px), with child margins reset. Explicit `Space::Md` still means 12px. Native shell search reserves its keyboard badge's width, defaults to `Search`, and breadcrumbs discard blank labels.
 
-Generate fixtures with `cargo run --example record_page_fixture`; compare `/fixtures/record-page-comfortable-guest.html` and `/fixtures/record-page-three-cards.html` at 1280 and 390. The catalog contains 83 primitives and 31 blocks.
+Generate fixtures with `cargo run --example record_page_fixture`; compare `/fixtures/record-page-comfortable-guest.html` and `/fixtures/record-page-three-cards.html` at 1280 and 390. The catalog contains 84 primitives and 31 blocks.
 
 ## 30-second tour
 
@@ -140,7 +140,7 @@ Routes:
 | Path | What it is |
 |---|---|
 | `/` | Landing page — the pitch, built out of the library's own primitives |
-| `/gallery` | The component index: all 83, grouped by tier, with a sidebar filter |
+| `/gallery` | The component index: all 84, grouped by tier, with a sidebar filter |
 | `/{component}` | One component's page — variants, code samples, API docs |
 | `/blocks`, `/blocks/{slug}` | The 31 pre-composed block templates |
 | `/theme` | Live theme customiser (edits tokens, persists to localStorage) |
@@ -233,7 +233,7 @@ The default theme is rebuilt on the measured Linear recipe: Inter Variable at 15
 ## Component reference
 
 <details>
-<summary><strong>83 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
+<summary><strong>84 components across three progressive-enhancement tiers</strong> (click to expand)</summary>
 
 ### Tier 1 — Pure HTML+CSS (works with JS disabled)
 
@@ -259,7 +259,7 @@ Each component's props and variants are also documented in its module — run `c
 ## Architecture
 
 ```
-src/primitives/     # 83 component modules (Props, Variant, render(), showcase())
+src/primitives/     # 84 component modules (Props, Variant, render(), showcase())
 src/tokens.rs       # Rust constants mirroring CSS custom properties
 css/                # Legacy source snapshot; edit static/styles/ for current releases
 static/             # Current bundles, editable styles/ and behavior overrides
@@ -299,7 +299,7 @@ the reason a breakpoint cannot be a CSS custom property.
 
 ```bash
 cargo check                     # Type-check the crate
-cargo test                      # Render tests for all 83 components + registration parity
+cargo test                      # Render tests for all 84 components + registration parity
 ADDR=127.0.0.1:$(free-port) cargo run --example showcase # Local live showcase
 
 # Rebuild the current artifacts. The legacy public/ export is a separate website release.

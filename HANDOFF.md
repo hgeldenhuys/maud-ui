@@ -50,8 +50,8 @@ component and 4–6 are counts that only pass once it is registered:
 1. Create docs/components/time_split.md (NEW; copy a sibling doc's shape).
 2. Add a time_split `include_str!` arm in src/showcase/docs.rs, then `cargo run --example build_docs`.
 3. Add time_split to `assert_showcase_renders!` in tests/render_tests.rs.
-4. Move "time_split" to its alphabetical place in COMPONENT_NAMES in src/showcase/mod.rs (it sits after "meter").
-5. Cargo.toml description and README.md lines 3 and 25 say 83; make them 84.
+4. Move "time_split" to its alphabetical place in COMPONENT_NAMES in src/showcase/mod.rs (VERIFIED 2026-09-23 by `sed -n 265,268p`: it sits right after "meter", near line 267).
+5. Cargo.toml line 6 and README.md lines 3 and 25 say 83 (VERIFIED 2026-09-23 by `rg -n 83`); make them 84.
 6. static/og.svg must state 84; then `node examples/build-social-card.mjs` re-renders static/og.png.
 
 ## Then, without waiting, in this order (the reason is the rank)

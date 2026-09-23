@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.20.3] — 2026-09-23 — the screenshot review's defects
+
+- **Swatch ships its own styles.** It was styled only by the gallery's page CSS, so an app using `swatch` got an unstyled component. `swatch.css` is now part of the bundle.
+- **Data table controls.** The Columns control is the library's outline button (it was a bare browser button), and row checkboxes use the library checkbox.
+- **Button sizes step up.** `xs` was 32px, the same as the default and taller than `sm`; now `xs` 20, `sm` 24, default 32, `lg` 40, and the icon sizes match.
+- **Pagination at phone width** shows previous, the neighbouring pages and next, instead of one stretched page.
+- **Select chevron** is the drawn chevron (`--mui-icon-chevron`), not a tiny glyph. **Toasts** in a static stack get proper spacing.
+- **Undefined classes resolved.** Every `mui-*` class in markup now has a rule, is a declared JS hook or state marker, or was removed as dead. Removed: `mui-block--auth`, `mui-block--stats__activity`, `mui-block--stats__chart`, `mui-block--data__select-all`, `mui-workspace-example__anchor`, `mui-record-example__payment`, `mui-record-example__related`, `mui-block--shell__nav-item--active` (use `[aria-current]`), `mui-diff__lineno--old/--new`, `mui-gutter-section__body`, `mui-pagination__btn--prev/--next`, `mui-sidebar__group-content`, `mui-sidebar__menu-sub-item`, `mui-sidebar__trigger-icon/-label`, `mui-tool-call__section(--args/--result)`, `mui-heading-size`. None was styled; an app selecting one should select the element or ARIA state instead.
+- Gallery: props tables keep code whole and show "No description" for empty cells and rendered rustdoc; the page pager passes contrast and stacks under the breadcrumb on phones; prose is capped near 70 characters; example captions are h3.
+
 ## [0.20.2] — 2026-09-23 — square rows in the app shell
 
 - **The app shell's nav rows are square.** In the shell block (the gallery's Worklist, Record and Banking demos) the current row was a rounded pill nearly touching the sidebar's edge; it is now a flat band across the sidebar. It is scoped as `--mui-nav-row-radius: 0` on `.mui-block--shell`, so the sidebar component and the gallery navigation keep rounded rows. Set that token on any container to choose for yourself.

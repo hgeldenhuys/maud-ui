@@ -944,7 +944,7 @@ fn page_header() -> Markup {
                     details class="mui-gallery__nav-advanced" {
                         summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary" {
                             "Advanced"
-                            span class="mui-gallery__nav-advanced-caret" aria-hidden="true" { "\u{25be}" }
+                            span class="mui-gallery__nav-advanced-caret" aria-hidden="true" {}
                         }
                         div class="mui-gallery__nav-advanced-menu" {
                             div class="mui-gallery__nav-advanced-group" {
@@ -6929,15 +6929,18 @@ fn showcase_css() -> &'static str {
     padding: 0 0 var(--mui-space-xs);
 }
 
-.mui-gallery__nav-tier { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; padding: var(--mui-space-sm) var(--mui-space-lg); min-height: var(--mui-nav-row-height); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); cursor: pointer; }
+.mui-gallery__nav-tier { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; margin: 0 var(--mui-space-sm); padding: 0 var(--mui-space-sm); min-height: var(--mui-nav-row-height); border-radius: var(--mui-nav-row-radius); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); color: var(--mui-text-muted); cursor: pointer; }
 .mui-gallery__nav-tier::-webkit-details-marker { display: none; }
-.mui-gallery__nav-tier::after { content: "›"; font-size: var(--mui-text-small-size); transition: transform var(--mui-transition); }
+.mui-gallery__nav-tier::after { content: ""; flex: none; inline-size: var(--mui-icon-chevron-size); block-size: var(--mui-icon-chevron-size); background: currentColor; mask: var(--mui-icon-chevron) center / contain no-repeat; transition: transform var(--mui-transition); }
 details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
 .mui-gallery__nav-tier:hover { color: var(--mui-text); background: var(--mui-bg-input); }
-.mui-gallery__nav-items { display: flex; flex-direction: column; gap: var(--mui-space-2xs); padding: 0 var(--mui-space-sm); }
-.mui-gallery__nav-item { display: flex; align-items: center; min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); font-size: var(--mui-text-small-size); color: var(--mui-text-secondary); text-decoration: none; border-inline-start: 2px solid transparent; border-radius: var(--mui-radius-md); transition: background-color var(--mui-transition), color var(--mui-transition); }
-.mui-gallery__nav-item:hover { color: var(--mui-text); background: var(--mui-bg-input); }
-.mui-gallery__nav-item--active { color: var(--mui-accent-text); border-inline-start-color: var(--mui-accent-text); background: var(--mui-accent-soft); font-weight: var(--mui-weight-heading); }
+/* Rows follow the library's own sidebar (navigation.css): 28px rows, a neutral current-row
+   ground, no coloured edge stripe. Until 0.20.1 the current row was an accent-tinted pill
+   with a 2px left border bent round its corner radius. */
+.mui-gallery__nav-items { display: flex; flex-direction: column; gap: 1px; padding: 0 var(--mui-space-sm); }
+.mui-gallery__nav-item { display: flex; align-items: center; min-height: var(--mui-nav-row-height); padding: 0 var(--mui-space-sm); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-medium); color: var(--mui-text-secondary); text-decoration: none; border-radius: var(--mui-nav-row-radius); transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-gallery__nav-item:hover { color: var(--mui-text); background: var(--mui-nav-current-bg); }
+.mui-gallery__nav-item--active { color: var(--mui-text); background: var(--mui-nav-current-bg); }
 @media (pointer: coarse) { .mui-gallery__nav-item, .mui-gallery__nav-tier { min-height: var(--mui-touch-target); } }
 
 /* Main content */
@@ -7680,13 +7683,16 @@ html { scroll-behavior: smooth; }
 
 .mui-gallery__nav-advanced-caret {
     display: inline-block;
-    font-size: var(--mui-text-caption-size);
-    line-height: var(--mui-leading-tight);
+    inline-size: var(--mui-icon-chevron-size);
+    block-size: var(--mui-icon-chevron-size);
+    background: currentColor;
+    mask: var(--mui-icon-chevron) center / contain no-repeat;
+    transform: rotate(90deg);
     transition: transform var(--mui-motion-fast) ease;
     color: var(--mui-text-muted);
 }
 .mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
-    transform: rotate(180deg);
+    transform: rotate(-90deg);
 }
 
 .mui-gallery__nav-advanced-menu {

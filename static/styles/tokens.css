@@ -67,6 +67,10 @@
      current-row ground, independent of the generic icon-size/control tokens.
      Sidebar icons render 14px; button icons stay on --mui-icon-size (16px). */
   --mui-nav-icon-size: 0.875rem;
+  /* A drawn chevron (points right; rotate for down). Nav disclosures mask it with
+     currentColor instead of using the "›"/"▾" text glyphs they used before 0.20.1. */
+  --mui-icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+  --mui-icon-chevron-size: 0.75rem;
   --mui-nav-row-radius: 0.5rem;
   --mui-nav-current-bg: rgba(255, 255, 255, 0.04);
   --mui-header-height: 3.5rem;

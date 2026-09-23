@@ -9,12 +9,14 @@
 .mui-sidebar__menu-button--accent[aria-current], .mui-sidebar__menu-button--accent[data-active="true"] { background: var(--mui-accent-soft); color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); }
 .mui-block--shell__nav-item[aria-current] { background: var(--mui-accent-soft); color: var(--mui-accent-text); font-weight: var(--mui-weight-heading); box-shadow: none; }
 .mui-sidebar__menu-button[aria-current]::before, .mui-sidebar__menu-button[data-active="true"]::before { content: none; }
-.mui-sidebar__menu-button--accent[aria-current]::before, .mui-sidebar__menu-button--accent[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { content: ""; position: absolute; inset-inline-start: 0; inset-block: var(--mui-space-sm); width: 2px; background: var(--mui-accent-text); border-radius: 0; }
+/* No 2px stripe on the current row: the tinted ground already marks it, and a coloured
+   edge bar on a rounded row is a generated-UI tell (removed 0.20.1). */
+.mui-sidebar__menu-button--accent[aria-current]::before, .mui-sidebar__menu-button--accent[data-active="true"]::before, .mui-block--shell__nav-item[aria-current]::before { content: none; }
 .mui-block--shell__nav-item[aria-current] .mui-block--shell__nav-icon { color: inherit; }
-.mui-sidebar__group-label, .mui-block--shell__nav-group-label { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); padding: var(--mui-space-sm) var(--mui-space-md); margin: 0; }
+.mui-sidebar__group-label, .mui-block--shell__nav-group-label { color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: none; letter-spacing: normal; padding: var(--mui-space-sm) var(--mui-space-md); margin: 0; }
 summary.mui-sidebar__group-label, summary.mui-block--shell__nav-group-label { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; border-radius: var(--mui-radius-md); cursor: pointer; }
 summary.mui-sidebar__group-label::-webkit-details-marker, summary.mui-block--shell__nav-group-label::-webkit-details-marker { display: none; }
-summary.mui-sidebar__group-label::after, summary.mui-block--shell__nav-group-label::after { content: "›"; font-size: var(--mui-text-small-size); transform: rotate(0deg); transition: transform var(--mui-transition); }
+summary.mui-sidebar__group-label::after, summary.mui-block--shell__nav-group-label::after { content: ""; flex: none; inline-size: var(--mui-icon-chevron-size); block-size: var(--mui-icon-chevron-size); background: currentColor; mask: var(--mui-icon-chevron) center / contain no-repeat; transform: rotate(0deg); transition: transform var(--mui-transition); }
 details[open] > summary.mui-sidebar__group-label::after, details[open] > summary.mui-block--shell__nav-group-label::after { transform: rotate(90deg); }
 summary.mui-sidebar__group-label:hover, summary.mui-block--shell__nav-group-label:hover { background: var(--mui-bg-input); color: var(--mui-text); }
 /* Collapsible group label (sidebar::group_label_collapsible) — a 24px flex

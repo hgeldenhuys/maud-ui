@@ -5,7 +5,7 @@
   var size = parseFloat(getComputedStyle(probe).fontSize);
   probe.remove();
   return size;
-};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wizard — Header — maud-ui blocks</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Wizard — Header — maud-ui blocks"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=364306"><style>
+};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Wizard — Header — maud-ui blocks</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Wizard — Header — maud-ui blocks"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=367635"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -139,6 +139,37 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
 }
 
 .mui-gallery__back { padding-top: var(--mui-space-lg); }
+
+.mui-props-table__empty { color: var(--mui-text-secondary); }
+
+.mui-gallery__component .mui-docs :is(p, ul, ol, blockquote) {
+    max-width: 70ch;
+}
+
+.mui-api-preview .mui-resizable__demo-content h3 {
+    margin: 0 0 var(--mui-space-sm);
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+}
+
+/* Keep Rust tokens intact; wide values scroll within the documentation. */
+.mui-gallery__component .mui-props-table td:nth-child(-n + 3) {
+    min-width: 12ch;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+.mui-gallery__component .mui-props-table td:nth-child(-n + 3) code {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+@media (max-width: 40rem) {
+    .mui-gallery__component .mui-props-table td:nth-child(-n + 3) {
+        min-width: 0;
+        overflow-x: auto;
+    }
+}
 
 /* ── Responsive: mobile drawer ──────────────────────────────────────
  * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
@@ -564,8 +595,8 @@ html { scroll-behavior: smooth; }
     gap: var(--mui-space-md);
     font-size: var(--mui-text-small-size);
 }
-.mui-gallery__seq-link {
-    color: var(--mui-text-muted);
+.mui-gallery__breadcrumb .mui-gallery__seq-link {
+    color: var(--mui-text-secondary);
     text-decoration: none;
     padding: var(--mui-space-2xs) var(--mui-inset-tight);
     border-radius: var(--mui-radius-sm);
@@ -575,7 +606,7 @@ html { scroll-behavior: smooth; }
     text-overflow: ellipsis;
     transition: color var(--mui-transition), background var(--mui-transition);
 }
-.mui-gallery__seq-link:hover {
+.mui-gallery__breadcrumb .mui-gallery__seq-link:hover {
     color: var(--mui-text);
     background: var(--mui-bg-input);
 }
@@ -739,6 +770,7 @@ html { scroll-behavior: smooth; }
  * would clip the popover / menu / select / tooltip demos, which is a
  * worse regression than the sideways scroll it fixes. */
 @media (max-width: 40rem) {
+    #api-auth-login-examples .mui-block--auth__frame { border: 0; }
     .mui-two-up { grid-template-columns: minmax(0, 1fr); }
 
     .mui-gallery__main,
@@ -749,8 +781,9 @@ html { scroll-behavior: smooth; }
     .mui-showcase__grid > section > * { min-width: 0; }
 
     /* Prev/next pager can't hold one line at 390px. */
-    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
-    .mui-gallery__seq-link { max-width: 9rem; }
+    .mui-gallery__breadcrumb { flex-wrap: wrap; }
+    .mui-gallery__seq { flex: 0 0 100%; justify-content: space-between; flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__breadcrumb .mui-gallery__seq-link { max-width: 9rem; }
 
     /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
        computes overflow-y to auto and raises a stray vertical scrollbar. */
@@ -1014,7 +1047,7 @@ let header = header::render(Props {
 </code></pre>
 <p><code>current</code> is one-based and clamped to the supplied list. Previous steps receive visible check marks and accessible completion text. Exactly one step has <code>aria-current="step"</code>; <code>complete: true</code> explicitly marks all complete and removes the current state. Empty steps render only the title/context. The compact list becomes vertical on a phone, keeping every label readable.</p>
 <p>The application decides eligibility, completion and backward navigation. Focus the next step's heading or first field after replacing its content; do not focus this reusable header on unrelated swaps. See the interactive <a href="/fixtures/workflow-lodge-comfortable.html">workflow fixture</a>.</p>
-<p class="mui-api-module"><code>maud_ui::blocks::wizard::header</code></p></section><section class="mui-api-section mui-docs" id="api-wizard-header-props"><h2>Props</h2><p class="mui-caption">Generated from public Rust fields. Defaults are evaluated from the implementation.</p><div class="mui-docs__scroll"><table class="mui-props-table" data-generated="rust-props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td data-label="Prop"><code>title</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>&quot;Check in guest&quot;</code></td><td data-label="Description"></td></tr><tr><td data-label="Prop"><code>context</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Human identity carried across every step, e.g. guest, room and dates.</td></tr><tr><td data-label="Prop"><code>steps</code></td><td data-label="Type"><code>Vec&lt;String&gt;</code></td><td data-label="Default"><code>[]</code></td><td data-label="Description"></td></tr><tr><td data-label="Prop"><code>current</code></td><td data-label="Type"><code>usize</code></td><td data-label="Default"><code>1</code></td><td data-label="Description">One-based current step. Clamped to the supplied step list.</td></tr><tr><td data-label="Prop"><code>complete</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Explicit terminal state, supplied by the application.</td></tr><tr><td data-label="Prop"><code>heading</code></td><td data-label="Type"><code>Heading</code></td><td data-label="Default"><code>H1</code></td><td data-label="Description"></td></tr></tbody></table></div></section><section class="mui-api-section" id="api-wizard-header-examples"><h2>Examples</h2><div class="mui-api-preview"><div class="mui-kit-previews"><section class="mui-kit-preview" data-theme="light" aria-label="light example"><p class="mui-eyebrow">light · fictional example</p><header class="mui-wizard-header"><h2 class="mui-wizard-header__title">Check in guest</h2><p class="mui-wizard-header__context">Leila Morgan · Garden suite · 10–11 September</p><p class="mui-wizard-header__progress" role="status" aria-atomic="true">Step 2 of 3 · Verify guest</p><ol class="mui-wizard-header__steps" aria-label="Progress"><li data-step="complete"><span class="mui-wizard-header__number" aria-hidden="true">✓</span><span>Select booking<span class="mui-sr-only"> · Complete</span></span></li><li data-step="current" aria-current="step"><span class="mui-wizard-header__number" aria-hidden="true">2</span><span>Verify guest</span></li><li data-step="upcoming"><span class="mui-wizard-header__number" aria-hidden="true">3</span><span>Check in</span></li></ol></header></section><section class="mui-kit-preview" data-theme="dark" aria-label="dark example"><p class="mui-eyebrow">dark · fictional example</p><header class="mui-wizard-header"><h2 class="mui-wizard-header__title">Check in guest</h2><p class="mui-wizard-header__context">Leila Morgan · Garden suite · 10–11 September</p><p class="mui-wizard-header__progress" role="status" aria-atomic="true">Step 2 of 3 · Verify guest</p><ol class="mui-wizard-header__steps" aria-label="Progress"><li data-step="complete"><span class="mui-wizard-header__number" aria-hidden="true">✓</span><span>Select booking<span class="mui-sr-only"> · Complete</span></span></li><li data-step="current" aria-current="step"><span class="mui-wizard-header__number" aria-hidden="true">2</span><span>Verify guest</span></li><li data-step="upcoming"><span class="mui-wizard-header__number" aria-hidden="true">3</span><span>Check in</span></li></ol></header></section></div></div></section><section class="mui-api-section mui-docs" id="api-wizard-header-accessibility"><h2>Accessibility</h2><p>Supply meaningful labels, choose heading levels for the surrounding page, and preserve native link and form behavior. Keyboard focus follows document order. Motion honors reduced-motion preferences.</p></section></section><div class="mui-gallery__back"><a href="/blocks" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Blocks</a></div></main></div><script src="/js/maud-ui.js?v=157642" defer></script><script>
+<p class="mui-api-module"><code>maud_ui::blocks::wizard::header</code></p></section><section class="mui-api-section mui-docs" id="api-wizard-header-props"><h2>Props</h2><p class="mui-caption">Generated from public Rust fields. Defaults are evaluated from the implementation.</p><div class="mui-docs__scroll"><table class="mui-props-table" data-generated="rust-props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td data-label="Prop"><code>title</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>&quot;Check in guest&quot;</code></td><td data-label="Description"><span class="mui-props-table__empty">No description</span></td></tr><tr><td data-label="Prop"><code>context</code></td><td data-label="Type"><code>Option&lt;String&gt;</code></td><td data-label="Default"><code>None</code></td><td data-label="Description">Human identity carried across every step, e.g. guest, room and dates.</td></tr><tr><td data-label="Prop"><code>steps</code></td><td data-label="Type"><code>Vec&lt;String&gt;</code></td><td data-label="Default"><code>[]</code></td><td data-label="Description"><span class="mui-props-table__empty">No description</span></td></tr><tr><td data-label="Prop"><code>current</code></td><td data-label="Type"><code>usize</code></td><td data-label="Default"><code>1</code></td><td data-label="Description">One-based current step. Clamped to the supplied step list.</td></tr><tr><td data-label="Prop"><code>complete</code></td><td data-label="Type"><code>bool</code></td><td data-label="Default"><code>false</code></td><td data-label="Description">Explicit terminal state, supplied by the application.</td></tr><tr><td data-label="Prop"><code>heading</code></td><td data-label="Type"><code>Heading</code></td><td data-label="Default"><code>H1</code></td><td data-label="Description"><span class="mui-props-table__empty">No description</span></td></tr></tbody></table></div></section><section class="mui-api-section" id="api-wizard-header-examples"><h2>Examples</h2><div class="mui-api-preview"><div class="mui-kit-previews"><section class="mui-kit-preview" data-theme="light" aria-label="light example"><p class="mui-eyebrow">light · fictional example</p><header class="mui-wizard-header"><h2 class="mui-wizard-header__title">Check in guest</h2><p class="mui-wizard-header__context">Leila Morgan · Garden suite · 10–11 September</p><p class="mui-wizard-header__progress" role="status" aria-atomic="true">Step 2 of 3 · Verify guest</p><ol class="mui-wizard-header__steps" aria-label="Progress"><li data-step="complete"><span class="mui-wizard-header__number" aria-hidden="true">✓</span><span>Select booking<span class="mui-sr-only"> · Complete</span></span></li><li data-step="current" aria-current="step"><span class="mui-wizard-header__number" aria-hidden="true">2</span><span>Verify guest</span></li><li data-step="upcoming"><span class="mui-wizard-header__number" aria-hidden="true">3</span><span>Check in</span></li></ol></header></section><section class="mui-kit-preview" data-theme="dark" aria-label="dark example"><p class="mui-eyebrow">dark · fictional example</p><header class="mui-wizard-header"><h2 class="mui-wizard-header__title">Check in guest</h2><p class="mui-wizard-header__context">Leila Morgan · Garden suite · 10–11 September</p><p class="mui-wizard-header__progress" role="status" aria-atomic="true">Step 2 of 3 · Verify guest</p><ol class="mui-wizard-header__steps" aria-label="Progress"><li data-step="complete"><span class="mui-wizard-header__number" aria-hidden="true">✓</span><span>Select booking<span class="mui-sr-only"> · Complete</span></span></li><li data-step="current" aria-current="step"><span class="mui-wizard-header__number" aria-hidden="true">2</span><span>Verify guest</span></li><li data-step="upcoming"><span class="mui-wizard-header__number" aria-hidden="true">3</span><span>Check in</span></li></ol></header></section></div></div></section><section class="mui-api-section mui-docs" id="api-wizard-header-accessibility"><h2>Accessibility</h2><p>Supply meaningful labels, choose heading levels for the surrounding page, and preserve native link and form behavior. Keyboard focus follows document order. Motion honors reduced-motion preferences.</p></section></section><div class="mui-gallery__back"><a href="/blocks" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Blocks</a></div></main></div><script src="/js/maud-ui.js?v=157642" defer></script><script>
 (function() {
     // The gallery theme is owned by the document toggle below.
 

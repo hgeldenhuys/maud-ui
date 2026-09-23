@@ -37,10 +37,13 @@ try {
         await delay(300);
         await browser.evaluate(`window.__overlayPanel=document.querySelector(${JSON.stringify(c.panel)}); window.__overlaySample=()=>{const n=__overlayPanel,s=getComputedStyle(n);const r=n.getBoundingClientRect();return {w:Math.round(r.width),h:Math.round(r.height),rendered:n.isConnected&&!!n.getClientRects().length&&s.display!=='none',opacity:Number(s.opacity),focus:document.activeElement===(${!!c.context}?__overlayBefore:__overlayTrigger),backdrop:Number(getComputedStyle(n,'::backdrop').opacity)}};`);
         const openSample=await browser.evaluate('__overlaySample()');
-        // Capture on the close event's own clock, not after CDP round trips.
+        // Capture on the close event's own clock, not after CDP round trips. Every animation
+        // frame for 150ms is sampled and a mid-fade frame is kept: a single sample at 40ms was
+        // flaky under load (the fade can start a frame late) and stopped a real release
+        // (2026-09-23, toast). An instant close still fails: it never shows a mid-fade frame.
         await browser.evaluate(`window.__overlayCapture=new Promise(resolve=>{
           const n=__overlayPanel; let started=false;
-          const start=()=>{if(started)return;started=true;observer.disconnect();const sample=()=>{const early=__overlaySample();setTimeout(()=>resolve({early,late:__overlaySample()}),${reduced?400:360})};${reduced?'sample()':'setTimeout(sample,40)'}};
+          const start=()=>{if(started)return;started=true;observer.disconnect();const t0=performance.now();let early=null;const sample=()=>{const s=__overlaySample();if(!early||(s.rendered&&s.opacity>0&&s.opacity<1&&!(early.rendered&&early.opacity>0&&early.opacity<1)))early=s;if(${reduced?'true':'performance.now()-t0<150'})requestAnimationFrame(sample);else setTimeout(()=>resolve({early,late:__overlaySample()}),${reduced?400:250})};${reduced?'early=__overlaySample();setTimeout(()=>resolve({early,late:__overlaySample()}),400)':'requestAnimationFrame(sample)'}};
           const observer=new MutationObserver(()=>{if(n.dataset.state==='closing'||n.classList.contains('mui-toast--exit')||n.hidden||!n.isConnected||(${!!c.native}&&!n.open)||(${!!c.more}&&!n.closest('details').open))start()});
           observer.observe(document.body,{subtree:true,attributes:true,childList:true});
           n.addEventListener('close',start,{once:true});

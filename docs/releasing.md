@@ -3,6 +3,38 @@
 Publishing is **irreversible**. crates.io versions can be yanked but never replaced, so every
 mistake below ships forever. Each rule here exists because it was nearly (or actually) shipped.
 
+## Current release workflow (0.19.x, verified 2026-09-22/23 across six releases)
+
+`static/` holds the current bundles. `dist/` and `public/` are copies that parity tests compare
+against it, and `public/` is what the WEBSITE serves. The site is a static export: pushing code
+rebuilds its container in about four minutes, but the pages only change if `public/` was
+regenerated and committed. Until 0.19.1 the export copied a year-old stylesheet from `dist/`.
+
+```bash
+cd ~/WebstormProjects/maud-ui
+# 1. Bump Cargo.toml and write the CHANGELOG entry (newest on top).
+# 2. Rebuild the bundles and sync the copies the parity tests read.
+node examples/build-assets.mjs
+for f in maud-ui.css maud-ui.min.css maud-ui.js maud-ui.min.js; do cp static/$f dist/$f; done
+# 3. Regenerate the website (starts the showcase on :3458, fetches every route into public/).
+bun run build:static
+# 4. Tests. 6 registration_parity failures predate 0.19 (time_split registration); anything else is new.
+cargo test --no-fail-fast > /tmp/t.log 2>&1; grep -E '^test .*FAILED$' /tmp/t.log
+# 5. Commit everything except docs/night-6-live-events.jsonl (another session's log), then publish.
+git add -A . ':!docs/night-6-live-events.jsonl' && git commit
+cargo publish
+# 6. Push: the website deploys from customer/main; github/master and forgejo/master are the mirrors.
+git push customer HEAD:main && git push customer HEAD && git push github HEAD:master && git push forgejo HEAD:master
+# 7. Prove the deploy fired (git.kapable.dev drops webhooks silently), then wait for a marker.
+kapable-push-verify customer-herman-engineer/maud-ui "$(git rev-parse HEAD)"
+curl -s https://maudui.herman.engineer/css/maud-ui.min.css | grep -c '<a rule new in this release>'
+```
+
+⚠ During the switchover the two serving lanes answer from different builds (the page from one, its
+stylesheet from the other). Sample the page's `?v=` and the stylesheet's size together, twice, before
+concluding anything. Apps that depend on maud-ui (kapable-kaps, kapable-backlog, kv2-pulse on its
+`master` branch, claude-conductor on the forgejo remote) do not move with a release; each pins a version.
+
 ## 0.8 asset contract
 
 0.8 consumers serve `maud_ui::assets::{CSS_MIN, JS_MIN}` or vendor **static/**. Rebuild with `node examples/build-assets.mjs`, `cargo run --example build_docs`, and `node examples/build-social-card.mjs` (librsvg). The example server serves those complete assets. The legacy **dist/** and **public/** snapshots stay at 0.7; the older website export command below does not constitute a 0.8 website build. Migrate the exporter to the new bundles and all 13 block routes before publishing the website. No publication or git write was performed by the 0.8 curation task.

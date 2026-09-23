@@ -210,12 +210,15 @@ async function main() {
         }
         side = 'diff';
         const diff = `${route.slug}/${theme}-${width}-diff.png`;
-        const {stdout} = await exec(python, [join(root, 'scripts/pixel-diff.py'), join(out, row.images.ref), join(out, row.images.cand), '--out', join(out, diff)], {timeout: 30000});
+        const {stdout} = await exec(python, [join(root, 'scripts/pixel-diff.py'), join(out, row.images.ref), join(out, row.images.cand), '--out', join(out, diff), '--tol', '2'], {timeout: 30000});
         const match = /^match (\d+(?:\.\d+)?)%/m.exec(stdout);
         if (!match) throw Error(`Unrecognized pixel-diff output: ${stdout}`);
         row.match = Number(match[1]);
         row.images.diff = diff;
         compared++;
+        // --tol 2, not pixel-diff's default 24: a light-accent shift from #6e79d6 to #5e6ad2 is
+        // 16 per channel and passed unseen at 24. Captures are deterministic; at 2 the only noise
+        // is zero pages of 84 (at 0 it is four), measured 2026-09-23.
         const differ = /^differ (\d+) pixels/m.exec(stdout);
         if (!differ) throw Error(`pixel-diff printed no 'differ N pixels' line: ${stdout}`);
         row.differ = Number(differ[1]);

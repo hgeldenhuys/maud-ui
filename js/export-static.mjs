@@ -73,7 +73,8 @@ async function main() {
   // 2. Boot the showcase on a known port.
   log(`booting showcase on :${PORT}...`);
   const server = spawn(
-    "./target/release/examples/showcase",
+    // CARGO_TARGET_DIR moves the binary; a hard-coded ./target was ENOENT under it (2026-09-23).
+    join(process.env.CARGO_TARGET_DIR || join(ROOT, "target"), "release/examples/showcase"),
     [],
     { env: { ...process.env, ADDR: `127.0.0.1:${PORT}` }, stdio: "ignore" },
   );

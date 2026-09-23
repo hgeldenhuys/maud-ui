@@ -1,0 +1,23 @@
+# Reference and candidate use the same paths. Actions run after fonts settle.
+# Stable IDs verified in public/input/index.html and public/tabs/index.html.
+/
+/gallery
+/breadcrumb
+/input focus=#demo-fullname
+/select
+/native_select
+/tabs click=#default-password-trigger
+/dialog
+/menu
+/popover
+/combobox
+/sidebar
+/button
+/card
+/data_table
+/toast
+/form
+/calendar
+/pagination
+/blocks/auth-login
+/blocks/settings-team

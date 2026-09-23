@@ -10,30 +10,44 @@ against it, and `public/` is what the WEBSITE serves. The site is a static expor
 rebuilds its container in about four minutes, but the pages only change if `public/` was
 regenerated and committed. Until 0.19.1 the export copied a year-old stylesheet from `dist/`.
 
+First bump `Cargo.toml`, write the newest `CHANGELOG.md` release entry, and commit those
+changes. Then run `scripts/release.sh`:
+
 ```bash
-cd ~/WebstormProjects/maud-ui
-# 1. Bump Cargo.toml and write the CHANGELOG entry (newest on top).
-# 2. Rebuild the bundles and sync the copies the parity tests read.
-node examples/build-assets.mjs
-for f in maud-ui.css maud-ui.min.css maud-ui.js maud-ui.min.js; do cp static/$f dist/$f; done
-# 3. Regenerate the website (starts the showcase on :3458, fetches every route into public/).
-bun run build:static
-# 4. Tests. The suite is fully green since 2026-09-23: any FAILED line blocks the release.
-cargo test --no-fail-fast > /tmp/t.log 2>&1; grep -E '^test .*FAILED$' /tmp/t.log
-# 5. Commit everything except docs/night-6-live-events.jsonl (another session's log), then publish.
-git add -A . ':!docs/night-6-live-events.jsonl' && git commit
-cargo publish
-# 6. Push: the website deploys from customer/main; github/master and forgejo/master are the mirrors.
-git push customer HEAD:main && git push customer HEAD && git push github HEAD:master && git push forgejo HEAD:master
-# 7. Prove the deploy fired (git.kapable.dev drops webhooks silently), then wait for a marker.
-kapable-push-verify customer-herman-engineer/maud-ui "$(git rev-parse HEAD)"
-curl -s https://maudui.herman.engineer/css/maud-ui.min.css | grep -c '<a rule new in this release>'
+scripts/release.sh --marker '<css text new in this release>' [--dry-run] [--visual-ok]
+scripts/release.sh --help
 ```
 
-⚠ During the switchover the two serving lanes answer from different builds (the page from one, its
-stylesheet from the other). Sample the page's `?v=` and the stylesheet's size together, twice, before
-concluding anything. Apps that depend on maud-ui (kapable-kaps, kapable-backlog, kv2-pulse on its
-`master` branch, claude-conductor on the forgejo remote) do not move with a release; each pins a version.
+Choose literal CSS text new in this release that appears in the minified stylesheet. The
+script requires a clean working tree except for `docs/night-6-live-events.jsonl`, which it
+excludes from staging, and a version newer than crates.io with a matching first changelog entry.
+It rebuilds `static/`, copies the bundles to `dist/`, checks the marker, regenerates `public/`,
+and gates the release on tests, clippy, and `cargo publish --dry-run --allow-dirty`.
+
+After regenerating `public/` it serves that folder locally and screenshots about 20 pages in
+light and dark at 1440 and 390 px against https://maudui.herman.engineer (the previous release),
+using `scripts/visual-check.mjs` and the routes in `tests/visual-routes.txt`. More than 16 changed
+pixels on any page, or a click or focus that changes a page's height, stops the release and prints
+a side-by-side report. Open it; if every change is intended, re-run with `--visual-ok`. Captures
+are deterministic (80 of 84 pages were pixel-identical to the live site on 2026-09-23), so a lost
+breadcrumb "/" (about 90 pixels) is enough to stop it. `tests/design_lint.rs` runs inside
+`cargo test` and fails on new raw colours, inline styles, raw pixel values, runtime-built class
+names, cross-component restyles, or `mui-*` classes no stylesheet defines; its counts in
+`tests/design-lint-baseline.txt` only go down (`DESIGN_LINT_UPDATE=1 cargo test --test design_lint`).
+
+With `--dry-run`, it stops after those checks and shows `git status --short`; generated files
+remain for review, but nothing is committed, published or pushed. Commit or remove those
+changes before another run to satisfy the clean-tree preflight.
+
+Without `--dry-run`, it commits regenerated assets, publishes the crate, pushes all four
+targets, verifies the deploy fired, and polls the website every 20 seconds for up to 15 minutes.
+Two consecutive marker matches are required because the site's two serving lanes can answer
+from different builds during a switchover. Finally, it confirms crates.io's `max_version`.
+Publishing is **irreversible**. If a later step stops, inspect the reported state and finish the
+remaining steps manually; a published version cannot pass a fresh run's version preflight.
+
+Apps that depend on maud-ui (kapable-kaps, kapable-backlog, kv2-pulse on its `master` branch,
+claude-conductor on the forgejo remote) do not move with a release; each pins a version.
 
 ## 0.8 asset contract
 

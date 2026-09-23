@@ -8,25 +8,37 @@ seat: claude-opus-5-5
 
 # maud-ui improvement arc
 
-## POSITION (2026-09-23 13:20 EDT)
+## POSITION (2026-09-23 13:35 EDT)
 
-maud-ui 0.19.5 is on crates.io and live at https://maudui.herman.engineer. The four Kapable apps
-run 0.19.3. Item 3 LANDED (unreleased, on the branch): `cargo test --no-fail-fast` = 311 passed,
-0 failed; `cargo clippy --all-targets -D warnings` clean (fixed a needless `..Default::default()`
-in tests/record_page.rs:183). time_split is fully registered: doc + rendered page, docs.rs arm,
-render test, alphabetical COMPONENT_NAMES, 84 in Cargo.toml / README (7 places) / og.svg + og.png.
-Gotcha found: `cargo run --example build_docs` cannot compile while docs.rs include_str!s a page
-that does not exist yet; seed an empty `docs/components/rendered/<name>.html` first.
+Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest on crates.io).
+- Item 3: cargo test 321 pass / 0 fail; clippy -D warnings clean.
+- Item 1: scripts/release.sh (Astra built; I fixed FORCE_COLOR=3 making node colour the version
+  comparison, which refused every release). Dry run PASSED end to end on a throwaway worktree
+  bumped to 0.19.6 ($CLAUDE_JOB_DIR/tmp/wt-release; never pushed).
+- Item 2: scripts/visual-check.mjs + tests/visual-routes.txt (21 routes x light/dark x 1440/390 =
+  84 captures) vs the LIVE site; gate = >16 changed pixels or an action that resizes the page.
+  Proved: breadcrumb "/" hidden (90-97 px), select unstyled, dark focus box, tab-panel resize all
+  FAIL; clean runs 0 px (tabs 3 runs in a row). Fixes I made: absolute pixel count (a % threshold
+  passed the breadcrumb bug at 100.00%), focus emulation (headless never painted :focus), DOM click
+  (mouse click scrolled sticky header differently per run), MAUD_UI_PYTHON (Homebrew python3 has
+  no Pillow). Wired into release.sh as step 5b; --visual-ok after reading the report.
+- Item 6: tests/design_lint.rs (GLM built) + baseline ratchet (457 findings frozen: raw colours 257,
+  unknown classes 78, raw px 77, inline styles 39, runtime classes 6). Proved fails on a planted
+  unknown class, inline style and raw colour. I fixed its #[cfg(test)] skip (only matched `mod tests`).
+- Screenshot of the breadcrumb catch SENT to Herman 13:30.
+- Reviews: K3 is OUT of weekly quota (403); Grok reviewing release.sh (in flight 13:12).
 
 ## NEXT_ACTION
 
-Item 1: write scripts/release.sh (the workflow in docs/releasing.md "Current release workflow" as
-one command). Must: refuse a dirty tree (ignoring docs/night-6-live-events.jsonl), stop on the first
-failure, require Cargo.toml version > crates.io max_version and a CHANGELOG entry for it, run
-build-assets + dist sync + build:static + cargo test (any FAILED line stops it) + clippy -D warnings,
-commit regenerated output excluding the night-6 log, cargo publish, the four pushes,
-kapable-push-verify, then poll the live stylesheet for a marker given as an argument (sampled twice).
-Have a --dry-run that stops before publish. Dispatch to a builder, review by another family.
+Read Grok's review ($CLAUDE_JOB_DIR/tmp/grok-release-review.txt), fix real defects, commit. Then
+item 4 (motion: dialog close, menus, popovers, More dropdown, toasts; view transitions like
+static/behaviors/rail_motion.js; reduced motion instant). Run scripts/visual-check.mjs after it.
+
+## FOUND FOR ITEM 5 (light mode + phone QA)
+- swatch has NO stylesheet: every mui-swatch* class is undefined (linter, 15 findings).
+  78 undefined classes total: tests/design-lint-baseline.txt `no-unknown-classes` lines.
+- At 390px the "<- Navigation Menu / Command ->" pager sits squeezed beside the breadcrumb
+  (seen in the breadcrumb page capture).
 
 ## PLAN (ranked; the reason is the rank)
 
@@ -51,4 +63,10 @@ Have a --dry-run that stops before publish. Dispatch to a builder, review by ano
 
 ## OPEN
 
-- None needing the operator yet.
+- (taste, mine, 2026-09-23) Item 2 compares the LOCAL gallery against the LIVE site (= previous
+  release) rather than storing baseline PNGs in git. Buys: no binary churn, the baseline can't go
+  stale. Costs: needs network; an intentional visual change always shows as a diff, so release.sh
+  stops at the report until a human passes `--visual-ok`. Alternative: committed baselines.
+- In flight 13:30 EDT: Astra building scripts/release.sh (+ docs/releasing.md) from
+  $CLAUDE_JOB_DIR/tmp/release-brief.md; a second Astra run building scripts/visual-check.mjs,
+  tests/visual-routes.txt, faster scripts/pixel-diff.py. Reviews go to K3 (another family).

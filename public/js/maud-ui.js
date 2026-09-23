@@ -2331,7 +2331,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
           if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
         }, { once: true });
       }
-    } else updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
+    } else {
+      const apply = () => updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
+      const inset = sidebar.closest(".mui-sidebar-provider")?.querySelector(".mui-sidebar-inset");
+      if (ui.railTransition) ui.railTransition([sidebar, inset], apply);
+      else apply();
+    }
   }
   ui.behaviors["sidebar"] = (sidebar) => {
     const panel = document.getElementById(sidebar.id + "-drawer");
@@ -3228,9 +3233,14 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
           row.hidden = false;
         });
       }
-      shell.setAttribute("data-collapsed", String(next));
+      const apply = () => {
+        shell.setAttribute("data-collapsed", String(next));
+        syncRail();
+      };
+      const parts = [sidebar, shell.querySelector(".mui-block--shell__main")];
+      if (ui.railTransition) ui.railTransition(parts, apply);
+      else apply();
       if (prefs) prefs.write(key, String(next));
-      syncRail();
     });
     const resizeRail = () => {
       if (!shell.isConnected) {
@@ -3770,6 +3780,43 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     });
   };
   ui.init();
+})();
+(function() {
+  "use strict";
+  const ui = window.MaudUI;
+  if (!ui) return;
+  let serial = 0;
+  function reduced() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+  ui.railTransition = function(parts, change) {
+    const live = parts.filter(Boolean).filter((el) => el.getClientRects().length);
+    if (typeof document.startViewTransition !== "function" || reduced() || !live.length) {
+      change();
+      return;
+    }
+    const id = ++serial;
+    live.forEach((el, i) => {
+      el.style.viewTransitionName = "mui-rail-" + id + "-" + i;
+      el.style.viewTransitionClass = i === 0 ? "mui-rail" : "mui-rail mui-rail-slide";
+    });
+    const clear = () => live.forEach((el) => {
+      el.style.viewTransitionName = "";
+      el.style.viewTransitionClass = "";
+    });
+    try {
+      let transition;
+      try {
+        transition = document.startViewTransition({ update: change, types: ["mui-rail"] });
+      } catch (e) {
+        transition = document.startViewTransition(change);
+      }
+      transition.finished.then(clear, clear);
+    } catch (error) {
+      clear();
+      change();
+    }
+  };
 })();
 (function() {
   "use strict";

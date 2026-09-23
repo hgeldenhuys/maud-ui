@@ -62,7 +62,11 @@
           if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
         }, { once: true });
       }
-    } else updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
+    } else {
+      const apply = () => updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
+      const inset = sidebar.closest('.mui-sidebar-provider')?.querySelector('.mui-sidebar-inset');
+      if (ui.railTransition) ui.railTransition([sidebar, inset], apply); else apply();
+    }
   }
   ui.behaviors["sidebar"] = sidebar => {
     const panel = document.getElementById(sidebar.id + "-drawer");

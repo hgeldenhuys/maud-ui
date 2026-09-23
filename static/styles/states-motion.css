@@ -77,3 +77,17 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
 [data-mui-type="caption"] { font-size: var(--mui-text-caption-size); line-height: var(--mui-text-caption-leading); letter-spacing: var(--mui-text-caption-tracking); }
 :where(h5, h6) { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); font-weight: var(--mui-weight-heading); }
 .mui-gallery__component > h1.mui-gallery__component-name { font-size: var(--mui-text-h1-size); line-height: var(--mui-text-h1-leading); letter-spacing: var(--mui-text-h1-tracking); }
+
+/* Sidebar collapse (rail_motion.js). Each part keeps its natural size and is clipped by
+   its animating box, so text is never stretched: the sidebar's labels are cut away as it
+   narrows while old and new cross-fade. */
+::view-transition-group(*.mui-rail) { animation-duration: 240ms; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); overflow: clip; }
+::view-transition-old(*.mui-rail), ::view-transition-new(*.mui-rail) { width: auto; height: 100%; object-fit: none; object-position: left top; animation-duration: 240ms; }
+html:dir(rtl)::view-transition-old(*.mui-rail), html:dir(rtl)::view-transition-new(*.mui-rail) { object-position: right top; }
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*.mui-rail), ::view-transition-old(*.mui-rail), ::view-transition-new(*.mui-rail) { animation: none; } }
+::view-transition-old(*.mui-rail-slide) { animation: none; opacity: 0; }
+::view-transition-new(*.mui-rail-slide) { animation: none; opacity: 1; }
+/* Everything outside the sidebar and its content column switches straight to the new
+   frame; its default cross-fade doubled any text whose position shifted. */
+html:active-view-transition-type(mui-rail)::view-transition-old(root) { animation: none; opacity: 0; }
+html:active-view-transition-type(mui-rail)::view-transition-new(root) { animation: none; opacity: 1; }

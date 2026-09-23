@@ -151,9 +151,10 @@
         if (input) input.value = '';
         sidebar.querySelectorAll('li, .mui-block--shell__nav-group').forEach(row => { row.hidden = false; });
       }
-      shell.setAttribute("data-collapsed", String(next));
+      const apply = () => { shell.setAttribute("data-collapsed", String(next)); syncRail(); };
+      const parts = [sidebar, shell.querySelector('.mui-block--shell__main')];
+      if (ui.railTransition) ui.railTransition(parts, apply); else apply();
       if (prefs) prefs.write(key, String(next));
-      syncRail();
     });
     const resizeRail = () => {
       if (!shell.isConnected) { railMedia.removeEventListener("change", resizeRail); return; }

@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.5] — 2026-09-23 — the sidebar collapse moves
+
+- **Collapsing a sidebar to its icon rail is animated.** It used to swap layouts in one frame: the column snapped from 240px to 64px and every label vanished at once. Now (new `rail_motion` behaviour, used by both `sidebar` and the shell block's rail toggle) the change runs as a view transition of about a quarter second: the sidebar's width glides, its labels clip and fade away as it narrows, the content column slides without cross-fading its reflowed text, and the rest of the page holds still. It is typed (`mui-rail`), so an app's own view transitions are unaffected. Readers who ask for reduced motion, and browsers without view transitions, keep the instant swap.
+
 ## [0.19.4] — 2026-09-22 — one font, and tabs that hold still
 
 - **Brand areas carry their font.** `[data-brand]` renamed `--mui-font-sans` but plain text inherits the font already resolved on `<body>`, so only elements that set their own font followed a brand: headings, links and buttons switched while paragraphs and table cells did not. `[data-brand]` now re-declares `font-family`.

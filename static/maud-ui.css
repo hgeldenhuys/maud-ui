@@ -12789,6 +12789,46 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
   line-height: var(--mui-text-h1-leading);
   letter-spacing: var(--mui-text-h1-tracking);
 }
+::view-transition-group(*.mui-rail) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: clip;
+}
+::view-transition-old(*.mui-rail),
+::view-transition-new(*.mui-rail) {
+  width: auto;
+  height: 100%;
+  object-fit: none;
+  object-position: left top;
+  animation-duration: 240ms;
+}
+html:dir(rtl)::view-transition-old(*.mui-rail),
+html:dir(rtl)::view-transition-new(*.mui-rail) {
+  object-position: right top;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*.mui-rail),
+  ::view-transition-old(*.mui-rail),
+  ::view-transition-new(*.mui-rail) {
+    animation: none;
+  }
+}
+::view-transition-old(*.mui-rail-slide) {
+  animation: none;
+  opacity: 0;
+}
+::view-transition-new(*.mui-rail-slide) {
+  animation: none;
+  opacity: 1;
+}
+html:active-view-transition-type(mui-rail)::view-transition-old(root) {
+  animation: none;
+  opacity: 0;
+}
+html:active-view-transition-type(mui-rail)::view-transition-new(root) {
+  animation: none;
+  opacity: 1;
+}
 
 /* static/styles/brand-presets.css */
 [data-brand=lodge] {

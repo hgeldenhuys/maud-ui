@@ -35,16 +35,17 @@ unstyled, a tab switch resized the page.
 
 ## Project
 Rust crate `maud-ui` at /Users/hgeldenhuys/WebstormProjects/maud-ui, branch curation-2026-09-08.
-Website https://maudui.herman.engineer is a static export of the gallery.
+Website https://maudui.herman.engineer: VERIFIED 2026-09-22 by reading server.ts and js/export-static.mjs, it serves the committed public/ folder, which only `bun run build:static` regenerates.
 
-## Read first (each confirmed to exist with `ls` on 2026-09-23)
+## Read first
+VERIFIED 2026-09-23 by `ls`: every file path named anywhere in this prompt exists, except the two marked NEW
+(docs/components/time_split.md, scripts/release.sh).
 - /Users/hgeldenhuys/WebstormProjects/maud-ui/.claude/maud-ui-improvements-state.md — NEXT_ACTION and the plan.
 - /Users/hgeldenhuys/WebstormProjects/maud-ui/docs/releasing.md — "Current release workflow (0.19.x)", the steps run six times.
 - /Users/hgeldenhuys/WebstormProjects/maud-ui/CHANGELOG.md — entries 0.18.0 to 0.19.5.
 
 ## Mission: item 3, make `cargo test` fully green
-Done when `cargo test --no-fail-fast` prints no FAILED line. Every path below was checked with `ls`
-on 2026-09-23 and exists, except the one marked NEW. Fix in this order, because 1–3 register the
+Done when `cargo test --no-fail-fast` prints no FAILED line. Fix in this order, because 1–3 register the
 component and 4–6 are counts that only pass once it is registered:
 1. Create docs/components/time_split.md (NEW; copy a sibling doc's shape).
 2. Add a time_split `include_str!` arm in src/showcase/docs.rs, then `cargo run --example build_docs`.
@@ -71,7 +72,7 @@ Send Herman a screenshot early in items 2, 4 and 5.
 - Mid-deploy the page and its stylesheet come from different builds. Tell: the page's `maud-ui.css?v=` number differs from the stylesheet's byte size. Sample twice.
 - A new test can pass on a comment. Tell: `prove-red` says the test "still PASSES" under a mutation. Run it on every new test.
 - Breakpoints must come from `tokens::breakpoints`. Tell: `every_media_width_is_a_declared_breakpoint` fails naming the width.
-- VERIFIED 2026-09-23 by `git status --short`: docs/night-6-live-events.jsonl is modified and was never touched by this arc (inferred: another session's log). Tell: it appears in every status; never stage it.
+- VERIFIED 2026-09-23 by `git status --short`: docs/night-6-live-events.jsonl is modified. INFERRED to be another session's log, because no commit or edit in this arc touched it. Tell: it appears in every status; never stage it.
 
 ## Not true / not proven
 - Light-mode values of the Linear recipe were inferred, not measured.

@@ -6,7 +6,7 @@
 # Publishing is irreversible: a crates.io version can never be replaced.
 #
 # Usage:
-#   scripts/release.sh --marker '<css text new in this release>' [--dry-run] [--visual-ok]
+#   scripts/release.sh --marker '<text new in this release>' [--marker-in <published path>] [--dry-run] [--visual-ok]
 #   scripts/release.sh --help
 #
 # Step 5b screenshots the freshly exported site against the live one (the previous release).
@@ -30,11 +30,13 @@ trap 'fail "Unexpected error at line $LINENO: inspect the command and its output
 usage() {
   cat <<'USAGE'
 Usage:
-  scripts/release.sh --marker '<css text new in this release>' [--dry-run] [--visual-ok]
+  scripts/release.sh --marker '<text new in this release>' [--marker-in <published path>] [--dry-run] [--visual-ok]
   scripts/release.sh --help
 
 First bump Cargo.toml, write the newest CHANGELOG entry, and commit.
---marker   Literal CSS text new in this release; must appear in the minified CSS.
+--marker   Literal text new in this release; must appear in the file --marker-in names.
+--marker-in  Site path to look in (default css/maud-ui.min.css). For a JS or page-only
+           change pass the page, e.g. gallery/ (a path ending in / means its index.html).
 --dry-run  Rebuild and run all checks, including cargo publish --dry-run;
            show git status without committing, publishing or pushing.
 --visual-ok  You opened the screenshot report and every change in it is intended.
@@ -44,6 +46,7 @@ USAGE
 }
 
 marker=''
+marker_in='css/maud-ui.min.css'
 dry_run=false
 visual_ok=false
 while [[ $# -gt 0 ]]; do
@@ -52,6 +55,9 @@ while [[ $# -gt 0 ]]; do
     --marker)
       [[ $# -ge 2 ]] || fail "--marker needs a value: pass --marker '<css text new in this release>'."
       marker="$2"; shift 2 ;;
+    --marker-in)
+      [[ $# -ge 2 && -n "$2" ]] || fail "--marker-in needs a site path: pass e.g. --marker-in gallery/ or --marker-in css/maud-ui.min.css."
+      marker_in="${2#/}"; shift 2 ;;
     --dry-run) dry_run=true; shift ;;
     --visual-ok) visual_ok=true; shift ;;
     *) fail "Unknown argument '$1': use scripts/release.sh --help for usage." ;;
@@ -59,7 +65,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 step '1. Preflight'
-[[ -n "$marker" ]] || fail "Missing or empty --marker: pass --marker '<css text new in this release>'."
+[[ -n "$marker" ]] || fail "Missing or empty --marker: pass --marker '<text new in this release>'."
 for command in cargo node bun jq curl git kapable-push-verify; do
   command -v "$command" >/dev/null 2>&1 || fail "Required command '$command' is missing: install it and put it on PATH."
 done
@@ -75,13 +81,18 @@ done <<< "$status"
 ${dirty}Commit or remove the unrelated changes before releasing; never stage $ignored."
 branch=$(git branch --show-current)
 [[ -n "$branch" ]] || fail 'HEAD is detached: check out the branch you are releasing from, then retry.'
-live_css_url='https://maudui.herman.engineer/css/maud-ui.min.css'
+# The marker is checked in one published file: the stylesheet by default, or --marker-in (a page
+# for a JS-only fix; 0.20.1's palette fix had to wait for a CSS change because only CSS could be
+# checked, 2026-09-23). A path ending in / is served from its index.html, locally and live.
+live_css_url="https://maudui.herman.engineer/$marker_in"
+local_marker_file="public/$marker_in"
+[[ "$local_marker_file" != */ ]] || local_marker_file="${local_marker_file}index.html"
 # Cache-busted and no-cache: server.ts sends max-age=300 on CSS, so a plain GET can be answered
 # from a cache and "verify" the old site (Grok review 2026-09-23).
 fetch_live_css() { curl -fsS --max-time "$1" -H 'Cache-Control: no-cache' "$live_css_url?release-check=$RANDOM$SECONDS"; }
 live_css=$(fetch_live_css 20) || fail "Cannot fetch $live_css_url: check the network, then retry."
 if grep -F -- "$marker" <<< "$live_css" >/dev/null; then
-  fail "The live site already serves the marker, so the final website check could not tell the new release from the old one: pass CSS text that is new in this release."
+  fail "The live site already serves the marker in $marker_in, so the final website check could not tell the new release from the old one: pass text that is new in this release (or a different --marker-in)."
 fi
 version=$(cargo metadata --no-deps --format-version 1 | jq -er '.packages[] | select(.name == "maud-ui") | .version') ||
   fail 'Cannot read the maud-ui version: fix Cargo.toml or the cargo metadata error and retry.'
@@ -136,10 +147,16 @@ for file in maud-ui.css maud-ui.min.css maud-ui.js maud-ui.min.js; do
   run 'Restore dist/ and fix the missing or unreadable static bundle, then retry.' cp "static/$file" "dist/$file"
 done
 step '4. Check the release stylesheet marker'
-grep -F -- "$marker" static/maud-ui.min.css >/dev/null ||
-  fail "The release's own stylesheet does not contain the marker (or cannot be read): either the marker is wrong or the new CSS rule did not reach the bundle; correct the marker or asset build."
+if [[ "$marker_in" == css/maud-ui.min.css ]]; then
+  grep -F -- "$marker" static/maud-ui.min.css >/dev/null ||
+    fail "The release's own stylesheet does not contain the marker (or cannot be read): either the marker is wrong or the new CSS rule did not reach the bundle; correct the marker or asset build."
+else
+  printf '    (marker is checked in %s after the site is regenerated)\n' "$local_marker_file"
+fi
 step '5. Regenerate the website'
 run 'Fix the static export error so public/ is regenerated, then retry.' bun run build:static
+grep -F -- "$marker" "$local_marker_file" >/dev/null ||
+  fail "The regenerated $local_marker_file does not contain the marker (or does not exist): either the marker or --marker-in is wrong, or the change did not reach the export; correct it and re-run."
 step '5b. Compare screenshots with the live site; check overlay behaviour'
 # Serve public/ exactly as the site will, on a free port, and diff it against the live site.
 visual_port=$(node -e "const s=require('net').createServer().listen(0,'127.0.0.1',()=>{process.stdout.write(String(s.address().port));s.close()})") ||
@@ -265,7 +282,7 @@ while (( SECONDS < deadline )); do
   if (( pause > 0 )); then sleep "$pause"; fi
 done
 (( consecutive == 2 )) ||
-  fail 'The push landed and the crate is published, but the site does not serve the marker yet in two consecutive samples: check that public/ was regenerated and committed, then inspect the deployment.'
+  fail "The push landed and the crate is published, but $live_css_url does not serve the marker yet in two consecutive samples: check that public/ was regenerated and committed, then inspect the deployment."
 step '16. Confirm crates.io version'
 published=$(registry_version) || fail 'The crate was published and the site verified, but crates.io could not be read: check the API/network and confirm max_version manually.'
 [[ "$published" == "$version" ]] || fail "crates.io max_version is $published, expected $version: check registry propagation and the published crate; do not republish an existing version."

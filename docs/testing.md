@@ -150,3 +150,10 @@ everyone to ignore it. Promote them to gates once the tree is clean.
 Run `node examples/build-assets.mjs`, then `node --test tests/curation-runtime.mjs` for handler/lifecycle fixtures against the complete bundle, and `node tests/curation-contrast.mjs` for 264 palette comparisons and token-control parity. These are not browser layout, native-dialog focus or assistive-technology tests. The older Chrome harness loads the legacy dist snapshot; it does not verify the new bundle.
 
 `cargo run --example build_docs` regenerates docs; `node examples/build-social-card.mjs` generates SVG/PNG with librsvg without screenshots. The example server serves the complete static assets and the new social card. The older public export is outside this curation lane and must be migrated before a website release.
+
+## Compare one element: live site vs local build
+
+`node scripts/compare-element.mjs <route> <selector> [--theme light|dark] [--width 1440]` writes
+`compare.png` with the live site's element on the left and the local gallery's on the right
+(start the gallery with `scripts/gallery.sh` first). Use it to show a single change; use
+`scripts/visual-check.mjs` to find every page that changed.

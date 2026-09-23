@@ -14,11 +14,11 @@ First bump `Cargo.toml`, write the newest `CHANGELOG.md` release entry, and comm
 changes. Then run `scripts/release.sh`:
 
 ```bash
-scripts/release.sh --marker '<css text new in this release>' [--dry-run] [--visual-ok]
+scripts/release.sh --marker '<text new in this release>' [--marker-in <site path>] [--dry-run] [--visual-ok]
 scripts/release.sh --help
 ```
 
-Choose literal CSS text new in this release that appears in the minified stylesheet. The
+Choose literal text new in this release. By default it must appear in the minified stylesheet; for a release that changes no CSS (a JS or page fix) pass `--marker-in` with the page that carries it, e.g. `--marker-in /` and `--marker 'maud-ui 0.20.3 ·'` (the home page footer shows the version). A path ending in `/` means its `index.html`. The script refuses a marker the live site already serves. The
 script requires a clean working tree except for `docs/night-6-live-events.jsonl`, which it
 excludes from staging, and a version newer than crates.io with a matching first changelog entry.
 It rebuilds `static/`, copies the bundles to `dist/`, checks the marker, regenerates `public/`,

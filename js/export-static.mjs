@@ -28,19 +28,18 @@ const COMPONENTS = (() => {
   return slugs;
 })();
 
-// Blocks — pre-composed templates. Mirrors BLOCK_NAMES in src/blocks/mod.rs.
-const BLOCKS = [
-  "auth-login",
-  "auth-signup",
-  "auth-two-factor",
-  "dashboard-stats",
-  "data-table-full",
-  "pricing-tiers",
-  "settings-billing",
-  "settings-profile",
-  "settings-team",
-  "shell-sidebar",
-];
+// Blocks — PARSED from BLOCK_NAMES in src/blocks/mod.rs, same as components.
+// The hand-kept copy that lived here listed 10 of 31 blocks, so 21 block pages
+// (record-header, worklist-header, …) 404'd on the site while the gallery's own
+// links pointed at them (found 2026-09-22 from a dead "Guest inbox" link).
+const BLOCKS = (() => {
+  const src = readFileSync(join(ROOT, "src/blocks/mod.rs"), "utf8");
+  const m = src.match(/pub const BLOCK_NAMES: &\[&str\] = &\[([\s\S]*?)\];/);
+  if (!m) throw new Error("could not find BLOCK_NAMES in src/blocks/mod.rs");
+  const slugs = [...m[1].matchAll(/"([a-z0-9-]+)"/g)].map((x) => x[1]);
+  if (slugs.length === 0) throw new Error("BLOCK_NAMES parsed as empty");
+  return slugs;
+})();
 
 function log(msg) { process.stdout.write(`[export-static] ${msg}\n`); }
 

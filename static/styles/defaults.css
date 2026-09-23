@@ -68,7 +68,12 @@ th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; fo
 .mui-empty-state { padding: var(--mui-space-3xl) var(--mui-space-xl); }
 
 /* One visible focus treatment. Functional outlines are distinct from hairlines. */
-[class*="mui-"]:is(a, button, input, textarea, select, summary, [tabindex], [role="button"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; box-shadow: none; }
+[class*="mui-"]:is(a, button, input:where([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]), summary, [tabindex], [role="button"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; box-shadow: none; }
+/* Text fields say "you are here" with a soft ring that follows their corners. Until
+   0.19.3 the offset outline above also hit them, and outranked .mui-input:focus-visible,
+   so every field focused as a hard dark rectangle two pixels outside its border.
+   Zero specificity on purpose: any component's own focus rule wins over this default. */
+:where([class*="mui-"]):where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]), textarea, select):focus-visible { outline: none; border-color: var(--mui-border-focus); box-shadow: var(--mui-ring-field); }
 :where([class*="mui-"]) { accent-color: var(--mui-accent); }
 @media (pointer: coarse) {
   .mui-btn:not(.mui-btn--link), .mui-input, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger { min-height: var(--mui-touch-target); }

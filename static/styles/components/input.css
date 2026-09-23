@@ -31,7 +31,7 @@
 .mui-input:focus-visible {
   outline: none;
   border-color: var(--mui-border-focus);
-  box-shadow: var(--mui-ring);
+  box-shadow: var(--mui-ring-field);
 }
 
 .mui-input[aria-invalid="true"] {

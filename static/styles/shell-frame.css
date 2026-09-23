@@ -30,7 +30,10 @@
 .mui-block--shell__content, .mui-page-stack { display: flex; flex-direction: column; gap: var(--mui-stack-gap); }
 .mui-block--shell__content > *, .mui-page-stack > *, .mui-record-example > *, .mui-bank-example > *, .mui-workspace-example > * { margin-block: 0; }
 .mui-block--shell__content > .mui-status-chip-group, .mui-page-stack > .mui-status-chip-group { margin-block: 0; }
-.mui-block--shell__content, .mui-page-stack, [data-density]:not(.mui-action-row) { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); }
+/* Never on <html>: a font-size there rescales every rem on the page, so a density
+   switch resized the whole layout (a 90rem page went 1350px -> 1260px) and controls
+   drew at 30px instead of 32px (fixed 0.19.3). On the root, the type goes on <body>. */
+.mui-block--shell__content, .mui-page-stack, [data-density]:not(.mui-action-row):not(html), html[data-density] > body { font-size: var(--mui-text-body-size); line-height: var(--mui-text-body-leading); }
 .mui-workspace-example, .mui-record-example, .mui-bank-example { gap: var(--mui-stack-gap); }
 .mui-block--shell[data-embedded="true"] { min-height: 32rem; }
 .mui-block--shell__brand { min-height: var(--mui-shell-header-height); padding-inline: var(--mui-shell-inset); }

@@ -56,6 +56,7 @@
   --mui-motion-loading: calc(var(--mui-motion-enter) * 6);
   --mui-transition: var(--mui-motion-fast) var(--mui-motion-ease);
   --mui-ring: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+  --mui-ring-field: 0 0 0 3px color-mix(in srgb, var(--mui-border-focus) 22%, transparent);
   --mui-hairline: 1px;
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);

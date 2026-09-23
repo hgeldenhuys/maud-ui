@@ -45,7 +45,8 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
 :where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]) { transition: background-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease), border-color var(--mui-motion-fast) var(--mui-motion-ease), filter var(--mui-motion-fast) var(--mui-motion-ease); }
 :where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]):hover:not(:disabled):not([aria-disabled="true"]) { filter: brightness(1.06); }
 :where(a[href], button, input, select, textarea, summary, [role="button"], [role="option"], [role="checkbox"], [role="radio"], [role="tab"], [contenteditable="true"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
-:is(a[href], button, input, select, textarea, summary, [tabindex], [contenteditable="true"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+:is(a[href], button, input:where([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]), summary, [tabindex]:not(input, select, textarea), [contenteditable="true"]):focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+/* Text fields take the soft ring from defaults.css instead (0.19.3). */
 .mui-toast__close { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

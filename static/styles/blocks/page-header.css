@@ -74,3 +74,4 @@
 .mui-page-header__search-trigger > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mui-page-header__search .mui-page-header__search-trigger kbd { position: static; transform: none; width: auto; flex: none; }
 .mui-page-header__switchers select.mui-native-select { height: var(--mui-control-height); min-height: var(--mui-control-height); }
+.mui-page-header__search-trigger:focus-visible { outline: none; border-color: var(--mui-border-focus); box-shadow: var(--mui-ring-field); }

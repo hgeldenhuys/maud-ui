@@ -7157,6 +7157,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 .mui-palette__icon { display: inline-flex; color: var(--mui-text-muted); }
 .mui-palette__input { flex: 1; min-width: 0; border: 0; outline: none; min-height: var(--mui-control-height); background: transparent; color: var(--mui-text); font: inherit; }
 .mui-palette__input::placeholder { color: var(--mui-text-subtle); }
+.mui-palette__input:focus-visible { outline: none; box-shadow: none; }
 .mui-palette__hint { border: 1px solid var(--mui-border); background: var(--mui-bg); color: var(--mui-text-muted); padding: var(--mui-space-xs) var(--mui-space-sm); border-radius: var(--mui-radius-sm); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); cursor: pointer; }
 .mui-palette__hint:hover { color: var(--mui-text); background: var(--mui-bg-input); }
 .mui-palette__list { list-style: none; overflow: auto; padding: var(--mui-space-sm); margin: 0; min-height: 0; }
@@ -8123,10 +8124,16 @@ fn showcase_js() -> &'static str {
             });
             activeIndex = 0; render(); paletteList.scrollTop = 0;
         }
-        function open() {
+        // The header search box is a door into this palette, not a second search:
+        // it used to filter the sidebar list while ⌘K opened this, so the same-looking
+        // box did two different things (0.19.3).
+        var headerSearch = document.getElementById('mui-search');
+        var reopenGuardUntil = 0;
+        function open(initial) {
             if (palette.open) return;
             previousFocus = document.activeElement; setDrawer(false);
-            paletteInput.value = ''; filter(); palette.showModal();
+            if (previousFocus === headerSearch) previousFocus = paletteBtn && paletteBtn.getClientRects().length ? paletteBtn : null;
+            paletteInput.value = typeof initial === 'string' ? initial : ''; filter(); palette.showModal();
             paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
         }
         function close() { if (palette.open) palette.close(); }
@@ -8141,7 +8148,17 @@ fn showcase_js() -> &'static str {
             if (previousFocus && previousFocus.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
         });
         palette.addEventListener('click', function (event) { if (event.target === palette) close(); });
-        paletteBtn?.addEventListener('click', open); closeBtn?.addEventListener('click', close);
+        paletteBtn?.addEventListener('click', function () { open(); }); closeBtn?.addEventListener('click', close);
+        if (headerSearch) {
+            headerSearch.setAttribute('aria-haspopup', 'dialog');
+            headerSearch.setAttribute('aria-keyshortcuts', 'Meta+K Control+K /');
+            headerSearch.addEventListener('focus', function () {
+                if (Date.now() < reopenGuardUntil) return;
+                var text = headerSearch.value; headerSearch.value = '';
+                open(text);
+            });
+            palette.addEventListener('close', function () { reopenGuardUntil = Date.now() + 300; });
+        }
         paletteInput.addEventListener('input', filter);
         paletteInput.addEventListener('keydown', function (event) {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

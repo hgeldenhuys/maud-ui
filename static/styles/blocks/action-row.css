@@ -8,14 +8,18 @@
 .mui-action-row__more > summary { list-style: none; cursor: pointer; }
 .mui-action-row__more > summary::-webkit-details-marker { display: none; }
 
-.mui-action-row__overflow { position: absolute; z-index: var(--mui-layer-overlay); inset-inline-end: 0; top: calc(100% + var(--mui-space-xs)); width: max-content; max-width: min(20rem, calc(100vw - var(--mui-space-xxl))); display: grid; gap: var(--mui-space-xs); padding: var(--mui-space-sm); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md); background: var(--mui-bg-card); box-shadow: none; }
-.mui-action-row__overflow .mui-btn { width: 100%; justify-content: flex-start; }
+.mui-action-row__overflow { position: absolute; z-index: var(--mui-layer-overlay); inset-inline-start: 0; top: calc(100% + var(--mui-space-xs)); width: max-content; min-width: 10rem; max-width: min(20rem, calc(100vw - var(--mui-space-xxl))); display: grid; gap: 1px; padding: var(--mui-space-xs); border: 1px solid var(--mui-border-strong, var(--mui-border)); border-radius: var(--mui-radius-md); background: var(--mui-bg-overlay-panel, var(--mui-bg-card)); box-shadow: var(--mui-shadow-md); }
+/* Opens under the trigger's start edge; the behaviour flips it to the end edge only when
+   the start-aligned menu would leave the viewport (0.19.3: it always opened end-aligned,
+   so a More at the start of a row threw its menu over the sidebar). */
+.mui-action-row__more[data-align="end"] > .mui-action-row__overflow { inset-inline-start: auto; inset-inline-end: 0; }
+/* Items are menu rows, not buttons in a box: no border, no fill until hovered. */
+.mui-action-row__overflow .mui-btn { width: 100%; justify-content: flex-start; min-height: var(--mui-control-height); height: auto; padding: 0 var(--mui-space-sm); border: 0; border-radius: var(--mui-radius-sm); background: transparent; box-shadow: none; color: var(--mui-text); font-weight: var(--mui-weight-normal); }
+.mui-action-row__overflow .mui-btn:hover, .mui-action-row__overflow .mui-btn:focus-visible { background: var(--mui-bg-input); outline: none; }
 @media (pointer: coarse) {
   .mui-action-row[data-density] .mui-btn { min-height: var(--mui-touch-target); }
 }
-@media (max-width: 40rem) {
-  .mui-action-row__overflow { inset-inline-end: auto; inset-inline-start: 0; }
-}
+
 
 .mui-action-row[data-density] .mui-action-row__trigger { width: auto; min-width: 0; min-height: var(--mui-space-xxl); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); gap: var(--mui-space-xs); }
 @media (pointer: coarse) { .mui-action-row[data-density] .mui-action-row__trigger { min-height: var(--mui-touch-target); } }

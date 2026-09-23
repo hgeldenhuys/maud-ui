@@ -5,7 +5,7 @@
   var size = parseFloat(getComputedStyle(probe).fontSize);
   probe.remove();
   return size;
-};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Swatch — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=355531"><style>
+};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Swatch — maud-ui</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Swatch — maud-ui"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=356686"><style>
 /* Gallery layout — sidebar + main */
 .mui-gallery {
     display: grid;
@@ -263,6 +263,7 @@ html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
 .mui-palette__icon { display: inline-flex; color: var(--mui-text-muted); }
 .mui-palette__input { flex: 1; min-width: 0; border: 0; outline: none; min-height: var(--mui-control-height); background: transparent; color: var(--mui-text); font: inherit; }
 .mui-palette__input::placeholder { color: var(--mui-text-subtle); }
+.mui-palette__input:focus-visible { outline: none; box-shadow: none; }
 .mui-palette__hint { border: 1px solid var(--mui-border); background: var(--mui-bg); color: var(--mui-text-muted); padding: var(--mui-space-xs) var(--mui-space-sm); border-radius: var(--mui-radius-sm); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); cursor: pointer; }
 .mui-palette__hint:hover { color: var(--mui-text); background: var(--mui-bg-input); }
 .mui-palette__list { list-style: none; overflow: auto; padding: var(--mui-space-sm); margin: 0; min-height: 0; }
@@ -1111,7 +1112,7 @@ html! {
 <li>Title attribute on copyable swatches: <code>"Click to copy"</code>.</li>
 <li>Copy value is written to <code>data-swatch-value</code> so the behaviour script reads it.</li>
 </ul>
-</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=151148" defer></script><script>
+</section></section><div class="mui-gallery__back"><a href="/gallery" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Gallery</a></div></main></div><script src="/js/maud-ui.js?v=152676" defer></script><script>
 (function() {
     // The gallery theme is owned by the document toggle below.
 
@@ -1401,10 +1402,16 @@ html! {
             });
             activeIndex = 0; render(); paletteList.scrollTop = 0;
         }
-        function open() {
+        // The header search box is a door into this palette, not a second search:
+        // it used to filter the sidebar list while ⌘K opened this, so the same-looking
+        // box did two different things (0.19.3).
+        var headerSearch = document.getElementById('mui-search');
+        var reopenGuardUntil = 0;
+        function open(initial) {
             if (palette.open) return;
             previousFocus = document.activeElement; setDrawer(false);
-            paletteInput.value = ''; filter(); palette.showModal();
+            if (previousFocus === headerSearch) previousFocus = paletteBtn && paletteBtn.getClientRects().length ? paletteBtn : null;
+            paletteInput.value = typeof initial === 'string' ? initial : ''; filter(); palette.showModal();
             paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
         }
         function close() { if (palette.open) palette.close(); }
@@ -1419,7 +1426,17 @@ html! {
             if (previousFocus && previousFocus.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
         });
         palette.addEventListener('click', function (event) { if (event.target === palette) close(); });
-        paletteBtn?.addEventListener('click', open); closeBtn?.addEventListener('click', close);
+        paletteBtn?.addEventListener('click', function () { open(); }); closeBtn?.addEventListener('click', close);
+        if (headerSearch) {
+            headerSearch.setAttribute('aria-haspopup', 'dialog');
+            headerSearch.setAttribute('aria-keyshortcuts', 'Meta+K Control+K /');
+            headerSearch.addEventListener('focus', function () {
+                if (Date.now() < reopenGuardUntil) return;
+                var text = headerSearch.value; headerSearch.value = '';
+                open(text);
+            });
+            palette.addEventListener('close', function () { reopenGuardUntil = Date.now() + 300; });
+        }
         paletteInput.addEventListener('input', filter);
         paletteInput.addEventListener('keydown', function (event) {
             if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {

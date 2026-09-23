@@ -1,0 +1,1435 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><script>window.muiTypePixels = function(token) {
+  var probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;font-size:var(' + token + ')';
+  document.documentElement.appendChild(probe);
+  var size = parseFloat(getComputedStyle(probe).fontSize);
+  probe.remove();
+  return size;
+};</script><meta name="viewport" content="width=device-width, initial-scale=1"><title>Record — Facts — maud-ui blocks</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta property="og:type" content="website"><meta property="og:site_name" content="maud-ui"><meta property="og:title" content="Record — Facts — maud-ui blocks"><meta property="og:image" content="https://maudui.herman.engineer/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://maudui.herman.engineer/og.png"><script>try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}</script><link rel="stylesheet" href="/css/maud-ui.css?v=356686"><style>
+/* Gallery layout — sidebar + main */
+.mui-gallery {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 80px);
+}
+
+/* Sticky sidebar */
+.mui-gallery__sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--mui-border);
+    padding: var(--mui-space-lg) 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mui-border) transparent;
+}
+
+.mui-gallery__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-xs);
+}
+
+.mui-gallery__nav-group {
+    padding: 0 0 var(--mui-space-xs);
+}
+
+.mui-gallery__nav-tier { display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm); list-style: none; padding: var(--mui-space-sm) var(--mui-space-lg); min-height: var(--mui-nav-row-height); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); text-transform: uppercase; letter-spacing: var(--mui-tracking-label); color: var(--mui-text-muted); cursor: pointer; }
+.mui-gallery__nav-tier::-webkit-details-marker { display: none; }
+.mui-gallery__nav-tier::after { content: "›"; font-size: var(--mui-text-small-size); transition: transform var(--mui-transition); }
+details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
+.mui-gallery__nav-tier:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-items { display: flex; flex-direction: column; gap: var(--mui-space-2xs); padding: 0 var(--mui-space-sm); }
+.mui-gallery__nav-item { display: flex; align-items: center; min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); font-size: var(--mui-text-small-size); color: var(--mui-text-secondary); text-decoration: none; border-inline-start: 2px solid transparent; border-radius: var(--mui-radius-md); transition: background-color var(--mui-transition), color var(--mui-transition); }
+.mui-gallery__nav-item:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-gallery__nav-item--active { color: var(--mui-accent-text); border-inline-start-color: var(--mui-accent-text); background: var(--mui-accent-soft); font-weight: var(--mui-weight-heading); }
+@media (pointer: coarse) { .mui-gallery__nav-item, .mui-gallery__nav-tier { min-height: var(--mui-touch-target); } }
+
+/* Main content */
+.mui-gallery__main {
+    padding: var(--mui-space-xxl) var(--mui-page-gutter);
+    /* The cap is a readable measure, but without the auto margins it jammed
+       against the sidebar and left the entire right half of a wide window
+       empty — it read as a broken layout rather than a deliberate column.
+       Centred in the remaining track instead.
+
+       `justify-self`, NOT `margin-inline: auto`: auto margins on a grid item
+       absorb the free space BEFORE alignment, which makes the item shrink to
+       fit its content instead of filling to the cap. That collapsed the column
+       to 881px on a 2080px viewport — narrower than before the "fix".
+       `width: 100%` fills the track up to the cap; `justify-self` centres what
+       is left. `min-width: 0` stops a wide demo (data_table, calendar) from
+       forcing the grid track past the viewport. */
+    width: 100%;
+    max-width: 1280px;
+    justify-self: center;
+    min-width: 0;
+}
+
+.mui-gallery__tier {
+    margin-bottom: var(--mui-space-3xl);
+}
+
+.mui-gallery__tier-header {
+    margin-bottom: var(--mui-space-xl);
+    padding-bottom: var(--mui-space-md);
+    border-bottom: 1px solid var(--mui-border);
+}
+
+.mui-gallery__tier-title {
+    margin: 0 0 var(--mui-space-xs);
+    font-size: var(--mui-text-h2-size);
+    font-weight: var(--mui-weight-heading);
+ line-height: var(--mui-text-h2-leading);  letter-spacing: var(--mui-text-h2-tracking); }
+
+.mui-gallery__tier-desc {
+    margin: 0;
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-small-size);
+}
+
+.mui-gallery__component {
+    padding: var(--mui-space-xl);
+    margin-bottom: var(--mui-space-lg);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+}
+
+.mui-gallery__component-name {
+    margin: 0 0 var(--mui-space-lg);
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-sm);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+
+.mui-gallery__anchor {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+    font-weight: var(--mui-weight-normal);
+    opacity: 0;
+    transition: opacity var(--mui-transition);
+}
+.mui-gallery__component:hover .mui-gallery__anchor {
+    opacity: 1;
+}
+.mui-gallery__anchor:hover { color: var(--mui-accent); }
+
+.mui-gallery__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-xs);
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+    margin-bottom: var(--mui-space-lg);
+}
+.mui-gallery__breadcrumb a {
+    color: var(--mui-text-subtle);
+    text-decoration: none;
+}
+.mui-gallery__breadcrumb a:hover {
+    color: var(--mui-text);
+    text-decoration: none;
+}
+
+.mui-gallery__back { padding-top: var(--mui-space-lg); }
+
+/* ── Responsive: mobile drawer ──────────────────────────────────────
+ * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
+ * the sidebar into an off-canvas drawer triggered by the hamburger
+ * button in the header. A backdrop scrim sits behind it and closes
+ * the drawer on click. The whole mechanism is driven by
+ * `html[data-mui-drawer="open"]` — a class-free state attribute so
+ * CSS + JS stay decoupled. */
+.mui-showcase__menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.mui-showcase__menu-btn:hover { border-color: var(--mui-border-hover); }
+.mui-showcase__menu-icon { font-size: var(--mui-text-body-size); line-height: var(--mui-leading-tight); }
+
+.mui-showcase__drawer-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: var(--mui-layer-navigation);
+    background: var(--mui-bg-overlay);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    animation: muiFadeIn var(--mui-motion-enter) ease;
+}
+@keyframes muiFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+html[data-mui-drawer="open"] { overflow: hidden; }
+html[data-mui-drawer="open"] .mui-showcase__drawer-backdrop { display: block; }
+
+@media (max-width: 60rem) {
+    html[data-mui-gallery-ready] .mui-showcase__menu-btn { display: inline-flex; }
+    .mui-gallery { grid-template-columns: 1fr; }
+
+    html[data-mui-gallery-ready] .mui-gallery__sidebar {
+        position: fixed !important;
+        top: var(--mui-header-h) !important;
+        inset-inline-start: 0;
+        width: 18rem;
+        max-width: 82vw;
+        height: calc(100dvh - var(--mui-header-h)) !important;
+        z-index: var(--mui-layer-navigation);
+        background: var(--mui-bg);
+        border-right: 1px solid var(--mui-border);
+        transform: translateX(-100%);
+        visibility: hidden;
+        transition: transform var(--mui-motion-enter) var(--mui-motion-ease);
+    }
+    html[data-mui-gallery-ready][dir="rtl"] .mui-gallery__sidebar { transform: translateX(100%); }
+    html[data-mui-gallery-ready][data-mui-drawer="open"] .mui-gallery__sidebar {
+        transform: translateX(0);
+        visibility: visible;
+        box-shadow: var(--mui-shadow-lg);
+    }
+    html:not([data-mui-gallery-ready]) .mui-gallery__sidebar { position: static; height: auto !important; }
+
+    /* Give the sidebar a visible close hint */
+    html[data-mui-gallery-ready] .mui-gallery__sidebar::after {
+        content: "Tap outside or press Esc to close";
+        display: block;
+        padding: var(--mui-space-md) var(--mui-space-lg);
+        font-size: var(--mui-text-caption-size);
+        color: var(--mui-text-subtle);
+        text-align: center;
+    }
+
+    /* Tighten header spacing on narrow viewports */
+    .mui-showcase__header-inner { gap: var(--mui-space-sm); row-gap: var(--mui-inset-tight); }
+    .mui-showcase__nav { order: 10; flex-basis: 100%; }
+    .mui-showcase__search { min-width: 0; flex: 1 1 auto; }
+    .mui-showcase__palette-btn { display: none; }
+    /* The palette chip carries the auto margin that right-anchors the utility
+     * cluster; it is hidden here, so the tools have to take it over or they
+     * collapse back against the brand. */
+    .mui-showcase__tools { margin-inline-start: auto; }
+}
+
+/* Dismissal via Escape should be accessible; backdrop handles click. */
+
+/* ── Command palette ────────────────────────────────────────────────
+ * Appears on cmd+k / ctrl+k (or click the kbd chip in the header).
+ * Purely CSS-driven visibility via `html[data-mui-palette="open"]`;
+ * JS only toggles that attribute + drives the results list. */
+.mui-showcase__palette-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) var(--mui-inset-tight);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text-muted);
+    font-size: var(--mui-text-caption-size);
+    cursor: pointer;
+    transition: border-color var(--mui-transition);
+}
+.mui-showcase__palette-btn:hover { border-color: var(--mui-border-hover); color: var(--mui-text); }
+.mui-showcase__palette-btn kbd {
+    font-family: var(--mui-font-mono);
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-space-xs);
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+}
+
+.mui-palette { width: min(42rem, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); padding: 0; margin: 12vh auto auto; border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); background: var(--mui-bg-card); color: var(--mui-text); box-shadow: var(--mui-shadow-lg); overflow: hidden; }
+.mui-palette::backdrop { background: var(--mui-bg-overlay); }
+.mui-palette[open] { display: block; animation: muiPaletteIn var(--mui-motion-enter) var(--mui-motion-ease); }
+@keyframes muiPaletteIn { from { opacity: 0; transform: translateY(-0.5rem); } to { opacity: 1; transform: none; } }
+.mui-palette__panel { display: flex; flex-direction: column; max-height: calc(80dvh - 2rem); }
+.mui-palette__search { display: flex; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-header-height); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-end: 1px solid var(--mui-border); }
+.mui-palette__icon { display: inline-flex; color: var(--mui-text-muted); }
+.mui-palette__input { flex: 1; min-width: 0; border: 0; outline: none; min-height: var(--mui-control-height); background: transparent; color: var(--mui-text); font: inherit; }
+.mui-palette__input::placeholder { color: var(--mui-text-subtle); }
+.mui-palette__input:focus-visible { outline: none; box-shadow: none; }
+.mui-palette__hint { border: 1px solid var(--mui-border); background: var(--mui-bg); color: var(--mui-text-muted); padding: var(--mui-space-xs) var(--mui-space-sm); border-radius: var(--mui-radius-sm); font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); cursor: pointer; }
+.mui-palette__hint:hover { color: var(--mui-text); background: var(--mui-bg-input); }
+.mui-palette__list { list-style: none; overflow: auto; padding: var(--mui-space-sm); margin: 0; min-height: 0; }
+.mui-palette__section { padding: var(--mui-space-md) var(--mui-space-sm) var(--mui-space-xs); font-size: var(--mui-text-caption-size); font-weight: var(--mui-weight-medium); color: var(--mui-text-muted); letter-spacing: var(--mui-tracking-label); text-transform: uppercase; }
+.mui-palette__item { display: grid; grid-template-columns: minmax(0,1fr) auto auto; align-items: center; gap: var(--mui-space-md); min-height: var(--mui-nav-row-height); padding: var(--mui-space-sm) var(--mui-space-md); border-radius: var(--mui-radius-md); cursor: pointer; }
+.mui-palette__item:hover { background: var(--mui-bg-input); }
+.mui-palette__item--active { background: var(--mui-accent-soft); color: var(--mui-accent-text); }
+.mui-palette__item-label { font-size: var(--mui-text-small-size); }
+.mui-palette__item-path { font: var(--mui-text-caption-size)/var(--mui-leading-small) var(--mui-font-mono); color: var(--mui-text-muted); }
+.mui-palette__item-key { color: var(--mui-text-subtle); visibility: hidden; font-size: var(--mui-text-caption-size); }
+.mui-palette__item--active .mui-palette__item-key { visibility: visible; }
+.mui-palette__empty { padding: var(--mui-space-xxl) var(--mui-space-lg); font-size: var(--mui-text-small-size); color: var(--mui-text-muted); }
+.mui-palette__footer { display: flex; flex-wrap: wrap; gap: var(--mui-space-lg); padding: var(--mui-space-sm) var(--mui-space-lg); border-block-start: 1px solid var(--mui-border); font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); }
+.mui-palette__footer kbd { font: inherit; font-family: var(--mui-font-mono); color: var(--mui-text-secondary); margin-inline-end: var(--mui-space-xs); }
+@media (pointer: coarse) { .mui-palette__item { min-height: var(--mui-touch-target); } .mui-palette__hint { min-height: var(--mui-touch-target); min-width: var(--mui-touch-target); } }
+@media (max-width: 40rem) { .mui-palette { margin-block-start: var(--mui-space-lg); } .mui-palette__item-path { display: none; } .mui-palette__input { font-size: var(--mui-text-input-touch-size); } }
+@media (prefers-reduced-motion: reduce) { .mui-palette[open] { animation: none; } }
+
+/* Blocks index grid */
+.mui-gallery__intro { margin-block-end: var(--mui-space-xxl); }
+.mui-gallery__intro h1 { margin: 0 0 var(--mui-space-sm); font-size: var(--mui-text-h1-size); letter-spacing: var(--mui-text-h1-tracking);  line-height: var(--mui-text-h1-leading); }
+.mui-gallery__curation-intro { color: var(--mui-text-muted); line-height: var(--mui-leading-body); }
+.mui-gallery__curation-intro a { color: var(--mui-link); text-underline-offset: 0.2em; }
+.mui-showcase__block-category + .mui-showcase__block-category { margin-block-start: var(--mui-space-xxl); }
+.mui-showcase__block-category-title { margin: 0 0 var(--mui-space-md); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-heading); }
+.mui-showcase__block-card:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 3px; }
+.mui-theme__presets [aria-pressed="true"] { border-color: var(--mui-accent-text); background: var(--mui-bg-input); box-shadow: inset 0 -2px var(--mui-accent-text); }
+.mui-theme__export-status { margin: 0; min-height: 1.5em; color: var(--mui-text-muted); font-size: var(--mui-text-small-size); }
+.mui-theme__export-pre:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+.mui-showcase__block-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--mui-space-lg);
+    margin-top: var(--mui-space-sm);
+}
+.mui-showcase__block-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-md);
+    padding: var(--mui-space-20);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color var(--mui-transition), transform var(--mui-transition);
+}
+.mui-showcase__block-card:hover {
+    border-color: var(--mui-border-hover);
+    transform: translateY(-1px);
+}
+.mui-showcase__block-card-title {
+    margin: var(--mui-space-xs) 0 0;
+    font-size: var(--mui-text-h3-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+ line-height: var(--mui-text-h3-leading);  letter-spacing: var(--mui-text-h3-tracking); }
+.mui-showcase__block-card-desc {
+    margin: 0;
+    font-size: var(--mui-text-small-size);
+    color: var(--mui-text-muted);
+    line-height: var(--mui-leading-small);
+    flex: 1;
+}
+.mui-showcase__block-card-uses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--mui-inset-tight);
+}
+.mui-showcase__block-card-use {
+    font-size: var(--mui-text-caption-size);
+    font-family: var(--mui-font-mono);
+    padding: var(--mui-space-2xs) 0.4375rem;
+    background: var(--mui-bg-input);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text-muted);
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* ── Swatch primitive ─────────────────────────────────────────────── */
+.mui-swatch {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--mui-space-sm);
+    min-width: 5rem;
+    padding: var(--mui-space-xs);
+    border-radius: var(--mui-radius-md);
+    transition: transform var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-swatch--copyable { cursor: pointer; }
+.mui-swatch--copyable:hover { transform: translateY(-1px); }
+.mui-swatch--copyable:focus-visible {
+    outline: 2px solid var(--mui-border-focus);
+    outline-offset: 2px;
+}
+.mui-swatch__chip {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--mui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--mui-border) 70%, transparent);
+    box-shadow: var(--mui-shadow-sm);
+    /* chequered base so translucent swatches are visible */
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.04) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.04) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    position: relative;
+    overflow: hidden;
+}
+/* The per-swatch inline style sets `background: <colour>` on the chip,
+ * which stacks above the chequerboard. */
+.mui-swatch__chip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+}
+.mui-swatch--sm .mui-swatch__chip { width: 2rem;   height: 2rem; }
+.mui-swatch--lg .mui-swatch__chip { width: 5rem;   height: 5rem; }
+
+.mui-swatch__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-2xs);
+    min-width: 0;
+}
+.mui-swatch__label {
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-medium);
+    color: var(--mui-text);
+}
+.mui-swatch__sub {
+    font-size: var(--mui-text-caption-size);
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mui-swatch__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: var(--mui-space-md);
+}
+
+/* Horizontal tone ramp */
+.mui-swatch__scale {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-sm);
+    margin-bottom: var(--mui-space-md);
+}
+.mui-swatch__scale-label {
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    text-transform: lowercase;
+    color: var(--mui-text-muted);
+    letter-spacing: var(--mui-tracking-label);
+}
+.mui-swatch__scale-row {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(2.25rem, 1fr));
+    gap: var(--mui-space-xs);
+}
+.mui-swatch--scale {
+    flex-direction: column;
+    gap: var(--mui-space-xs);
+    padding: var(--mui-space-2xs);
+    min-width: 0;
+}
+.mui-swatch--scale .mui-swatch__chip {
+    width: 100%;
+    height: 2.25rem;
+    border-radius: var(--mui-radius-sm);
+}
+.mui-swatch__scale-key {
+    font-size: var(--mui-text-caption-size);
+    font-family: var(--mui-font-mono);
+    color: var(--mui-text-subtle);
+    text-align: center;
+}
+
+/* Toast-ish "copied" hint that fades after click */
+.mui-swatch--copied { animation: muiSwatchCopied calc(var(--mui-motion-enter) * 5) var(--mui-motion-ease) forwards; }
+@keyframes muiSwatchCopied {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 45%, transparent); }
+    40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--mui-accent) 25%, transparent); }
+    100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--mui-accent) 0%, transparent); }
+}
+
+/* ── Sticky compact page header ─────────────────────────────────────
+ * Overrides the dist maud-ui.css baseline (which shipped 2rem padding
+ * + a two-row "brand above nav" layout). The new header is a single
+ * row with brand · nav · tools, on an opaque surface from the document
+ * theme. --mui-header-h is published as a custom property so the
+ * sidebar and section anchors can offset accurately. */
+:root { --mui-header-h: 3.25rem; }
+
+.mui-showcase__header {
+    position: sticky;
+    top: 0;
+    z-index: var(--mui-layer-overlay);
+    padding: var(--mui-space-sm) var(--mui-space-20) !important;
+    background: var(--mui-bg-card);
+    color: var(--mui-text);
+}
+
+.mui-showcase__header-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-md);
+    flex-wrap: wrap;
+    min-height: 2.25rem;
+}
+
+.mui-showcase__brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--mui-inset-cell);
+    color: inherit;
+    text-decoration: none;
+    padding-inline: var(--mui-space-xs);
+    flex-shrink: 0;
+}
+
+/* Search input — takes flexible middle space, bounded so it doesn't
+ * crowd out the nav on wider viewports. Hotkey: "/" to focus. */
+.mui-showcase__search {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 1 1 14rem;
+    max-width: 26rem;
+    min-width: 9rem;
+}
+.mui-showcase__search-icon {
+    position: absolute;
+    left: 0.5rem;
+    display: inline-flex;
+    color: var(--mui-text-subtle);
+    pointer-events: none;
+}
+.mui-showcase__search-input {
+    width: 100%;
+    height: 2rem;
+    padding: 0 var(--mui-space-xxl) 0 1.875rem;
+    font-size: var(--mui-text-small-size);
+    font-family: inherit;
+    color: var(--mui-text);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    outline: none;
+    transition: border-color var(--mui-transition),
+                box-shadow var(--mui-transition);
+}
+.mui-showcase__search-input::placeholder { color: var(--mui-text-subtle); }
+.mui-showcase__search-input:focus-visible {
+    border-color: var(--mui-accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mui-accent) 25%, transparent);
+}
+.mui-showcase__search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+.mui-showcase__search-hint {
+    position: absolute;
+    right: 0.5rem;
+    font-family: var(--mui-font-mono);
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
+    background: var(--mui-bg);
+    color: var(--mui-text-muted);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-sm);
+    pointer-events: none;
+}
+.mui-showcase__search--focused .mui-showcase__search-hint,
+.mui-showcase__search--dirty  .mui-showcase__search-hint { opacity: 0; }
+
+/* When filtering, grey out group headers whose items are all hidden,
+ * and hide the empty group entirely. */
+.mui-gallery__seq {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--mui-space-md);
+    font-size: var(--mui-text-small-size);
+}
+.mui-gallery__seq-link {
+    color: var(--mui-text-muted);
+    text-decoration: none;
+    padding: var(--mui-space-2xs) var(--mui-inset-tight);
+    border-radius: var(--mui-radius-sm);
+    white-space: nowrap;
+    max-width: 14rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--mui-transition), background var(--mui-transition);
+}
+.mui-gallery__seq-link:hover {
+    color: var(--mui-text);
+    background: var(--mui-bg-input);
+}
+/* Placeholder that holds the slot at the first component, so `next` stays put
+   instead of jumping left on exactly one page. */
+.mui-gallery__seq-link--end { pointer-events: none; }
+
+.mui-gallery__nav-item[hidden] { display: none; }
+.mui-gallery__nav-group[data-mui-search-empty="1"] { display: none; }
+
+/* Search-match highlight in the sidebar text */
+.mui-gallery__nav-item mark {
+    background: color-mix(in srgb, var(--mui-accent) 30%, transparent);
+    color: var(--mui-text);
+    border-radius: var(--mui-radius-sm);
+    padding: 0 1px;
+}
+
+/* No-results state inside the sidebar */
+.mui-gallery__nav-empty {
+    padding: var(--mui-space-md) var(--mui-space-lg);
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-muted);
+    display: none;
+}
+.mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
+
+/* Above the 60rem breakpoint the header is ONE row: the search gives up width
+ * before the utility cluster wraps under it (it wrapped at 1024px until 0.19.2);
+ * between 60rem and 80rem the nav takes its own row, as it already does below 60rem.
+ * The palette's ⌘K lives on its own button, so the placeholder no longer
+ * repeats it next to the "/" hint. */
+@media (min-width: 80rem) {
+    .mui-showcase__header-inner { flex-wrap: nowrap; }
+    .mui-showcase__search { flex: 1 1 14rem; min-width: 10rem; }
+    .mui-showcase__nav { flex: none; }
+}
+@media (min-width: 60rem) and (max-width: 79.99rem) {
+    .mui-showcase__header-inner { row-gap: var(--mui-inset-tight); }
+    .mui-showcase__nav { order: 10; flex-basis: 100%; }
+    .mui-showcase__search { flex: 1 1 auto; min-width: 0; }
+}
+@media (max-width: 48rem) {
+    /* Drop the hint + shrink a touch on narrow screens */
+    .mui-showcase__search-hint { display: none; }
+    .mui-showcase__search { min-width: 7rem; }
+}
+.mui-showcase__brand-name {
+    font-size: var(--mui-text-body-size);
+    font-weight: var(--mui-weight-heading);
+    letter-spacing: var(--mui-tracking-heading);
+    color: var(--mui-text);
+}
+.mui-showcase__brand-count {
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-muted);
+}
+
+.mui-showcase__nav {
+    display: inline-flex;
+    gap: var(--mui-space-2xs);
+    align-items: center;
+    flex-wrap: wrap;
+    /* Reset the dist CSS default that paints <nav> elements with a
+     * card background — inside the header we want the nav to sit
+     * transparent on the header's own backdrop. */
+    background: transparent;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+/* Push the utility cluster to the far edge of the header.
+ *
+ * The palette chip and the theme/direction toggles are page-level controls,
+ * not navigation, and they belong at the opposite end from the brand. They
+ * used to simply trail the nav, which looked right ONLY on pages where the
+ * sidebar search grew to fill the gap — on any page without it (the landing
+ * page hides the search, since there is no sidebar to filter) the whole
+ * header bunched against the left edge with dead space to the right.
+ * Anchoring them explicitly makes the layout independent of whether the
+ * search happens to be present. */
+.mui-showcase__palette-btn { margin-inline-start: auto; }
+
+.mui-showcase__tools {
+    display: inline-flex;
+    gap: var(--mui-space-xs);
+    align-items: center;
+    margin-left: var(--mui-space-xs);
+    padding-left: var(--mui-space-sm);
+    border-left: 1px solid var(--mui-border);
+}
+
+.mui-showcase__tool-btn {
+    min-width: 2rem;
+    padding-inline: var(--mui-space-sm);
+    font-size: var(--mui-text-body-size);
+    line-height: var(--mui-leading-tight);
+}
+
+/* The sidebar stuck to top:0 hid behind the new header; pin it
+ * below the sticky chrome instead. */
+.mui-gallery__sidebar {
+    top: var(--mui-header-h) !important;
+    height: calc(100dvh - var(--mui-header-h)) !important;
+}
+
+/* When the user clicks a sidebar / in-page jump link, keep the
+ * target heading below the sticky header instead of jumping it off
+ * the top of the viewport. */
+.mui-gallery__component,
+.mui-gallery__breadcrumb,
+[id] {
+    scroll-margin-top: calc(var(--mui-header-h) + var(--mui-space-md));
+}
+
+/* Two short rows on phones. Site links move into the existing menu. */
+@media (max-width: 40rem) {
+    .mui-showcase__brand-count { display: none; }
+    :root { --mui-header-h: 7rem; }
+    .mui-showcase__header { padding: var(--mui-space-sm) var(--mui-space-lg) !important; }
+    .mui-showcase__header-inner { display: grid; grid-template-columns: 2.75rem minmax(0, 1fr) auto; gap: var(--mui-space-sm); }
+    .mui-showcase__menu-btn { grid-column: 1; grid-row: 1; width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__brand { grid-column: 2 / -1; grid-row: 1; min-height: 2.75rem; align-items: center; }
+    .mui-showcase__search { grid-column: 1 / 3; grid-row: 2; width: 100%; max-width: none; min-width: 0; }
+    .mui-showcase__search-input { height: 2.75rem; font-size: var(--mui-text-body-size); }
+    .mui-showcase__tools { grid-column: 3; grid-row: 2; margin: 0; padding: 0; border: 0; }
+    .mui-showcase__tool-btn { width: 2.75rem; height: 2.75rem; }
+    .mui-showcase__palette-btn { display: none; }
+    .mui-showcase__header-inner > .mui-showcase__nav { grid-column: 1 / -1; }
+    .mui-gallery__sidebar > .mui-showcase__nav { display: flex; flex-direction: column; align-items: stretch; padding: 0 var(--mui-space-md) var(--mui-space-md); margin-bottom: var(--mui-space-md); border-bottom: 1px solid var(--mui-border); }
+    .mui-gallery__sidebar > .mui-showcase__nav > .mui-btn,
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-summary { min-height: 2.75rem; justify-content: flex-start; width: 100%; }
+    .mui-gallery__sidebar .mui-gallery__nav-advanced-menu { position: static; min-width: 0; max-height: none; box-shadow: none; }
+    .mui-gallery__main { padding: var(--mui-space-lg); }
+    .mui-gallery__component { padding: var(--mui-space-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .mui-gallery__sidebar, .mui-showcase__drawer-backdrop { animation: none; transition: none; }
+}
+
+/* Two-column "you write / you get" comparison — stacks on narrow screens.
+   Was an inline 1fr 1fr grid, which no media query could reach. */
+.mui-two-up {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mui-space-xl);
+    margin-bottom: var(--mui-space-lg);
+}
+
+/* ── Mobile overflow hardening ───────────────────────────────────────
+ * Grid and flex items default to `min-width: auto`, so a demo whose
+ * intrinsic width exceeds the phone viewport refuses to shrink and
+ * widens the whole document — every page then scrolls sideways.
+ * Measured at 390px (iPhone 14) across all 77 gallery routes.
+ *
+ * The scroll treatment below is deliberately scoped to demos that carry
+ * no floating overlay. A blanket `overflow` on every demo container
+ * would clip the popover / menu / select / tooltip demos, which is a
+ * worse regression than the sideways scroll it fixes. */
+@media (max-width: 40rem) {
+    .mui-two-up { grid-template-columns: minmax(0, 1fr); }
+
+    .mui-gallery__main,
+    .mui-gallery__component { min-width: 0; }
+
+    .mui-showcase__grid { grid-template-columns: minmax(0, 1fr); }
+    .mui-showcase__grid > *,
+    .mui-showcase__grid > section > * { min-width: 0; }
+
+    /* Prev/next pager can't hold one line at 390px. */
+    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__seq-link { max-width: 9rem; }
+
+    /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
+       computes overflow-y to auto and raises a stray vertical scrollbar. */
+    .mui-swatch__scale,
+    .mui-theme__preview,
+    .mui-grid {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* OTP boxes wrap onto a second line rather than scrolling — a split
+       code is still readable, a horizontally scrolled one is not. */
+    .mui-input-otp { flex-wrap: wrap; }
+}
+
+/* ── "Advanced" dropdown in the page header ─────────────────────────
+ * <details>/<summary>-based, so it works without JS. The menu is
+ * positioned absolutely below the summary; `list-style:none` strips
+ * the default disclosure triangle and we supply our own caret that
+ * rotates on [open]. */
+.mui-gallery__nav-advanced {
+    position: relative;
+}
+
+.mui-gallery__nav-advanced-summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mui-inset-tight);
+    cursor: pointer;
+    user-select: none;
+}
+.mui-gallery__nav-advanced-summary::-webkit-details-marker { display: none; }
+.mui-gallery__nav-advanced-summary::marker { content: ''; }
+
+.mui-gallery__nav-advanced-caret {
+    display: inline-block;
+    font-size: var(--mui-text-caption-size);
+    line-height: var(--mui-leading-tight);
+    transition: transform var(--mui-motion-fast) ease;
+    color: var(--mui-text-muted);
+}
+.mui-gallery__nav-advanced[open] .mui-gallery__nav-advanced-caret {
+    transform: rotate(180deg);
+}
+
+.mui-gallery__nav-advanced-menu {
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    right: 0;
+    z-index: var(--mui-layer-toast);
+    min-width: 18rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-inset-tight);
+    background: var(--mui-bg-card);
+    border: 1px solid var(--mui-border);
+    border-radius: var(--mui-radius-md);
+    box-shadow: var(--mui-shadow-lg);
+}
+
+.mui-gallery__nav-advanced-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-xs) 0 var(--mui-inset-tight);
+    border-bottom: 1px solid var(--mui-border);
+}
+.mui-gallery__nav-advanced-group:last-child { border-bottom: 0; }
+
+.mui-gallery__nav-advanced-group-label {
+    display: block;
+    padding: var(--mui-inset-tight) var(--mui-space-md) var(--mui-space-xs);
+    font-size: var(--mui-text-caption-size);
+    font-weight: var(--mui-weight-heading);
+    text-transform: uppercase;
+    letter-spacing: var(--mui-tracking-label);
+    color: var(--mui-text-subtle);
+}
+
+.mui-gallery__nav-advanced-menu a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mui-space-2xs);
+    padding: var(--mui-space-sm) var(--mui-space-md);
+    border-radius: var(--mui-radius-sm);
+    color: var(--mui-text);
+    text-decoration: none;
+    transition: background-color var(--mui-transition),
+                color var(--mui-transition);
+}
+.mui-gallery__nav-advanced-menu a:hover,
+.mui-gallery__nav-advanced-menu a:focus-visible {
+    background: var(--mui-bg);
+    outline: none;
+}
+
+.mui-gallery__nav-advanced-label {
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-heading);
+}
+.mui-gallery__nav-advanced-sub {
+    font-size: var(--mui-text-caption-size);
+    color: var(--mui-text-muted);
+    font-weight: var(--mui-weight-normal);
+}
+</style></head><body><header class="mui-showcase__header"><div class="mui-showcase__header-inner"><button type="button" class="mui-showcase__menu-btn" id="mui-drawer-toggle" aria-label="Open navigation" aria-controls="mui-gallery-navigation" aria-expanded="false"><span aria-hidden="true" class="mui-showcase__menu-icon">☰</span></button><a href="/" class="mui-showcase__brand"><span class="mui-showcase__brand-mark" aria-hidden="true"><svg viewBox="3.5 2.5 25 27" style="height:0.75em;width:auto;display:block"><g fill="none" style="stroke:var(--mui-accent-text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M13 4 C 9.5 4 10 7.5 10 11 C 10 14.5 7 16 5 16 C 7 16 10 17.5 10 21 C 10 24.5 9.5 28 13 28"/><path d="M19 4 C 22.5 4 22 7.5 22 11 C 22 14.5 25 16 27 16 C 25 16 22 17.5 22 21 C 22 24.5 22.5 28 19 28"/></g><rect x="13.75" y="13.75" width="4.5" height="4.5" rx="1.1" style="fill:var(--mui-accent-text)"/></svg></span><span class="mui-showcase__brand-name">maud-ui</span><span class="mui-showcase__brand-count">84 components</span></a><div class="mui-showcase__search"><span class="mui-showcase__search-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-search" class="mui-showcase__search-input" placeholder="Search components, blocks, integrations…" aria-label="Search the gallery" spellcheck="false" autocomplete="off"><kbd class="mui-showcase__search-hint" aria-hidden="true">/</kbd></div><nav class="mui-showcase__nav" id="mui-site-navigation" aria-label="Site"><a href="/gallery" class="mui-btn mui-btn--ghost mui-btn--sm">Components</a><a href="/getting-started" class="mui-btn mui-btn--ghost mui-btn--sm">Get started</a><a href="/blocks" class="mui-btn mui-btn--ghost mui-btn--sm">Blocks</a><a href="/theme" class="mui-btn mui-btn--ghost mui-btn--sm">Theme</a><details class="mui-gallery__nav-advanced"><summary class="mui-btn mui-btn--ghost mui-btn--sm mui-gallery__nav-advanced-summary">Advanced<span class="mui-gallery__nav-advanced-caret" aria-hidden="true">▾</span></summary><div class="mui-gallery__nav-advanced-menu"><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Code &amp; Text</span><a href="/integrations/monaco-editor"><span class="mui-gallery__nav-advanced-label">Monaco editor</span><span class="mui-gallery__nav-advanced-sub">VS Code's editor, embedded</span></a><a href="/integrations/tiptap"><span class="mui-gallery__nav-advanced-label">TipTap</span><span class="mui-gallery__nav-advanced-sub">Rich text prose editor</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Diagrams &amp; Graphs</span><a href="/integrations/xyflow"><span class="mui-gallery__nav-advanced-label">xyflow</span><span class="mui-gallery__nav-advanced-sub">React Flow node editor</span></a><a href="/integrations/cytoscape"><span class="mui-gallery__nav-advanced-label">Cytoscape</span><span class="mui-gallery__nav-advanced-sub">Network graph visualisation</span></a><a href="/integrations/mermaid"><span class="mui-gallery__nav-advanced-label">Mermaid</span><span class="mui-gallery__nav-advanced-sub">Text-to-diagram renderer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Canvas</span><a href="/integrations/excalidraw"><span class="mui-gallery__nav-advanced-label">Excalidraw</span><span class="mui-gallery__nav-advanced-sub">Sketchy whiteboard canvas</span></a><a href="/integrations/threejs"><span class="mui-gallery__nav-advanced-label">Three.js</span><span class="mui-gallery__nav-advanced-sub">WebGL 3D scene</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Data</span><a href="/integrations/ag-grid"><span class="mui-gallery__nav-advanced-label">AG Grid</span><span class="mui-gallery__nav-advanced-sub">Enterprise data grid</span></a><a href="/integrations/echarts"><span class="mui-gallery__nav-advanced-label">Apache ECharts</span><span class="mui-gallery__nav-advanced-sub">Charting library</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Maps &amp; Scheduling</span><a href="/integrations/leaflet"><span class="mui-gallery__nav-advanced-label">Leaflet</span><span class="mui-gallery__nav-advanced-sub">Interactive maps</span></a><a href="/integrations/fullcalendar"><span class="mui-gallery__nav-advanced-label">FullCalendar</span><span class="mui-gallery__nav-advanced-sub">Scheduling, drag-drop events</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Media</span><a href="/integrations/wavesurfer"><span class="mui-gallery__nav-advanced-label">Wavesurfer</span><span class="mui-gallery__nav-advanced-sub">Audio waveform player</span></a><a href="/integrations/pdfjs"><span class="mui-gallery__nav-advanced-label">PDF.js</span><span class="mui-gallery__nav-advanced-sub">Inline PDF viewer</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Drag &amp; Drop</span><a href="/integrations/sortable"><span class="mui-gallery__nav-advanced-label">SortableJS</span><span class="mui-gallery__nav-advanced-sub">Reorder list, kanban, tile grid</span></a></div><div class="mui-gallery__nav-advanced-group"><span class="mui-gallery__nav-advanced-group-label">Terminal</span><a href="/integrations/xterm"><span class="mui-gallery__nav-advanced-label">xterm.js</span><span class="mui-gallery__nav-advanced-sub">Terminal emulator</span></a></div></div></details><a href="https://docs.rs/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm">Docs</a><a href="https://github.com/hgeldenhuys/maud-ui" target="_blank" rel="noopener" class="mui-btn mui-btn--ghost mui-btn--sm">GitHub</a></nav><button type="button" class="mui-showcase__palette-btn" id="mui-palette-open" aria-label="Open command palette"><kbd>⌘</kbd><kbd>K</kbd></button><div class="mui-showcase__tools"><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--theme" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme"><span class="mui-showcase__tool-icon" aria-hidden="true">◐</span></button><button type="button" class="mui-btn mui-btn--outline mui-btn--sm mui-showcase__tool-btn mui-showcase__tool-btn--dir" id="dir-toggle" title="Toggle reading direction" aria-label="Toggle reading direction"><span class="mui-showcase__tool-icon" aria-hidden="true">⇄</span></button></div></div></header><div class="mui-showcase__drawer-backdrop" id="mui-drawer-backdrop" aria-hidden="true"></div><script>window.__MUI_PALETTE__ = [
+  { l: "Home", u: "/", k: "page" },
+  { l: "Component gallery", u: "/gallery", k: "page" },
+  { l: "Get started", u: "/getting-started", k: "page" },
+  { l: "Blocks", u: "/blocks", k: "page" },
+  { l: "Theme customiser", u: "/theme", k: "page" },
+  { l: "Accordion", u: "/accordion", k: "component" },
+  { l: "Alert", u: "/alert", k: "component" },
+  { l: "Alert Dialog", u: "/alert_dialog", k: "component" },
+  { l: "Aspect Ratio", u: "/aspect_ratio", k: "component" },
+  { l: "Attention Pill", u: "/attention_pill", k: "component" },
+  { l: "Avatar", u: "/avatar", k: "component" },
+  { l: "Badge", u: "/badge", k: "component" },
+  { l: "Bottom Tab Bar", u: "/bottom_tab_bar", k: "component" },
+  { l: "Breadcrumb", u: "/breadcrumb", k: "component" },
+  { l: "Button", u: "/button", k: "component" },
+  { l: "Button Group", u: "/button_group", k: "component" },
+  { l: "Calendar", u: "/calendar", k: "component" },
+  { l: "Card", u: "/card", k: "component" },
+  { l: "Carousel", u: "/carousel", k: "component" },
+  { l: "Chart", u: "/chart", k: "component" },
+  { l: "Checkbox", u: "/checkbox", k: "component" },
+  { l: "Choice Card", u: "/choice_card", k: "component" },
+  { l: "Code Block", u: "/code_block", k: "component" },
+  { l: "Collapsible", u: "/collapsible", k: "component" },
+  { l: "Combobox", u: "/combobox", k: "component" },
+  { l: "Command", u: "/command", k: "component" },
+  { l: "Composer", u: "/composer", k: "component" },
+  { l: "Context Menu", u: "/context_menu", k: "component" },
+  { l: "Data Table", u: "/data_table", k: "component" },
+  { l: "Date Picker", u: "/date_picker", k: "component" },
+  { l: "Date Range", u: "/date_range", k: "component" },
+  { l: "Dialog", u: "/dialog", k: "component" },
+  { l: "Diff", u: "/diff", k: "component" },
+  { l: "Direction", u: "/direction", k: "component" },
+  { l: "Drawer", u: "/drawer", k: "component" },
+  { l: "Empty State", u: "/empty_state", k: "component" },
+  { l: "Facts List", u: "/facts_list", k: "component" },
+  { l: "Field", u: "/field", k: "component" },
+  { l: "Fieldset", u: "/fieldset", k: "component" },
+  { l: "Form", u: "/form", k: "component" },
+  { l: "Grid", u: "/grid", k: "component" },
+  { l: "Gutter Section", u: "/gutter_section", k: "component" },
+  { l: "Hover Card", u: "/hover_card", k: "component" },
+  { l: "Input", u: "/input", k: "component" },
+  { l: "Input Group", u: "/input_group", k: "component" },
+  { l: "Input Otp", u: "/input_otp", k: "component" },
+  { l: "Item", u: "/item", k: "component" },
+  { l: "Kbd", u: "/kbd", k: "component" },
+  { l: "Label", u: "/label", k: "component" },
+  { l: "Menu", u: "/menu", k: "component" },
+  { l: "Menubar", u: "/menubar", k: "component" },
+  { l: "Message", u: "/message", k: "component" },
+  { l: "Meter", u: "/meter", k: "component" },
+  { l: "Time Split", u: "/time_split", k: "component" },
+  { l: "Native Select", u: "/native_select", k: "component" },
+  { l: "Navigation Menu", u: "/navigation_menu", k: "component" },
+  { l: "Number Field", u: "/number_field", k: "component" },
+  { l: "Pagination", u: "/pagination", k: "component" },
+  { l: "Popover", u: "/popover", k: "component" },
+  { l: "Progress", u: "/progress", k: "component" },
+  { l: "Radio", u: "/radio", k: "component" },
+  { l: "Radio Group", u: "/radio_group", k: "component" },
+  { l: "Resizable", u: "/resizable", k: "component" },
+  { l: "Scroll Area", u: "/scroll_area", k: "component" },
+  { l: "Segmented Control", u: "/segmented_control", k: "component" },
+  { l: "Select", u: "/select", k: "component" },
+  { l: "Separator", u: "/separator", k: "component" },
+  { l: "Sheet", u: "/sheet", k: "component" },
+  { l: "Sidebar", u: "/sidebar", k: "component" },
+  { l: "Skeleton", u: "/skeleton", k: "component" },
+  { l: "Slider", u: "/slider", k: "component" },
+  { l: "Sonner", u: "/sonner", k: "component" },
+  { l: "Spinner", u: "/spinner", k: "component" },
+  { l: "Stack", u: "/stack", k: "component" },
+  { l: "Status Chip Group", u: "/status_chip_group", k: "component" },
+  { l: "Status Dot", u: "/status_dot", k: "component" },
+  { l: "Streaming Cursor", u: "/streaming_cursor", k: "component" },
+  { l: "Swatch", u: "/swatch", k: "component" },
+  { l: "Switch", u: "/switch", k: "component" },
+  { l: "Table", u: "/table", k: "component" },
+  { l: "Tabs", u: "/tabs", k: "component" },
+  { l: "Textarea", u: "/textarea", k: "component" },
+  { l: "Toast", u: "/toast", k: "component" },
+  { l: "Toggle", u: "/toggle", k: "component" },
+  { l: "Toggle Group", u: "/toggle_group", k: "component" },
+  { l: "Tool Call", u: "/tool_call", k: "component" },
+  { l: "Tooltip", u: "/tooltip", k: "component" },
+  { l: "Turn Progress", u: "/turn_progress", k: "component" },
+  { l: "Typography", u: "/typography", k: "component" },
+  { l: "Auth — Login", u: "/blocks/auth-login", k: "block" },
+  { l: "Auth — Signup", u: "/blocks/auth-signup", k: "block" },
+  { l: "Auth — Two Factor", u: "/blocks/auth-two-factor", k: "block" },
+  { l: "Dashboard — Stats", u: "/blocks/dashboard-stats", k: "block" },
+  { l: "Data — Table Full", u: "/blocks/data-table-full", k: "block" },
+  { l: "Pricing — Tiers", u: "/blocks/pricing-tiers", k: "block" },
+  { l: "Settings — Billing", u: "/blocks/settings-billing", k: "block" },
+  { l: "Settings — Profile", u: "/blocks/settings-profile", k: "block" },
+  { l: "Settings — Team", u: "/blocks/settings-team", k: "block" },
+  { l: "Shell — Sidebar", u: "/blocks/shell-sidebar", k: "block" },
+  { l: "Shell — Page Header", u: "/blocks/shell-page-header", k: "block" },
+  { l: "Shell — App Header", u: "/blocks/shell-app-header", k: "block" },
+  { l: "Shell — App Footer", u: "/blocks/shell-app-footer", k: "block" },
+  { l: "Shell — Brand Mark", u: "/blocks/shell-brand-mark", k: "block" },
+  { l: "Worklist — Header", u: "/blocks/worklist-header", k: "block" },
+  { l: "Record — Header", u: "/blocks/record-header", k: "block" },
+  { l: "Task — Grid", u: "/blocks/task-grid", k: "block" },
+  { l: "Record — Timeline", u: "/blocks/record-timeline", k: "block" },
+  { l: "Record — Money", u: "/blocks/record-money", k: "block" },
+  { l: "Record — Related Card", u: "/blocks/record-related-card", k: "block" },
+  { l: "Record — Facts", u: "/blocks/record-facts", k: "block" },
+  { l: "Record — Related List", u: "/blocks/record-related-list", k: "block" },
+  { l: "Record — Page", u: "/blocks/record-page", k: "block" },
+  { l: "Worklist — Grouped", u: "/blocks/worklist-grouped", k: "block" },
+  { l: "Attention — Banner", u: "/blocks/attention-banner", k: "block" },
+  { l: "Action — Row", u: "/blocks/action-row", k: "block" },
+  { l: "Feedback — Notice", u: "/blocks/feedback-notice", k: "block" },
+  { l: "Feedback — Confirm", u: "/blocks/feedback-confirm", k: "block" },
+  { l: "Search — Results", u: "/blocks/search-results", k: "block" },
+  { l: "Wizard — Header", u: "/blocks/wizard-header", k: "block" },
+  { l: "Worklist — Empty", u: "/blocks/worklist-empty", k: "block" },
+  { l: "Monaco editor", u: "/integrations/monaco-editor", k: "integration" },
+  { l: "xyflow", u: "/integrations/xyflow", k: "integration" },
+  { l: "Excalidraw", u: "/integrations/excalidraw", k: "integration" },
+  { l: "TipTap", u: "/integrations/tiptap", k: "integration" },
+  { l: "Mermaid", u: "/integrations/mermaid", k: "integration" },
+  { l: "Cytoscape", u: "/integrations/cytoscape", k: "integration" },
+  { l: "Three.js", u: "/integrations/threejs", k: "integration" },
+  { l: "AG Grid", u: "/integrations/ag-grid", k: "integration" },
+  { l: "Apache ECharts", u: "/integrations/echarts", k: "integration" },
+  { l: "Leaflet", u: "/integrations/leaflet", k: "integration" },
+  { l: "FullCalendar", u: "/integrations/fullcalendar", k: "integration" },
+  { l: "Wavesurfer", u: "/integrations/wavesurfer", k: "integration" },
+  { l: "PDF.js", u: "/integrations/pdfjs", k: "integration" },
+  { l: "xterm.js", u: "/integrations/xterm", k: "integration" },
+  { l: "SortableJS", u: "/integrations/sortable", k: "integration" }
+];
+</script><dialog class="mui-palette" id="mui-palette" aria-label="Command palette"><div class="mui-palette__panel"><div class="mui-palette__search"><span class="mui-palette__icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span><input type="search" id="mui-palette-input" class="mui-palette__input" placeholder="Search components, blocks and guides…" aria-label="Search destinations" aria-controls="mui-palette-list" role="combobox" aria-expanded="false" aria-autocomplete="list" spellcheck="false" autocomplete="off"><button class="mui-palette__hint" id="mui-palette-close" type="button" aria-label="Close command palette">Esc</button></div><ul class="mui-palette__list" id="mui-palette-list" role="listbox"></ul><div class="mui-palette__footer"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>Esc</kbd> close</span></div></div></dialog><div class="mui-gallery"><aside class="mui-gallery__sidebar" id="mui-gallery-navigation" aria-label="Gallery navigation"><nav class="mui-gallery__nav" aria-label="Components"><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:form-controls"><summary class="mui-gallery__nav-tier">Form Controls</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/form" data-slug="form">Form</a><a class="mui-gallery__nav-item" href="/button" data-slug="button">Button</a><a class="mui-gallery__nav-item" href="/input" data-slug="input">Input</a><a class="mui-gallery__nav-item" href="/textarea" data-slug="textarea">Textarea</a><a class="mui-gallery__nav-item" href="/checkbox" data-slug="checkbox">Checkbox</a><a class="mui-gallery__nav-item" href="/radio" data-slug="radio">Radio</a><a class="mui-gallery__nav-item" href="/choice_card" data-slug="choice_card">Choice Card</a><a class="mui-gallery__nav-item" href="/date_range" data-slug="date_range">Date Range</a><a class="mui-gallery__nav-item" href="/select" data-slug="select">Select</a><a class="mui-gallery__nav-item" href="/switch" data-slug="switch">Switch</a><a class="mui-gallery__nav-item" href="/slider" data-slug="slider">Slider</a><a class="mui-gallery__nav-item" href="/number_field" data-slug="number_field">Number Field</a><a class="mui-gallery__nav-item" href="/field" data-slug="field">Field</a><a class="mui-gallery__nav-item" href="/fieldset" data-slug="fieldset">Fieldset</a><a class="mui-gallery__nav-item" href="/label" data-slug="label">Label</a><a class="mui-gallery__nav-item" href="/native_select" data-slug="native_select">Native Select</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:display"><summary class="mui-gallery__nav-tier">Display</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/badge" data-slug="badge">Badge</a><a class="mui-gallery__nav-item" href="/swatch" data-slug="swatch">Swatch</a><a class="mui-gallery__nav-item" href="/avatar" data-slug="avatar">Avatar</a><a class="mui-gallery__nav-item" href="/separator" data-slug="separator">Separator</a><a class="mui-gallery__nav-item" href="/progress" data-slug="progress">Progress</a><a class="mui-gallery__nav-item" href="/meter" data-slug="meter">Meter</a><a class="mui-gallery__nav-item" href="/time_split" data-slug="time_split">Time Split</a><a class="mui-gallery__nav-item" href="/kbd" data-slug="kbd">Kbd</a><a class="mui-gallery__nav-item" href="/skeleton" data-slug="skeleton">Skeleton</a><a class="mui-gallery__nav-item" href="/spinner" data-slug="spinner">Spinner</a><a class="mui-gallery__nav-item" href="/typography" data-slug="typography">Typography</a><a class="mui-gallery__nav-item" href="/empty_state" data-slug="empty_state">Empty State</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:layout"><summary class="mui-gallery__nav-tier">Layout</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/stack" data-slug="stack">Stack</a><a class="mui-gallery__nav-item" href="/grid" data-slug="grid">Grid</a><a class="mui-gallery__nav-item" href="/card" data-slug="card">Card</a><a class="mui-gallery__nav-item" href="/accordion" data-slug="accordion">Accordion</a><a class="mui-gallery__nav-item" href="/collapsible" data-slug="collapsible">Collapsible</a><a class="mui-gallery__nav-item" href="/tabs" data-slug="tabs">Tabs</a><a class="mui-gallery__nav-item" href="/table" data-slug="table">Table</a><a class="mui-gallery__nav-item" href="/data_table" data-slug="data_table">Data Table</a><a class="mui-gallery__nav-item" href="/pagination" data-slug="pagination">Pagination</a><a class="mui-gallery__nav-item" href="/resizable" data-slug="resizable">Resizable</a><a class="mui-gallery__nav-item" href="/scroll_area" data-slug="scroll_area">Scroll Area</a><a class="mui-gallery__nav-item" href="/sidebar" data-slug="sidebar">Sidebar</a><a class="mui-gallery__nav-item" href="/item" data-slug="item">Item</a><a class="mui-gallery__nav-item" href="/aspect_ratio" data-slug="aspect_ratio">Aspect Ratio</a><a class="mui-gallery__nav-item" href="/direction" data-slug="direction">Direction</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:overlay"><summary class="mui-gallery__nav-tier">Overlay</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/dialog" data-slug="dialog">Dialog</a><a class="mui-gallery__nav-item" href="/alert_dialog" data-slug="alert_dialog">Alert Dialog</a><a class="mui-gallery__nav-item" href="/drawer" data-slug="drawer">Drawer</a><a class="mui-gallery__nav-item" href="/sheet" data-slug="sheet">Sheet</a><a class="mui-gallery__nav-item" href="/popover" data-slug="popover">Popover</a><a class="mui-gallery__nav-item" href="/tooltip" data-slug="tooltip">Tooltip</a><a class="mui-gallery__nav-item" href="/hover_card" data-slug="hover_card">Hover Card</a><a class="mui-gallery__nav-item" href="/toast" data-slug="toast">Toast</a><a class="mui-gallery__nav-item" href="/sonner" data-slug="sonner">Sonner</a><a class="mui-gallery__nav-item" href="/alert" data-slug="alert">Alert</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:navigation"><summary class="mui-gallery__nav-tier">Navigation</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/bottom_tab_bar" data-slug="bottom_tab_bar">Bottom Tab Bar</a><a class="mui-gallery__nav-item" href="/status_chip_group" data-slug="status_chip_group">Status Chip Group</a><a class="mui-gallery__nav-item" href="/menu" data-slug="menu">Menu</a><a class="mui-gallery__nav-item" href="/context_menu" data-slug="context_menu">Context Menu</a><a class="mui-gallery__nav-item" href="/menubar" data-slug="menubar">Menubar</a><a class="mui-gallery__nav-item" href="/navigation_menu" data-slug="navigation_menu">Navigation Menu</a><a class="mui-gallery__nav-item" href="/breadcrumb" data-slug="breadcrumb">Breadcrumb</a><a class="mui-gallery__nav-item" href="/command" data-slug="command">Command</a><a class="mui-gallery__nav-item" href="/combobox" data-slug="combobox">Combobox</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:composite"><summary class="mui-gallery__nav-tier">Composite</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/button_group" data-slug="button_group">Button Group</a><a class="mui-gallery__nav-item" href="/toggle" data-slug="toggle">Toggle</a><a class="mui-gallery__nav-item" href="/toggle_group" data-slug="toggle_group">Toggle Group</a><a class="mui-gallery__nav-item" href="/input_group" data-slug="input_group">Input Group</a><a class="mui-gallery__nav-item" href="/input_otp" data-slug="input_otp">Input Otp</a><a class="mui-gallery__nav-item" href="/radio_group" data-slug="radio_group">Radio Group</a><a class="mui-gallery__nav-item" href="/calendar" data-slug="calendar">Calendar</a><a class="mui-gallery__nav-item" href="/carousel" data-slug="carousel">Carousel</a><a class="mui-gallery__nav-item" href="/chart" data-slug="chart">Chart</a><a class="mui-gallery__nav-item" href="/date_picker" data-slug="date_picker">Date Picker</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:conversation"><summary class="mui-gallery__nav-tier">Conversation</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/message" data-slug="message">Message</a><a class="mui-gallery__nav-item" href="/streaming_cursor" data-slug="streaming_cursor">Streaming Cursor</a><a class="mui-gallery__nav-item" href="/code_block" data-slug="code_block">Code Block</a><a class="mui-gallery__nav-item" href="/diff" data-slug="diff">Diff</a><a class="mui-gallery__nav-item" href="/tool_call" data-slug="tool_call">Tool Call</a></div></details><details class="mui-gallery__nav-group" open data-mui="nav-group" data-nav-key="gallery:session"><summary class="mui-gallery__nav-tier">Session</summary><div class="mui-gallery__nav-items"><a class="mui-gallery__nav-item" href="/composer" data-slug="composer">Composer</a><a class="mui-gallery__nav-item" href="/segmented_control" data-slug="segmented_control">Segmented Control</a><a class="mui-gallery__nav-item" href="/turn_progress" data-slug="turn_progress">Turn Progress</a><a class="mui-gallery__nav-item" href="/status_dot" data-slug="status_dot">Status Dot</a><a class="mui-gallery__nav-item" href="/attention_pill" data-slug="attention_pill">Attention Pill</a><a class="mui-gallery__nav-item" href="/facts_list" data-slug="facts_list">Facts List</a><a class="mui-gallery__nav-item" href="/gutter_section" data-slug="gutter_section">Gutter Section</a></div></details></nav></aside><main class="mui-gallery__main"><nav class="mui-gallery__breadcrumb"><a href="/gallery">Gallery</a><span> / </span><a href="/blocks">Blocks</a><span> / </span><span>Record — Facts</span></nav><section class="mui-gallery__component" id="record-facts"><h1 class="mui-gallery__component-name">Record — Facts</h1><nav class="mui-api-nav" aria-label="On this page"><a href="#api-record-facts-anatomy">Anatomy</a><a href="#api-record-facts-props">Props</a><a href="#api-record-facts-examples">Examples</a><a href="#api-record-facts-accessibility">Accessibility</a></nav><section class="mui-api-section mui-docs" id="api-record-facts-anatomy"><h2>Anatomy</h2>
+<p>Pass all of a record's fact groups to <strong>one</strong> <code>record::facts</code> block. Identity, Contact and Loyalty are sections of that surface, not separate cards. Use separate cards only for independent tasks or entities with their own actions. A group with one admitted fact becomes a compact row; a lone single-fact group has no card border, fill or inset.</p>
+<p class="mui-api-module"><code>maud_ui::blocks::record::facts</code></p></section><section class="mui-api-section mui-docs" id="api-record-facts-props"><h2>Props</h2><p class="mui-caption">Generated from public Rust fields. Defaults are evaluated from the implementation.</p><div class="mui-docs__scroll"><table class="mui-props-table" data-generated="rust-props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td data-label="Prop"><code>state</code></td><td data-label="Type"><code>State</code></td><td data-label="Default"><code>Ready</code></td><td data-label="Description"></td></tr><tr><td data-label="Prop"><code>groups</code></td><td data-label="Type"><code>Vec&lt;Group&gt;</code></td><td data-label="Default"><code>[]</code></td><td data-label="Description">Pass every group together, rather than rendering one card per group.</td></tr><tr><td data-label="Prop"><code>columns</code></td><td data-label="Type"><code>Columns</code></td><td data-label="Default"><code>Four</code></td><td data-label="Description">Maximum columns; narrow containers reduce to two, then one.</td></tr><tr><td data-label="Prop"><code>heading</code></td><td data-label="Type"><code>Heading</code></td><td data-label="Default"><code>H2</code></td><td data-label="Description">Heading level for group titles; use H2 below the page's H1.</td></tr><tr><td data-label="Prop"><code>aria_label</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>&quot;Record facts&quot;</code></td><td data-label="Description"></td></tr><tr><td data-label="Prop"><code>masked_hint</code></td><td data-label="Type"><code>String</code></td><td data-label="Default"><code>&quot;masked&quot;</code></td><td data-label="Description"></td></tr></tbody></table></div></section><section class="mui-api-section" id="api-record-facts-examples"><h2>Examples</h2><div class="mui-api-preview"><div class="mui-kit-previews"><section class="mui-kit-preview" data-theme="light" aria-label="light example"><p class="mui-eyebrow">light · fictional example</p><section class="mui-record-facts mui-stack" aria-label="Record facts" data-columns="4"><div class="mui-record-facts__group" data-single="false"><h2 class="mui-record-facts__title">Identity</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Guest ID</dt><dd class="mui-record-facts__value" data-mono="true">UI-G5</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Full name</dt><dd class="mui-record-facts__value" data-mono="false">Sofia Patel</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Email</dt><dd class="mui-record-facts__value" data-mono="false">sofia.patel@example.com</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Nationality</dt><dd class="mui-record-facts__value" data-mono="false">South African</dd></div></dl></div><div class="mui-record-facts__group" data-single="false"><h2 class="mui-record-facts__title">Sensitive details</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Phone</dt><dd class="mui-record-facts__value" data-mono="true">••••••0005<span class="mui-record-facts__masked">masked</span></dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">ID number</dt><dd class="mui-record-facts__value" data-mono="true">••••••0005<span class="mui-record-facts__masked">masked</span></dd></div></dl></div><div class="mui-record-facts__group" data-single="true"><h2 class="mui-record-facts__title">Loyalty</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Loyalty points</dt><dd class="mui-record-facts__value" data-mono="true">0</dd></div></dl></div></section><section class="mui-record-facts mui-record-facts--inline mui-stack" aria-label="Record facts" data-columns="4"><div class="mui-record-facts__group" data-single="true"><h2 class="mui-record-facts__title">Language</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Preferred language</dt><dd class="mui-record-facts__value" data-mono="false">English</dd></div></dl></div></section></section><section class="mui-kit-preview" data-theme="dark" aria-label="dark example"><p class="mui-eyebrow">dark · fictional example</p><section class="mui-record-facts mui-stack" aria-label="Record facts" data-columns="4"><div class="mui-record-facts__group" data-single="false"><h2 class="mui-record-facts__title">Identity</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Guest ID</dt><dd class="mui-record-facts__value" data-mono="true">UI-G5</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Full name</dt><dd class="mui-record-facts__value" data-mono="false">Sofia Patel</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Email</dt><dd class="mui-record-facts__value" data-mono="false">sofia.patel@example.com</dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Nationality</dt><dd class="mui-record-facts__value" data-mono="false">South African</dd></div></dl></div><div class="mui-record-facts__group" data-single="false"><h2 class="mui-record-facts__title">Sensitive details</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Phone</dt><dd class="mui-record-facts__value" data-mono="true">••••••0005<span class="mui-record-facts__masked">masked</span></dd></div><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">ID number</dt><dd class="mui-record-facts__value" data-mono="true">••••••0005<span class="mui-record-facts__masked">masked</span></dd></div></dl></div><div class="mui-record-facts__group" data-single="true"><h2 class="mui-record-facts__title">Loyalty</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Loyalty points</dt><dd class="mui-record-facts__value" data-mono="true">0</dd></div></dl></div></section><section class="mui-record-facts mui-record-facts--inline mui-stack" aria-label="Record facts" data-columns="4"><div class="mui-record-facts__group" data-single="true"><h2 class="mui-record-facts__title">Language</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Preferred language</dt><dd class="mui-record-facts__value" data-mono="false">English</dd></div></dl></div></section></section></div></div><h3 class="mui-api-subheading">Loading, empty, error and disabled</h3><p class="mui-caption">Each example uses the block’s state prop. Empty and error are separate outcomes.</p><div class="mui-state-examples"><section class="mui-state-example" aria-label="loading"><p class="mui-eyebrow">loading</p><div class="mui-block-state" data-state="loading" aria-busy="true"><p class="mui-block-state__message" role="status">Loading…</p><div class="mui-block-state__skeleton" aria-hidden="true"><div class="mui-skeleton mui-skeleton--text" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" aria-hidden="true"></div><div class="mui-skeleton mui-skeleton--text" aria-hidden="true"></div></div></div></section><section class="mui-state-example" aria-label="empty"><p class="mui-eyebrow">empty</p><div class="mui-block-state" data-state="empty"><p class="mui-block-state__message">No items yet.</p><a class="mui-btn mui-btn--outline mui-btn--row" href="/blocks/action-row">Add an item</a></div></section><section class="mui-state-example" aria-label="error"><p class="mui-eyebrow">error</p><div class="mui-block-state" data-state="error"><p class="mui-block-state__message" role="alert">Could not load this section.</p><a class="mui-btn mui-btn--outline mui-btn--row" href="?retry=example">Try again</a></div></section><section class="mui-state-example" aria-label="disabled"><p class="mui-eyebrow">disabled</p><div class="mui-block-state" data-state="disabled"><p class="mui-block-state__message">Editing is unavailable in this example.</p><div class="mui-block-state__disabled" inert="" aria-disabled="true"><section class="mui-record-facts mui-record-facts--inline mui-stack" aria-label="Record facts" data-columns="4"><div class="mui-record-facts__group" data-single="true"><h2 class="mui-record-facts__title">Identity</h2><dl class="mui-record-facts__grid"><div class="mui-record-facts__fact"><dt class="mui-record-facts__label">Guest</dt><dd class="mui-record-facts__value" data-mono="false">Sofia Patel</dd></div></dl></div></section></div></div></section></div><details class="mui-api-reference"><summary>Usage and composition</summary><div class="mui-docs"><h3>Import and example</h3>
+<pre><code class="language-rust">use maud_ui::blocks::record::facts::{self, Fact, Group};
+facts::render(facts::Props {
+    groups: vec![
+        Group { title: "Identity".into(), facts: vec![
+            Fact::new("Full name", "Sofia Patel"),
+            Fact::new("Email", "sofia.patel@example.com"),
+        ] },
+        Group { title: "Sensitive details".into(), facts: vec![
+            Fact::masked("Phone", "••••••0005"),
+            Fact::masked("ID number", "••••••0005"),
+        ] },
+        Group { title: "Loyalty".into(), facts: vec![Fact::mono("Loyalty points", "0")] },
+    ],
+    ..Default::default()
+});
+</code></pre>
+<h3>Props and value ownership</h3>
+<p><code>groups: Vec&lt;Group&gt;</code> owns the sections in caller order. Each <code>Group</code> has a human-facing <code>title</code> and <code>facts: Vec&lt;Fact&gt;</code>. Empty groups are omitted; all groups empty renders nothing. <code>columns: Columns::{Two, Three, Four}</code> caps the responsive grid, default Four. Available container width gives one column below 28rem, two at 28rem, up to three at 42rem and up to four at 56rem. A single fact always stays one row.</p>
+<p><code>Fact::new(label, value)</code> uses body text. <code>Fact::mono</code> uses the mono face. <code>Fact::masked</code> expects an <strong>already redacted</strong> value and adds mono text plus the visible <code>masked_hint</code> (default <code>masked</code>). Masking is never CSS hiding: do not send the underlying secret to this renderer. The caller keeps classification and authorization decisions.</p>
+<p><code>Fact::value_markup: Option&lt;Markup&gt;</code> preserves a canonical field emitter, including its links and data attributes; it takes precedence over plain <code>value</code>. An explicitly empty fragment omits that fact, including its label. A plain empty string is preserved as supplied. Markup must already be safe and authorized. Plain labels and values are escaped.</p>
+<p><code>heading: action::Heading</code> defaults to H2 for section headings below a page H1; <code>aria_label</code> defaults to <code>Record facts</code>. Set both for nested compositions. <code>state: State</code> supports Ready, Absent, Loading, Empty, Error and Disabled using the shared presentation contract. Non-ready replacement states do not render supplied facts.</p>
+</div></details></section><section class="mui-api-section mui-docs" id="api-record-facts-accessibility"><h2>Accessibility</h2>
+<p>Semantic <code>dl</code>, <code>dt</code> and <code>dd</code> keep each label associated with its value. Muted labels and masking hints use the theme's contrast-tested tokens. Masked status has text as well as styling; only its value uses mono. Long admitted values wrap within the grid. Sections share <code>--mui-radius-lg</code>, one surface and <code>--mui-stack-gap</code>; no nested rounded boxes.</p>
+<p>See <a href="/blocks/record-page">Record page</a>, <a href="/blocks/record-related-list">Related records</a> and <a href="/stack">Stack</a>. Fixtures: <code>/fixtures/record-page-{compact,comfortable,spacious}-{guest,long}.html</code>.</p>
+</section></section><div class="mui-gallery__back"><a href="/blocks" class="mui-btn mui-btn--outline mui-btn--sm">← Back to Blocks</a></div></main></div><script src="/js/maud-ui.js?v=152676" defer></script><script>
+(function() {
+    // The gallery theme is owned by the document toggle below.
+
+    // ── Keep the current component visible in the sidebar ──────────
+    // The sidebar lists 72 items in tier order and scrolls independently.
+    // Navigating to a component left the sidebar wherever it was, so the
+    // page you were ON was usually off-screen and picking a neighbour meant
+    // hunting for your place first. Mark the current slug from the URL
+    // (server-rendered pages have no scroll event to trigger the observer
+    // below) and bring it into view.
+    var here = location.pathname.replace(/^\/+|\/+$/g, '');
+    if (here) {
+        var current = document.querySelector('.mui-gallery__nav-item[data-slug="' + CSS.escape(here) + '"]');
+        if (current) {
+            current.classList.add('mui-gallery__nav-item--active');
+            current.setAttribute('aria-current', 'page');
+            var currentGroup = current.closest('details'); if (currentGroup) currentGroup.open = true;
+            // Wait until the responsive drawer is placed, then scroll only
+            // its own container. scrollIntoView can move the document during
+            // the initial no-JS layout and hide the page's first content.
+            requestAnimationFrame(function () {
+                var sidebar = current.closest('.mui-gallery__sidebar');
+                if (!sidebar) return;
+                var offset = current.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+                sidebar.scrollTop += offset - sidebar.clientHeight / 2;
+            });
+        }
+    }
+
+    // Sidebar active state on scroll
+    var navItems = document.querySelectorAll('.mui-gallery__nav-item');
+    if (navItems.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+            for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (entry.isIntersecting) {
+                    var id = entry.target.id;
+                    for (var j = 0; j < navItems.length; j++) {
+                        var item = navItems[j];
+                        // Nav items link to /{slug} for cross-page nav,
+                        // so we match by data-slug instead of href.
+                        if (item.getAttribute('data-slug') === id) {
+                            item.classList.add('mui-gallery__nav-item--active');
+                        } else {
+                            item.classList.remove('mui-gallery__nav-item--active');
+                        }
+                    }
+                }
+            }
+        }, { rootMargin: '-20% 0px -60% 0px' });
+
+        var sections = document.querySelectorAll('.mui-gallery__component');
+        for (var k = 0; k < sections.length; k++) {
+            observer.observe(sections[k]);
+        }
+    }
+
+    // ── Sidebar search ────────────────────────────────────────────
+    // Filters .mui-gallery__nav-item entries against the input value.
+    // Groups whose items are all hidden collapse. "/" focuses the
+    // search box (skipped if the user is already typing into another
+    // input). "Esc" clears and restores the full list.
+    var search = document.getElementById('mui-search');
+    if (search && navItems.length > 0) {
+        var wrap = search.closest('.mui-showcase__search');
+        var nav = document.querySelector('.mui-gallery__nav');
+        var groups = Array.prototype.slice.call(document.querySelectorAll('.mui-gallery__nav-group'));
+
+        // Cache each nav item's display text + its tier header so we
+        // can re-run the filter quickly without hitting DOM on each
+        // keypress.
+        var entries = [];
+        for (var i = 0; i < navItems.length; i++) {
+            var it = navItems[i];
+            entries.push({
+                el: it,
+                label: it.textContent || '',
+                slug: it.getAttribute('data-slug') || '',
+                original: it.innerHTML,
+            });
+        }
+
+        // Ensure "no results" message exists inside the nav container.
+        var empty = nav ? nav.querySelector('.mui-gallery__nav-empty') : null;
+        if (!empty && nav) {
+            empty = document.createElement('div');
+            empty.className = 'mui-gallery__nav-empty';
+            empty.textContent = 'No matches. Press Esc to clear.';
+            nav.appendChild(empty);
+        }
+
+        function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+        function escapeHtml(s) {
+            return s.replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+        }
+
+        function runFilter() {
+            var q = search.value.trim().toLowerCase();
+            var dirty = q.length > 0;
+            wrap.classList.toggle('mui-showcase__search--dirty', dirty);
+            if (window.MaudUI?.navigation && nav) window.MaudUI.navigation.forceGroups(nav, dirty);
+
+            var visibleCount = 0;
+            var pattern = dirty ? new RegExp('(' + escapeRegex(q) + ')', 'ig') : null;
+
+            for (var i = 0; i < entries.length; i++) {
+                var e = entries[i];
+                var label = e.label.toLowerCase();
+                var slug  = e.slug.toLowerCase();
+                var match = !dirty || label.indexOf(q) !== -1 || slug.indexOf(q) !== -1;
+                if (match) {
+                    e.el.hidden = false;
+                    if (dirty) {
+                        e.el.innerHTML = escapeHtml(e.label).replace(pattern, '<mark>$1</mark>');
+                    } else {
+                        e.el.innerHTML = e.original;
+                    }
+                    visibleCount++;
+                } else {
+                    e.el.hidden = true;
+                }
+            }
+
+            // Collapse empty groups. A group is "empty" when all its
+            // child nav items are hidden.
+            for (var g = 0; g < groups.length; g++) {
+                var group = groups[g];
+                var kids = group.querySelectorAll('.mui-gallery__nav-item');
+                var any = false;
+                for (var k = 0; k < kids.length; k++) {
+                    if (!kids[k].hidden) { any = true; break; }
+                }
+                group.setAttribute('data-mui-search-empty', any ? '0' : '1');
+            }
+            if (nav) nav.setAttribute('data-mui-search-empty', visibleCount === 0 && dirty ? '1' : '0');
+        }
+
+        search.addEventListener('input', runFilter);
+        search.addEventListener('focus', function () { wrap.classList.add('mui-showcase__search--focused'); });
+        search.addEventListener('blur',  function () { wrap.classList.remove('mui-showcase__search--focused'); });
+        search.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                search.value = '';
+                runFilter();
+                search.blur();
+            }
+        });
+
+        // Global "/" hotkey — focus unless the user is typing into
+        // another input/textarea/contenteditable.
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== '/') return;
+            var t = e.target;
+            if (!t) return;
+            var tag = (t.tagName || '').toLowerCase();
+            var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable;
+            if (typing) return;
+            e.preventDefault();
+            search.focus();
+            search.select();
+        });
+    }
+
+    // ── Mobile drawer ────────────────────────────────────────────
+    var htmlEl = document.documentElement;
+    var menuButton = document.getElementById('mui-drawer-toggle');
+    var gallerySidebar = document.getElementById('mui-gallery-navigation');
+    var siteNavigation = document.getElementById('mui-site-navigation');
+    var galleryMain = document.querySelector('main.mui-gallery__main');
+    var galleryHeader = document.querySelector('.mui-showcase__header');
+    var phoneNavigation = window.matchMedia('(max-width: 40rem)');
+    var drawerNavigation = window.matchMedia('(max-width: 60rem)');
+    var siteHome = siteNavigation && siteNavigation.parentNode;
+    var siteNext = siteNavigation && siteNavigation.nextSibling;
+
+    function setDrawer(open, focusNavigation) {
+        open = open && drawerNavigation.matches && !!gallerySidebar;
+        if (open) htmlEl.setAttribute('data-mui-drawer', 'open');
+        else htmlEl.removeAttribute('data-mui-drawer');
+        if (galleryMain) galleryMain.inert = open;
+        if (menuButton) {
+            menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+        }
+        if (open && focusNavigation) gallerySidebar.querySelector('a[href]')?.focus();
+        if (!open && gallerySidebar?.contains(document.activeElement) && drawerNavigation.matches) menuButton?.focus();
+    }
+    function placeSiteNavigation() {
+        if (!siteNavigation || !gallerySidebar) return;
+        if (phoneNavigation.matches) gallerySidebar.insertBefore(siteNavigation, gallerySidebar.firstChild);
+        else siteHome.insertBefore(siteNavigation, siteNext);
+    }
+    if (menuButton && gallerySidebar) {
+        placeSiteNavigation();
+        htmlEl.setAttribute('data-mui-gallery-ready', '');
+        if (window.ResizeObserver && galleryHeader) {
+            new ResizeObserver(function () {
+                htmlEl.style.setProperty('--mui-header-h', galleryHeader.getBoundingClientRect().height + 'px');
+            }).observe(galleryHeader);
+        }
+        phoneNavigation.addEventListener('change', placeSiteNavigation);
+        drawerNavigation.addEventListener('change', function () { setDrawer(false); });
+        menuButton.addEventListener('click', function () {
+            setDrawer(htmlEl.getAttribute('data-mui-drawer') !== 'open', true);
+        });
+        document.getElementById('mui-drawer-backdrop')?.addEventListener('click', function () {
+            setDrawer(false); menuButton.focus();
+        });
+        gallerySidebar.addEventListener('click', function (event) {
+            if (event.target.closest('a[href]')) setDrawer(false);
+        });
+        // Keep the quick filter usable in the header while showing its results.
+        search?.addEventListener('input', function () { if (search.value.trim()) setDrawer(true, false); });
+        document.addEventListener('keydown', function (event) {
+            if (htmlEl.getAttribute('data-mui-drawer') !== 'open') return;
+            if (event.key === 'Escape') {
+                event.preventDefault(); setDrawer(false); menuButton.focus();
+            } else if (event.key === 'Tab') {
+                var selector = 'a[href], button, input, select, summary, [tabindex="0"]';
+                var focusable = Array.from(galleryHeader.querySelectorAll(selector))
+                    .concat(Array.from(gallerySidebar.querySelectorAll(selector)))
+                    .filter(function (el) { return !el.disabled && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'; });
+                var first = focusable[0], last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+                else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+            }
+        });
+    }
+
+    // ── Command palette ──────────────────────────────────────────
+    (function () {
+        var palette = document.getElementById('mui-palette');
+        var paletteInput = document.getElementById('mui-palette-input');
+        var paletteList = document.getElementById('mui-palette-list');
+        var paletteBtn = document.getElementById('mui-palette-open');
+        var closeBtn = document.getElementById('mui-palette-close');
+        var data = Array.isArray(window.__MUI_PALETTE__) ? window.__MUI_PALETTE__ : [];
+        if (!palette || !paletteInput || !paletteList || typeof palette.showModal !== 'function') return;
+        var recent = [];
+        try { recent = JSON.parse(localStorage.getItem('mui-palette-recent') || '[]'); } catch {}
+        // Storage is untrusted: recents may reference only known routes in this build.
+        if (!Array.isArray(recent)) recent = [];
+        recent = Array.from(new Set(recent.filter(function (url) { return data.some(function (item) { return item.u === url; }); }))).slice(0, 5);
+        var filtered = [], activeIndex = 0, previousFocus = null;
+        var names = { page: 'Start here', block: 'Application blocks', component: 'Components', integration: 'Integrations' };
+        function active() {
+            paletteList.querySelectorAll('[role="option"]').forEach(function (row, i) {
+                row.classList.toggle('mui-palette__item--active', i === activeIndex);
+                row.setAttribute('aria-selected', String(i === activeIndex));
+            });
+            var row = paletteList.querySelector('[aria-selected="true"]');
+            if (row) { paletteInput.setAttribute('aria-activedescendant', row.id); row.scrollIntoView({ block: 'nearest' }); }
+            else paletteInput.removeAttribute('aria-activedescendant');
+        }
+        function render() {
+            paletteList.replaceChildren();
+            var lastGroup = '';
+            filtered.forEach(function (entry, index) {
+                var section = entry.section || names[entry.k] || entry.k;
+                if (section !== lastGroup) {
+                    var heading = document.createElement('li');
+                    heading.className = 'mui-palette__section'; heading.setAttribute('role', 'presentation'); heading.textContent = section;
+                    paletteList.appendChild(heading); lastGroup = section;
+                }
+                var row = document.createElement('li'); row.className = 'mui-palette__item'; row.id = 'mui-palette-option-' + index;
+                row.setAttribute('role', 'option'); row.setAttribute('data-index', String(index));
+                var label = document.createElement('span'); label.className = 'mui-palette__item-label'; label.textContent = entry.l;
+                var path = document.createElement('span'); path.className = 'mui-palette__item-path'; path.textContent = entry.u;
+                var hint = document.createElement('kbd'); hint.className = 'mui-palette__item-key'; hint.textContent = '↵'; hint.setAttribute('aria-hidden', 'true');
+                row.appendChild(label); row.appendChild(path); row.appendChild(hint); paletteList.appendChild(row);
+            });
+            if (!filtered.length) {
+                var empty = document.createElement('li'); empty.className = 'mui-palette__empty'; empty.setAttribute('role', 'presentation'); empty.textContent = 'No destinations found. Try a component or block name.'; paletteList.appendChild(empty);
+            }
+            active();
+        }
+        function filter() {
+            var query = paletteInput.value.trim().toLocaleLowerCase();
+            var matches = data.filter(function (entry) { return !query || (entry.l + ' ' + entry.u).toLocaleLowerCase().includes(query); });
+            filtered = [];
+            if (!query) recent.forEach(function (url) { var entry = data.find(function (item) { return item.u === url; }); if (entry) filtered.push(Object.assign({}, entry, { section: 'Recent' })); });
+            ['page', 'block', 'component', 'integration'].forEach(function (kind) {
+                matches.filter(function (entry) { return entry.k === kind && (query || !recent.includes(entry.u)); }).forEach(function (entry) { filtered.push(entry); });
+            });
+            activeIndex = 0; render(); paletteList.scrollTop = 0;
+        }
+        // The header search box is a door into this palette, not a second search:
+        // it used to filter the sidebar list while ⌘K opened this, so the same-looking
+        // box did two different things (0.19.3).
+        var headerSearch = document.getElementById('mui-search');
+        var reopenGuardUntil = 0;
+        function open(initial) {
+            if (palette.open) return;
+            previousFocus = document.activeElement; setDrawer(false);
+            if (previousFocus === headerSearch) previousFocus = paletteBtn && paletteBtn.getClientRects().length ? paletteBtn : null;
+            paletteInput.value = typeof initial === 'string' ? initial : ''; filter(); palette.showModal();
+            paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
+        }
+        function close() { if (palette.open) palette.close(); }
+        function activate() {
+            var entry = filtered[activeIndex]; if (!entry) return;
+            recent = [entry.u].concat(recent.filter(function (url) { return url !== entry.u; })).slice(0, 5);
+            try { localStorage.setItem('mui-palette-recent', JSON.stringify(recent)); } catch {}
+            close(); window.location.href = entry.u;
+        }
+        palette.addEventListener('close', function () {
+            htmlEl.removeAttribute('data-mui-palette'); paletteInput.setAttribute('aria-expanded', 'false');
+            if (previousFocus && previousFocus.isConnected && previousFocus.getClientRects().length) previousFocus.focus();
+        });
+        palette.addEventListener('click', function (event) { if (event.target === palette) close(); });
+        paletteBtn?.addEventListener('click', function () { open(); }); closeBtn?.addEventListener('click', close);
+        if (headerSearch) {
+            headerSearch.setAttribute('aria-haspopup', 'dialog');
+            headerSearch.setAttribute('aria-keyshortcuts', 'Meta+K Control+K /');
+            headerSearch.addEventListener('focus', function () {
+                if (Date.now() < reopenGuardUntil) return;
+                var text = headerSearch.value; headerSearch.value = '';
+                open(text);
+            });
+            palette.addEventListener('close', function () { reopenGuardUntil = Date.now() + 300; });
+        }
+        paletteInput.addEventListener('input', filter);
+        paletteInput.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                event.preventDefault(); if (filtered.length) activeIndex = (activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + filtered.length) % filtered.length; active();
+            } else if (event.key === 'Enter') { event.preventDefault(); activate(); }
+            else if (event.key === 'Home' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = 0; active(); }
+            else if (event.key === 'End' && (event.metaKey || event.ctrlKey)) { event.preventDefault(); activeIndex = Math.max(0, filtered.length - 1); active(); }
+        });
+        paletteList.addEventListener('click', function (event) {
+            var row = event.target.closest('[data-index]'); if (!row) return;
+            activeIndex = Number(row.getAttribute('data-index')); activate();
+        });
+        document.addEventListener('keydown', function (event) {
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+                // Inside an embedded app, its own search owns the same shortcut.
+                if (!palette.open && event.target.closest('.mui-block--shell')) return;
+                event.preventDefault(); event.stopImmediatePropagation(); if (palette.open) close(); else open();
+            }
+        }, true);
+    })();
+
+    // ── Theme + direction toggles (icon-only, stable text) ──────
+    // We override the bundled behaviours so the buttons keep their
+    // glyphs rather than morphing into "Dark mode" / "RTL" labels.
+    // Values persist to localStorage under the same keys the bundled
+    // behaviour uses, so other pages / other visits see the choice.
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        try { localStorage.setItem('mui-theme', theme); } catch {}
+    }
+    function setDir(dir) {
+        document.documentElement.setAttribute('dir', dir);
+        try { localStorage.setItem('mui-dir', dir); } catch {}
+    }
+    try {
+        var savedTheme = localStorage.getItem('mui-theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme);
+        var savedDir = localStorage.getItem('mui-dir');
+        if (savedDir === 'rtl' || savedDir === 'ltr') setDir(savedDir);
+    } catch {}
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function (e) {
+            // Stop the bundled behaviour if it's bound to this node.
+            e.stopImmediatePropagation();
+            var next = (document.documentElement.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        }, true);
+    }
+    var dirBtn = document.getElementById('dir-toggle');
+    if (dirBtn) {
+        dirBtn.addEventListener('click', function (e) {
+            e.stopImmediatePropagation();
+            var next = (document.documentElement.getAttribute('dir') || 'ltr') === 'rtl' ? 'ltr' : 'rtl';
+            setDir(next);
+        }, true);
+    }
+
+    // ── Swatch click-to-copy ──────────────────────────────────────
+    // Any element with data-mui="swatch-copy" copies its
+    // data-swatch-value to the clipboard on click / Enter / Space,
+    // then animates a brief pulse so the user sees it landed.
+    function copySwatch(el) {
+        var v = el.getAttribute('data-swatch-value');
+        if (!v) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(v).catch(function () {});
+        }
+        el.classList.remove('mui-swatch--copied');
+        // force reflow so re-adding the class restarts the animation
+        void el.offsetWidth;
+        el.classList.add('mui-swatch--copied');
+    }
+    document.addEventListener('click', function (e) {
+        var el = e.target && e.target.closest && e.target.closest('[data-mui="swatch-copy"]');
+        if (el) copySwatch(el);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var t = e.target;
+        if (!t || !t.matches || !t.matches('[data-mui="swatch-copy"]')) return;
+        e.preventDefault();
+        copySwatch(t);
+    });
+})();
+</script></body></html>

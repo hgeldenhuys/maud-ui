@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.3] — 2026-09-22 — focus rings, menus, density on the root
+
+- **Density no longer rescales the page.** `[data-density]` set the body text size on whatever carried it, and when that was `<html>` it rescaled every `rem`: switching to compact shrank a 90rem layout from 1350px to 1260px, and controls drew at 30px instead of 32px. The rule now skips `<html>` and styles `<body>` instead.
+- **Text fields focus with a soft ring.** Two catch-all focus rules drew a 2px offset outline on every field and outranked `.mui-input:focus-visible`, so fields focused as a hard dark rectangle. Text fields now get `--mui-ring-field` (a 3px accent-tinted ring that follows the corners), at zero specificity so any component's own focus rule still wins. Buttons, links and checkboxes keep the outline.
+- **Overflow menus behave like menus.** `details.mui-action-row__more` opens under its trigger's start edge (flipping to the end edge only when it would leave the viewport), renders its items as plain rows on the overlay panel colour with a shadow, and closes on an outside click, on Escape (focus returns to the trigger) and when another opens (new `disclosure_menu` behaviour).
+- Site: the header search box opens the same palette as ⌘K and "/"; the static export now reads `BLOCK_NAMES` instead of a hand-kept list of 10, so the 21 missing block pages (including the "Guest inbox" target) exist, guarded by a test proven able to fail.
+
 ## [0.19.2] — 2026-09-22 — site QA: breadcrumbs, selects, search, theme
 
 - **Breadcrumb default separator restored.** `breadcrumb::Props` derived `Default`, which gave `separator: None`, so every trail built with `..Default::default()` lost its "/" in 0.19.0 while the docs promised `Some("/")`. `Default` is now written by hand; a test pins it and was proven able to fail.

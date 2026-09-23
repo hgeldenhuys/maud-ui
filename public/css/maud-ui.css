@@ -70,6 +70,7 @@
   --mui-motion-loading: calc(var(--mui-motion-enter) * 6);
   --mui-transition: var(--mui-motion-fast) var(--mui-motion-ease);
   --mui-ring: 0 0 0 2px var(--mui-bg), 0 0 0 4px var(--mui-border-focus);
+  --mui-ring-field: 0 0 0 3px color-mix(in srgb, var(--mui-border-focus) 22%, transparent);
   --mui-hairline: 1px;
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
@@ -4160,7 +4161,7 @@ dialog.mui-alert-dialog .mui-field {
 .mui-input:focus-visible {
   outline: none;
   border-color: var(--mui-border-focus);
-  box-shadow: var(--mui-ring);
+  box-shadow: var(--mui-ring-field);
 }
 .mui-input[aria-invalid=true] {
   border-color: var(--mui-danger);
@@ -10868,10 +10869,15 @@ td.mui-table__cell--numeric {
 .mui-empty-state {
   padding: var(--mui-space-3xl) var(--mui-space-xl);
 }
-[class*=mui-]:is(a, button, input, textarea, select, summary, [tabindex], [role=button]):focus-visible {
+[class*=mui-]:is(a, button, input:where([type=checkbox], [type=radio], [type=range], [type=color], [type=file]), summary, [tabindex], [role=button]):focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
   box-shadow: none;
+}
+:where([class*=mui-]):where(input:not([type=checkbox], [type=radio], [type=range], [type=color], [type=file]), textarea, select):focus-visible {
+  outline: none;
+  border-color: var(--mui-border-focus);
+  box-shadow: var(--mui-ring-field);
 }
 :where([class*=mui-]) {
   accent-color: var(--mui-accent);
@@ -11293,6 +11299,11 @@ details:not([open]) > :not(summary) {
 .mui-page-header__switchers select.mui-native-select {
   height: var(--mui-control-height);
   min-height: var(--mui-control-height);
+}
+.mui-page-header__search-trigger:focus-visible {
+  outline: none;
+  border-color: var(--mui-border-focus);
+  box-shadow: var(--mui-ring-field);
 }
 
 /* static/styles/blocks/app-header.css */
@@ -12382,31 +12393,44 @@ summary.mui-block--shell__nav-group-label:hover {
 .mui-action-row__overflow {
   position: absolute;
   z-index: var(--mui-layer-overlay);
-  inset-inline-end: 0;
+  inset-inline-start: 0;
   top: calc(100% + var(--mui-space-xs));
   width: max-content;
+  min-width: 10rem;
   max-width: min(20rem, calc(100vw - var(--mui-space-xxl)));
   display: grid;
-  gap: var(--mui-space-xs);
-  padding: var(--mui-space-sm);
-  border: 1px solid var(--mui-border);
+  gap: 1px;
+  padding: var(--mui-space-xs);
+  border: 1px solid var(--mui-border-strong, var(--mui-border));
   border-radius: var(--mui-radius-md);
-  background: var(--mui-bg-card);
-  box-shadow: none;
+  background: var(--mui-bg-overlay-panel, var(--mui-bg-card));
+  box-shadow: var(--mui-shadow-md);
+}
+.mui-action-row__more[data-align=end] > .mui-action-row__overflow {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
 }
 .mui-action-row__overflow .mui-btn {
   width: 100%;
   justify-content: flex-start;
+  min-height: var(--mui-control-height);
+  height: auto;
+  padding: 0 var(--mui-space-sm);
+  border: 0;
+  border-radius: var(--mui-radius-sm);
+  background: transparent;
+  box-shadow: none;
+  color: var(--mui-text);
+  font-weight: var(--mui-weight-normal);
+}
+.mui-action-row__overflow .mui-btn:hover,
+.mui-action-row__overflow .mui-btn:focus-visible {
+  background: var(--mui-bg-input);
+  outline: none;
 }
 @media (pointer: coarse) {
   .mui-action-row[data-density] .mui-btn {
     min-height: var(--mui-touch-target);
-  }
-}
-@media (max-width: 40rem) {
-  .mui-action-row__overflow {
-    inset-inline-end: auto;
-    inset-inline-start: 0;
   }
 }
 .mui-action-row[data-density] .mui-action-row__trigger {
@@ -12624,7 +12648,7 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
 :where(a[href], button, input, select, textarea, summary, [role=button], [role=option], [role=checkbox], [role=radio], [role=tab], [contenteditable=true]):active:not(:disabled):not([aria-disabled=true]) {
   filter: brightness(0.96);
 }
-:is(a[href], button, input, select, textarea, summary, [tabindex], [contenteditable=true]):focus-visible {
+:is(a[href], button, input:where([type=checkbox], [type=radio], [type=range], [type=color], [type=file]), summary, [tabindex]:not(input, select, textarea), [contenteditable=true]):focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: 2px;
 }
@@ -13163,7 +13187,8 @@ td.mui-table__td,
 }
 .mui-block--shell__content,
 .mui-page-stack,
-[data-density]:not(.mui-action-row) {
+[data-density]:not(.mui-action-row):not(html),
+html[data-density] > body {
   font-size: var(--mui-text-body-size);
   line-height: var(--mui-text-body-leading);
 }

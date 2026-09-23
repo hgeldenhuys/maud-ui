@@ -1,6 +1,8 @@
 /* Data Table component — toolbar, sort indicators, footer/pagination */
 
 .mui-data-table {
+  min-width: 0;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -17,7 +19,10 @@
 /* Wrapper — bordered container around the table */
 .mui-data-table__wrapper {
   position: relative;
-  overflow: auto;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -148,3 +153,8 @@
 .mui-data-table [data-align="center"], th.mui-data-table__th[data-align="center"] { text-align: center; }
 .mui-data-table [data-align="right"], th.mui-data-table__th[data-align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
 .mui-data-table__th[data-sortable="true"]:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: -2px; }
+
+.mui-data-table__wrapper > .mui-table { width: max-content; min-width: 100%; }
+
+/* Allow the gallery grid item to shrink so its inner wrapper can scroll. */
+.mui-data-table-demo { min-width: 0; }

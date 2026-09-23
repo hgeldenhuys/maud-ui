@@ -115,7 +115,7 @@ pub fn render(props: Props) -> Markup {
                     }
 
                     // Members table
-                    div class="mui-block--team__table-wrap" {
+                    div class="mui-block--team__table-wrap" tabindex="0" role="region" aria-label="Team members" {
                         table class="mui-block--team__table" {
                             thead {
                                 tr {

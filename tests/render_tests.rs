@@ -1024,3 +1024,19 @@ mod composer_no_js_contract {
         assert!(legacy.contains(r#"type="button""#), "no action → type=button: {legacy}");
     }
 }
+
+#[test]
+fn combobox_showcase_has_no_nested_buttons() {
+    let rendered = maud_ui::primitives::combobox::showcase().into_string();
+    let mut inside_button = false;
+    for tag in rendered.split('<').skip(1) {
+        if tag.starts_with("button ") || tag.starts_with("button>") {
+            assert!(!inside_button, "nested buttons cause the HTML parser to eject combobox controls");
+            inside_button = true;
+        } else if tag.starts_with("/button>") {
+            assert!(inside_button);
+            inside_button = false;
+        }
+    }
+    assert!(!inside_button);
+}

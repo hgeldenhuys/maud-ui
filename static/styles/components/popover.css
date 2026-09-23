@@ -4,6 +4,7 @@
 }
 
 .mui-popover__trigger {
+  display: inline-flex;
   cursor: pointer;
   transition: var(--mui-transition);
 }
@@ -23,7 +24,7 @@
   border-radius: var(--mui-radius-md);
   box-shadow: var(--mui-shadow-md);
   padding: var(--mui-space-lg);
-  width: 18rem; /* w-72 = 18rem */
+  width: var(--mui-popover-width); /* w-72 = 18rem */
   z-index: var(--mui-layer-overlay);
   outline: none;
   /* Animation: fade + scale like shadcn */
@@ -147,4 +148,53 @@
   line-height: var(--mui-leading-small);
   margin: 0;
   color: var(--mui-text-muted, var(--mui-text));
+}
+
+/* Scoped anchors let each panel flip independently without inline geometry. */
+.mui-popover { anchor-scope: --mui-popover-trigger; }
+.mui-popover__trigger { anchor-name: --mui-popover-trigger; }
+.mui-popover > .mui-popover__content {
+  position: fixed;
+  position-anchor: --mui-popover-trigger;
+  height: max-content;
+  inset: auto;
+  margin: var(--mui-inset-tight);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--mui-inset-tight) * 2);
+  max-height: calc(100vh - var(--mui-inset-tight) * 2);
+  overflow: auto;
+  --mui-popover-translate: translate(0);
+  position-try-fallbacks: flip-inline, flip-block, flip-inline flip-block, --mui-popover-below, --mui-popover-above;
+}
+.mui-popover__content[data-side="bottom"][data-align="center"] { position-area: bottom; }
+.mui-popover__content[data-side="bottom"][data-align="start"] { position-area: bottom span-right; }
+.mui-popover__content[data-side="bottom"][data-align="end"] { position-area: bottom span-left; }
+.mui-popover__content[data-side="top"][data-align="center"] { position-area: top; }
+.mui-popover__content[data-side="top"][data-align="start"] { position-area: top span-right; }
+.mui-popover__content[data-side="top"][data-align="end"] { position-area: top span-left; }
+.mui-popover__content[data-side="left"][data-align="center"] { position-area: left; }
+.mui-popover__content[data-side="left"][data-align="start"] { position-area: left span-bottom; }
+.mui-popover__content[data-side="left"][data-align="end"] { position-area: left span-top; }
+.mui-popover__content[data-side="right"][data-align="center"] { position-area: right; }
+.mui-popover__content[data-side="right"][data-align="start"] { position-area: right span-bottom; }
+.mui-popover__content[data-side="right"][data-align="end"] { position-area: right span-top; }
+/* Every fallback keeps a vertical anchor reference. Viewport-centred insets
+   detach the panel from its trigger and can drift when the anchor scrolls.
+   Clamp only the horizontal coordinate; leave vertical placement to the anchor
+   and try the opposite vertical side when the panel would overflow. */
+@position-try --mui-popover-below {
+  position-area: none;
+  top: calc(anchor(bottom) + var(--mui-inset-tight));
+  bottom: auto;
+  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
+  right: auto;
+  margin: 0;
+}
+@position-try --mui-popover-above {
+  position-area: none;
+  top: auto;
+  bottom: calc(anchor(top) + var(--mui-inset-tight));
+  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
+  right: auto;
+  margin: 0;
 }

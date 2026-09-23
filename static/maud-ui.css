@@ -7,7 +7,7 @@
   src: url(fonts/InterVariable.woff2) format("woff2");
 }
 :root {
-  --mui-brand-accent: #6e79d6;
+  --mui-brand-accent: #5e6ad2;
   --mui-brand-accent-ink: #ffffff;
   --mui-brand-font-heading:
     "Inter Variable",
@@ -102,6 +102,8 @@
   --mui-search-shortcut-width: 2.25rem;
   --mui-search-shortcut-gap: 0.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  --mui-combobox-width: 12rem;
+  --mui-popover-width: 18rem;
   --mui-control-height: 2rem;
   --mui-status-chip-height: 1.875rem;
   --mui-status-chip-label-size: 0.8125rem;
@@ -150,6 +152,7 @@
   --mui-bg: #08090a;
   --mui-bg-card: #0f1011;
   --mui-bg-input: #1c1c1f;
+  --mui-switch-off: var(--mui-bg-input);
   --mui-bg-raised: #232326;
   --mui-bg-overlay-panel: #1c1c1f;
   --mui-bg-overlay: rgba(0, 0, 0, 0.64);
@@ -212,12 +215,13 @@
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
   --mui-bg: #ffffff;
-  --mui-bg-card: #ffffff;
+  --mui-bg-card: #f6f6f7;
   --mui-bg-input: #f9f8f9;
+  --mui-switch-off: #b6b8c0;
   --mui-bg-raised: #f4f2f4;
   --mui-bg-overlay-panel: #ffffff;
   --mui-bg-overlay: rgba(15, 23, 42, 0.48);
-  --mui-border: rgba(0, 0, 0, 0.08);
+  --mui-border: rgba(0, 0, 0, 0.12);
   --mui-border-strong: rgba(0, 0, 0, 0.12);
   --mui-border-control: rgba(0, 0, 0, 0.24);
   --mui-border-focus: var(--mui-accent-text);
@@ -227,10 +231,10 @@
   --mui-text-secondary: #3c3f44;
   --mui-text-muted: #6b6f76;
   --mui-text-subtle: #8a8f98;
-  --mui-brand-accent: #6e79d6;
+  --mui-brand-accent: #5e6ad2;
   --mui-brand-accent-ink: #ffffff;
   --mui-accent: var(--mui-brand-accent);
-  --mui-accent-hover: var(--mui-brand-accent);
+  --mui-accent-hover: color-mix(in srgb, var(--mui-brand-accent) 90%, var(--mui-text));
   --mui-accent-fg: var(--mui-brand-accent-ink);
   --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
   --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));
@@ -1869,7 +1873,7 @@ dialog.mui-alert-dialog::backdrop {
   align-items: center;
   justify-content: space-between;
   gap: var(--mui-space-sm);
-  min-width: 12rem;
+  min-width: var(--mui-combobox-width);
   height: 2.25rem;
   padding: 0 var(--mui-space-md);
   background: transparent;
@@ -1897,6 +1901,8 @@ dialog.mui-alert-dialog::backdrop {
   pointer-events: none;
 }
 .mui-combobox__value {
+  min-width: 0;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2101,6 +2107,26 @@ dialog.mui-alert-dialog::backdrop {
     inset-inline-end: 0;
     max-width: 100%;
   }
+}
+.mui-combobox[data-multiple] .mui-combobox__trigger {
+  width: var(--mui-combobox-width);
+  max-width: 100%;
+  height: auto;
+  padding-block: var(--mui-space-xs);
+}
+.mui-combobox__chip {
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+.mui-combobox__chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mui-combobox__chip-remove,
+.mui-combobox__clear {
+  flex-shrink: 0;
 }
 
 /* static/styles/components/command.css */
@@ -2564,6 +2590,8 @@ dialog.mui-command::backdrop {
 
 /* static/styles/components/data_table.css */
 .mui-data-table {
+  min-width: 0;
+  max-width: 100%;
   width: 100%;
 }
 .mui-data-table__toolbar {
@@ -2589,7 +2617,10 @@ dialog.mui-command::backdrop {
 }
 .mui-data-table__wrapper {
   position: relative;
-  overflow: auto;
+  overflow-x: auto;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   width: 100%;
   border: 1px solid var(--mui-border);
   border-radius: var(--mui-radius-md);
@@ -2708,6 +2739,13 @@ th.mui-data-table__th[data-align=right] {
 .mui-data-table__th[data-sortable=true]:focus-visible {
   outline: 2px solid var(--mui-border-focus);
   outline-offset: -2px;
+}
+.mui-data-table__wrapper > .mui-table {
+  width: max-content;
+  min-width: 100%;
+}
+.mui-data-table-demo {
+  min-width: 0;
 }
 
 /* static/styles/components/date_picker.css */
@@ -5096,8 +5134,8 @@ dialog.mui-alert-dialog .mui-field {
   -webkit-appearance: none;
   display: block;
   width: 100%;
-  height: 2.25rem;
-  padding: var(--mui-space-sm) 2.25rem var(--mui-space-sm) var(--mui-space-md);
+  height: var(--mui-control-height);
+  padding: 0 calc(var(--mui-space-md) * 2 + var(--mui-icon-size)) 0 var(--mui-space-md);
   background: transparent;
   color: var(--mui-text);
   border: 1px solid var(--mui-border-control);
@@ -5128,14 +5166,14 @@ dialog.mui-alert-dialog .mui-field {
 }
 .mui-native-select__chevron {
   position: absolute;
-  inset-inline-end: 0.75rem;
+  inset-inline-end: var(--mui-space-md);
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1rem;
-  height: 1rem;
+  width: var(--mui-icon-size);
+  height: var(--mui-icon-size);
   color: var(--mui-text-muted);
   pointer-events: none;
   opacity: 0.7;
@@ -5178,6 +5216,10 @@ select.mui-native-select:focus-visible {
 select.mui-native-select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.mui-native-select > .mui-native-select__select {
+  min-height: var(--mui-control-height);
+  padding-inline-end: calc(var(--mui-space-md) * 2 + var(--mui-icon-size));
 }
 
 /* static/styles/components/navigation_menu.css */
@@ -5560,6 +5602,7 @@ a.mui-pagination__page {
   position: relative;
 }
 .mui-popover__trigger {
+  display: inline-flex;
   cursor: pointer;
   transition: var(--mui-transition);
 }
@@ -5575,7 +5618,7 @@ a.mui-pagination__page {
   border-radius: var(--mui-radius-md);
   box-shadow: var(--mui-shadow-md);
   padding: var(--mui-space-lg);
-  width: 18rem;
+  width: var(--mui-popover-width);
   z-index: var(--mui-layer-overlay);
   outline: none;
   opacity: 0;
@@ -5675,6 +5718,82 @@ a.mui-pagination__page {
   line-height: var(--mui-leading-small);
   margin: 0;
   color: var(--mui-text-muted, var(--mui-text));
+}
+.mui-popover {
+  anchor-scope: --mui-popover-trigger;
+}
+.mui-popover__trigger {
+  anchor-name: --mui-popover-trigger;
+}
+.mui-popover > .mui-popover__content {
+  position: fixed;
+  position-anchor: --mui-popover-trigger;
+  height: max-content;
+  inset: auto;
+  margin: var(--mui-inset-tight);
+  box-sizing: border-box;
+  max-width: calc(100vw - var(--mui-inset-tight) * 2);
+  max-height: calc(100vh - var(--mui-inset-tight) * 2);
+  overflow: auto;
+  --mui-popover-translate: translate(0);
+  position-try-fallbacks:
+    flip-inline,
+    flip-block,
+    flip-inline flip-block,
+    --mui-popover-below,
+    --mui-popover-above;
+}
+.mui-popover__content[data-side=bottom][data-align=center] {
+  position-area: bottom;
+}
+.mui-popover__content[data-side=bottom][data-align=start] {
+  position-area: bottom span-right;
+}
+.mui-popover__content[data-side=bottom][data-align=end] {
+  position-area: bottom span-left;
+}
+.mui-popover__content[data-side=top][data-align=center] {
+  position-area: top;
+}
+.mui-popover__content[data-side=top][data-align=start] {
+  position-area: top span-right;
+}
+.mui-popover__content[data-side=top][data-align=end] {
+  position-area: top span-left;
+}
+.mui-popover__content[data-side=left][data-align=center] {
+  position-area: left;
+}
+.mui-popover__content[data-side=left][data-align=start] {
+  position-area: left span-bottom;
+}
+.mui-popover__content[data-side=left][data-align=end] {
+  position-area: left span-top;
+}
+.mui-popover__content[data-side=right][data-align=center] {
+  position-area: right;
+}
+.mui-popover__content[data-side=right][data-align=start] {
+  position-area: right span-bottom;
+}
+.mui-popover__content[data-side=right][data-align=end] {
+  position-area: right span-top;
+}
+@position-try --mui-popover-below {
+  position-area: none;
+  top: calc(anchor(bottom) + var(--mui-inset-tight));
+  bottom: auto;
+  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
+  right: auto;
+  margin: 0;
+}
+@position-try --mui-popover-above {
+  position-area: none;
+  top: auto;
+  bottom: calc(anchor(top) + var(--mui-inset-tight));
+  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
+  right: auto;
+  margin: 0;
 }
 
 /* static/styles/components/progress.css */
@@ -7245,7 +7364,7 @@ dialog.mui-sheet--bottom {
   height: 1.5rem;
   border: 1px solid var(--mui-border-control);
   border-radius: var(--mui-radius-control);
-  background: var(--mui-bg-input);
+  background: var(--mui-switch-off);
   position: relative;
   cursor: pointer;
   padding: 0;
@@ -9082,13 +9201,16 @@ dialog.mui-sheet--bottom {
   }
 }
 .mui-block--team__table-wrap {
+  min-width: 0;
   overflow-x: auto;
   border-top: 1px solid var(--mui-border);
-  margin: 0 -1.25rem -1.25rem;
+  margin: 0 calc(-1 * var(--mui-space-20)) calc(-1 * var(--mui-space-20));
   padding: 0 var(--mui-space-20) var(--mui-space-20);
 }
 .mui-block--team__table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
+  white-space: nowrap;
   border-collapse: collapse;
   font-size: var(--mui-text-small-size);
 }
@@ -9284,6 +9406,9 @@ dialog.mui-sheet--bottom {
   display: flex;
   justify-content: center;
   padding: var(--mui-space-sm) 0;
+}
+.mui-block--team {
+  min-width: 0;
 }
 
 /* static/styles/blocks/shell-sidebar.css */
@@ -10780,7 +10905,7 @@ a.mui-btn:focus,
 }
 .mui-input,
 .mui-textarea,
-.mui-native-select,
+:is(.mui-native-select:where(select), .mui-native-select__select),
 .mui-select__trigger,
 .mui-combobox__trigger,
 .mui-number-field__input {
@@ -10792,7 +10917,7 @@ a.mui-btn:focus,
 }
 .mui-input:hover:not(:disabled),
 .mui-textarea:hover:not(:disabled),
-.mui-native-select:hover:not(:disabled) {
+:is(.mui-native-select:where(select), .mui-native-select__select):hover:not(:disabled) {
   background: var(--mui-bg-input);
 }
 .mui-card {
@@ -10888,14 +11013,14 @@ td.mui-table__cell--numeric {
 @media (pointer: coarse) {
   .mui-btn:not(.mui-btn--link),
   .mui-input,
-  .mui-native-select,
+  :is(.mui-native-select:where(select), .mui-native-select__select),
   .mui-select__trigger,
   .mui-combobox__trigger {
     min-height: var(--mui-touch-target);
   }
   .mui-input,
   .mui-textarea,
-  .mui-native-select {
+  :is(.mui-native-select:where(select), .mui-native-select__select) {
     font-size: var(--mui-text-input-touch-size);
   }
 }
@@ -13063,7 +13188,7 @@ html:active-view-transition-type(mui-rail)::view-transition-new(root) {
 }
 .mui-input,
 .mui-data-table__search,
-.mui-native-select,
+:is(.mui-native-select:where(select), .mui-native-select__select),
 .mui-select__trigger,
 .mui-combobox__trigger,
 .mui-number-field__input {
@@ -13193,7 +13318,7 @@ td.mui-table__td,
   .mui-action-row[data-density=comfortable] .mui-btn:not(.mui-action-row__trigger),
   .mui-input,
   .mui-data-table__search,
-  .mui-native-select,
+  :is(.mui-native-select:where(select), .mui-native-select__select),
   .mui-select__trigger,
   .mui-combobox__trigger,
   .mui-status-chip-group__chip {
@@ -13202,7 +13327,7 @@ td.mui-table__td,
   .mui-input,
   .mui-data-table__search,
   .mui-textarea,
-  .mui-native-select {
+  :is(.mui-native-select:where(select), .mui-native-select__select) {
     font-size: var(--mui-text-input-touch-size);
   }
 }
@@ -13380,7 +13505,7 @@ html[data-density] > body {
 .mui-btn,
 .mui-input,
 .mui-textarea,
-.mui-native-select,
+:is(.mui-native-select:where(select), .mui-native-select__select),
 .mui-select__trigger,
 .mui-combobox__trigger,
 .mui-number-field__input,

@@ -54,6 +54,19 @@ scripts/visual-check.mjs + tests/overlay-motion-browser.mjs. Then release (scrip
 bump the four apps (item 7).
 
 ## FOUND FOR ITEM 5 (light mode + phone QA)
+- 14:00 QA reviewer (fresh Opus, screenshots) found 28 defects; px-contrast CONFIRMED light primary
+  button #FFF on #6E79D6 = 3.91:1 (dark 4.7:1). In flight: Astra fixing 8 ($CLAUDE_JOB_DIR/tmp/qa-fix-brief.md):
+  light accent, combobox parts escaping trigger, controlled popover off-screen, settings-team +
+  data_table clipped at 390, light surfaces flat, switch off-state invisible in light, native select.
+- DEFERRED (not in this arc's fix pass; each a real defect per the reviewer, unverified by me):
+  props tables (code split mid-word at 1440, empty Description cells, raw rustdoc markdown shown);
+  button size ladder (xs 32px = default, taller than sm 24px); data_table "Columns" button and row
+  checkboxes unstyled (likely among the 78 undefined classes); dialog demo triggers full-width grey;
+  gallery GET form + home header search squeezed at 390; toast stack gap 2-3px; pager text 3.25:1;
+  pagination at 390 shows only the current page; select chevron ~4px; stray 2px bar left of home's
+  active nav item; auth-login double border at 390.
+- NOT a defect: the "heavy ring" on the active tab in /tabs captures is the focus ring from the
+  capture's own click (focus emulation paints :focus-visible).
 - swatch has NO stylesheet: every mui-swatch* class is undefined (linter, 15 findings).
   78 undefined classes total: tests/design-lint-baseline.txt `no-unknown-classes` lines.
 - At 390px the "<- Navigation Menu / Command ->" pager sits squeezed beside the breadcrumb

@@ -119,14 +119,17 @@
 }
 
 .mui-block--team__table-wrap {
+    min-width: 0;
     overflow-x: auto;
     border-top: 1px solid var(--mui-border);
-    margin: 0 -1.25rem -1.25rem;  /* bleed into card padding */
+    margin: 0 calc(-1 * var(--mui-space-20)) calc(-1 * var(--mui-space-20));  /* bleed into card padding */
     padding: 0 var(--mui-space-20) var(--mui-space-20);
 }
 
 .mui-block--team__table {
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
+    white-space: nowrap;
     border-collapse: collapse;
     font-size: var(--mui-text-small-size);
 }
@@ -358,3 +361,5 @@
     justify-content: center;
     padding: var(--mui-space-sm) 0;
 }
+
+.mui-block--team { min-width: 0; }

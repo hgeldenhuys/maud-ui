@@ -178,13 +178,13 @@ pub fn render(props: Props) -> Markup {
                     } @else {
                         span class="mui-combobox__value" { (selected_label) }
                     }
-                    @if props.show_clear && props.selected.is_some() {
+                    @if props.show_clear && (props.selected.is_some() || !props.selected_values.is_empty()) {
                         span class="mui-combobox__clear" aria-label="Clear" aria-hidden="true" { "\u{00d7}" }
                     }
                     span class="mui-combobox__chevron" aria-hidden="true" { "\u{25be}" }
                 }
             } @else {
-                button type="button" class="mui-combobox__trigger"
+                div tabindex="0" class="mui-combobox__trigger"
                         role="combobox" aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-controls=(format!("{}-dropdown", props.id))
@@ -210,7 +210,7 @@ pub fn render(props: Props) -> Markup {
                     } @else {
                         span class="mui-combobox__value" { (selected_label) }
                     }
-                    @if props.show_clear && props.selected.is_some() {
+                    @if props.show_clear && (props.selected.is_some() || !props.selected_values.is_empty()) {
                         button type="button" class="mui-combobox__clear" aria-label="Clear" { "\u{00d7}" }
                     }
                     span class="mui-combobox__chevron" aria-hidden="true" { "\u{25be}" }

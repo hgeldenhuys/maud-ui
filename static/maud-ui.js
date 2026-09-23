@@ -1918,7 +1918,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     if (!trigger || !content) return;
     var interactive = trigger.querySelector('button, a, [role="button"]') || trigger;
     interactive.setAttribute("aria-haspopup", "dialog");
-    interactive.setAttribute("aria-expanded", "false");
+    interactive.setAttribute("aria-expanded", content.hidden ? "false" : "true");
     interactive.setAttribute("aria-controls", content.id || "");
     function toggle() {
       var expanded = interactive.getAttribute("aria-expanded") === "true";
@@ -1930,6 +1930,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       window.MaudUI.cancelOverlayExit(content);
       content.removeAttribute("hidden");
       void content.offsetHeight;
+      content.setAttribute("data-state", "open");
       content.setAttribute("data-visible", "true");
       content.focus();
       document.addEventListener("click", clickOutside, true);
@@ -1937,6 +1938,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function close() {
       interactive.setAttribute("aria-expanded", "false");
+      content.setAttribute("data-state", "closed");
       content.setAttribute("data-visible", "false");
       window.MaudUI.closeOverlay(content, function() {
         content.setAttribute("hidden", "");
@@ -1954,6 +1956,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     trigger.addEventListener("click", toggle);
+    if (!content.hidden) {
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("keydown", escClose, true);
+    }
   };
   if (window.MaudUI.init) window.MaudUI.init();
 })();

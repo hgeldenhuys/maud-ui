@@ -350,7 +350,7 @@ pub fn showcase() -> Markup {
 
     html! {
         div.mui-showcase__grid {
-            div {
+            div.mui-data-table-demo {
                 p.mui-showcase__caption { "Searchable, sortable, paginated (5 per page)" }
                 (render(Props {
                     id: "invoice-table".to_string(),
@@ -362,7 +362,7 @@ pub fn showcase() -> Markup {
                     ..Default::default()
                 }))
             }
-            div {
+            div.mui-data-table-demo {
                 p.mui-showcase__caption { "Selectable rows + view options" }
                 (view_options(&demo_columns))
                 (render(Props {

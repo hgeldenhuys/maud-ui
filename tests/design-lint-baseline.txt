@@ -72,12 +72,11 @@ no-unknown-classes src/blocks/auth/two_factor.rs 2
 no-unknown-classes src/blocks/dashboard/stats.rs 2
 no-unknown-classes src/blocks/data/table_full.rs 3
 no-unknown-classes src/blocks/settings/profile.rs 3
-no-unknown-classes src/blocks/settings/team.rs 3
+no-unknown-classes src/blocks/settings/team.rs 2
 no-unknown-classes src/blocks/shell/example.rs 1
 no-unknown-classes src/blocks/shell/record_example.rs 3
 no-unknown-classes src/blocks/shell/sidebar.rs 2
 no-unknown-classes src/primitives/calendar.rs 2
-no-unknown-classes src/primitives/combobox.rs 1
 no-unknown-classes src/primitives/composer.rs 3
 no-unknown-classes src/primitives/data_table.rs 9
 no-unknown-classes src/primitives/diff.rs 2

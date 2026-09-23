@@ -59,7 +59,6 @@ pub fn showcase() -> Markup {
     html! {
         div.mui-showcase__grid {
             div {
-                p.mui-showcase__caption { "Country" }
                 div class="mui-field" {
                     label class="mui-label" for="country-select" { "Country" }
                     (render(NativeSelectProps {
@@ -84,7 +83,6 @@ pub fn showcase() -> Markup {
             }
 
             div {
-                p.mui-showcase__caption { "Currency" }
                 div class="mui-field" {
                     label class="mui-label" for="currency-select" { "Currency" }
                     (render(NativeSelectProps {
@@ -106,7 +104,6 @@ pub fn showcase() -> Markup {
             }
 
             div {
-                p.mui-showcase__caption { "Disabled" }
                 div class="mui-field" {
                     label class="mui-label mui-label--disabled" for="timezone-select" { "Timezone" }
                     (render(NativeSelectProps {

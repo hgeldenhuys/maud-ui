@@ -19,7 +19,7 @@
 .mui-brand-controls__preview { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--mui-space-lg); padding: var(--mui-card-inset-block) var(--mui-card-inset-inline); border: 1px solid var(--mui-border); border-radius: var(--mui-radius-lg); background: var(--mui-bg-card); }
 
 /* Controls and containers read the same root choice, including kit composition. */
-.mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { box-sizing: border-box; height: var(--mui-control-height); padding-block: 0; }
+.mui-input, .mui-data-table__search, :is(.mui-native-select:where(select), .mui-native-select__select), .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { box-sizing: border-box; height: var(--mui-control-height); padding-block: 0; }
 .mui-btn { padding-block: var(--mui-space-xs); min-height: var(--mui-control-height); }
 /* Icon-only sizes own their height; the density clamp above must not re-grow them (0.19.0). */
 .mui-btn--icon, .mui-btn--icon-sm, .mui-btn--icon-lg, .mui-btn--icon-xs, .mui-btn--icon-28 { padding-block: 0; }
@@ -51,6 +51,6 @@ th.mui-table__th, td.mui-table__td, .mui-data-table th, .mui-data-table td { pad
   .mui-page-header__search-toggle { min-width: var(--mui-touch-target); }
   .mui-btn:not(.mui-btn--link), .mui-action-row[data-density] .mui-btn, .mui-action-row[data-density] .mui-action-row__trigger,
   .mui-action-row[data-density="comfortable"] .mui-btn:not(.mui-action-row__trigger),
-  .mui-input, .mui-data-table__search, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-status-chip-group__chip { min-height: var(--mui-touch-target); }
-  .mui-input, .mui-data-table__search, .mui-textarea, .mui-native-select { font-size: var(--mui-text-input-touch-size); }
+  .mui-input, .mui-data-table__search, :is(.mui-native-select:where(select), .mui-native-select__select), .mui-select__trigger, .mui-combobox__trigger, .mui-status-chip-group__chip { min-height: var(--mui-touch-target); }
+  .mui-input, .mui-data-table__search, .mui-textarea, :is(.mui-native-select:where(select), .mui-native-select__select) { font-size: var(--mui-text-input-touch-size); }
 }

@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--mui-space-sm);
-  min-width: 12rem;
+  min-width: var(--mui-combobox-width);
   height: 2.25rem;
   padding: 0 var(--mui-space-md);
   background: transparent;
@@ -42,6 +42,8 @@
 }
 
 .mui-combobox__value {
+  min-width: 0;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -306,3 +308,14 @@
     max-width: 100%;
   }
 }
+
+/* Keep every control inside the field, including wrapped multi-value chips. */
+.mui-combobox[data-multiple] .mui-combobox__trigger {
+  width: var(--mui-combobox-width);
+  max-width: 100%;
+  height: auto;
+  padding-block: var(--mui-space-xs);
+}
+.mui-combobox__chip { max-width: 100%; box-sizing: border-box; min-width: 0; }
+.mui-combobox__chip-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-combobox__chip-remove, .mui-combobox__clear { flex-shrink: 0; }

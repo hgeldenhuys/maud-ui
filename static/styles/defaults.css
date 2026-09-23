@@ -46,8 +46,8 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 .mui-btn--primary { background: var(--mui-accent); border-color: var(--mui-accent); color: var(--mui-accent-fg); }
 .mui-btn--primary:hover:not([aria-disabled="true"]) { background: var(--mui-accent-hover); border-color: var(--mui-accent-hover); color: var(--mui-accent-fg); }
 :where(button, a.mui-btn, [role="button"]):active:not(:disabled):not([aria-disabled="true"]) { filter: brightness(0.96); }
-.mui-input, .mui-textarea, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); padding: var(--mui-space-sm) var(--mui-space-md); }
-.mui-input:hover:not(:disabled), .mui-textarea:hover:not(:disabled), .mui-native-select:hover:not(:disabled) { background: var(--mui-bg-input); }
+.mui-input, .mui-textarea, :is(.mui-native-select:where(select), .mui-native-select__select), .mui-select__trigger, .mui-combobox__trigger, .mui-number-field__input { min-height: var(--mui-control-height); border-radius: var(--mui-radius-md); font-size: var(--mui-text-small-size); background: var(--mui-bg-card); padding: var(--mui-space-sm) var(--mui-space-md); }
+.mui-input:hover:not(:disabled), .mui-textarea:hover:not(:disabled), :is(.mui-native-select:where(select), .mui-native-select__select):hover:not(:disabled) { background: var(--mui-bg-input); }
 .mui-card { padding: 0; border-radius: var(--mui-radius-lg); border: var(--mui-hairline) solid var(--mui-border); background: var(--mui-bg-card); box-shadow: var(--mui-ring-hairline); }
 .mui-card__header, .mui-card__body, .mui-card__content, .mui-card__footer { padding: var(--mui-space-20) var(--mui-space-xl); }
 .mui-card__header + .mui-card__body, .mui-card__header + .mui-card__content { padding-block-start: 0; }
@@ -76,8 +76,8 @@ th.mui-table__cell--numeric, td.mui-table__cell--numeric { text-align: right; fo
 :where([class*="mui-"]):where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]), textarea, select):focus-visible { outline: none; border-color: var(--mui-border-focus); box-shadow: var(--mui-ring-field); }
 :where([class*="mui-"]) { accent-color: var(--mui-accent); }
 @media (pointer: coarse) {
-  .mui-btn:not(.mui-btn--link), .mui-input, .mui-native-select, .mui-select__trigger, .mui-combobox__trigger { min-height: var(--mui-touch-target); }
-  .mui-input, .mui-textarea, .mui-native-select { font-size: var(--mui-text-input-touch-size); }
+  .mui-btn:not(.mui-btn--link), .mui-input, :is(.mui-native-select:where(select), .mui-native-select__select), .mui-select__trigger, .mui-combobox__trigger { min-height: var(--mui-touch-target); }
+  .mui-input, .mui-textarea, :is(.mui-native-select:where(select), .mui-native-select__select) { font-size: var(--mui-text-input-touch-size); }
 }
 @media (max-width: 40rem) {
   .mui-block__frame { padding: var(--mui-space-sm); }

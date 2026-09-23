@@ -11,7 +11,7 @@
     // bare span (invalid on a generic role).
     var interactive = trigger.querySelector('button, a, [role="button"]') || trigger;
     interactive.setAttribute("aria-haspopup", "dialog");
-    interactive.setAttribute("aria-expanded", "false");
+    interactive.setAttribute("aria-expanded", content.hidden ? "false" : "true");
     interactive.setAttribute("aria-controls", content.id || "");
 
     function toggle() {
@@ -27,6 +27,7 @@
       content.removeAttribute("hidden");
       // Force reflow before adding visible state
       void content.offsetHeight;
+      content.setAttribute("data-state", "open");
       content.setAttribute("data-visible", "true");
       content.focus();
       document.addEventListener("click", clickOutside, true);
@@ -35,6 +36,7 @@
 
     function close() {
       interactive.setAttribute("aria-expanded", "false");
+      content.setAttribute("data-state", "closed");
       content.setAttribute("data-visible", "false");
       window.MaudUI.closeOverlay(content, function () { content.setAttribute("hidden", ""); });
       document.removeEventListener("click", clickOutside, true);
@@ -52,6 +54,10 @@
     }
 
     trigger.addEventListener("click", toggle);
+    if (!content.hidden) {
+      document.addEventListener("click", clickOutside, true);
+      document.addEventListener("keydown", escClose, true);
+    }
   };
 
   // Re-init in case DOMContentLoaded already fired

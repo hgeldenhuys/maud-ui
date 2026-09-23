@@ -12,7 +12,7 @@
   src: url("fonts/InterVariable.woff2") format("woff2");
 }
 :root {
-  --mui-brand-accent: #6e79d6;
+  --mui-brand-accent: #5e6ad2;
   --mui-brand-accent-ink: #ffffff;
   --mui-brand-font-heading: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --mui-brand-font-body: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -92,6 +92,8 @@
   --mui-search-shortcut-width: 2.25rem;
   --mui-search-shortcut-gap: 0.5rem;
   --mui-bottom-tab-bar-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  --mui-combobox-width: 12rem;
+  --mui-popover-width: 18rem;
   --mui-control-height: 2rem;
   --mui-status-chip-height: 1.875rem;
   --mui-status-chip-label-size: 0.8125rem;
@@ -141,6 +143,7 @@
   --mui-bg: #08090a;
   --mui-bg-card: #0f1011;
   --mui-bg-input: #1c1c1f;
+  --mui-switch-off: var(--mui-bg-input);
   --mui-bg-raised: #232326;
   --mui-bg-overlay-panel: #1c1c1f;
   --mui-bg-overlay: rgba(0, 0, 0, 0.64);
@@ -205,12 +208,13 @@
   --mui-border-hover: var(--mui-border);
   --mui-link: var(--mui-text-secondary);
   --mui-bg: #ffffff;
-  --mui-bg-card: #ffffff;
+  --mui-bg-card: #f6f6f7;
   --mui-bg-input: #f9f8f9;
+  --mui-switch-off: #b6b8c0;
   --mui-bg-raised: #f4f2f4;
   --mui-bg-overlay-panel: #ffffff;
   --mui-bg-overlay: rgba(15, 23, 42, 0.48);
-  --mui-border: rgba(0, 0, 0, 0.08);
+  --mui-border: rgba(0, 0, 0, 0.12);
   --mui-border-strong: rgba(0, 0, 0, 0.12);
   --mui-border-control: rgba(0, 0, 0, 0.24);
   --mui-border-focus: var(--mui-accent-text);
@@ -220,10 +224,10 @@
   --mui-text-secondary: #3c3f44;
   --mui-text-muted: #6b6f76;
   --mui-text-subtle: #8a8f98;
-  --mui-brand-accent: #6e79d6;
+  --mui-brand-accent: #5e6ad2;
   --mui-brand-accent-ink: #ffffff;
   --mui-accent: var(--mui-brand-accent);
-  --mui-accent-hover: var(--mui-brand-accent);
+  --mui-accent-hover: color-mix(in srgb, var(--mui-brand-accent) 90%, var(--mui-text));
   --mui-accent-fg: var(--mui-brand-accent-ink);
   --mui-accent-text: color-mix(in srgb, var(--mui-brand-accent) 40%, var(--mui-text));
   --mui-accent-soft: color-mix(in srgb, var(--mui-brand-accent) 8%, var(--mui-bg-card));

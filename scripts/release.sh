@@ -140,7 +140,7 @@ grep -F -- "$marker" static/maud-ui.min.css >/dev/null ||
   fail "The release's own stylesheet does not contain the marker (or cannot be read): either the marker is wrong or the new CSS rule did not reach the bundle; correct the marker or asset build."
 step '5. Regenerate the website'
 run 'Fix the static export error so public/ is regenerated, then retry.' bun run build:static
-step '5b. Compare screenshots with the live site'
+step '5b. Compare screenshots with the live site; check overlay behaviour'
 # Serve public/ exactly as the site will, on a free port, and diff it against the live site.
 visual_port=$(node -e "const s=require('net').createServer().listen(0,'127.0.0.1',()=>{process.stdout.write(String(s.address().port));s.close()})") ||
   fail 'Cannot find a free local port for the screenshot check: free a port and retry.'
@@ -157,9 +157,16 @@ done
 visual_dir=$(mktemp -d "${TMPDIR:-/tmp}/maud-ui-release-visual.XXXXXX") || fail 'Cannot create a screenshot folder: fix temporary-directory permissions or free disk space.'
 visual_status=0
 node scripts/visual-check.mjs --candidate "http://127.0.0.1:$visual_port" --out "$visual_dir" || visual_status=$?
+# Behaviour a screenshot cannot see, against the same export: overlays fade out and hand focus
+# back, and the gallery palette stays closed after Escape / click-outside (0.20.0 shipped with
+# it reopening instantly).
+behaviour_failed=''
+node tests/overlay-motion-browser.mjs "http://127.0.0.1:$visual_port" || behaviour_failed="$behaviour_failed tests/overlay-motion-browser.mjs"
+node tests/palette-browser.mjs "http://127.0.0.1:$visual_port" || behaviour_failed="$behaviour_failed tests/palette-browser.mjs"
 kill "$visual_server" 2>/dev/null || true
 wait "$visual_server" 2>/dev/null || true
 trap - EXIT   # the pid may be reused later; never kill it again at exit
+[[ -z "$behaviour_failed" ]] || fail "Browser behaviour checks failed:$behaviour_failed. Their FAIL lines above name the overlay; fix it, then re-run."
 case "$visual_status" in
   0) ;;
   1) [[ "$visual_ok" == true ]] ||

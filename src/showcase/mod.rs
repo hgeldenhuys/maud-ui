@@ -8136,7 +8136,7 @@ fn showcase_js() -> &'static str {
             paletteInput.value = typeof initial === 'string' ? initial : ''; filter(); palette.showModal();
             paletteInput.setAttribute('aria-expanded', 'true'); htmlEl.setAttribute('data-mui-palette', 'open'); paletteInput.focus();
         }
-        function close() { if (palette.open) palette.close(); }
+        function close() { if (palette.open) { reopenGuardUntil = Date.now() + 300; palette.close(); } }
         function activate() {
             var entry = filtered[activeIndex]; if (!entry) return;
             recent = [entry.u].concat(recent.filter(function (url) { return url !== entry.u; })).slice(0, 5);
@@ -8152,11 +8152,19 @@ fn showcase_js() -> &'static str {
         if (headerSearch) {
             headerSearch.setAttribute('aria-haspopup', 'dialog');
             headerSearch.setAttribute('aria-keyshortcuts', 'Meta+K Control+K /');
-            headerSearch.addEventListener('focus', function () {
+            // Closing a modal dialog hands focus back to what had it when it opened: this
+            // box. The browser does that BEFORE the dialog's 'close' event, so a guard set in
+            // 'close' came too late and Escape / click-outside reopened the palette at once
+            // (reported 2026-09-23). A focus arriving FROM the palette is that hand-back.
+            headerSearch.addEventListener('focus', function (event) {
                 if (Date.now() < reopenGuardUntil) return;
+                if (event.relatedTarget && palette.contains(event.relatedTarget)) return;
                 var text = headerSearch.value; headerSearch.value = '';
                 open(text);
             });
+            // Focus may already sit in the box after a close, where a click fires no focus.
+            headerSearch.addEventListener('click', function () { if (!palette.open && Date.now() >= reopenGuardUntil) open(); });
+            palette.addEventListener('cancel', function () { reopenGuardUntil = Date.now() + 300; });
             palette.addEventListener('close', function () { reopenGuardUntil = Date.now() + 300; });
         }
         paletteInput.addEventListener('input', filter);

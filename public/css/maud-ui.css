@@ -9798,6 +9798,9 @@ dialog.mui-sheet--bottom {
 .mui-block--shell__nav {
   gap: var(--mui-space-lg);
 }
+.mui-block--shell {
+  --mui-nav-row-radius: 0;
+}
 .mui-block--shell__nav-item {
   position: relative;
   display: flex;
@@ -9806,7 +9809,7 @@ dialog.mui-sheet--bottom {
   min-height: var(--mui-nav-row-height);
   box-sizing: border-box;
   padding: 0 var(--mui-space-sm);
-  border-radius: var(--mui-radius-sm);
+  border-radius: var(--mui-nav-row-radius);
   color: var(--mui-text-muted);
   font-size: var(--mui-text-small-size);
   font-weight: var(--mui-weight-medium);

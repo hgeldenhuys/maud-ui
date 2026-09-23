@@ -90,7 +90,11 @@
 .mui-block--shell__where-label { display: block; margin-block-end: var(--mui-space-sm); color: var(--mui-text-muted); font-size: var(--mui-text-caption-size); }
 .mui-block--shell__where .mui-breadcrumb__list { flex-wrap: wrap; }
 .mui-block--shell__nav { gap: var(--mui-space-lg); }
-.mui-block--shell__nav-item { position: relative; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-nav-row-height); box-sizing: border-box; padding: 0 var(--mui-space-sm); border-radius: var(--mui-radius-sm); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-medium); }
+/* Square nav rows in the app shell: the current row reads as a flat band across the sidebar,
+   not a rounded pill hugging its edge (owner's call, 2026-09-23). Scoped here as a token so the
+   sidebar component and the gallery keep their rounded rows. */
+.mui-block--shell { --mui-nav-row-radius: 0; }
+.mui-block--shell__nav-item { position: relative; display: flex; align-items: center; gap: var(--mui-space-sm); min-height: var(--mui-nav-row-height); box-sizing: border-box; padding: 0 var(--mui-space-sm); border-radius: var(--mui-nav-row-radius); color: var(--mui-text-muted); font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-medium); }
 .mui-block--shell__nav-item:hover { background: var(--mui-bg-input); }
 .mui-block--shell__nav-item[aria-current="page"] { color: var(--mui-accent-text); background: var(--mui-accent-soft); }
 .mui-block--shell__nav-item[aria-current="page"]::before { content: none; }

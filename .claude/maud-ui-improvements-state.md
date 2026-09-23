@@ -69,10 +69,9 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
   No visible change (conductor sets its own theme colours).
 - Screenshots: $CLAUDE_JOB_DIR/tmp/{kapable-kaps,kapable-backlog,kv2-pulse}-0.20.0.png, conductor-ui-{before,after}.png.
 
-## OPEN (for Herman)
-- Light --mui-bg-card #ffffff -> #f6f6f7 (item 5, 23b0691): apps paint their page with the card
-  colour, so in LIGHT mode whole app pages (kaps, backlog, pulse) are now light grey with white
-  header/dock, not just raised panels. Nothing broken; a taste call he may want reverted.
+## RULED
+- 2026-09-23 16:09 EDT, Herman: "go" = KEEP light --mui-bg-card #f6f6f7 (item 5, 23b0691). In light
+  mode app pages (kaps, backlog, pulse) are light grey with white header/dock. Do not revert.
 
 ## NEXT_ACTION
 

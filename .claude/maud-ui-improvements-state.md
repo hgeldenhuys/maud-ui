@@ -56,13 +56,28 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
 - Screenshots SENT to Herman: breadcrumb catch (13:30), dialog close frames (14:00), item 5
   before/after sheet (14:15).
 
+## ITEM 7 DONE (2026-09-23 14:47 EDT) — all four apps LIVE on maud-ui 0.20.0
+- kapable-kaps a9d8019 (main): CI build 21745aca + deploy 603ac036 green; live CSS sha = 0.20.0 min.css.
+- kapable-backlog b69d01ecf (kv2-platform main): build 0b945985 + deploy 3dce1bfc green; marker x4;
+  index list took a few minutes to fill after restart (filled by 14:46; scanned 18:28Z).
+- kv2-pulse 7090865: pushed master; ⚠ the DEPLOY recipe (ci-kv2-pulse) fetches `main` and refuses a
+  sha main lacks, so the first deploy 5345b5c4 FAILED; main fast-forwarded to 7090865 (no force),
+  deploy cac91cab green. Every Pulse bump hits this until the recipe fetches master (NOT fixed).
+- claude-conductor 406c31f0 (forgejo main; the forgejo clone is ~/WebstormProjects/claude-code-sdk,
+  NOT ~/tapestry-comms/transcript-tui-rs which has only GitHub origin): pin crates.io =0.20.0 +
+  vendored min bundles; deployed --all-orgs, md5 gate passed on 3115-3118 + 3120; marker x2 on all.
+  No visible change (conductor sets its own theme colours).
+- Screenshots: $CLAUDE_JOB_DIR/tmp/{kapable-kaps,kapable-backlog,kv2-pulse}-0.20.0.png, conductor-ui-{before,after}.png.
+
+## OPEN (for Herman)
+- Light --mui-bg-card #ffffff -> #f6f6f7 (item 5, 23b0691): apps paint their page with the card
+  colour, so in LIGHT mode whole app pages (kaps, backlog, pulse) are now light grey with white
+  header/dock, not just raised panels. Nothing broken; a taste call he may want reverted.
+
 ## NEXT_ACTION
 
-Item 7 IN FLIGHT (14:22): four Claude builders bumping kapable-kaps, kapable-backlog (kv2-platform
-platform/kapable-backlog), kv2-pulse (master!) and claude-conductor (forgejo main, --all-orgs) to
-=0.20.0; brief $CLAUDE_JOB_DIR/tmp/app-bump-common.md; each proves `mui-overlay-exit` live twice
-and saves $CLAUDE_JOB_DIR/tmp/<app>-0.20.0.png. When all four report: look at the screenshots,
-then /wrapoff.
+Arc complete. Remaining: /wrapoff when Herman asks. Follow-ups worth a backlog item: kv2-pulse deploy
+recipe fetches main (build triggers on master); the DEFERRED list below.
 
 ## FOUND FOR ITEM 5 (light mode + phone QA)
 - 14:00 QA reviewer (fresh Opus, screenshots) found 28 defects; px-contrast CONFIRMED light primary

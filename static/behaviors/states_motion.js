@@ -16,8 +16,11 @@
         tab.setAttribute('aria-selected', String(i === index)); tab.setAttribute('tabindex', i === index ? '0' : '-1');
         panels[i].setAttribute('role', 'tabpanel'); panels[i].hidden = i !== index;
       });
-      const density = panels[index].getAttribute('data-default-density');
-      if (density && !ui.densityChosen) ui.setDensity?.(density, false);
+      // Each panel carries its own density scope; switching tabs must not resize the page
+      // around it (it moved the tab strip under the cursor until 0.19.4). The density
+      // control mirrors the visible panel until the reader picks a density themselves.
+      const density = panels[index].getAttribute('data-mui-density-scope');
+      if (density && !ui.densityChosen) document.querySelectorAll('[data-mui="density-control"]').forEach(select => { select.value = density; });
       if (focus) tabs[index].focus();
     }
     const initial = tabs.findIndex(tab => tab.getAttribute('href') === window.location?.hash);

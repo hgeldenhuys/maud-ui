@@ -36,13 +36,13 @@ pub fn landing_page() -> Markup {
                                 a id="lp-record-tab" href="#lp-record-panel" data-workspace-tab { "Record" }
                                 a id="lp-bank-tab" href="#lp-bank-panel" data-workspace-tab { "Banking" }
                             }
-                            section class="lp__screen" id="lp-worklist-panel" aria-labelledby="lp-worklist-tab" data-workspace-panel data-default-density="comfortable" {
+                            section class="lp__screen" id="lp-worklist-panel" aria-labelledby="lp-worklist-tab" data-workspace-panel data-default-density="comfortable" data-mui-density-scope="comfortable" {
                                 (blocks::shell::sidebar::example("landing-workspace"))
                             }
-                            section class="lp__screen" id="lp-record-panel" aria-labelledby="lp-record-tab" data-workspace-panel data-default-density="comfortable" {
+                            section class="lp__screen" id="lp-record-panel" aria-labelledby="lp-record-tab" data-workspace-panel data-default-density="comfortable" data-mui-density-scope="comfortable" {
                                 (blocks::shell::record_example::render("landing-record"))
                             }
-                            section class="lp__screen" id="lp-bank-panel" aria-labelledby="lp-bank-tab" data-workspace-panel data-default-density="compact" {
+                            section class="lp__screen" id="lp-bank-panel" aria-labelledby="lp-bank-tab" data-workspace-panel data-default-density="compact" data-mui-density-scope="compact" {
                                 (blocks::shell::banking_example::render("landing-bank"))
                             }
                         }

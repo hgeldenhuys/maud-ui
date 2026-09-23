@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.4] — 2026-09-22 — one font, and tabs that hold still
+
+- **Brand areas carry their font.** `[data-brand]` renamed `--mui-font-sans` but plain text inherits the font already resolved on `<body>`, so only elements that set their own font followed a brand: headings, links and buttons switched while paragraphs and table cells did not. `[data-brand]` now re-declares `font-family`.
+- **Brand presets use Inter for body text.** The brand token defaults and the Lodge/Bank/Clinic body fonts were "Avenir Next", which exists only on macOS, so the presets rendered in a different face from the 0.18 default theme and fell back to system-ui elsewhere. They now use the Inter stack; Lodge keeps its Georgia headings and Clinic its Trebuchet headings.
+- Gallery: each workspace example on the home page carries its own density (`data-mui-density-scope`), so switching to Banking (compact) no longer resizes the page around it; the density control mirrors the visible example until the reader picks one.
+
 ## [0.19.3] — 2026-09-22 — focus rings, menus, density on the root
 
 - **Density no longer rescales the page.** `[data-density]` set the body text size on whatever carried it, and when that was `<html>` it rescaled every `rem`: switching to compact shrank a 90rem layout from 1350px to 1260px, and controls drew at 30px instead of 32px. The rule now skips `<html>` and styles `<body>` instead.

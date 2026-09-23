@@ -297,6 +297,10 @@
   --mui-text-small-size: calc(0.75rem + 0.0625rem * var(--mui-density-level));
   --mui-text-caption-size: max(0.75rem, calc(0.6875rem + 0.0625rem * var(--mui-density-level)));
 }
+/* A brand area renames the font token, but plain text inherits the font already
+   resolved on <body>, so only elements that set their own font followed the brand
+   (headings did, paragraphs and table cells did not) until 0.19.4. */
+[data-brand] { font-family: var(--mui-font-sans); }
 [data-brand] {
   --mui-accent: var(--mui-brand-accent);
   --mui-accent-fg: var(--mui-brand-accent-ink);

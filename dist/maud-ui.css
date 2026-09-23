@@ -311,6 +311,9 @@
   --mui-text-caption-size: max(0.75rem, calc(0.6875rem + 0.0625rem * var(--mui-density-level)));
 }
 [data-brand] {
+  font-family: var(--mui-font-sans);
+}
+[data-brand] {
   --mui-accent: var(--mui-brand-accent);
   --mui-accent-fg: var(--mui-brand-accent-ink);
   --mui-accent-hover: var(--mui-brand-accent);
@@ -12793,7 +12796,10 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
   --mui-brand-accent-ink: #ffffff;
   --mui-brand-font-heading: Georgia, serif;
   --mui-brand-font-body:
-    "Avenir Next",
+    "Inter Variable",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     system-ui,
     sans-serif;
   --mui-brand-radius: 0.5rem;
@@ -12806,11 +12812,17 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
   --mui-brand-accent: #24428c;
   --mui-brand-accent-ink: #ffffff;
   --mui-brand-font-heading:
-    "Avenir Next",
+    "Inter Variable",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     system-ui,
     sans-serif;
   --mui-brand-font-body:
-    "Avenir Next",
+    "Inter Variable",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     system-ui,
     sans-serif;
   --mui-brand-radius: 0.25rem;
@@ -12827,7 +12839,10 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
     system-ui,
     sans-serif;
   --mui-brand-font-body:
-    "Avenir Next",
+    "Inter Variable",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     system-ui,
     sans-serif;
   --mui-brand-radius: 0.75rem;

@@ -83,6 +83,11 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
 - Apps still pin =0.20.0: the stripe/chevron/label changes reach them only on a bump (the
   conductor uses the sidebar component; kaps/backlog/pulse use kp-* shell chrome).
 
+## 0.20.2 (2026-09-23 16:33 EDT) — RELEASED (ea9838b)
+- Herman: "i don't like the rounded corners on the select in the worklist/record/banking demo's
+  navs" = the shell block's current nav row. Now square via `.mui-block--shell { --mui-nav-row-radius: 0 }`;
+  sidebar component + gallery nav keep rounded rows (offered to square them too). Verified live.
+
 ## RULED
 - 2026-09-23 16:09 EDT, Herman: "go" = KEEP light --mui-bg-card #f6f6f7 (item 5, 23b0691). In light
   mode app pages (kaps, backlog, pulse) are light grey with white header/dock. Do not revert.

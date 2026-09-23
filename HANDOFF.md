@@ -1,75 +1,86 @@
-VERIFIED 2026-09-23 12:30 EDT by crates.io API + `git rev-parse`: maud-ui 0.19.5 is the published version and HEAD of branch curation-2026-09-08 matches customer/curation-2026-09-08.
-VERIFIED 2026-09-23 by `cargo test --no-fail-fast`: 304 tests pass, exactly 6 fail, all six are the `time_split` component never being fully registered.
-VERIFIED 2026-09-22/23 by live probes: the four Kapable apps (kaps, backlog, pulse, conductor) serve 0.19.3; none of the six arc items is started.
+VERIFIED 2026-09-23 12:30 EDT by crates.io API + `git rev-parse`: maud-ui 0.19.5 is the published version; branch curation-2026-09-08 HEAD equals customer/curation-2026-09-08 (nothing unpushed).
+VERIFIED 2026-09-23 by `cargo test --no-fail-fast`: 304 tests pass, exactly 6 fail, all six caused by the `time_split` component never being fully registered.
+VERIFIED 2026-09-22/23 by live stylesheet probes: the four Kapable apps (kaps, backlog, pulse, conductor) serve maud-ui 0.19.3; none of the six arc items below is started.
 
 ````
-Start with the arc Herman ratified on 2026-09-23: six maud-ui improvements, in the order below.
-
-## Intent
-maud-ui is the component library every Kapable app renders with. Herman's bar is Linear:
-professional, calm, nothing janky. Tonight's bugs (a missing breadcrumb "/", harsh focus boxes,
-unstyled selects, tab jank) were all found by Herman LOOKING. "Good" for this arc means the
-library catches its own regressions before he sees them: a green suite, a one-command release
-that refuses a bad build, screenshot diffs, and a linter that tells an agent the fix.
-
-## Project
-Rust crate `maud-ui` (maud + htmx components, shadcn-style) at /Users/hgeldenhuys/WebstormProjects/maud-ui,
-branch curation-2026-09-08. Gallery/website: https://maudui.herman.engineer (a static export).
-
-## Read first (each checked to exist this ceremony)
-- /Users/hgeldenhuys/WebstormProjects/maud-ui/.claude/maud-ui-improvements-state.md — NEXT_ACTION, the ranked plan with reasons.
-- /Users/hgeldenhuys/WebstormProjects/maud-ui/docs/releasing.md — section "Current release workflow (0.19.x)": the exact release steps, run six times.
-- /Users/hgeldenhuys/WebstormProjects/maud-ui/CHANGELOG.md — entries 0.18.0 to 0.19.5 say what changed and why.
-
-## Where things stand
-Everything is committed and pushed (maud-ui 6cfa83d on customer, github/master, forgejo/master).
-The only dirty file, docs/night-6-live-events.jsonl, belongs to another session: never stage it.
-
-## Mission: item 3, make `cargo test` fully green
-Done when `cargo test --no-fail-fast` prints no FAILED line. Fix in this order, because 1–3 are
-the component's registration and 4–6 are counts that only pass once it is registered:
-1. Create docs/components/time_split.md (new file; copy a sibling doc's shape).
-2. Add the time_split `include_str!` arm in src/showcase/docs.rs, then `cargo run --example build_docs`.
-3. Add time_split to `assert_showcase_renders!` in tests/render_tests.rs.
-4. Move "time_split" into alphabetical place in COMPONENT_NAMES (src/showcase/mod.rs; it sits after "meter").
-5. Cargo.toml description "83 headless" → "84 headless"; README.md lines 3 ("83 headless") and 25 ("83 primitives") → 84.
-6. static/og.svg must state 84; then `node examples/build-social-card.mjs` re-renders static/og.png.
-
-Then take the next items without waiting, in this rank (reasons in the state file):
-item 1 a new scripts/release.sh → item 2 screenshot regression (build on tests/chrome-cdp.mjs and
-scripts/pixel-diff.py) → item 6 design-system linter (modelled on github.com/shadcn-ui/lint's six
-rules, but reading maud html! markup and CSS, since shadcn/lint only reads Tailwind in TSX) →
-item 4 motion for dialog close, menus, popovers, the More dropdown and toasts (copy
-static/behaviors/rail_motion.js's approach) → item 5 light-mode and phone-width QA → bump the
-four apps. Show Herman a screenshot early in items 2, 4 and 5.
-
-## Settled; do not redo
-- The Linear theme is the default (0.18). The sidebar collapse motion (0.19.5) and brand fonts (0.19.4) are done.
-- Apps pin exact versions; a release does not move them. kv2-pulse deploys from its `master` branch; claude-conductor's trunk is the `forgejo` remote (its GitHub `origin` is 424 commits behind).
-
-## Traps, each with its tell
-- A release looks live but the site shows old CSS: the site is a static export, so `bun run build:static` must run and public/ must be committed. Tell: the container reports the new commit while https://maudui.herman.engineer/css/maud-ui.min.css lacks this release's new rule.
-- Mid-deploy the page and its stylesheet come from different builds. Tell: the page's `maud-ui.css?v=` number differs from the stylesheet's byte size. Sample twice.
-- A test that checks a string can pass on a comment. Tell: prove-red says "still PASSES" when you break the code. Run `prove-red` on every new test.
-- New breakpoints must come from `tokens::breakpoints`. Tell: `every_media_width_is_a_declared_breakpoint` fails naming the width.
-
-## Not true / not proven
-- Light-mode values of the Linear recipe were inferred, not measured.
-- Nothing was checked at phone width in this session.
-- The linter does not exist; nothing like it is in the repo (checked for a lint script, none).
-
-## Operator mechanics
-Run `/start-sprint resume maud-ui-improvements` from the repo, then:
+First action: run this verbatim. It exits non-zero, printing nothing after the failing check, if the three lines above no longer hold; then read the state file before trusting anything else here.
 
 ```bash
-cd /Users/hgeldenhuys/WebstormProjects/maud-ui && git fetch -q customer && test "$(git rev-parse HEAD)" = "$(git rev-parse customer/curation-2026-09-08)" && test "$(curl -s -A maud-ui-handoff https://crates.io/api/v1/crates/maud-ui | jq -r .crate.max_version)" = 0.19.5 && echo GROUND-OK
+(
+  set -eu
+  cd /Users/hgeldenhuys/WebstormProjects/maud-ui
+  test "$(git branch --show-current)" = curation-2026-09-08
+  git fetch -q customer
+  test "$(git rev-parse HEAD)" = "$(git rev-parse customer/curation-2026-09-08)"
+  test "$(curl -fsS -A maud-ui-handoff https://crates.io/api/v1/crates/maud-ui | jq -er .crate.max_version)" = 0.19.5
+  test -f .claude/maud-ui-improvements-state.md
+  git status --short
+  echo GROUND-OK
+)
+```
+
+Then, in the Claude Code prompt (not the shell): `/start-sprint resume maud-ui-improvements`, and in the shell:
+
+```bash
 opctl init maud-ui-improvements --state "/Users/hgeldenhuys/WebstormProjects/maud-ui/.claude/maud-ui-improvements-state.md"
 opctl done-when "cargo test --no-fail-fast in maud-ui prints no FAILED line"
 ```
 
-The ground line exits non-zero if HEAD moved or a newer version was published; then re-read the
-state file before trusting anything here. Read `/staff` before the first dispatch: grunt work
-(docs, the release script, screenshot sweeps) goes to builders, and review goes to another model
-family. You are the co-founder seat: decide what is worth doing and whether it really happened.
-Builders' reports arrive via `opctl inbox`. Release with docs/releasing.md until item 1 lands.
+## Intent
+maud-ui is the component library every Kapable app renders with; Herman's bar is Linear. The arc's
+test of success: the library catches its own visual and structural regressions before Herman sees
+them. Judge every item by whether it would have caught one of these real regressions from
+2026-09-22: the breadcrumb lost its "/", text fields focused as a hard dark box, six selects were
+unstyled, a tab switch resized the page.
+
+## Project
+Rust crate `maud-ui` at /Users/hgeldenhuys/WebstormProjects/maud-ui, branch curation-2026-09-08.
+Website https://maudui.herman.engineer is a static export of the gallery.
+
+## Read first (each confirmed to exist with `ls` on 2026-09-23)
+- /Users/hgeldenhuys/WebstormProjects/maud-ui/.claude/maud-ui-improvements-state.md — NEXT_ACTION and the plan.
+- /Users/hgeldenhuys/WebstormProjects/maud-ui/docs/releasing.md — "Current release workflow (0.19.x)", the steps run six times.
+- /Users/hgeldenhuys/WebstormProjects/maud-ui/CHANGELOG.md — entries 0.18.0 to 0.19.5.
+
+## Mission: item 3, make `cargo test` fully green
+Done when `cargo test --no-fail-fast` prints no FAILED line. Every path below was checked with `ls`
+on 2026-09-23 and exists, except the one marked NEW. Fix in this order, because 1–3 register the
+component and 4–6 are counts that only pass once it is registered:
+1. Create docs/components/time_split.md (NEW; copy a sibling doc's shape).
+2. Add a time_split `include_str!` arm in src/showcase/docs.rs, then `cargo run --example build_docs`.
+3. Add time_split to `assert_showcase_renders!` in tests/render_tests.rs.
+4. Move "time_split" to its alphabetical place in COMPONENT_NAMES in src/showcase/mod.rs (it sits after "meter").
+5. Cargo.toml description and README.md lines 3 and 25 say 83; make them 84.
+6. static/og.svg must state 84; then `node examples/build-social-card.mjs` re-renders static/og.png.
+
+## Then, without waiting, in this order (the reason is the rank)
+1. Item 1: create scripts/release.sh (NEW), the workflow in docs/releasing.md as one command that stops on the first failure and refuses a dirty tree. First, because every later item ships through it and it makes the green suite a mandatory gate.
+2. Item 2: screenshot regression, about 20 gallery routes in light and dark at 1440px and 390px, diffed against the previous release with scripts/pixel-diff.py on top of the CDP harness in tests/chrome-cdp.mjs; wire it into release.sh. Second, because items 4 and 5 change visuals and need it to prove they broke nothing.
+3. Item 6: a design-system linter for maud `html!` markup and CSS, modelled on github.com/shadcn-ui/lint's six rules (no-restyle, no-raw-colors, no-arbitrary-values, no-inline-styles, no-unknown-classes, require-static-classes), with errors that name the fix. shadcn/lint itself only reads Tailwind in TSX. Third, because it prevents defects during items 4 and 5.
+4. Item 4: motion for dialog close, menus, popovers, the More dropdown and toasts, the way static/behaviors/rail_motion.js does the sidebar; reduced motion stays instant.
+5. Item 5: light-mode and phone-width QA using item 2's screenshots. Last of the six, because it judges the combined result.
+6. Bump the four apps to the new release; only the conductor visibly changes.
+Send Herman a screenshot early in items 2, 4 and 5.
+
+## Settled; do not redo
+- The Linear theme is the default (0.18.0); brand fonts (0.19.4) and sidebar collapse motion (0.19.5) are done.
+- VERIFIED 2026-09-22 from the live foreman recipe: kv2-pulse deploys from its `master` branch. VERIFIED 2026-09-22 by the conductor deploy's lineage gate: claude-conductor's trunk is the `forgejo` remote, not GitHub `origin`.
+
+## Traps, each with its tell
+- The site is a static export. Tell: the container reports the new commit while https://maudui.herman.engineer/css/maud-ui.min.css lacks this release's new rule; run `bun run build:static` and commit public/.
+- Mid-deploy the page and its stylesheet come from different builds. Tell: the page's `maud-ui.css?v=` number differs from the stylesheet's byte size. Sample twice.
+- A new test can pass on a comment. Tell: `prove-red` says the test "still PASSES" under a mutation. Run it on every new test.
+- Breakpoints must come from `tokens::breakpoints`. Tell: `every_media_width_is_a_declared_breakpoint` fails naming the width.
+- VERIFIED 2026-09-23 by `git status --short`: docs/night-6-live-events.jsonl is modified and was never touched by this arc (inferred: another session's log). Tell: it appears in every status; never stage it.
+
+## Not true / not proven
+- Light-mode values of the Linear recipe were inferred, not measured.
+- Nothing was checked at phone width.
+- No linter exists (checked: no lint file under scripts/, examples/ or js/).
+
+## How to work
+Read `/staff` before the first dispatch: writing docs, the release script and screenshot sweeps go
+to builders; review goes to another model family. Rule scope and taste calls yourself and record
+them in the state file's OPEN list; read builders' reports with `opctl inbox`. Release with
+docs/releasing.md until item 1 lands.
 ````

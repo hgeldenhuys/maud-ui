@@ -12590,6 +12590,65 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
     opacity: 1;
   }
 }
+@supports (transition-behavior: allow-discrete) and (overlay: auto) {
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog) {
+    opacity: 0;
+    transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md)));
+    transition:
+      opacity var(--mui-motion-fast) var(--mui-motion-ease),
+      transform var(--mui-motion-fast) var(--mui-motion-ease),
+      overlay var(--mui-motion-fast) allow-discrete,
+      display var(--mui-motion-fast) allow-discrete;
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] {
+    animation: none;
+    opacity: 1;
+    transform: translate(0, 0);
+    transition-duration: var(--mui-motion-enter);
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)::backdrop {
+    animation: none;
+    opacity: 0;
+    transition:
+      opacity var(--mui-motion-fast) var(--mui-motion-ease),
+      overlay var(--mui-motion-fast) allow-discrete,
+      display var(--mui-motion-fast) allow-discrete;
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open]::backdrop {
+    opacity: 1;
+    transition-duration: var(--mui-motion-enter);
+  }
+  dialog:is(.mui-dialog, .mui-sheet, .mui-drawer) {
+    flex-direction: column;
+  }
+  dialog.mui-navigation-dialog {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border: 0;
+  }
+  @starting-style {
+    dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] {
+      opacity: 0;
+      transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md)));
+    }
+    dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}
+:is(.mui-menu__content, .mui-context-menu__content, .mui-menubar__content, .mui-popover__content, .mui-hover-card__content, .mui-action-row__overflow)[data-state=closing] {
+  pointer-events: none;
+  animation: mui-overlay-exit var(--mui-motion-fast) var(--mui-motion-ease) forwards;
+}
+@keyframes mui-overlay-exit {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 .mui-toast {
   animation: mui-notice-enter var(--mui-motion-enter) var(--mui-motion-ease);
 }

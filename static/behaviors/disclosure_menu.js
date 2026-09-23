@@ -9,6 +9,20 @@
   window.__muiDisclosureMenuBound = true;
   var SELECTOR = 'details.mui-action-row__more';
   function openMenus() { return Array.prototype.slice.call(document.querySelectorAll(SELECTOR + '[open]')); }
+  function close(details) {
+    var panel = details.querySelector('.mui-action-row__overflow');
+    if (!panel) { details.open = false; return; }
+    window.MaudUI.closeOverlay(panel, function () { details.open = false; });
+  }
+  document.addEventListener('click', function (event) {
+    var summary = event.target.closest?.(SELECTOR + ' > summary');
+    if (!summary) return;
+    var details = summary.parentElement;
+    var panel = details.querySelector('.mui-action-row__overflow');
+    if (panel?.getAttribute('data-state') === 'closing') {
+      event.preventDefault(); window.MaudUI.cancelOverlayExit(panel);
+    } else if (details.open) { event.preventDefault(); close(details); }
+  });
   function align(details) {
     var panel = details.querySelector('.mui-action-row__overflow');
     if (!panel) return;
@@ -21,18 +35,18 @@
   document.addEventListener('toggle', function (event) {
     var details = event.target;
     if (!(details instanceof HTMLDetailsElement) || !details.matches(SELECTOR) || !details.open) return;
-    openMenus().forEach(function (other) { if (other !== details) other.open = false; });
+    openMenus().forEach(function (other) { if (other !== details) close(other); });
     align(details);
   }, true);
   document.addEventListener('pointerdown', function (event) {
-    openMenus().forEach(function (details) { if (!details.contains(event.target)) details.open = false; });
+    openMenus().forEach(function (details) { if (!details.contains(event.target)) close(details); });
   });
   document.addEventListener('keydown', function (event) {
     if (event.key !== 'Escape') return;
     openMenus().forEach(function (details) {
-      details.open = false;
       var summary = details.querySelector('summary');
       if (summary && details.contains(document.activeElement)) summary.focus();
+      close(details);
     });
   });
 })();

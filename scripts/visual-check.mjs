@@ -190,7 +190,8 @@ async function main() {
         if (row.cand.status === 404) throw Error('Candidate returned HTTP 404');
         if (row.ref.status === 404) {
           row.newPage = true;
-          console.log(`NEW PAGE ${route.path} ${theme} ${width} (reference HTTP 404)`);
+          below++;  // nothing to compare against, so it needs the same human look as a change
+          console.log(`NEW PAGE ${route.path} ${theme} ${width} (reference HTTP 404): review it in the report`);
           continue;
         }
         // An action (a tab click, a focus) that resizes the page is the 0.19.3 "tab switch

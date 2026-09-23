@@ -34,6 +34,49 @@ dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigati
 :is(.mui-sheet--bottom, .mui-drawer--bottom, .mui-navigation-dialog) { --mui-enter-y: var(--mui-space-xl); }
 @keyframes mui-surface-enter { from { opacity: 0; transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md))); } to { opacity: 1; transform: translate(0, 0); } }
 @keyframes mui-backdrop-enter { from { opacity: 0; } to { opacity: 1; } }
+/* Native top-layer removal is deferred only where discrete transitions exist.
+   Older engines retain the original entry animation and instant close. */
+@supports (transition-behavior: allow-discrete) and (overlay: auto) {
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog) {
+    opacity: 0;
+    transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md)));
+    transition: opacity var(--mui-motion-fast) var(--mui-motion-ease), transform var(--mui-motion-fast) var(--mui-motion-ease), overlay var(--mui-motion-fast) allow-discrete, display var(--mui-motion-fast) allow-discrete;
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] {
+    animation: none;
+    opacity: 1;
+    transform: translate(0, 0);
+    transition-duration: var(--mui-motion-enter);
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)::backdrop {
+    animation: none;
+    opacity: 0;
+    transition: opacity var(--mui-motion-fast) var(--mui-motion-ease), overlay var(--mui-motion-fast) allow-discrete, display var(--mui-motion-fast) allow-discrete;
+  }
+  dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open]::backdrop {
+    opacity: 1;
+    transition-duration: var(--mui-motion-enter);
+  }
+  /* Keep the open layout during the deferred display removal. Each of these sets its
+     layout only under [open]; without this the dialog's content fell into a row for the
+     length of the fade (seen frame by frame, 2026-09-23). A closed dialog is display:none
+     outside the fade, so these apply to nothing else. */
+  dialog:is(.mui-dialog, .mui-sheet, .mui-drawer) { flex-direction: column; }
+  dialog.mui-navigation-dialog { flex-direction: column; gap: 0; padding: 0; border: 0; }
+  @starting-style {
+    dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open] {
+      opacity: 0;
+      transform: translate(var(--mui-enter-x, 0px), var(--mui-enter-y, var(--mui-space-md)));
+    }
+    dialog:is(.mui-dialog, .mui-alert-dialog, .mui-sheet, .mui-drawer, .mui-navigation-dialog)[open]::backdrop { opacity: 0; }
+  }
+}
+/* Keep hidden/details panels painted while their existing close policy runs. */
+:is(.mui-menu__content, .mui-context-menu__content, .mui-menubar__content, .mui-popover__content, .mui-hover-card__content, .mui-action-row__overflow)[data-state="closing"] {
+  pointer-events: none;
+  animation: mui-overlay-exit var(--mui-motion-fast) var(--mui-motion-ease) forwards;
+}
+@keyframes mui-overlay-exit { from { opacity: 1; } to { opacity: 0; } }
 .mui-toast { animation: mui-notice-enter var(--mui-motion-enter) var(--mui-motion-ease); }
 .mui-toast--exit, .mui-toast[data-state="exit"] { animation: mui-notice-exit var(--mui-motion-fast) var(--mui-motion-ease) forwards; }
 @keyframes mui-notice-enter { from { opacity: 0; transform: translateY(var(--mui-space-md)); } to { opacity: 1; transform: translateY(0); } }

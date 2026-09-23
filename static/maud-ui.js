@@ -1259,10 +1259,9 @@
     var closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
     var openTimer = null;
     var closeTimer = null;
-    var hideTimer = null;
     function show() {
       clearTimeout(closeTimer);
-      clearTimeout(hideTimer);
+      window.MaudUI.cancelOverlayExit(content);
       openTimer = setTimeout(function() {
         content.removeAttribute("hidden");
         void content.offsetHeight;
@@ -1271,18 +1270,20 @@
     }
     function hide() {
       clearTimeout(openTimer);
-      closeTimer = setTimeout(function() {
+      function close() {
         content.setAttribute("data-visible", "false");
-        hideTimer = setTimeout(function() {
+        window.MaudUI.closeOverlay(content, function() {
           content.setAttribute("hidden", "");
-        }, 150);
-      }, closeDelay);
+        });
+      }
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) close();
+      else closeTimer = setTimeout(close, closeDelay);
     }
     trigger.addEventListener("mouseenter", show);
     trigger.addEventListener("mouseleave", hide);
     content.addEventListener("mouseenter", function() {
       clearTimeout(closeTimer);
-      clearTimeout(hideTimer);
+      window.MaudUI.cancelOverlayExit(content);
     });
     content.addEventListener("mouseleave", hide);
   };
@@ -1325,6 +1326,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     var focusedIndex = -1;
     function open() {
       trigger.setAttribute("aria-expanded", "true");
+      window.MaudUI.cancelOverlayExit(content);
       content.removeAttribute("hidden");
       focusedIndex = 0;
       focusItem(0);
@@ -1333,7 +1335,9 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function close() {
       trigger.setAttribute("aria-expanded", "false");
-      content.setAttribute("hidden", "");
+      window.MaudUI.closeOverlay(content, function() {
+        content.setAttribute("hidden", "");
+      });
       focusedIndex = -1;
       document.removeEventListener("click", clickOutside, true);
       document.removeEventListener("keydown", handleKeydown, true);
@@ -1407,9 +1411,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     var content = root.querySelector("[role='menu']");
     if (!region || !content) return;
     var focusedIndex = -1;
+    var returnTo = null;
     function open(x, y) {
+      returnTo = document.activeElement;
       content.style.left = x + "px";
       content.style.top = y + "px";
+      window.MaudUI.cancelOverlayExit(content);
       content.removeAttribute("hidden");
       focusedIndex = 0;
       focusItem(0);
@@ -1418,7 +1425,9 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       document.addEventListener("keydown", handleKeydown, true);
     }
     function close() {
-      content.setAttribute("hidden", "");
+      window.MaudUI.closeOverlay(content, function() {
+        content.setAttribute("hidden", "");
+      });
       focusedIndex = -1;
       document.removeEventListener("click", clickOutside, true);
       document.removeEventListener("contextmenu", closeOnContext, true);
@@ -1477,6 +1486,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         case "Escape":
           e.preventDefault();
           close();
+          if (returnTo && returnTo.isConnected && returnTo.focus) returnTo.focus();
           break;
         case "Tab":
           close();
@@ -1515,6 +1525,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
       activeIndex = index;
       triggers[index].setAttribute("aria-expanded", "true");
+      window.MaudUI.cancelOverlayExit(contents[index]);
       contents[index].removeAttribute("hidden");
       for (var i2 = 0; i2 < triggers.length; i2++) {
         triggers[i2].tabIndex = i2 === index ? 0 : -1;
@@ -1530,7 +1541,9 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     function closeMenu(index) {
       if (index < 0 || index >= triggers.length) return;
       triggers[index].setAttribute("aria-expanded", "false");
-      contents[index].setAttribute("hidden", "");
+      window.MaudUI.closeOverlay(contents[index], function() {
+        contents[index].setAttribute("hidden", "");
+      });
       var items = getMenuItems(index);
       for (var i2 = 0; i2 < items.length; i2++) {
         items[i2].tabIndex = -1;
@@ -1914,6 +1927,7 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function open() {
       interactive.setAttribute("aria-expanded", "true");
+      window.MaudUI.cancelOverlayExit(content);
       content.removeAttribute("hidden");
       void content.offsetHeight;
       content.setAttribute("data-visible", "true");
@@ -1924,9 +1938,9 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     function close() {
       interactive.setAttribute("aria-expanded", "false");
       content.setAttribute("data-visible", "false");
-      setTimeout(function() {
+      window.MaudUI.closeOverlay(content, function() {
         content.setAttribute("hidden", "");
-      }, 150);
+      });
       document.removeEventListener("click", clickOutside, true);
       document.removeEventListener("keydown", escClose, true);
     }
@@ -1934,7 +1948,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       if (!root.contains(e.target)) close();
     }
     function escClose(e) {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        close();
+        interactive.focus();
+      }
     }
     trigger.addEventListener("click", toggle);
   };
@@ -3424,6 +3441,29 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   function openMenus() {
     return Array.prototype.slice.call(document.querySelectorAll(SELECTOR + "[open]"));
   }
+  function close(details) {
+    var panel = details.querySelector(".mui-action-row__overflow");
+    if (!panel) {
+      details.open = false;
+      return;
+    }
+    window.MaudUI.closeOverlay(panel, function() {
+      details.open = false;
+    });
+  }
+  document.addEventListener("click", function(event) {
+    var summary = event.target.closest?.(SELECTOR + " > summary");
+    if (!summary) return;
+    var details = summary.parentElement;
+    var panel = details.querySelector(".mui-action-row__overflow");
+    if (panel?.getAttribute("data-state") === "closing") {
+      event.preventDefault();
+      window.MaudUI.cancelOverlayExit(panel);
+    } else if (details.open) {
+      event.preventDefault();
+      close(details);
+    }
+  });
   function align(details) {
     var panel = details.querySelector(".mui-action-row__overflow");
     if (!panel) return;
@@ -3437,21 +3477,21 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     var details = event.target;
     if (!(details instanceof HTMLDetailsElement) || !details.matches(SELECTOR) || !details.open) return;
     openMenus().forEach(function(other) {
-      if (other !== details) other.open = false;
+      if (other !== details) close(other);
     });
     align(details);
   }, true);
   document.addEventListener("pointerdown", function(event) {
     openMenus().forEach(function(details) {
-      if (!details.contains(event.target)) details.open = false;
+      if (!details.contains(event.target)) close(details);
     });
   });
   document.addEventListener("keydown", function(event) {
     if (event.key !== "Escape") return;
     openMenus().forEach(function(details) {
-      details.open = false;
       var summary = details.querySelector("summary");
       if (summary && details.contains(document.activeElement)) summary.focus();
+      close(details);
     });
   });
 })();
@@ -3780,6 +3820,45 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     });
   };
   ui.init();
+})();
+(function() {
+  const ui = window.MaudUI;
+  if (!ui) return;
+  const pending = /* @__PURE__ */ new WeakMap();
+  ui.cancelOverlayExit = function(panel) {
+    pending.get(panel)?.();
+  };
+  ui.closeOverlay = function(panel, hide) {
+    if (pending.has(panel) || panel.hidden) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      hide();
+      return;
+    }
+    const state = panel.getAttribute("data-state");
+    const inert = panel.inert;
+    panel.setAttribute("data-state", "closing");
+    panel.inert = true;
+    const style = getComputedStyle(panel);
+    const ms = (value) => value.trim().endsWith("ms") ? parseFloat(value) : parseFloat(value) * 1e3;
+    const duration = ms(style.getPropertyValue("--mui-motion-fast")) || 0;
+    let timer;
+    function cleanup() {
+      clearTimeout(timer);
+      panel.removeEventListener("animationend", finish);
+      panel.inert = inert;
+      if (state === null) panel.removeAttribute("data-state");
+      else panel.setAttribute("data-state", state);
+      pending.delete(panel);
+    }
+    function finish(event) {
+      if (event && (event.target !== panel || event.animationName !== "mui-overlay-exit")) return;
+      cleanup();
+      hide();
+    }
+    pending.set(panel, cleanup);
+    panel.addEventListener("animationend", finish);
+    timer = setTimeout(() => finish(), duration);
+  };
 })();
 (function() {
   "use strict";

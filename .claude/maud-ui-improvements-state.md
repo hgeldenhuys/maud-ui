@@ -69,6 +69,20 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
   No visible change (conductor sets its own theme colours).
 - Screenshots: $CLAUDE_JOB_DIR/tmp/{kapable-kaps,kapable-backlog,kv2-pulse}-0.20.0.png, conductor-ui-{before,after}.png.
 
+## 0.20.1 (2026-09-23 16:25 EDT) — RELEASED by scripts/release.sh (56554c6)
+- Herman: "spotlight ... doesn't close on esc or click outside, it shows again". Was the GALLERY
+  search palette opened from the header box (Kapable app switchers were fine): closing a modal
+  dialog hands focus back to the box BEFORE the close event, so the box's focus handler reopened
+  it. Fixed 6f90c23; tests/palette-browser.mjs (fails on 0.20.0, passes live on 0.20.1); release.sh
+  step 5b now runs it + overlay-motion-browser against the export.
+- Herman: "/impeccable audit" of the gallery left nav, "fix all the Ps". 16/20. Fixed 2200dd4:
+  P1 left-edge stripe (gallery curved border, shell block + sidebar accent 2px bar); P2 gallery
+  drifted from the library's sidebar recipe; P2 text-glyph chevrons -> drawn --mui-icon-chevron;
+  P3 37px rows -> 28px; P3 uppercase tracked group labels -> sentence case (library-wide).
+  Not in nav scope, left: detector's line-length (content measure) + one skipped heading level.
+- Apps still pin =0.20.0: the stripe/chevron/label changes reach them only on a bump (the
+  conductor uses the sidebar component; kaps/backlog/pulse use kp-* shell chrome).
+
 ## RULED
 - 2026-09-23 16:09 EDT, Herman: "go" = KEEP light --mui-bg-card #f6f6f7 (item 5, 23b0691). In light
   mode app pages (kaps, backlog, pulse) are light grey with white header/dock. Do not revert.

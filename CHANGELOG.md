@@ -5,6 +5,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.20.2] — 2026-09-23 — square rows in the app shell
+
+- **The app shell's nav rows are square.** In the shell block (the gallery's Worklist, Record and Banking demos) the current row was a rounded pill nearly touching the sidebar's edge; it is now a flat band across the sidebar. It is scoped as `--mui-nav-row-radius: 0` on `.mui-block--shell`, so the sidebar component and the gallery navigation keep rounded rows. Set that token on any container to choose for yourself.
+
 ## [0.20.1] — 2026-09-23 — navigation without the stripe; the search palette closes
 
 - **No coloured edge stripe on the current row.** The gallery's current page was an accent-tinted pill with a 2px left border bent round its corner radius, and the shell block and the sidebar's accent variant drew a 2px bar. All three are gone: the current row is marked by its ground (and `aria-current`), as in Linear.

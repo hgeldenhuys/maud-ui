@@ -28,11 +28,30 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
 - Screenshot of the breadcrumb catch SENT to Herman 13:30.
 - Reviews: K3 is OUT of weekly quota (403); Grok reviewing release.sh (in flight 13:12).
 
+## ITEM 4 + REVIEW (2026-09-23 14:00 EDT) — LANDED 6c2413a, 23d7087, pushed to customer branch
+- Overlays fade out on close (Astra built): dialog family, menus, context menu, menubar, popover,
+  hover card, action-row More; toast already had it. tests/overlay-motion-browser.mjs: 17/17 PASS on
+  the gallery, every non-toast case FAILS on the 0.19.5 live site. I fixed: test awaited its own
+  setup promise (never pressed Escape); dialogs lost column layout mid-fade (layout lived under
+  [open]; seen frame by frame, now asserted: size must stay within 3% while closing).
+- Taste call (mine): popover returns focus to its button on Escape; context menu to what had focus
+  before it opened. Hover card and toast are exempt from the focus-return check (no trigger contract).
+- Grok (cross-family) FAILED release.sh with 9 findings; all 9 fixed in 6c2413a: push dry-runs
+  BEFORE publish, "do not bump" message after a post-publish push failure, stage only build output,
+  marker must not already be live + uncached fetch, no --max-time 0, trap cleared after the server
+  stops, server identity check by stylesheet bytes, new pages need review, deadline edge.
+- Full hardened dry run PASSED on $CLAUDE_JOB_DIR/tmp/wt-release2 (local branch
+  rehearsal-0.19.6-never-push; never pushed). Motion screenshot SENT to Herman 14:00.
+- No CHANGELOG entry yet for the unreleased work: the next release's entry must list items 1-4, 6
+  (release.sh requires the first `## [` heading to be the new version, so no "Unreleased" section).
+
 ## NEXT_ACTION
 
-Read Grok's review ($CLAUDE_JOB_DIR/tmp/grok-release-review.txt), fix real defects, commit. Then
-item 4 (motion: dialog close, menus, popovers, More dropdown, toasts; view transitions like
-static/behaviors/rail_motion.js; reduced motion instant). Run scripts/visual-check.mjs after it.
+Item 5: light-mode + phone-width QA. Candidate captures already exist at
+$CLAUDE_JOB_DIR/tmp/visual-run2/<route>/{light,dark}-{1440,390}-cand.png. Also run
+`bun run sweep:overflow` for horizontal overflow at 390. Have a reviewer list defects, fix, re-run
+scripts/visual-check.mjs + tests/overlay-motion-browser.mjs. Then release (scripts/release.sh) and
+bump the four apps (item 7).
 
 ## FOUND FOR ITEM 5 (light mode + phone QA)
 - swatch has NO stylesheet: every mui-swatch* class is undefined (linter, 15 findings).

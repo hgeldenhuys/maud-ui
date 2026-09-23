@@ -5,6 +5,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.20.0] — 2026-09-23 — overlays close with motion; the library checks itself
+
+- **Overlays fade out.** Dialogs, alert dialogs, sheets, drawers, the navigation dialog, menus, context menus, menubars, popovers, hover cards and the action-row More menu used to vanish in one frame when closed. They now fade (and sheets and drawers slide back) over `--mui-motion-fast`. Native `<dialog>` uses `transition-behavior: allow-discrete`, so browsers without it keep the instant close. Readers who ask for reduced motion keep the instant close. A dialog keeps its layout while it fades.
+- **Focus returns after Escape.** A popover returns focus to its button; a context menu returns it to whatever had focus before it opened.
+- **Light mode passes contrast.** The light accent is now `#5e6ad2`, the same as dark: white text on the old `#6e79d6` was 3.91:1, now 4.7:1. Light cards get an off-white surface and stronger borders, so panels that are raised in dark are raised in light. The switch's off track has its own light fill (it was white on near-white).
+- **Combobox markup changed (why this is 0.20).** The trigger was a `<button>` with buttons inside it, which the HTML parser moves out, so the clear × and the multi-select chips escaped the field. The trigger is now a focusable container; chips wrap inside it. Apps that style `button.mui-combobox__trigger` by element should switch to the class.
+- **Popovers stay on screen.** They flip to the other side when the preferred side does not fit, then fall back to directly below or above the trigger, clamped inside the viewport (CSS anchor positioning).
+- **Phone width.** The settings-team member table and the data table keep their columns and scroll inside their card instead of squeezing selects to 50px. Native select is 32px like other controls, aligned with its label, with a centred chevron.
+- **For maintainers:** `scripts/release.sh` runs the whole release as one command; `scripts/visual-check.mjs` compares 21 gallery pages in both themes at 1440 and 390 px against the live site and stops a release on any changed page until someone has looked; `tests/design_lint.rs` fails `cargo test` on new raw colours, inline styles, raw pixel values, runtime-built class names and `mui-*` classes no stylesheet defines. `time_split` is fully registered (84 components) and the test suite is green.
+
 ## [0.19.5] — 2026-09-23 — the sidebar collapse moves
 
 - **Collapsing a sidebar to its icon rail is animated.** It used to swap layouts in one frame: the column snapped from 240px to 64px and every label vanished at once. Now (new `rail_motion` behaviour, used by both `sidebar` and the shell block's rail toggle) the change runs as a view transition of about a quarter second: the sidebar's width glides, its labels clip and fade away as it narrows, the content column slides without cross-fading its reflowed text, and the rest of the page holds still. It is typed (`mui-rail`), so an app's own view transitions are unaffected. Readers who ask for reduced motion, and browsers without view transitions, keep the instant swap.

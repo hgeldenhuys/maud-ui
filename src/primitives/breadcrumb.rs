@@ -12,7 +12,6 @@ pub struct BreadcrumbItem {
 
 /// Breadcrumb rendering properties
 #[derive(Debug, Clone)]
-#[derive(Default)]
 pub struct Props<'a> {
     /// List of breadcrumb items (last item has no href). Blank labels are discarded.
     pub items: Vec<BreadcrumbItem>,
@@ -20,6 +19,14 @@ pub struct Props<'a> {
     /// list gap alone separates the trail (a trail with no visible divider).
     /// Defaults to `Some("/")`.
     pub separator: Option<&'a str>,
+}
+
+// Written by hand: a derived Default gives `separator: None`, which silently
+// dropped the "/" from every trail built with `..Default::default()` (0.19.0).
+impl Default for Props<'_> {
+    fn default() -> Self {
+        Self { items: Vec::new(), separator: Some("/") }
+    }
 }
 
 

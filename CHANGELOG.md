@@ -5,6 +5,13 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.19.2] — 2026-09-22 — site QA: breadcrumbs, selects, search, theme
+
+- **Breadcrumb default separator restored.** `breadcrumb::Props` derived `Default`, which gave `separator: None`, so every trail built with `..Default::default()` lost its "/" in 0.19.0 while the docs promised `Some("/")`. `Default` is now written by hand; a test pins it and was proven able to fail.
+- **Bare `<select class="mui-native-select">` is styled.** Six call sites (the shell's language switcher, the theme customiser, the density control) wrote the wrapper's class on the select itself and got browser defaults. The bare form now has the input's fill, border, height and a theme-coloured chevron.
+- **Workspace search trigger styled.** `.mui-page-header__search-trigger` had no rules: it rendered as a grey browser button and its ⌘K hint escaped under the language select. It now reads as the input it opens, with the hint inside.
+- Gallery: every page follows the saved theme or, with none saved, the system setting (the home page was hard-coded light and the rest dark); the header stays on one row from 80rem (1280px) and puts the nav on its own row below; the search placeholder no longer repeats ⌘K.
+
 ## [0.19.1] — 2026-09-22 — colour values are colours, not CSS
 
 - `badge::Props::dot` and `swatch` `Mode::Raw`/`Mode::Token` now accept only colour syntax (hex, a named colour, `var(--token)`, or an `rgb`/`hsl`/`oklch`/`lch` function); anything else renders unpainted instead of reaching the `style` attribute. The swatch chip also no longer bypasses attribute escaping. Both values can carry user data.

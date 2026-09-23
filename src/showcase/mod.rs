@@ -854,7 +854,7 @@ fn page_head(title: &str) -> Markup {
         meta name="twitter:card" content="summary_large_image";
         meta name="twitter:image" content=(format!("{SITE_ORIGIN}/og.png"));
 
-        script { (maud::PreEscaped(r#"try { const theme = localStorage.getItem('mui-theme'); if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme; const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}"#)) }
+        script { (maud::PreEscaped(r#"try { const theme = localStorage.getItem('mui-theme'); document.documentElement.dataset.theme = (theme === 'light' || theme === 'dark') ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); const dir = localStorage.getItem('mui-dir'); if (dir === 'ltr' || dir === 'rtl') document.documentElement.dir = dir; } catch {}"#)) }
         link rel="stylesheet" href=(format!("/css/maud-ui.css?v={}", CSS_VER));
         style { (maud::PreEscaped(showcase_css())) }
     }
@@ -915,7 +915,7 @@ fn page_header() -> Markup {
                         (maud::PreEscaped(r##"<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>"##.to_string()))
                     }
                     input type="search" id="mui-search" class="mui-showcase__search-input"
-                          placeholder="Search components, blocks, integrations\u{2026} ( \u{2318}K )"
+                          placeholder="Search components, blocks, integrations\u{2026}"
                           aria-label="Search the gallery"
                           spellcheck="false" autocomplete="off";
                     kbd class="mui-showcase__search-hint" aria-hidden="true" { "/" }
@@ -7493,6 +7493,21 @@ html { scroll-behavior: smooth; }
 }
 .mui-gallery__nav[data-mui-search-empty="1"] .mui-gallery__nav-empty { display: block; }
 
+/* Above the 60rem breakpoint the header is ONE row: the search gives up width
+ * before the utility cluster wraps under it (it wrapped at 1024px until 0.19.2);
+ * between 60rem and 80rem the nav takes its own row, as it already does below 60rem.
+ * The palette's ⌘K lives on its own button, so the placeholder no longer
+ * repeats it next to the "/" hint. */
+@media (min-width: 80rem) {
+    .mui-showcase__header-inner { flex-wrap: nowrap; }
+    .mui-showcase__search { flex: 1 1 14rem; min-width: 10rem; }
+    .mui-showcase__nav { flex: none; }
+}
+@media (min-width: 60rem) and (max-width: 79.99rem) {
+    .mui-showcase__header-inner { row-gap: var(--mui-inset-tight); }
+    .mui-showcase__nav { order: 10; flex-basis: 100%; }
+    .mui-showcase__search { flex: 1 1 auto; min-width: 0; }
+}
 @media (max-width: 48rem) {
     /* Drop the hint + shrink a touch on narrow screens */
     .mui-showcase__search-hint { display: none; }

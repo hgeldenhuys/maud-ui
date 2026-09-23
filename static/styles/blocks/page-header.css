@@ -55,3 +55,22 @@
   .mui-block--shell__mobile-controls .mui-page-header__controls, .mui-block--shell__mobile-controls .mui-page-header__switchers { flex-wrap: wrap; width: 100%; }
   .mui-page-header__settings { grid-column: 1 / -1; }
 }
+
+/* The workspace search trigger (a button that opens the palette) had no rules
+   before 0.19.2: it rendered as a browser-grey button and its ⌘K hint, which is
+   absolutely positioned for the INPUT form, escaped the button and sat under the
+   language select. Style it as the input it stands in for, with the hint inline. */
+.mui-page-header__search-trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--mui-space-sm);
+  width: 100%; height: var(--mui-control-height); box-sizing: border-box;
+  padding: 0 var(--mui-space-xs) 0 var(--mui-space-sm);
+  background: var(--mui-bg-input); color: var(--mui-text-muted);
+  border: 1px solid var(--mui-border); border-radius: var(--mui-radius-md);
+  font: var(--mui-weight-normal) var(--mui-text-small-size)/1 var(--mui-font-sans);
+  cursor: pointer; text-align: start;
+  transition: border-color var(--mui-motion-fast) var(--mui-motion-ease), color var(--mui-motion-fast) var(--mui-motion-ease);
+}
+.mui-page-header__search-trigger:hover { border-color: var(--mui-border-strong, var(--mui-border)); color: var(--mui-text-secondary); }
+.mui-page-header__search-trigger > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mui-page-header__search .mui-page-header__search-trigger kbd { position: static; transform: none; width: auto; flex: none; }
+.mui-page-header__switchers select.mui-native-select { height: var(--mui-control-height); min-height: var(--mui-control-height); }

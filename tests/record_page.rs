@@ -273,3 +273,17 @@ fn new_block_docs_and_previews_are_registered_in_both_themes() {
         assert!(docs.contains("Props") && docs.to_lowercase().contains("accessibility"));
     }
 }
+
+#[test]
+fn breadcrumb_default_keeps_its_separator() {
+    use maud_ui::primitives::breadcrumb::{render, BreadcrumbItem, Props};
+    let html = render(Props {
+        items: vec![
+            BreadcrumbItem { label: "A".into(), href: Some("/a".into()) },
+            BreadcrumbItem { label: "B".into(), href: None },
+        ],
+        ..Default::default()
+    })
+    .into_string();
+    assert!(html.contains("mui-breadcrumb__separator"), "default trail lost its separator: {html}");
+}

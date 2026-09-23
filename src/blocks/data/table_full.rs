@@ -206,7 +206,6 @@ pub fn render(props: Props) -> Markup {
                                 tr {
                                     th class="mui-block--data__select-col" {
                                         input type="checkbox"
-                                              class="mui-block--data__select-all"
                                               aria-label="Select all rows";
                                     }
                                     @for c in &props.columns {

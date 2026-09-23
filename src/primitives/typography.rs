@@ -33,7 +33,7 @@ impl TextSize {
 /// keeps the document outline; the size does not have to follow the level).
 pub fn heading(level: u8, text: &str, size: Option<TextSize>) -> Markup {
     let size_class = size.unwrap_or_default().class();
-    let class = format!("mui-heading-size {size_class}");
+    let class = size_class;
     match level.clamp(1, 6) {
         1 => html! { h1 class=(class) { (text) } },
         2 => html! { h2 class=(class) { (text) } },

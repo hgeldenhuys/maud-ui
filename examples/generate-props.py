@@ -4,10 +4,25 @@ The scanner reads named public structs and aliases, not Markdown tables. No depe
 """
 from pathlib import Path
 import re, sys
+from html import escape
 
 ROOT = Path(__file__).resolve().parents[1]
 def quoted(value):
     return '"' + value.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '') + '"'
+def inline_docs(value):
+    """Render inline rustdoc without trusting source text as HTML or URLs."""
+    pattern = r'\[`([^`]+)`\](?:\([^)]*\)|\[[^]]*\])?|`([^`]+)`|\*\*(.+?)\*\*'
+    result = []; previous = 0
+    for match in re.finditer(pattern, value):
+        result.append(escape(value[previous:match.start()]))
+        if match[1] is not None or match[2] is not None:
+            result.append('<code>' + escape(match[1] if match[1] is not None else match[2]) + '</code>')
+        else:
+            result.append('<strong>' + inline_docs(match[3]) + '</strong>')
+        previous = match.end()
+    result.append(escape(value[previous:]))
+    return ''.join(result)
+
 def block_body(source, start):
     opening = source.index('{', start); depth = 1; end = opening + 1
     while depth:
@@ -79,7 +94,11 @@ fn table(fields: Vec<Prop>) -> Markup {
             td data-label="Prop" { code { (field.name) } }
             td data-label="Type" { code { (field.ty) } }
             td data-label="Default" { code { (field.default) } }
-            td data-label="Description" { (field.description) }
+            td data-label="Description" {
+                @if field.description.is_empty() {
+                    span class="mui-props-table__empty" { "No description" }
+                } @else { (maud::PreEscaped(field.description)) }
+            }
         } } }
     } } }
 }
@@ -95,7 +114,7 @@ for name, block, module, props, props_name, has_default in rows:
     out += '            table(vec![\n'
     for field, ty, description in props:
         default = f'format!("{{:?}}", props.{field})' if has_default else '"No struct Default; supply explicitly".into()'
-        out += f'                Prop {{ name: {quoted(field)}, ty: {quoted(ty)}, default: {default}, description: {quoted(description)} }},\n'
+        out += f'                Prop {{ name: {quoted(field)}, ty: {quoted(ty)}, default: {default}, description: {quoted(inline_docs(description))} }},\n'
     out += '            ])\n        },\n'
 out += '        _ => return None,\n    })\n}\n'
 path = ROOT / 'src/showcase/generated_props.rs'

@@ -150,7 +150,13 @@ pub fn render(props: Props) -> Markup {
                     } else {
                         format!("{} · {}", seg.name, seg.label)
                     };
-                    @let tone = format!("mui-time-split__seg--t{}", i % 5);
+                    @let tone = match i % 5 {
+                        0 => "mui-time-split__seg--t0",
+                        1 => "mui-time-split__seg--t1",
+                        2 => "mui-time-split__seg--t2",
+                        3 => "mui-time-split__seg--t3",
+                        _ => "mui-time-split__seg--t4",
+                    };
                     @let lead = seg.millis.is_some() && seg.millis == top;
                     span
                         .mui-time-split__seg

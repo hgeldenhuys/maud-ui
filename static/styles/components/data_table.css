@@ -158,3 +158,6 @@
 
 /* Allow the gallery grid item to shrink so its inner wrapper can scroll. */
 .mui-data-table-demo { min-width: 0; }
+
+/* Selection cells reuse the checkbox component and keep a compact column. */
+.mui-data-table__th--select, .mui-data-table__td--select { width: var(--mui-space-xxl); }

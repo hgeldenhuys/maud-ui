@@ -152,3 +152,7 @@
 
 /* RTL: toast sits on the inline-end corner, which is physical LEFT
    in RTL — so the slide must come from / exit to physical left. */
+
+/* Inline/static sibling stacks need the same separation as the viewport. */
+.mui-toast + .mui-toast { margin-block-start: var(--mui-space-sm); }
+.mui-toast-viewport > .mui-toast + .mui-toast { margin-block-start: 0; }

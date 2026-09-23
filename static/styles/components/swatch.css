@@ -1,0 +1,17 @@
+/* Colour is supplied by the swatch value; all component geometry uses tokens. */
+.mui-swatch { display: flex; flex-direction: column; gap: var(--mui-space-sm); min-width: 0; }
+.mui-swatch--sm { --mui-swatch-size: var(--mui-space-xxl); }
+.mui-swatch--md { --mui-swatch-size: calc(var(--mui-space-3xl) + var(--mui-space-sm)); }
+.mui-swatch--lg { --mui-swatch-size: calc(var(--mui-space-4xl) + var(--mui-space-lg)); }
+.mui-swatch__chip { width: var(--mui-swatch-size); height: var(--mui-swatch-size); border-radius: var(--mui-radius-md); box-shadow: inset 0 0 0 1px var(--mui-border-control); }
+.mui-swatch__body { display: flex; flex-direction: column; gap: var(--mui-space-2xs); }
+.mui-swatch__label, .mui-swatch__scale-label { font-size: var(--mui-text-small-size); font-weight: var(--mui-weight-medium); color: var(--mui-text); }
+.mui-swatch__sub, .mui-swatch__scale-key { font-size: var(--mui-text-caption-size); color: var(--mui-text-muted); overflow-wrap: anywhere; }
+.mui-swatch--copyable { cursor: pointer; border-radius: var(--mui-radius-md); }
+.mui-swatch--copyable:hover .mui-swatch__chip { box-shadow: inset 0 0 0 1px var(--mui-border-hover), var(--mui-shadow-sm); }
+.mui-swatch--copyable:focus-visible { outline: 2px solid var(--mui-border-focus); outline-offset: 2px; }
+.mui-swatch__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--mui-space-4xl) * 2)), 1fr)); gap: var(--mui-space-xl); }
+.mui-swatch__scale { display: flex; flex-direction: column; gap: var(--mui-space-sm); margin-block: var(--mui-space-lg); }
+.mui-swatch__scale-row { display: flex; gap: var(--mui-space-xs); overflow-x: auto; padding: var(--mui-space-xs); }
+.mui-swatch--scale { flex: 1 0 var(--mui-space-xxl); text-align: center; }
+.mui-swatch--scale .mui-swatch__chip { width: 100%; height: var(--mui-space-3xl); }

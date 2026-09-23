@@ -107,7 +107,7 @@ fn nav_items(items: &[NavItem], current: Option<&NavItem>, depth: usize) -> Mark
             @for item in items {
                 @let active = current.is_some_and(|selected| std::ptr::eq(selected, item));
                 li style=(format!("--mui-nav-depth:{depth}")) {
-                    a href=(item.href) class=(if active { "mui-block--shell__nav-item mui-block--shell__nav-item--active" } else { "mui-block--shell__nav-item" })
+                    a href=(item.href) class="mui-block--shell__nav-item"
                         aria-current=[active.then_some("page")] title=(item.label)
                         aria-label=(if let Some(badge) = &item.badge { format!("{} — {}", item.label, badge) } else { item.label.clone() }) {
                         span class="mui-block--shell__nav-icon" aria-hidden="true" {

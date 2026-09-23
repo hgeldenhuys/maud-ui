@@ -141,7 +141,7 @@ pub fn render(props: Props) -> Markup {
             }
 
             @if let Some(chart) = &props.chart {
-                div class="mui-block--stats__chart" {
+                div {
                     (card::render(card::Props {
                         children: html! { (chart) },
                         ..Default::default()
@@ -150,7 +150,7 @@ pub fn render(props: Props) -> Markup {
             }
 
             @if let Some(items) = &props.activity {
-                div class="mui-block--stats__activity" {
+                div {
                     (card::render(card::Props {
                         title: Some("Recent activity".into()),
                         children: html! {

@@ -149,13 +149,13 @@ pub fn render(props: Props) -> Markup {
             }
             div class="mui-tool-call__body" id=(body_id) hidden[!props.open] {
                 @if let Some(args) = props.args {
-                    div class="mui-tool-call__section mui-tool-call__section--args" {
+                    div class="" {
                         div class="mui-tool-call__section-label" { "arguments" }
                         div class="mui-tool-call__section-body" { (args) }
                     }
                 }
                 @if let Some(result) = props.result {
-                    div class="mui-tool-call__section mui-tool-call__section--result" {
+                    div class="" {
                         div class="mui-tool-call__section-label" { "result" }
                         div class="mui-tool-call__section-body" { (result) }
                     }

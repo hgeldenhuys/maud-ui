@@ -52,6 +52,13 @@ pub(crate) fn article(
     }
     .unwrap_or("");
     let (intro, reference, accessibility) = split_docs(&docs::link_docs(raw, block));
+    // These demos supply h4 captions; under the gallery's Examples h2 they
+    // belong at h3. Keep typography's intentional heading-scale specimens.
+    let examples = if !block && matches!(name, "tabs" | "resizable") {
+        PreEscaped(examples.into_string().replace("<h4", "<h3").replace("</h4>", "</h3>"))
+    } else {
+        examples
+    };
     let prefix = format!("api-{name}");
     let module = if block {
         format!(
@@ -105,5 +112,38 @@ pub(crate) fn article(
                 p { "Supply meaningful labels, choose heading levels for the surrounding page, and preserve native link and form behavior. Keyboard focus follows document order. Motion honors reduced-motion preferences." }
             } @else { (PreEscaped(docs::wrap_tables(&accessibility))) }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn rustdoc_descriptions_are_formatted_and_empty_cells_have_a_fallback() {
+        let form = generated_props::render("form", false).unwrap().into_string();
+        assert!(form.contains("<strong>this diverges from HTML</strong>"));
+        let popover = generated_props::render("popover", false).unwrap().into_string();
+        assert!(form.contains("<code>render</code>"));
+        assert!(!form.contains("[`render`]"));
+        assert!(popover.contains("<code>placement</code>"));
+        for name in ["select", "native_select", "tabs", "combobox", "data_table", "button"] {
+            let props = generated_props::render(name, false).unwrap().into_string();
+            assert!(!props.contains("data-label=\"Description\"></td>"), "{name}");
+            assert!(props.contains("No description"), "{name}");
+        }
+    }
+
+    #[test]
+    fn gallery_promotes_example_captions_without_changing_library_markup() {
+        for name in ["tabs", "resizable"] {
+            let examples = super::super::component_content(name).unwrap();
+            assert!(examples.0.contains("<h4"));
+            let page = article(name, examples, false, None).into_string();
+            assert!(!page.contains("<h4"), "{name}");
+            assert!(page.contains("<h3"), "{name}");
+        }
+        let examples = super::super::component_content("typography").unwrap();
+        assert!(article("typography", examples, false, None).0.contains("<h4"));
     }
 }

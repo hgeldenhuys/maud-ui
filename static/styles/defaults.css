@@ -35,9 +35,9 @@ a:where(:not(.mui-btn)):hover { color: var(--mui-text); }
 .mui-btn--sm { min-height: 1.5rem; height: 1.5rem; padding: 0 0.625rem; font-size: var(--mui-text-caption-size); }
 .mui-btn--row { min-height: var(--mui-row-height); height: var(--mui-row-height); padding: 0 var(--mui-space-md); font-size: var(--mui-text-caption-size); padding-block: 0; }
 .mui-btn--lg { min-height: 2.5rem; height: 2.5rem; padding: 0 0.875rem; font-size: var(--mui-text-body-size); }
-.mui-btn--xs { min-height: 1.5rem; padding: var(--mui-space-2xs) var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
+.mui-btn--xs { min-height: var(--mui-space-20); height: var(--mui-space-20); padding: 0 var(--mui-space-sm); font-size: var(--mui-text-caption-size); }
 /* Icon-only buttons take their square geometry from components/button.css per
-   size (32/24/24/28/40px). No min-width/min-height clamp here: a clamp derived
+   size (32/20/24/28/40px). No min-width/min-height clamp here: a clamp derived
    from --mui-control-height forced every icon variant — including the 24px
    ones — out to 32px and could not be overridden without min-width: 0
    downstream. */

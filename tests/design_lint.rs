@@ -20,7 +20,39 @@ const BASELINE_FILE: &str = "tests/design-lint-baseline.txt";
 
 /// Classes that exist only to be read by JS and so have no CSS rule.
 /// One line of reason each; keep empty unless genuinely needed.
-const JS_ONLY_CLASSES: &[&str] = &[];
+const JS_ONLY_CLASSES: &[&str] = &[
+    "mui-calendar__nav--next", // dist/behaviors/calendar.js selects the next-month control.
+    "mui-calendar__nav--prev", // dist/behaviors/calendar.js selects the previous-month control.
+    "mui-data-table__body", // Both data_table.js behaviors select the tbody for filtering/sorting.
+    "mui-composer--ready", // Composer State::Ready marker; base styles supply its appearance.
+    "mui-composer--executing", // Composer State::Executing marker; rendered controls express the state.
+    "mui-streaming--cursor", // Variant::Cursor marker; the child cursor owns the animation.
+    "mui-streaming--dots", // Variant::Dots marker; the child dots own the animation.
+    "mui-streaming--pulse", // Variant::Pulse marker; the child pulse owns the animation.
+];
+
+// The string scanner also sees IDs. These are not classes and must retain their
+// label/form/viewport associations rather than acquire meaningless CSS rules.
+const NON_CLASS_IDENTIFIERS: &[&str] = &[
+    "mui-block-auth-email", // Login input ID and label target.
+    "mui-block-auth-password", // Login password ID and label target.
+    "mui-block-auth-otp", // Two-factor input_otp ID.
+    "mui-block-signup-confirm", // Confirmation input ID and label target.
+    "mui-block-signup-email", // Signup email ID and label target.
+    "mui-block-signup-name", // Signup name ID and label target.
+    "mui-block-signup-password", // Signup password ID and label target.
+    "mui-block-signup-terms", // Terms checkbox ID and label target.
+    "mui-block-data-bulk", // Bulk-action native select ID.
+    "mui-block-data-q", // Table search input ID.
+    "mui-block-settings-bio", // Profile textarea ID and label target.
+    "mui-block-settings-email", // Profile email ID and label target.
+    "mui-block-settings-name", // Profile name ID and label target.
+    "mui-block-team-invite-email", // Team invitation email input ID.
+    "mui-block-team-invite-role", // Team invitation role select ID.
+    "mui-app", // Default shell instance ID.
+    "mui-composer-secondary", // Secondary form ID used by form-associated buttons.
+    "mui-sonner-viewport", // Default sonner viewport ID.
+];
 
 const FIX_TOKEN: &str =
     "add a rule for .mui-foo in static/styles/components/<component>.css, or fix the class name";
@@ -648,7 +680,7 @@ fn run_lint() -> (Vec<(String, Finding)>, BTreeSet<String>) {
             if class.ends_with('-') || class.ends_with('_') || class.ends_with('.') {
                 continue;
             }
-            if class.starts_with("mui-") && !defined.contains(class) && !JS_ONLY_CLASSES.contains(&class.as_str())
+            if class.starts_with("mui-") && !defined.contains(class) && !JS_ONLY_CLASSES.contains(&class.as_str()) && !NON_CLASS_IDENTIFIERS.contains(&class.as_str())
             {
                 // Attribute to the first line in the file that uses it.
                 if let Ok(text) = fs::read_to_string(path) {

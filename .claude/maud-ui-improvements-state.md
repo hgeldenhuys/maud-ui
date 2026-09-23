@@ -88,6 +88,18 @@ Items 3, 1, 2 and 6 LANDED on the branch (unreleased; 0.19.5 is still the latest
   navs" = the shell block's current nav row. Now square via `.mui-block--shell { --mui-nav-row-radius: 0 }`;
   sidebar component + gallery nav keep rounded rows (offered to square them too). Verified live.
 
+## NEXT STEPS RUN (2026-09-23 17:15 EDT, Herman: "do those next steps")
+- Order changed on purpose: fix the roadmap defects FIRST, release 0.20.3, then bump the four
+  apps ONCE (bumping to 0.20.2 then 0.20.3 would double the deploys for nothing).
+- In flight: Astra A (component defects: swatch.css, data-table controls, button ladder,
+  pagination 390, select chevron, toast gap, the 78 undefined classes) and Astra B (gallery:
+  props tables, pager contrast + 390 layout, line length, heading level, auth-login border),
+  disjoint files. Astra C in foreman worktree $CLAUDE_JOB_DIR/tmp/wt-foreman (branch
+  fix-deploy-branch-r071): event-migrate.py derives the trunk branch from the builder trigger;
+  ci-kv2-pulse AND ci-harbor both fetched main while building on master.
+- After: verify in browser, commit, release 0.20.3, register recipes (recipe-drift.py first /
+  foreman-register), bump 4 apps (pulse push master ONLY, to prove R-071).
+
 ## RULED
 - 2026-09-23 16:09 EDT, Herman: "go" = KEEP light --mui-bg-card #f6f6f7 (item 5, 23b0691). In light
   mode app pages (kaps, backlog, pulse) are light grey with white header/dock. Do not revert.

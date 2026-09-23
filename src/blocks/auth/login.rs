@@ -122,7 +122,7 @@ pub struct OAuthProvider {
 /// Render the login block.
 pub fn render(props: Props) -> Markup {
     html! {
-        div class="mui-block mui-block--auth" {
+        div class="mui-block" {
             div class="mui-block__frame mui-block--auth__frame" {
                 div class="mui-block--auth__card" {
                     // Logo + heading

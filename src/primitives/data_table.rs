@@ -103,8 +103,8 @@ pub fn column_header_aligned(label: &str, sortable: bool, align: Align) -> Marku
 /// wiring up actual toggles is deferred.
 pub fn view_options(columns: &[Column]) -> Markup {
     html! {
-        div.mui-data-table__view-options data-mui="data-table-view-options" {
-            button type="button" class="mui-button mui-button--secondary mui-data-table__view-options-trigger"
+        div data-mui="data-table-view-options" {
+            button type="button" class="mui-btn mui-btn--outline mui-btn--md"
                 aria-haspopup="menu"
                 aria-expanded="false"
                 data-column-count=(columns.len())
@@ -155,9 +155,10 @@ pub fn render(props: Props) -> Markup {
                         tr {
                             @if props.selectable {
                                 th.mui-table__th.mui-data-table__th.mui-data-table__th--select {
-                                    input type="checkbox"
-                                        class="mui-data-table__select-all"
-                                        aria-label="Select all rows";
+                                    label.mui-checkbox {
+                                        input type="checkbox" class="mui-checkbox__input" aria-label="Select all rows";
+                                        span.mui-checkbox__indicator aria-hidden="true" {}
+                                    }
                                 }
                             }
                             @for col in &props.columns {
@@ -181,9 +182,10 @@ pub fn render(props: Props) -> Markup {
                                 tr.mui-table__row hidden[i >= page_size] {
                                     @if props.selectable {
                                         td.mui-table__td.mui-data-table__td--select {
-                                            input type="checkbox"
-                                                class="mui-data-table__select-row"
-                                                aria-label="Select row";
+                                            label.mui-checkbox {
+                                                input type="checkbox" class="mui-checkbox__input" aria-label="Select row";
+                                                span.mui-checkbox__indicator aria-hidden="true" {}
+                                            }
                                         }
                                     }
                                     @for (index, cell) in row.iter().enumerate() {
@@ -206,9 +208,10 @@ pub fn render(props: Props) -> Markup {
                                     hidden[i >= page_size] {
                                     @if props.selectable {
                                         td.mui-table__td.mui-data-table__td--select {
-                                            input type="checkbox"
-                                                class="mui-data-table__select-row"
-                                                aria-label="Select row";
+                                            label.mui-checkbox {
+                                                input type="checkbox" class="mui-checkbox__input" aria-label="Select row";
+                                                span.mui-checkbox__indicator aria-hidden="true" {}
+                                            }
                                         }
                                     }
                                     @for (index, cell) in row.iter().enumerate() {

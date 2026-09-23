@@ -279,7 +279,7 @@ pub fn group_action(children: Markup) -> Markup {
 
 /// Group content — container for the menu inside a group
 pub fn group_content(children: Markup) -> Markup {
-    html! { div class="mui-sidebar__group-content" { (children) } }
+    html! { div { (children) } }
 }
 
 /// Menu — `<ul>` wrapper for menu items
@@ -317,7 +317,7 @@ pub fn menu_sub(children: Markup) -> Markup {
 
 /// Menu sub item — `<li>` row inside a sub-menu
 pub fn menu_sub_item(children: Markup) -> Markup {
-    html! { li class="mui-sidebar__menu-sub-item" { (children) } }
+    html! { li { (children) } }
 }
 
 /// Menu badge — small badge/count pill attached to a menu item
@@ -348,10 +348,10 @@ pub fn trigger(target_id: &str, label: &str) -> Markup {
             data-target=(target_id)
             aria-label=(label)
         {
-            span class="mui-sidebar__trigger-icon" aria-hidden="true" {
+            span aria-hidden="true" {
                 "\u{2630}"
             }
-            span class="mui-sidebar__trigger-label" { (label) }
+            span { (label) }
         }
     }
 }

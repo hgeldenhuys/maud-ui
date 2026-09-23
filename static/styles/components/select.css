@@ -48,14 +48,19 @@
 }
 
 .mui-select__chevron {
-  font-size: var(--mui-text-caption-size);
+  width: var(--mui-icon-chevron-size);
+  height: var(--mui-icon-chevron-size);
+  font-size: 0;
   color: var(--mui-text-muted);
+  background: currentColor;
+  mask: var(--mui-icon-chevron) center / contain no-repeat;
+  transform: rotate(90deg);
   transition: transform var(--mui-transition);
   flex-shrink: 0;
 }
 
 .mui-select__trigger[aria-expanded="true"] .mui-select__chevron {
-  transform: rotate(180deg);
+  transform: rotate(270deg);
 }
 
 .mui-select__dropdown {

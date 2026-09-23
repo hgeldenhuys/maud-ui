@@ -17,7 +17,7 @@ pub fn render(props: Props) -> Markup {
     html! {
         section class="mui-gutter-section" {
             h3 class="mui-gutter-section__title" { (props.title) }
-            div class="mui-gutter-section__body" { (props.content) }
+            div { (props.content) }
         }
     }
 }

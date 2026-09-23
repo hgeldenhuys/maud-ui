@@ -108,10 +108,10 @@ pub fn render(props: Props) -> Markup {
                             span class="mui-diff__text" role="cell" { (line.text) }
                         } @else {
                             @if props.show_line_numbers {
-                                span class="mui-diff__lineno mui-diff__lineno--old" role="cell" {
+                                span class="mui-diff__lineno" role="cell" {
                                     @if let Some(n) = line.old_line_no { (n) }
                                 }
-                                span class="mui-diff__lineno mui-diff__lineno--new" role="cell" {
+                                span class="mui-diff__lineno" role="cell" {
                                     @if let Some(n) = line.new_line_no { (n) }
                                 }
                             }

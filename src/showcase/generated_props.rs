@@ -9,7 +9,11 @@ fn table(fields: Vec<Prop>) -> Markup {
             td data-label="Prop" { code { (field.name) } }
             td data-label="Type" { code { (field.ty) } }
             td data-label="Default" { code { (field.default) } }
-            td data-label="Description" { (field.description) }
+            td data-label="Description" {
+                @if field.description.is_empty() {
+                    span class="mui-props-table__empty" { "No description" }
+                } @else { (maud::PreEscaped(field.description)) }
+            }
         } } }
     } } }
 }
@@ -20,7 +24,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "items", ty: "Vec<Item>", default: format!("{:?}", props.items), description: "Array of accordion items" },
                 Prop { name: "multiple", ty: "bool", default: format!("{:?}", props.multiple), description: "If true, multiple items can be open; if false, only one item at a time" },
-                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Optional accessible label for the accordion wrapper (emitted as `aria-label`). shadcn/Radix exposes this on the root — provide a descriptive label when the accordion has no surrounding heading (e.g. \"FAQ\", \"Product specifications\")." },
+                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Optional accessible label for the accordion wrapper (emitted as <code>aria-label</code>). shadcn/Radix exposes this on the root — provide a descriptive label when the accordion has no surrounding heading (e.g. &quot;FAQ&quot;, &quot;Product specifications&quot;)." },
             ])
         },
         (false, "alert") => {
@@ -39,11 +43,11 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for the alert dialog" },
                 Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "Alert dialog title" },
                 Prop { name: "description", ty: "Option<String>", default: format!("{:?}", props.description), description: "Optional description text displayed below title" },
-                Prop { name: "media", ty: "Option<Markup>", default: format!("{:?}", props.media), description: "Optional media slot (icon/image) rendered above the header. Matches shadcn's `AlertDialogMedia`." },
+                Prop { name: "media", ty: "Option<Markup>", default: format!("{:?}", props.media), description: "Optional media slot (icon/image) rendered above the header. Matches shadcn&#x27;s <code>AlertDialogMedia</code>." },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Markup content displayed in alert dialog body (optional extra content)" },
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Footer markup — action buttons (Cancel + destructive action)" },
                 Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Initial open state (default false)" },
-                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size variant — `Default` (32rem) or `Sm` (24rem, compact)." },
+                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size variant — <code>Default</code> (32rem) or <code>Sm</code> (24rem, compact)." },
             ])
         },
         (false, "aspect_ratio") => {
@@ -55,7 +59,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "attention_pill") => {
             let props = crate::primitives::attention_pill::Props::default();
             table(vec![
-                Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Caller-supplied label, e.g. `2 waiting on you`." },
+                Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Caller-supplied label, e.g. <code>2 waiting on you</code>." },
                 Prop { name: "muted", ty: "bool", default: format!("{:?}", props.muted), description: "Render the muted zero-state (no accent) instead of the accent form." },
             ])
         },
@@ -74,14 +78,14 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Text content displayed in the badge" },
                 Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Visual variant (color scheme)" },
-                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size step. See [`Size`]." },
-                Prop { name: "href", ty: "Option<String>", default: format!("{:?}", props.href), description: "Optional href — when `Some`, the badge renders as an `<a>` element" },
-                Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon — rendered before the label with `data-icon=\"inline-start\"`" },
-                Prop { name: "dot", ty: "Option<String>", default: format!("{:?}", props.dot), description: "Optional colour dot — a 16px circle rendered before the label (the colour-coding of a label chip). The string is any CSS colour value applied as the dot's background; pass `\"\"` for an unpainted dot." },
+                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size step. See <code>Size</code>." },
+                Prop { name: "href", ty: "Option<String>", default: format!("{:?}", props.href), description: "Optional href — when <code>Some</code>, the badge renders as an <code>&lt;a&gt;</code> element" },
+                Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon — rendered before the label with <code>data-icon=&quot;inline-start&quot;</code>" },
+                Prop { name: "dot", ty: "Option<String>", default: format!("{:?}", props.dot), description: "Optional colour dot — a 16px circle rendered before the label (the colour-coding of a label chip). The string is any CSS colour value applied as the dot&#x27;s background; pass <code>&quot;&quot;</code> for an unpainted dot." },
                 Prop { name: "mono", ty: "bool", default: format!("{:?}", props.mono), description: "Render the label in the monospace face — for shas, ids, counts, and other machine-register text that should not reflow with the sans stack." },
-                Prop { name: "chip", ty: "bool", default: format!("{:?}", props.chip), description: "Render as a hollow CHIP: a taller (26px) bordered-transparent badge with a 1px foreground-10% border, sized to sit inline with controls. Its corner is `--mui-radius-sm`, the same as a filled badge — the consumer's token, not a fixed 6px. The filled variants above ignore this; it is the counterpart to the solid `Badge`, for a taggable, dismissable, count-bearing chip." },
-                Prop { name: "trailing_count", ty: "Option<String>", default: format!("{:?}", props.trailing_count), description: "Optional trailing count — the `2` in `mail 2`. Rendered as a mono figure set slightly apart from the label." },
-                Prop { name: "kbd", ty: "Option<String>", default: format!("{:?}", props.kbd), description: "Optional trailing kbd hint — the `⌘K` in a command chip. Rendered in the mono face inside a subtle key cap." },
+                Prop { name: "chip", ty: "bool", default: format!("{:?}", props.chip), description: "Render as a hollow CHIP: a taller (26px) bordered-transparent badge with a 1px foreground-10% border, sized to sit inline with controls. Its corner is <code>--mui-radius-sm</code>, the same as a filled badge — the consumer&#x27;s token, not a fixed 6px. The filled variants above ignore this; it is the counterpart to the solid <code>Badge</code>, for a taggable, dismissable, count-bearing chip." },
+                Prop { name: "trailing_count", ty: "Option<String>", default: format!("{:?}", props.trailing_count), description: "Optional trailing count — the <code>2</code> in <code>mail 2</code>. Rendered as a mono figure set slightly apart from the label." },
+                Prop { name: "kbd", ty: "Option<String>", default: format!("{:?}", props.kbd), description: "Optional trailing kbd hint — the <code>⌘K</code> in a command chip. Rendered in the mono face inside a subtle key cap." },
                 Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the class list — the escape hatch for per-instance overrides that a closed enum cannot express." },
             ])
         },
@@ -99,7 +103,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::breadcrumb::Props::default();
             table(vec![
                 Prop { name: "items", ty: "Vec<BreadcrumbItem>", default: format!("{:?}", props.items), description: "List of breadcrumb items (last item has no href). Blank labels are discarded." },
-                Prop { name: "separator", ty: "Option<&'a str>", default: format!("{:?}", props.separator), description: "Separator between items. `None` renders NO separator at all — the list gap alone separates the trail (a trail with no visible divider). Defaults to `Some(\"/\")`." },
+                Prop { name: "separator", ty: "Option<&'a str>", default: format!("{:?}", props.separator), description: "Separator between items. <code>None</code> renders NO separator at all — the list gap alone separates the trail (a trail with no visible divider). Defaults to <code>Some(&quot;/&quot;)</code>." },
             ])
         },
         (false, "button") => {
@@ -110,11 +114,11 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "" },
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
                 Prop { name: "button_type", ty: "&'static str", default: format!("{:?}", props.button_type), description: "" },
-                Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon (SVG markup). Use `stroke=\"currentColor\"` so it inherits the button's text color — emoji characters do NOT inherit color and will render in OS system colors. Emitted as a span with `data-icon=\"inline-start\"`." },
-                Prop { name: "trailing_icon", ty: "Option<Markup>", default: format!("{:?}", props.trailing_icon), description: "Optional trailing icon (SVG markup). Same rules as `leading_icon` — use `stroke=\"currentColor\"` so it inherits the button's text color. Emitted as a span with `data-icon=\"inline-end\"` AFTER the label." },
-                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "aria-label override. Required for icon-only buttons (where `label` is empty) so screen readers announce the button's purpose." },
+                Prop { name: "leading_icon", ty: "Option<Markup>", default: format!("{:?}", props.leading_icon), description: "Optional leading icon (SVG markup). Use <code>stroke=&quot;currentColor&quot;</code> so it inherits the button&#x27;s text color — emoji characters do NOT inherit color and will render in OS system colors. Emitted as a span with <code>data-icon=&quot;inline-start&quot;</code>." },
+                Prop { name: "trailing_icon", ty: "Option<Markup>", default: format!("{:?}", props.trailing_icon), description: "Optional trailing icon (SVG markup). Same rules as <code>leading_icon</code> — use <code>stroke=&quot;currentColor&quot;</code> so it inherits the button&#x27;s text color. Emitted as a span with <code>data-icon=&quot;inline-end&quot;</code> AFTER the label." },
+                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "aria-label override. Required for icon-only buttons (where <code>label</code> is empty) so screen readers announce the button&#x27;s purpose." },
                 Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the class list — the escape hatch for per-instance overrides that a closed enum cannot express (target the class from your own stylesheet instead of wrapping the button in a div). Rendered last, so it can override nothing by itself; it only gives your CSS a hook." },
-                Prop { name: "bordered", ty: "bool", default: format!("{:?}", props.bordered), description: "Ghost only: give the bare ghost a visible hairline boundary — a quiet bordered pill (the \"New issue\" button). Ignored by every other variant." },
+                Prop { name: "bordered", ty: "bool", default: format!("{:?}", props.bordered), description: "Ghost only: give the bare ghost a visible hairline boundary — a quiet bordered pill (the &quot;New issue&quot; button). Ignored by every other variant." },
             ])
         },
         (false, "button_group") => {
@@ -123,7 +127,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "" },
                 Prop { name: "orientation", ty: "Orientation", default: format!("{:?}", props.orientation), description: "" },
                 Prop { name: "size", ty: "Option<String>", default: format!("{:?}", props.size), description: "" },
-                Prop { name: "mode", ty: "Option<Mode>", default: format!("{:?}", props.mode), description: "When `Some`, the group opts into the bundled `data-mui=\"button-group\"` behaviour that toggles `aria-pressed` on child buttons." },
+                Prop { name: "mode", ty: "Option<Mode>", default: format!("{:?}", props.mode), description: "When <code>Some</code>, the group opts into the bundled <code>data-mui=&quot;button-group&quot;</code> behaviour that toggles <code>aria-pressed</code> on child buttons." },
             ])
         },
         (false, "calendar") => {
@@ -146,20 +150,20 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Main content markup" },
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Optional footer markup" },
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Card size modifier." },
-                Prop { name: "action", ty: "Option<Markup>", default: format!("{:?}", props.action), description: "Optional top-right header slot (shadcn `CardAction` equivalent). When `Some`, the header becomes a 2-col grid: `(title/description) | (action)`." },
-                Prop { name: "padding", ty: "Option<Space>", default: format!("{:?}", props.padding), description: "Body padding override. `None` keeps the default section padding; `Some(Space::None)` is the explicit `padding: 0` — the body becomes a bare column and the children own their spacing. When [`Props::bare`] is set, the padding applies to the card root instead." },
-                Prop { name: "gap", ty: "Option<Space>", default: format!("{:?}", props.gap), description: "Body stack gap override (the `mui-stack` gap between children)." },
-                Prop { name: "radius", ty: "Option<Radius>", default: format!("{:?}", props.radius), description: "Corner radius override. `None` keeps the token corner (`--mui-radius-lg`)." },
-                Prop { name: "bare", ty: "bool", default: format!("{:?}", props.bare), description: "Bare render: emit the children directly into the card without the `__body` wrapper (which carries its own padding and stack gap). Use for composed surfaces — a comment thread, a PR summary — that bring their own layout." },
-                Prop { name: "overlay", ty: "Option<Markup>", default: format!("{:?}", props.overlay), description: "Optional overlay slot — rendered absolutely at the card's top-right corner, above the body content (a floating status chip)." },
-                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the card's class list — the escape hatch for per-instance overrides that a closed enum cannot express. Gives your own CSS a hook on this one card." },
+                Prop { name: "action", ty: "Option<Markup>", default: format!("{:?}", props.action), description: "Optional top-right header slot (shadcn <code>CardAction</code> equivalent). When <code>Some</code>, the header becomes a 2-col grid: <code>(title/description) | (action)</code>." },
+                Prop { name: "padding", ty: "Option<Space>", default: format!("{:?}", props.padding), description: "Body padding override. <code>None</code> keeps the default section padding; <code>Some(Space::None)</code> is the explicit <code>padding: 0</code> — the body becomes a bare column and the children own their spacing. When <code>Props::bare</code> is set, the padding applies to the card root instead." },
+                Prop { name: "gap", ty: "Option<Space>", default: format!("{:?}", props.gap), description: "Body stack gap override (the <code>mui-stack</code> gap between children)." },
+                Prop { name: "radius", ty: "Option<Radius>", default: format!("{:?}", props.radius), description: "Corner radius override. <code>None</code> keeps the token corner (<code>--mui-radius-lg</code>)." },
+                Prop { name: "bare", ty: "bool", default: format!("{:?}", props.bare), description: "Bare render: emit the children directly into the card without the <code>__body</code> wrapper (which carries its own padding and stack gap). Use for composed surfaces — a comment thread, a PR summary — that bring their own layout." },
+                Prop { name: "overlay", ty: "Option<Markup>", default: format!("{:?}", props.overlay), description: "Optional overlay slot — rendered absolutely at the card&#x27;s top-right corner, above the body content (a floating status chip)." },
+                Prop { name: "class", ty: "Option<String>", default: format!("{:?}", props.class), description: "Extra class names appended to the card&#x27;s class list — the escape hatch for per-instance overrides that a closed enum cannot express. Gives your own CSS a hook on this one card." },
             ])
         },
         (false, "carousel") => {
             let props = crate::primitives::carousel::Props::default();
             table(vec![
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique element id" },
-                Prop { name: "items", ty: "Vec<Markup>", default: format!("{:?}", props.items), description: "Each slide's content as Markup" },
+                Prop { name: "items", ty: "Vec<Markup>", default: format!("{:?}", props.items), description: "Each slide&#x27;s content as Markup" },
                 Prop { name: "show_dots", ty: "bool", default: format!("{:?}", props.show_dots), description: "Show dot indicators at bottom (default true)" },
                 Prop { name: "show_arrows", ty: "bool", default: format!("{:?}", props.show_arrows), description: "Show prev/next arrows (default true)" },
                 Prop { name: "loop_slides", ty: "bool", default: format!("{:?}", props.loop_slides), description: "Wrap around when reaching the end (default false)" },
@@ -178,7 +182,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "height", ty: "u32", default: format!("{:?}", props.height), description: "SVG height in px (default 200)" },
                 Prop { name: "color", ty: "Option<String>", default: format!("{:?}", props.color), description: "CSS color for bars/line/dots; defaults to var(--mui-accent)" },
                 Prop { name: "config", ty: "Option<ChartConfig>", default: format!("{:?}", props.config), description: "Optional series configuration (shadcn-parity stub — currently not consumed). See module-level docs." },
-                Prop { name: "accessibility_layer", ty: "bool", default: format!("{:?}", props.accessibility_layer), description: "When true, emits `data-accessibility-layer=\"true\"` on the container so CSS or AT hooks can adapt (enlarged hit targets, visible focus rings, etc.). Mirrors shadcn's `accessibilityLayer` prop." },
+                Prop { name: "accessibility_layer", ty: "bool", default: format!("{:?}", props.accessibility_layer), description: "When true, emits <code>data-accessibility-layer=&quot;true&quot;</code> on the container so CSS or AT hooks can adapt (enlarged hit targets, visible focus rings, etc.). Mirrors shadcn&#x27;s <code>accessibilityLayer</code> prop." },
             ])
         },
         (false, "checkbox") => {
@@ -212,9 +216,9 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "code_block") => {
             let props = crate::primitives::code_block::Props::default();
             table(vec![
-                Prop { name: "code", ty: "String", default: format!("{:?}", props.code), description: "Raw source — used when `pre_rendered` is `None`. Highlighted per [`Props::language`] when the language is recognised." },
-                Prop { name: "pre_rendered", ty: "Option<String>", default: format!("{:?}", props.pre_rendered), description: "Optional pre-rendered HTML (e.g. from a syntax-highlighter). Takes precedence over `code` and the built-in highlighter when set." },
-                Prop { name: "language", ty: "Option<String>", default: format!("{:?}", props.language), description: "Language label shown in the header (e.g. \"rust\", \"bash\"). When set to a recognised token, drives the built-in highlighter; unknown values fall back to plain-text rendering." },
+                Prop { name: "code", ty: "String", default: format!("{:?}", props.code), description: "Raw source — used when <code>pre_rendered</code> is <code>None</code>. Highlighted per <code>Props::language</code> when the language is recognised." },
+                Prop { name: "pre_rendered", ty: "Option<String>", default: format!("{:?}", props.pre_rendered), description: "Optional pre-rendered HTML (e.g. from a syntax-highlighter). Takes precedence over <code>code</code> and the built-in highlighter when set." },
+                Prop { name: "language", ty: "Option<String>", default: format!("{:?}", props.language), description: "Language label shown in the header (e.g. &quot;rust&quot;, &quot;bash&quot;). When set to a recognised token, drives the built-in highlighter; unknown values fall back to plain-text rendering." },
                 Prop { name: "filename", ty: "Option<String>", default: format!("{:?}", props.filename), description: "Optional filename shown next to the language." },
                 Prop { name: "show_copy", ty: "bool", default: format!("{:?}", props.show_copy), description: "Whether to render the copy button (default true)." },
                 Prop { name: "max_height", ty: "Option<String>", default: format!("{:?}", props.max_height), description: "Optional max-height (CSS) — enables vertical scrolling when set." },
@@ -227,7 +231,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "content", ty: "Markup", default: format!("{:?}", props.content), description: "Markup content displayed when expanded" },
                 Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Initial open state (default false)" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for aria-controls and content linking" },
-                Prop { name: "native", ty: "bool", default: format!("{:?}", props.native), description: "Render as a native `<details>`/`<summary>` pair instead of the scripted button. Toggling then costs no JavaScript — the section still opens with scripts blocked, failed, or not yet loaded — at the price of the height animation. Prefer it for content-only disclosures." },
+                Prop { name: "native", ty: "bool", default: format!("{:?}", props.native), description: "Render as a native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> pair instead of the scripted button. Toggling then costs no JavaScript — the section still opens with scripts blocked, failed, or not yet loaded — at the price of the height animation. Prefer it for content-only disclosures." },
             ])
         },
         (false, "combobox") => {
@@ -242,10 +246,10 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "empty_text", ty: "String", default: format!("{:?}", props.empty_text), description: "" },
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
                 Prop { name: "multiple", ty: "bool", default: format!("{:?}", props.multiple), description: "Multi-select mode. When true, selected values render as chips in the trigger. TODO: full JS chip interaction is stubbed — struct + rendered attr only." },
-                Prop { name: "auto_highlight", ty: "bool", default: format!("{:?}", props.auto_highlight), description: "When true, the first filtered option gets `aria-selected=\"true\"` and `data-highlighted` so keyboard Enter can commit it immediately." },
+                Prop { name: "auto_highlight", ty: "bool", default: format!("{:?}", props.auto_highlight), description: "When true, the first filtered option gets <code>aria-selected=&quot;true&quot;</code> and <code>data-highlighted</code> so keyboard Enter can commit it immediately." },
                 Prop { name: "show_clear", ty: "bool", default: format!("{:?}", props.show_clear), description: "Render a small X button inside the trigger to clear the selection." },
-                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Sets `aria-invalid=\"true\"` on the trigger for form-validation styling." },
-                Prop { name: "groups", ty: "Vec<ComboboxGroup>", default: format!("{:?}", props.groups), description: "Grouped options. When non-empty, takes precedence over `options` and renders group labels as `.mui-combobox__group-label`." },
+                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Sets <code>aria-invalid=&quot;true&quot;</code> on the trigger for form-validation styling." },
+                Prop { name: "groups", ty: "Vec<ComboboxGroup>", default: format!("{:?}", props.groups), description: "Grouped options. When non-empty, takes precedence over <code>options</code> and renders group labels as <code>.mui-combobox__group-label</code>." },
                 Prop { name: "selected_values", ty: "Vec<String>", default: format!("{:?}", props.selected_values), description: "Selected values for multi-select mode (rendered as chips)." },
             ])
         },
@@ -255,29 +259,29 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for the command palette dialog" },
                 Prop { name: "items", ty: "Vec<CommandItem>", default: format!("{:?}", props.items), description: "List of command items" },
                 Prop { name: "placeholder", ty: "String", default: format!("{:?}", props.placeholder), description: "Placeholder text for the search input" },
-                Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Whether the palette should render in the open state. Emits the native `<dialog open>` attribute when `true`. Matches `popover::Props.open` so SSR consumers can open the palette on page load (e.g. via a `?cmdk=1` query param) without shipping their own `showModal()` shim." },
+                Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Whether the palette should render in the open state. Emits the native <code>&lt;dialog open&gt;</code> attribute when <code>true</code>. Matches <code>popover::Props.open</code> so SSR consumers can open the palette on page load (e.g. via a <code>?cmdk=1</code> query param) without shipping their own <code>showModal()</code> shim." },
             ])
         },
         (false, "composer") => {
             let props = crate::primitives::composer::Props::default();
             table(vec![
                 Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "Which state to render." },
-                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "`<form action>` — where the message posts." },
-                Prop { name: "method", ty: "String", default: format!("{:?}", props.method), description: "`<form method>` — defaults to `post`." },
-                Prop { name: "field_name", ty: "String", default: format!("{:?}", props.field_name), description: "`<textarea name>` — defaults to `message`." },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "<code>&lt;form action&gt;</code> — where the message posts." },
+                Prop { name: "method", ty: "String", default: format!("{:?}", props.method), description: "<code>&lt;form method&gt;</code> — defaults to <code>post</code>." },
+                Prop { name: "field_name", ty: "String", default: format!("{:?}", props.field_name), description: "<code>&lt;textarea name&gt;</code> — defaults to <code>message</code>." },
                 Prop { name: "placeholder", ty: "String", default: format!("{:?}", props.placeholder), description: "Placeholder shown when the field is empty." },
                 Prop { name: "value", ty: "String", default: format!("{:?}", props.value), description: "Pre-filled field content — the in-progress draft." },
                 Prop { name: "chips", ty: "Vec<Chip>", default: format!("{:?}", props.chips), description: "Leading mono chips (model, auto-accept, attachments)." },
-                Prop { name: "control_chips", ty: "Vec<Markup>", default: format!("{:?}", props.control_chips), description: "Interactive chips — each Markup is a FORM CONTROL (typically a `<select name=…>`) rendered inside the chip row, wrapped in `.mui-composer__chip--control` so it takes the chip treatment. Controls live inside the composer's form, so they submit with the message and work with JavaScript disabled. Rendered after `chips`." },
+                Prop { name: "control_chips", ty: "Vec<Markup>", default: format!("{:?}", props.control_chips), description: "Interactive chips — each Markup is a FORM CONTROL (typically a <code>&lt;select name=…&gt;</code>) rendered inside the chip row, wrapped in <code>.mui-composer__chip--control</code> so it takes the chip treatment. Controls live inside the composer&#x27;s form, so they submit with the message and work with JavaScript disabled. Rendered after <code>chips</code>." },
                 Prop { name: "trailing", ty: "Vec<Markup>", default: format!("{:?}", props.trailing), description: "Trailing action slot — icon actions (retry, attach, …) rendered in the actions row between the spacer and the primary action." },
                 Prop { name: "show_voice", ty: "bool", default: format!("{:?}", props.show_voice), description: "Show the voice-capture button before the primary action." },
                 Prop { name: "flat", ty: "bool", default: format!("{:?}", props.flat), description: "Render the send button flat and chromeless: a transparent field with no border, the hairline ring carried by shadow alone (a dock sitting on a raised panel surface that brings its own ground)." },
-                Prop { name: "icon_only_send", ty: "bool", default: format!("{:?}", props.icon_only_send), description: "Icon-only send button — a 26px circle; the label stays in the DOM, visually hidden (`.mui-sr-only`), so screen readers keep it. Pair with a visible glyph drawn by the consumer's CSS or an icon slot." },
-                Prop { name: "secondary_label", ty: "Option<String>", default: format!("{:?}", props.secondary_label), description: "Optional secondary action label — renders a hollow-destructive button (the `Interrupt` affordance) before the primary. Only meaningful while executing." },
-                Prop { name: "secondary_action", ty: "Option<String>", default: format!("{:?}", props.secondary_action), description: "`<form action>` for the secondary button. When set, the button is a real submit targeting a sibling form (HTML5 `form` attribute), so the action works with JavaScript disabled. When unset the button renders `type=\"button\"` and needs a consumer JS layer." },
-                Prop { name: "primary_label", ty: "String", default: format!("{:?}", props.primary_label), description: "Primary button label — `Send`, `Queue`, …" },
-                Prop { name: "primary_kbd", ty: "Option<String>", default: format!("{:?}", props.primary_kbd), description: "Optional kbd hint shown inside the primary button (`⌘↵`)." },
-                Prop { name: "status", ty: "Option<Markup>", default: format!("{:?}", props.status), description: "Optional mono status line rendered below the field — the \"beside\" data (turn count, context, spend, worktree). 11px, muted." },
+                Prop { name: "icon_only_send", ty: "bool", default: format!("{:?}", props.icon_only_send), description: "Icon-only send button — a 26px circle; the label stays in the DOM, visually hidden (<code>.mui-sr-only</code>), so screen readers keep it. Pair with a visible glyph drawn by the consumer&#x27;s CSS or an icon slot." },
+                Prop { name: "secondary_label", ty: "Option<String>", default: format!("{:?}", props.secondary_label), description: "Optional secondary action label — renders a hollow-destructive button (the <code>Interrupt</code> affordance) before the primary. Only meaningful while executing." },
+                Prop { name: "secondary_action", ty: "Option<String>", default: format!("{:?}", props.secondary_action), description: "<code>&lt;form action&gt;</code> for the secondary button. When set, the button is a real submit targeting a sibling form (HTML5 <code>form</code> attribute), so the action works with JavaScript disabled. When unset the button renders <code>type=&quot;button&quot;</code> and needs a consumer JS layer." },
+                Prop { name: "primary_label", ty: "String", default: format!("{:?}", props.primary_label), description: "Primary button label — <code>Send</code>, <code>Queue</code>, …" },
+                Prop { name: "primary_kbd", ty: "Option<String>", default: format!("{:?}", props.primary_kbd), description: "Optional kbd hint shown inside the primary button (<code>⌘↵</code>)." },
+                Prop { name: "status", ty: "Option<Markup>", default: format!("{:?}", props.status), description: "Optional mono status line rendered below the field — the &quot;beside&quot; data (turn count, context, spend, worktree). 11px, muted." },
             ])
         },
         (false, "context_menu") => {
@@ -293,11 +297,11 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
                 Prop { name: "columns", ty: "Vec<Column>", default: format!("{:?}", props.columns), description: "" },
                 Prop { name: "rows", ty: "Vec<Vec<String>>", default: format!("{:?}", props.rows), description: "" },
-                Prop { name: "rich_rows", ty: "Vec<Vec<CellMarkup>>", default: format!("{:?}", props.rich_rows), description: "Rich-markup rows. When non-empty, takes precedence over `rows` and each cell renders its `CellMarkup::content` (avatars, badges, buttons, etc.) with optional right-alignment. Mirrors `table::Props.rich_rows`.  Backwards-compat: when empty (the default), the plain `rows` path is used unchanged — existing consumers need no migration.  Sorting/filtering use plain row values, or visible text for rich rows. The runtime reorders original row nodes, preserving markup, controls and alignment." },
+                Prop { name: "rich_rows", ty: "Vec<Vec<CellMarkup>>", default: format!("{:?}", props.rich_rows), description: "Rich-markup rows. When non-empty, takes precedence over <code>rows</code> and each cell renders its <code>CellMarkup::content</code> (avatars, badges, buttons, etc.) with optional right-alignment. Mirrors <code>table::Props.rich_rows</code>.  Backwards-compat: when empty (the default), the plain <code>rows</code> path is used unchanged — existing consumers need no migration.  Sorting/filtering use plain row values, or visible text for rich rows. The runtime reorders original row nodes, preserving markup, controls and alignment." },
                 Prop { name: "page_size", ty: "usize", default: format!("{:?}", props.page_size), description: "" },
                 Prop { name: "searchable", ty: "bool", default: format!("{:?}", props.searchable), description: "" },
                 Prop { name: "search_placeholder", ty: "String", default: format!("{:?}", props.search_placeholder), description: "" },
-                Prop { name: "selectable", ty: "bool", default: format!("{:?}", props.selectable), description: "When true, prepend a \"Select all\" checkbox column with per-row checkboxes. Matches shadcn's DataTable row-selection pattern." },
+                Prop { name: "selectable", ty: "bool", default: format!("{:?}", props.selectable), description: "When true, prepend a &quot;Select all&quot; checkbox column with per-row checkboxes. Matches shadcn&#x27;s DataTable row-selection pattern." },
             ])
         },
         (false, "date_picker") => {
@@ -310,8 +314,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "Whether the picker is disabled" },
                 Prop { name: "min_date", ty: "Option<(u32, u32, u32)>", default: format!("{:?}", props.min_date), description: "Minimum selectable date (year, month, day)" },
                 Prop { name: "max_date", ty: "Option<(u32, u32, u32)>", default: format!("{:?}", props.max_date), description: "Maximum selectable date (year, month, day)" },
-                Prop { name: "mode", ty: "Mode", default: format!("{:?}", props.mode), description: "Selection mode — `Single` (default) or `Range`. Range selection UX is a TODO; the attribute is emitted on the root element so client scripts can gate behavior." },
-                Prop { name: "format", ty: "Option<String>", default: format!("{:?}", props.format), description: "Optional display-format token (e.g. `\"yyyy-MM-dd\"`). When supplied and a date is selected, the trigger label is rendered using this format; otherwise the existing long-form display (`\"April 20, 2026\"`) is used." },
+                Prop { name: "mode", ty: "Mode", default: format!("{:?}", props.mode), description: "Selection mode — <code>Single</code> (default) or <code>Range</code>. Range selection UX is a TODO; the attribute is emitted on the root element so client scripts can gate behavior." },
+                Prop { name: "format", ty: "Option<String>", default: format!("{:?}", props.format), description: "Optional display-format token (e.g. <code>&quot;yyyy-MM-dd&quot;</code>). When supplied and a date is selected, the trigger label is rendered using this format; otherwise the existing long-form display (<code>&quot;April 20, 2026&quot;</code>) is used." },
             ])
         },
         (false, "date_range") => {
@@ -348,11 +352,11 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "diff") => {
             let props = crate::primitives::diff::Props::default();
             table(vec![
-                Prop { name: "file_path", ty: "Option<String>", default: format!("{:?}", props.file_path), description: "File path shown in the header (e.g. \"src/main.rs\")." },
+                Prop { name: "file_path", ty: "Option<String>", default: format!("{:?}", props.file_path), description: "File path shown in the header (e.g. &quot;src/main.rs&quot;)." },
                 Prop { name: "lines", ty: "Vec<Line>", default: format!("{:?}", props.lines), description: "Lines in display order (usually: hunk, then context+add+remove per hunk)." },
                 Prop { name: "show_line_numbers", ty: "bool", default: format!("{:?}", props.show_line_numbers), description: "Whether to show line-number columns." },
-                Prop { name: "added", ty: "Option<u32>", default: format!("{:?}", props.added), description: "Optional `added` count override — when None, counted from `lines`." },
-                Prop { name: "removed", ty: "Option<u32>", default: format!("{:?}", props.removed), description: "Optional `removed` count override." },
+                Prop { name: "added", ty: "Option<u32>", default: format!("{:?}", props.added), description: "Optional <code>added</code> count override — when None, counted from <code>lines</code>." },
+                Prop { name: "removed", ty: "Option<u32>", default: format!("{:?}", props.removed), description: "Optional <code>removed</code> count override." },
             ])
         },
         (false, "direction") => {
@@ -371,7 +375,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Markup content displayed in drawer body" },
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Optional footer markup pinned at the bottom" },
                 Prop { name: "side", ty: "Side", default: format!("{:?}", props.side), description: "Which side the drawer slides from (default Right)" },
-                Prop { name: "should_scale_background", ty: "bool", default: format!("{:?}", props.should_scale_background), description: "Whether the page background should scale down when the drawer opens (mirrors Vaul's `shouldScaleBackground`). Emits `data-scale-background=\"true\"` on the root so a script/CSS hook can toggle `body[data-drawer-scaling]`. Default: false." },
+                Prop { name: "should_scale_background", ty: "bool", default: format!("{:?}", props.should_scale_background), description: "Whether the page background should scale down when the drawer opens (mirrors Vaul&#x27;s <code>shouldScaleBackground</code>). Emits <code>data-scale-background=&quot;true&quot;</code> on the root so a script/CSS hook can toggle <code>body[data-drawer-scaling]</code>. Default: false." },
                 Prop { name: "show_close_button", ty: "bool", default: format!("{:?}", props.show_close_button), description: "Whether the built-in close (×) button renders in the header. Default: true." },
             ])
         },
@@ -397,8 +401,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
                 Prop { name: "description", ty: "Option<String>", default: format!("{:?}", props.description), description: "" },
-                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Legacy single-error field. Still supported; prefer `errors` for multiple messages." },
-                Prop { name: "errors", ty: "Vec<String>", default: format!("{:?}", props.errors), description: "Multiple validation errors. Rendered after `error` (if set)." },
+                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Legacy single-error field. Still supported; prefer <code>errors</code> for multiple messages." },
+                Prop { name: "errors", ty: "Vec<String>", default: format!("{:?}", props.errors), description: "Multiple validation errors. Rendered after <code>error</code> (if set)." },
                 Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "" },
                 Prop { name: "orientation", ty: "Orientation", default: format!("{:?}", props.orientation), description: "" },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "" },
@@ -415,29 +419,29 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "form") => {
             let props = crate::primitives::form::Props::default();
             table(vec![
-                Prop { name: "action", ty: "Option<String>", default: format!("{:?}", props.action), description: "Submission target. `None` omits the attribute, which submits to the current URL — valid HTML and the common case for a page that posts to itself." },
-                Prop { name: "method", ty: "Method", default: format!("{:?}", props.method), description: "HTTP method. Default [`Method::Post`] — **this diverges from HTML**, see [`render`]." },
-                Prop { name: "enctype", ty: "Enctype", default: format!("{:?}", props.enctype), description: "Body encoding. Default [`Enctype::UrlEncoded`] (attribute omitted)." },
-                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional `id`, for `aria-labelledby`, label targeting, and submit buttons placed outside the form via `form=\"<id>\"`." },
-                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Accessible name. A `<form>` is only exposed as a `form` landmark when it has one — see [`render`]." },
-                Prop { name: "novalidate", ty: "bool", default: format!("{:?}", props.novalidate), description: "Skip the browser's built-in constraint validation on submit. Default `false`." },
-                Prop { name: "autocomplete", ty: "bool", default: format!("{:?}", props.autocomplete), description: "Allow the browser to autofill fields. Default `true`; `false` emits `autocomplete=\"off\"`." },
+                Prop { name: "action", ty: "Option<String>", default: format!("{:?}", props.action), description: "Submission target. <code>None</code> omits the attribute, which submits to the current URL — valid HTML and the common case for a page that posts to itself." },
+                Prop { name: "method", ty: "Method", default: format!("{:?}", props.method), description: "HTTP method. Default <code>Method::Post</code> — <strong>this diverges from HTML</strong>, see <code>render</code>." },
+                Prop { name: "enctype", ty: "Enctype", default: format!("{:?}", props.enctype), description: "Body encoding. Default <code>Enctype::UrlEncoded</code> (attribute omitted)." },
+                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional <code>id</code>, for <code>aria-labelledby</code>, label targeting, and submit buttons placed outside the form via <code>form=&quot;&lt;id&gt;&quot;</code>." },
+                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Accessible name. A <code>&lt;form&gt;</code> is only exposed as a <code>form</code> landmark when it has one — see <code>render</code>." },
+                Prop { name: "novalidate", ty: "bool", default: format!("{:?}", props.novalidate), description: "Skip the browser&#x27;s built-in constraint validation on submit. Default <code>false</code>." },
+                Prop { name: "autocomplete", ty: "bool", default: format!("{:?}", props.autocomplete), description: "Allow the browser to autofill fields. Default <code>true</code>; <code>false</code> emits <code>autocomplete=&quot;off&quot;</code>." },
                 Prop { name: "feedback", ty: "bool", default: format!("{:?}", props.feedback), description: "Opt into persistent inline errors, first-error focus and duplicate-submit protection. Call MaudUI.formFeedback(form, result) after an asynchronous response." },
                 Prop { name: "pending_label", ty: "String", default: format!("{:?}", props.pending_label), description: "Text shown on the submitting button while an opted-in form is pending." },
-                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The form's contents — fields, and the submit control." },
+                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The form&#x27;s contents — fields, and the submit control." },
             ])
         },
         (false, "grid") => {
             let props = crate::primitives::grid::Props::default();
             table(vec![
-                Prop { name: "columns", ty: "Columns", default: format!("{:?}", props.columns), description: "Column track definition. Default [`Columns::AutoFit`]." },
-                Prop { name: "min_column", ty: "MinColumn", default: format!("{:?}", props.min_column), description: "Minimum column width for [`Columns::AutoFit`]. Default [`MinColumn::Md`]. Has no effect on fixed column counts." },
-                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between both rows and columns. Default [`Space::Md`] (`0.75rem`)." },
-                Prop { name: "padding", ty: "Space", default: format!("{:?}", props.padding), description: "Space inside the container's edges. Default [`Space::None`]." },
-                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Block-axis alignment of items within their track (`align-items`). Default [`Align::Stretch`]." },
-                Prop { name: "collapse_narrow", ty: "bool", default: format!("{:?}", props.collapse_narrow), description: "Collapse fixed column counts to a single column below `40rem`. Default `true` — see [`render`] for why." },
-                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional `id`, for anchor targets and `aria-labelledby` references." },
-                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The grid's children — each becomes one grid item." },
+                Prop { name: "columns", ty: "Columns", default: format!("{:?}", props.columns), description: "Column track definition. Default <code>Columns::AutoFit</code>." },
+                Prop { name: "min_column", ty: "MinColumn", default: format!("{:?}", props.min_column), description: "Minimum column width for <code>Columns::AutoFit</code>. Default <code>MinColumn::Md</code>. Has no effect on fixed column counts." },
+                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between both rows and columns. Default <code>Space::Md</code> (<code>0.75rem</code>)." },
+                Prop { name: "padding", ty: "Space", default: format!("{:?}", props.padding), description: "Space inside the container&#x27;s edges. Default <code>Space::None</code>." },
+                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Block-axis alignment of items within their track (<code>align-items</code>). Default <code>Align::Stretch</code>." },
+                Prop { name: "collapse_narrow", ty: "bool", default: format!("{:?}", props.collapse_narrow), description: "Collapse fixed column counts to a single column below <code>40rem</code>. Default <code>true</code> — see <code>render</code> for why." },
+                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references." },
+                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The grid&#x27;s children — each becomes one grid item." },
             ])
         },
         (false, "gutter_section") => {
@@ -489,8 +493,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
-                Prop { name: "pattern", ty: "OtpPattern", default: format!("{:?}", props.pattern), description: "Accepted character pattern per slot. Defaults to [`OtpPattern::Digits`]." },
-                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "When true, emits `aria-invalid=\"true\"` on each slot — for announcing incorrect-code validation without triggering native form validation." },
+                Prop { name: "pattern", ty: "OtpPattern", default: format!("{:?}", props.pattern), description: "Accepted character pattern per slot. Defaults to <code>OtpPattern::Digits</code>." },
+                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "When true, emits <code>aria-invalid=&quot;true&quot;</code> on each slot — for announcing incorrect-code validation without triggering native form validation." },
             ])
         },
         (false, "item") => {
@@ -499,15 +503,15 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional DOM id (wire triggers / skip-links to this row)." },
                 Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Visual variant — frame style." },
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Density." },
-                Prop { name: "tone", ty: "Option<Tone>", default: format!("{:?}", props.tone), description: "Optional health tone — tints the row background to match the [`status_dot`] in its media slot." },
-                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Row contents — typically composed from `media`, `content`, `actions`." },
+                Prop { name: "tone", ty: "Option<Tone>", default: format!("{:?}", props.tone), description: "Optional health tone — tints the row background to match the <code>status_dot</code> in its media slot." },
+                Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Row contents — typically composed from <code>media</code>, <code>content</code>, <code>actions</code>." },
             ])
         },
         (false, "kbd") => {
             let props = crate::primitives::kbd::Props::default();
             table(vec![
-                Prop { name: "keys", ty: "Vec<String>", default: format!("{:?}", props.keys), description: "Keys to display (e.g., [\"Ctrl\", \"S\"] or [\"⌘\", \"K\"])" },
-                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Treatment. See [`Variant`]." },
+                Prop { name: "keys", ty: "Vec<String>", default: format!("{:?}", props.keys), description: "Keys to display (e.g., [&quot;Ctrl&quot;, &quot;S&quot;] or [&quot;⌘&quot;, &quot;K&quot;])" },
+                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Treatment. See <code>Variant</code>." },
             ])
         },
         (false, "label") => {
@@ -536,15 +540,15 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::message::Props::default();
             table(vec![
                 Prop { name: "role", ty: "Role", default: format!("{:?}", props.role), description: "Who authored the message." },
-                Prop { name: "author", ty: "String", default: format!("{:?}", props.author), description: "Display name (e.g. \"Claude\", \"Sofia\")." },
-                Prop { name: "avatar_initials", ty: "Option<String>", default: format!("{:?}", props.avatar_initials), description: "Avatar initials (e.g. \"C\"). Falls back to first letter of `author`." },
+                Prop { name: "author", ty: "String", default: format!("{:?}", props.author), description: "Display name (e.g. &quot;Claude&quot;, &quot;Sofia&quot;)." },
+                Prop { name: "avatar_initials", ty: "Option<String>", default: format!("{:?}", props.avatar_initials), description: "Avatar initials (e.g. &quot;C&quot;). Falls back to first letter of <code>author</code>." },
                 Prop { name: "avatar_color", ty: "Option<String>", default: format!("{:?}", props.avatar_color), description: "Optional override for avatar background colour (CSS colour string)." },
-                Prop { name: "timestamp", ty: "Option<String>", default: format!("{:?}", props.timestamp), description: "Human-readable timestamp (\"2 min ago\", \"14:32\")." },
+                Prop { name: "timestamp", ty: "Option<String>", default: format!("{:?}", props.timestamp), description: "Human-readable timestamp (&quot;2 min ago&quot;, &quot;14:32&quot;)." },
                 Prop { name: "body", ty: "Markup", default: format!("{:?}", props.body), description: "The message body — may contain markdown-rendered HTML, code blocks, etc." },
                 Prop { name: "is_live", ty: "bool", default: format!("{:?}", props.is_live), description: "When true, the avatar pulses to indicate an in-progress streaming response." },
                 Prop { name: "footer", ty: "Option<Markup>", default: format!("{:?}", props.footer), description: "Footer slot — tool chips, action buttons, attachments." },
-                Prop { name: "layout", ty: "Layout", default: format!("{:?}", props.layout), description: "Which layout to render. See [`Layout`]." },
-                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Chat-layout body treatment. See [`Variant`]. Ignored in the avatar layout." },
+                Prop { name: "layout", ty: "Layout", default: format!("{:?}", props.layout), description: "Which layout to render. See <code>Layout</code>." },
+                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Chat-layout body treatment. See <code>Variant</code>. Ignored in the avatar layout." },
                 Prop { name: "actions", ty: "Option<Markup>", default: format!("{:?}", props.actions), description: "The quiet action row under a reply (copy, fork from here, the model that answered, the cost). Revealed on hover on a pointer device, always visible where there is no hover. Chat layout only; the avatar layout renders it as part of the footer." },
             ])
         },
@@ -554,18 +558,10 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "value", ty: "f64", default: format!("{:?}", props.value), description: "Current value of the meter" },
                 Prop { name: "min", ty: "f64", default: format!("{:?}", props.min), description: "Minimum value (default 0.0)" },
                 Prop { name: "max", ty: "f64", default: format!("{:?}", props.max), description: "Maximum value (default 100.0)" },
-                Prop { name: "low", ty: "Option<f64>", default: format!("{:?}", props.low), description: "Threshold below which the zone is \"suboptimum\" (warning)" },
-                Prop { name: "high", ty: "Option<f64>", default: format!("{:?}", props.high), description: "Threshold above which the zone is \"suboptimum\" (warning)" },
-                Prop { name: "optimum", ty: "Option<f64>", default: format!("{:?}", props.optimum), description: "The ideal value; if present, determines which side is \"good\"" },
+                Prop { name: "low", ty: "Option<f64>", default: format!("{:?}", props.low), description: "Threshold below which the zone is &quot;suboptimum&quot; (warning)" },
+                Prop { name: "high", ty: "Option<f64>", default: format!("{:?}", props.high), description: "Threshold above which the zone is &quot;suboptimum&quot; (warning)" },
+                Prop { name: "optimum", ty: "Option<f64>", default: format!("{:?}", props.optimum), description: "The ideal value; if present, determines which side is &quot;good&quot;" },
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Label for the meter (accessibility)" },
-            ])
-        },
-        (false, "time_split") => {
-            let props = crate::primitives::time_split::Props::default();
-            table(vec![
-                Prop { name: "segments", ty: "Vec<Segment>", default: format!("{:?}", props.segments), description: "Steps in EXECUTION ORDER. Steps that never ran should be left out entirely rather than passed with a zero duration: the empty remainder of the track is what \"it ended here\" looks like." },
-                Prop { name: "caption", ty: "String", default: format!("{:?}", props.caption), description: "The finding, in words. Do not skip it — see the module note." },
-                Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "Read to a screen reader in place of the bar. [`aria_from`] builds a decent one from the segments." },
             ])
         },
         (false, "native_select") => {
@@ -588,7 +584,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
                 Prop { name: "items", ty: "Vec<NavItem>", default: format!("{:?}", props.items), description: "" },
                 Prop { name: "orientation", ty: "Orientation", default: format!("{:?}", props.orientation), description: "Horizontal (default) or vertical layout of the top-level list." },
-                Prop { name: "viewport", ty: "bool", default: format!("{:?}", props.viewport), description: "When `true` (default), dropdown content is rendered in a shared viewport panel. When `false`, each trigger carries its own per-item popover wrapper." },
+                Prop { name: "viewport", ty: "bool", default: format!("{:?}", props.viewport), description: "When <code>true</code> (default), dropdown content is rendered in a shared viewport panel. When <code>false</code>, each trigger carries its own per-item popover wrapper." },
             ])
         },
         (false, "number_field") => {
@@ -610,8 +606,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "current_page", ty: "usize", default: format!("{:?}", props.current_page), description: "Current active page (1-indexed)" },
                 Prop { name: "total_pages", ty: "usize", default: format!("{:?}", props.total_pages), description: "Total number of pages" },
                 Prop { name: "max_visible", ty: "usize", default: format!("{:?}", props.max_visible), description: "Maximum visible page buttons (default 5)" },
-                Prop { name: "href_pattern", ty: "Option<String>", default: format!("{:?}", props.href_pattern), description: "Optional href pattern. When `Some`, page buttons render as `<a>` tags with `{page}` in the pattern substituted for the page number. Prev/Next also become anchors. When `None`, `<button>` is used." },
-                Prop { name: "icons_only", ty: "bool", default: format!("{:?}", props.icons_only), description: "When true, hide the \"Previous\"/\"Next\" text (still announced to SRs via a visually-hidden span). Only chevron icons remain visible." },
+                Prop { name: "href_pattern", ty: "Option<String>", default: format!("{:?}", props.href_pattern), description: "Optional href pattern. When <code>Some</code>, page buttons render as <code>&lt;a&gt;</code> tags with <code>{page}</code> in the pattern substituted for the page number. Prev/Next also become anchors. When <code>None</code>, <code>&lt;button&gt;</code> is used." },
+                Prop { name: "icons_only", ty: "bool", default: format!("{:?}", props.icons_only), description: "When true, hide the &quot;Previous&quot;/&quot;Next&quot; text (still announced to SRs via a visually-hidden span). Only chevron icons remain visible." },
             ])
         },
         (false, "popover") => {
@@ -620,11 +616,11 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for the popover content" },
                 Prop { name: "trigger", ty: "Markup", default: format!("{:?}", props.trigger), description: "The element that triggers the popover open/close (typically a button)" },
                 Prop { name: "content", ty: "Markup", default: format!("{:?}", props.content), description: "Markup content displayed inside the popover" },
-                Prop { name: "side", ty: "Option<Side>", default: format!("{:?}", props.side), description: "Side of the trigger the popover renders on. When set, takes precedence over `placement` (shadcn-compatible 4-way side selector)." },
-                Prop { name: "placement", ty: "Placement", default: format!("{:?}", props.placement), description: "Vertical placement relative to trigger (legacy 2-way API, default: Bottom). Kept for backward compatibility; prefer `side` for new code." },
+                Prop { name: "side", ty: "Option<Side>", default: format!("{:?}", props.side), description: "Side of the trigger the popover renders on. When set, takes precedence over <code>placement</code> (shadcn-compatible 4-way side selector)." },
+                Prop { name: "placement", ty: "Placement", default: format!("{:?}", props.placement), description: "Vertical placement relative to trigger (legacy 2-way API, default: Bottom). Kept for backward compatibility; prefer <code>side</code> for new code." },
                 Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Horizontal alignment (default: Center)" },
-                Prop { name: "side_offset", ty: "Option<u32>", default: format!("{:?}", props.side_offset), description: "Offset in pixels between the trigger and the popover along the side axis. Emitted as `data-side-offset` for JS-driven positioning engines." },
-                Prop { name: "open", ty: "Option<bool>", default: format!("{:?}", props.open), description: "Controlled open state. When `Some(true)`, the popover is rendered visible (no `hidden` attribute, `data-state=\"open\"`). When `Some(false)`, rendered hidden. When `None`, left for client JS to toggle (legacy default)." },
+                Prop { name: "side_offset", ty: "Option<u32>", default: format!("{:?}", props.side_offset), description: "Offset in pixels between the trigger and the popover along the side axis. Emitted as <code>data-side-offset</code> for JS-driven positioning engines." },
+                Prop { name: "open", ty: "Option<bool>", default: format!("{:?}", props.open), description: "Controlled open state. When <code>Some(true)</code>, the popover is rendered visible (no <code>hidden</code> attribute, <code>data-state=&quot;open&quot;</code>). When <code>Some(false)</code>, rendered hidden. When <code>None</code>, left for client JS to toggle (legacy default)." },
             ])
         },
         (false, "progress") => {
@@ -658,8 +654,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "selected", ty: "Option<String>", default: format!("{:?}", props.selected), description: "" },
                 Prop { name: "orientation", ty: "Orientation", default: format!("{:?}", props.orientation), description: "" },
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
-                Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Marks each underlying `<input type=\"radio\">` as required so native form validation blocks submit until one option is chosen." },
-                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Density variant — see [`Variant`]." },
+                Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Marks each underlying <code>&lt;input type=&quot;radio&quot;&gt;</code> as required so native form validation blocks submit until one option is chosen." },
+                Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "Density variant — see <code>Variant</code>." },
             ])
         },
         (false, "resizable") => {
@@ -673,7 +669,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "scroll_area") => {
             let props = crate::primitives::scroll_area::Props::default();
             table(vec![
-                Prop { name: "max_height", ty: "String", default: format!("{:?}", props.max_height), description: "CSS value for max-height (e.g., \"12rem\", \"200px\")" },
+                Prop { name: "max_height", ty: "String", default: format!("{:?}", props.max_height), description: "CSS value for max-height (e.g., &quot;12rem&quot;, &quot;200px&quot;)" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for the viewport" },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Content to scroll" },
             ])
@@ -704,7 +700,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::separator::Props::default();
             table(vec![
                 Prop { name: "orientation", ty: "Orientation", default: format!("{:?}", props.orientation), description: "Orientation of the separator (default: Horizontal)" },
-                Prop { name: "decorative", ty: "bool", default: format!("{:?}", props.decorative), description: "If true, render as purely decorative (aria-hidden). If false, semantic with role=\"separator\"" },
+                Prop { name: "decorative", ty: "bool", default: format!("{:?}", props.decorative), description: "If true, render as purely decorative (aria-hidden). If false, semantic with role=&quot;separator&quot;" },
             ])
         },
         (false, "sheet") => {
@@ -728,7 +724,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "variant", ty: "SidebarVariant", default: format!("{:?}", props.variant), description: "Visual variant" },
                 Prop { name: "collapsible", ty: "Collapsible", default: format!("{:?}", props.collapsible), description: "How the sidebar collapses" },
                 Prop { name: "default_open", ty: "bool", default: format!("{:?}", props.default_open), description: "Whether the sidebar renders in its expanded state (SSR default)" },
-                Prop { name: "surface", ty: "Surface", default: format!("{:?}", props.surface), description: "What ground the sidebar sits on. See [`Surface`]." },
+                Prop { name: "surface", ty: "Surface", default: format!("{:?}", props.surface), description: "What ground the sidebar sits on. See <code>Surface</code>." },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "Markup content (typically header / content / footer helpers)" },
             ])
         },
@@ -745,8 +741,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "HTML name attribute for form submission" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "HTML id attribute for label linkage" },
-                Prop { name: "value", ty: "f64", default: format!("{:?}", props.value), description: "Current value (used when `values` is empty — single-thumb mode)" },
-                Prop { name: "values", ty: "Vec<f64>", default: format!("{:?}", props.values), description: "Multiple thumb values. When non-empty, renders one thumb per value and fills between the min and max of the set (range/multi-thumb mode). When empty, falls back to single-thumb mode using `value`." },
+                Prop { name: "value", ty: "f64", default: format!("{:?}", props.value), description: "Current value (used when <code>values</code> is empty — single-thumb mode)" },
+                Prop { name: "values", ty: "Vec<f64>", default: format!("{:?}", props.values), description: "Multiple thumb values. When non-empty, renders one thumb per value and fills between the min and max of the set (range/multi-thumb mode). When empty, falls back to single-thumb mode using <code>value</code>." },
                 Prop { name: "min", ty: "f64", default: format!("{:?}", props.min), description: "Minimum value (default 0.0)" },
                 Prop { name: "max", ty: "f64", default: format!("{:?}", props.max), description: "Maximum value (default 100.0)" },
                 Prop { name: "step", ty: "f64", default: format!("{:?}", props.step), description: "Step increment (default 1.0)" },
@@ -776,15 +772,15 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (false, "stack") => {
             let props = crate::primitives::stack::Props::default();
             table(vec![
-                Prop { name: "direction", ty: "Direction", default: format!("{:?}", props.direction), description: "Main-axis direction. Default [`Direction::Vertical`]." },
-                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between children. Default [`Space::Lg`] (`--mui-stack-gap`, normally 1rem)." },
-                Prop { name: "padding", ty: "Space", default: format!("{:?}", props.padding), description: "Space inside the container's edges. Default [`Space::None`], so a stack is a drop-in wrapper that adds no inset of its own." },
-                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Cross-axis alignment. Default [`Align::Stretch`]." },
-                Prop { name: "justify", ty: "Justify", default: format!("{:?}", props.justify), description: "Main-axis distribution. Default [`Justify::Start`]." },
-                Prop { name: "wrap", ty: "bool", default: format!("{:?}", props.wrap), description: "Allow children to wrap onto additional lines (`flex-wrap: wrap`). Default `false`." },
-                Prop { name: "tag", ty: "Tag", default: format!("{:?}", props.tag), description: "The element to render as. Default [`Tag::Div`]." },
-                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional `id`, for anchor targets and `aria-labelledby` references." },
-                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Accessible name for the container. Required when `tag` is [`Tag::Section`]; recommended when a page has more than one [`Tag::Nav`] or [`Tag::Aside`] so each landmark is distinguishable." },
+                Prop { name: "direction", ty: "Direction", default: format!("{:?}", props.direction), description: "Main-axis direction. Default <code>Direction::Vertical</code>." },
+                Prop { name: "gap", ty: "Space", default: format!("{:?}", props.gap), description: "Space between children. Default <code>Space::Lg</code> (<code>--mui-stack-gap</code>, normally 1rem)." },
+                Prop { name: "padding", ty: "Space", default: format!("{:?}", props.padding), description: "Space inside the container&#x27;s edges. Default <code>Space::None</code>, so a stack is a drop-in wrapper that adds no inset of its own." },
+                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Cross-axis alignment. Default <code>Align::Stretch</code>." },
+                Prop { name: "justify", ty: "Justify", default: format!("{:?}", props.justify), description: "Main-axis distribution. Default <code>Justify::Start</code>." },
+                Prop { name: "wrap", ty: "bool", default: format!("{:?}", props.wrap), description: "Allow children to wrap onto additional lines (<code>flex-wrap: wrap</code>). Default <code>false</code>." },
+                Prop { name: "tag", ty: "Tag", default: format!("{:?}", props.tag), description: "The element to render as. Default <code>Tag::Div</code>." },
+                Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "Optional <code>id</code>, for anchor targets and <code>aria-labelledby</code> references." },
+                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Accessible name for the container. Required when <code>tag</code> is <code>Tag::Section</code>; recommended when a page has more than one <code>Tag::Nav</code> or <code>Tag::Aside</code> so each landmark is distinguishable." },
                 Prop { name: "children", ty: "Markup", default: format!("{:?}", props.children), description: "The stacked content." },
             ])
         },
@@ -800,25 +796,25 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::primitives::status_dot::Props::default();
             table(vec![
                 Prop { name: "tone", ty: "Tone", default: format!("{:?}", props.tone), description: "Semantic tone." },
-                Prop { name: "outline", ty: "bool", default: format!("{:?}", props.outline), description: "Render hollow (outline) instead of filled — the \"observing\" state." },
-                Prop { name: "label", ty: "Option<String>", default: format!("{:?}", props.label), description: "Optional accessible label; when set, the dot is exposed with `role=\"img\"` so it is not silently invisible to a screen reader." },
+                Prop { name: "outline", ty: "bool", default: format!("{:?}", props.outline), description: "Render hollow (outline) instead of filled — the &quot;observing&quot; state." },
+                Prop { name: "label", ty: "Option<String>", default: format!("{:?}", props.label), description: "Optional accessible label; when set, the dot is exposed with <code>role=&quot;img&quot;</code> so it is not silently invisible to a screen reader." },
             ])
         },
         (false, "streaming_cursor") => {
             let props = crate::primitives::streaming_cursor::Props::default();
             table(vec![
                 Prop { name: "variant", ty: "Variant", default: format!("{:?}", props.variant), description: "" },
-                Prop { name: "label", ty: "Option<String>", default: format!("{:?}", props.label), description: "Optional label rendered next to the animation (e.g. \"thinking\", \"writing…\")." },
+                Prop { name: "label", ty: "Option<String>", default: format!("{:?}", props.label), description: "Optional label rendered next to the animation (e.g. &quot;thinking&quot;, &quot;writing…&quot;)." },
             ])
         },
         (false, "swatch") => {
             let props = crate::primitives::swatch::Props::default();
             table(vec![
-                Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Human-readable name shown under the chip (e.g. \"Primary\")." },
+                Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "Human-readable name shown under the chip (e.g. &quot;Primary&quot;)." },
                 Prop { name: "sublabel", ty: "Option<String>", default: format!("{:?}", props.sublabel), description: "Optional second line — typically the raw value or token name." },
                 Prop { name: "mode", ty: "Mode", default: format!("{:?}", props.mode), description: "Colour source." },
                 Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Size of the chip." },
-                Prop { name: "copyable", ty: "bool", default: format!("{:?}", props.copyable), description: "Whether clicking the swatch copies the underlying value to the clipboard. Handled by a tiny vanilla-JS behaviour registered by `mui-swatch.js`." },
+                Prop { name: "copyable", ty: "bool", default: format!("{:?}", props.copyable), description: "Whether clicking the swatch copies the underlying value to the clipboard. Handled by a tiny vanilla-JS behaviour registered by <code>mui-swatch.js</code>." },
             ])
         },
         (false, "switch") => {
@@ -829,10 +825,10 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "label", ty: "String", default: format!("{:?}", props.label), description: "" },
                 Prop { name: "checked", ty: "bool", default: format!("{:?}", props.checked), description: "" },
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "" },
-                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Explicit accessible name. Required when `label` is empty (e.g., when the switch sits next to an external label or description block). Falls back to `label` if not set." },
-                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Visual size variant. `Default` = 2.75rem × 1.5rem, `Sm` = 2rem × 1.125rem." },
-                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Propagates to the hidden `<input>` as `aria-invalid=\"true\"` when set." },
-                Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Propagates to the hidden `<input>` as `required` when set." },
+                Prop { name: "aria_label", ty: "Option<String>", default: format!("{:?}", props.aria_label), description: "Explicit accessible name. Required when <code>label</code> is empty (e.g., when the switch sits next to an external label or description block). Falls back to <code>label</code> if not set." },
+                Prop { name: "size", ty: "Size", default: format!("{:?}", props.size), description: "Visual size variant. <code>Default</code> = 2.75rem × 1.5rem, <code>Sm</code> = 2rem × 1.125rem." },
+                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Propagates to the hidden <code>&lt;input&gt;</code> as <code>aria-invalid=&quot;true&quot;</code> when set." },
+                Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Propagates to the hidden <code>&lt;input&gt;</code> as <code>required</code> when set." },
             ])
         },
         (false, "table") => {
@@ -847,7 +843,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "compact", ty: "bool", default: format!("{:?}", props.compact), description: "" },
                 Prop { name: "caption", ty: "Option<String>", default: format!("{:?}", props.caption), description: "" },
                 Prop { name: "right_align_cols", ty: "Vec<usize>", default: format!("{:?}", props.right_align_cols), description: "Numeric columns: right-aligned, tabular numerals in headers, body and footer." },
-                Prop { name: "hide_cols_sm", ty: "Vec<usize>", default: format!("{:?}", props.hide_cols_sm), description: "Column indices dropped at 40rem and below. A five-column row that merely squeezes on a phone becomes unreadable; naming the columns that carry the least signal lets the table shed them instead. Emits `data-hide-sm` on the matching `th`/`td`." },
+                Prop { name: "hide_cols_sm", ty: "Vec<usize>", default: format!("{:?}", props.hide_cols_sm), description: "Column indices dropped at 40rem and below. A five-column row that merely squeezes on a phone becomes unreadable; naming the columns that carry the least signal lets the table shed them instead. Emits <code>data-hide-sm</code> on the matching <code>th</code>/<code>td</code>." },
             ])
         },
         (false, "tabs") => {
@@ -872,9 +868,17 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "disabled", ty: "bool", default: format!("{:?}", props.disabled), description: "Whether field is disabled" },
                 Prop { name: "required", ty: "bool", default: format!("{:?}", props.required), description: "Whether field is required" },
                 Prop { name: "invalid", ty: "bool", default: format!("{:?}", props.invalid), description: "Whether field shows invalid state" },
-                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Explicit `aria-invalid=\"true\"` emission. OR'd with `invalid` so either field turns on the attribute; exposed separately so form frameworks can set just the ARIA bit without triggering invalid styling." },
+                Prop { name: "aria_invalid", ty: "bool", default: format!("{:?}", props.aria_invalid), description: "Explicit <code>aria-invalid=&quot;true&quot;</code> emission. OR&#x27;d with <code>invalid</code> so either field turns on the attribute; exposed separately so form frameworks can set just the ARIA bit without triggering invalid styling." },
                 Prop { name: "readonly", ty: "bool", default: format!("{:?}", props.readonly), description: "Whether field is read-only" },
                 Prop { name: "resize", ty: "Resize", default: format!("{:?}", props.resize), description: "Resize behavior" },
+            ])
+        },
+        (false, "time_split") => {
+            let props = crate::primitives::time_split::Props::default();
+            table(vec![
+                Prop { name: "segments", ty: "Vec<Segment>", default: format!("{:?}", props.segments), description: "Steps in EXECUTION ORDER. Steps that never ran should be left out entirely rather than passed with a zero duration: the empty remainder of the track is what &quot;it ended here&quot; looks like." },
+                Prop { name: "caption", ty: "String", default: format!("{:?}", props.caption), description: "The finding, in words. Do not skip it — see the module note." },
+                Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "Read to a screen reader in place of the bar. <code>aria_from</code> builds a decent one from the segments." },
             ])
         },
         (false, "toast") => {
@@ -913,14 +917,14 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique DOM id — used to wire the details disclosure." },
                 Prop { name: "kind", ty: "Kind", default: format!("{:?}", props.kind), description: "Tool family (drives accent colour + glyph)." },
-                Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "Tool name (e.g. \"Edit\", \"Bash\")." },
+                Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "Tool name (e.g. &quot;Edit&quot;, &quot;Bash&quot;)." },
                 Prop { name: "summary", ty: "String", default: format!("{:?}", props.summary), description: "One-line summary shown in the trigger (e.g. file path, command)." },
                 Prop { name: "status", ty: "Status", default: format!("{:?}", props.status), description: "Current execution status." },
                 Prop { name: "args", ty: "Option<Markup>", default: format!("{:?}", props.args), description: "Optional args panel — rendered in the expanded body." },
                 Prop { name: "result", ty: "Option<Markup>", default: format!("{:?}", props.result), description: "Optional result panel — rendered in the expanded body." },
                 Prop { name: "open", ty: "bool", default: format!("{:?}", props.open), description: "Initial open state (default false — collapsed)." },
-                Prop { name: "compact", ty: "bool", default: format!("{:?}", props.compact), description: "Chip density: one rounded chip per call that sits inline in a row (`mui-tool-call-row`) and expands in place. What a settled turn in a chat shows instead of a card per call." },
-                Prop { name: "duration", ty: "Option<String>", default: format!("{:?}", props.duration), description: "Wall time the call took, already formatted (\"0.4s\", \"12ms\"). Shown in the trigger after the summary; absent when unmeasured." },
+                Prop { name: "compact", ty: "bool", default: format!("{:?}", props.compact), description: "Chip density: one rounded chip per call that sits inline in a row (<code>mui-tool-call-row</code>) and expands in place. What a settled turn in a chat shows instead of a card per call." },
+                Prop { name: "duration", ty: "Option<String>", default: format!("{:?}", props.duration), description: "Wall time the call took, already formatted (&quot;0.4s&quot;, &quot;12ms&quot;). Shown in the trigger after the summary; absent when unmeasured." },
             ])
         },
         (false, "tooltip") => {
@@ -928,8 +932,8 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "content", ty: "String", default: format!("{:?}", props.content), description: "The tooltip text displayed on hover/focus" },
                 Prop { name: "placement", ty: "Placement", default: format!("{:?}", props.placement), description: "Position relative to trigger" },
-                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Alignment along the perpendicular axis of placement (default `Center`)" },
-                Prop { name: "side_offset", ty: "Option<u32>", default: format!("{:?}", props.side_offset), description: "Optional offset in pixels between the trigger and tooltip. Emitted as `data-side-offset` for client-side positioning code to consume. When `None` (the default), the CSS-level `0.375rem` gap is used." },
+                Prop { name: "align", ty: "Align", default: format!("{:?}", props.align), description: "Alignment along the perpendicular axis of placement (default <code>Center</code>)" },
+                Prop { name: "side_offset", ty: "Option<u32>", default: format!("{:?}", props.side_offset), description: "Optional offset in pixels between the trigger and tooltip. Emitted as <code>data-side-offset</code> for client-side positioning code to consume. When <code>None</code> (the default), the CSS-level <code>0.375rem</code> gap is used." },
                 Prop { name: "delay_ms", ty: "u32", default: format!("{:?}", props.delay_ms), description: "Delay in milliseconds before showing (default 500)" },
                 Prop { name: "trigger", ty: "Markup", default: format!("{:?}", props.trigger), description: "The element that triggers the tooltip (button, link, icon, etc.)" },
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "Unique identifier for aria-describedby linking" },
@@ -945,33 +949,33 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (true, "auth-login") => {
             let props = crate::blocks::auth::login::Props::default();
             table(vec![
-                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "Form action URL — where the email + password form POSTs. The form sends `email` and `password` fields." },
-                Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Optional logo shown above the heading. Typically an inline SVG or `<img>`. Use `stroke=\"currentColor\"` on SVGs so they inherit `--mui-text`." },
-                Prop { name: "heading", ty: "String", default: format!("{:?}", props.heading), description: "Primary heading (default: \"Welcome back\")." },
-                Prop { name: "subheading", ty: "String", default: format!("{:?}", props.subheading), description: "Secondary prompt below the heading (default: \"Sign in to your account\")." },
-                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Optional error message to show above the form — rendered with the `alert` primitive in Danger variant. Typical use: render the login page with `error: Some(\"Invalid email or password\")` after a failed POST." },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "Form action URL — where the email + password form POSTs. The form sends <code>email</code> and <code>password</code> fields." },
+                Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Optional logo shown above the heading. Typically an inline SVG or <code>&lt;img&gt;</code>. Use <code>stroke=&quot;currentColor&quot;</code> on SVGs so they inherit <code>--mui-text</code>." },
+                Prop { name: "heading", ty: "String", default: format!("{:?}", props.heading), description: "Primary heading (default: &quot;Welcome back&quot;)." },
+                Prop { name: "subheading", ty: "String", default: format!("{:?}", props.subheading), description: "Secondary prompt below the heading (default: &quot;Sign in to your account&quot;)." },
+                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Optional error message to show above the form — rendered with the <code>alert</code> primitive in Danger variant. Typical use: render the login page with <code>error: Some(&quot;Invalid email or password&quot;)</code> after a failed POST." },
                 Prop { name: "oauth_providers", ty: "Vec<OAuthProvider>", default: format!("{:?}", props.oauth_providers), description: "OAuth providers to show above the email/password form. Empty vec = no OAuth row, no divider." },
-                Prop { name: "forgot_password_url", ty: "Option<String>", default: format!("{:?}", props.forgot_password_url), description: "URL for the \"Forgot password?\" link rendered next to the password label. `None` hides the link." },
-                Prop { name: "signup_url", ty: "Option<String>", default: format!("{:?}", props.signup_url), description: "URL for the \"Don't have an account? Sign up\" prompt at the bottom of the card. `None` hides the prompt entirely — useful for invite-only products." },
+                Prop { name: "forgot_password_url", ty: "Option<String>", default: format!("{:?}", props.forgot_password_url), description: "URL for the &quot;Forgot password?&quot; link rendered next to the password label. <code>None</code> hides the link." },
+                Prop { name: "signup_url", ty: "Option<String>", default: format!("{:?}", props.signup_url), description: "URL for the &quot;Don&#x27;t have an account? Sign up&quot; prompt at the bottom of the card. <code>None</code> hides the prompt entirely — useful for invite-only products." },
                 Prop { name: "email_value", ty: "String", default: format!("{:?}", props.email_value), description: "Email value to preserve across error re-renders (e.g., after a failed POST, the email stays filled in)." },
-                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Submit button label (default: \"Sign in\")." },
+                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Submit button label (default: &quot;Sign in&quot;)." },
             ])
         },
         (true, "auth-signup") => {
             let props = crate::blocks::auth::signup::Props::default();
             table(vec![
-                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the email + password form. Submits fields: `name`, `email`, `password`, `password_confirm`, `accept_terms`." },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the email + password form. Submits fields: <code>name</code>, <code>email</code>, <code>password</code>, <code>password_confirm</code>, <code>accept_terms</code>." },
                 Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Optional brand logo shown above the heading." },
-                Prop { name: "heading", ty: "String", default: format!("{:?}", props.heading), description: "Headline (default: \"Create your account\")." },
-                Prop { name: "subheading", ty: "String", default: format!("{:?}", props.subheading), description: "Subheading under the heading (default: \"Start in under a minute.\")." },
-                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Error banner (danger variant). Typical use: re-render the page with `Some(\"Email already in use\")` after a failed POST." },
-                Prop { name: "oauth_providers", ty: "Vec<crate::blocks::auth::login::OAuthProvider>", default: format!("{:?}", props.oauth_providers), description: "OAuth providers shown above the email form. Same shape as `auth::login::OAuthProvider` — consumers often share a Vec between their login + signup pages." },
+                Prop { name: "heading", ty: "String", default: format!("{:?}", props.heading), description: "Headline (default: &quot;Create your account&quot;)." },
+                Prop { name: "subheading", ty: "String", default: format!("{:?}", props.subheading), description: "Subheading under the heading (default: &quot;Start in under a minute.&quot;)." },
+                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Error banner (danger variant). Typical use: re-render the page with <code>Some(&quot;Email already in use&quot;)</code> after a failed POST." },
+                Prop { name: "oauth_providers", ty: "Vec<crate::blocks::auth::login::OAuthProvider>", default: format!("{:?}", props.oauth_providers), description: "OAuth providers shown above the email form. Same shape as <code>auth::login::OAuthProvider</code> — consumers often share a Vec between their login + signup pages." },
                 Prop { name: "collect_name", ty: "bool", default: format!("{:?}", props.collect_name), description: "Include the full-name field at the top of the form. Many B2C flows skip this and collect the name later. Default: true." },
                 Prop { name: "require_password_confirm", ty: "bool", default: format!("{:?}", props.require_password_confirm), description: "Include the password-confirmation field. Default: true." },
-                Prop { name: "terms_url", ty: "Option<String>", default: format!("{:?}", props.terms_url), description: "Terms of Service URL. If `terms_url` or `privacy_url` is set, a checkbox row appears above the submit button." },
+                Prop { name: "terms_url", ty: "Option<String>", default: format!("{:?}", props.terms_url), description: "Terms of Service URL. If <code>terms_url</code> or <code>privacy_url</code> is set, a checkbox row appears above the submit button." },
                 Prop { name: "privacy_url", ty: "Option<String>", default: format!("{:?}", props.privacy_url), description: "Privacy Policy URL. Rendered next to the Terms link in the checkbox label." },
-                Prop { name: "signin_url", ty: "Option<String>", default: format!("{:?}", props.signin_url), description: "URL for the \"Already have an account? Sign in\" link at the bottom of the card. `None` hides the prompt — useful for embedded signup where the parent page already has a sign-in option." },
-                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Submit button label (default: \"Create account\")." },
+                Prop { name: "signin_url", ty: "Option<String>", default: format!("{:?}", props.signin_url), description: "URL for the &quot;Already have an account? Sign in&quot; link at the bottom of the card. <code>None</code> hides the prompt — useful for embedded signup where the parent page already has a sign-in option." },
+                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Submit button label (default: &quot;Create account&quot;)." },
                 Prop { name: "email_value", ty: "String", default: format!("{:?}", props.email_value), description: "Email value to preserve across error re-renders." },
                 Prop { name: "name_value", ty: "String", default: format!("{:?}", props.name_value), description: "Name value to preserve across error re-renders." },
             ])
@@ -979,25 +983,25 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
         (true, "auth-two-factor") => {
             let props = crate::blocks::auth::two_factor::Props::default();
             table(vec![
-                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the code-submit form. Submits field `code`." },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the code-submit form. Submits field <code>code</code>." },
                 Prop { name: "method", ty: "Method", default: format!("{:?}", props.method), description: "Delivery channel — used to pick the heading copy and icon." },
-                Prop { name: "sent_to", ty: "String", default: format!("{:?}", props.sent_to), description: "Masked/partial identifier for where the code went (e.g. `\"s***@acme.com\"` or `\"+1 (••) •••-4321\"`). Shown in the subheading so users see which destination to check." },
+                Prop { name: "sent_to", ty: "String", default: format!("{:?}", props.sent_to), description: "Masked/partial identifier for where the code went (e.g. <code>&quot;s***@acme.com&quot;</code> or <code>&quot;+1 (••) •••-4321&quot;</code>). Shown in the subheading so users see which destination to check." },
                 Prop { name: "length", ty: "usize", default: format!("{:?}", props.length), description: "OTP length. 6 is the ubiquitous default; 4 is common for PINs and cheaper SMS cases." },
-                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Error banner shown above the OTP input — e.g. \"That code was incorrect\" or \"Code expired; request a new one\"." },
-                Prop { name: "resend_url", ty: "Option<String>", default: format!("{:?}", props.resend_url), description: "URL for the resend link. `None` hides the resend row (useful while a client-side cooldown is active — render the same block but with this `None` and a hint in `footer_hint`)." },
-                Prop { name: "footer_hint", ty: "Option<String>", default: format!("{:?}", props.footer_hint), description: "Custom text below the OTP input, above the submit button. Typical use: cooldown hint (\"Resend available in 23s\") or channel-specific advice (\"Check your spam folder\")." },
-                Prop { name: "cancel_url", ty: "Option<String>", default: format!("{:?}", props.cancel_url), description: "URL for the \"Cancel / use a different method\" link at the bottom. `None` hides it." },
-                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Label for the submit button (default: \"Verify\")." },
+                Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Error banner shown above the OTP input — e.g. &quot;That code was incorrect&quot; or &quot;Code expired; request a new one&quot;." },
+                Prop { name: "resend_url", ty: "Option<String>", default: format!("{:?}", props.resend_url), description: "URL for the resend link. <code>None</code> hides the resend row (useful while a client-side cooldown is active — render the same block but with this <code>None</code> and a hint in <code>footer_hint</code>)." },
+                Prop { name: "footer_hint", ty: "Option<String>", default: format!("{:?}", props.footer_hint), description: "Custom text below the OTP input, above the submit button. Typical use: cooldown hint (&quot;Resend available in 23s&quot;) or channel-specific advice (&quot;Check your spam folder&quot;)." },
+                Prop { name: "cancel_url", ty: "Option<String>", default: format!("{:?}", props.cancel_url), description: "URL for the &quot;Cancel / use a different method&quot; link at the bottom. <code>None</code> hides it." },
+                Prop { name: "submit_label", ty: "String", default: format!("{:?}", props.submit_label), description: "Label for the submit button (default: &quot;Verify&quot;)." },
             ])
         },
         (true, "dashboard-stats") => {
             let props = crate::blocks::dashboard::stats::Props::default();
             table(vec![
-                Prop { name: "title", ty: "Option<String>", default: format!("{:?}", props.title), description: "Section title shown above the cards. `None` hides the header." },
-                Prop { name: "subtitle", ty: "Option<String>", default: format!("{:?}", props.subtitle), description: "Small subtitle under the title (e.g., \"Last 30 days\"). `None` if you don't need one." },
+                Prop { name: "title", ty: "Option<String>", default: format!("{:?}", props.title), description: "Section title shown above the cards. <code>None</code> hides the header." },
+                Prop { name: "subtitle", ty: "Option<String>", default: format!("{:?}", props.subtitle), description: "Small subtitle under the title (e.g., &quot;Last 30 days&quot;). <code>None</code> if you don&#x27;t need one." },
                 Prop { name: "cards", ty: "Vec<StatCard>", default: format!("{:?}", props.cards), description: "The KPI cards. Rendered in an auto-fit grid (min 14rem)." },
-                Prop { name: "chart", ty: "Option<Markup>", default: format!("{:?}", props.chart), description: "Optional arbitrary chart markup rendered in a wide card under the stat row. Pair with `maud_ui::primitives::chart` or your favorite chart library." },
-                Prop { name: "activity", ty: "Option<Vec<ActivityItem>>", default: format!("{:?}", props.activity), description: "Optional list of recent activity rendered under the chart. `None` hides the activity card entirely." },
+                Prop { name: "chart", ty: "Option<Markup>", default: format!("{:?}", props.chart), description: "Optional arbitrary chart markup rendered in a wide card under the stat row. Pair with <code>maud_ui::primitives::chart</code> or your favorite chart library." },
+                Prop { name: "activity", ty: "Option<Vec<ActivityItem>>", default: format!("{:?}", props.activity), description: "Optional list of recent activity rendered under the chart. <code>None</code> hides the activity card entirely." },
             ])
         },
         (true, "data-table-full") => {
@@ -1011,17 +1015,17 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "filters", ty: "Vec<Filter>", default: format!("{:?}", props.filters), description: "" },
                 Prop { name: "rows", ty: "Vec<Row>", default: format!("{:?}", props.rows), description: "" },
                 Prop { name: "bulk_actions", ty: "Vec<BulkAction>", default: format!("{:?}", props.bulk_actions), description: "Bulk actions shown in a dropdown — disabled until at least one row is selected (the checkbox-counter JS is up to the consumer; this block ships the dropdown wired to POST with selected ids)." },
-                Prop { name: "pagination_summary", ty: "Option<String>", default: format!("{:?}", props.pagination_summary), description: "Summary text shown under the table — e.g. \"Showing 25 of 1,284\"." },
-                Prop { name: "primary_action", ty: "Option<PrimaryAction>", default: format!("{:?}", props.primary_action), description: "URL for the primary action (e.g. \"Create customer\") at the top right of the card." },
+                Prop { name: "pagination_summary", ty: "Option<String>", default: format!("{:?}", props.pagination_summary), description: "Summary text shown under the table — e.g. &quot;Showing 25 of 1,284&quot;." },
+                Prop { name: "primary_action", ty: "Option<PrimaryAction>", default: format!("{:?}", props.primary_action), description: "URL for the primary action (e.g. &quot;Create customer&quot;) at the top right of the card." },
             ])
         },
         (true, "pricing-tiers") => {
             let props = crate::blocks::pricing::tiers::Props::default();
             table(vec![
-                Prop { name: "heading", ty: "Option<String>", default: format!("{:?}", props.heading), description: "Section heading (above the cards). `None` hides the header row." },
+                Prop { name: "heading", ty: "Option<String>", default: format!("{:?}", props.heading), description: "Section heading (above the cards). <code>None</code> hides the header row." },
                 Prop { name: "subheading", ty: "Option<String>", default: format!("{:?}", props.subheading), description: "" },
                 Prop { name: "tiers", ty: "Vec<Tier>", default: format!("{:?}", props.tiers), description: "The tiers, rendered in order. 3 is the usual count but any number works — the grid adjusts." },
-                Prop { name: "fine_print", ty: "Option<String>", default: format!("{:?}", props.fine_print), description: "Optional fine-print line below the cards (e.g. \"All plans include a 14-day free trial. No credit card required.\")." },
+                Prop { name: "fine_print", ty: "Option<String>", default: format!("{:?}", props.fine_print), description: "Optional fine-print line below the cards (e.g. &quot;All plans include a 14-day free trial. No credit card required.&quot;)." },
             ])
         },
         (true, "settings-billing") => {
@@ -1030,30 +1034,30 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "plan", ty: "PlanSummary", default: format!("{:?}", props.plan), description: "" },
                 Prop { name: "payment_method", ty: "Option<PaymentMethod>", default: format!("{:?}", props.payment_method), description: "" },
                 Prop { name: "invoices", ty: "Vec<Invoice>", default: format!("{:?}", props.invoices), description: "" },
-                Prop { name: "change_plan_action", ty: "Option<String>", default: format!("{:?}", props.change_plan_action), description: "POST URL for \"Change plan\" button." },
-                Prop { name: "cancel_plan_action", ty: "Option<String>", default: format!("{:?}", props.cancel_plan_action), description: "POST URL for \"Cancel plan\" (rendered as a subtle link). `None` hides it." },
-                Prop { name: "update_payment_action", ty: "Option<String>", default: format!("{:?}", props.update_payment_action), description: "URL for the \"Update payment method\" form." },
+                Prop { name: "change_plan_action", ty: "Option<String>", default: format!("{:?}", props.change_plan_action), description: "POST URL for &quot;Change plan&quot; button." },
+                Prop { name: "cancel_plan_action", ty: "Option<String>", default: format!("{:?}", props.cancel_plan_action), description: "POST URL for &quot;Cancel plan&quot; (rendered as a subtle link). <code>None</code> hides it." },
+                Prop { name: "update_payment_action", ty: "Option<String>", default: format!("{:?}", props.update_payment_action), description: "URL for the &quot;Update payment method&quot; form." },
             ])
         },
         (true, "settings-profile") => {
             let props = crate::blocks::settings::profile::Props::default();
             table(vec![
-                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the profile form. Submits fields: `name`, `email`, `bio`. For the avatar upload, use a separate multipart endpoint — this block shows the current avatar but doesn't include a file input (decoupled so the form can be a regular POST)." },
+                Prop { name: "action", ty: "String", default: format!("{:?}", props.action), description: "POST target for the profile form. Submits fields: <code>name</code>, <code>email</code>, <code>bio</code>. For the avatar upload, use a separate multipart endpoint — this block shows the current avatar but doesn&#x27;t include a file input (decoupled so the form can be a regular POST)." },
                 Prop { name: "name", ty: "String", default: format!("{:?}", props.name), description: "Current display name." },
                 Prop { name: "email", ty: "String", default: format!("{:?}", props.email), description: "Current email address." },
-                Prop { name: "avatar_initials", ty: "String", default: format!("{:?}", props.avatar_initials), description: "Two-letter initials fallback for the avatar when there's no image — matches the shell::sidebar pattern so shells stay consistent." },
+                Prop { name: "avatar_initials", ty: "String", default: format!("{:?}", props.avatar_initials), description: "Two-letter initials fallback for the avatar when there&#x27;s no image — matches the shell::sidebar pattern so shells stay consistent." },
                 Prop { name: "bio", ty: "String", default: format!("{:?}", props.bio), description: "Current bio (optional long-form about text)." },
-                Prop { name: "avatar_upload_action", ty: "Option<String>", default: format!("{:?}", props.avatar_upload_action), description: "Avatar upload URL. `None` hides the \"Change\" button." },
-                Prop { name: "avatar_remove_action", ty: "Option<String>", default: format!("{:?}", props.avatar_remove_action), description: "Remove-avatar URL. `None` hides the \"Remove\" button." },
-                Prop { name: "success", ty: "Option<String>", default: format!("{:?}", props.success), description: "Success notice shown at the top (e.g. \"Profile updated\")." },
+                Prop { name: "avatar_upload_action", ty: "Option<String>", default: format!("{:?}", props.avatar_upload_action), description: "Avatar upload URL. <code>None</code> hides the &quot;Change&quot; button." },
+                Prop { name: "avatar_remove_action", ty: "Option<String>", default: format!("{:?}", props.avatar_remove_action), description: "Remove-avatar URL. <code>None</code> hides the &quot;Remove&quot; button." },
+                Prop { name: "success", ty: "Option<String>", default: format!("{:?}", props.success), description: "Success notice shown at the top (e.g. &quot;Profile updated&quot;)." },
                 Prop { name: "error", ty: "Option<String>", default: format!("{:?}", props.error), description: "Error banner shown at the top." },
-                Prop { name: "delete_action", ty: "Option<String>", default: format!("{:?}", props.delete_action), description: "Delete-account POST target. When set, renders a \"Danger zone\" card at the bottom with a destructive button. `None` hides the section entirely." },
+                Prop { name: "delete_action", ty: "Option<String>", default: format!("{:?}", props.delete_action), description: "Delete-account POST target. When set, renders a &quot;Danger zone&quot; card at the bottom with a destructive button. <code>None</code> hides the section entirely." },
             ])
         },
         (true, "settings-team") => {
             let props = crate::blocks::settings::team::Props::default();
             table(vec![
-                Prop { name: "invite_action", ty: "String", default: format!("{:?}", props.invite_action), description: "POST target for the invite form — fields: `email`, `role`." },
+                Prop { name: "invite_action", ty: "String", default: format!("{:?}", props.invite_action), description: "POST target for the invite form — fields: <code>email</code>, <code>role</code>." },
                 Prop { name: "roles", ty: "Vec<String>", default: format!("{:?}", props.roles), description: "Available role options shown in the invite dropdown and the per-member role select." },
                 Prop { name: "members", ty: "Vec<Member>", default: format!("{:?}", props.members), description: "Team members, rendered in order." },
             ])
@@ -1071,7 +1075,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "active_path", ty: "String", default: format!("{:?}", props.active_path), description: "" },
                 Prop { name: "user", ty: "Option<UserBlock>", default: format!("{:?}", props.user), description: "" },
                 Prop { name: "mobile_navigation", ty: "MobileNavigation", default: format!("{:?}", props.mobile_navigation), description: "" },
-                Prop { name: "mobile_tab_bar", ty: "Option<Markup>", default: format!("{:?}", props.mobile_tab_bar), description: "Caller-owned schema tabs, using this shell's drawer ID." },
+                Prop { name: "mobile_tab_bar", ty: "Option<Markup>", default: format!("{:?}", props.mobile_tab_bar), description: "Caller-owned schema tabs, using this shell&#x27;s drawer ID." },
                 Prop { name: "collapsible", ty: "bool", default: format!("{:?}", props.collapsible), description: "" },
                 Prop { name: "default_collapsed", ty: "bool", default: format!("{:?}", props.default_collapsed), description: "" },
                 Prop { name: "topbar_title", ty: "Option<String>", default: format!("{:?}", props.topbar_title), description: "" },
@@ -1124,7 +1128,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "wordmark", ty: "String", default: format!("{:?}", props.wordmark), description: "Plain text identity. Empty identity emits nothing." },
                 Prop { name: "href", ty: "Option<String>", default: format!("{:?}", props.href), description: "Optional destination for the wordmark; the tagline remains outside the link." },
-                Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Full-color image or custom logo. None uses the brand's CSS logo mask." },
+                Prop { name: "logo", ty: "Option<Markup>", default: format!("{:?}", props.logo), description: "Full-color image or custom logo. None uses the brand&#x27;s CSS logo mask." },
                 Prop { name: "tagline", ty: "Option<Markup>", default: format!("{:?}", props.tagline), description: "Optional caller-owned tagline slot." },
             ])
         },
@@ -1133,7 +1137,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "state", ty: "crate::blocks::state::State", default: format!("{:?}", props.state), description: "Explicit presentation state; Ready preserves the ordinary content." },
                 Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "" },
-                Prop { name: "count_sentence", ty: "String", default: format!("{:?}", props.count_sentence), description: "Caller-owned localized sentence, e.g. \"48 reservations · 12 arriving today\"." },
+                Prop { name: "count_sentence", ty: "String", default: format!("{:?}", props.count_sentence), description: "Caller-owned localized sentence, e.g. &quot;48 reservations · 12 arriving today&quot;." },
                 Prop { name: "search", ty: "Option<Search>", default: format!("{:?}", props.search), description: "" },
                 Prop { name: "primary_action", ty: "Option<Action>", default: format!("{:?}", props.primary_action), description: "" },
                 Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "" },
@@ -1144,12 +1148,12 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             table(vec![
                 Prop { name: "state", ty: "crate::blocks::state::State", default: format!("{:?}", props.state), description: "Explicit presentation state; Ready preserves the ordinary content." },
                 Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "" },
-                Prop { name: "title_markup", ty: "Option<Markup>", default: format!("{:?}", props.title_markup), description: "Overrides `title`. May contain a field-emitter heading; no heading is wrapped around it." },
+                Prop { name: "title_markup", ty: "Option<Markup>", default: format!("{:?}", props.title_markup), description: "Overrides <code>title</code>. May contain a field-emitter heading; no heading is wrapped around it." },
                 Prop { name: "subtitle", ty: "Option<String>", default: format!("{:?}", props.subtitle), description: "" },
                 Prop { name: "kind", ty: "Option<String>", default: format!("{:?}", props.kind), description: "Human-facing kind, e.g. Guest. Together with reference, replaces subtitle." },
                 Prop { name: "reference", ty: "Option<String>", default: format!("{:?}", props.reference), description: "Record reference, e.g. UI-G5; rendered once in the muted identity line." },
                 Prop { name: "status", ty: "Option<badge::Props>", default: format!("{:?}", props.status), description: "" },
-                Prop { name: "status_markup", ty: "Option<Markup>", default: format!("{:?}", props.status_markup), description: "Overrides `status`, including when the supplied markup is empty." },
+                Prop { name: "status_markup", ty: "Option<Markup>", default: format!("{:?}", props.status_markup), description: "Overrides <code>status</code>, including when the supplied markup is empty." },
                 Prop { name: "primary_action", ty: "Option<Action>", default: format!("{:?}", props.primary_action), description: "" },
                 Prop { name: "secondary_actions", ty: "Vec<Action>", default: format!("{:?}", props.secondary_actions), description: "" },
                 Prop { name: "back", ty: "Option<Link>", default: format!("{:?}", props.back), description: "Legacy navigation link; prefer the shell breadcrumb. Never put Back in actions." },
@@ -1211,7 +1215,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
                 Prop { name: "state", ty: "State", default: format!("{:?}", props.state), description: "" },
                 Prop { name: "groups", ty: "Vec<Group>", default: format!("{:?}", props.groups), description: "Pass every group together, rather than rendering one card per group." },
                 Prop { name: "columns", ty: "Columns", default: format!("{:?}", props.columns), description: "Maximum columns; narrow containers reduce to two, then one." },
-                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "Heading level for group titles; use H2 below the page's H1." },
+                Prop { name: "heading", ty: "Heading", default: format!("{:?}", props.heading), description: "Heading level for group titles; use H2 below the page&#x27;s H1." },
                 Prop { name: "aria_label", ty: "String", default: format!("{:?}", props.aria_label), description: "" },
                 Prop { name: "masked_hint", ty: "String", default: format!("{:?}", props.masked_hint), description: "" },
             ])
@@ -1276,7 +1280,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::blocks::feedback::notice::Props::default();
             table(vec![
                 Prop { name: "id", ty: "Option<String>", default: format!("{:?}", props.id), description: "" },
-                Prop { name: "message", ty: "String", default: format!("{:?}", props.message), description: "A complete human sentence, e.g. \"The guest could not be saved.\"" },
+                Prop { name: "message", ty: "String", default: format!("{:?}", props.message), description: "A complete human sentence, e.g. &quot;The guest could not be saved.&quot;" },
                 Prop { name: "description", ty: "Option<String>", default: format!("{:?}", props.description), description: "Helpful next step or record context, before technical details." },
                 Prop { name: "details", ty: "Option<String>", default: format!("{:?}", props.details), description: "Optional diagnostics, behind a native Details disclosure." },
                 Prop { name: "tone", ty: "Tone", default: format!("{:?}", props.tone), description: "" },
@@ -1287,7 +1291,7 @@ pub fn render(name: &str, block: bool) -> Option<Markup> {
             let props = crate::blocks::feedback::confirm::Props::default();
             table(vec![
                 Prop { name: "id", ty: "String", default: format!("{:?}", props.id), description: "" },
-                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "Name the consequence, e.g. \"Check in Leila Morgan?\"" },
+                Prop { name: "title", ty: "String", default: format!("{:?}", props.title), description: "Name the consequence, e.g. &quot;Check in Leila Morgan?&quot;" },
                 Prop { name: "message", ty: "String", default: format!("{:?}", props.message), description: "Human context: guest, room, dates or amount." },
                 Prop { name: "confirm_label", ty: "String", default: format!("{:?}", props.confirm_label), description: "" },
                 Prop { name: "cancel_label", ty: "String", default: format!("{:?}", props.cancel_label), description: "" },

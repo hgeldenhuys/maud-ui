@@ -108,7 +108,7 @@ pub fn render(props: Props) -> Markup {
     let show_terms = props.terms_url.is_some() || props.privacy_url.is_some();
 
     html! {
-        div class="mui-block mui-block--auth" {
+        div class="mui-block" {
             div class="mui-block__frame mui-block--auth__frame" {
                 div class="mui-block--auth__card" {
                     @if let Some(logo) = &props.logo {

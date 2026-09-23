@@ -49,14 +49,14 @@
 }
 
 .mui-btn--xs {
-  height: 1.5rem;
+  height: var(--mui-space-20);
   padding: 0 var(--mui-space-sm);
   font-size: var(--mui-text-caption-size);
 }
 
 .mui-btn--icon-xs {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: var(--mui-space-20);
+  width: var(--mui-space-20);
   padding: 0;
   flex-shrink: 0;
 }

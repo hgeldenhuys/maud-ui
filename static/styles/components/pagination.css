@@ -131,28 +131,12 @@ a.mui-pagination__page {
   user-select: none;
 }
 
-/* Mobile: collapse to prev/next + current/total; hide numbered page buttons */
+/* Mobile: keep the current page and its neighbours at their normal width. */
 @media (max-width: 40rem) {
-  .mui-pagination {
-    gap: var(--mui-space-sm);
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .mui-pagination__pages {
-    flex: 1;
-    justify-content: center;
-    gap: var(--mui-space-2xs);
-    /* Keep only the active page visible; hide siblings + ellipsis */
-    overflow: hidden;
-  }
-
-  .mui-pagination__pages .mui-pagination__page:not([aria-current="page"]),
-  .mui-pagination__pages .mui-pagination__ellipsis {
-    display: none;
-  }
-
-  .mui-pagination__page[aria-current="page"] {
-    min-width: 3.5rem;
-  }
+  .mui-pagination { gap: var(--mui-space-xs); flex-wrap: nowrap; }
+  .mui-pagination__pages { flex: none; gap: var(--mui-space-2xs); }
+  .mui-pagination__pages .mui-pagination__page:not([aria-current="page"]):not(:has(+ [aria-current="page"])):not([aria-current="page"] + .mui-pagination__page),
+  .mui-pagination__pages .mui-pagination__ellipsis { display: none; }
+  .mui-pagination__btn-label { display: none; }
+  .mui-pagination__btn { min-width: var(--mui-control-height); padding-inline: var(--mui-space-sm); gap: var(--mui-space-xs); }
 }

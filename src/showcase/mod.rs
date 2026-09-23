@@ -7034,6 +7034,37 @@ details[open] > .mui-gallery__nav-tier::after { transform: rotate(90deg); }
 
 .mui-gallery__back { padding-top: var(--mui-space-lg); }
 
+.mui-props-table__empty { color: var(--mui-text-secondary); }
+
+.mui-gallery__component .mui-docs :is(p, ul, ol, blockquote) {
+    max-width: 70ch;
+}
+
+.mui-api-preview .mui-resizable__demo-content h3 {
+    margin: 0 0 var(--mui-space-sm);
+    font-size: var(--mui-text-small-size);
+    font-weight: var(--mui-weight-heading);
+    color: var(--mui-text);
+}
+
+/* Keep Rust tokens intact; wide values scroll within the documentation. */
+.mui-gallery__component .mui-props-table td:nth-child(-n + 3) {
+    min-width: 12ch;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+.mui-gallery__component .mui-props-table td:nth-child(-n + 3) code {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+@media (max-width: 40rem) {
+    .mui-gallery__component .mui-props-table td:nth-child(-n + 3) {
+        min-width: 0;
+        overflow-x: auto;
+    }
+}
+
 /* ── Responsive: mobile drawer ──────────────────────────────────────
  * Desktop keeps the 240px sticky-sidebar layout. At <=960px we turn
  * the sidebar into an off-canvas drawer triggered by the hamburger
@@ -7458,8 +7489,8 @@ html { scroll-behavior: smooth; }
     gap: var(--mui-space-md);
     font-size: var(--mui-text-small-size);
 }
-.mui-gallery__seq-link {
-    color: var(--mui-text-muted);
+.mui-gallery__breadcrumb .mui-gallery__seq-link {
+    color: var(--mui-text-secondary);
     text-decoration: none;
     padding: var(--mui-space-2xs) var(--mui-inset-tight);
     border-radius: var(--mui-radius-sm);
@@ -7469,7 +7500,7 @@ html { scroll-behavior: smooth; }
     text-overflow: ellipsis;
     transition: color var(--mui-transition), background var(--mui-transition);
 }
-.mui-gallery__seq-link:hover {
+.mui-gallery__breadcrumb .mui-gallery__seq-link:hover {
     color: var(--mui-text);
     background: var(--mui-bg-input);
 }
@@ -7633,6 +7664,7 @@ html { scroll-behavior: smooth; }
  * would clip the popover / menu / select / tooltip demos, which is a
  * worse regression than the sideways scroll it fixes. */
 @media (max-width: 40rem) {
+    #api-auth-login-examples .mui-block--auth__frame { border: 0; }
     .mui-two-up { grid-template-columns: minmax(0, 1fr); }
 
     .mui-gallery__main,
@@ -7643,8 +7675,9 @@ html { scroll-behavior: smooth; }
     .mui-showcase__grid > section > * { min-width: 0; }
 
     /* Prev/next pager can't hold one line at 390px. */
-    .mui-gallery__seq { flex-wrap: wrap; margin-left: 0; }
-    .mui-gallery__seq-link { max-width: 9rem; }
+    .mui-gallery__breadcrumb { flex-wrap: wrap; }
+    .mui-gallery__seq { flex: 0 0 100%; justify-content: space-between; flex-wrap: wrap; margin-left: 0; }
+    .mui-gallery__breadcrumb .mui-gallery__seq-link { max-width: 9rem; }
 
     /* `overflow-y: hidden` is load-bearing: `overflow-x: auto` alone
        computes overflow-y to auto and raises a stray vertical scrollbar. */

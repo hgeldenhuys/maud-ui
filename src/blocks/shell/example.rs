@@ -25,7 +25,7 @@ pub(super) fn content(id: &str) -> Markup {
                 ..Default::default()
             }))
             div class="mui-workspace-example__table" id=(format!("{id}-list")) {
-                @for i in 0..4 { span class="mui-workspace-example__anchor" id=(format!("{id}-filter-{i}")) {} }
+                @for i in 0..4 { span id=(format!("{id}-filter-{i}")) {} }
                 (table::render(table::Props {
                     headers: ["Guest", "Room", "Status", "Nights", ""].into_iter().map(str::to_string).collect(),
                     right_align_cols: vec![3], hide_cols_sm: vec![1,3], hoverable: true,

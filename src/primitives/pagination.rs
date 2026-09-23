@@ -88,7 +88,7 @@ pub fn render(props: Props) -> Markup {
             @match (&props.href_pattern, prev_disabled) {
                 (Some(pattern), false) => {
                     a
-                        class="mui-pagination__btn mui-pagination__btn--prev"
+                        class="mui-pagination__btn"
                         href=(render_href(pattern, prev_page))
                         aria-label="Go to previous page"
                     {
@@ -96,13 +96,13 @@ pub fn render(props: Props) -> Markup {
                         @if props.icons_only {
                             span class="mui-visually-hidden" { "Previous" }
                         } @else {
-                            "Previous"
+                            span.mui-pagination__btn-label { "Previous" }
                         }
                     }
                 }
                 _ => {
                     button
-                        class="mui-pagination__btn mui-pagination__btn--prev"
+                        class="mui-pagination__btn"
                         aria-label="Go to previous page"
                         disabled[prev_disabled]
                     {
@@ -110,7 +110,7 @@ pub fn render(props: Props) -> Markup {
                         @if props.icons_only {
                             span class="mui-visually-hidden" { "Previous" }
                         } @else {
-                            "Previous"
+                            span.mui-pagination__btn-label { "Previous" }
                         }
                     }
                 }
@@ -164,28 +164,28 @@ pub fn render(props: Props) -> Markup {
             @match (&props.href_pattern, next_disabled) {
                 (Some(pattern), false) => {
                     a
-                        class="mui-pagination__btn mui-pagination__btn--next"
+                        class="mui-pagination__btn"
                         href=(render_href(pattern, next_page))
                         aria-label="Go to next page"
                     {
                         @if props.icons_only {
                             span class="mui-visually-hidden" { "Next" }
                         } @else {
-                            "Next"
+                            span.mui-pagination__btn-label { "Next" }
                         }
                         span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
                     }
                 }
                 _ => {
                     button
-                        class="mui-pagination__btn mui-pagination__btn--next"
+                        class="mui-pagination__btn"
                         aria-label="Go to next page"
                         disabled[next_disabled]
                     {
                         @if props.icons_only {
                             span class="mui-visually-hidden" { "Next" }
                         } @else {
-                            "Next"
+                            span.mui-pagination__btn-label { "Next" }
                         }
                         span class="mui-pagination__btn-icon" { (PreEscaped(CHEVRON_RIGHT)) }
                     }

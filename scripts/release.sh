@@ -81,7 +81,7 @@ live_css_url='https://maudui.herman.engineer/css/maud-ui.min.css'
 fetch_live_css() { curl -fsS --max-time "$1" -H 'Cache-Control: no-cache' "$live_css_url?release-check=$RANDOM$SECONDS"; }
 live_css=$(fetch_live_css 20) || fail "Cannot fetch $live_css_url: check the network, then retry."
 if grep -F -- "$marker" <<< "$live_css" >/dev/null; then
-  fail "The live site already serves the marker, so step 14 could not tell the new release from the old one: pass CSS text that is new in this release."
+  fail "The live site already serves the marker, so the final website check could not tell the new release from the old one: pass CSS text that is new in this release."
 fi
 version=$(cargo metadata --no-deps --format-version 1 | jq -er '.packages[] | select(.name == "maud-ui") | .version') ||
   fail 'Cannot read the maud-ui version: fix Cargo.toml or the cargo metadata error and retry.'

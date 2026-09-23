@@ -1,9 +1,9 @@
 VERIFIED 2026-09-23 12:30 EDT by crates.io API + `git rev-parse`: maud-ui 0.19.5 is the published version; branch curation-2026-09-08 HEAD equals customer/curation-2026-09-08 (nothing unpushed).
-VERIFIED 2026-09-23 by `cargo test --no-fail-fast`: 304 tests pass, exactly 6 fail, all six caused by the `time_split` component never being fully registered.
-VERIFIED 2026-09-22/23 by live stylesheet probes: the four Kapable apps (kaps, backlog, pulse, conductor) serve maud-ui 0.19.3; none of the six arc items below is started.
+VERIFIED 2026-09-23 by `cargo test --no-fail-fast`: 304 tests pass and exactly 6 fail; each of the six failure messages names `time_split` or the 83-vs-84 component count.
+VERIFIED 2026-09-22/23 by live stylesheet probes: the four Kapable apps (kaps, backlog, pulse, conductor) serve maud-ui 0.19.3. VERIFIED 2026-09-23 by `ls`: scripts/release.sh and docs/components/time_split.md do not exist, so items 1 and 3 are not started.
 
 ````
-First action: run this verbatim. It exits non-zero, printing nothing after the failing check, if the three lines above no longer hold; then read the state file before trusting anything else here.
+First action: run this verbatim. It checks the branch, that HEAD equals the fetched customer ref, crates.io's latest version and that the state file exists, then prints the working-tree status. It does not re-run the tests or re-probe the apps. On failure it stops at the failing check: read the state file before continuing.
 
 ```bash
 (
@@ -57,13 +57,13 @@ component and 4–6 are counts that only pass once it is registered:
 1. Item 1: create scripts/release.sh (NEW), the workflow in docs/releasing.md as one command that stops on the first failure and refuses a dirty tree. First, because every later item ships through it and it makes the green suite a mandatory gate.
 2. Item 2: screenshot regression, about 20 gallery routes in light and dark at 1440px and 390px, diffed against the previous release with scripts/pixel-diff.py on top of the CDP harness in tests/chrome-cdp.mjs; wire it into release.sh. Second, because items 4 and 5 change visuals and need it to prove they broke nothing.
 3. Item 6: a design-system linter for maud `html!` markup and CSS, modelled on github.com/shadcn-ui/lint's six rules (no-restyle, no-raw-colors, no-arbitrary-values, no-inline-styles, no-unknown-classes, require-static-classes), with errors that name the fix. shadcn/lint itself only reads Tailwind in TSX. Third, because it prevents defects during items 4 and 5.
-4. Item 4: motion for dialog close, menus, popovers, the More dropdown and toasts, the way static/behaviors/rail_motion.js does the sidebar; reduced motion stays instant.
+4. Item 4: motion for dialog close, menus, popovers, the More dropdown and toasts, the way static/behaviors/rail_motion.js does the sidebar; reduced motion stays instant. Fourth, because it is the first item that changes what people see, so it comes after the screenshot check and the linter can catch its side effects.
 5. Item 5: light-mode and phone-width QA using item 2's screenshots. Last of the six, because it judges the combined result.
-6. Bump the four apps to the new release; only the conductor visibly changes.
+6. Bump the four apps to the new release. Last, because apps should only take a release that passed items 1 to 5. INFERRED from the apps' code: only the conductor uses the sidebar collapse, so it is the one likely to change visibly; screenshot all four after the bump.
 Send Herman a screenshot early in items 2, 4 and 5.
 
 ## Settled; do not redo
-- The Linear theme is the default (0.18.0); brand fonts (0.19.4) and sidebar collapse motion (0.19.5) are done.
+- VERIFIED 2026-09-23 by CHANGELOG.md and crates.io: the Linear theme is the default (0.18.0); brand fonts (0.19.4) and sidebar collapse motion (0.19.5) are published.
 - VERIFIED 2026-09-22 from the live foreman recipe: kv2-pulse deploys from its `master` branch. VERIFIED 2026-09-22 by the conductor deploy's lineage gate: claude-conductor's trunk is the `forgejo` remote, not GitHub `origin`.
 
 ## Traps, each with its tell

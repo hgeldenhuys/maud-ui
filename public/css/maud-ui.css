@@ -2338,6 +2338,19 @@ dialog.mui-command::backdrop {
   align-items: center;
   gap: var(--mui-space-sm);
 }
+.mui-composer__surface {
+  min-width: 0;
+}
+.mui-composer__surface[hidden] {
+  display: none;
+}
+.mui-composer__field:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input,
+.mui-composer__sleepbar:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input {
+  display: none;
+}
+.mui-composer__sleepbar > .mui-composer__surface {
+  flex: 1 1 100%;
+}
 @media (max-width: 40rem) {
   .mui-composer__actions {
     flex-wrap: wrap;
@@ -5792,22 +5805,8 @@ a.mui-pagination__page {
 .mui-popover__content[data-side=right][data-align=end] {
   position-area: right span-top;
 }
-@position-try --mui-popover-below {
-  position-area: none;
-  top: calc(anchor(bottom) + var(--mui-inset-tight));
-  bottom: auto;
-  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
-  right: auto;
-  margin: 0;
-}
-@position-try --mui-popover-above {
-  position-area: none;
-  top: auto;
-  bottom: calc(anchor(top) + var(--mui-inset-tight));
-  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
-  right: auto;
-  margin: 0;
-}
+@position-try --mui-popover-below { position-area: none; top: calc(anchor(bottom) + var(--mui-inset-tight)); bottom: auto; left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight))); right: auto; margin: 0; }
+@position-try --mui-popover-above { position-area: none; top: auto; bottom: calc(anchor(top) + var(--mui-inset-tight)); left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight))); right: auto; margin: 0; }
 
 /* static/styles/components/progress.css */
 .mui-progress {

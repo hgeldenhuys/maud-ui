@@ -4,7 +4,8 @@
     behaviors: {},
     // Attach a behavior to one element, once.
     attach: function(el) {
-      if (el.hasAttribute("data-mui-init")) return;
+      if (el.hasAttribute("data-mui-init"))
+        return;
       var type = el.getAttribute("data-mui");
       if (type && MaudUI.behaviors[type]) {
         MaudUI.behaviors[type](el);
@@ -20,7 +21,8 @@
     // swaps produced markup with no behavior attached — no error, no console
     // warning, just a control that does nothing when clicked.
     init: function(root) {
-      if (!root) root = document.body;
+      if (!root)
+        root = document.body;
       if (root.nodeType === 1 && root.hasAttribute("data-mui")) {
         MaudUI.attach(root);
       }
@@ -37,7 +39,8 @@
   var SWAP_EVENTS = ["htmx:afterSwap", "htmx:oobAfterSwap"];
   for (var e = 0; e < SWAP_EVENTS.length; e++) {
     document.addEventListener(SWAP_EVENTS[e], function(evt) {
-      if (evt.target instanceof Element) MaudUI.init(evt.target);
+      if (evt.target instanceof Element)
+        MaudUI.init(evt.target);
     });
   }
   document.addEventListener("htmx:historyRestore", function() {
@@ -49,11 +52,13 @@
   });
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["accordion"] = function(root) {
     var isMultiple = root.getAttribute("data-multiple") === "true";
     var triggers = root.querySelectorAll(".mui-accordion__trigger");
-    if (triggers.length === 0) return;
+    if (triggers.length === 0)
+      return;
     for (var i = 0; i < triggers.length; i++) {
       var trigger = triggers[i];
       trigger.addEventListener("click", function(event) {
@@ -87,7 +92,8 @@
       var isExpanded = trigger2.getAttribute("aria-expanded") === "true";
       var contentId = trigger2.getAttribute("aria-controls");
       var content = document.getElementById(contentId);
-      if (!content) return;
+      if (!content)
+        return;
       if (!isMultiple2 && !isExpanded) {
         for (var i2 = 0; i2 < triggers.length; i2++) {
           var otherTrigger = triggers[i2];
@@ -110,14 +116,17 @@
       }
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["button-group"] = function(group) {
     var mode = (group.getAttribute("data-mode") || "exclusive").toLowerCase();
     var buttons = Array.prototype.slice.call(group.querySelectorAll("button"));
-    if (buttons.length === 0) return;
+    if (buttons.length === 0)
+      return;
     function valueOf(btn) {
       return btn.value || btn.getAttribute("data-value") || (btn.textContent || "").trim();
     }
@@ -129,7 +138,8 @@
     }
     group.addEventListener("click", function(e) {
       var btn = e.target && e.target.closest && e.target.closest("button");
-      if (!btn || !group.contains(btn) || btn.disabled) return;
+      if (!btn || !group.contains(btn) || btn.disabled)
+        return;
       if (mode === "multiple") {
         var pressed = btn.getAttribute("aria-pressed") !== "true";
         btn.setAttribute("aria-pressed", pressed ? "true" : "false");
@@ -141,31 +151,38 @@
         }
         for (var i = 0; i < buttons.length; i++) {
           var b = buttons[i];
-          if (b === btn) b.setAttribute("aria-pressed", "true");
-          else b.setAttribute("aria-pressed", "false");
+          if (b === btn)
+            b.setAttribute("aria-pressed", "true");
+          else
+            b.setAttribute("aria-pressed", "false");
         }
         emit(btn, true);
       }
     });
     if (mode !== "multiple") {
       group.addEventListener("keydown", function(e) {
-        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+        if (e.key !== "ArrowLeft" && e.key !== "ArrowRight")
+          return;
         var current = document.activeElement;
-        if (!buttons.indexOf || buttons.indexOf(current) === -1) return;
+        if (!buttons.indexOf || buttons.indexOf(current) === -1)
+          return;
         e.preventDefault();
         var idx = buttons.indexOf(current);
         var dir = e.key === "ArrowRight" ? 1 : -1;
         var next = buttons[(idx + dir + buttons.length) % buttons.length];
-        if (next.disabled) return;
+        if (next.disabled)
+          return;
         next.focus();
         next.click();
       });
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   var MONTHS = [
     "January",
     "February",
@@ -184,34 +201,44 @@
     return y % 4 === 0 && y % 100 !== 0 || y % 400 === 0;
   }
   function daysInMonth(y, m) {
-    if (m === 2) return isLeapYear(y) ? 29 : 28;
-    if (m === 4 || m === 6 || m === 9 || m === 11) return 30;
+    if (m === 2)
+      return isLeapYear(y) ? 29 : 28;
+    if (m === 4 || m === 6 || m === 9 || m === 11)
+      return 30;
     return 31;
   }
   function dayOfWeek(y, m, d) {
     var t = [0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4];
-    if (m < 3) y--;
+    if (m < 3)
+      y--;
     return (y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + t[m - 1] + d) % 7;
   }
   function fmtDate(y, m, d) {
     return String(y) + "-" + (m < 10 ? "0" : "") + m + "-" + (d < 10 ? "0" : "") + d;
   }
   function parseDate(s) {
-    if (!s) return null;
+    if (!s)
+      return null;
     var p = s.split("-");
-    if (p.length !== 3) return null;
+    if (p.length !== 3)
+      return null;
     return { y: parseInt(p[0], 10), m: parseInt(p[1], 10), d: parseInt(p[2], 10) };
   }
   function dateCmp(a, b) {
-    if (a.y !== b.y) return a.y < b.y ? -1 : 1;
-    if (a.m !== b.m) return a.m < b.m ? -1 : 1;
-    if (a.d !== b.d) return a.d < b.d ? -1 : 1;
+    if (a.y !== b.y)
+      return a.y < b.y ? -1 : 1;
+    if (a.m !== b.m)
+      return a.m < b.m ? -1 : 1;
+    if (a.d !== b.d)
+      return a.d < b.d ? -1 : 1;
     return 0;
   }
   function isDisabled(y, m, d, minD, maxD) {
     var cur = { y, m, d };
-    if (minD && dateCmp(cur, minD) < 0) return true;
-    if (maxD && dateCmp(cur, maxD) > 0) return true;
+    if (minD && dateCmp(cur, minD) < 0)
+      return true;
+    if (maxD && dateCmp(cur, maxD) > 0)
+      return true;
     return false;
   }
   window.MaudUI.behaviors["calendar"] = function(root) {
@@ -243,7 +270,8 @@
       root.setAttribute("data-year", currentYear);
       root.setAttribute("data-month", currentMonth);
       var weekRows = grid.querySelectorAll(".mui-calendar__week");
-      for (var i = 0; i < weekRows.length; i++) weekRows[i].remove();
+      for (var i = 0; i < weekRows.length; i++)
+        weekRows[i].remove();
       var firstDow = dayOfWeek(currentYear, currentMonth, 1);
       var dim = daysInMonth(currentYear, currentMonth);
       var prevYear = currentMonth === 1 ? currentYear - 1 : currentYear;
@@ -292,8 +320,10 @@
           btn.setAttribute("data-date", dateStr);
           btn.setAttribute("tabindex", idx === focusIdx ? "0" : "-1");
           var cls = "mui-calendar__day";
-          if (c.outside) cls += " mui-calendar__day--outside";
-          if (dateStr === todayStr) cls += " mui-calendar__day--today";
+          if (c.outside)
+            cls += " mui-calendar__day--outside";
+          if (dateStr === todayStr)
+            cls += " mui-calendar__day--today";
           if (dateStr === selected) {
             cls += " mui-calendar__day--selected";
             btn.setAttribute("aria-selected", "true");
@@ -301,7 +331,8 @@
             btn.setAttribute("aria-selected", "false");
           }
           var dis = isDisabled(c.y, c.m, c.d, minDate, maxDate);
-          if (dis) btn.disabled = true;
+          if (dis)
+            btn.disabled = true;
           btn.className = cls;
           if (!c.outside || showOutside) {
             btn.textContent = String(c.d);
@@ -329,7 +360,8 @@
     });
     grid.addEventListener("click", function(e) {
       var day = e.target.closest(".mui-calendar__day");
-      if (!day || day.disabled) return;
+      if (!day || day.disabled)
+        return;
       var prev = grid.querySelector(".mui-calendar__day--selected");
       if (prev) {
         prev.classList.remove("mui-calendar__day--selected");
@@ -342,12 +374,14 @@
       day.focus();
       selected = day.getAttribute("data-date");
       root.setAttribute("data-selected", selected);
-      if (hidden) hidden.value = selected;
+      if (hidden)
+        hidden.value = selected;
       root.dispatchEvent(new CustomEvent("calendar:change", { detail: { date: selected }, bubbles: true }));
     });
     grid.addEventListener("keydown", function(e) {
       var day = e.target.closest(".mui-calendar__day");
-      if (!day) return;
+      if (!day)
+        return;
       var allDays = grid.querySelectorAll(".mui-calendar__day:not(:disabled)");
       var currentIdx = -1;
       for (var i = 0; i < allDays.length; i++) {
@@ -356,7 +390,8 @@
           break;
         }
       }
-      if (currentIdx === -1) return;
+      if (currentIdx === -1)
+        return;
       var targetIdx = -1;
       if (e.key === "ArrowRight") {
         e.preventDefault();
@@ -426,13 +461,16 @@
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["carousel"] = function(root) {
     var container = root.querySelector(".mui-carousel__container");
-    if (!container) return;
+    if (!container)
+      return;
     var slides = container.querySelectorAll(".mui-carousel__slide");
     var prev = root.querySelector(".mui-carousel__prev");
     var next = root.querySelector(".mui-carousel__next");
@@ -443,9 +481,12 @@
     var autoPlay = root.getAttribute("data-autoplay") === "true";
     var autoPlayTimer = null;
     function updateDisabled() {
-      if (loopEnabled) return;
-      if (prev) prev.disabled = currentIndex === 0;
-      if (next) next.disabled = currentIndex === total - 1;
+      if (loopEnabled)
+        return;
+      if (prev)
+        prev.disabled = currentIndex === 0;
+      if (next)
+        next.disabled = currentIndex === total - 1;
     }
     function goTo(index) {
       if (index < 0) {
@@ -502,7 +543,8 @@
       }
     });
     function startAutoPlay() {
-      if (!autoPlay) return;
+      if (!autoPlay)
+        return;
       autoPlayTimer = setInterval(function() {
         goTo(currentIndex + 1);
       }, 4e3);
@@ -535,14 +577,17 @@
     goTo(0);
     startAutoPlay();
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["collapsible"] = function(root) {
     var trigger = root.querySelector(".mui-collapsible__trigger");
     var content = root.querySelector(".mui-collapsible__content");
-    if (!trigger || !content) return;
+    if (!trigger || !content)
+      return;
     trigger.addEventListener("click", function() {
       toggleCollapsible();
     });
@@ -563,10 +608,12 @@
       }
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["combobox"] = function(root) {
     var trigger = root.querySelector(".mui-combobox__trigger");
     var dropdown = root.querySelector(".mui-combobox__dropdown");
@@ -610,7 +657,8 @@
         var label = options[i].querySelector(".mui-combobox__option-label").textContent.toLowerCase();
         var visible = !q || label.indexOf(q) !== -1;
         options[i].style.display = visible ? "" : "none";
-        if (visible) visibleCount++;
+        if (visible)
+          visibleCount++;
       }
       if (visibleCount === 0) {
         emptyEl.removeAttribute("hidden");
@@ -707,10 +755,12 @@
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["command-trigger"] = function(el) {
     el.addEventListener("click", function() {
       var targetId = el.getAttribute("data-target");
@@ -873,22 +923,26 @@
       }
     }
   });
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   ui.compareDecimal = (left, right) => {
     function parse(text) {
       const value = text.trim().replace("\u2212", "-");
       const match = /^([+-]?)(?:[$€£¥])?((?:\d{1,3}(?:,\d{3})+|\d+))(?:\.(\d+))?$/.exec(value);
-      if (!match) return null;
+      if (!match)
+        return null;
       const decimals = match[3] || "";
       return { value: BigInt((match[1] === "-" ? "-" : "") + match[2].replaceAll(",", "") + decimals), scale: decimals.length };
     }
     const a = parse(left), b = parse(right);
-    if (!a || !b) return null;
+    if (!a || !b)
+      return null;
     const scale = Math.max(a.scale, b.scale);
     const l = a.value * 10n ** BigInt(scale - a.scale), r = b.value * 10n ** BigInt(scale - b.scale);
     return l < r ? -1 : l > r ? 1 : 0;
@@ -896,7 +950,8 @@
   ui.behaviors["data-table"] = (root) => {
     const pageSize = Math.max(1, parseInt(root.getAttribute("data-page-size") || "5", 10) || 5);
     const body = root.querySelector(".mui-data-table__body");
-    if (!body) return;
+    if (!body)
+      return;
     const info = root.querySelector(".mui-data-table__info");
     const previous = root.querySelector('[data-action="prev"]');
     const next = root.querySelector('[data-action="next"]');
@@ -908,17 +963,19 @@
         values = JSON.parse(node.getAttribute("data-row-data"));
       } catch {
       }
-      if (!Array.isArray(values)) values = Array.from(node.children).filter((cell) => !cell.classList.contains("mui-data-table__td--select")).map((cell) => cell.textContent.trim());
+      if (!Array.isArray(values))
+        values = Array.from(node.children).filter((cell) => !cell.classList.contains("mui-data-table__td--select")).map((cell) => cell.textContent.trim());
       return { node, values: values.map(String) };
     });
     let page = 0, column = -1, direction = 0;
     function render() {
       const query = (search?.value || "").trim().toLocaleLowerCase();
       const filtered = rows.filter((row) => row.values.some((value) => value.toLocaleLowerCase().includes(query)) || !query);
-      if (direction && column >= 0) filtered.sort((a, b) => {
-        const left = a.values[column] || "", right = b.values[column] || "";
-        return direction * (ui.compareDecimal(left, right) ?? left.localeCompare(right));
-      });
+      if (direction && column >= 0)
+        filtered.sort((a, b) => {
+          const left = a.values[column] || "", right = b.values[column] || "";
+          return direction * (ui.compareDecimal(left, right) ?? left.localeCompare(right));
+        });
       page = Math.max(0, Math.min(page, Math.ceil(filtered.length / pageSize) - 1));
       rows.forEach((row) => {
         row.node.hidden = true;
@@ -927,18 +984,25 @@
         body.append(row.node);
         row.node.hidden = index < page * pageSize || index >= (page + 1) * pageSize;
       });
-      if (info) info.textContent = filtered.length ? `Showing ${page * pageSize + 1}-${Math.min((page + 1) * pageSize, filtered.length)} of ${filtered.length}` : "No results";
-      if (previous) previous.disabled = page === 0;
-      if (next) next.disabled = (page + 1) * pageSize >= filtered.length;
+      if (info)
+        info.textContent = filtered.length ? `Showing ${page * pageSize + 1}-${Math.min((page + 1) * pageSize, filtered.length)} of ${filtered.length}` : "No results";
+      if (previous)
+        previous.disabled = page === 0;
+      if (next)
+        next.disabled = (page + 1) * pageSize >= filtered.length;
       headers.forEach((header, index) => {
-        if (header.getAttribute("data-sortable") !== "true") return;
+        if (header.getAttribute("data-sortable") !== "true")
+          return;
         header.setAttribute("aria-sort", index === column && direction ? direction === 1 ? "ascending" : "descending" : "none");
-        if (index === column && direction) header.setAttribute("data-sort-dir", direction === 1 ? "asc" : "desc");
-        else header.removeAttribute("data-sort-dir");
+        if (index === column && direction)
+          header.setAttribute("data-sort-dir", direction === 1 ? "asc" : "desc");
+        else
+          header.removeAttribute("data-sort-dir");
       });
     }
     headers.forEach((header, index) => {
-      if (header.getAttribute("data-sortable") !== "true") return;
+      if (header.getAttribute("data-sortable") !== "true")
+        return;
       const sort = () => {
         direction = column === index ? direction === 1 ? -1 : direction === -1 ? 0 : 1 : 1;
         column = index;
@@ -970,7 +1034,8 @@
   ui.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   var MONTH_NAMES = [
     "January",
     "February",
@@ -992,7 +1057,8 @@
     }
     var thirtyDays = [4, 6, 9, 11];
     for (var i = 0; i < thirtyDays.length; i++) {
-      if (month === thirtyDays[i]) return 30;
+      if (month === thirtyDays[i])
+        return 30;
     }
     return 31;
   }
@@ -1030,7 +1096,8 @@
     for (var d = 1; d <= totalDays; d++) {
       var isSelected = year === selectedYear && month === selectedMonth && d === selectedDay;
       var cls = "mui-date-picker__day";
-      if (isSelected) cls += " mui-date-picker__day--selected";
+      if (isSelected)
+        cls += " mui-date-picker__day--selected";
       html += '<button type="button" class="' + cls + '" data-day="' + d + '" data-month="' + month + '" data-year="' + year + '">' + d + "</button>";
     }
     html += "</div></div>";
@@ -1075,10 +1142,12 @@
       document.removeEventListener("keydown", escClose, true);
     }
     function clickOutside(e) {
-      if (!root.contains(e.target)) close();
+      if (!root.contains(e.target))
+        close();
     }
     function escClose(e) {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape")
+        close();
     }
     function rebuildCalendar() {
       dropdown.innerHTML = renderCalendarHTML(viewYear, viewMonth, selectedYear, selectedMonth, selectedDay);
@@ -1136,20 +1205,24 @@
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet(), openers = /* @__PURE__ */ new WeakMap();
   const focusable = (dialog) => Array.from(dialog.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),summary,[tabindex]:not([tabindex="-1"])')).filter((n) => n.getClientRects().length && !n.closest("[inert]") && getComputedStyle(n).visibility !== "hidden");
   function trigger(button) {
-    if (initialized.has(button)) return;
+    if (initialized.has(button))
+      return;
     initialized.add(button);
     button.addEventListener("click", () => {
       const dialog = document.getElementById(button.getAttribute("data-target"));
-      if (!dialog?.showModal || dialog.open) return;
+      if (!dialog?.showModal || dialog.open)
+        return;
       ui.init(dialog);
       openers.set(dialog, button);
       dialog.showModal();
@@ -1157,7 +1230,8 @@
     });
   }
   function attach(dialog, backdrop) {
-    if (initialized.has(dialog)) return;
+    if (initialized.has(dialog))
+      return;
     initialized.add(dialog);
     dialog.addEventListener("click", (event) => {
       const close = event.target.closest?.("[data-mui-close]");
@@ -1168,11 +1242,13 @@
       }
       if (backdrop && event.target === dialog) {
         const r = dialog.getBoundingClientRect();
-        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)
+          dialog.close();
       }
     });
     dialog.addEventListener("keydown", (event) => {
-      if (event.key !== "Tab" || !dialog.open) return;
+      if (event.key !== "Tab" || !dialog.open)
+        return;
       const items = focusable(dialog), first = items[0], last = items[items.length - 1];
       if (!first) {
         event.preventDefault();
@@ -1188,7 +1264,8 @@
     });
     dialog.addEventListener("close", () => {
       const opener = openers.get(dialog);
-      if (opener?.isConnected && opener.getClientRects().length) opener.focus();
+      if (opener?.isConnected && opener.getClientRects().length)
+        opener.focus();
       openers.delete(dialog);
     });
   }
@@ -1199,7 +1276,8 @@
   ui.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["dir-toggle"] = function(el) {
     el.addEventListener("click", function() {
       var html = document.documentElement;
@@ -1221,10 +1299,12 @@
     } catch (e) {
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["drawer-trigger"] = function(el) {
     el.addEventListener("click", function() {
       var target_id = el.getAttribute("data-target");
@@ -1247,14 +1327,17 @@
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["hover-card"] = function(root) {
     var trigger = root.querySelector(".mui-hover-card__trigger");
     var content = root.querySelector(".mui-hover-card__content");
-    if (!trigger || !content) return;
+    if (!trigger || !content)
+      return;
     var openDelay = parseInt(root.getAttribute("data-open-delay") || "300", 10);
     var closeDelay = parseInt(root.getAttribute("data-close-delay") || "200", 10);
     var openTimer = null;
@@ -1276,8 +1359,10 @@
           content.setAttribute("hidden", "");
         });
       }
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) close();
-      else closeTimer = setTimeout(close, closeDelay);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        close();
+      else
+        closeTimer = setTimeout(close, closeDelay);
     }
     trigger.addEventListener("mouseenter", show);
     trigger.addEventListener("mouseleave", hide);
@@ -1287,7 +1372,8 @@
     });
     content.addEventListener("mouseleave", hide);
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 window.MaudUI.behaviors["input-otp"] = function(root) {
   var slots = root.querySelectorAll(".mui-input-otp__slot");
@@ -1318,11 +1404,13 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   }
 };
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["menu"] = function(root) {
     var trigger = root.querySelector(".mui-menu__trigger");
     var content = root.querySelector("[role='menu']");
-    if (!trigger || !content) return;
+    if (!trigger || !content)
+      return;
     var focusedIndex = -1;
     function open() {
       trigger.setAttribute("aria-expanded", "true");
@@ -1361,7 +1449,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function focusItem(index) {
       var items = getMenuItems();
-      if (index < 0 || index >= items.length) return;
+      if (index < 0 || index >= items.length)
+        return;
       focusedIndex = index;
       for (var i = 0; i < items.length; i++) {
         items[i].tabIndex = i === index ? 0 : -1;
@@ -1374,9 +1463,11 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     function handleKeydown(e) {
-      if (trigger.getAttribute("aria-expanded") !== "true") return;
+      if (trigger.getAttribute("aria-expanded") !== "true")
+        return;
       var items = getMenuItems();
-      if (items.length === 0) return;
+      if (items.length === 0)
+        return;
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
@@ -1409,7 +1500,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   window.MaudUI.behaviors["context-menu"] = function(root) {
     var region = root.querySelector(".mui-context-menu__region");
     var content = root.querySelector("[role='menu']");
-    if (!region || !content) return;
+    if (!region || !content)
+      return;
     var focusedIndex = -1;
     var returnTo = null;
     function open(x, y) {
@@ -1445,7 +1537,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function focusItem(index) {
       var items = getMenuItems();
-      if (index < 0 || index >= items.length) return;
+      if (index < 0 || index >= items.length)
+        return;
       focusedIndex = index;
       for (var i = 0; i < items.length; i++) {
         items[i].tabIndex = i === index ? 0 : -1;
@@ -1463,9 +1556,11 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     function handleKeydown(e) {
-      if (content.getAttribute("hidden") !== null) return;
+      if (content.getAttribute("hidden") !== null)
+        return;
       var items = getMenuItems();
-      if (items.length === 0) return;
+      if (items.length === 0)
+        return;
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
@@ -1486,7 +1581,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         case "Escape":
           e.preventDefault();
           close();
-          if (returnTo && returnTo.isConnected && returnTo.focus) returnTo.focus();
+          if (returnTo && returnTo.isConnected && returnTo.focus)
+            returnTo.focus();
           break;
         case "Tab":
           close();
@@ -1498,10 +1594,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       open(e.clientX, e.clientY);
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["menubar"] = function(root) {
     var triggers = [];
     var contents = [];
@@ -1515,7 +1613,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         contents.push(content);
       }
     }
-    if (triggers.length === 0) return;
+    if (triggers.length === 0)
+      return;
     function isAnyOpen() {
       return activeIndex >= 0;
     }
@@ -1539,7 +1638,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       document.addEventListener("keydown", handleGlobalKeydown, true);
     }
     function closeMenu(index) {
-      if (index < 0 || index >= triggers.length) return;
+      if (index < 0 || index >= triggers.length)
+        return;
       triggers[index].setAttribute("aria-expanded", "false");
       window.MaudUI.closeOverlay(contents[index], function() {
         contents[index].setAttribute("hidden", "");
@@ -1571,13 +1671,15 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       var items = getMenuItems(menuIndex);
       var focused = document.activeElement;
       for (var i2 = 0; i2 < items.length; i2++) {
-        if (items[i2] === focused) return i2;
+        if (items[i2] === focused)
+          return i2;
       }
       return -1;
     }
     function focusItem(menuIndex, itemIndex) {
       var items = getMenuItems(menuIndex);
-      if (itemIndex < 0 || itemIndex >= items.length) return;
+      if (itemIndex < 0 || itemIndex >= items.length)
+        return;
       for (var i2 = 0; i2 < items.length; i2++) {
         items[i2].tabIndex = i2 === itemIndex ? 0 : -1;
       }
@@ -1589,7 +1691,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     function handleGlobalKeydown(e) {
-      if (!isAnyOpen()) return;
+      if (!isAnyOpen())
+        return;
       var items = getMenuItems(activeIndex);
       var focusedIdx = getFocusedItemIndex(activeIndex);
       switch (e.key) {
@@ -1673,7 +1776,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       })(c);
     }
     root.addEventListener("keydown", function(e) {
-      if (isAnyOpen()) return;
+      if (isAnyOpen())
+        return;
       var focused = document.activeElement;
       var currentIdx = -1;
       for (var i2 = 0; i2 < triggers.length; i2++) {
@@ -1682,7 +1786,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
           break;
         }
       }
-      if (currentIdx < 0) return;
+      if (currentIdx < 0)
+        return;
       switch (e.key) {
         case "ArrowRight":
           e.preventDefault();
@@ -1709,10 +1814,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["nav-menu"] = function(root) {
     var items = root.querySelectorAll(".mui-nav-menu__item[data-has-content]");
     var triggers = [];
@@ -1726,7 +1833,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         contents.push(content);
       }
     }
-    if (triggers.length === 0) return;
+    if (triggers.length === 0)
+      return;
     function isAnyOpen() {
       return activeIndex >= 0;
     }
@@ -1745,7 +1853,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       document.addEventListener("keydown", handleGlobalKeydown, true);
     }
     function closeMenu(index) {
-      if (index < 0 || index >= triggers.length) return;
+      if (index < 0 || index >= triggers.length)
+        return;
       triggers[index].setAttribute("aria-expanded", "false");
       contents[index].setAttribute("hidden", "");
     }
@@ -1764,7 +1873,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       var links = getLinks(menuIndex);
       var focused = document.activeElement;
       for (var i2 = 0; i2 < links.length; i2++) {
-        if (links[i2] === focused) return i2;
+        if (links[i2] === focused)
+          return i2;
       }
       return -1;
     }
@@ -1780,7 +1890,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     function handleGlobalKeydown(e) {
-      if (!isAnyOpen()) return;
+      if (!isAnyOpen())
+        return;
       var links = getLinks(activeIndex);
       var focusedIdx = getFocusedLinkIndex(activeIndex);
       switch (e.key) {
@@ -1844,7 +1955,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       })(t);
     }
     root.addEventListener("keydown", function(e) {
-      if (isAnyOpen()) return;
+      if (isAnyOpen())
+        return;
       var focused = document.activeElement;
       var currentIdx = -1;
       for (var i2 = 0; i2 < triggers.length; i2++) {
@@ -1853,7 +1965,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
           break;
         }
       }
-      if (currentIdx < 0) return;
+      if (currentIdx < 0)
+        return;
       switch (e.key) {
         case "ArrowRight":
           e.preventDefault();
@@ -1874,10 +1987,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   function updateValue(input, newVal) {
     var min = input.hasAttribute("min") ? parseFloat(input.min) : -Infinity;
     var max = input.hasAttribute("max") ? parseFloat(input.max) : Infinity;
@@ -1890,9 +2005,11 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   }
   window.MaudUI.behaviors["number-field-dec"] = function(el) {
     el.addEventListener("click", function() {
-      if (el.disabled) return;
+      if (el.disabled)
+        return;
       var input = el.parentElement.querySelector("input[type='number']");
-      if (!input || input.disabled) return;
+      if (!input || input.disabled)
+        return;
       var current = parseFloat(input.value) || 0;
       var step = parseFloat(input.step) || 1;
       updateValue(input, current - step);
@@ -1900,30 +2017,37 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   };
   window.MaudUI.behaviors["number-field-inc"] = function(el) {
     el.addEventListener("click", function() {
-      if (el.disabled) return;
+      if (el.disabled)
+        return;
       var input = el.parentElement.querySelector("input[type='number']");
-      if (!input || input.disabled) return;
+      if (!input || input.disabled)
+        return;
       var current = parseFloat(input.value) || 0;
       var step = parseFloat(input.step) || 1;
       updateValue(input, current + step);
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["popover"] = function(root) {
     var trigger = root.querySelector(".mui-popover__trigger");
     var content = root.querySelector(".mui-popover__content");
-    if (!trigger || !content) return;
+    if (!trigger || !content)
+      return;
     var interactive = trigger.querySelector('button, a, [role="button"]') || trigger;
     interactive.setAttribute("aria-haspopup", "dialog");
     interactive.setAttribute("aria-expanded", content.hidden ? "false" : "true");
     interactive.setAttribute("aria-controls", content.id || "");
     function toggle() {
       var expanded = interactive.getAttribute("aria-expanded") === "true";
-      if (expanded) close();
-      else open();
+      if (expanded)
+        close();
+      else
+        open();
     }
     function open() {
       interactive.setAttribute("aria-expanded", "true");
@@ -1947,7 +2071,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       document.removeEventListener("keydown", escClose, true);
     }
     function clickOutside(e) {
-      if (!root.contains(e.target)) close();
+      if (!root.contains(e.target))
+        close();
     }
     function escClose(e) {
       if (e.key === "Escape") {
@@ -1961,16 +2086,19 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       document.addEventListener("keydown", escClose, true);
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["resizable"] = function(root) {
     var handles = root.querySelectorAll(".mui-resizable__handle");
     var panels = root.querySelectorAll(".mui-resizable__panel");
     var direction = root.getAttribute("data-direction") || "horizontal";
     var isHorizontal = direction === "horizontal";
-    if (handles.length === 0 || panels.length < 2) return;
+    if (handles.length === 0 || panels.length < 2)
+      return;
     function getTotalSize() {
       var rect = root.getBoundingClientRect();
       return isHorizontal ? rect.width : rect.height;
@@ -2087,15 +2215,18 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       })(h);
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["scroll-area"] = function(root) {
     var viewport = root.querySelector(".mui-scroll-area__viewport");
     var scrollbar = root.querySelector(".mui-scroll-area__scrollbar");
     var thumb = root.querySelector(".mui-scroll-area__thumb");
-    if (!viewport || !scrollbar || !thumb) return;
+    if (!viewport || !scrollbar || !thumb)
+      return;
     var hideTimer = null;
     function updateThumb() {
       var ratio = viewport.clientHeight / viewport.scrollHeight;
@@ -2135,7 +2266,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       );
     });
     function onDrag(e) {
-      if (!dragging) return;
+      if (!dragging)
+        return;
       var delta = e.clientY - startY;
       var scrollable = viewport.scrollHeight - viewport.clientHeight;
       var trackHeight = scrollbar.clientHeight;
@@ -2146,10 +2278,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       new ResizeObserver(updateThumb).observe(viewport);
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["select"] = function(root) {
     var trigger = root.querySelector(".mui-select__trigger");
     var dropdown = root.querySelector("[role='listbox']");
@@ -2161,7 +2295,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     var typeAheadStr = "";
     function indexOf(nodeList, element) {
       for (var i = 0; i < nodeList.length; i++) {
-        if (nodeList[i] === element) return i;
+        if (nodeList[i] === element)
+          return i;
       }
       return -1;
     }
@@ -2199,7 +2334,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function selectOption(idx) {
       var opt = options[idx];
-      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      if (!opt || opt.getAttribute("aria-disabled") === "true")
+        return;
       for (var i = 0; i < options.length; i++) {
         options[i].classList.remove("mui-select__option--selected");
         options[i].setAttribute("aria-selected", "false");
@@ -2232,7 +2368,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         } else {
           nextIdx = activeIndex + (e.key === "ArrowDown" ? 1 : -1);
           while (nextIdx >= 0 && nextIdx < options.length) {
-            if (options[nextIdx].getAttribute("aria-disabled") !== "true") break;
+            if (options[nextIdx].getAttribute("aria-disabled") !== "true")
+              break;
             nextIdx += e.key === "ArrowDown" ? 1 : -1;
           }
           if (nextIdx >= 0 && nextIdx < options.length) {
@@ -2279,12 +2416,14 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const groups = /* @__PURE__ */ new WeakMap();
   const read = (key) => {
     try {
@@ -2300,17 +2439,22 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
   };
   function initGroup(group) {
-    if (group.querySelector('[aria-current="page"]')) group.setAttribute("data-contains-current", "true");
-    else group.removeAttribute("data-contains-current");
-    if (groups.has(group)) return groups.get(group);
+    if (group.querySelector('[aria-current="page"]'))
+      group.setAttribute("data-contains-current", "true");
+    else
+      group.removeAttribute("data-contains-current");
+    if (groups.has(group))
+      return groups.get(group);
     const key = "mui-nav-group:" + (group.getAttribute("data-nav-key") || group.id);
     const saved = read(key);
     const state = { desired: saved === "closed" ? false : saved === "open" ? true : group.open, forced: false };
-    if (saved === null && group.querySelector('[aria-current="page"]')) state.desired = true;
+    if (saved === null && group.querySelector('[aria-current="page"]'))
+      state.desired = true;
     groups.set(group, state);
     group.open = state.desired;
     group.addEventListener("toggle", () => {
-      if (state.forced) return;
+      if (state.forced)
+        return;
       state.desired = group.open;
       write(key, group.open ? "open" : "closed");
     });
@@ -2328,7 +2472,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   function updateSidebar(sidebar, collapsed) {
     const desktop = window.matchMedia("(min-width: 64rem)").matches;
     const mode = sidebar.getAttribute("data-collapsible");
-    if (mode === "none") collapsed = false;
+    if (mode === "none")
+      collapsed = false;
     sidebar.setAttribute("data-state", collapsed ? "collapsed" : "expanded");
     write("mui-sidebar:" + sidebar.id, collapsed ? "collapsed" : "expanded");
     forceGroups(sidebar, desktop && mode === "icon" && collapsed);
@@ -2340,31 +2485,37 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     });
   }
   function toggle(sidebar, trigger) {
-    if (!sidebar) return;
+    if (!sidebar)
+      return;
     const phone = window.matchMedia("(max-width: 59.99rem)").matches;
     if (phone) {
       const panel = document.getElementById(sidebar.id + "-drawer");
-      if (!panel || typeof panel.showModal !== "function" || panel.open) return;
+      if (!panel || typeof panel.showModal !== "function" || panel.open)
+        return;
       panel.dispatchEvent(new CustomEvent("mui:navigation-open"));
       panel.showModal();
       if (trigger) {
         trigger.setAttribute("aria-expanded", "true");
         panel.addEventListener("close", () => {
           trigger.setAttribute("aria-expanded", "false");
-          if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
+          if (trigger.isConnected && trigger.getClientRects().length)
+            trigger.focus();
         }, { once: true });
       }
     } else {
       const apply = () => updateSidebar(sidebar, sidebar.getAttribute("data-state") !== "collapsed");
       const inset = sidebar.closest(".mui-sidebar-provider")?.querySelector(".mui-sidebar-inset");
-      if (ui.railTransition) ui.railTransition([sidebar, inset], apply);
-      else apply();
+      if (ui.railTransition)
+        ui.railTransition([sidebar, inset], apply);
+      else
+        apply();
     }
   }
   ui.behaviors["sidebar"] = (sidebar) => {
     const panel = document.getElementById(sidebar.id + "-drawer");
     const provider = sidebar.closest(".mui-sidebar-provider");
-    if (!panel || !provider || typeof panel.showModal !== "function") return;
+    if (!panel || !provider || typeof panel.showModal !== "function")
+      return;
     const home = panel.parentNode;
     sidebar.setAttribute("data-navigation-ready", "");
     provider.setAttribute("data-navigation-ready", "");
@@ -2372,11 +2523,14 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     const restore = () => home.insertBefore(sidebar, panel);
     restore();
     sidebar.querySelectorAll(".mui-sidebar__menu-button").forEach((row) => {
-      if (!row.hasAttribute("aria-label")) row.setAttribute("aria-label", row.textContent.trim());
-      if (!row.hasAttribute("title")) row.setAttribute("title", row.getAttribute("aria-label"));
+      if (!row.hasAttribute("aria-label"))
+        row.setAttribute("aria-label", row.textContent.trim());
+      if (!row.hasAttribute("title"))
+        row.setAttribute("title", row.getAttribute("aria-label"));
     });
     const saved = read("mui-sidebar:" + sidebar.id);
-    if (saved === "collapsed" || saved === "expanded") sidebar.setAttribute("data-state", saved);
+    if (saved === "collapsed" || saved === "expanded")
+      sidebar.setAttribute("data-state", saved);
     const sync = () => {
       const phone = window.matchMedia("(max-width: 59.99rem)").matches;
       if (!phone && panel.open) {
@@ -2391,7 +2545,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     });
     panel.addEventListener("close", restore);
     panel.addEventListener("click", (event) => {
-      if (event.target === panel || event.target.closest("a[href]")) panel.close();
+      if (event.target === panel || event.target.closest("a[href]"))
+        panel.close();
     });
     const media = [window.matchMedia("(max-width: 59.99rem)"), window.matchMedia("(min-width: 64rem)")];
     const resize = () => {
@@ -2414,8 +2569,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   if (!window.__muiSidebarShortcutBound) {
     window.__muiSidebarShortcutBound = true;
     document.addEventListener("keydown", (event) => {
-      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "b" || event.defaultPrevented) return;
-      if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "b" || event.defaultPrevented)
+        return;
+      if (event.target.closest('input, textarea, select, [contenteditable="true"]'))
+        return;
       const provider = event.target.closest(".mui-sidebar-provider");
       const sidebar = provider ? provider.querySelector('[data-mui="sidebar"]') : document.querySelector('[data-mui="sidebar"]');
       if (sidebar) {
@@ -2427,7 +2584,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
   ui.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["slider"] = function(root) {
     var track = root.querySelector(".mui-slider__track");
     var fill = root.querySelector(".mui-slider__fill");
@@ -2436,13 +2594,16 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     var thumbs = Array.prototype.slice.call(
       root.querySelectorAll(".mui-slider__thumb")
     );
-    if (!track || !fill || thumbs.length === 0) return;
-    if (root.getAttribute("data-disabled") === "true") return;
+    if (!track || !fill || thumbs.length === 0)
+      return;
+    if (root.getAttribute("data-disabled") === "true")
+      return;
     var vertical = root.getAttribute("data-orientation") === "vertical";
     var min = parseFloat(root.getAttribute("data-min") || "0");
     var max = parseFloat(root.getAttribute("data-max") || "100");
     var step = parseFloat(root.getAttribute("data-step") || "1");
-    if (!(step > 0)) step = 1;
+    if (!(step > 0))
+      step = 1;
     var values = thumbs.map(function(t) {
       return parseFloat(t.getAttribute("aria-valuenow") || "0");
     });
@@ -2461,8 +2622,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     function paint() {
       for (var i2 = 0; i2 < thumbs.length; i2++) {
         var p = pct(values[i2]);
-        if (vertical) thumbs[i2].style.bottom = p + "%";
-        else thumbs[i2].style.left = p + "%";
+        if (vertical)
+          thumbs[i2].style.bottom = p + "%";
+        else
+          thumbs[i2].style.left = p + "%";
         thumbs[i2].setAttribute("aria-valuenow", fmt(values[i2]));
       }
       var lo, hi;
@@ -2496,9 +2659,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function setThumb(i2, v) {
       v = snap(v);
-      if (i2 > 0) v = Math.max(v, values[i2 - 1]);
-      if (i2 < values.length - 1) v = Math.min(v, values[i2 + 1]);
-      if (v === values[i2]) return;
+      if (i2 > 0)
+        v = Math.max(v, values[i2 - 1]);
+      if (i2 < values.length - 1)
+        v = Math.min(v, values[i2 + 1]);
+      if (v === values[i2])
+        return;
       values[i2] = v;
       paint();
     }
@@ -2526,7 +2692,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     function bindThumb(thumb, index) {
       thumb.addEventListener("pointerdown", function(e) {
-        if (thumb.getAttribute("aria-disabled") === "true") return;
+        if (thumb.getAttribute("aria-disabled") === "true")
+          return;
         e.preventDefault();
         thumb.focus();
         try {
@@ -2554,41 +2721,54 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
         thumb.addEventListener("pointercancel", onUp);
       });
       thumb.addEventListener("keydown", function(e) {
-        if (thumb.getAttribute("aria-disabled") === "true") return;
+        if (thumb.getAttribute("aria-disabled") === "true")
+          return;
         var v = values[index];
         var big = step * 10;
         var next = null;
-        if (e.key === "ArrowRight" || e.key === "ArrowUp") next = v + step;
-        else if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = v - step;
-        else if (e.key === "PageUp") next = v + big;
-        else if (e.key === "PageDown") next = v - big;
-        else if (e.key === "Home") next = min;
-        else if (e.key === "End") next = max;
-        if (next === null) return;
+        if (e.key === "ArrowRight" || e.key === "ArrowUp")
+          next = v + step;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowDown")
+          next = v - step;
+        else if (e.key === "PageUp")
+          next = v + big;
+        else if (e.key === "PageDown")
+          next = v - big;
+        else if (e.key === "Home")
+          next = min;
+        else if (e.key === "End")
+          next = max;
+        if (next === null)
+          return;
         e.preventDefault();
         setThumb(index, next);
       });
     }
-    for (var i = 0; i < thumbs.length; i++) bindThumb(thumbs[i], i);
+    for (var i = 0; i < thumbs.length; i++)
+      bindThumb(thumbs[i], i);
     track.addEventListener("pointerdown", function(e) {
-      if (e.target !== track && e.target !== fill) return;
+      if (e.target !== track && e.target !== fill)
+        return;
       var v = valueFromPointer(e);
       var idx = nearestThumb(v);
       setThumb(idx, v);
       thumbs[idx].focus();
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["switch"] = function(el) {
     var hiddenInput = el.nextElementSibling;
     while (hiddenInput && hiddenInput.className.indexOf("mui-switch__value") === -1) {
       hiddenInput = hiddenInput.nextElementSibling;
     }
     function toggle() {
-      if (el.hasAttribute("disabled")) return;
+      if (el.hasAttribute("disabled"))
+        return;
       var isChecked = el.getAttribute("aria-checked") === "true";
       var newState = !isChecked;
       el.setAttribute("aria-checked", newState ? "true" : "false");
@@ -2604,10 +2784,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["tabs"] = function(root) {
     var tabs = root.querySelectorAll('[role="tab"]');
     var panels = root.querySelectorAll('[role="tabpanel"]');
@@ -2664,10 +2846,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       })(i);
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["theme-toggle"] = function(el) {
     el.addEventListener("click", function() {
       var html = document.documentElement;
@@ -2689,10 +2873,12 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     } catch (e) {
     }
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["toast"] = function(el) {
     const closeBtn = el.querySelector(".mui-toast__close");
     if (closeBtn) {
@@ -2705,7 +2891,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
   };
   function dismissToast(el) {
-    if (el.hasAttribute("data-mui-exiting")) return;
+    if (el.hasAttribute("data-mui-exiting"))
+      return;
     el.setAttribute("data-mui-exiting", "");
     el.classList.add("mui-toast--exit");
     const style = getComputedStyle(el);
@@ -2762,7 +2949,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       return;
     }
     viewport.appendChild(buildToastNode(opts));
-    if (window.MaudUI.init) window.MaudUI.init(viewport);
+    if (window.MaudUI.init)
+      window.MaudUI.init(viewport);
   };
   function dispatchToSonner(opts) {
     const viewport = document.querySelector(".mui-sonner");
@@ -2771,19 +2959,24 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       return;
     }
     viewport.appendChild(buildToastNode(opts));
-    if (window.MaudUI.init) window.MaudUI.init(viewport);
+    if (window.MaudUI.init)
+      window.MaudUI.init(viewport);
   }
   window.MaudUI.sonner = dispatchToSonner;
   window.addEventListener("mui:sonner-toast", function(e) {
-    if (e && e.detail) dispatchToSonner(e.detail);
+    if (e && e.detail)
+      dispatchToSonner(e.detail);
   });
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["toggle"] = function(el) {
     function toggle() {
-      if (el.hasAttribute("disabled")) return;
+      if (el.hasAttribute("disabled"))
+        return;
       var isPressed = el.getAttribute("aria-pressed") === "true";
       el.setAttribute("aria-pressed", !isPressed ? "true" : "false");
     }
@@ -2815,7 +3008,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       }
     }
     function pressItem(item) {
-      if (isDisabled || item.hasAttribute("disabled")) return;
+      if (isDisabled || item.hasAttribute("disabled"))
+        return;
       var isPressed = item.getAttribute("aria-pressed") === "true";
       var newPressed = !isPressed;
       if (isMultiple) {
@@ -2836,7 +3030,8 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
           break;
         }
       }
-      if (focusedIndex === -1) return;
+      if (focusedIndex === -1)
+        return;
       var nextIndex = focusedIndex;
       if (direction === "left" || direction === "up") {
         nextIndex = focusedIndex === 0 ? items.length - 1 : focusedIndex - 1;
@@ -2866,14 +3061,17 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     }
     updateTabindex();
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
-  if (!window.MaudUI || !window.MaudUI.behaviors) return;
+  if (!window.MaudUI || !window.MaudUI.behaviors)
+    return;
   window.MaudUI.behaviors["tooltip"] = function(wrapper) {
     var trigger = wrapper.querySelector(".mui-tooltip__trigger");
     var content = wrapper.querySelector(".mui-tooltip__content");
-    if (!trigger || !content) return;
+    if (!trigger || !content)
+      return;
     var delay = parseInt(wrapper.getAttribute("data-delay") || "500", 10);
     var showTimer = null;
     var hideTimer = null;
@@ -2899,18 +3097,22 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
     trigger.addEventListener("focus", show);
     trigger.addEventListener("blur", hide);
     trigger.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") hide();
+      if (e.key === "Escape")
+        hide();
     });
   };
-  if (window.MaudUI.init) window.MaudUI.init();
+  if (window.MaudUI.init)
+    window.MaudUI.init();
 })();
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["banking-demo"] = (root) => {
-    if (initialized.has(root)) return;
+    if (initialized.has(root))
+      return;
     initialized.add(root);
     let trigger;
     root.addEventListener("click", (event) => {
@@ -2928,8 +3130,10 @@ window.MaudUI.behaviors["input-otp"] = function(root) {
       if (close) {
         const panel = close.closest("details");
         panel.open = false;
-        if (trigger?.isConnected) trigger.focus();
-        else panel.querySelector("summary").focus();
+        if (trigger?.isConnected)
+          trigger.focus();
+        else
+          panel.querySelector("summary").focus();
       }
     });
     const shell = root.closest(".mui-block--shell");
@@ -2949,7 +3153,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI, data = ui?.brandData;
-  if (!data) return;
+  if (!data)
+    return;
   const root = document.documentElement;
   const modes = ["compact", "comfortable", "spacious"];
   const read = (key) => {
@@ -2971,10 +3176,12 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   ui.densityChosen = modes.includes(savedDensity);
   function refresh() {
     const output = document.getElementById("mui-theme-export");
-    if (output) output.textContent = buildCss();
+    if (output)
+      output.textContent = buildCss();
     document.querySelectorAll("[data-brand-token]").forEach((input) => {
       const index = data.tokens.findIndex((token) => token.name === input.getAttribute("data-brand-token"));
-      if (index >= 0 && input !== document.activeElement) input.value = values[index];
+      if (index >= 0 && input !== document.activeElement)
+        input.value = values[index];
     });
     document.querySelectorAll("[data-brand-select]").forEach((select) => {
       select.value = current;
@@ -2985,19 +3192,25 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     document.querySelectorAll("[data-brand-radius-sample]").forEach((sample) => {
       const key = sample.getAttribute("data-brand-radius-sample");
       const value = getComputedStyle(sample).borderTopLeftRadius;
-      if (!value) return;
+      if (!value)
+        return;
       radii.push(key + " = " + value);
       const label = document.querySelector('[data-brand-radius-value="' + key + '"]');
-      if (label) label.textContent = value;
+      if (label)
+        label.textContent = value;
     });
     const formula = "Radius: sm = brand * 0.5; md = brand; lg = min(brand * 1.5, 12px). Controls = min(sm, 8px).";
     return "/* " + formula + (radii.length ? " Resolved: " + radii.join("; ") + "." : "") + " */\n:root {\n" + data.tokens.map((token, index) => "  " + token.name + ": " + values[index] + ";").join("\n") + "\n}\n";
   }
   function valid(token, value) {
-    if (typeof value !== "string" || !value.trim()) return false;
-    if (token.kind === "density") return ["0", "1", "2"].includes(value);
-    if (token.kind === "color") return /^#[0-9a-f]{6}$/i.test(value);
-    if (token.name === "--mui-brand-radius") return value === "0" || window.CSS?.supports("width", value) && window.CSS.supports("width", "calc(" + value + " * 0.5)");
+    if (typeof value !== "string" || !value.trim())
+      return false;
+    if (token.kind === "density")
+      return ["0", "1", "2"].includes(value);
+    if (token.kind === "color")
+      return /^#[0-9a-f]{6}$/i.test(value);
+    if (token.name === "--mui-brand-radius")
+      return value === "0" || window.CSS?.supports("width", value) && window.CSS.supports("width", "calc(" + value + " * 0.5)");
     const property = token.name.includes("font-") ? "font-family" : token.name.endsWith("mask") ? "mask-image" : token.name.includes("radius") ? "border-radius" : "width";
     return window.CSS?.supports(property, value) ?? false;
   }
@@ -3005,7 +3218,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     write("mui-brand", JSON.stringify({ current, values }));
   }
   function setDensity(mode, persistChoice = true) {
-    if (!modes.includes(mode)) return;
+    if (!modes.includes(mode))
+      return;
     root.setAttribute("data-density", mode);
     document.querySelectorAll("[data-mui-density-scope]").forEach((scope) => scope.setAttribute("data-mui-density-scope", mode));
     document.querySelectorAll('[data-mui="density-control"]').forEach((select) => {
@@ -3021,26 +3235,30 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   }
   ui.setDensity = setDensity;
   function apply(next, name, save = true) {
-    if (next.length !== data.tokens.length || !next.every((v, i) => valid(data.tokens[i], v))) return false;
+    if (next.length !== data.tokens.length || !next.every((v, i) => valid(data.tokens[i], v)))
+      return false;
     let old = {};
     try {
       old = JSON.parse(read("mui-theme-overrides") || "{}");
     } catch {
     }
     Object.keys(old).forEach((key) => {
-      if (key.startsWith("mui-") && !key.startsWith("mui-brand-")) root.style.removeProperty("--" + key);
+      if (key.startsWith("mui-") && !key.startsWith("mui-brand-"))
+        root.style.removeProperty("--" + key);
     });
     values = [...next];
     current = name;
     root.removeAttribute("data-brand");
     data.tokens.forEach((token, i) => root.style.setProperty(token.name, values[i]));
     const brand = data.presets.find((preset) => preset.key === name);
-    if (brand) document.querySelectorAll("[data-brand-live]").forEach((preview) => {
-      preview.querySelector(".mui-brand-mark__wordmark").textContent = brand.wordmark;
-      preview.querySelector(".mui-brand-mark__tagline").textContent = brand.tagline;
-    });
+    if (brand)
+      document.querySelectorAll("[data-brand-live]").forEach((preview) => {
+        preview.querySelector(".mui-brand-mark__wordmark").textContent = brand.wordmark;
+        preview.querySelector(".mui-brand-mark__tagline").textContent = brand.tagline;
+      });
     setDensity(modes[Number(values[5])], false);
-    if (save) persist();
+    if (save)
+      persist();
     document.dispatchEvent(new CustomEvent("mui:brand-change"));
     refresh();
     return true;
@@ -3048,27 +3266,33 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   ui.brand = { buildCss, apply, valid };
   try {
     const saved = JSON.parse(read("mui-brand") || "null");
-    if (Array.isArray(saved?.values)) apply(saved.values, saved.current, false);
+    if (Array.isArray(saved?.values))
+      apply(saved.values, saved.current, false);
   } catch {
   }
-  if (ui.densityChosen) setDensity(savedDensity, false);
+  if (ui.densityChosen)
+    setDensity(savedDensity, false);
   const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["density-control"] = (select) => {
-    if (initialized.has(select)) return;
+    if (initialized.has(select))
+      return;
     initialized.add(select);
     select.value = root.getAttribute("data-density") || "comfortable";
     select.addEventListener("change", () => setDensity(select.value));
   };
   ui.behaviors["brand-customizer"] = (editor) => {
-    if (initialized.has(editor)) return;
+    if (initialized.has(editor))
+      return;
     initialized.add(editor);
     let saved;
     try {
       saved = JSON.parse(read("mui-brand") || "null");
     } catch {
     }
-    if (!saved || !Array.isArray(saved.values) || !apply(saved.values, saved.current, false)) apply(data.presets[0].values, data.presets[0].key, false);
-    if (ui.densityChosen) setDensity(savedDensity, false);
+    if (!saved || !Array.isArray(saved.values) || !apply(saved.values, saved.current, false))
+      apply(data.presets[0].values, data.presets[0].key, false);
+    if (ui.densityChosen)
+      setDensity(savedDensity, false);
     editor.querySelector("[data-brand-select]").addEventListener("change", (event) => {
       const preset = data.presets.find((preset2) => preset2.key === event.target.value);
       if (preset) {
@@ -3079,14 +3303,16 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     });
     editor.addEventListener("input", (event) => {
       const index = data.tokens.findIndex((token) => token.name === event.target.getAttribute("data-brand-token"));
-      if (index < 0) return;
+      if (index < 0)
+        return;
       const next = [...values];
       next[index] = event.target.value;
       const accepted = valid(data.tokens[index], next[index]);
       event.target.setAttribute("aria-invalid", String(!accepted));
       if (accepted) {
         apply(next, "");
-        if (index === 5) setDensity(modes[Number(next[index])]);
+        if (index === 5)
+          setDensity(modes[Number(next[index])]);
       }
     });
     editor.querySelector("[data-brand-example-action]").addEventListener("click", () => {
@@ -3098,39 +3324,54 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["status-chip-group"] = function(group) {
-    if (initialized.has(group)) return;
+    if (initialized.has(group))
+      return;
     initialized.add(group);
     group.addEventListener("keydown", function(event) {
-      if (event.altKey || event.metaKey || event.ctrlKey || event.shiftKey) return;
+      if (event.altKey || event.metaKey || event.ctrlKey || event.shiftKey)
+        return;
       const links = Array.from(group.querySelectorAll("a[href]"));
       const index = links.indexOf(event.target);
-      if (index < 0) return;
+      if (index < 0)
+        return;
       const rtl = getComputedStyle(group).direction === "rtl";
       let next;
-      if (event.key === "Home") next = 0;
-      else if (event.key === "End") next = links.length - 1;
-      else if (event.key === "ArrowRight") next = index + (rtl ? -1 : 1);
-      else if (event.key === "ArrowLeft") next = index + (rtl ? 1 : -1);
-      else if (event.key === "ArrowDown") next = index + 1;
-      else if (event.key === "ArrowUp") next = index - 1;
-      else return;
+      if (event.key === "Home")
+        next = 0;
+      else if (event.key === "End")
+        next = links.length - 1;
+      else if (event.key === "ArrowRight")
+        next = index + (rtl ? -1 : 1);
+      else if (event.key === "ArrowLeft")
+        next = index + (rtl ? 1 : -1);
+      else if (event.key === "ArrowDown")
+        next = index + 1;
+      else if (event.key === "ArrowUp")
+        next = index - 1;
+      else
+        return;
       event.preventDefault();
       links[(next + links.length) % links.length].focus();
     });
   };
   ui.behaviors["navigation-trigger"] = function(trigger) {
-    if (initialized.has(trigger)) return;
+    if (initialized.has(trigger))
+      return;
     initialized.add(trigger);
     trigger.setAttribute("aria-expanded", "false");
     trigger.addEventListener("click", function(event) {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+        return;
       const dialog = document.getElementById(trigger.getAttribute("aria-controls"));
-      if (!dialog || typeof dialog.showModal !== "function") return;
+      if (!dialog || typeof dialog.showModal !== "function")
+        return;
       event.preventDefault();
-      if (dialog.open) return;
+      if (dialog.open)
+        return;
       dialog.dispatchEvent(new CustomEvent("mui:navigation-open"));
       dialog.showModal();
       trigger.setAttribute("aria-expanded", "true");
@@ -3138,23 +3379,27 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         setTimeout(() => {
           if (!dialog.open) {
             trigger.setAttribute("aria-expanded", "false");
-            if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
+            if (trigger.isConnected && trigger.getClientRects().length)
+              trigger.focus();
           }
         });
       }, { once: true });
       dialog.addEventListener("close", function() {
         trigger.setAttribute("aria-expanded", "false");
-        if (trigger.isConnected && trigger.getClientRects().length) trigger.focus();
+        if (trigger.isConnected && trigger.getClientRects().length)
+          trigger.focus();
       }, { once: true });
     });
   };
   ui.behaviors["shell-navigation"] = function(shell) {
-    if (initialized.has(shell)) return;
+    if (initialized.has(shell))
+      return;
     initialized.add(shell);
     const sidebar = shell.querySelector(".mui-block--shell__sidebar");
     const dialog = shell.querySelector(".mui-navigation-dialog");
     const main = shell.querySelector(".mui-block--shell__main");
-    if (!sidebar || !dialog || typeof dialog.showModal !== "function") return;
+    if (!sidebar || !dialog || typeof dialog.showModal !== "function")
+      return;
     shell.setAttribute("data-mui-navigation-ready", "");
     const fallback = shell.querySelector(".mui-navigation-fallback");
     const column = shell.querySelector(".mui-block--shell__sidebar-column");
@@ -3171,10 +3416,12 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     const drawerBrand = sidebar.querySelector(".mui-block--shell__brand");
     const restore = () => {
       home.insertBefore(sidebar, column ? null : main);
-      if (headerBrand && brandHome) brandHome.insertBefore(headerBrand, brandNext);
+      if (headerBrand && brandHome)
+        brandHome.insertBefore(headerBrand, brandNext);
     };
     dialog.addEventListener("mui:navigation-open", () => {
-      if (headerBrand && drawerBrand) drawerBrand.insertBefore(headerBrand, drawerBrand.firstChild);
+      if (headerBrand && drawerBrand)
+        drawerBrand.insertBefore(headerBrand, drawerBrand.firstChild);
       dialog.append(sidebar);
     });
     dialog.addEventListener("close", restore);
@@ -3184,11 +3431,13 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         dialog.close();
       }
       setTimeout(() => {
-        if (!dialog.open) restore();
+        if (!dialog.open)
+          restore();
       });
     });
     dialog.addEventListener("click", function(event) {
-      if (event.target === dialog || event.target.closest("a[href]")) dialog.close();
+      if (event.target === dialog || event.target.closest("a[href]"))
+        dialog.close();
     });
     const media = window.matchMedia("(max-width: 63.99rem)");
     const resize = () => {
@@ -3200,7 +3449,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         const focused = sidebar.contains(document.activeElement) ? document.activeElement : null;
         dialog.close();
         restore();
-        if (focused) focused.focus();
+        if (focused)
+          focused.focus();
       }
     };
     media.addEventListener("change", resize);
@@ -3218,17 +3468,21 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         wide.removeEventListener("change", syncHeader);
         return;
       }
-      if (!header) return;
+      if (!header)
+        return;
       const focused = document.activeElement;
       if (headerControls && mobileControls) {
         const target = media.matches ? mobileControls : settings || header;
-        if (headerControls.parentNode !== target) target.append(headerControls);
+        if (headerControls.parentNode !== target)
+          target.append(headerControls);
       }
       if (breadcrumb && where && context) {
         const target = media.matches ? where : context;
-        if (breadcrumb.parentNode !== target) target.append(breadcrumb);
+        if (breadcrumb.parentNode !== target)
+          target.append(breadcrumb);
       }
-      if (settings) settings.open = wide.matches;
+      if (settings)
+        settings.open = wide.matches;
       if (focused && sidebar.contains(focused) && media.matches && !dialog.open) {
         shell.querySelector('[data-mui="navigation-trigger"]')?.focus();
       }
@@ -3241,30 +3495,38 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     const rail = shell.querySelector('[data-mui="shell-rail"]');
     const key = "mui-shell-rail:" + shell.id;
     const saved = prefs && prefs.read(key);
-    if (saved === "true" || saved === "false") shell.setAttribute("data-collapsed", saved);
+    if (saved === "true" || saved === "false")
+      shell.setAttribute("data-collapsed", saved);
     function syncRail() {
       const collapsed = !!rail && railMedia.matches && shell.getAttribute("data-collapsed") === "true";
-      if (rail) rail.setAttribute("aria-expanded", String(!collapsed));
-      if (prefs) prefs.forceGroups(sidebar, collapsed);
+      if (rail)
+        rail.setAttribute("aria-expanded", String(!collapsed));
+      if (prefs)
+        prefs.forceGroups(sidebar, collapsed);
     }
-    if (rail) rail.addEventListener("click", function() {
-      const next = shell.getAttribute("data-collapsed") !== "true";
-      if (next) {
-        const input = sidebar.querySelector("[data-mui-nav-search]");
-        if (input) input.value = "";
-        sidebar.querySelectorAll("li, .mui-block--shell__nav-group").forEach((row) => {
-          row.hidden = false;
-        });
-      }
-      const apply = () => {
-        shell.setAttribute("data-collapsed", String(next));
-        syncRail();
-      };
-      const parts = [sidebar, shell.querySelector(".mui-block--shell__main")];
-      if (ui.railTransition) ui.railTransition(parts, apply);
-      else apply();
-      if (prefs) prefs.write(key, String(next));
-    });
+    if (rail)
+      rail.addEventListener("click", function() {
+        const next = shell.getAttribute("data-collapsed") !== "true";
+        if (next) {
+          const input = sidebar.querySelector("[data-mui-nav-search]");
+          if (input)
+            input.value = "";
+          sidebar.querySelectorAll("li, .mui-block--shell__nav-group").forEach((row) => {
+            row.hidden = false;
+          });
+        }
+        const apply = () => {
+          shell.setAttribute("data-collapsed", String(next));
+          syncRail();
+        };
+        const parts = [sidebar, shell.querySelector(".mui-block--shell__main")];
+        if (ui.railTransition)
+          ui.railTransition(parts, apply);
+        else
+          apply();
+        if (prefs)
+          prefs.write(key, String(next));
+      });
     const resizeRail = () => {
       if (!shell.isConnected) {
         railMedia.removeEventListener("change", resizeRail);
@@ -3274,42 +3536,49 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     };
     railMedia.addEventListener("change", resizeRail);
     dialog.addEventListener("mui:navigation-open", () => {
-      if (prefs) prefs.forceGroups(sidebar, false);
+      if (prefs)
+        prefs.forceGroups(sidebar, false);
     });
     dialog.addEventListener("close", syncRail);
     syncRail();
     const search = sidebar.querySelector("[data-mui-nav-search]");
-    if (search) search.addEventListener("input", function() {
-      const query = search.value.trim().toLocaleLowerCase();
-      if (prefs) prefs.forceGroups(sidebar, !!query);
-      sidebar.querySelectorAll(".mui-block--shell__nav-group").forEach((group) => {
-        const rows = Array.from(group.querySelectorAll("li"));
-        rows.forEach((row) => {
-          row.hidden = !row.textContent.toLocaleLowerCase().includes(query);
+    if (search)
+      search.addEventListener("input", function() {
+        const query = search.value.trim().toLocaleLowerCase();
+        if (prefs)
+          prefs.forceGroups(sidebar, !!query);
+        sidebar.querySelectorAll(".mui-block--shell__nav-group").forEach((group) => {
+          const rows = Array.from(group.querySelectorAll("li"));
+          rows.forEach((row) => {
+            row.hidden = !row.textContent.toLocaleLowerCase().includes(query);
+          });
+          group.hidden = rows.every((row) => row.hidden);
         });
-        group.hidden = rows.every((row) => row.hidden);
       });
-    });
   };
   ui.init();
 })();
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   function focusSearch(target, source) {
     const disclosure = target.closest(".mui-page-header__search-disclosure");
-    if (disclosure) disclosure.open = true;
+    if (disclosure)
+      disclosure.open = true;
     const dialog = source.closest("dialog");
     if (dialog?.open) {
       dialog.addEventListener("close", () => target.focus(), { once: true });
       dialog.close();
-    } else target.focus();
+    } else
+      target.focus();
   }
   ui.behaviors["workspace-search"] = (trigger) => {
     trigger.addEventListener("click", () => {
       const target = trigger.closest(".mui-block--shell")?.querySelector('.mui-worklist-header input[type="search"]');
-      if (target) focusSearch(target, trigger);
+      if (target)
+        focusSearch(target, trigger);
     });
   };
   ui.behaviors["page-search"] = (input) => {
@@ -3318,7 +3587,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   if (!window.__muiPageSearchBound) {
     window.__muiPageSearchBound = true;
     document.addEventListener("keydown", (event) => {
-      if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
+      if (event.defaultPrevented || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k")
+        return;
       const scope = event.target.closest(".mui-block--shell") || document;
       const target = scope.querySelector('[data-mui="page-search"], .mui-worklist-header input[type="search"]');
       if (target && (target.getClientRects().length || target.closest(".mui-page-header__search-disclosure")?.getClientRects().length)) {
@@ -3339,7 +3609,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     const title = demo.querySelector("[data-demo-title]");
     const subtitle = demo.querySelector(".mui-record-header__subtitle");
     const status = demo.querySelector("[data-demo-status]");
-    if (!shell || !search || !table || !panel || !create || !dialog) return;
+    if (!shell || !search || !table || !panel || !create || !dialog)
+      return;
     let selectedFilter = 0;
     let serial = 2051;
     const filterNames = ["", "Arriving", "Checked in", "Needs review"];
@@ -3353,14 +3624,18 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         const guest = row.querySelector("[data-guest]");
         const matches = (!selectedFilter || guest.getAttribute("data-status") === filterNames[selectedFilter]) && row.textContent.toLocaleLowerCase().includes(query);
         row.hidden = !matches;
-        if (matches) visible++;
+        if (matches)
+          visible++;
       });
       chips.forEach((chip, i) => {
-        if (i === selectedFilter) chip.setAttribute("aria-current", "page");
-        else chip.removeAttribute("aria-current");
+        if (i === selectedFilter)
+          chip.setAttribute("aria-current", "page");
+        else
+          chip.removeAttribute("aria-current");
       });
       demo.querySelector(".mui-workspace-example__empty").hidden = visible > 0;
-      if (announce) feedback.textContent = visible + (visible === 1 ? " reservation shown." : " reservations shown.");
+      if (announce)
+        feedback.textContent = visible + (visible === 1 ? " reservation shown." : " reservations shown.");
     }
     function selectRow(row) {
       const guest = row.querySelector("[data-guest]");
@@ -3385,16 +3660,19 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       applyFilter();
     });
     demo.addEventListener("click", (event) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+        return;
       const link = event.target.closest("a[href]");
-      if (!link) return;
+      if (!link)
+        return;
       const href = link.getAttribute("href");
       const filter = chips.findIndex((chip) => chip.getAttribute("href") === href);
       if (filter >= 0) {
         event.preventDefault();
         selectedFilter = filter;
         applyFilter();
-        if (!link.closest(".mui-status-chip-group")) search.focus();
+        if (!link.closest(".mui-status-chip-group"))
+          search.focus();
       } else if (link.hasAttribute("data-demo-view")) {
         event.preventDefault();
         selectRow(link.closest("tr"));
@@ -3402,13 +3680,15 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         event.preventDefault();
         dialog.showModal();
         dialog.addEventListener("close", () => {
-          if (link.isConnected) link.focus();
+          if (link.isConnected)
+            link.focus();
         }, { once: true });
       }
     });
     create.addEventListener("submit", (event) => {
       event.preventDefault();
-      if (!create.reportValidity()) return;
+      if (!create.reportValidity())
+        return;
       const fields = new FormData(create);
       const name = String(fields.get("guest") || "").trim();
       if (!name) {
@@ -3421,7 +3701,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       const reference = "RS-" + serial++;
       row.hidden = false;
       guest.textContent = name;
-      for (const [key, value] of Object.entries({ guest: name, reference, status: "Arriving", room })) guest.setAttribute("data-" + key, value);
+      for (const [key, value] of Object.entries({ guest: name, reference, status: "Arriving", room }))
+        guest.setAttribute("data-" + key, value);
       row.querySelector(".mui-workspace-example__reference").textContent = reference;
       row.children[1].textContent = room;
       row.children[2].firstElementChild.textContent = "Arriving";
@@ -3441,7 +3722,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   ui.init();
 })();
 (function() {
-  if (window.__muiDisclosureMenuBound) return;
+  if (window.__muiDisclosureMenuBound)
+    return;
   window.__muiDisclosureMenuBound = true;
   var SELECTOR = "details.mui-action-row__more";
   function openMenus() {
@@ -3459,7 +3741,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   }
   document.addEventListener("click", function(event) {
     var summary = event.target.closest?.(SELECTOR + " > summary");
-    if (!summary) return;
+    if (!summary)
+      return;
     var details = summary.parentElement;
     var panel = details.querySelector(".mui-action-row__overflow");
     if (panel?.getAttribute("data-state") === "closing") {
@@ -3472,31 +3755,38 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   });
   function align(details) {
     var panel = details.querySelector(".mui-action-row__overflow");
-    if (!panel) return;
+    if (!panel)
+      return;
     details.removeAttribute("data-align");
     var rect = panel.getBoundingClientRect();
     var rtl = getComputedStyle(details).direction === "rtl";
     var overflows = rtl ? rect.left < 0 : rect.right > document.documentElement.clientWidth;
-    if (overflows) details.setAttribute("data-align", "end");
+    if (overflows)
+      details.setAttribute("data-align", "end");
   }
   document.addEventListener("toggle", function(event) {
     var details = event.target;
-    if (!(details instanceof HTMLDetailsElement) || !details.matches(SELECTOR) || !details.open) return;
+    if (!(details instanceof HTMLDetailsElement) || !details.matches(SELECTOR) || !details.open)
+      return;
     openMenus().forEach(function(other) {
-      if (other !== details) close(other);
+      if (other !== details)
+        close(other);
     });
     align(details);
   }, true);
   document.addEventListener("pointerdown", function(event) {
     openMenus().forEach(function(details) {
-      if (!details.contains(event.target)) close(details);
+      if (!details.contains(event.target))
+        close(details);
     });
   });
   document.addEventListener("keydown", function(event) {
-    if (event.key !== "Escape") return;
+    if (event.key !== "Escape")
+      return;
     openMenus().forEach(function(details) {
       var summary = details.querySelector("summary");
-      if (summary && details.contains(document.activeElement)) summary.focus();
+      if (summary && details.contains(document.activeElement))
+        summary.focus();
       close(details);
     });
   });
@@ -3504,7 +3794,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   const pending = /* @__PURE__ */ new WeakMap();
   const focusQueued = /* @__PURE__ */ new WeakSet();
@@ -3519,7 +3810,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     const id = field.getAttribute("data-field-control") || field.querySelector("label[for]")?.htmlFor;
     const control = id && document.getElementById(id);
     if (control && field.contains(control)) {
-      if (control.type === "radio") return Array.from(field.querySelectorAll('input[type="radio"]')).filter((n) => n.name === control.name);
+      if (control.type === "radio")
+        return Array.from(field.querySelectorAll('input[type="radio"]')).filter((n) => n.name === control.name);
       return [control];
     }
     return Array.from(field.querySelectorAll("input,select,textarea")).filter((n) => fieldFor(n) === field);
@@ -3529,15 +3821,18 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     const descriptions = Array.from(field.querySelectorAll(".mui-field__description")).filter((n) => n.closest(".mui-field, .mui-radio-group") === field);
     const nodes = [...descriptions, ...errors];
     nodes.forEach((n) => {
-      if (!n.id) n.id = "mui-field-message-" + ++nextId;
+      if (!n.id)
+        n.id = "mui-field-message-" + ++nextId;
     });
     controlsFor(field).forEach((control) => {
       const previous = (control.getAttribute("data-mui-field-links") || "").split(/\s+/);
       const existing = (control.getAttribute("aria-describedby") || "").split(/\s+/).filter((id) => id && !previous.includes(id));
       const links = nodes.map((n) => n.id);
       const all = Array.from(/* @__PURE__ */ new Set([...existing, ...links])).join(" ");
-      if (all) control.setAttribute("aria-describedby", all);
-      else control.removeAttribute("aria-describedby");
+      if (all)
+        control.setAttribute("aria-describedby", all);
+      else
+        control.removeAttribute("aria-describedby");
       control.setAttribute("data-mui-field-links", links.join(" "));
       if (errors.length) {
         control.setAttribute("aria-invalid", "true");
@@ -3548,12 +3843,15 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       }
     });
     field.classList.toggle("mui-field--invalid", errors.length > 0);
-    if (errors.length) field.setAttribute("data-invalid", "true");
-    else field.removeAttribute("data-invalid");
+    if (errors.length)
+      field.setAttribute("data-invalid", "true");
+    else
+      field.removeAttribute("data-invalid");
   }
   function clear(control) {
     const field = fieldFor(control);
-    if (!field) return;
+    if (!field)
+      return;
     errorNodes(field).forEach((n) => n.remove());
     wire(field);
   }
@@ -3596,8 +3894,10 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       if (error?.getAttribute("data-mui-control-error") === control.id) {
         const links = (control.getAttribute("aria-describedby") || "").split(/\s+/).filter((id) => id && id !== error.id).join(" ");
         error.remove();
-        if (links) control.setAttribute("aria-describedby", links);
-        else control.removeAttribute("aria-describedby");
+        if (links)
+          control.setAttribute("aria-describedby", links);
+        else
+          control.removeAttribute("aria-describedby");
         control.removeAttribute("aria-invalid");
         control.removeAttribute("data-mui-error-id");
       }
@@ -3605,7 +3905,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   }
   function focusFirst(form) {
     const first = fields(form).find((n) => enabled(n) && n.getAttribute("aria-invalid") === "true" && n.getClientRects().length);
-    if (first) first.focus();
+    if (first)
+      first.focus();
     return first;
   }
   function resultRegion(form) {
@@ -3648,17 +3949,21 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     return region;
   };
   ui.formPending = function(form, value = true, submitter) {
-    if (value && pending.has(form)) return;
+    if (value && pending.has(form))
+      return;
     if (!value) {
       const state = pending.get(form);
-      if (state?.mirror) state.mirror.remove();
+      if (state?.mirror)
+        state.mirror.remove();
       form.querySelectorAll("[data-mui-submitter-mirror]").forEach((n) => n.remove());
       Array.from(form.elements).filter((n) => n.hasAttribute("data-mui-disabled-before")).forEach((button) => {
         button.disabled = button.getAttribute("data-mui-disabled-before") === "true";
         button.removeAttribute("data-mui-disabled-before");
         const aria = button.getAttribute("data-mui-aria-disabled-before");
-        if (aria === "__absent__") button.removeAttribute("aria-disabled");
-        else if (aria !== null) button.setAttribute("aria-disabled", aria);
+        if (aria === "__absent__")
+          button.removeAttribute("aria-disabled");
+        else if (aria !== null)
+          button.setAttribute("aria-disabled", aria);
         button.removeAttribute("data-mui-aria-disabled-before");
         const content = button.querySelector("[data-mui-submit-content]");
         if (content) {
@@ -3707,7 +4012,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       for (const [name, message] of Object.entries(result.errors || {})) {
         fields(form).filter((n) => n.name === name || n.id === name).filter(enabled).forEach((n) => showError(n, String(message)));
       }
-      if (!focusFirst(form)) region.focus();
+      if (!focusFirst(form))
+        region.focus();
     }
     return region;
   };
@@ -3715,37 +4021,44 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     wire(field);
   };
   ui.behaviors["form-feedback"] = function(form) {
-    if (initialized.has(form)) return;
+    if (initialized.has(form))
+      return;
     initialized.add(form);
     ui.formPending(form, false);
     form.querySelectorAll(".mui-field, .mui-radio-group").forEach(wire);
-    if (form.querySelector(".mui-field__error")) queueMicrotask(() => focusFirst(form));
+    if (form.querySelector(".mui-field__error"))
+      queueMicrotask(() => focusFirst(form));
     form.addEventListener("submit", (event) => {
       if (pending.has(form)) {
         event.preventDefault();
         event.stopImmediatePropagation();
         return;
       }
-      if ((event.submitter?.formMethod || form.method) === "dialog") return;
+      if ((event.submitter?.formMethod || form.method) === "dialog")
+        return;
       if (!form.noValidate && !event.submitter?.formNoValidate && !form.checkValidity()) {
         event.preventDefault();
         return;
       }
       const region = form.querySelector("[data-mui-form-result]");
-      if (region) region.hidden = true;
+      if (region)
+        region.hidden = true;
       ui.formPending(form, true, event.submitter);
     }, true);
     form.addEventListener("reset", (event) => queueMicrotask(() => {
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented)
+        return;
       ui.formPending(form, false);
       fields(form).forEach(clearControl);
       const region = form.querySelector("[data-mui-form-result]");
-      if (region) region.hidden = true;
+      if (region)
+        region.hidden = true;
     }));
   };
   document.addEventListener("invalid", (event) => {
     const control = event.target, form = control.form;
-    if (!form || form.getAttribute("data-mui") !== "form-feedback") return;
+    if (!form || form.getAttribute("data-mui") !== "form-feedback")
+      return;
     event.preventDefault();
     showError(control, control.validationMessage || "Check this field.");
     if (!focusQueued.has(form)) {
@@ -3758,9 +4071,11 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
   }, true);
   const edit = (event) => {
     const control = event.target;
-    if (control.form?.getAttribute("data-mui") !== "form-feedback" || control.getAttribute("aria-invalid") !== "true") return;
+    if (control.form?.getAttribute("data-mui") !== "form-feedback" || control.getAttribute("aria-invalid") !== "true")
+      return;
     clearControl(control);
-    if (!control.validity.valid) showError(control, control.validationMessage);
+    if (!control.validity.valid)
+      showError(control, control.validationMessage);
   };
   document.addEventListener("input", edit);
   document.addEventListener("change", edit);
@@ -3769,14 +4084,17 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     if (field) {
       wire(field);
       const form = controlsFor(field)[0]?.form;
-      if (form?.getAttribute("data-mui") === "form-feedback" && errorNodes(field).length) focusFirst(form);
+      if (form?.getAttribute("data-mui") === "form-feedback" && errorNodes(field).length)
+        focusFirst(form);
     }
   });
   window.addEventListener("pageshow", (event) => {
-    if (event.persisted) document.querySelectorAll('form[data-mui="form-feedback"]').forEach((form) => ui.formPending(form, false));
+    if (event.persisted)
+      document.querySelectorAll('form[data-mui="form-feedback"]').forEach((form) => ui.formPending(form, false));
   });
   ui.behaviors["confirm-demo"] = (wrapper) => {
-    if (initialized.has(wrapper)) return;
+    if (initialized.has(wrapper))
+      return;
     initialized.add(wrapper);
     wrapper.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -3788,10 +4106,12 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["header-search"] = (details) => {
-    if (initialized.has(details)) return;
+    if (initialized.has(details))
+      return;
     initialized.add(details);
     const summary = details.querySelector("summary");
     const input = details.querySelector('input[type="search"]');
@@ -3808,16 +4128,19 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       sync();
     }
     document.addEventListener("keydown", (event) => {
-      if (!details.isConnected || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
+      if (!details.isConnected || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k")
+        return;
       event.preventDefault();
       details.open = true;
       input?.focus();
     });
     details.addEventListener("toggle", () => {
-      if (details.open && details.contains(document.activeElement)) input?.focus();
+      if (details.open && details.contains(document.activeElement))
+        input?.focus();
     });
     details.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape" || !details.open) return;
+      if (event.key !== "Escape" || !details.open)
+        return;
       event.preventDefault();
       if (!desktop?.matches) {
         details.open = false;
@@ -3829,13 +4152,15 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 })();
 (function() {
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const pending = /* @__PURE__ */ new WeakMap();
   ui.cancelOverlayExit = function(panel) {
     pending.get(panel)?.();
   };
   ui.closeOverlay = function(panel, hide) {
-    if (pending.has(panel) || panel.hidden) return;
+    if (pending.has(panel) || panel.hidden)
+      return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       hide();
       return;
@@ -3852,12 +4177,15 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       clearTimeout(timer);
       panel.removeEventListener("animationend", finish);
       panel.inert = inert;
-      if (state === null) panel.removeAttribute("data-state");
-      else panel.setAttribute("data-state", state);
+      if (state === null)
+        panel.removeAttribute("data-state");
+      else
+        panel.setAttribute("data-state", state);
       pending.delete(panel);
     }
     function finish(event) {
-      if (event && (event.target !== panel || event.animationName !== "mui-overlay-exit")) return;
+      if (event && (event.target !== panel || event.animationName !== "mui-overlay-exit"))
+        return;
       cleanup();
       hide();
     }
@@ -3869,7 +4197,8 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   let serial = 0;
   function reduced() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -3906,15 +4235,19 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   function ordinal(value) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value))
+      return null;
     const [year, month, day] = value.split("-").map(Number);
-    if (!year || month < 1 || month > 12) return null;
+    if (!year || month < 1 || month > 12)
+      return null;
     const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
     const months = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    if (!day || day > months[month - 1]) return null;
+    if (!day || day > months[month - 1])
+      return null;
     const previous = year - 1;
     return previous * 365 + Math.floor(previous / 4) - Math.floor(previous / 100) + Math.floor(previous / 400) + months.slice(0, month - 1).reduce((a, b) => a + b, 0) + day;
   }
@@ -3923,11 +4256,13 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     return value !== null && (min === null || value >= min) && (max === null || value <= max);
   }
   ui.behaviors["date-range"] = (range) => {
-    if (initialized.has(range)) return;
+    if (initialized.has(range))
+      return;
     const start = range.querySelector('[data-range-field="start"]');
     const end = range.querySelector('[data-range-field="end"]');
     const output = range.querySelector("output");
-    if (!start || !end || !output) return;
+    if (!start || !end || !output)
+      return;
     initialized.add(range);
     function update() {
       const first = ordinal(start.value), last = ordinal(end.value);
@@ -3937,8 +4272,10 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       output.textContent = incomplete ? range.getAttribute("data-incomplete") : invalid ? range.getAttribute("data-invalid") : count + " " + range.getAttribute(count === 1 ? "data-night" : "data-nights");
       output.setAttribute("data-range-invalid", String(invalid));
       for (const input of [start, end]) {
-        if (invalid) input.setAttribute("aria-invalid", "true");
-        else input.removeAttribute("aria-invalid");
+        if (invalid)
+          input.setAttribute("aria-invalid", "true");
+        else
+          input.removeAttribute("aria-invalid");
       }
       end.setCustomValidity(invalid && !range.disabled && !end.disabled && !end.readOnly ? range.getAttribute("data-invalid") : "");
     }
@@ -3951,17 +4288,21 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
     window.__muiRecordKitResetBound = true;
     document.addEventListener("reset", (event) => {
       setTimeout(() => {
-        if (event.defaultPrevented) return;
+        if (event.defaultPrevented)
+          return;
         document.querySelectorAll('[data-mui="date-range"]').forEach((range) => {
-          if (range.querySelector('[data-range-field="start"]')?.form === event.target || range.querySelector('[data-range-field="end"]')?.form === event.target) range.__muiUpdateDateRange?.();
+          if (range.querySelector('[data-range-field="start"]')?.form === event.target || range.querySelector('[data-range-field="end"]')?.form === event.target)
+            range.__muiUpdateDateRange?.();
         });
       }, 0);
     });
   }
   ui.behaviors["attention-banner"] = (banner) => {
-    if (initialized.has(banner)) return;
+    if (initialized.has(banner))
+      return;
     const dismiss = banner.querySelector(".mui-attention-banner__dismiss");
-    if (!dismiss) return;
+    if (!dismiss)
+      return;
     initialized.add(banner);
     dismiss.hidden = false;
     dismiss.addEventListener("click", () => {
@@ -3972,15 +4313,18 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
       const index = controls.indexOf(dismiss);
       const target = usable(explicit) ? explicit : controls.slice(index + 1).find(tabbable) || controls.slice(0, Math.max(0, index)).reverse().find(tabbable);
       banner.hidden = true;
-      if (target) target.focus();
+      if (target)
+        target.focus();
       else {
         const parent = banner.parentElement;
         if (parent) {
           const previous = parent.getAttribute("tabindex");
           parent.setAttribute("tabindex", "-1");
           parent.focus();
-          if (previous === null) parent.removeAttribute("tabindex");
-          else parent.setAttribute("tabindex", previous);
+          if (previous === null)
+            parent.removeAttribute("tabindex");
+          else
+            parent.setAttribute("tabindex", previous);
         }
       }
     });
@@ -3990,13 +4334,16 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
 (function() {
   "use strict";
   const ui = window.MaudUI;
-  if (!ui) return;
+  if (!ui)
+    return;
   const initialized = /* @__PURE__ */ new WeakSet();
   ui.behaviors["workspace-pages"] = (root) => {
-    if (initialized.has(root)) return;
+    if (initialized.has(root))
+      return;
     const tabs = Array.from(root.querySelectorAll("[data-workspace-tab]"));
     const panels = Array.from(root.querySelectorAll("[data-workspace-panel]"));
-    if (!tabs.length || tabs.length !== panels.length) return;
+    if (!tabs.length || tabs.length !== panels.length)
+      return;
     initialized.add(root);
     root.querySelector(".lp__workspace-tabs").setAttribute("role", "tablist");
     function activate(index, focus) {
@@ -4009,32 +4356,43 @@ window.MaudUI.brandData = { "tokens": [{ "name": "--mui-brand-accent", "label": 
         panels[i].hidden = i !== index;
       });
       const density = panels[index].getAttribute("data-mui-density-scope");
-      if (density && !ui.densityChosen) document.querySelectorAll('[data-mui="density-control"]').forEach((select) => {
-        select.value = density;
-      });
-      if (focus) tabs[index].focus();
+      if (density && !ui.densityChosen)
+        document.querySelectorAll('[data-mui="density-control"]').forEach((select) => {
+          select.value = density;
+        });
+      if (focus)
+        tabs[index].focus();
     }
     const initial = tabs.findIndex((tab) => tab.getAttribute("href") === window.location?.hash);
     activate(initial < 0 ? 0 : initial, false);
     root.addEventListener("click", (event) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+        return;
       const link = event.target.closest("a[href]");
       const index = link ? tabs.findIndex((tab) => tab.getAttribute("href") === link.getAttribute("href")) : -1;
-      if (index < 0) return;
+      if (index < 0)
+        return;
       event.preventDefault();
       activate(index, !tabs.includes(link));
     });
     root.addEventListener("keydown", (event) => {
-      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+        return;
       const index = tabs.indexOf(event.target);
-      if (index < 0) return;
+      if (index < 0)
+        return;
       const rtl = getComputedStyle(root).direction === "rtl";
       let next;
-      if (event.key === "Home") next = 0;
-      else if (event.key === "End") next = tabs.length - 1;
-      else if (event.key === "ArrowRight") next = index + (rtl ? -1 : 1);
-      else if (event.key === "ArrowLeft") next = index + (rtl ? 1 : -1);
-      else return;
+      if (event.key === "Home")
+        next = 0;
+      else if (event.key === "End")
+        next = tabs.length - 1;
+      else if (event.key === "ArrowRight")
+        next = index + (rtl ? -1 : 1);
+      else if (event.key === "ArrowLeft")
+        next = index + (rtl ? 1 : -1);
+      else
+        return;
       event.preventDefault();
       activate((next + tabs.length) % tabs.length, true);
     });

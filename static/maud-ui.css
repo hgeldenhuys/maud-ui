@@ -2338,6 +2338,19 @@ dialog.mui-command::backdrop {
   align-items: center;
   gap: var(--mui-space-sm);
 }
+.mui-composer__surface {
+  min-width: 0;
+}
+.mui-composer__surface[hidden] {
+  display: none;
+}
+.mui-composer__field:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input,
+.mui-composer__sleepbar:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input {
+  display: none;
+}
+.mui-composer__sleepbar > .mui-composer__surface {
+  flex: 1 1 100%;
+}
 @media (max-width: 40rem) {
   .mui-composer__actions {
     flex-wrap: wrap;

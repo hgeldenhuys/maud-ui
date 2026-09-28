@@ -43,14 +43,6 @@
 .mui-composer__input:focus { outline: none; }
 
 .mui-composer__actions { display: flex; align-items: center; gap: 7px; }
-
-/* An alternate input surface (0.21.0): shown, it takes the text area's place;
-   the text area stays in the form, so a draft survives the switch. */
-.mui-composer__surface { min-width: 0; }
-.mui-composer__surface[hidden] { display: none; }
-.mui-composer__field:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input,
-.mui-composer__sleepbar:has(> .mui-composer__surface:not([hidden])) > .mui-composer__input { display: none; }
-.mui-composer__sleepbar > .mui-composer__surface { flex: 1 1 100%; }
 /* The action buttons are `white-space: nowrap`, so without wrapping the row
    sets a min-content width the composer cannot go below — on a phone that
    widens the whole page rather than the composer. */

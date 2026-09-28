@@ -5792,22 +5792,8 @@ a.mui-pagination__page {
 .mui-popover__content[data-side=right][data-align=end] {
   position-area: right span-top;
 }
-@position-try --mui-popover-below {
-  position-area: none;
-  top: calc(anchor(bottom) + var(--mui-inset-tight));
-  bottom: auto;
-  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
-  right: auto;
-  margin: 0;
-}
-@position-try --mui-popover-above {
-  position-area: none;
-  top: auto;
-  bottom: calc(anchor(top) + var(--mui-inset-tight));
-  left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight)));
-  right: auto;
-  margin: 0;
-}
+@position-try --mui-popover-below { position-area: none; top: calc(anchor(bottom) + var(--mui-inset-tight)); bottom: auto; left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight))); right: auto; margin: 0; }
+@position-try --mui-popover-above { position-area: none; top: auto; bottom: calc(anchor(top) + var(--mui-inset-tight)); left: clamp(var(--mui-inset-tight), anchor(left), calc(100% - var(--mui-popover-width) - var(--mui-inset-tight))); right: auto; margin: 0; }
 
 /* static/styles/components/progress.css */
 .mui-progress {

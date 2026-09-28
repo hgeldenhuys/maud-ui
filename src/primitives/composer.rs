@@ -26,6 +26,13 @@
 //! forms are invalid HTML, but a button may submit a form it is not inside.
 //! With [`Props::secondary_action`] unset the button renders `type="button"`
 //! and does nothing without a consumer JS layer (legacy behaviour).
+//!
+//! A second way to write (0.21.0): [`Props::surface`] is an alternate input
+//! surface rendered inside the card beside the text area, such as a voice
+//! capture line. It ships `hidden`-controlled by the consumer: while the
+//! surface is shown, the text area steps aside (it stays in the form, so a
+//! draft is kept), and when it is hidden again the text area returns. One
+//! box, two ways in, no second panel over the page.
 
 use maud::{html, Markup};
 
@@ -144,6 +151,17 @@ pub struct Props {
     /// Optional mono status line rendered below the field — the "beside" data
     /// (turn count, context, spend, worktree). 11px, muted.
     pub status: Option<Markup>,
+    /// Accessible name for the text area (`aria-label`). A composer's field
+    /// has no visible label, so without one a screen reader announces only
+    /// "edit text"; name the thing being written to ("Message to ops").
+    pub label: Option<String>,
+    /// An alternate input surface rendered first inside the card (and inside
+    /// the Asleep bar): a voice capture line, a drawing pad. The consumer
+    /// renders it with `class="mui-composer__surface"` and toggles its
+    /// `hidden` attribute; while it is shown the text area is hidden by
+    /// CSS and stays in the form. Place its controls in `trailing` or
+    /// `control_chips`.
+    pub surface: Option<Markup>,
 }
 
 impl Default for Props {
@@ -166,6 +184,8 @@ impl Default for Props {
             primary_label: "Send".into(),
             primary_kbd: None,
             status: None,
+            label: None,
+            surface: None,
         }
     }
 }
@@ -214,11 +234,15 @@ pub fn render(props: Props) -> Markup {
             div class=(class) {
                 form class="mui-composer__form" action=(props.action) method=(props.method) {
                     div class="mui-composer__sleepbar" {
+                        @if let Some(surface) = props.surface.as_ref() {
+                            (surface)
+                        }
                         span class="mui-composer__state-tag" { "ASLEEP" }
                         textarea
                             class="mui-composer__input mui-composer__input--sleep"
                             name=(props.field_name)
                             rows="1"
+                            aria-label=[props.label.as_deref()]
                             placeholder=(if props.placeholder.is_empty() { "Type to wake" } else { &props.placeholder }) {
                             (props.value)
                         }
@@ -231,6 +255,11 @@ pub fn render(props: Props) -> Markup {
                             span class="mui-composer__chip mui-composer__chip--control" {
                                 (control)
                             }
+                        }
+                        // Trailing actions sit before Wake, as they sit
+                        // before Send in the other states.
+                        @for action in &props.trailing {
+                            (action)
                         }
                         button type="submit" class="mui-composer__wake" { (wake) }
                     }
@@ -245,10 +274,14 @@ pub fn render(props: Props) -> Markup {
         div class=(class) {
             form class="mui-composer__form" action=(props.action) method=(props.method) {
                 div class="mui-composer__field" {
+                    @if let Some(surface) = props.surface.as_ref() {
+                        (surface)
+                    }
                     textarea
                         class="mui-composer__input"
                         name=(props.field_name)
                         rows="2"
+                        aria-label=[props.label.as_deref()]
                         placeholder=(props.placeholder) {
                         (props.value)
                     }
@@ -369,6 +402,26 @@ pub fn showcase() -> Markup {
                     primary_label: "Queue".into(),
                     primary_kbd: Some("⌘↵".into()),
                     status: Some(status_exec),
+                    ..Default::default()
+                }))
+            }
+
+            section {
+                h2 { "Surface — a second way to write, in the same card" }
+                p.mui-showcase__caption { "An alternate input surface (voice capture, say) takes the text area's place while it is shown; the text area stays in the form and comes back when the surface hides." }
+                (render(Props {
+                    state: State::Ready,
+                    placeholder: "Message refactor-auth-middleware…".into(),
+                    label: Some("Message to refactor-auth-middleware".into()),
+                    surface: Some(html! {
+                        section class="mui-composer__surface" aria-label="Voice" {
+                            span class="mui-composer__chip" { "listening…" }
+                        }
+                    }),
+                    trailing: vec![html! {
+                        button type="button" class="mui-composer__chip" { "type instead" }
+                    }],
+                    primary_label: "Send".into(),
                     ..Default::default()
                 }))
             }

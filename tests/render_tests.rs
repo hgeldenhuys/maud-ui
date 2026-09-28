@@ -993,6 +993,38 @@ mod composer_no_js_contract {
         assert!(!out.contains("mui-composer__sleep-hint"), "the decorative hint span is retired: {out}");
     }
 
+    /// 0.21.0: the text area carries the consumer's accessible name, an
+    /// alternate surface renders first inside the card and inside the Asleep
+    /// bar, and trailing actions sit before Wake as they sit before Send.
+    #[test]
+    fn surface_label_and_trailing_render_in_every_writable_state() {
+        let surface = || maud::html! { section class="mui-composer__surface" id="voice" hidden { "listening" } };
+        let trailing = || vec![maud::html! { button type="button" id="talk" { "Talk" } }];
+        for state in [State::Ready, State::Executing, State::Asleep] {
+            let out = composer::render(composer::Props {
+                state,
+                action: "/x/_prompt".into(),
+                label: Some("Message to \"ops\"".into()),
+                surface: Some(surface()),
+                trailing: trailing(),
+                primary_label: if state == State::Asleep { "Wake".into() } else { "Send".into() },
+                ..Default::default()
+            })
+            .into_string();
+            let textarea = out.find("<textarea").expect("a field renders");
+            let surface_at = out.find(r#"id="voice""#).expect("the surface renders: {out}");
+            assert!(surface_at < textarea, "{state:?}: the surface comes first in the card: {out}");
+            assert!(out.contains(r#"aria-label="Message to &quot;ops&quot;""#), "{state:?}: label escaped on the field: {out}");
+            let talk = out.find(r#"id="talk""#).expect("trailing renders: {out}");
+            let primary = out.find(if state == State::Asleep { "mui-composer__wake" } else { "mui-composer__send" }).unwrap();
+            assert!(talk < primary, "{state:?}: trailing sits before the primary action: {out}");
+            assert!(out.find("</form>").unwrap() > talk, "{state:?}: trailing is inside the form");
+        }
+        let plain = composer::render(composer::Props::default()).into_string();
+        assert!(!plain.contains("aria-label"), "no label, no attribute: {plain}");
+        assert!(!plain.contains("mui-composer__surface"), "no surface, nothing rendered: {plain}");
+    }
+
     /// With a secondary_action, Interrupt is a real submit targeting the empty
     /// sibling form via the HTML5 `form` attribute — a nested form would be
     /// invalid HTML, and a `type="button"` needs JS the constraint forbids.

@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Newest on top.
 
 ---
 
+## [0.21.0] — 2026-09-28 — a second way to write in the composer
+
+- **Composer surface.** `Props::surface` renders an alternate input surface first inside the composer's card (and inside the Asleep bar): a voice capture line, say. The consumer toggles its `hidden` attribute; while it is shown the text area steps aside by CSS and stays in the form, so a draft survives the switch. The Kapable conductor uses it for Talk mode, whose panel used to float over the conversation, wider than the column it served.
+- **Composer label.** `Props::label` sets the text area's `aria-label`. Consumers were adding it by rewriting the rendered HTML.
+- **Trailing actions in the Asleep bar.** `Props::trailing` now renders before Wake, as it does before Send in the other states.
+
 ## [0.20.3] — 2026-09-23 — the screenshot review's defects
 
 - **Swatch ships its own styles.** It was styled only by the gallery's page CSS, so an app using `swatch` got an unstyled component. `swatch.css` is now part of the bundle.
